@@ -1,0 +1,144 @@
+<xsd:schema xmlns="http://schema.alipay.com/sofa/schema/slite"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:beans="http://www.springframework.org/schema/beans"
+            targetNamespace="http://schema.alipay.com/sofa/schema/slite"
+            elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+    <xsd:import namespace="http://www.springframework.org/schema/beans"/>
+
+    <xsd:simpleType name="GrpcInvokeMode">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="sync"/>
+            <xsd:enumeration value="oneway"/>
+            <xsd:enumeration value="future"/>
+            <xsd:enumeration value="callback"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="GrpcContent">
+        <xsd:sequence minOccurs="1" maxOccurs="1">
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="GrpcInterface">
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="GrpcBinding">
+        <xsd:complexContent>
+            <xsd:extension base="beans:identifiedType">
+                <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+                </xsd:sequence>
+                <xsd:attribute name="name" type="xsd:string" use="optional"/>
+                <xsd:attribute name="url" type="xsd:string" use="optional"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <!-- method in reference binding.tr -->
+    <xsd:complexType name="GrpcBindingTRRefMethod">
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+        <xsd:attribute name="type" type="GrpcInvokeMode" use="optional"/>
+        <xsd:attribute name="timeout" type="xsd:int" use="optional"/>
+        <xsd:attribute name="callback-class" type="xsd:string" use="optional"/>
+        <xsd:attribute name="callback-ref" type="xsd:string" use="optional"/>
+    </xsd:complexType>
+
+    <!-- route in reference binding.tr -->
+    <xsd:complexType name="GrpcBindingTRRefRoute">
+        <xsd:attribute name="target-url" type="xsd:string" use="optional"/>
+    </xsd:complexType>
+
+    <!-- global-attrs in reference binding.tr -->
+    <xsd:complexType name="GrpcBindingTRRefAttr">
+        <xsd:attribute name="timeout" type="xsd:int" use="optional"/>
+        <xsd:attribute name="type" type="GrpcInvokeMode" use="optional"/>
+        <xsd:attribute name="test-url" type="xsd:string" use="optional"/>
+        <xsd:attribute name="address-wait-time" type="xsd:int" use="optional"/>
+        <xsd:attribute name="callback-class" type="xsd:string" use="optional"/>
+        <xsd:attribute name="callback-ref" type="xsd:string" use="optional"/>
+        <xsd:attribute name="connect.timeout" type="xsd:int" use="optional"/>
+        <xsd:attribute name="connect.num" type="xsd:int" use="optional"/>
+        <xsd:attribute name="idle.timeout" type="xsd:int" use="optional"/>
+        <xsd:attribute name="idle.timeout.read" type="xsd:int" use="optional"/>
+        <xsd:attribute name="generic-interface" type="xsd:string" use="optional"/>
+    </xsd:complexType>
+
+    <!-- method in service binding.tr -->
+    <xsd:complexType name="GrpcBindingTRSerMethod">
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+        <xsd:attribute name="timeout" type="xsd:int" use="optional"/>
+    </xsd:complexType>
+    <!-- global-attrs in service binding.tr -->
+    <xsd:complexType name="GrpcBindingTRSerAttr">
+        <xsd:attribute name="timeout" type="xsd:int" use="optional"/>
+    </xsd:complexType>
+    <!-- binding.tr in reference -->
+    <xsd:complexType name="GrpcBindingTRReference">
+        <xsd:complexContent>
+            <xsd:extension base="GrpcBinding">
+                <xsd:sequence minOccurs="0">
+                    <xsd:element name="global-attrs" type="GrpcBindingTRRefAttr" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="route" type="GrpcBindingTRRefRoute" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="method" type="GrpcBindingTRRefMethod" minOccurs="0" maxOccurs="unbounded"/>
+                    <xsd:any minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+    <!-- binding.tr in service -->
+    <xsd:complexType name="GrpcBindingTRService">
+        <xsd:complexContent>
+            <xsd:extension base="GrpcBinding">
+                <xsd:sequence minOccurs="0">
+                    <xsd:element name="global-attrs" type="GrpcBindingTRSerAttr" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="method" type="GrpcBindingTRSerMethod" minOccurs="0" maxOccurs="unbounded"/>
+                    <xsd:any minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <!-- 注意: service 和 reference 合并到 slite 中 要注意修正 binding 部分-->
+    <!-- reference -->
+    <xsd:element name="reference" type="Treference"/>
+    <xsd:complexType name="Treference">
+        <xsd:complexContent>
+            <xsd:extension base="beans:identifiedType">
+                <xsd:all minOccurs="0" maxOccurs="1">
+                    <xsd:element name="binding" type="GrpcBinding" minOccurs="0"/>
+                    <xsd:element name="binding.tr" type="GrpcBindingTRReference" minOccurs="0"/>
+                </xsd:all>
+                <xsd:attribute name="local-first" use="optional" type="xsd:boolean" default="false"/>
+                <xsd:attribute name="jvm-service" use="optional" type="xsd:boolean" default="false"/>
+                <xsd:attribute name="interface" type="xsd:string" use="required"/>
+                <xsd:attribute name="abstract" type="xsd:boolean" use="optional"/>
+                <xsd:attribute name="parent" type="xsd:string" use="optional"/>
+                <xsd:attribute name="unique-id" type="xsd:string" use="optional"/>
+
+                <xsd:attribute name="filter" type="xsd:string" use="optional"/>
+                <xsd:attribute name="registry" type="xsd:string" use="optional"/>
+
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <!-- service -->
+    <xsd:element name="service" type="Tservice"/>
+    <xsd:complexType name="Tservice">
+        <xsd:complexContent>
+            <xsd:extension base="beans:identifiedType">
+                <xsd:all minOccurs="0" maxOccurs="1">
+                    <xsd:element name="binding" type="GrpcBinding" minOccurs="0"/>
+                    <xsd:element name="binding.tr" type="GrpcBindingTRService" minOccurs="0"/>
+                </xsd:all>
+                <xsd:attribute name="ref" type="xsd:string" use="required"/>
+                <xsd:attribute name="interface" type="xsd:string" use="required"/>
+                <xsd:attribute name="abstract" type="xsd:boolean" use="optional"/>
+                <xsd:attribute name="parent" type="xsd:string" use="optional"/>
+                <xsd:attribute name="unique-id" type="xsd:string" use="optional"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+
+</xsd:schema>

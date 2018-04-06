@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="OFF">
+
+    <Properties>
+        <Property name="RUNTIME_LOG_LEVEL">${sys:logging.level.com.alipay.sofa.runtime}</Property>
+        <Property name="RUNTIME_LOG_PATH">${sys:logging.path}</Property>
+        <Property name="RUNTIME_FILE_ENCODING">${sys:file.encoding}</Property>
+    </Properties>
+
+    <appenders>
+        <RollingFile name="ERROR-APPENDER" fileName="${RUNTIME_LOG_PATH}/sofa-runtime/common-error.log" append="true"
+                     filePattern="${RUNTIME_LOG_PATH}/sofa-runtime/common-error.log.%d{yyyy-MM-dd}">
+            <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout charset="${RUNTIME_FILE_ENCODING}">
+                <pattern>%d %-5p %-32t - %m%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+        </RollingFile>
+
+        <RollingFile name="SOFA-APPENDER" fileName="${RUNTIME_LOG_PATH}/sofa-runtime/sofa-default.log" append="true"
+                     filePattern="${RUNTIME_LOG_PATH}/sofa-runtime/sofa-default.log.%d{yyyy-MM-dd}">
+            <ThresholdFilter level="${RUNTIME_LOG_LEVEL}" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout charset="${RUNTIME_FILE_ENCODING}">
+                <pattern>%d %-5p %-32t - %m%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+        </RollingFile>
+    </appenders>
+
+    <loggers>
+        <logger name="com.alipay.sofa" level="${RUNTIME_LOG_LEVEL}" additivity="false">
+            <appender-ref ref="SOFA-APPENDER"/>
+            <appender-ref ref="ERROR-APPENDER"/>
+        </logger>
+
+        <root level="${RUNTIME_LOG_LEVEL}" additivity="false">
+            <appender-ref ref="SOFA-APPENDER"/>
+            <appender-ref ref="ERROR-APPENDER"/>
+        </root>
+    </loggers>
+</configuration>

@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <!-- Spring Boot Reference Doc : https://docs.spring.io/spring-boot/docs/1.4.2.RELEASE/reference/htmlsingle/ -->
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.4.2.RELEASE</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.alipay.sofa</groupId>
+    <artifactId>sofaboot-dependencies</artifactId>
+    <version>2.3.0</version>
+    <packaging>pom</packaging>
+
+    <properties>
+        <java.version>1.7</java.version>
+        <project.build.encoding>UTF-8</project.build.encoding>
+        <spring.boot.version>1.4.2.RELEASE</spring.boot.version>
+        <sofa.boot.version>2.3.0</sofa.boot.version>
+        <rpc.starter.version>5.3.0</rpc.starter.version>
+        <!-- sofa-common-tools for log -->
+        <sofa.common.tools.version>1.0.12</sofa.common.tools.version>
+        <!-- 3rd lib dependency -->
+        <fastjson.version>1.2.48</fastjson.version>
+
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+
+            <!-- starter management begin -->
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>infra-sofa-boot-starter</artifactId>
+                <version>${sofa.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>healthcheck-sofa-boot-starter</artifactId>
+                <version>${sofa.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>runtime-sofa-boot-starter</artifactId>
+                <version>${sofa.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>rpc-sofa-boot-starter</artifactId>
+                <version>${rpc.starter.version}</version>
+            </dependency>
+            <!-- Ark Plugin Management -->
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>runtime-sofa-boot-starter</artifactId>
+                <classifier>ark-plugin</classifier>
+                <version>${sofa.boot.version}</version>
+            </dependency>
+
+            <!-- starter management end -->
+
+            <!-- 2nd dependency begin -->
+
+            <dependency>
+                <groupId>com.alipay.sofa.common</groupId>
+                <artifactId>sofa-common-tools</artifactId>
+                <version>${sofa.common.tools.version}</version>
+            </dependency>
+            <!-- 2nd dependency end -->
+
+            <!-- 3rd lib dependency begin -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${fastjson.version}</version>
+            </dependency>
+            <!-- 3rd lib dependency end -->
+
+        </dependencies>
+    </dependencyManagement>
+
+
+    <profiles>
+
+        <profile>
+            <id>alipayplus-dev</id>
+            <distributionManagement>
+                <repository>
+                    <id>alipayplus-dev</id>
+                    <name>Alipay Release Repository</name>
+                    <url>http://mvn.dev.alipayplus.net/nexus/content/repositories/Foundation-Release</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+        <profile>
+            <id>alipayplus-release</id>
+            <distributionManagement>
+                <repository>
+                    <id>alipayplus-release</id>
+                    <name>Alipay Release Repository</name>
+                    <url>http://mvn.release.alipayplus.net/nexus/content/repositories/Foundation-Release</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+
+
+
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <distributionManagement>
+                <repository>
+                    <!-- Alipay-Snapshots -->
+                    <id>nexus-server@alipay</id>
+                    <name>Alipay Release Repository</name>
+                    <url>http://mvn.dev.alipay.net:8081/artifactory/content/repositories/Alipay-Releases</url>
+                </repository>
+            </distributionManagement>
+            <repositories>
+                <repository>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                    <id>central_prod</id>
+                    <url>http://mvn.dev.alipay.net:8080/artifactory/repo</url>
+                </repository>
+                <repository>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                    <id>central</id>
+                    <url>http://mvn.dev.alipay.net:8080/artifactory/repo</url>
+                </repository>
+                <repository>
+                    <releases>
+                        <enabled>true</enabled>
+                        <updatePolicy>never</updatePolicy>
+                    </releases>
+                    <id>snapshots</id>
+                    <url>http://mvn.dev.alipay.net:8080/artifactory/repo</url>
+                </repository>
+            </repositories>
+            <pluginRepositories>
+                <pluginRepository>
+                    <snapshots>
+                        <enabled>false</enabled>
+                        <updatePolicy>never</updatePolicy>
+                    </snapshots>
+                    <id>central</id>
+                    <url>http://mvn.dev.alipay.net:8080/artifactory/repo</url>
+                </pluginRepository>
+            </pluginRepositories>
+        </profile>
+        <profile>
+            <id>mayibank-dev</id>
+            <activation>
+                <property>
+                    <name>env</name>
+                    <value>alibank_dev</value>
+                </property>
+            </activation>
+            <distributionManagement>
+                <repository>
+                    <!-- Alipay-Snapshots -->
+                    <id>nexus-server@mayibank-dev</id>
+                    <name>mayibank dev Repository</name>
+                    <url>http://mvn.dev.mayibank.net/artifactory/content/repositories/Alibank-Releases</url>
+                </repository>
+            </distributionManagement>
+            <repositories>
+                <repository>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                    <id>central_prod</id>
+                    <url>http://mvn.dev.alipay.net:8080/artifactory/repo</url>
+                </repository>
+                <repository>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                    <id>central</id>
+                    <url>http://mvn.dev.alipay.net:8080/artifactory/repo</url>
+                </repository>
+                <repository>
+                    <releases>
+                        <enabled>true</enabled>
+                        <updatePolicy>never</updatePolicy>
+                    </releases>
+                    <id>snapshots</id>
+                    <url>http://mvn.dev.alipay.net:8080/artifactory/repo</url>
+                </repository>
+            </repositories>
+            <pluginRepositories>
+                <pluginRepository>
+                    <snapshots>
+                        <enabled>false</enabled>
+                        <updatePolicy>never</updatePolicy>
+                    </snapshots>
+                    <id>central</id>
+                    <url>http://mvn.dev.alipay.net:8080/artifactory/repo</url>
+                </pluginRepository>
+            </pluginRepositories>
+        </profile>
+        <profile>
+            <id>alipay-release</id>
+            <activation>
+                <property>
+                    <name>env</name>
+                    <value>test</value>
+                </property>
+            </activation>
+            <distributionManagement>
+                <repository>
+                    <id>nexus-server@alipay-release</id>
+                    <name>Alibank Release Repository</name>
+                    <url>http://mvn.test.alipay.net:8081/artifactory/content/repositories/Alipay-Releases</url>
+                </repository>
+            </distributionManagement>
+            <repositories>
+                <repository>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                    <id>central</id>
+                    <url>http://mvn.test.alipay.net:8080/artifactory/repo</url>
+                </repository>
+                <repository>
+                    <releases>
+                        <enabled>true</enabled>
+                        <updatePolicy>never</updatePolicy>
+                    </releases>
+                    <id>snapshots</id>
+                    <url>http://mvn.test.alipay.net:8080/artifactory/repo</url>
+                </repository>
+            </repositories>
+            <pluginRepositories>
+                <pluginRepository>
+                    <snapshots>
+                        <enabled>false</enabled>
+                        <updatePolicy>never</updatePolicy>
+                    </snapshots>
+                    <id>central</id>
+                    <url>http://mvn.test.alipay.net:8080/artifactory/repo</url>
+                </pluginRepository>
+            </pluginRepositories>
+        </profile>
+        <profile>
+            <id>mayibank-release</id>
+            <activation>
+                <property>
+                    <name>env</name>
+                    <value>alibank_test</value>
+                </property>
+            </activation>
+            <distributionManagement>
+                <repository>
+                    <id>nexus-server@mayibank-release</id>
+                    <name>Alibank Release Repository</name>
+                    <url>http://mvn.release.mayibank.net:8081/artifactory/content/repositories/Alibank-Releases</url>
+                </repository>
+            </distributionManagement>
+            <repositories>
+                <repository>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                    <id>central</id>
+                    <url>http://mvn.release.mayibank.net:8080/artifactory/repo</url>
+                </repository>
+                <repository>
+                    <releases>
+                        <enabled>true</enabled>
+                        <updatePolicy>never</updatePolicy>
+                    </releases>
+                    <id>snapshots</id>
+                    <url>http://mvn.release.mayibank.net:8080/artifactory/repo</url>
+                </repository>
+            </repositories>
+            <pluginRepositories>
+                <pluginRepository>
+                    <snapshots>
+                        <enabled>false</enabled>
+                        <updatePolicy>never</updatePolicy>
+                    </snapshots>
+                    <id>central</id>
+                    <url>http://mvn.release.mayibank.net:8080/artifactory/repo</url>
+                </pluginRepository>
+            </pluginRepositories>
+        </profile>
+
+        <profile>
+            <id>cloud-release</id>
+            <distributionManagement>
+                <repository>
+                    <id>nexus-server@cloud</id>
+                    <name>Cloud Repository</name>
+                    <url>http://mvn.cloud.alipay.com/nexus/content/repositories/releases</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+    </profiles>
+</project>

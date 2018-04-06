@@ -1,0 +1,97 @@
+<xsd:schema xmlns="http://schema.alipay.com/sofa/schema/slite"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:beans="http://www.springframework.org/schema/beans"
+            targetNamespace="http://schema.alipay.com/sofa/schema/slite"
+            elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+    <xsd:import namespace="http://www.springframework.org/schema/beans"/>
+
+    <!-- zdal start -->
+    <xsd:element name="zdal-jdbc" type="Tzdal"/>
+    <xsd:complexType name="Tzdal">
+        <xsd:complexContent>
+            <xsd:extension base="beans:identifiedType">
+                <xsd:sequence minOccurs="1">
+                    <xsd:element name="appDataSourceName" type="TzdalDatasource" minOccurs="1" maxOccurs="1"/>
+                    <xsd:element name="configPath" type="TzdalDatasource" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="elasticRuleBaseOnTable" type="TelasticRuleBaseOnTable" minOccurs="0"
+                                 maxOccurs="1"/>
+                    <xsd:element name="zdalConfigurationPath" type="TzdalConfigurationPath" minOccurs="0"
+                                 maxOccurs="1"/>
+                    <xsd:element name="sqlAdapter" type="TsqlAdapter" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="translator" type="Ttranslator" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="dataSourceFactory" type="TdataSourceFactory" minOccurs="0" maxOccurs="unbounded"/>
+                    <xsd:element name="dataSourceFactories" type="TdataSourceFactories" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="isHintReplaceSupport" type="TisHintReplaceSupport" minOccurs="0" maxOccurs="1"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="TzdalDatasource">
+        <xsd:complexContent>
+            <xsd:extension base="beans:identifiedType">
+                <xsd:attribute name="value" type="xsd:string" use="required"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="TelasticRuleBaseOnTable">
+        <xsd:complexContent>
+            <xsd:extension base="beans:identifiedType">
+                <xsd:attribute name="value" type="xsd:string" use="required"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="TzdalConfigurationPath">
+        <xsd:complexContent>
+            <xsd:extension base="beans:identifiedType">
+                <xsd:attribute name="value" type="xsd:string" use="required"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="TsqlAdapter">
+        <xsd:complexContent>
+            <xsd:extension base="beans:identifiedType">
+                <xsd:attribute name="ref" type="xsd:string" use="required"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="Ttranslator">
+        <xsd:complexContent>
+            <xsd:extension base="beans:identifiedType">
+                <xsd:attribute name="ref" type="xsd:string" use="required"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="TdataSourceFactory">
+        <xsd:complexContent>
+            <xsd:extension base="beans:identifiedType">
+                <xsd:attribute name="ref" type="xsd:string" use="required"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="TdataSourceFactories">
+        <xsd:complexContent>
+            <xsd:extension base="beans:identifiedType">
+                <xsd:sequence minOccurs="1">
+                    <xsd:element name="dataSourceFactory" type="TdataSourceFactory" minOccurs="1" maxOccurs="unbounded"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="TisHintReplaceSupport">
+        <xsd:complexContent>
+            <xsd:extension base="beans:identifiedType">
+                <xsd:attribute name="value" type="xsd:string" use="required"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+    <!-- zdal start -->
+
+</xsd:schema>

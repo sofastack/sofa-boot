@@ -1,0 +1,10 @@
+language: java
+sudo: false
+
+jdk: oraclejdk8
+
+script:
+- mvn clean test
+- sh ./check_format.sh
+
+after_success: mvn clean cobertura:cobertura coveralls:report

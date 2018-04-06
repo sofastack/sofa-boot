@@ -1,0 +1,125 @@
+<xsd:schema xmlns="http://schema.alipay.com/sofa/schema/slite"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:beans="http://www.springframework.org/schema/beans"
+            targetNamespace="http://schema.alipay.com/sofa/schema/slite"
+            elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+    <xsd:import namespace="http://www.springframework.org/schema/beans"/>
+
+    <xsd:complexType name="TBindingRestVip">
+        <xsd:attribute name="base-path" type="xsd:string" use="required"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="TBindingRestRefMethod">
+        <xsd:sequence>
+            <xsd:element name="param" type="TBindingRestParam" minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="TBindingRestParam">
+        <xsd:attribute name="invoke-type" type="TInvokeMode" use="optional"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="TBindingRestReference">
+        <xsd:sequence minOccurs="0">
+            <xsd:element name="vip" type="TBindingRestVip" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="method" type="TBindingRestRefMethod" minOccurs="0"/>
+            <xsd:element name="param" type="TBindingRestParam" minOccurs="0" maxOccurs="1"/>
+            <xsd:any minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <!--sofa rest client and server-->
+    <!--public part for sofa-->
+
+    <xsd:element name="rest-server">
+        <xsd:annotation>
+            <xsd:documentation><![CDATA[
+	Configures sofa rest server!
+			]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:choice maxOccurs="unbounded">
+                <xsd:element name="connector">
+                    <xsd:annotation>
+                        <xsd:documentation><![CDATA[
+	      server connector.
+						]]></xsd:documentation>
+                    </xsd:annotation>
+                    <xsd:complexType>
+                        <xsd:attribute name="port" type="xsd:integer" default="8341">
+                            <xsd:annotation>
+                                <xsd:documentation><![CDATA[
+                        newwork port
+					]]></xsd:documentation>
+                            </xsd:annotation>
+                        </xsd:attribute>
+                        <xsd:attribute name="exposed" type="xsd:boolean" default="true">
+                            <xsd:annotation>
+                                <xsd:documentation><![CDATA[
+                        if expose to service register center when use soft load balance
+					]]></xsd:documentation>
+                            </xsd:annotation>
+                        </xsd:attribute>
+                    </xsd:complexType>
+                </xsd:element>
+                <xsd:any minOccurs="0"/>
+            </xsd:choice>
+
+            <xsd:attribute name="threads" type="xsd:integer">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[
+	 the number of threads that handle rest requests!
+					]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+
+
+    <xsd:element name="rest-client">
+        <xsd:annotation>
+            <xsd:documentation><![CDATA[
+	Configures sofa rest server!
+			]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:attribute name="retries" type="xsd:integer" default="0">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[
+                        retry times
+					]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="connections" type="xsd:integer" default="10">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[
+                        global client connection pool size
+					]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="threads" type="xsd:integer" default="10">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[
+                        global client thread pool size
+					]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="socket-timeout" type="xsd:integer" default="-1">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[
+                        global client read and write interval timeout
+					]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="connect-timeout" type="xsd:integer" default="-1">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[
+                        global client connect to server timeout
+					]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+
+</xsd:schema>

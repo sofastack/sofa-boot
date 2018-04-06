@@ -1,0 +1,130 @@
+<xsd:schema xmlns="http://schema.alipay.com/sofa/schema/slite"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:beans="http://www.springframework.org/schema/beans"
+            targetNamespace="http://schema.alipay.com/sofa/schema/slite"
+            elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+    <xsd:import namespace="http://www.springframework.org/schema/beans"/>
+
+    <!-- publisher&consumer start -->
+    <!-- msgbroker publisher -->
+    <xsd:element name="publisher" type="Tpublisher"/>
+
+    <xsd:complexType name="Tpublisher">
+        <xsd:complexContent>
+            <xsd:extension base="beans:identifiedType">
+                <xsd:sequence minOccurs="0" maxOccurs="1">
+                    <xsd:element name="channels" type="TpublisherChannels" minOccurs="1"/>
+                    <xsd:element name="binding.msg_broker" type="TBindingMsgbroker" minOccurs="1"/>
+                </xsd:sequence>
+                <!--<xsd:attribute name="id" type="xsd:string" use="required"/>-->
+                <xsd:attribute name="group" type="xsd:string" use="required"/>
+                <xsd:attribute name="domain" type="xsd:string" use="optional"/>
+                <xsd:attribute name="instance-id" type="xsd:string" use="optional"/>
+                <xsd:attribute name="test-url" type="xsd:string" use="optional"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <!-- publisher channels -->
+    <xsd:complexType name="TpublisherChannels">
+        <xsd:complexContent>
+            <xsd:extension base="beans:identifiedType">
+                <xsd:sequence minOccurs="1" maxOccurs="unbounded">
+                    <xsd:element name="channel" type="Tchannel" minOccurs="1"/>
+                </xsd:sequence>
+                <xsd:attribute name="tx-callback" type="xsd:string" use="optional"/>
+                <xsd:attribute name="local-store" type="xsd:string" use="optional"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <!-- publisher channel -->
+    <xsd:complexType name="Tchannel">
+        <xsd:attribute name="value" type="xsd:string" use="required"/>
+    </xsd:complexType>
+
+    <!-- msgbroker consumer -->
+    <xsd:element name="consumer" type="Tconsumer"/>
+
+    <xsd:complexType name="Tconsumer">
+        <xsd:complexContent>
+            <xsd:extension base="beans:identifiedType">
+                <xsd:sequence minOccurs="0" maxOccurs="1">
+                    <xsd:element name="listener" type="TconsumerListener" minOccurs="1"/>
+                    <xsd:element name="channels" type="TconsumerChannels" minOccurs="1"/>
+                    <xsd:element name="binding.msg_broker" type="TBindingMsgbroker" minOccurs="0"/>
+                </xsd:sequence>
+                <!--<xsd:attribute name="id" type="xsd:string" use="required"/>-->
+                <xsd:attribute name="group" type="xsd:string" use="required"/>
+                <xsd:attribute name="domain" type="xsd:string" use="optional"/>
+                <xsd:attribute name="instance-id" type="xsd:string" use="optional"/>
+                <xsd:attribute name="test-url" type="xsd:string" use="optional"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="TBindingMsgbroker">
+        <xsd:complexContent>
+            <xsd:extension base="TBinding">
+                <xsd:sequence minOccurs="0">
+                    <xsd:element name="attributes" type="Tattributes" minOccurs="0" maxOccurs="1"/>
+                    <xsd:any minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="Tattributes">
+        <xsd:complexContent>
+            <xsd:extension base="beans:identifiedType">
+                <xsd:attribute name="messageTPCorePoolSize" type="xsd:string" use="optional"/>
+                <xsd:attribute name="messageTPMaxPoolSize" type="xsd:string" use="optional"/>
+                <xsd:attribute name="messageTPMaxQueueSize" type="xsd:string" use="optional"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <!-- consumer channels -->
+    <xsd:complexType name="TconsumerChannels">
+        <xsd:complexContent>
+            <xsd:extension base="beans:identifiedType">
+                <xsd:sequence minOccurs="1" maxOccurs="unbounded">
+                    <xsd:element name="channel" type="TeventChannel" minOccurs="1"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <!-- consumer channel event -->
+    <xsd:complexType name="TeventChannel">
+        <xsd:complexContent>
+            <xsd:extension base="Tchannel">
+                <xsd:sequence minOccurs="1" maxOccurs="unbounded">
+                    <xsd:element name="event" type="Tevent" minOccurs="1"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <!-- consumer event -->
+    <xsd:complexType name="Tevent">
+        <xsd:attribute name="eventType" type="xsd:string" use="optional"/>
+        <xsd:attribute name="eventCode" type="xsd:string" use="optional"/>
+        <xsd:attribute name="expression" type="xsd:string" use="optional"/>
+        <xsd:attribute name="persistence" type="xsd:boolean" use="required"/>
+        <xsd:attribute name="waterMark" type="xsd:string" use="optional"/>
+    </xsd:complexType>
+
+    <!-- consumer listener -->
+    <xsd:element name="listener" type="TconsumerListener"/>
+
+    <xsd:complexType name="TconsumerListener">
+        <xsd:complexContent>
+            <xsd:extension base="beans:identifiedType">
+                <xsd:attribute name="ref" type="xsd:string" use="required"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+    <!-- publisher&consumer end -->
+
+</xsd:schema>

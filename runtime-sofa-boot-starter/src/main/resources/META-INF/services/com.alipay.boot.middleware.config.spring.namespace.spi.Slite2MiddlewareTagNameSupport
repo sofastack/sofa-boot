@@ -1,0 +1,2 @@
+com.alipay.sofa.runtime.spring.parser.ReferenceDefinitionParser
+com.alipay.sofa.runtime.spring.parser.ServiceDefinitionParser

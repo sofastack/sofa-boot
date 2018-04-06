@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appender name="ERROR-APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <append>true</append>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>error</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <file>${logging.path}/sofa-runtime/common-error.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${logging.path}/sofa-runtime/common-error.log.%d{yyyy-MM-dd}</FileNamePattern>
+            <MaxHistory>30</MaxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d %-5p %-32t - %m%n</pattern>
+            <charset>${file.encoding}</charset>
+        </encoder>
+    </appender>
+
+    <appender name="SOFA-APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <append>true</append>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>${logging.level.com.alipay.sofa.runtime}</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <file>${logging.path}/sofa-runtime/sofa-default.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${logging.path}/sofa-runtime/sofa-default.log.%d{yyyy-MM-dd}</FileNamePattern>
+            <MaxHistory>30</MaxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d %-5p %-32t - %m%n</pattern>
+            <charset>${file.encoding}</charset>
+        </encoder>
+    </appender>
+
+    <logger name="com.alipay.sofa" level="${logging.level.com.alipay.sofa.runtime}" additivity="false">
+        <appender-ref ref="SOFA-APPENDER"/>
+        <appender-ref ref="ERROR-APPENDER"/>
+    </logger>
+
+    <root level="${logging.level.com.alipay.sofa.runtime}">
+        <appender-ref ref="SOFA-APPENDER"/>
+        <appender-ref ref="ERROR-APPENDER"/>
+    </root>
+
+</configuration>
