@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.alipay.sofa.boot.examples.demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

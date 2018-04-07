@@ -20,6 +20,7 @@
         <project.build.encoding>UTF-8</project.build.encoding>
         <spring.boot.version>1.4.2.RELEASE</spring.boot.version>
         <sofa.boot.version>2.3.0</sofa.boot.version>
+        <sofa.ark.version>0.1.0</sofa.ark.version>
         <rpc.starter.version>5.3.0</rpc.starter.version>
         <!-- sofa-common-tools for log -->
         <sofa.common.tools.version>1.0.12</sofa.common.tools.version>
@@ -47,6 +48,18 @@
                 <artifactId>runtime-sofa-boot-starter</artifactId>
                 <version>${sofa.boot.version}</version>
             </dependency>
+            <!-- SOFA Ark Plugin -->
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>sofa-ark-springboot-starter</artifactId>
+                <version>${sofa.ark.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>sofa-ark-maven-plugin</artifactId>
+                <version>${sofa.ark.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>rpc-sofa-boot-starter</artifactId>

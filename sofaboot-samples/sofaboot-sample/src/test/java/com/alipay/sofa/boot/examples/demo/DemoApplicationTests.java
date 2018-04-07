@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.alipay.sofa.boot.examples.demo;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

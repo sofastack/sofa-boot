@@ -17,6 +17,7 @@
 
     <modules>
         <module>sofaboot-sample</module>
+        <module>sofaboot-sample-with-isolation</module>
     </modules>
 
 
