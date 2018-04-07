@@ -111,8 +111,8 @@ SOFA Boot 的管控依赖集合，管控 SOFA Boot 的所有开源组件依赖�
 ## 六、示例
 
 * 在此工程的 `sofaboot-samples` 下是示例工程，分别为：
-	+ SOFA Boot 示例工程
-	+ SOFA Boot 示例工程(包含类隔离能力)
+	+ [SOFA Boot 示例工程](https://github.com/alipay/sofa-boot/tree/master/sofaboot-samples/sofaboot-sample)
+	+ [SOFA Boot 示例工程(包含类隔离能力)](https://github.com/alipay/sofa-boot/tree/master/sofaboot-samples/sofaboot-sample-with-isolation)
  
 ## 七、SOFA Boot Guides
 
