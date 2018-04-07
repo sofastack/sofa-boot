@@ -1,16 +1,18 @@
-/**
- * Copyright Notice: This software is developed by Ant Small and Micro Financial Services Group Co., Ltd. This software and all the relevant information, including but not limited to any signs, images, photographs, animations, text, interface design,
- *  audios and videos, and printed materials, are protected by copyright laws and other intellectual property laws and treaties.
- *  The use of this software shall abide by the laws and regulations as well as Software Installation License Agreement/Software Use Agreement updated from time to time.
- *   Without authorization from Ant Small and Micro Financial Services Group Co., Ltd., no one may conduct the following actions:
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
- *   1) reproduce, spread, present, set up a mirror of, upload, download this software;
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- *   2) reverse engineer, decompile the source code of this software or try to find the source code in any other ways;
- *
- *   3) modify, translate and adapt this software, or develop derivative products, works, and services based on this software;
- *
- *   4) distribute, lease, rent, sub-license, demise or transfer any rights in relation to this software, or authorize the reproduction of this software on other’s computers.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.alipay.sofa.healthcheck.core;
 
@@ -52,7 +54,7 @@ public class ComponentCheckProcessorTest {
 
         boolean result = componentCheckProcessor.startupCheckComponent();
 
-        Assert.assertEquals(true, result);
+        Assert.assertTrue(result);
         Assert.assertEquals(6, ReferenceA.getCount());
 
     }
@@ -64,7 +66,7 @@ public class ComponentCheckProcessorTest {
         ReferenceA.setRetryCount(4);
 
         boolean result_1 = componentCheckProcessor.startupCheckComponent();
-        Assert.assertEquals(false, result_1);
+        Assert.assertFalse(result_1);
         Assert.assertEquals(5, ReferenceA.getCount());
 
         ReferenceA.setCount(0);
@@ -72,7 +74,7 @@ public class ComponentCheckProcessorTest {
         ReferenceA.setRetryCount(4);
 
         boolean result_2 = componentCheckProcessor.startupCheckComponent();
-        Assert.assertEquals(true, result_2);
+        Assert.assertTrue(result_2);
         Assert.assertEquals(5, ReferenceA.getCount());
 
     }
@@ -85,7 +87,7 @@ public class ComponentCheckProcessorTest {
 
         Map<String, Health> details_1 = new HashMap<String, Health>();
         boolean result_1 = componentCheckProcessor.httpCheckComponent(details_1);
-        Assert.assertEquals(result_1, false);
+        Assert.assertFalse(result_1);
 
         Assert.assertEquals(5, ReferenceA.getCount());
         Assert.assertEquals(2, details_1.size());
