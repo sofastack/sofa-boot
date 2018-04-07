@@ -1,5 +1,11 @@
 ## SOFA Boot 框架文档
 
+[![Build Status](https://travis-ci.org/alipay/sofa-boot.svg?branch=master)](https://travis-ci.org/alipay/sofa-boot)
+[![Coverage Status](https://coveralls.io/repos/github/alipay/sofa-boot/badge.svg?branch=master)](https://coveralls.io/github/alipay/sofa-boot?branch=master)
+[![Gitter](https://img.shields.io/badge/chat-on%20gitter-orange.svg)](https://gitter.im/alipay/sofa-boot)
+![license](https://img.shields.io/badge/license-Apache--2.0-green.svg)
+![maven](https://img.shields.io/badge/maven-2.3.0-green.svg)
+
 ## 一、背景
 
 在我们使用 Java 的日常开发过程中，可能经常遇到一些类冲突问题，经常要解决可能潜在的 Jar 版本冲突问题，同时，不同的应用使用的 Web 容器、开源框架和一些基础的依赖集合都可能不尽相同，如果我们没有一个统一的开发框架来规范和管控大家的开源框架或者基础依赖的版本，那么大家在遇到一些业务场景时比如架构层面某一个能力在全部应用的支持，大家就需要各自去升级指定的依赖版本，这个时候如果没有框架层面做统一约束的话，人力的投入和升级的周期都可能导致最终目标的达成。同时，很多业务应用也期望存在一个统一的开发框架来统一大家的编程接口，并在框架层面提供一些基础能力如健康检查、类隔离和 Spring 上下文隔离能力，除此之外对一些基础依赖的管控也能最大程度的避免引入组件之间的类冲突并统一大家的基础依赖。
