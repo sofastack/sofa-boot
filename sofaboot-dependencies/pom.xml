@@ -27,7 +27,7 @@
         <!-- sofa-common-tools for log -->
         <sofa.common.tools.version>1.0.12</sofa.common.tools.version>
         <!-- 3rd lib dependency -->
-        <fastjson.version>1.2.48</fastjson.version>
+        <fastjson.version>1.2.47</fastjson.version>
     </properties>
 
     <licenses>
