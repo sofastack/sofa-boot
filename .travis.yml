@@ -1,10 +1,15 @@
 language: java
 sudo: false
 
-jdk: oraclejdk8
+jdk:
+- oraclejdk8
+- openjdk7
+
+install:
+- mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 
 script:
-- mvn clean test
 - sh ./check_format.sh
 
-after_success: mvn clean cobertura:cobertura coveralls:report
+after_success:
+- mvn clean test cobertura:cobertura coveralls:report
