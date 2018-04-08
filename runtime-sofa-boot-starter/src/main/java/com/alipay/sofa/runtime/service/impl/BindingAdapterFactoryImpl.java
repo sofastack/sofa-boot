@@ -37,7 +37,7 @@ public class BindingAdapterFactoryImpl implements BindingAdapterFactory {
     }
 
     @Override
-    public  BindingAdapter getBindingAdapter(BindingType bindingType) {
+    public BindingAdapter getBindingAdapter(BindingType bindingType) {
         return bindingTypeBindingAdapterMap.get(bindingType);
     }
 

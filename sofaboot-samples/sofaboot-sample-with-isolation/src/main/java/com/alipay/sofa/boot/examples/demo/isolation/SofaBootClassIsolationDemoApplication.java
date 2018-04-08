@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.alipay.sofa.boot.examples.demo.isolation;
 
 import org.springframework.boot.SpringApplication;
@@ -23,8 +22,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class SofaBootClassIsolationDemoApplication {
 
-	public static void main(String[] args) {
-		//SOFABoot Isolation
-		SpringApplication.run(SofaBootClassIsolationDemoApplication.class, args);
-	}
+    public static void main(String[] args) {
+        //SOFABoot Isolation
+        SpringApplication.run(SofaBootClassIsolationDemoApplication.class, args);
+    }
 }

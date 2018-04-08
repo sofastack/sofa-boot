@@ -29,7 +29,7 @@ import java.util.Set;
  */
 public class BindingConverterFactoryImpl implements BindingConverterFactory {
     private Map<BindingType, BindingConverter> bindingTypeBindingConverterMap = new HashMap<>();
-    private Map<String, BindingConverter> tagBindingConverterMap = new HashMap<>();
+    private Map<String, BindingConverter>      tagBindingConverterMap         = new HashMap<>();
 
     @Override
     public BindingConverter getBindingConverter(BindingType bindingType) {
@@ -43,12 +43,13 @@ public class BindingConverterFactoryImpl implements BindingConverterFactory {
 
     @Override
     public void addBindingConverters(Set<BindingConverter> bindingConverters) {
-        if(bindingConverters == null || bindingConverters.size() == 0){
+        if (bindingConverters == null || bindingConverters.size() == 0) {
             return;
         }
-        for(BindingConverter bindingConverter : bindingConverters){
-            bindingTypeBindingConverterMap.put(bindingConverter.supportBindingType(),bindingConverter);
-            tagBindingConverterMap.put(bindingConverter.supportTagName(),bindingConverter);
+        for (BindingConverter bindingConverter : bindingConverters) {
+            bindingTypeBindingConverterMap.put(bindingConverter.supportBindingType(),
+                bindingConverter);
+            tagBindingConverterMap.put(bindingConverter.supportTagName(), bindingConverter);
         }
     }
 }

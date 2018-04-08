@@ -28,7 +28,6 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.alipay.sofa</groupId>
     <artifactId>sofa-boot-runtime</artifactId>
     <packaging>pom</packaging>
     <version>2.3.0</version>

@@ -26,7 +26,7 @@ import java.util.Map;
  * @author xuanbei 18/3/2
  */
 public class AppConfigurationImpl implements AppConfiguration {
-    private Map<String, String> sofaConfigMap          = new HashMap<>();
+    private Map<String, String> sofaConfigMap = new HashMap<>();
 
     public AppConfigurationImpl(Map<String, String> sofaConfigMap) {
         this.sofaConfigMap = sofaConfigMap;

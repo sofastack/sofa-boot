@@ -14,8 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 package com.alipay.sofa.healthcheck.core;
 
 import com.alipay.sofa.healthcheck.service.SofaBootComponentHealthCheckInfo;
@@ -52,7 +50,8 @@ public class HealthCheckManager {
     public static List<HealthChecker> getHealthCheckers() {
         List<HealthChecker> healthCheckers = new ArrayList<HealthChecker>();
 
-        Map<String, HealthChecker> stringToHealthChecker = applicationContext.getBeansOfType(HealthChecker.class);
+        Map<String, HealthChecker> stringToHealthChecker = applicationContext
+            .getBeansOfType(HealthChecker.class);
         if (!CollectionUtils.isEmpty(stringToHealthChecker)) {
             for (HealthChecker healthChecker : stringToHealthChecker.values()) {
                 healthCheckers.add(healthChecker);
@@ -65,11 +64,12 @@ public class HealthCheckManager {
     public static List<HealthIndicator> getHealthIndicator() {
         List<HealthIndicator> healthIndicators = new ArrayList<HealthIndicator>();
 
-        Map<String, HealthIndicator> stringToHealthIndicator = applicationContext.getBeansOfType(HealthIndicator.class);
+        Map<String, HealthIndicator> stringToHealthIndicator = applicationContext
+            .getBeansOfType(HealthIndicator.class);
         if (!CollectionUtils.isEmpty(stringToHealthIndicator)) {
             for (HealthIndicator healthIndicator : stringToHealthIndicator.values()) {
-                if (!(healthIndicator instanceof SofaBootComponentHealthCheckInfo) &&
-                    !(healthIndicator instanceof SpringContextHealthCheckInfo)) { //排除掉SofaBootComponentHealthCheckInfo 和 SpringContextHealthCheckInfo
+                if (!(healthIndicator instanceof SofaBootComponentHealthCheckInfo)
+                    && !(healthIndicator instanceof SpringContextHealthCheckInfo)) { //排除掉SofaBootComponentHealthCheckInfo 和 SpringContextHealthCheckInfo
                     healthIndicators.add(healthIndicator);
                 }
             }

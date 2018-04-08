@@ -29,17 +29,17 @@ import java.util.Set;
  */
 public class SystemPropertyConstants {
 
-    private static final String MIDDLEWARE_ACCESS_KEY = "com.antcloud.mw.access";
+    private static final String     MIDDLEWARE_ACCESS_KEY   = "com.antcloud.mw.access";
 
-    private static final String MIDDLEWARE_SECRET_KEY = "com.antcloud.mw.secret";
+    private static final String     MIDDLEWARE_SECRET_KEY   = "com.antcloud.mw.secret";
 
-    private static final String ANTCLOUD_ENDPOINT_KEY = "com.antcloud.antvip.endpoint";
+    private static final String     ANTCLOUD_ENDPOINT_KEY   = "com.antcloud.antvip.endpoint";
 
-    private static final String ANTCLOUD_INSTANCEID_KEY = "com.alipay.instanceid";
+    private static final String     ANTCLOUD_INSTANCEID_KEY = "com.alipay.instanceid";
 
-    private static final String ANTCLOUD_ENV_KEY = "com.alipay.env";
+    private static final String     ANTCLOUD_ENV_KEY        = "com.alipay.env";
 
-    public static final Set<String> KEYS = new HashSet<String>();
+    public static final Set<String> KEYS                    = new HashSet<String>();
 
     static {
         KEYS.add(MIDDLEWARE_ACCESS_KEY);
@@ -48,6 +48,5 @@ public class SystemPropertyConstants {
         KEYS.add(ANTCLOUD_INSTANCEID_KEY);
         KEYS.add(ANTCLOUD_ENV_KEY);
     }
-
 
 }

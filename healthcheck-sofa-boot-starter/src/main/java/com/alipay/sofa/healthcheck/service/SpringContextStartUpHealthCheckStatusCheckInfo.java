@@ -54,10 +54,12 @@ public class SpringContextStartUpHealthCheckStatusCheckInfo extends AbstractEndp
 
         //HealthIndicator
         boolean healthIndicatorStatus = StartUpHealthCheckStatus.getHealthIndicatorStatus();
-        List<HealthIndicatorDetail> healthIndicatorDetails = StartUpHealthCheckStatus.getHealthIndicatorDetails();
+        List<HealthIndicatorDetail> healthIndicatorDetails = StartUpHealthCheckStatus
+            .getHealthIndicatorDetails();
 
         //AfterHealthCheckCallback
-        boolean afterHealthCheckCallbackStatus = StartUpHealthCheckStatus.getAfterHealthCheckCallbackStatus();
+        boolean afterHealthCheckCallbackStatus = StartUpHealthCheckStatus
+            .getAfterHealthCheckCallbackStatus();
         Map<String, Health> afterHealthCheckCallbackDetails = StartUpHealthCheckStatus
             .getAfterHealthCheckCallbackDetails();
 
@@ -84,7 +86,8 @@ public class SpringContextStartUpHealthCheckStatusCheckInfo extends AbstractEndp
             builder = builder.withDetail("Middleware-start-period", componentDetail);
         }
         if (!CollectionUtils.isEmpty(afterHealthCheckCallbackDetails)) {
-            builder = builder.withDetail("Middleware-operation-period", afterHealthCheckCallbackDetails);
+            builder = builder.withDetail("Middleware-operation-period",
+                afterHealthCheckCallbackDetails);
         }
 
         healths.put("sofaBootComponentHealthCheckInfo", builder.build());

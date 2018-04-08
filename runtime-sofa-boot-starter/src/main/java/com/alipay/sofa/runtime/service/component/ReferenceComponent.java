@@ -61,7 +61,7 @@ public class ReferenceComponent extends AbstractComponent {
             REFERENCE_COMPONENT_TYPE,
             reference.getInterfaceType(),
             reference.getUniqueId() + "#"
-                + ReferenceRegisterHelper.generateBindingHashCode(reference));
+                    + ReferenceRegisterHelper.generateBindingHashCode(reference));
         this.reference = reference;
         this.implementation = implementation;
         this.sofaRuntimeContext = sofaRuntimeContext;
@@ -88,7 +88,7 @@ public class ReferenceComponent extends AbstractComponent {
             SofaConfigurationConstants.SOFA_RUNTIME_SKIP_JVM_REFERENCE_HEALTH_CHECK, "true");
 
         return StringUtils.hasText(skipJVMReferenceHealth)
-            && "true".equalsIgnoreCase(skipJVMReferenceHealth);
+               && "true".equalsIgnoreCase(skipJVMReferenceHealth);
     }
 
     /**
@@ -155,7 +155,7 @@ public class ReferenceComponent extends AbstractComponent {
             String healthReport = "|";
             for (HealthResult healthResult : failedBindingHealth) {
                 healthReport = healthReport + healthResult.getHealthName() + "#"
-                    + healthResult.getHealthReport();
+                               + healthResult.getHealthReport();
             }
             result.setHealthReport(healthReport.substring(1, healthReport.length()));
             result.setHealthy(false);
@@ -209,16 +209,16 @@ public class ReferenceComponent extends AbstractComponent {
                     .getBindingAdapter(binding.getBindingType());
                 if (bindingAdapter == null) {
                     throw new ServiceRuntimeException("Can't find BindingAdapter of type "
-                        + binding.getBindingType()
-                        + " for reference " + reference + ".");
+                                                      + binding.getBindingType()
+                                                      + " for reference " + reference + ".");
                 }
-                SofaLogger.info(" >>Un-in Binding [{0}] Begins - {1}.", binding.getBindingType()
-                    , reference);
+                SofaLogger.info(" >>Un-in Binding [{0}] Begins - {1}.", binding.getBindingType(),
+                    reference);
                 try {
                     bindingAdapter.unInBinding(reference, binding, sofaRuntimeContext);
                 } finally {
-                    SofaLogger.info(" >>Un-in Binding [{0}] Ends - {1}.", binding.getBindingType()
-                        , reference);
+                    SofaLogger.info(" >>Un-in Binding [{0}] Ends - {1}.", binding.getBindingType(),
+                        reference);
                 }
             }
         }
@@ -257,11 +257,10 @@ public class ReferenceComponent extends AbstractComponent {
             .getBindingType());
         if (bindingAdapter == null) {
             throw new ServiceRuntimeException("Can't find BindingAdapter of type "
-                + binding.getBindingType() + " for reference "
-                + reference + ".");
+                                              + binding.getBindingType() + " for reference "
+                                              + reference + ".");
         }
-        SofaLogger.info(" >>In Binding [{0}] Begins - {1}.", binding.getBindingType(),
-            reference);
+        SofaLogger.info(" >>In Binding [{0}] Begins - {1}.", binding.getBindingType(), reference);
         Object proxy = null;
         try {
             proxy = bindingAdapter.inBinding(reference, binding, sofaRuntimeContext);

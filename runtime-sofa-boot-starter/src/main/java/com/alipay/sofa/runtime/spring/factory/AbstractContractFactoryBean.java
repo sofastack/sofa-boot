@@ -66,7 +66,8 @@ public abstract class AbstractContractFactoryBean implements InitializingBean,
     /** repeat times */
     protected String                  repeatReferLimit;
     /** binding converter factory */
-    protected BindingConverterFactory bindingConverterFactory = BindingFactoryContainer.getBindingConverterFactory();
+    protected BindingConverterFactory bindingConverterFactory = BindingFactoryContainer
+                                                                  .getBindingConverterFactory();
 
     @Override
     public void afterPropertiesSet() throws Exception {

@@ -36,7 +36,8 @@ public class ComponentHealthChecker extends DefaultHealthChecker {
         boolean allPassed = true;
         Health.Builder builder = new Health.Builder();
         for (ComponentInfo componentInfo : SofaFrameworkHolder.getSofaFramework()
-            .getSofaRuntimeContext(Slite2Configuration.getAppName()).getComponentManager().getComponents()) {
+            .getSofaRuntimeContext(Slite2Configuration.getAppName()).getComponentManager()
+            .getComponents()) {
             HealthResult healthy = componentInfo.isHealthy();
             if (healthy.isHealthy()) {
                 builder.withDetail(healthy.getHealthName(), "passed");

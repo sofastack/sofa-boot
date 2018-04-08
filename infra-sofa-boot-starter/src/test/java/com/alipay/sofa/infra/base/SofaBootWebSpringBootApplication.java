@@ -32,10 +32,12 @@ import org.springframework.context.annotation.ImportResource;
 public class SofaBootWebSpringBootApplication {
 
     // 在Java类中创建 logger 实例
-    private static final Logger logger = LoggerFactory.getLogger(SofaBootWebSpringBootApplication.class);
+    private static final Logger logger = LoggerFactory
+                                           .getLogger(SofaBootWebSpringBootApplication.class);
 
     public static void main(String[] args) throws Exception {
-        SpringApplication springApplication = new SpringApplication(SofaBootWebSpringBootApplication.class);
+        SpringApplication springApplication = new SpringApplication(
+            SofaBootWebSpringBootApplication.class);
         ApplicationContext applicationContext = springApplication.run(args);
     }
 }

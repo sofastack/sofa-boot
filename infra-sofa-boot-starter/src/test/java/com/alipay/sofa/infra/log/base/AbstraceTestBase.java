@@ -27,8 +27,8 @@ import com.alipay.sofa.common.log.LoggerSpaceManager;
  */
 public abstract class AbstraceTestBase {
 
-    public static final String restLogLevel = Constants.LOG_LEVEL_PREFIX +
-                                                InfraHealthCheckLoggerFactory.INFRASTRUCTURE_LOG_SPACE;
+    public static final String restLogLevel = Constants.LOG_LEVEL_PREFIX
+                                              + InfraHealthCheckLoggerFactory.INFRASTRUCTURE_LOG_SPACE;
 
     public void before() throws Exception {
         System.getProperties().put("logging.path", "./logs");
@@ -36,11 +36,12 @@ public abstract class AbstraceTestBase {
 
     public void after() throws Exception {
 
-        System.err.println("\n " + Constants.LOG_ENCODING_PROP_KEY + " : " + System.getProperty("file.encoding"));
+        System.err.println("\n " + Constants.LOG_ENCODING_PROP_KEY + " : "
+                           + System.getProperty("file.encoding"));
         System.err.println("\n " + Constants.LOG_PATH + " : " + System.getProperty("logging.path"));
-        String restLogLevel = Constants.LOG_LEVEL_PREFIX + InfraHealthCheckLoggerFactory.INFRASTRUCTURE_LOG_SPACE;
-        System.err.println("\n " + restLogLevel + " : " +
-            System.getProperty(restLogLevel));
+        String restLogLevel = Constants.LOG_LEVEL_PREFIX
+                              + InfraHealthCheckLoggerFactory.INFRASTRUCTURE_LOG_SPACE;
+        System.err.println("\n " + restLogLevel + " : " + System.getProperty(restLogLevel));
 
         System.clearProperty(Constants.LOG_PATH);
         System.clearProperty(restLogLevel);
@@ -48,6 +49,7 @@ public abstract class AbstraceTestBase {
         System.clearProperty(Constants.LOGBACK_MIDDLEWARE_LOG_DISABLE_PROP_KEY);
         System.clearProperty(Constants.LOG4J2_MIDDLEWARE_LOG_DISABLE_PROP_KEY);
         System.clearProperty(Constants.LOG4J_MIDDLEWARE_LOG_DISABLE_PROP_KEY);
-        LoggerSpaceManager.removeILoggerFactoryBySpaceName(InfraHealthCheckLoggerFactory.INFRASTRUCTURE_LOG_SPACE);
+        LoggerSpaceManager
+            .removeILoggerFactoryBySpaceName(InfraHealthCheckLoggerFactory.INFRASTRUCTURE_LOG_SPACE);
     }
 }

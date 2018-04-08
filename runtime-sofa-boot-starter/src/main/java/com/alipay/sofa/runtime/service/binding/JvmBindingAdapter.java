@@ -151,39 +151,32 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
         @Override
         public Object doInvoke(MethodInvocation invocation) throws Throwable {
             if (binding.isDestroyed()) {
-                throw new IllegalStateException("Can not call destroyed reference! JVM Reference[" +
-                        getInterfaceName() + "#"
-                        + getUniqueId() + "] has already been destroyed.");
+                throw new IllegalStateException("Can not call destroyed reference! JVM Reference["
+                                                + getInterfaceName() + "#" + getUniqueId()
+                                                + "] has already been destroyed.");
             }
 
-            SofaLogger
-                    .debug(">> Start in JVM service invoke, the service interface is  - {0}"
-                            , getInterfaceName());
+            SofaLogger.debug(">> Start in JVM service invoke, the service interface is  - {0}",
+                getInterfaceName());
 
             Object retVal;
             Object targetObj = this.getTarget();
 
             if ((targetObj == null || ((targetObj instanceof Proxy) && binding.hasBackupProxy()))) {
                 targetObj = binding.getBackupProxy();
-                SofaLogger
-                    .debug("<<{0}.{1} backup proxy invoke.", getInterfaceName().getName(), invocation.getMethod()
-                        .getName());
+                SofaLogger.debug("<<{0}.{1} backup proxy invoke.", getInterfaceName().getName(),
+                    invocation.getMethod().getName());
             }
 
             if (targetObj == null) {
-                throw new IllegalStateException("JVM Reference["
-                        +
-                        getInterfaceName()
-                        +
-                        "#"
-                        +
-                        getUniqueId()
-                        +
-                        "] cant not find the corresponding JVM service. "
-                        +
-                        "Please check if there is a SOFA deployment publish the corresponding JVM service. "
-                        +
-                        "If this exception occurred when the application starts up, please add Require-Module to SOFA deployment's MANIFEST.MF to indicate the startup dependency of SOFA modules.");
+                throw new IllegalStateException(
+                    "JVM Reference["
+                            + getInterfaceName()
+                            + "#"
+                            + getUniqueId()
+                            + "] cant not find the corresponding JVM service. "
+                            + "Please check if there is a SOFA deployment publish the corresponding JVM service. "
+                            + "If this exception occurred when the application starts up, please add Require-Module to SOFA deployment's MANIFEST.MF to indicate the startup dependency of SOFA modules.");
             }
 
             ClassLoader tcl = Thread.currentThread().getContextClassLoader();
@@ -194,9 +187,9 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
             } catch (InvocationTargetException ex) {
                 throw ex.getTargetException();
             } finally {
-                SofaLogger
-                    .debug("<< Finish JVM service invoke, the service implementation is  - {0}]"
-                        , (this.target == null ? "null" : this.target.getClass().getName()));
+                SofaLogger.debug(
+                    "<< Finish JVM service invoke, the service implementation is  - {0}]",
+                    (this.target == null ? "null" : this.target.getClass().getName()));
 
                 popThreadContextClassLoader(tcl);
             }
@@ -207,16 +200,14 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
         @Override
         protected void do_catch(MethodInvocation invocation, Throwable e, long startTime) {
             if (SofaLogger.isDebugEnabled()) {
-                SofaLogger.debug(getCommonInvocationLog("Exception", invocation,
-                    startTime));
+                SofaLogger.debug(getCommonInvocationLog("Exception", invocation, startTime));
             }
         }
 
         @Override
         protected void do_finally(MethodInvocation invocation, long startTime) {
             if (SofaLogger.isDebugEnabled()) {
-                SofaLogger.debug(getCommonInvocationLog("Finally", invocation,
-                    startTime));
+                SofaLogger.debug(getCommonInvocationLog("Finally", invocation, startTime));
             }
         }
 

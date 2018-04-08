@@ -25,8 +25,7 @@ import java.text.MessageFormat;
  */
 public class SofaLogger {
     /** SOFA Default Logger */
-    private static final Logger DEFAULT_LOG = SofaRuntimeLoggerFactory
-                                                .getLogger("com.alipay.sofa");
+    private static final Logger DEFAULT_LOG = SofaRuntimeLoggerFactory.getLogger("com.alipay.sofa");
 
     public static void debug(String format, Object... args) {
         if (DEFAULT_LOG.isDebugEnabled()) {

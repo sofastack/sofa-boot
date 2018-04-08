@@ -60,13 +60,13 @@ public class ReferenceClientImpl implements ReferenceClient {
             // add JVM Binding Default
             reference.addBinding(new JvmBinding());
         } else {
-            BindingConverter bindingConverter = BindingFactoryContainer.getBindingConverterFactory()
-                .getBindingConverter(bindingParam.getBindingType());
+            BindingConverter bindingConverter = BindingFactoryContainer
+                .getBindingConverterFactory().getBindingConverter(bindingParam.getBindingType());
 
             if (bindingConverter == null) {
                 throw new ServiceRuntimeException(
                     "Can not found binding converter for binding type "
-                        + bindingParam.getBindingType());
+                            + bindingParam.getBindingType());
             }
             BindingConverterContext bindingConverterContext = new BindingConverterContext();
             bindingConverterContext.setInBinding(true);
@@ -93,7 +93,7 @@ public class ReferenceClientImpl implements ReferenceClient {
             ReferenceComponent.REFERENCE_COMPONENT_TYPE,
             reference.getInterfaceType(),
             reference.getUniqueId() + "#"
-                + ReferenceRegisterHelper.generateBindingHashCode(reference));
+                    + ReferenceRegisterHelper.generateBindingHashCode(reference));
         Collection<ComponentInfo> referenceComponents = sofaRuntimeContext.getComponentManager()
             .getComponentInfosByType(ReferenceComponent.REFERENCE_COMPONENT_TYPE);
 

@@ -103,7 +103,8 @@ public class HealthCheckStartupProcessor {
 
         } catch (Throwable e) {
 
-            logger.error("Unknown error occurred while doing first phase of the readiness check", e);
+            logger
+                .error("Unknown error occurred while doing first phase of the readiness check", e);
             return false;
         }
     }
@@ -142,7 +143,8 @@ public class HealthCheckStartupProcessor {
                 logger.error("second phase of the readiness check result: fail");
             }
         } catch (Throwable e) {
-            logger.error("Unknown error occurred while doing second phase of the readiness check", e);
+            logger.error("Unknown error occurred while doing second phase of the readiness check",
+                e);
             return false;
         }
 
@@ -151,7 +153,8 @@ public class HealthCheckStartupProcessor {
 
     private void publishBeforeHealthCheckEvent() {
 
-        HealthCheckManager.publishEvent(new SofaBootBeforeRedinessCheckEvent(HealthCheckManager.getApplicationContext()));
+        HealthCheckManager.publishEvent(new SofaBootBeforeRedinessCheckEvent(HealthCheckManager
+            .getApplicationContext()));
 
     }
 }

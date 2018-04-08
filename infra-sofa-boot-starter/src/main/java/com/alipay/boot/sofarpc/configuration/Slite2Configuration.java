@@ -14,8 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 package com.alipay.boot.sofarpc.configuration;
 
 import com.alipay.sofa.infra.constants.CommonMiddlewareConstants;
@@ -38,25 +36,26 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class Slite2Configuration {
 
-    private static final Logger logger = LoggerFactory.getLogger(Slite2Configuration.class);
+    private static final Logger    logger            = LoggerFactory
+                                                         .getLogger(Slite2Configuration.class);
 
     //用于存放用配置文件中读取属性
-    public static Properties properties = new Properties();
+    public static Properties       properties        = new Properties();
 
-    private static Environment environment = null;
+    private static Environment     environment       = null;
 
     //判断是否被初始化，此处可以不做多线程判断
-    private static AtomicBoolean initialized = new AtomicBoolean(false);
+    private static AtomicBoolean   initialized       = new AtomicBoolean(false);
 
     private static volatile String appName;
 
-    private static AtomicBoolean environmentSetted = new AtomicBoolean(false);
+    private static AtomicBoolean   environmentSetted = new AtomicBoolean(false);
 
-    public static String getProperty(String key){
+    public static String getProperty(String key) {
         String result = null;
-        if (environment != null){
+        if (environment != null) {
             result = environment.getProperty(key);
-            if (result != null){
+            if (result != null) {
                 return result;
             }
         }
@@ -66,15 +65,15 @@ public class Slite2Configuration {
         return (String) properties.get(key);
     }
 
-    public static boolean containsKey(String key){
-        if (environment != null && environment.containsProperty(key)){
+    public static boolean containsKey(String key) {
+        if (environment != null && environment.containsProperty(key)) {
             return true;
         }
         return properties.containsKey(key);
     }
 
-    public static void embededInit(){
-        if (initialized.compareAndSet(false, true)){
+    public static void embededInit() {
+        if (initialized.compareAndSet(false, true)) {
             ClassLoader classLoader = null;
             if (Thread.currentThread().getContextClassLoader() != null) {
                 classLoader = Thread.currentThread().getContextClassLoader();
@@ -83,32 +82,41 @@ public class Slite2Configuration {
             }
             InputStream inputStream = null;
             try {
-                inputStream = classLoader!=null? classLoader.getResourceAsStream("META-INF/application.properties"): ClassLoader.getSystemResourceAsStream("META-INF/application.properties");
-                if (inputStream != null){
+                inputStream = classLoader != null ? classLoader
+                    .getResourceAsStream("META-INF/application.properties") : ClassLoader
+                    .getSystemResourceAsStream("META-INF/application.properties");
+                if (inputStream != null) {
                     properties.load(inputStream);
                     inputStream.close();
                 }
-            }catch (Exception e){
-                throw new RuntimeException("the default properties of application.properties does not exist in fisrt level of the resource path ", e);
-            }finally {
-                if (inputStream != null){
+            } catch (Exception e) {
+                throw new RuntimeException(
+                    "the default properties of application.properties does not exist in fisrt level of the resource path ",
+                    e);
+            } finally {
+                if (inputStream != null) {
                     try {
                         inputStream.close();
                     } catch (IOException e) {
                         //不以static实例以防止过早初始化
-                        logger.error("error happen when close the inputstream of application.properties ", e);
+                        logger
+                            .error(
+                                "error happen when close the inputstream of application.properties ",
+                                e);
                     }
                 }
             }
 
-            for (String key : SystemPropertyConstants.KEYS){
-                if (!StringUtils.hasText(System.getProperty(key))){
-                    if (properties.containsKey(key)){
+            for (String key : SystemPropertyConstants.KEYS) {
+                if (!StringUtils.hasText(System.getProperty(key))) {
+                    if (properties.containsKey(key)) {
                         System.setProperty(key, properties.getProperty(key));
-                            logger.info("Not find key " + key + " in Java -D argument, put value " + properties.get(key) + " into System");
+                        logger.info("Not find key " + key + " in Java -D argument, put value "
+                                    + properties.get(key) + " into System");
                     }
-                }else {
-                    logger.info("Find key " + key + " in Java -D argument, use system value " + System.getProperty(key));
+                } else {
+                    logger.info("Find key " + key + " in Java -D argument, use system value "
+                                + System.getProperty(key));
                 }
             }
 
@@ -126,7 +134,7 @@ public class Slite2Configuration {
             appName = environment.getProperty(CommonMiddlewareConstants.APP_NAME_KEY);
             if (appName == null) {
                 throw new RuntimeException(
-                        "Application doesn't has property which key is spring.application.name!");
+                    "Application doesn't has property which key is spring.application.name!");
             }
 
             if (environment != null) {
@@ -135,10 +143,12 @@ public class Slite2Configuration {
                         String value = environment.getProperty(key);
                         if (value != null) {
                             System.setProperty(key, value);
-                            logger.info("Not find key " + key + " in Java -D argument, put value " + environment.getProperty(key) + " into System");
+                            logger.info("Not find key " + key + " in Java -D argument, put value "
+                                        + environment.getProperty(key) + " into System");
                         }
                     } else {
-                        logger.info("Find key " + key + " in Java -D argument, use system value " + System.getProperty(key));
+                        logger.info("Find key " + key + " in Java -D argument, use system value "
+                                    + System.getProperty(key));
 
                     }
                 }
