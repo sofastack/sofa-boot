@@ -60,11 +60,11 @@ public class HealthIndicatorCheckProcessor {
                 Status status = health.getStatus();
                 if (!status.equals(Status.UP)) {
                     result = false;
-                    logger.error("healthIndicator (" + healthIndicator.getClass()
+                    logger.error("HealthIndicator (" + healthIndicator.getClass()
                                  + ")check fail. And the status is[" + status
                                  + "]; the detail is: " + JSON.toJSONString(health.getDetails()));
                 } else {
-                    logger.info("healthIndicator (" + healthIndicator.getClass()
+                    logger.info("HealthIndicator (" + healthIndicator.getClass()
                                 + ")check success.");
                 }
 
@@ -72,7 +72,7 @@ public class HealthIndicatorCheckProcessor {
                     getKey(healthIndicator), health));
             } catch (Exception e) {
                 result = false;
-                logger.error("Error occurred while doing HealthIndicator health check("
+                logger.error("Error occurred while doing HealthIndicator readiness check("
                              + healthIndicator.getClass() + ")", e);
             }
 
@@ -105,7 +105,7 @@ public class HealthIndicatorCheckProcessor {
         String[] fullName = healthIndicator.getClass().getName().split("\\.");
         String name = fullName[fullName.length - 1];
 
-        int index = name.toLowerCase().indexOf("healthindicator");
+        int index = name.toLowerCase().indexOf("HealthIndicator");
         if (index > 0) {
             return name.substring(0, index);
         }

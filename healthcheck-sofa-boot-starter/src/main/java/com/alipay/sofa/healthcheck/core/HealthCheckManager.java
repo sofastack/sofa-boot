@@ -81,11 +81,11 @@ public class HealthCheckManager {
     public static List<SofaBootAfterReadinessCheckCallback> getApplicationAfterHealthCheckCallbacks() {
         List<SofaBootAfterReadinessCheckCallback> afterReadinessCheckCallbacks = null;
 
-        Map<String, SofaBootAfterReadinessCheckCallback> stringToCallback = applicationContext
+        Map<String, SofaBootAfterReadinessCheckCallback> stringToAfterReadinessCheckCallback = applicationContext
             .getBeansOfType(SofaBootAfterReadinessCheckCallback.class);
-        if (!CollectionUtils.isEmpty(stringToCallback)) {
+        if (!CollectionUtils.isEmpty(stringToAfterReadinessCheckCallback)) {
             afterReadinessCheckCallbacks = new ArrayList<SofaBootAfterReadinessCheckCallback>(
-                stringToCallback.values());
+                stringToAfterReadinessCheckCallback.values());
         } else {
             afterReadinessCheckCallbacks = Collections.EMPTY_LIST;
         }
@@ -97,11 +97,11 @@ public class HealthCheckManager {
     public static List<SofaBootMiddlewareAfterReadinessCheckCallback> getMiddlewareAfterHealthCheckCallbacks() {
         List<SofaBootMiddlewareAfterReadinessCheckCallback> middlewareAfterReadinessCheckCallbacks = null;
 
-        Map<String, SofaBootMiddlewareAfterReadinessCheckCallback> stringToCallback = applicationContext
+        Map<String, SofaBootMiddlewareAfterReadinessCheckCallback> stringToMiddlewareAfterReadinessCheckCallback = applicationContext
             .getBeansOfType(SofaBootMiddlewareAfterReadinessCheckCallback.class);
-        if (!CollectionUtils.isEmpty(stringToCallback)) {
+        if (!CollectionUtils.isEmpty(stringToMiddlewareAfterReadinessCheckCallback)) {
             middlewareAfterReadinessCheckCallbacks = new ArrayList<SofaBootMiddlewareAfterReadinessCheckCallback>(
-                stringToCallback.values());
+                stringToMiddlewareAfterReadinessCheckCallback.values());
         } else {
             middlewareAfterReadinessCheckCallbacks = Collections.EMPTY_LIST;
         }

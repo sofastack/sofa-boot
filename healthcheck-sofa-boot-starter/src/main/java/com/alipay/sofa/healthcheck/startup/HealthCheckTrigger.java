@@ -54,13 +54,13 @@ public class HealthCheckTrigger implements ApplicationListener<ContextRefreshedE
 
         StringBuilder hcInfo = new StringBuilder();
 
-        hcInfo.append("\nFound " + healthCheckers.size() + " component health checkers:").append(
-            "\n");
+        hcInfo.append("\nFound " + healthCheckers.size() + " SOFABoot component health checkers:")
+            .append("\n");
         for (HealthChecker healthchecker : healthCheckers) {
             hcInfo.append(healthchecker.getClass()).append("\n");
         }
 
-        hcInfo.append("Found " + healthIndicators.size() + " indicator health checkers:").append(
+        hcInfo.append("Found " + healthIndicators.size() + " HealthIndicator checkers:").append(
             "\n");
         for (HealthIndicator healthIndicator : healthIndicators) {
             hcInfo.append(healthIndicator.getClass()).append("\n");
