@@ -31,14 +31,14 @@ public class SpringContextCheckProcessor {
                                      .getCanonicalName());
 
     public boolean springContextCheck() {
-        logger.info("Begin springContext health check.");
+        logger.info("Begin SpringContext health check.");
 
         boolean isHealth = HealthCheckManager.springContextCheck();
 
         if (isHealth) {
-            logger.info("springContext check result: success.");
+            logger.info("SpringContext check result: success.");
         } else {
-            logger.error("springContext check result: fail.");
+            logger.error("SpringContext check result: fail.");
         }
 
         StartUpHealthCheckStatus.setSpringContextStatus(isHealth);

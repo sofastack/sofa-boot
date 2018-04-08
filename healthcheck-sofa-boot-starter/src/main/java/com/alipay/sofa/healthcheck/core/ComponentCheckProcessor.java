@@ -47,7 +47,7 @@ public class ComponentCheckProcessor {
     public boolean httpCheckComponent(Map<String, Health> healthMap) {
         boolean result = true;
 
-        logger.info("Begin http component health check.");
+        logger.info("Begin SOFABoot component health check.");
 
         for (HealthChecker healthChecker : HealthCheckManager.getHealthCheckers()) {
 
@@ -59,9 +59,9 @@ public class ComponentCheckProcessor {
         }
 
         if (result) {
-            logger.info("http component health check result: success.");
+            logger.info("SOFABoot component health check result: success.");
         } else {
-            logger.error("http component health check result: failed.");
+            logger.error("SOFABoot component health check result: failed.");
 
         }
 
@@ -78,7 +78,7 @@ public class ComponentCheckProcessor {
             return true;
         }
 
-        logger.info("Begin startup component health check.");
+        logger.info("Begin startup SOFABoot component health check.");
 
         boolean result = true;
 
@@ -91,9 +91,10 @@ public class ComponentCheckProcessor {
         }
 
         if (result) {
-            logger.info("component startup health check result: success.");
+            logger.info("SOFABoot component startup health check result: success.");
+
         } else {
-            logger.error("component startup health check result: failed.");
+            logger.error("SOFABoot component startup health check result: failed.");
         }
 
         StartUpHealthCheckStatus.setComponentStatus(result);
