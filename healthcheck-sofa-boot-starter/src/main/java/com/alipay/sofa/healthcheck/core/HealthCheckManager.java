@@ -85,7 +85,7 @@ public class HealthCheckManager {
             .getBeansOfType(SofaBootAfterReadinessCheckCallback.class);
         if (!CollectionUtils.isEmpty(stringToAfterReadinessCheckCallback)) {
             afterReadinessCheckCallbacks = new ArrayList<>(
-                    stringToAfterReadinessCheckCallback.values());
+                stringToAfterReadinessCheckCallback.values());
         } else {
             afterReadinessCheckCallbacks = Collections.EMPTY_LIST;
         }
@@ -101,7 +101,7 @@ public class HealthCheckManager {
             .getBeansOfType(SofaBootMiddlewareAfterReadinessCheckCallback.class);
         if (!CollectionUtils.isEmpty(stringToMiddlewareAfterReadinessCheckCallback)) {
             middlewareAfterReadinessCheckCallbacks = new ArrayList<>(
-                    stringToMiddlewareAfterReadinessCheckCallback.values());
+                stringToMiddlewareAfterReadinessCheckCallback.values());
         } else {
             middlewareAfterReadinessCheckCallbacks = Collections.EMPTY_LIST;
         }
