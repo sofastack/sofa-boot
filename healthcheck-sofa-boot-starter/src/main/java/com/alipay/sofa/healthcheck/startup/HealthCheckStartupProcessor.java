@@ -58,9 +58,9 @@ public class HealthCheckStartupProcessor {
             }
         } finally {
             if (result) {
-                logger.info("Startup health check result: success");
+                logger.info("Readiness check result: success");
             } else {
-                logger.error("Startup health check result: fail");
+                logger.error("Readiness check result: fail");
             }
 
             StartUpHealthCheckStatus.closeStartStatu();
