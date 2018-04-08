@@ -16,8 +16,8 @@
  */
 package com.alipay.sofa.healthcheck.core;
 
-import com.alipay.sofa.healthcheck.bean.AfterHealthCheckCallbackA;
-import com.alipay.sofa.healthcheck.bean.AfterHealthCheckCallbackB;
+import com.alipay.sofa.healthcheck.bean.AfterReadinessCheckCallbackA;
+import com.alipay.sofa.healthcheck.bean.AfterReadinessCheckCallbackB;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -44,17 +44,17 @@ public class AfterHealthCheckCallbackProcessorTest {
     @Test
     public void testAfterHealthCheckCallback() {
 
-        AfterHealthCheckCallbackA.setHealth(true);
-        AfterHealthCheckCallbackB.setMark(false);
+        AfterReadinessCheckCallbackA.setHealth(true);
+        AfterReadinessCheckCallbackB.setMark(false);
         boolean result_1 = afterHealthCheckCallbackProcessor.checkAfterHealthCheckCallback();
         Assert.assertTrue(result_1);
-        Assert.assertTrue(AfterHealthCheckCallbackB.isMark());
+        Assert.assertTrue(AfterReadinessCheckCallbackB.isMark());
 
-        AfterHealthCheckCallbackA.setHealth(false);
-        AfterHealthCheckCallbackB.setMark(false);
+        AfterReadinessCheckCallbackA.setHealth(false);
+        AfterReadinessCheckCallbackB.setMark(false);
         boolean result_2 = afterHealthCheckCallbackProcessor.checkAfterHealthCheckCallback();
         Assert.assertFalse(result_2);
-        Assert.assertFalse(AfterHealthCheckCallbackB.isMark());
+        Assert.assertFalse(AfterReadinessCheckCallbackB.isMark());
 
     }
 

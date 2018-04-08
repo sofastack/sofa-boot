@@ -24,7 +24,7 @@ import org.springframework.context.ApplicationContext;
  * @author liangen
  * @version $Id: SofaBootMiddlewareHealthCheckCallback.java, v 0.1 2018年03月08日 下午9:19 liangen Exp $
  */
-public interface SofaBootMiddlewareAfterHealthCheckCallback {
+public interface SofaBootMiddlewareAfterReadinessCheckCallback {
 
     Health onHealthy(ApplicationContext applicationContext);
 

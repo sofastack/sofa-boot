@@ -20,8 +20,8 @@ package com.alipay.sofa.healthcheck.core;
 
 import com.alipay.sofa.healthcheck.service.SofaBootComponentHealthCheckInfo;
 import com.alipay.sofa.healthcheck.service.SpringContextHealthCheckInfo;
-import com.alipay.sofa.healthcheck.startup.SofaBootApplicationAfterHealthCheckCallback;
-import com.alipay.sofa.healthcheck.startup.SofaBootMiddlewareAfterHealthCheckCallback;
+import com.alipay.sofa.healthcheck.startup.SofaBootAfterReadinessCheckCallback;
+import com.alipay.sofa.healthcheck.startup.SofaBootMiddlewareAfterReadinessCheckCallback;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEvent;
@@ -78,13 +78,13 @@ public class HealthCheckManager {
         return healthIndicators;
     }
 
-    public static List<SofaBootApplicationAfterHealthCheckCallback> getApplicationAfterHealthCheckCallbacks() {
-        List<SofaBootApplicationAfterHealthCheckCallback> afterHealthCheckCallbacks = null;
+    public static List<SofaBootAfterReadinessCheckCallback> getApplicationAfterHealthCheckCallbacks() {
+        List<SofaBootAfterReadinessCheckCallback> afterHealthCheckCallbacks = null;
 
-        Map<String, SofaBootApplicationAfterHealthCheckCallback> stringToCallback = applicationContext
-            .getBeansOfType(SofaBootApplicationAfterHealthCheckCallback.class);
+        Map<String, SofaBootAfterReadinessCheckCallback> stringToCallback = applicationContext
+            .getBeansOfType(SofaBootAfterReadinessCheckCallback.class);
         if (!CollectionUtils.isEmpty(stringToCallback)) {
-            afterHealthCheckCallbacks = new ArrayList<SofaBootApplicationAfterHealthCheckCallback>(
+            afterHealthCheckCallbacks = new ArrayList<SofaBootAfterReadinessCheckCallback>(
                 stringToCallback.values());
         } else {
             afterHealthCheckCallbacks = Collections.EMPTY_LIST;
@@ -94,13 +94,13 @@ public class HealthCheckManager {
 
     }
 
-    public static List<SofaBootMiddlewareAfterHealthCheckCallback> getMiddlewareAfterHealthCheckCallbacks() {
-        List<SofaBootMiddlewareAfterHealthCheckCallback> afterHealthCheckCallbacks = null;
+    public static List<SofaBootMiddlewareAfterReadinessCheckCallback> getMiddlewareAfterHealthCheckCallbacks() {
+        List<SofaBootMiddlewareAfterReadinessCheckCallback> afterHealthCheckCallbacks = null;
 
-        Map<String, SofaBootMiddlewareAfterHealthCheckCallback> stringToCallback = applicationContext
-            .getBeansOfType(SofaBootMiddlewareAfterHealthCheckCallback.class);
+        Map<String, SofaBootMiddlewareAfterReadinessCheckCallback> stringToCallback = applicationContext
+            .getBeansOfType(SofaBootMiddlewareAfterReadinessCheckCallback.class);
         if (!CollectionUtils.isEmpty(stringToCallback)) {
-            afterHealthCheckCallbacks = new ArrayList<SofaBootMiddlewareAfterHealthCheckCallback>(
+            afterHealthCheckCallbacks = new ArrayList<SofaBootMiddlewareAfterReadinessCheckCallback>(
                 stringToCallback.values());
         } else {
             afterHealthCheckCallbacks = Collections.EMPTY_LIST;

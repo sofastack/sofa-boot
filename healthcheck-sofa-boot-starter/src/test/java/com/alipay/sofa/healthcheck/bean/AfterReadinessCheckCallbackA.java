@@ -14,17 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.healthcheck.startup;
+package com.alipay.sofa.healthcheck.bean;
 
+import com.alipay.sofa.healthcheck.startup.SofaBootMiddlewareAfterReadinessCheckCallback;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.context.ApplicationContext;
 
 /**
  *
  * @author liangen
- * @version $Id: SofaBootAfterHealthCheckCallback.java, v 0.1 2018年03月07日 上午10:30 liangen Exp $
+ * @version $Id: AfterReadinessCheckCallbackA.java, v 0.1 2018年03月11日 下午2:40 liangen Exp $
  */
-public interface SofaBootApplicationAfterHealthCheckCallback {
+public class AfterReadinessCheckCallbackA implements SofaBootMiddlewareAfterReadinessCheckCallback {
 
-    Health onHealthy(ApplicationContext applicationContext);
+    private static boolean health = false;
+
+    @Override
+    public Health onHealthy(ApplicationContext applicationContext) {
+        if (health) {
+            return Health.up().withDetail("server", "server is ok").build();
+        } else {
+            return Health.down().withDetail("server", "server is bad").build();
+
+        }
+    }
+
+    public static void setHealth(boolean health) {
+        AfterReadinessCheckCallbackA.health = health;
+    }
 }

@@ -18,8 +18,8 @@ package com.alipay.sofa.healthcheck.core;
 
 import com.alibaba.fastjson.JSON;
 import com.alipay.sofa.healthcheck.log.SofaBootHealthCheckLoggerFactory;
-import com.alipay.sofa.healthcheck.startup.SofaBootApplicationAfterHealthCheckCallback;
-import com.alipay.sofa.healthcheck.startup.SofaBootMiddlewareAfterHealthCheckCallback;
+import com.alipay.sofa.healthcheck.startup.SofaBootAfterReadinessCheckCallback;
+import com.alipay.sofa.healthcheck.startup.SofaBootMiddlewareAfterReadinessCheckCallback;
 import com.alipay.sofa.healthcheck.startup.StartUpHealthCheckStatus;
 import org.slf4j.Logger;
 import org.springframework.boot.actuate.health.Health;
@@ -63,9 +63,9 @@ public class AfterHealthCheckCallbackProcessor {
         boolean result = true;
         logger.info("Begin MiddlewareAfterHealthCheckCallback startup health check");
 
-        List<SofaBootMiddlewareAfterHealthCheckCallback> afterHealthCheckCallbacks = HealthCheckManager
+        List<SofaBootMiddlewareAfterReadinessCheckCallback> afterHealthCheckCallbacks = HealthCheckManager
             .getMiddlewareAfterHealthCheckCallbacks();
-        for (SofaBootMiddlewareAfterHealthCheckCallback afterHealthCheckCallback : afterHealthCheckCallbacks) {
+        for (SofaBootMiddlewareAfterReadinessCheckCallback afterHealthCheckCallback : afterHealthCheckCallbacks) {
             try {
                 Health health = afterHealthCheckCallback.onHealthy(HealthCheckManager.getApplicationContext());
                 Status status = health.getStatus();
@@ -112,9 +112,9 @@ public class AfterHealthCheckCallbackProcessor {
 
         logger.info("Begin ApplicationAfterHealthCheckCallback startup health check");
 
-        List<SofaBootApplicationAfterHealthCheckCallback> afterHealthCheckCallbacks = HealthCheckManager
+        List<SofaBootAfterReadinessCheckCallback> afterHealthCheckCallbacks = HealthCheckManager
             .getApplicationAfterHealthCheckCallbacks();
-        for (SofaBootApplicationAfterHealthCheckCallback afterHealthCheckCallback : afterHealthCheckCallbacks) {
+        for (SofaBootAfterReadinessCheckCallback afterHealthCheckCallback : afterHealthCheckCallbacks) {
             try {
                 Health health = afterHealthCheckCallback.onHealthy(HealthCheckManager.getApplicationContext());
                 Status status = health.getStatus();
