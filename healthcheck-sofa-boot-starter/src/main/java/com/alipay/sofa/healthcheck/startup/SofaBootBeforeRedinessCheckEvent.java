@@ -19,9 +19,9 @@ package com.alipay.sofa.healthcheck.startup;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.event.ApplicationContextEvent;
 
-public class SofaBootBeforeHealthCheckEvent extends ApplicationContextEvent {
+public class SofaBootBeforeRedinessCheckEvent extends ApplicationContextEvent {
 
-    public SofaBootBeforeHealthCheckEvent(ApplicationContext source) {
+    public SofaBootBeforeRedinessCheckEvent(ApplicationContext source) {
         super(source);
     }
 }

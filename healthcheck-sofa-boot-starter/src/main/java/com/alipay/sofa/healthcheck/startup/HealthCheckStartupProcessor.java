@@ -43,7 +43,7 @@ public class HealthCheckStartupProcessor {
 
     public void checkHealth() {
 
-        //publish SofaBootBeforeHealthCheckEvent before the health check.
+        //publish SofaBootBeforeRedinessCheckEvent before the health check.
         publishBeforeHealthCheckEvent();
 
         boolean result = false;
@@ -151,7 +151,7 @@ public class HealthCheckStartupProcessor {
 
     private void publishBeforeHealthCheckEvent() {
 
-        HealthCheckManager.publishEvent(new SofaBootBeforeHealthCheckEvent(HealthCheckManager.getApplicationContext()));
+        HealthCheckManager.publishEvent(new SofaBootBeforeRedinessCheckEvent(HealthCheckManager.getApplicationContext()));
 
     }
 }
