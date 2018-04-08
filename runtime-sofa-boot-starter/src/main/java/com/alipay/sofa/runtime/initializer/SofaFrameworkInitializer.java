@@ -157,7 +157,7 @@ public abstract class SofaFrameworkInitializer {
             return Collections.emptySet();
         }
 
-        Set<T> result = new HashSet<T>();
+        Set<T> result = new HashSet<>();
         for (T t : serviceLoader) {
             result.add(t);
         }

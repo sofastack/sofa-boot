@@ -56,7 +56,7 @@ public class ComponentManagerImpl implements ComponentManager {
     }
 
     public Collection<ComponentName> getPendingComponentInfos() {
-        List<ComponentName> names = new ArrayList<ComponentName>();
+        List<ComponentName> names = new ArrayList<>();
         for (ComponentInfo ri : registry.values()) {
             if (ri.getState() == ComponentStatus.REGISTERED) {
                 names.add(ri.getName());
@@ -85,7 +85,7 @@ public class ComponentManagerImpl implements ComponentManager {
 
     @Override
     public void shutdown() {
-        List<ComponentInfo> elems = new ArrayList<ComponentInfo>(registry.values());
+        List<ComponentInfo> elems = new ArrayList<>(registry.values());
 
         for (ComponentInfo ri : elems) {
             try {
@@ -174,7 +174,7 @@ public class ComponentManagerImpl implements ComponentManager {
     }
 
     public Collection<ComponentInfo> getComponentInfosByType(ComponentType type) {
-        List<ComponentInfo> componentInfos = new ArrayList<ComponentInfo>();
+        List<ComponentInfo> componentInfos = new ArrayList<>();
 
         for (ComponentInfo componentInfo : registry.values()) {
             if (type.equals(componentInfo.getType())) {

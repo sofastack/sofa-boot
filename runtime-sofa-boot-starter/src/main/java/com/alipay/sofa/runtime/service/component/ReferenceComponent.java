@@ -117,7 +117,7 @@ public class ReferenceComponent extends AbstractComponent {
         }
 
         HealthResult result = new HealthResult(componentName.getRawName());
-        List<HealthResult> bindingHealth = new ArrayList<HealthResult>();
+        List<HealthResult> bindingHealth = new ArrayList<>();
 
         JvmBinding jvmBinding = null;
         HealthResult jvmBindingHealthResult = null;
@@ -141,7 +141,7 @@ public class ReferenceComponent extends AbstractComponent {
             }
         }
 
-        List<HealthResult> failedBindingHealth = new ArrayList<HealthResult>();
+        List<HealthResult> failedBindingHealth = new ArrayList<>();
 
         for (HealthResult healthResult : bindingHealth) {
             if (healthResult != null && !healthResult.isHealthy()) {

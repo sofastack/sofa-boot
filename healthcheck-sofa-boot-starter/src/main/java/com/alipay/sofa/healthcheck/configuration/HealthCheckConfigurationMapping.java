@@ -23,7 +23,7 @@ import java.util.Map;
  * Created by liangen on 17/8/7.
  */
 public class HealthCheckConfigurationMapping {
-    public static Map<String, String> dotMap = new HashMap<String, String>();
+    public static Map<String, String> dotMap = new HashMap<>();
 
     static {
 

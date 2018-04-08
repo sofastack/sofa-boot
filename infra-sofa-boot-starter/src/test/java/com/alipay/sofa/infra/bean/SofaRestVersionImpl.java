@@ -41,7 +41,7 @@ public class SofaRestVersionImpl extends AbstractSofaBootMiddlewareVersionFacade
 
     @Override
     public List<String> getAuthors() {
-        List<String> authors = new LinkedList<String>();
+        List<String> authors = new LinkedList<>();
         authors.add("guanchao.ygc");
         return authors;
     }

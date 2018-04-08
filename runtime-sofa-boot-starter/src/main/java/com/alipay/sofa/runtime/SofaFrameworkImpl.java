@@ -31,9 +31,9 @@ import java.util.concurrent.CopyOnWriteArraySet;
  */
 public class SofaFrameworkImpl implements SofaFrameworkInternal {
     /** sofa runtime managers */
-    private Map<String, SofaRuntimeManager> sofaRuntimeManagers = new ConcurrentHashMap<String, SofaRuntimeManager>();
+    private Map<String, SofaRuntimeManager> sofaRuntimeManagers = new ConcurrentHashMap<>();
     /** application names */
-    private Set<String>                     appNames            = new CopyOnWriteArraySet<String>();
+    private Set<String>                     appNames            = new CopyOnWriteArraySet<>();
 
     public SofaFrameworkImpl() {
     }
