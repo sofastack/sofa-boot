@@ -42,6 +42,7 @@
         <module>healthcheck-sofa-boot-starter</module>
         <module>runtime-sofa-boot-starter</module>
         <module>sofaboot-samples</module>
+        <module>test-sofa-boot-starter</module>
     </modules>
 
     <properties>
