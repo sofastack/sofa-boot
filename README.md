@@ -6,7 +6,7 @@
 ![license](https://img.shields.io/badge/license-Apache--2.0-green.svg)
 ![maven](https://img.shields.io/badge/maven-2.3.0-green.svg)
 
-SOFABoot 是蚂蚁金服开源的基于 Spring Boot 的研发框架，它在 Spring Boot 的基础上，提供了诸如 Readiness Check，类隔离，日志空间隔离等等能力。在增强了 Spring Boot 的同时，SOFABoot 提供了让用户可以在 Spring Boot 中非常方便地使用 SOFAStack 相关中间件的能力。
+SOFABoot 是蚂蚁金服开源的基于 Spring Boot 的研发框架，它在 Spring Boot 的基础上，提供了诸如 Readiness Check，类隔离，日志空间隔离等等能力。在增强了 Spring Boot 的同时，SOFABoot 提供了让用户可以在 Spring Boot 中非常方便地使用 SOFAStack 相关中间件的能力。
 
 ## 一、背景
 
@@ -14,7 +14,7 @@ Spring Boot 是一个非常优秀的开源框架，可以非常方便地就构�
 
 * Spring Boot 提供了一个基础的健康检查的能力，中间件和应用都可以扩展来实现自己的健康检查逻辑。但是 Spring Boot 的健康检查只有 Liveness Check 的能力，缺少 Readiness Check 的能力，这样会有比较致命的问题。当一个微服务应用启动的时候，必须要先保证启动后应用是健康的，才可以将上游的流量放进来（来自于 RPC，网关，定时任务等等流量），否则就可能会导致一定时间内大量的错误发生。
 * Spring Boot 虽然通过依赖管理（Dependency Management）的方式最大程度的保证了 Spring Boot 管理的 JAR 包之间的兼容性，但是不可避免的，当引入一些其他的 JAR 包的时候，还是可能会遇到冲突，而且很多时候这种冲突解决起来并不是这么容易，一个例子是当冲突的包是序列化相关的类库时，比如说 Hessian，如果应用中的一个组件需要使用 Hessian 3，而另一个则必须要使用 Hessian 4，由于 Hessian 3 和 Hessian 4 之间的不兼容性，并且序列化还涉及到微服务中的上下游服务，要把 Hessian 统一到一个版本绝非易事。
-* 在超大规模微服务运维的场景下，运维能力的平台化是一定要解决的问题，而监控又是其中非常主要的一个点，针对于日志监控这种情况，Spring Boot 并没有提供任何解决方案。大部分的开源组件，具体要打印哪些日志，打印到什么路径，什么文件下面，都是由应用的使用者来决定，这样会导致每一个应用的日志配置都各式各样，每一个应用都需要去监控系统中配置自己应用的日志监控，导致关键的监控的实施成本特别搞。
+* 在超大规模微服务运维的场景下，运维能力的平台化是一定要解决的问题，而监控又是其中非常主要的一个点，针对于日志监控这种情况，Spring Boot 并没有提供任何解决方案。大部分的开源组件，具体要打印哪些日志，打印到什么路径，什么文件下面，都是由应用的使用者来决定，这样会导致每一个应用的日志配置都各式各样，每一个应用都需要去监控系统中配置自己应用的日志监控，导致关键的监控的实施成本特别高。
 
 为了解决以上的问题，又因为 SOFAStack 中的诸多中间件本身就需要集成 Spring Boot，所以蚂蚁金服基于 Spring Boot 开发并开源了 SOFABoot，来解决以上的问题，也方便使用者在 Spring Boot 中方便地去使用 SOFAStack 中间件。
 
