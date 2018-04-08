@@ -30,7 +30,7 @@ import java.util.List;
 public class SofaBootVersionImpl extends AbstractSofaBootMiddlewareVersionFacade {
     @Override
     public String getName() {
-        return "SOFA Boot";
+        return "SOFABoot";
     }
 
     @Override

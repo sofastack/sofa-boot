@@ -24,7 +24,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class SofaBootClassIsolationDemoApplication {
 
 	public static void main(String[] args) {
-		//SOFA Boot Isolation
+		//SOFABoot Isolation
 		SpringApplication.run(SofaBootClassIsolationDemoApplication.class, args);
 	}
 }

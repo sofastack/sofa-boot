@@ -31,7 +31,7 @@
 
     <dependencies>
 
-        <!-- import SOFA Boot Dependency healthcheck and infra -->
+        <!-- import SOFABoot Dependency healthcheck and infra -->
         <dependency>
             <groupId>com.alipay.sofa</groupId>
             <artifactId>healthcheck-sofa-boot-starter</artifactId>

@@ -20,7 +20,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * 改类中的静态变量的值为 SOFA Boot 初始化时默认会塞入系统属性中的 key 值,
+ * 改类中的静态变量的值为 SOFABoot 初始化时默认会塞入系统属性中的 key 值,
  * SOFABoot 在初始化时，如发现配置源(SOFABoot 为 Environment, Embedded 为指定文件的 Properties) 中包含该类中的静态变量，
  * 将会自动将该属性 塞入到系统属性中
  * 后续如有其他功能需要扩展需要向系统属性中写入的 key-value ,直接在该类中添加即可。

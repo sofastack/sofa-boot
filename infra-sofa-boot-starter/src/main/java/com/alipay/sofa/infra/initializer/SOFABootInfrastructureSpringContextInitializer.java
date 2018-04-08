@@ -26,7 +26,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.util.StringUtils;
 
 /**
- * SOFA Boot Infrastructure 启动初始化器
+ * SOFABoot Infrastructure 启动初始化器
  * <p/>
  * 参考:org.springframework.core.io.support.SpringFactoriesLoader
  * <p/>
@@ -43,7 +43,7 @@ public class SOFABootInfrastructureSpringContextInitializer
         this.logInit(applicationContext.getEnvironment());
 
         InfraHealthCheckLoggerFactory.getLogger(SOFABootInfrastructureSpringContextInitializer.class)
-            .info("SOFA Boot Infrastructure Starting!");
+            .info("SOFABoot Infrastructure Starting!");
 
     }
 

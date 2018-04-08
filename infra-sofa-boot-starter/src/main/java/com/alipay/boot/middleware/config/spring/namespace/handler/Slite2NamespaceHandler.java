@@ -26,7 +26,7 @@ import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 import java.util.ServiceLoader;
 
 /**
- * SOFA Boot 命名空间解析
+ * SOFABoot 命名空间解析
  * <p>
  * Created by yangguanchao on 16/9/1.
  */
@@ -43,7 +43,7 @@ public class Slite2NamespaceHandler extends NamespaceHandlerSupport {
         for (Slite2MiddlewareTagNameSupport tagNameSupport : serviceLoader) {
             this.registerTagParser(tagNameSupport);
         }
-        //SOFA Boot
+        //SOFABoot
         for (Slite2MiddlewareTagNameSupport tagNameSupport : serviceLoaderSofaBoot) {
             this.registerTagParser(tagNameSupport);
         }
