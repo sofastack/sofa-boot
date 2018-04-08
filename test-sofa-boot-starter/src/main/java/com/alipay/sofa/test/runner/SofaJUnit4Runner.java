@@ -23,6 +23,7 @@ import org.junit.runner.Runner;
 import org.junit.runner.manipulation.*;
 import org.junit.runner.notification.RunNotifier;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.ClassUtils;
 
 /**
@@ -31,11 +32,11 @@ import org.springframework.util.ClassUtils;
  */
 public class SofaJUnit4Runner extends Runner implements Filterable, Sortable {
 
-    private static final String DEFAULT_JUNIT4_RUNNER = "org.junit.runners.JUnit4";
+    private static final String DEFAULT_JUNIT4_RUNNER  = "org.junit.runners.JUnit4";
 
     private static final String SOFA_ARK_JUNIT4_RUNNER = "com.alipay.sofa.ark.support.runner.ArkJUnit4Runner";
 
-    protected Runner runner;
+    protected Runner            runner;
 
     public SofaJUnit4Runner(Class<?> klazz) {
 
@@ -56,6 +57,16 @@ public class SofaJUnit4Runner extends Runner implements Filterable, Sortable {
             if (runnerClass == null) {
                 runnerClass = ClassUtils.getDefaultClassLoader().loadClass(testRunner);
             }
+
+            if (TestModeUtil.isArkMode()
+                && SpringJUnit4ClassRunner.class.isAssignableFrom(runnerClass)) {
+                throw new RuntimeException(
+                    String
+                        .format(
+                            "As TestRunner is %s, dependency of sofa-ark-springboot-starter should be removed from classpath!",
+                            runnerClass.getCanonicalName()));
+            }
+
             runner = (Runner) runnerClass.getConstructor(Class.class).newInstance(klazz);
         } catch (Exception ex) {
             throw new RuntimeException(ex);

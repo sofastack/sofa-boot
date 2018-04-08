@@ -26,7 +26,7 @@ public class SofaBootRunner extends SofaJUnit4Runner {
 
     private static final String DEFAULT_SPRING_BOOT_RUNNER = "org.springframework.test.context.junit4.SpringRunner";
 
-    private static final String SOFA_ARK_BOOT_RUNNER = "com.alipay.sofa.ark.springboot.runner.ArkBootRunner";
+    private static final String SOFA_ARK_BOOT_RUNNER       = "com.alipay.sofa.ark.springboot.runner.ArkBootRunner";
 
     public SofaBootRunner(Class<?> klazz) {
         super(klazz);
