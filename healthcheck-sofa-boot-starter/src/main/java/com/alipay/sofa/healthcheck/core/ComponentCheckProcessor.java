@@ -74,11 +74,11 @@ public class ComponentCheckProcessor {
      */
     public boolean startupCheckComponent() {
         if (skipComponentHealthCheck()) {
-            logger.info("Skip startup component health check.");
+            logger.info("Skip SOFABoot component readiness check.");
             return true;
         }
 
-        logger.info("Begin startup SOFABoot component health check.");
+        logger.info("Begin SOFABoot component readiness check.");
 
         boolean result = true;
 
@@ -91,10 +91,10 @@ public class ComponentCheckProcessor {
         }
 
         if (result) {
-            logger.info("SOFABoot component startup health check result: success.");
+            logger.info("SOFABoot component readiness check result: success.");
 
         } else {
-            logger.error("SOFABoot component startup health check result: failed.");
+            logger.error("SOFABoot component readiness check result: failed.");
         }
 
         StartUpHealthCheckStatus.setComponentStatus(result);

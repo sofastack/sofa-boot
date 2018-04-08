@@ -73,11 +73,11 @@ public class HealthCheckStartupProcessor {
         try {
             //是否跳过所有健康检查
             if (skipAllCheck()) {
-                logger.info("Skip the first phase of the startup health check");
+                logger.info("Skip the first phase of the readiness check");
                 return true;
             }
 
-            logger.info("Begin first phase of the startup health check");
+            logger.info("Begin first phase of the readiness check");
 
             if (!springContextCheckProcessor.springContextCheck()) {
 
@@ -95,15 +95,15 @@ public class HealthCheckStartupProcessor {
             }
 
             if (result) {
-                logger.info("first phase of the startup health check result: success");
+                logger.info("first phase of the readiness check result: success");
             } else {
-                logger.error("first phase of the startup health check result: fail");
+                logger.error("first phase of the readiness check result: fail");
             }
             return result;
 
         } catch (Throwable e) {
 
-            logger.error("Unknown error occurred while doing first phase of the startup health check", e);
+            logger.error("Unknown error occurred while doing first phase of the readiness check", e);
             return false;
         }
     }
@@ -128,7 +128,7 @@ public class HealthCheckStartupProcessor {
         boolean checkResult = true;
 
         try {
-            logger.info("Begin second phase of the startup health check");
+            logger.info("Begin second phase of the readiness check");
 
             if (!afterHealthCheckCallbackProcessor.checkAfterHealthCheckCallback()) {
 
@@ -137,12 +137,12 @@ public class HealthCheckStartupProcessor {
             }
 
             if (checkResult) {
-                logger.info("second phase of the startup health check result: success");
+                logger.info("second phase of the readiness check result: success");
             } else {
-                logger.error("second phase of the startup health check result: fail");
+                logger.error("second phase of the readiness check result: fail");
             }
         } catch (Throwable e) {
-            logger.error("Unknown error occurred while doing second phase of the startup health check", e);
+            logger.error("Unknown error occurred while doing second phase of the readiness check", e);
             return false;
         }
 

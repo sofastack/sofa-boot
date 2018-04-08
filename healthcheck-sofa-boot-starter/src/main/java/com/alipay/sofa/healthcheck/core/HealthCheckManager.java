@@ -79,34 +79,34 @@ public class HealthCheckManager {
     }
 
     public static List<SofaBootAfterReadinessCheckCallback> getApplicationAfterHealthCheckCallbacks() {
-        List<SofaBootAfterReadinessCheckCallback> afterHealthCheckCallbacks = null;
+        List<SofaBootAfterReadinessCheckCallback> afterReadinessCheckCallbacks = null;
 
         Map<String, SofaBootAfterReadinessCheckCallback> stringToCallback = applicationContext
             .getBeansOfType(SofaBootAfterReadinessCheckCallback.class);
         if (!CollectionUtils.isEmpty(stringToCallback)) {
-            afterHealthCheckCallbacks = new ArrayList<SofaBootAfterReadinessCheckCallback>(
+            afterReadinessCheckCallbacks = new ArrayList<SofaBootAfterReadinessCheckCallback>(
                 stringToCallback.values());
         } else {
-            afterHealthCheckCallbacks = Collections.EMPTY_LIST;
+            afterReadinessCheckCallbacks = Collections.EMPTY_LIST;
         }
 
-        return afterHealthCheckCallbacks;
+        return afterReadinessCheckCallbacks;
 
     }
 
     public static List<SofaBootMiddlewareAfterReadinessCheckCallback> getMiddlewareAfterHealthCheckCallbacks() {
-        List<SofaBootMiddlewareAfterReadinessCheckCallback> afterHealthCheckCallbacks = null;
+        List<SofaBootMiddlewareAfterReadinessCheckCallback> middlewareAfterReadinessCheckCallbacks = null;
 
         Map<String, SofaBootMiddlewareAfterReadinessCheckCallback> stringToCallback = applicationContext
             .getBeansOfType(SofaBootMiddlewareAfterReadinessCheckCallback.class);
         if (!CollectionUtils.isEmpty(stringToCallback)) {
-            afterHealthCheckCallbacks = new ArrayList<SofaBootMiddlewareAfterReadinessCheckCallback>(
+            middlewareAfterReadinessCheckCallbacks = new ArrayList<SofaBootMiddlewareAfterReadinessCheckCallback>(
                 stringToCallback.values());
         } else {
-            afterHealthCheckCallbacks = Collections.EMPTY_LIST;
+            middlewareAfterReadinessCheckCallbacks = Collections.EMPTY_LIST;
         }
 
-        return afterHealthCheckCallbacks;
+        return middlewareAfterReadinessCheckCallbacks;
     }
 
     public static void publishEvent(ApplicationEvent applicationEvent) {

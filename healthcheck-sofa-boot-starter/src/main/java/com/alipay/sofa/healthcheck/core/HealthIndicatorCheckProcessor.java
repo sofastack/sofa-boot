@@ -43,11 +43,11 @@ public class HealthIndicatorCheckProcessor {
 
     public boolean checkIndicator() {
         if (skipHealthIndicator()) {
-            logger.info("Skip startup healthIndicator check.");
+            logger.info("Skip HealthIndicator readiness check.");
             return true;
         }
 
-        logger.info("Begin startup healthIndicator check.");
+        logger.info("Begin HealthIndicator readiness check.");
 
         List<HealthIndicator> healthIndicators = HealthCheckManager.getHealthIndicator();
         if (healthIndicators == null) {
@@ -73,16 +73,16 @@ public class HealthIndicatorCheckProcessor {
                     health));
             } catch (Exception e) {
                 result = false;
-                logger.error("Error occurred while doing healthIndicator health check("
+                logger.error("Error occurred while doing HealthIndicator health check("
                     + healthIndicator.getClass() + ")", e);
             }
 
         }
 
         if (result) {
-            logger.info("Startup healthIndicator check result: success.");
+            logger.info("Readiness check HealthIndicator result: success.");
         } else {
-            logger.error("Startup healthIndicator check result: fail.");
+            logger.error("Readiness check HealthIndicator result: fail.");
         }
 
         StartUpHealthCheckStatus.setHealthIndicatorStatus(result);

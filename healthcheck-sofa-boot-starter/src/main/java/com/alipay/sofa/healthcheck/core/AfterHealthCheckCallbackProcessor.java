@@ -47,9 +47,9 @@ public class AfterHealthCheckCallbackProcessor {
         StartUpHealthCheckStatus.setAfterHealthCheckCallbackStatus(result);
 
         if (result) {
-            logger.info("SOFABoot readiness check callback startup health check result: success.");
+            logger.info("SOFABoot readiness check callback : success.");
         } else {
-            logger.error("SOFABoot readiness check callback startup health check result: failed.");
+            logger.error("SOFABoot readiness check callback : failed.");
         }
         return result;
 
@@ -61,23 +61,23 @@ public class AfterHealthCheckCallbackProcessor {
      */
     private boolean doMiddlewareAfterHealthCheckCallback() {
         boolean result = true;
-        logger.info("Begin SofaBootMiddlewareAfterReadinessCheckCallback startup health check");
+        logger.info("Begin SofaBootMiddlewareAfterReadinessCheckCallback readiness check");
 
-        List<SofaBootMiddlewareAfterReadinessCheckCallback> afterHealthCheckCallbacks = HealthCheckManager
+        List<SofaBootMiddlewareAfterReadinessCheckCallback> middlewareAfterReadinessCheckCallbacks = HealthCheckManager
             .getMiddlewareAfterHealthCheckCallbacks();
-        for (SofaBootMiddlewareAfterReadinessCheckCallback afterHealthCheckCallback : afterHealthCheckCallbacks) {
+        for (SofaBootMiddlewareAfterReadinessCheckCallback afterHealthCheckCallback : middlewareAfterReadinessCheckCallbacks) {
             try {
                 Health health = afterHealthCheckCallback.onHealthy(HealthCheckManager.getApplicationContext());
                 Status status = health.getStatus();
                 if (!status.equals(Status.UP)) {
                     result = false;
 
-                    logger.error("SOFABoot middleware afterHealthCheck callback("
+                    logger.error("SOFABoot middleware after readiness check callback("
                         + afterHealthCheckCallback.getClass()
                         + ") failed, the details is: "
                         + JSON.toJSONString(health.getDetails()));
                 } else {
-                    logger.info("SOFABoot middleware afterHealthCheck callback("
+                    logger.info("SOFABoot middleware after readiness check callback("
                         + afterHealthCheckCallback.getClass()
                         + ") ]success.");
                 }
@@ -95,9 +95,9 @@ public class AfterHealthCheckCallbackProcessor {
         }
 
         if (result) {
-            logger.info("SofaBootMiddlewareAfterReadinessCheckCallback startup health check result: success.");
+            logger.info("SofaBootMiddlewareAfterReadinessCheckCallback readiness check result: success.");
         } else {
-            logger.error("SofaBootMiddlewareAfterReadinessCheckCallback startup health check result: failed.");
+            logger.error("SofaBootMiddlewareAfterReadinessCheckCallback readiness check result: failed.");
 
         }
         return result;
@@ -110,11 +110,11 @@ public class AfterHealthCheckCallbackProcessor {
     private boolean doApplicationAfterHealthCheckCallback() {
         boolean result = true;
 
-        logger.info("Begin SofaBootAfterReadinessCheckCallback startup health check");
+        logger.info("Begin SofaBootAfterReadinessCheckCallback readiness check");
 
-        List<SofaBootAfterReadinessCheckCallback> afterHealthCheckCallbacks = HealthCheckManager
+        List<SofaBootAfterReadinessCheckCallback> afterReadinessCheckCallbacks = HealthCheckManager
             .getApplicationAfterHealthCheckCallbacks();
-        for (SofaBootAfterReadinessCheckCallback afterHealthCheckCallback : afterHealthCheckCallbacks) {
+        for (SofaBootAfterReadinessCheckCallback afterHealthCheckCallback : afterReadinessCheckCallbacks) {
             try {
                 Health health = afterHealthCheckCallback.onHealthy(HealthCheckManager.getApplicationContext());
                 Status status = health.getStatus();
@@ -144,9 +144,9 @@ public class AfterHealthCheckCallbackProcessor {
         }
 
         if (result) {
-            logger.info("SofaBootAfterReadinessCheckCallback startup health check result: success.");
+            logger.info("SofaBootAfterReadinessCheckCallback readiness check result: success.");
         } else {
-            logger.error("SofaBootAfterReadinessCheckCallback startup health check result: failed.");
+            logger.error("SofaBootAfterReadinessCheckCallback readiness check result: failed.");
 
         }
         return result;
