@@ -15,4 +15,4 @@
 # limitations under the License.
 #
 
-http\://schema.alipay.com/sofa/schema/slite=com.alipay.boot.middleware.config.spring.namespace.handler.Slite2NamespaceHandler
+http\://sofastack.io/schema/sofaboot.xsd=com.alipay.sofa.infra.config.spring.namespace.handler.SofaBootNamespaceHandler

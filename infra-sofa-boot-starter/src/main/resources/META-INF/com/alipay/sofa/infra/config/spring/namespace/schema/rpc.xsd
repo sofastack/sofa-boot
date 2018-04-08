@@ -1,5 +1,3 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-
 <!--
   ~ Licensed to the Apache Software Foundation (ASF) under one or more
   ~ contributor license agreements.  See the NOTICE file distributed with
@@ -17,29 +15,12 @@
   ~ limitations under the License.
   -->
 
-<!-- actual .xsd file, slite.xsd is used for IDEs -->
-<xsd:schema xmlns="http://schema.alipay.com/sofa/schema/slite"
+<xsd:schema xmlns="http://sofastack.io/schema/sofaboot"
             xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:beans="http://www.springframework.org/schema/beans"
-            targetNamespace="http://schema.alipay.com/sofa/schema/slite"
+            targetNamespace="http://sofastack.io/schema/sofaboot"
             elementFormDefault="qualified" attributeFormDefault="unqualified">
 
     <xsd:import namespace="http://www.springframework.org/schema/beans"/>
 
-    <xsd:include schemaLocation="http://schema.alipay.com/sofa/slite-binding.xsd"/>
-    <xsd:include schemaLocation="http://schema.alipay.com/sofa/slite-mgw.xsd"/>
 
-    <!-- distributed-resource -->
-    <xsd:element name="distributed-resource" type="Tdistributed-resource"/>
-
-    <xsd:complexType name="Tdistributed-resource">
-        <xsd:complexContent>
-            <xsd:extension base="beans:identifiedType">
-                <xsd:sequence minOccurs="0" maxOccurs="unbounded">
-                    <!--&lt;!&ndash; nested bean declaration &ndash;&gt;-->
-                    <!--<xsd:any namespace="##other" minOccurs="0" maxOccurs="1" processContents="skip"/>-->
-                </xsd:sequence>
-                <xsd:attribute name="ref" type="xsd:string" use="required"/>
-            </xsd:extension>
-        </xsd:complexContent>
-    </xsd:complexType>
 </xsd:schema>

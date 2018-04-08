@@ -15,14 +15,5 @@
 # limitations under the License.
 #
 
-http\://schema.alipay.com/sofa/slite.xsd=META-INF/com/alipay/boot/middleware/service/config/slite.xsd
-http\://schema.alipay.com/sofa/slite-service.xsd=META-INF/com/alipay/boot/middleware/service/config/slite-service.xsd
-http\://schema.alipay.com/sofa/slite-binding.xsd=META-INF/com/alipay/boot/middleware/service/config/binding.xsd
-http\://schema.alipay.com/sofa/slite-mgw.xsd=META-INF/com/alipay/boot/middleware/service/config/mgw.xsd
-
-http\://schema.alipay.com/sofa/slite-zdal.xsd=META-INF/com/alipay/boot/middleware/service/config/zdal.xsd
-http\://schema.alipay.com/sofa/slite-xts.xsd=META-INF/com/alipay/boot/middleware/service/config/xts.xsd
-http\://schema.alipay.com/sofa/slite-msgbroker.xsd=META-INF/com/alipay/boot/middleware/service/config/msgbroker.xsd
-http\://schema.alipay.com/sofa/slite-rest.xsd=META-INF/com/alipay/boot/middleware/service/config/rest.xsd
-
-http\://schema.alipay.com/sofa/slite-grpc.xsd=META-INF/com/alipay/boot/middleware/service/config/grpc.xsd
+http\://sofastack.io/schema/sofaboot.xsd=META-INF/com/alipay/sofa/infra/config/spring/namespace/schema/sofaboot.xsd
+http\://sofastack.io/schema/rpc.xsd=META-INF/com/alipay/sofa/infra/config/spring/namespace/schema/rpc.xsd
