@@ -16,15 +16,12 @@
  */
 package com.alipay.sofa.healthcheck.startup;
 
-import org.springframework.boot.actuate.health.Health;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.event.ApplicationContextEvent;
 
-/**
- *
- * @author liangen
- * @version $Id: SofaBootAfterHealthCheckCallback.java, v 0.1 2018年03月07日 上午10:30 liangen Exp $
- */
-public interface SofaBootApplicationAfterHealthCheckCallback {
+public class SofaBootBeforeReadinessCheckEvent extends ApplicationContextEvent {
 
-    Health onHealthy(ApplicationContext applicationContext);
+    public SofaBootBeforeReadinessCheckEvent(ApplicationContext source) {
+        super(source);
+    }
 }

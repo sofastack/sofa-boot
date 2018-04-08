@@ -16,16 +16,16 @@
  */
 package com.alipay.sofa.healthcheck.bean;
 
-import com.alipay.sofa.healthcheck.startup.SofaBootMiddlewareAfterHealthCheckCallback;
+import com.alipay.sofa.healthcheck.startup.SofaBootMiddlewareAfterReadinessCheckCallback;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.context.ApplicationContext;
 
 /**
  *
  * @author liangen
- * @version $Id: AfterHealthCheckCallbackA.java, v 0.1 2018年03月11日 下午2:40 liangen Exp $
+ * @version $Id: AfterReadinessCheckCallbackA.java, v 0.1 2018年03月11日 下午2:40 liangen Exp $
  */
-public class AfterHealthCheckCallbackA implements SofaBootMiddlewareAfterHealthCheckCallback {
+public class AfterReadinessCheckCallbackA implements SofaBootMiddlewareAfterReadinessCheckCallback {
 
     private static boolean health = false;
 
@@ -40,6 +40,6 @@ public class AfterHealthCheckCallbackA implements SofaBootMiddlewareAfterHealthC
     }
 
     public static void setHealth(boolean health) {
-        AfterHealthCheckCallbackA.health = health;
+        AfterReadinessCheckCallbackA.health = health;
     }
 }

@@ -33,8 +33,10 @@ import org.springframework.util.StringUtils;
  */
 @Component
 @Configuration
-@ComponentScan(basePackageClasses = { HealthCheckTrigger.class, SofaBootComponentHealthCheckInfo.class })
-public class HealthcheckInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+@ComponentScan(basePackageClasses = { HealthCheckTrigger.class,
+                                     SofaBootComponentHealthCheckInfo.class })
+public class HealthcheckInitializer implements
+                                   ApplicationContextInitializer<ConfigurableApplicationContext> {
 
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
@@ -46,20 +48,23 @@ public class HealthcheckInitializer implements ApplicationContextInitializer<Con
     }
 
     private void initializeLog() {
-        if (StringUtils.isEmpty(System.getProperty(Constants.LOG_PATH)) &&
-            StringUtils.hasText(HealthCheckConfiguration.getProperty(Constants.LOG_PATH))) {
-            System.setProperty(Constants.LOG_PATH, HealthCheckConfiguration.getProperty(Constants.LOG_PATH));
+        if (StringUtils.isEmpty(System.getProperty(Constants.LOG_PATH))
+            && StringUtils.hasText(HealthCheckConfiguration.getProperty(Constants.LOG_PATH))) {
+            System.setProperty(Constants.LOG_PATH,
+                HealthCheckConfiguration.getProperty(Constants.LOG_PATH));
         }
 
-        String healthCheckLogLevelKey = Constants.LOG_LEVEL_PREFIX +
-            HealthCheckConfigurationConstants.SOFABOOT_HEALTH_LOG_SPACE;
-        if (StringUtils.isEmpty(System.getProperty(healthCheckLogLevelKey)) &&
-            StringUtils.hasText(HealthCheckConfiguration.getProperty(healthCheckLogLevelKey))) {
-            System.setProperty(healthCheckLogLevelKey, HealthCheckConfiguration.getProperty(healthCheckLogLevelKey));
+        String healthCheckLogLevelKey = Constants.LOG_LEVEL_PREFIX
+                                        + HealthCheckConfigurationConstants.SOFABOOT_HEALTH_LOG_SPACE;
+        if (StringUtils.isEmpty(System.getProperty(healthCheckLogLevelKey))
+            && StringUtils.hasText(HealthCheckConfiguration.getProperty(healthCheckLogLevelKey))) {
+            System.setProperty(healthCheckLogLevelKey,
+                HealthCheckConfiguration.getProperty(healthCheckLogLevelKey));
         }
 
-        if (StringUtils.isEmpty(System.getProperty(Constants.LOG_ENCODING_PROP_KEY)) &&
-            StringUtils.hasText(HealthCheckConfiguration.getProperty(Constants.LOG_ENCODING_PROP_KEY))) {
+        if (StringUtils.isEmpty(System.getProperty(Constants.LOG_ENCODING_PROP_KEY))
+            && StringUtils.hasText(HealthCheckConfiguration
+                .getProperty(Constants.LOG_ENCODING_PROP_KEY))) {
             System.setProperty(Constants.LOG_ENCODING_PROP_KEY,
                 HealthCheckConfiguration.getProperty(Constants.LOG_ENCODING_PROP_KEY));
         }

@@ -92,7 +92,8 @@ public class ComponentCheckProcessorTest {
         Assert.assertEquals(5, ReferenceA.getCount());
         Assert.assertEquals(2, details_1.size());
         Assert.assertEquals(Status.DOWN, details_1.get("AAA").getStatus());
-        Assert.assertEquals("memory is deficiency", details_1.get("AAA").getDetails().get("memory"));
+        Assert
+            .assertEquals("memory is deficiency", details_1.get("AAA").getDetails().get("memory"));
         Assert.assertEquals(Status.UP, details_1.get("BBB").getStatus());
         Assert.assertEquals("network is ok", details_1.get("BBB").getDetails().get("network"));
 

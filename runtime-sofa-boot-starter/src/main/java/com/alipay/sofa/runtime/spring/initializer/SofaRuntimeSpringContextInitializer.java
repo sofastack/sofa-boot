@@ -47,7 +47,7 @@ public class SofaRuntimeSpringContextInitializer
 
         // init logging.level.com.alipay.sofa.runtime argument
         String runtimeLogLevelKey = Constants.LOG_LEVEL_PREFIX
-            + SofaRuntimeLoggerFactory.SOFA_RUNTIME_LOG_SPACE;
+                                    + SofaRuntimeLoggerFactory.SOFA_RUNTIME_LOG_SPACE;
         String runtimeLogLevelValue = Slite2Configuration.getProperty(runtimeLogLevelKey);
         if (runtimeLogLevelValue != null) {
             System.setProperty(runtimeLogLevelKey, runtimeLogLevelValue);
@@ -56,8 +56,7 @@ public class SofaRuntimeSpringContextInitializer
         // init file.encoding
         String fileEncoding = Slite2Configuration.getProperty(Constants.LOG_ENCODING_PROP_KEY);
         if (fileEncoding != null) {
-            System.setProperty(Constants.LOG_ENCODING_PROP_KEY,
-                fileEncoding);
+            System.setProperty(Constants.LOG_ENCODING_PROP_KEY, fileEncoding);
         }
     }
 }

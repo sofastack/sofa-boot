@@ -56,7 +56,7 @@ public abstract class AbstractSofaBootMiddlewareVersionFacade {
     public abstract String getDocs();
 
     /***
-     * Get the SOFA Boot Middleware Runtime Info. Middleware Extension Info
+     * Get the SOFABoot Middleware Runtime Info. Middleware Extension Info
      * @return Middleware Runtime Info
      */
     public Map<String, Object> getRuntimeInfo() {

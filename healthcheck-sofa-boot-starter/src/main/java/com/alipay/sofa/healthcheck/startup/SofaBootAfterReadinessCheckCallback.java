@@ -22,10 +22,9 @@ import org.springframework.context.ApplicationContext;
 /**
  *
  * @author liangen
- * @version $Id: SofaBootMiddlewareHealthCheckCallback.java, v 0.1 2018年03月08日 下午9:19 liangen Exp $
+ * @version $Id: SofaBootAfterHealthCheckCallback.java, v 0.1 2018年03月07日 上午10:30 liangen Exp $
  */
-public interface SofaBootMiddlewareAfterHealthCheckCallback {
+public interface SofaBootAfterReadinessCheckCallback {
 
     Health onHealthy(ApplicationContext applicationContext);
-
 }

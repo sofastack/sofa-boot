@@ -38,7 +38,8 @@ public class ServiceTest extends AbstractTestBase {
     public void testServiceGet() throws Exception {
 
         assertNotNull(urlHttpPrefix);
-        String sofaBootVersionUrl = urlHttpPrefix + SofaBootVersionEndpoint.SOFA_BOOT_VERSION_PREFIX;
+        String sofaBootVersionUrl = urlHttpPrefix
+                                    + SofaBootVersionEndpoint.SOFA_BOOT_VERSION_PREFIX;
 
         //TODO 注意 RestSampleFacadeResp 一定要有默认构造函数
         ResponseEntity<List> result = testRestTemplate.getForEntity(sofaBootVersionUrl, List.class);

@@ -18,8 +18,8 @@ package com.alipay.sofa.healthcheck.core;
 
 import com.alibaba.fastjson.JSON;
 import com.alipay.sofa.healthcheck.log.SofaBootHealthCheckLoggerFactory;
-import com.alipay.sofa.healthcheck.startup.SofaBootApplicationAfterHealthCheckCallback;
-import com.alipay.sofa.healthcheck.startup.SofaBootMiddlewareAfterHealthCheckCallback;
+import com.alipay.sofa.healthcheck.startup.SofaBootAfterReadinessCheckCallback;
+import com.alipay.sofa.healthcheck.startup.SofaBootMiddlewareAfterReadinessCheckCallback;
 import com.alipay.sofa.healthcheck.startup.StartUpHealthCheckStatus;
 import org.slf4j.Logger;
 import org.springframework.boot.actuate.health.Health;
@@ -33,8 +33,9 @@ import java.util.List;
  * @version $Id: AfterHealthCheckCallback.java, v 0.1 2018年03月09日 上午11:10 liangen Exp $
  */
 public class AfterHealthCheckCallbackProcessor {
-    private static Logger logger = SofaBootHealthCheckLoggerFactory.getLogger(AfterHealthCheckCallbackProcessor.class
-                                     .getCanonicalName());
+    private static Logger logger = SofaBootHealthCheckLoggerFactory
+                                     .getLogger(AfterHealthCheckCallbackProcessor.class
+                                         .getCanonicalName());
 
     public boolean checkAfterHealthCheckCallback() {
 
@@ -47,9 +48,9 @@ public class AfterHealthCheckCallbackProcessor {
         StartUpHealthCheckStatus.setAfterHealthCheckCallbackStatus(result);
 
         if (result) {
-            logger.info("AfterHealthCheckCallback startup health check result: success.");
+            logger.info("SOFABoot readiness check callback : success.");
         } else {
-            logger.error("AfterHealthCheckCallback startup health check result: failed.");
+            logger.error("SOFABoot readiness check callback : failed.");
         }
         return result;
 
@@ -61,43 +62,45 @@ public class AfterHealthCheckCallbackProcessor {
      */
     private boolean doMiddlewareAfterHealthCheckCallback() {
         boolean result = true;
-        logger.info("Begin MiddlewareAfterHealthCheckCallback startup health check");
+        logger.info("Begin SofaBootMiddlewareAfterReadinessCheckCallback readiness check");
 
-        List<SofaBootMiddlewareAfterHealthCheckCallback> afterHealthCheckCallbacks = HealthCheckManager
+        List<SofaBootMiddlewareAfterReadinessCheckCallback> middlewareAfterReadinessCheckCallbacks = HealthCheckManager
             .getMiddlewareAfterHealthCheckCallbacks();
-        for (SofaBootMiddlewareAfterHealthCheckCallback afterHealthCheckCallback : afterHealthCheckCallbacks) {
+        for (SofaBootMiddlewareAfterReadinessCheckCallback middlewareAfterReadinessCheckCallback : middlewareAfterReadinessCheckCallbacks) {
             try {
-                Health health = afterHealthCheckCallback.onHealthy(HealthCheckManager.getApplicationContext());
+                Health health = middlewareAfterReadinessCheckCallback.onHealthy(HealthCheckManager
+                    .getApplicationContext());
                 Status status = health.getStatus();
                 if (!status.equals(Status.UP)) {
                     result = false;
 
-                    logger.error("sofaboot middleware afterHealthCheck callback("
-                        + afterHealthCheckCallback.getClass()
-                        + ") failed, the details is: "
-                        + JSON.toJSONString(health.getDetails()));
+                    logger.error("SOFABoot middleware after readiness check callback("
+                                 + middlewareAfterReadinessCheckCallback.getClass()
+                                 + ") failed, the details is: "
+                                 + JSON.toJSONString(health.getDetails()));
                 } else {
-                    logger.info("sofaboot middleware afterHealthCheck callback("
-                        + afterHealthCheckCallback.getClass()
-                        + ") ]success.");
+                    logger.info("SOFABoot middleware after readiness check callback("
+                                + middlewareAfterReadinessCheckCallback.getClass() + ") ]success.");
                 }
 
-                StartUpHealthCheckStatus.putAfterHealthCheckCallbackDetail(getKey(afterHealthCheckCallback.getClass()
-                    .getName()), health);
+                StartUpHealthCheckStatus.putAfterHealthCheckCallbackDetail(
+                    getKey(middlewareAfterReadinessCheckCallback.getClass().getName()), health);
 
             } catch (Throwable t) {
                 result = false;
 
-                logger.error("Invoking MiddlewareAfterHealthCheckCallback "
-                    + afterHealthCheckCallback.getClass().getName()
-                    + " got an exception.", t);
+                logger.error("Invoking SofaBootMiddlewareAfterReadinessCheckCallback "
+                             + middlewareAfterReadinessCheckCallback.getClass().getName()
+                             + " got an exception.", t);
             }
         }
 
         if (result) {
-            logger.info("MiddlewareAfterHealthCheckCallback startup health check result: success.");
+            logger
+                .info("SofaBootMiddlewareAfterReadinessCheckCallback readiness check result: success.");
         } else {
-            logger.error("MiddlewareAfterHealthCheckCallback startup health check result: failed.");
+            logger
+                .error("SofaBootMiddlewareAfterReadinessCheckCallback readiness check result: failed.");
 
         }
         return result;
@@ -110,43 +113,43 @@ public class AfterHealthCheckCallbackProcessor {
     private boolean doApplicationAfterHealthCheckCallback() {
         boolean result = true;
 
-        logger.info("Begin ApplicationAfterHealthCheckCallback startup health check");
+        logger.info("Begin SofaBootAfterReadinessCheckCallback readiness check");
 
-        List<SofaBootApplicationAfterHealthCheckCallback> afterHealthCheckCallbacks = HealthCheckManager
+        List<SofaBootAfterReadinessCheckCallback> afterReadinessCheckCallbacks = HealthCheckManager
             .getApplicationAfterHealthCheckCallbacks();
-        for (SofaBootApplicationAfterHealthCheckCallback afterHealthCheckCallback : afterHealthCheckCallbacks) {
+        for (SofaBootAfterReadinessCheckCallback afterReadinessCheckCallback : afterReadinessCheckCallbacks) {
             try {
-                Health health = afterHealthCheckCallback.onHealthy(HealthCheckManager.getApplicationContext());
+                Health health = afterReadinessCheckCallback.onHealthy(HealthCheckManager
+                    .getApplicationContext());
                 Status status = health.getStatus();
                 if (!status.equals(Status.UP)) {
                     result = false;
 
-                    logger.error("sofaboot application afterHealthCheck callback("
-                        + afterHealthCheckCallback.getClass()
-                        + ") failed, the details is: "
-                        + JSON.toJSONString(health.getDetails()));
+                    logger.error("SOFABoot application after readiness check callback("
+                                 + afterReadinessCheckCallback.getClass()
+                                 + ") failed, the details is: "
+                                 + JSON.toJSONString(health.getDetails()));
                 } else {
-                    logger.info("sofaboot application afterHealthCheck callback("
-                        + afterHealthCheckCallback.getClass()
-                        + ") ]success.");
+                    logger.info("SOFABoot application after readiness check callback("
+                                + afterReadinessCheckCallback.getClass() + ") ]success.");
                 }
 
-                StartUpHealthCheckStatus.putAfterHealthCheckCallbackDetail(getKey(afterHealthCheckCallback.getClass()
-                    .getName()), health);
+                StartUpHealthCheckStatus.putAfterHealthCheckCallbackDetail(
+                    getKey(afterReadinessCheckCallback.getClass().getName()), health);
 
             } catch (Throwable t) {
                 result = false;
 
-                logger.error("Invoking  ApplicationAfterHealthCheckCallback "
-                    + afterHealthCheckCallback.getClass().getName()
-                    + " got an exception.", t);
+                logger.error("Invoking  SofaBootAfterReadinessCheckCallback "
+                             + afterReadinessCheckCallback.getClass().getName()
+                             + " got an exception.", t);
             }
         }
 
         if (result) {
-            logger.info("ApplicationAfterHealthCheckCallback startup health check result: success.");
+            logger.info("SofaBootAfterReadinessCheckCallback readiness check result: success.");
         } else {
-            logger.error("ApplicationAfterHealthCheckCallback startup health check result: failed.");
+            logger.error("SofaBootAfterReadinessCheckCallback readiness check result: failed.");
 
         }
         return result;

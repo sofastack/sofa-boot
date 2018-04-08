@@ -71,7 +71,8 @@ public abstract class SofaFrameworkInitializer {
         BindingFactoryContainer.setBindingConverterFactory(createBindingConverterFactory());
     }
 
-    private static void registerProcessors(String appName, ConfigurableApplicationContext applicationContext) {
+    private static void registerProcessors(String appName,
+                                           ConfigurableApplicationContext applicationContext) {
         applicationContext.getBeanFactory().addBeanPostProcessor(
             new SofaRuntimeContextAwareProcessor(SofaFrameworkHolder.getSofaFramework()
                 .getSofaRuntimeContext(appName)));
@@ -83,12 +84,14 @@ public abstract class SofaFrameworkInitializer {
                 .getSofaRuntimeContext(appName).getClientFactory()));
     }
 
-    private static void addSofaRuntimeManager(String appName, ConfigurableApplicationContext applicationContext) {
+    private static void addSofaRuntimeManager(String appName,
+                                              ConfigurableApplicationContext applicationContext) {
         if (!SofaFrameworkHolder.containsSofaFramework()) {
             SofaFrameworkHolder.setSofaFramework(new SofaFrameworkImpl());
         }
 
-        SofaFrameworkImpl sofaFramework = (SofaFrameworkImpl) SofaFrameworkHolder.getSofaFramework();
+        SofaFrameworkImpl sofaFramework = (SofaFrameworkImpl) SofaFrameworkHolder
+            .getSofaFramework();
         AppConfiguration applicationConfiguration = createAppConfigurationImpl(applicationContext);
         ClientFactoryInternal clientFactoryInternal = new ClientFactoryImpl();
         SofaRuntimeManager sofaRuntimeManager = new StandardSofaRuntimeManager(appName,
@@ -108,7 +111,8 @@ public abstract class SofaFrameworkInitializer {
     private static AppConfigurationImpl createAppConfigurationImpl(ConfigurableApplicationContext applicationContext) {
         Map<String, String> properties = new HashMap<>();
         for (String configurationKey : getAllConfigurationConstants(SofaConfigurationConstants.class)) {
-            String configurationValue = applicationContext.getEnvironment().getProperty(configurationKey);
+            String configurationValue = applicationContext.getEnvironment().getProperty(
+                configurationKey);
             if (configurationValue != null) {
                 properties.put(configurationKey, configurationValue);
             }

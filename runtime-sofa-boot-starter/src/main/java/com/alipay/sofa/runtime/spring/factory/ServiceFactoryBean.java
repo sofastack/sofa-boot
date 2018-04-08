@@ -41,8 +41,8 @@ public class ServiceFactoryBean extends AbstractContractFactoryBean {
         if (hasSofaServiceAnnotation()) {
             throw new ServiceRuntimeException(
                 "Bean " + beanId + " of type " + ref.getClass()
-                    + " has already annotated by @SofaService,"
-                    + " can not be registered using xml. Please check it.");
+                        + " has already annotated by @SofaService,"
+                        + " can not be registered using xml. Please check it.");
         }
 
         Implementation implementation = new DefaultImplementation();

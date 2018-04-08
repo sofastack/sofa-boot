@@ -27,18 +27,19 @@ import org.slf4j.Logger;
  */
 public class SpringContextCheckProcessor {
 
-    private static Logger logger = SofaBootHealthCheckLoggerFactory.getLogger(SpringContextCheckProcessor.class
-                                     .getCanonicalName());
+    private static Logger logger = SofaBootHealthCheckLoggerFactory
+                                     .getLogger(SpringContextCheckProcessor.class
+                                         .getCanonicalName());
 
     public boolean springContextCheck() {
-        logger.info("Begin springContext health check.");
+        logger.info("Begin SpringContext readiness check.");
 
         boolean isHealth = HealthCheckManager.springContextCheck();
 
         if (isHealth) {
-            logger.info("springContext check result: success.");
+            logger.info("SpringContext readiness check result: success.");
         } else {
-            logger.error("springContext check result: fail.");
+            logger.error("SpringContext readiness check result: fail.");
         }
 
         StartUpHealthCheckStatus.setSpringContextStatus(isHealth);

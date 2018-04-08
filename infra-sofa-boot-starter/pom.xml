@@ -21,9 +21,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>com.alipay.sofa</groupId>
-        <artifactId>sofaboot-dependencies</artifactId>
+        <artifactId>sofa-boot-runtime</artifactId>
         <version>2.3.0</version>
-        <relativePath>../sofaboot-dependencies/pom.xml</relativePath>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -158,7 +158,6 @@
 
     <build>
         <plugins>
-
             <plugin>
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>sofa-version-maven-plugin</artifactId>
@@ -179,41 +178,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>2.0.2</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.eluder.coveralls</groupId>
-                <artifactId>coveralls-maven-plugin</artifactId>
-                <version>3.1.0</version>
-                <configuration>
-                    <sourceEncoding>${project.encoding}</sourceEncoding>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>cobertura-maven-plugin</artifactId>
-                <version>2.6</version>
-                <configuration>
-                    <encoding>${project.encoding}</encoding>
-                    <aggregate>true</aggregate>
-                    <formats>
-                        <format>xml</format>
-                        <format>html</format>
-                    </formats>
-                </configuration>
             </plugin>
         </plugins>
     </build>

@@ -28,6 +28,6 @@
 
     <bean id="healthIndicatorB" class="com.alipay.sofa.healthcheck.bean.HealthIndicatorB"/>
 
-    <bean id="afterHealthCheckCallbackA" class="com.alipay.sofa.healthcheck.bean.AfterHealthCheckCallbackA"/>
+    <bean id="afterHealthCheckCallbackA" class="com.alipay.sofa.healthcheck.bean.AfterReadinessCheckCallbackA"/>
 
 </beans>

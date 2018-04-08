@@ -33,7 +33,7 @@ public class SofaRuntimeContextAwareProcessor implements BeanPostProcessor {
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName)
-        throws BeansException {
+                                                                               throws BeansException {
         if (bean instanceof SofaRuntimeContextAware) {
             ((SofaRuntimeContextAware) bean).setSofaRuntimeContext(sofaRuntimeContext);
         }
@@ -43,7 +43,7 @@ public class SofaRuntimeContextAwareProcessor implements BeanPostProcessor {
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName)
-        throws BeansException {
+                                                                              throws BeansException {
         return bean;
     }
 }
