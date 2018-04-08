@@ -21,7 +21,7 @@
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
 
     <appender name="ERROR-APPENDER" class="org.apache.log4j.DailyRollingFileAppender">
-        <param name="file" value="${logging.path}/health-check/sofaboot-common-error.log"/>
+        <param name="file" value="${logging.path}/health-check/common-error.log"/>
         <param name="append" value="true"/>
         <param name="encoding" value="${file.encoding}"/>
         <param name="threshold" value="error"/>
@@ -31,7 +31,7 @@
     </appender>
 
     <appender name="ROOT-APPENDER" class="org.apache.log4j.DailyRollingFileAppender">
-        <param name="file" value="${logging.path}/health-check/sofaboot-common-default.log"/>
+        <param name="file" value="${logging.path}/health-check/common-default.log"/>
         <param name="append" value="true"/>
         <param name="encoding" value="${file.encoding}"/>
         <param name="threshold" value="${logging.level.com.alipay.sofa.healthcheck}"/>
