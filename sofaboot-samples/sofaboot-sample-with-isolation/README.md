@@ -129,7 +129,7 @@ public class IntegrationTestCaseWithIsolation {
 
 `SofaBootRunner` 会检测应用是否引入
 
-```java
+```xml
 <dependency>
     <groupId>com.alipay.sofa</groupId>
     <artifactId>sofa-ark-springboot-starter</artifactId>
