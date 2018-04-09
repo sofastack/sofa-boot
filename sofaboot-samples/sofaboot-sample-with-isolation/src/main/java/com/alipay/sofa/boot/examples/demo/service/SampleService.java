@@ -14,18 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.boot.examples.demo.isolation;
+package com.alipay.sofa.boot.examples.demo.service;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
-
-@SpringBootApplication
-@ComponentScan({ "com.alipay.sofa.boot.examples.demo.service" })
-public class SofaBootClassIsolationDemoApplication {
-
-    public static void main(String[] args) {
-        //SOFABoot Isolation
-        SpringApplication.run(SofaBootClassIsolationDemoApplication.class, args);
-    }
+/**
+ * @author qilong.zql
+ * @since 2.3.0
+ */
+public interface SampleService {
+    String service();
 }

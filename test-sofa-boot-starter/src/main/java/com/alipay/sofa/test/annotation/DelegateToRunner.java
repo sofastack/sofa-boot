@@ -14,18 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.boot.examples.demo.isolation;
+package com.alipay.sofa.test.annotation;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
+import org.junit.runner.Runner;
 
-@SpringBootApplication
-@ComponentScan({ "com.alipay.sofa.boot.examples.demo.service" })
-public class SofaBootClassIsolationDemoApplication {
+import java.lang.annotation.*;
 
-    public static void main(String[] args) {
-        //SOFABoot Isolation
-        SpringApplication.run(SofaBootClassIsolationDemoApplication.class, args);
-    }
+/**
+ * @author qilong.zql
+ * @since 2.3.0
+ */
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+@Inherited
+public @interface DelegateToRunner {
+    /**
+     * @return a Runner class (must have a constructor that takes a single Class to run)
+     */
+    Class<? extends Runner> value();
 }

@@ -14,18 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.boot.examples.demo.isolation;
+package com.alipay.sofa.test.utils;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.util.ClassUtils;
 
-@SpringBootApplication
-@ComponentScan({ "com.alipay.sofa.boot.examples.demo.service" })
-public class SofaBootClassIsolationDemoApplication {
+/**
+ * @author qilong.zql
+ * @since 2.3.0
+ */
+public class TestModeUtil {
 
-    public static void main(String[] args) {
-        //SOFABoot Isolation
-        SpringApplication.run(SofaBootClassIsolationDemoApplication.class, args);
+    public static final String SOFA_ARK_BOOT_STRAPPER = "com.alipay.sofa.ark.support.startup.SofaArkBootstrap";
+
+    public static boolean isArkMode() {
+        try {
+            Class clazz = ClassUtils.getDefaultClassLoader().loadClass(SOFA_ARK_BOOT_STRAPPER);
+            return clazz != null;
+        } catch (ClassNotFoundException ex) {
+            return false;
+        }
     }
+
 }

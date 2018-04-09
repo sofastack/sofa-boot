@@ -14,18 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.boot.examples.demo.isolation;
+package com.alipay.sofa.test.runner;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
+/**
+ * Corresponding to {@see org.springframework.test.context.junit4.SpringRunner}
+ *
+ * @author qilong.zql
+ * @since 2.3.0
+ */
+public class SofaBootRunner extends SofaJUnit4Runner {
 
-@SpringBootApplication
-@ComponentScan({ "com.alipay.sofa.boot.examples.demo.service" })
-public class SofaBootClassIsolationDemoApplication {
+    private static final String DEFAULT_SPRING_BOOT_RUNNER = "org.springframework.test.context.junit4.SpringRunner";
 
-    public static void main(String[] args) {
-        //SOFABoot Isolation
-        SpringApplication.run(SofaBootClassIsolationDemoApplication.class, args);
+    private static final String SOFA_ARK_BOOT_RUNNER       = "com.alipay.sofa.ark.springboot.runner.ArkBootRunner";
+
+    public SofaBootRunner(Class<?> klazz) {
+        super(klazz);
+    }
+
+    @Override
+    public String getArkModeRunner() {
+        return SOFA_ARK_BOOT_RUNNER;
+    }
+
+    @Override
+    public String getDefaultRunner() {
+        return DEFAULT_SPRING_BOOT_RUNNER;
     }
 }
