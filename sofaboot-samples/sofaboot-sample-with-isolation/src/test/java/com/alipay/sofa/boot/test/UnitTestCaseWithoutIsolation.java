@@ -16,29 +16,26 @@
  */
 package com.alipay.sofa.boot.test;
 
-import com.alipay.sofa.boot.examples.demo.isolation.SofaBootClassIsolationDemoApplication;
-import com.alipay.sofa.boot.examples.demo.service.SampleService;
-import com.alipay.sofa.test.runner.SofaBootRunner;
+import com.alipay.sofa.ark.support.common.DelegateArkContainer;
+import com.alipay.sofa.test.annotation.DelegateToRunner;
+import com.alipay.sofa.test.runner.SofaJUnit4Runner;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.runners.JUnit4;
 
 /**
  * @author qilong.zql
  * @since 2.3.0
+ *
  */
-@RunWith(SofaBootRunner.class)
-@SpringBootTest(classes = SofaBootClassIsolationDemoApplication.class)
-public class IntegrationTestCaseRunOnArk {
-
-    @Autowired
-    private SampleService sampleService;
+@RunWith(SofaJUnit4Runner.class)
+@DelegateToRunner(JUnit4.class)
+public class UnitTestCaseWithoutIsolation {
 
     @Test
     public void test() {
-        Assert.assertTrue("service".equals(sampleService.service()));
+        Assert.assertFalse(DelegateArkContainer.isStarted());
     }
 
 }

@@ -26,7 +26,7 @@ import org.junit.runner.RunWith;
  * @since 2.3.0
  */
 @RunWith(SofaJUnit4Runner.class)
-public class UnitTestCaseOnArk {
+public class UnitTestCaseWithIsolation {
 
     public static final String testClassloader = "com.alipay.sofa.ark.container.test.TestClassLoader";
 
