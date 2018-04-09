@@ -1,13 +1,13 @@
 # 如何使用 SOFABoot 类隔离能力
 
 ## 简介
-该用例工程演示如何使用 SOFABoot 类隔离能力，阅读该文档之前，建议先了解SOFABoot提供的类隔离框架 [SOFAArk](https://github.com/alipay/sofa-ark)
+该用例工程演示如何使用 SOFABoot 类隔离能力，阅读该文档之前，建议先了解 SOFABoot 提供的类隔离框架 [SOFAArk](https://github.com/alipay/sofa-ark)
 
 ## 工程演示
-SOFABoot 提供了类隔离框架 SOFAArk，弥补了 SpringBoot 在类隔离能力上的缺失，用以解决在实际开发中常见的类冲突、包冲突问题；使用 SOFABoot 类隔离能力只需两步操作；配置 `sofa-ark-maven-plugin` 打包插件以及引入 `sofa-ark-springboot-starter` 依赖；
+SOFABoot 提供了类隔离框架 SOFAArk，弥补了 Spring Boot 在类隔离能力上的缺失，用以解决在实际开发中常见的类冲突、包冲突问题；使用 SOFABoot 类隔离能力只需两步操作；配置 `sofa-ark-maven-plugin` 打包插件以及引入 `sofa-ark-springboot-starter` 依赖；
 
 ### 配置 Maven 打包插件
-SOFABoot 官方提供了 `Maven` 插件 - `sofa-ark-maven-plugin` ，只需要简单的配置项，即可将 SpringBoot 工程打包成标准格式规范的可执行 Ark 包，插件坐标为：
+SOFABoot 官方提供了 `Maven` 插件 - `sofa-ark-maven-plugin` ，只需要简单的配置项，即可将 Spring Boot 工程打包成标准格式规范的可执行 Ark 包，插件坐标为：
 
 ```java
 <plugin>
@@ -82,15 +82,15 @@ build>
 
 ```xml
 <dependency>
-	<groupId>com.alipay.sofa</groupId>
-	<artifactId>sofa-ark-springboot-starter</artifactId>
+    <groupId>com.alipay.sofa</groupId>
+    <artifactId>sofa-ark-springboot-starter</artifactId>
 </dependency>
 ```
 
 ### 编写测试用例
-SpringBoot 官方提供了和 JUnit4 集成的 `SpringRunner`，用于集成测试用例的编写；为了方便运行测试用例时使用 SOFABoot 类隔离能力，应用需要额外引入如下测试依赖：
+Spring Boot 官方提供了和 JUnit4 集成的 `SpringRunner`，用于集成测试用例的编写；为了方便运行测试用例时使用 SOFABoot 类隔离能力，应用需要额外引入如下测试依赖：
 
-```java
+```xml
 <dependency>
     <groupId>com.alipay.sofa</groupId>
     <artifactId>test-sofa-boot-starter</artifactId>
@@ -99,7 +99,7 @@ SpringBoot 官方提供了和 JUnit4 集成的 `SpringRunner`，用于集成测�
 
 SOFABoot 推荐使用 `SofaBootRunner` 替代 `SpringRunner` 编写集成测试用例，使用 `SofaJUnit4Runner` 替代 `JUnit4` 编写单元测试；这样做的好处是，只需要控制添加或者删除类隔离依赖：
 
-```java
+```xml
 <dependency>
     <groupId>com.alipay.sofa</groupId>
     <artifactId>sofa-ark-springboot-starter</artifactId>
@@ -136,7 +136,7 @@ public class IntegrationTestCaseWithIsolation {
 </dependency>
 ```
 
-依赖；根据 SpringBoot 依赖即服务的原则，如果检测到 `sofa-ark-springboot-starter` 依赖，`SofaBootRunner` 会使用 SOFABoot 类隔离能力，否则和原生的 `SpringRunner` 无异；
+依赖；根据 Spring Boot 依赖即服务的原则，如果检测到 `sofa-ark-springboot-starter` 依赖，`SofaBootRunner` 会使用 SOFABoot 类隔离能力，否则和原生的 `SpringRunner` 无异；
 
 #### SofaJUnit4Runner
 示例代码：
@@ -154,7 +154,7 @@ public class UnitTestCaseWithIsolation {
 }
 ```
 
-`SofaJUnit4Runner` 同样会检测应用是否引入 `sofa-ark-springboot-starter` 依赖；根据 SpringBoot 依赖即服务的原则，如果检测到 `sofa-ark-springboot-starter` 依赖，`SofaJUnit4Runner` 会使用 SOFABoot 类隔离能力，否则和原生的 `JUnit4` 无异；
+`SofaJUnit4Runner` 同样会检测应用是否引入 `sofa-ark-springboot-starter` 依赖；根据 Spring Boot 依赖即服务的原则，如果检测到 `sofa-ark-springboot-starter` 依赖，`SofaJUnit4Runner` 会使用 SOFABoot 类隔离能力，否则和原生的 `JUnit4` 无异；
 
 #### 自定义 Runner 
 在编写测试用例时，有时需要指定特殊的 Runner，为了统一编码风格，可以借助注解 `@DelegateToRunner` 配合 `SofaBootRunner` 和 `SofaJUnit4Runner` 使用，示例代码：

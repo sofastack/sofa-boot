@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.boot.examples.demo.isolation;
 
-import com.alipay.sofa.boot.examples.demo.service.SampleServiceImpl;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
