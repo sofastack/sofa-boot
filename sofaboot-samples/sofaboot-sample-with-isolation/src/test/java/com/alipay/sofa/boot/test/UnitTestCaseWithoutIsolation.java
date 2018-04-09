@@ -14,18 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.boot.examples.demo.isolation;
+package com.alipay.sofa.boot.test;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
+import com.alipay.sofa.ark.support.common.DelegateArkContainer;
+import com.alipay.sofa.test.annotation.DelegateToRunner;
+import com.alipay.sofa.test.runner.SofaJUnit4Runner;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
-@SpringBootApplication
-@ComponentScan({ "com.alipay.sofa.boot.examples.demo.service" })
-public class SofaBootClassIsolationDemoApplication {
+/**
+ * @author qilong.zql
+ * @since 2.3.0
+ *
+ */
+@RunWith(SofaJUnit4Runner.class)
+@DelegateToRunner(JUnit4.class)
+public class UnitTestCaseWithoutIsolation {
 
-    public static void main(String[] args) {
-        //SOFABoot Isolation
-        SpringApplication.run(SofaBootClassIsolationDemoApplication.class, args);
+    @Test
+    public void test() {
+        Assert.assertFalse(DelegateArkContainer.isStarted());
     }
+
 }

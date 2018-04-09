@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.runtime.spring.parser;
 
-import com.alipay.boot.middleware.config.spring.namespace.spi.Slite2MiddlewareTagNameSupport;
+import com.alipay.sofa.infra.config.spring.namespace.spi.SofaBootTagNameSupport;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import org.springframework.beans.factory.config.TypedStringValue;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
@@ -39,7 +39,7 @@ import java.util.List;
  */
 public abstract class AbstractContractDefinitionParser extends AbstractSingleBeanDefinitionParser
                                                                                                  implements
-                                                                                                 Slite2MiddlewareTagNameSupport {
+                                                                                                 SofaBootTagNameSupport {
 
     protected static final String INTERFACE_ELEMENT           = "interface";
     protected static final String INTERFACE_PROPERTY          = "interfaceType";

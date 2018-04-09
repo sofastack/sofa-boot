@@ -29,6 +29,10 @@
     <artifactId>sofaboot-sample-with-isolation</artifactId>
     <version>2.3.0</version>
 
+    <properties>
+        <main.user.dir>${user.dir}/../..</main.user.dir>
+    </properties>
+
     <dependencies>
 
         <!-- import SOFABoot Dependency healthcheck and infra -->
@@ -59,6 +63,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>test-sofa-boot-starter</artifactId>
             <scope>test</scope>
         </dependency>
 

@@ -16,12 +16,14 @@
  */
 package com.alipay.sofa.runtime.spring.initializer;
 
-import com.alipay.boot.sofarpc.configuration.Slite2Configuration;
 import com.alipay.sofa.common.log.Constants;
+import com.alipay.sofa.infra.constants.CommonMiddlewareConstants;
+import com.alipay.sofa.infra.log.space.SofaBootLogSpaceIsolationInit;
 import com.alipay.sofa.runtime.initializer.SofaFrameworkInitializer;
 import com.alipay.sofa.runtime.spi.log.SofaRuntimeLoggerFactory;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.env.Environment;
 
 /**
  * @author xuanbei 18/3/13
@@ -31,32 +33,12 @@ public class SofaRuntimeSpringContextInitializer
                                                 ApplicationContextInitializer<ConfigurableApplicationContext> {
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
-        if (Slite2Configuration.getEnvironment() == null) {
-            Slite2Configuration.setEnvironment(applicationContext.getEnvironment());
-        }
-        initLogger();
-        SofaFrameworkInitializer.initialize(Slite2Configuration.getAppName(), applicationContext);
-    }
-
-    private void initLogger() {
-        // init logging.path argument
-        if (Slite2Configuration.containsKey(Constants.LOG_PATH)) {
-            System.setProperty(Constants.LOG_PATH,
-                Slite2Configuration.getProperty(Constants.LOG_PATH));
-        }
-
+        Environment environment = applicationContext.getEnvironment();
         // init logging.level.com.alipay.sofa.runtime argument
         String runtimeLogLevelKey = Constants.LOG_LEVEL_PREFIX
                                     + SofaRuntimeLoggerFactory.SOFA_RUNTIME_LOG_SPACE;
-        String runtimeLogLevelValue = Slite2Configuration.getProperty(runtimeLogLevelKey);
-        if (runtimeLogLevelValue != null) {
-            System.setProperty(runtimeLogLevelKey, runtimeLogLevelValue);
-        }
-
-        // init file.encoding
-        String fileEncoding = Slite2Configuration.getProperty(Constants.LOG_ENCODING_PROP_KEY);
-        if (fileEncoding != null) {
-            System.setProperty(Constants.LOG_ENCODING_PROP_KEY, fileEncoding);
-        }
+        SofaBootLogSpaceIsolationInit.initSofaBootLogger(environment, runtimeLogLevelKey);
+        SofaFrameworkInitializer.initialize(
+            environment.getProperty(CommonMiddlewareConstants.APP_NAME_KEY), applicationContext);
     }
 }

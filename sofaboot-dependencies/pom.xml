@@ -100,6 +100,11 @@
                 <artifactId>runtime-sofa-boot-starter</artifactId>
                 <version>${sofa.boot.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>test-sofa-boot-starter</artifactId>
+                <version>${sofa.boot.version}</version>
+            </dependency>
             <!-- SOFA Ark Plugin -->
             <dependency>
                 <groupId>com.alipay.sofa</groupId>

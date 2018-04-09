@@ -14,20 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.infra.config.spring.namespace.spi;
+package com.alipay.sofa.boot.test;
+
+import com.alipay.sofa.boot.examples.demo.isolation.SofaBootClassIsolationDemoApplication;
+import com.alipay.sofa.boot.examples.demo.service.SampleService;
+import com.alipay.sofa.test.runner.SofaBootRunner;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 /**
- * SofaBootTagNameSupport
- *
- * @author yangguanchao
- * @since 2018/04/05
+ * @author qilong.zql
+ * @since 2.3.0
  */
-public interface SofaBootTagNameSupport {
+@RunWith(SofaBootRunner.class)
+@SpringBootTest(classes = SofaBootClassIsolationDemoApplication.class)
+public class IntegrationTestCaseRunWithIsolation {
 
-    /**
-     * 获取支持的 TagName
-     *
-     * @return 支持的 TagName
-     */
-    String supportTagName();
+    @Autowired
+    private SampleService sampleService;
+
+    @Test
+    public void test() {
+        Assert.assertTrue("service".equals(sampleService.service()));
+    }
+
 }

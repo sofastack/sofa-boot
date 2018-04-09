@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+
 <!--
   ~ Licensed to the Apache Software Foundation (ASF) under one or more
   ~ contributor license agreements.  See the NOTICE file distributed with
@@ -16,17 +18,16 @@
   ~ limitations under the License.
   -->
 
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:sofa="http://sofastack.io/schema/sofaboot"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-            http://sofastack.io/schema/sofaboot   http://sofastack.io/schema/sofaboot.xsd"
-       default-autowire="byName">
+<xsd:schema xmlns="http://sofastack.io/schema/sofaboot"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:beans="http://www.springframework.org/schema/beans"
+            targetNamespace="http://sofastack.io/schema/sofaboot"
+            elementFormDefault="qualified" attributeFormDefault="unqualified">
 
-    <bean id="sofaBootVersionImpl" class="com.alipay.sofa.infra.bean.SofaBootVersionImpl"/>
+    <xsd:import namespace="http://www.springframework.org/schema/beans"/>
 
-    <bean id="sofaRestVersionImpl" class="com.alipay.sofa.infra.bean.SofaRestVersionImpl"/>
+    <!-- Use xsd:include to bring in an XSD from the same or no namespace -->
+    <!-- Use xsd:import to bring in an XSD from a different namespace -->
+    <!-- http://itdoc.hitachi.co.jp/manuals/3020/30203Y4340e/EY430034.HTM -->
+    <xsd:include schemaLocation="./rpc.xsd"/>
 
-    <bean id="sofaRpcVersionImpl" class="com.alipay.sofa.infra.bean.SofaRpcVersionImpl"/>
-</beans>
+</xsd:schema>
