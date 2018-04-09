@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.alipay.sofa.runtime.component.impl;
 
 import com.alipay.sofa.runtime.api.component.ComponentName;
@@ -31,8 +30,8 @@ import org.junit.Test;
  */
 public class ComponentManagerImplTest {
     private ComponentManagerImpl componentManager;
-    private ComponentType type = new ComponentType("testType");
-    private ComponentName name = new ComponentName(type, "object");
+    private ComponentType        type = new ComponentType("testType");
+    private ComponentName        name = new ComponentName(type, "object");
 
     @Test
     public void testRegister(@Mocked final ClientFactoryInternal mockClientFactoryInternal,
@@ -57,72 +56,72 @@ public class ComponentManagerImplTest {
         componentManager.register(mockComponentInfo);
         Assert.assertTrue(componentManager.registry.containsKey(name));
         Assert.assertTrue(componentManager.resolvedRegistry.get(type).containsValue(
-                mockComponentInfo));
+            mockComponentInfo));
     }
 
-//    @Test
-//    public void testUnregister(@Mocked final ClientFactoryInternal mockClientFactoryInternal,
-//                               @Mocked final ComponentInfo mockComponentInfo) {
-//        new Expectations() {
-//            {
-//                mockComponentInfo.getName();
-//                result = name;
-//                mockComponentInfo.resolve();
-//                result = true;
-//            }
-//        };
-//        componentManager = new ComponentManagerImpl(mockClientFactoryInternal);
-//        componentManager.register(mockComponentInfo);
-//
-//        componentManager.unregister(mockComponentInfo);
-//        Assert.assertFalse(componentManager.registry.containsKey(name));
-//        Assert.assertTrue(componentManager.resolvedRegistry.get(type).isEmpty());
-//    }
-//
-//    @Test
-//    public void testResolvePendingResolveComponent(@Mocked final ClientFactoryInternal mockClientFactoryInternal,
-//                                                   @Mocked final ComponentInfo mockComponentInfo) {
-//        new Expectations() {
-//            {
-//                mockComponentInfo.getName();
-//                result = name;
-//                mockComponentInfo.resolve();
-//                result = false;
-//            }
-//        };
-//        componentManager = new ComponentManagerImpl(mockClientFactoryInternal);
-//        componentManager.register(mockComponentInfo);
-//        Assert.assertTrue(componentManager.registry.containsKey(name));
-//        Assert.assertFalse(componentManager.resolvedRegistry.containsKey(type));
-//        new Expectations() {
-//            {
-//                mockComponentInfo.resolve();
-//                result = true;
-//            }
-//        };
-//
-//        Assert.assertTrue(componentManager.resolvedRegistry.get(type).containsValue(
-//                mockComponentInfo));
-//    }
-//
-//    @Test
-//    public void testShutDown(@Mocked final ClientFactoryInternal mockClientFactoryInternal,
-//                             @Mocked final ComponentInfo mockComponentInfo) {
-//        new Expectations() {
-//            {
-//                mockComponentInfo.getName();
-//                result = name;
-//                mockComponentInfo.resolve();
-//                result = true;
-//            }
-//        };
-//        componentManager = new ComponentManagerImpl(mockClientFactoryInternal);
-//        componentManager.register(mockComponentInfo);
-//        componentManager.shutdown();
-//
-//        Assert.assertNull(componentManager.registry);
-//        Assert.assertNull(componentManager.resolvedRegistry);
-//        Assert.assertNull(componentManager.clientFactoryInternal);
-//    }
+    //    @Test
+    //    public void testUnregister(@Mocked final ClientFactoryInternal mockClientFactoryInternal,
+    //                               @Mocked final ComponentInfo mockComponentInfo) {
+    //        new Expectations() {
+    //            {
+    //                mockComponentInfo.getName();
+    //                result = name;
+    //                mockComponentInfo.resolve();
+    //                result = true;
+    //            }
+    //        };
+    //        componentManager = new ComponentManagerImpl(mockClientFactoryInternal);
+    //        componentManager.register(mockComponentInfo);
+    //
+    //        componentManager.unregister(mockComponentInfo);
+    //        Assert.assertFalse(componentManager.registry.containsKey(name));
+    //        Assert.assertTrue(componentManager.resolvedRegistry.get(type).isEmpty());
+    //    }
+    //
+    //    @Test
+    //    public void testResolvePendingResolveComponent(@Mocked final ClientFactoryInternal mockClientFactoryInternal,
+    //                                                   @Mocked final ComponentInfo mockComponentInfo) {
+    //        new Expectations() {
+    //            {
+    //                mockComponentInfo.getName();
+    //                result = name;
+    //                mockComponentInfo.resolve();
+    //                result = false;
+    //            }
+    //        };
+    //        componentManager = new ComponentManagerImpl(mockClientFactoryInternal);
+    //        componentManager.register(mockComponentInfo);
+    //        Assert.assertTrue(componentManager.registry.containsKey(name));
+    //        Assert.assertFalse(componentManager.resolvedRegistry.containsKey(type));
+    //        new Expectations() {
+    //            {
+    //                mockComponentInfo.resolve();
+    //                result = true;
+    //            }
+    //        };
+    //
+    //        Assert.assertTrue(componentManager.resolvedRegistry.get(type).containsValue(
+    //                mockComponentInfo));
+    //    }
+    //
+    //    @Test
+    //    public void testShutDown(@Mocked final ClientFactoryInternal mockClientFactoryInternal,
+    //                             @Mocked final ComponentInfo mockComponentInfo) {
+    //        new Expectations() {
+    //            {
+    //                mockComponentInfo.getName();
+    //                result = name;
+    //                mockComponentInfo.resolve();
+    //                result = true;
+    //            }
+    //        };
+    //        componentManager = new ComponentManagerImpl(mockClientFactoryInternal);
+    //        componentManager.register(mockComponentInfo);
+    //        componentManager.shutdown();
+    //
+    //        Assert.assertNull(componentManager.registry);
+    //        Assert.assertNull(componentManager.resolvedRegistry);
+    //        Assert.assertNull(componentManager.clientFactoryInternal);
+    //    }
 
 }

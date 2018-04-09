@@ -31,19 +31,4 @@ public interface SofaConfigurationConstants {
      * disable local first or not
      **/
     String SOFA_RUNTIME_DISABLE_LOCAL_FIRST             = "sofa_runtime_disable_local_first";
-
-    /**
-     * profile active key
-     */
-    String SOFA_ACTIVE_PROFILES_PROPERTY_NAME           = "sofa_runtime_profiles_active";
-
-    /**
-     * start sofa module parallel or not
-     */
-    String SOFA_MODULE_START_UP_PARALLEL                = "sofa_module_start_up_parallel";
-
-    /**
-     * allow bean definition overriding
-     */
-    String ALLOW_BEAN_DEFINITION_OVERRIDING             = "allow_bean_definition_overriding";
 }

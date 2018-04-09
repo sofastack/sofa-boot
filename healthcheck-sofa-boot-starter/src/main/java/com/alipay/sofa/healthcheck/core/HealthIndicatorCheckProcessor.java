@@ -14,8 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 package com.alipay.sofa.healthcheck.core;
 
 import com.alibaba.fastjson.JSON;
@@ -38,16 +36,17 @@ import java.util.List;
  * @version $Id: HealthIndicatorCheckProcessor.java, v 0.1 2017年10月20日 上午10:55 liangen Exp $
  */
 public class HealthIndicatorCheckProcessor {
-    private static Logger logger = SofaBootHealthCheckLoggerFactory.getLogger(HealthIndicatorCheckProcessor.class
-                                     .getCanonicalName());
+    private static Logger logger = SofaBootHealthCheckLoggerFactory
+                                     .getLogger(HealthIndicatorCheckProcessor.class
+                                         .getCanonicalName());
 
     public boolean checkIndicator() {
         if (skipHealthIndicator()) {
-            logger.info("Skip startup healthIndicator check.");
+            logger.info("Skip HealthIndicator readiness check.");
             return true;
         }
 
-        logger.info("Begin startup healthIndicator check.");
+        logger.info("Begin HealthIndicator readiness check.");
 
         List<HealthIndicator> healthIndicators = HealthCheckManager.getHealthIndicator();
         if (healthIndicators == null) {
@@ -61,28 +60,28 @@ public class HealthIndicatorCheckProcessor {
                 Status status = health.getStatus();
                 if (!status.equals(Status.UP)) {
                     result = false;
-                    logger.error("healthIndicator (" + healthIndicator.getClass()
-                        + ")check fail. And the status is[" + status + "]; the detail is: " +
-                        JSON.toJSONString(health.getDetails()));
+                    logger.error("HealthIndicator (" + healthIndicator.getClass()
+                                 + ")check fail. And the status is[" + status
+                                 + "]; the detail is: " + JSON.toJSONString(health.getDetails()));
                 } else {
-                    logger.info("healthIndicator (" + healthIndicator.getClass()
-                        + ")check success.");
+                    logger.info("HealthIndicator (" + healthIndicator.getClass()
+                                + ")check success.");
                 }
 
-                StartUpHealthCheckStatus.addHealthIndicatorDetail(new HealthIndicatorDetail(getKey(healthIndicator),
-                    health));
+                StartUpHealthCheckStatus.addHealthIndicatorDetail(new HealthIndicatorDetail(
+                    getKey(healthIndicator), health));
             } catch (Exception e) {
                 result = false;
-                logger.error("Error occurred while doing healthIndicator health check("
-                    + healthIndicator.getClass() + ")", e);
+                logger.error("Error occurred while doing HealthIndicator readiness check("
+                             + healthIndicator.getClass() + ")", e);
             }
 
         }
 
         if (result) {
-            logger.info("Startup healthIndicator check result: success.");
+            logger.info("Readiness check HealthIndicator result: success.");
         } else {
-            logger.error("Startup healthIndicator check result: fail.");
+            logger.error("Readiness check HealthIndicator result: fail.");
         }
 
         StartUpHealthCheckStatus.setHealthIndicatorStatus(result);
@@ -106,7 +105,7 @@ public class HealthIndicatorCheckProcessor {
         String[] fullName = healthIndicator.getClass().getName().split("\\.");
         String name = fullName[fullName.length - 1];
 
-        int index = name.toLowerCase().indexOf("healthindicator");
+        int index = name.toLowerCase().indexOf("HealthIndicator");
         if (index > 0) {
             return name.substring(0, index);
         }

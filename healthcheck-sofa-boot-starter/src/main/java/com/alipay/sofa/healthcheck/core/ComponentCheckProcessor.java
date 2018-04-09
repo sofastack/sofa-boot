@@ -14,8 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 package com.alipay.sofa.healthcheck.core;
 
 import com.alipay.sofa.healthcheck.configuration.HealthCheckConfiguration;
@@ -36,8 +34,8 @@ import java.util.concurrent.TimeUnit;
  * @version $Id: ComponentCheckProcessor.java, v 0.1 2017年10月20日 上午10:52 liangen Exp $
  */
 public class ComponentCheckProcessor {
-    private static Logger logger = SofaBootHealthCheckLoggerFactory.getLogger(ComponentCheckProcessor.class
-                                     .getCanonicalName());
+    private static Logger logger = SofaBootHealthCheckLoggerFactory
+                                     .getLogger(ComponentCheckProcessor.class.getCanonicalName());
 
     /**
      * Provides for HTTP checking. The method does not retry the reference component.
@@ -47,7 +45,7 @@ public class ComponentCheckProcessor {
     public boolean httpCheckComponent(Map<String, Health> healthMap) {
         boolean result = true;
 
-        logger.info("Begin http component health check.");
+        logger.info("Begin SOFABoot component readiness check.");
 
         for (HealthChecker healthChecker : HealthCheckManager.getHealthCheckers()) {
 
@@ -59,9 +57,9 @@ public class ComponentCheckProcessor {
         }
 
         if (result) {
-            logger.info("http component health check result: success.");
+            logger.info("SOFABoot component readiness check result: success.");
         } else {
-            logger.error("http component health check result: failed.");
+            logger.error("SOFABoot component readiness check result: failed.");
 
         }
 
@@ -74,11 +72,11 @@ public class ComponentCheckProcessor {
      */
     public boolean startupCheckComponent() {
         if (skipComponentHealthCheck()) {
-            logger.info("Skip startup component health check.");
+            logger.info("Skip SOFABoot component readiness check.");
             return true;
         }
 
-        logger.info("Begin startup component health check.");
+        logger.info("Begin SOFABoot component readiness check.");
 
         boolean result = true;
 
@@ -91,9 +89,10 @@ public class ComponentCheckProcessor {
         }
 
         if (result) {
-            logger.info("component startup health check result: success.");
+            logger.info("SOFABoot component readiness check result: success.");
+
         } else {
-            logger.error("component startup health check result: failed.");
+            logger.error("SOFABoot component readiness check result: failed.");
         }
 
         StartUpHealthCheckStatus.setComponentStatus(result);
@@ -111,7 +110,8 @@ public class ComponentCheckProcessor {
         return "true".equalsIgnoreCase(skipComponentHealthCheck);
     }
 
-    private boolean doCheckComponentHealth(HealthChecker healthChecker, boolean isRetry, Map<String, Health> healthMap) {
+    private boolean doCheckComponentHealth(HealthChecker healthChecker, boolean isRetry,
+                                           Map<String, Health> healthMap) {
 
         boolean result = true;
 
@@ -130,30 +130,33 @@ public class ComponentCheckProcessor {
                 try {
                     TimeUnit.MILLISECONDS.sleep(retryTimeInterval);
                 } catch (InterruptedException e) {
-                    logger.error("Exception occurred while sleeping of retry component health check.", e);
+                    logger.error(
+                        "Exception occurred while sleeping of retry component readiness check.", e);
                 }
 
                 health = healthChecker.isHealthy();
                 if (HealthCheckUtil.isHealth(health)) {
 
-                    logger.info("component health check success. component name[" + componentName + "]; retry count[" +
-                        (i + 1) + "]");
+                    logger.info("component readiness check success. component name["
+                                + componentName + "]; retry count[" + (i + 1) + "]");
                     break;
                 } else {
-                    logger.error("component health check failed. component name[" + componentName + "]; retry count[" +
-                        (i + 1) + "]; fail details:[" + health.getDetails() + "]");
+                    logger.error("component readiness check failed. component name["
+                                 + componentName + "]; retry count[" + (i + 1)
+                                 + "]; fail details:[" + health.getDetails() + "]");
 
                 }
 
             }
 
             if (retryCount == 0) {
-                logger.error("component health check failed. component name[" + componentName +
-                    "]; no retry; fail details:[" + health.getDetails() + "]");
+                logger.error("component readiness check failed. component name[" + componentName
+                             + "]; no retry; fail details:[" + health.getDetails() + "]");
             }
 
         } else {
-            logger.info("component health check success. component name[" + componentName + "]; no retry.");
+            logger.info("component readiness check success. component name[" + componentName
+                        + "]; no retry.");
 
         }
 

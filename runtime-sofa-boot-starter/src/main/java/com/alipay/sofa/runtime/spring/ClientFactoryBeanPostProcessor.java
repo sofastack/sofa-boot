@@ -43,7 +43,7 @@ public class ClientFactoryBeanPostProcessor implements BeanPostProcessor {
 
     @Override
     public Object postProcessBeforeInitialization(final Object bean, String beanName)
-        throws BeansException {
+                                                                                     throws BeansException {
         if (bean instanceof ClientFactoryAware) {
             ((ClientFactoryAware) bean).setClientFactory(clientFactory);
         }
@@ -56,8 +56,8 @@ public class ClientFactoryBeanPostProcessor implements BeanPostProcessor {
                     ReflectionUtils.makeAccessible(field);
                     ReflectionUtils.setField(field, bean, clientFactory);
                 } else if ((clientFactory instanceof ClientFactoryImpl)
-                    && ((ClientFactoryImpl) clientFactory).getAllClientTypes().contains(
-                        field.getType())) {
+                           && ((ClientFactoryImpl) clientFactory).getAllClientTypes().contains(
+                               field.getType())) {
                     Object client = clientFactory.getClient(field.getType());
 
                     ReflectionUtils.makeAccessible(field);
@@ -65,7 +65,7 @@ public class ClientFactoryBeanPostProcessor implements BeanPostProcessor {
                 } else {
                     throw new RuntimeException(
                         "Field annotated by ClientFactorySetter must be of type"
-                            + " ClientFactory or client store in the ClientFactory.");
+                                + " ClientFactory or client store in the ClientFactory.");
                 }
             }
         }, new ReflectionUtils.FieldFilter() {
@@ -73,7 +73,7 @@ public class ClientFactoryBeanPostProcessor implements BeanPostProcessor {
             @Override
             public boolean matches(Field field) {
                 return !Modifier.isStatic(field.getModifiers())
-                    && field.isAnnotationPresent(SofaClientFactory.class);
+                       && field.isAnnotationPresent(SofaClientFactory.class);
             }
         });
 
@@ -82,7 +82,7 @@ public class ClientFactoryBeanPostProcessor implements BeanPostProcessor {
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName)
-        throws BeansException {
+                                                                              throws BeansException {
         return bean;
     }
 }

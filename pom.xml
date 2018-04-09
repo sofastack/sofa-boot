@@ -28,13 +28,12 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.alipay.sofa</groupId>
     <artifactId>sofa-boot-runtime</artifactId>
     <packaging>pom</packaging>
     <version>2.3.0</version>
 
-    <name>SOFA Boot Runtime</name>
-    <description>SOFA Boot Runtime</description>
+    <name>SOFABoot Runtime</name>
+    <description>SOFABoot Runtime</description>
 
     <modules>
         <module>sofaboot-dependencies</module>

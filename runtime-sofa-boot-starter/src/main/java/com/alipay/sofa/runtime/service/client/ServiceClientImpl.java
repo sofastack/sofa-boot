@@ -63,13 +63,13 @@ public class ServiceClientImpl implements ServiceClient {
             serviceParam.getInterfaceType(), InterfaceMode.api, serviceParam.getInstance(), null);
 
         for (BindingParam bindingParam : serviceParam.getBindingParams()) {
-            BindingConverter bindingConverter = BindingFactoryContainer.getBindingConverterFactory()
-                .getBindingConverter(bindingParam.getBindingType());
+            BindingConverter bindingConverter = BindingFactoryContainer
+                .getBindingConverterFactory().getBindingConverter(bindingParam.getBindingType());
 
             if (bindingConverter == null) {
                 throw new ServiceRuntimeException(
                     "Can not found binding converter for binding type "
-                        + bindingParam.getBindingType());
+                            + bindingParam.getBindingType());
             }
             BindingConverterContext bindingConverterContext = new BindingConverterContext();
             bindingConverterContext.setInBinding(false);
@@ -105,7 +105,7 @@ public class ServiceClientImpl implements ServiceClient {
     @Override
     public void removeService(Class<?> interfaceClass, String uniqueId, int millisecondsToDelay) {
         if (millisecondsToDelay < 0) {
-            throw new IllegalArgumentException( "Argument delay must be a positive integer or zero.");
+            throw new IllegalArgumentException("Argument delay must be a positive integer or zero.");
         }
 
         Collection<ComponentInfo> serviceComponents = sofaRuntimeContext.getComponentManager()

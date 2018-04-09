@@ -41,7 +41,8 @@ import java.util.*;
  * @author yangguanchao
  * @since 2018/03/26
  */
-public class SofaBootVersionEndpoint extends AbstractEndpoint<Object> implements ApplicationContextAware {
+public class SofaBootVersionEndpoint extends AbstractEndpoint<Object> implements
+                                                                     ApplicationContextAware {
 
     public static final String                  SOFA_BOOT_VERSION_PREFIX = "sofaboot/versions";
 
@@ -78,8 +79,8 @@ public class SofaBootVersionEndpoint extends AbstractEndpoint<Object> implements
         //second Interface
         @SuppressWarnings("rawtypes")
         Collection<AbstractSofaBootMiddlewareVersionFacade> sofaBootMiddlewares = BeanFactoryUtils
-            .beansOfTypeIncludingAncestors(this.applicationContext, AbstractSofaBootMiddlewareVersionFacade.class)
-            .values();
+            .beansOfTypeIncludingAncestors(this.applicationContext,
+                AbstractSofaBootMiddlewareVersionFacade.class).values();
 
         for (AbstractSofaBootMiddlewareVersionFacade sofaBootMiddleware : sofaBootMiddlewares) {
             if (sofaBootMiddleware == null) {
@@ -125,11 +126,11 @@ public class SofaBootVersionEndpoint extends AbstractEndpoint<Object> implements
                 logger.info("Loading properties file from " + resourceLocation);
             }
             try {
-                PropertiesLoaderUtils.fillProperties(
-                    result, new EncodedResource(resourceLocation));
+                PropertiesLoaderUtils.fillProperties(result, new EncodedResource(resourceLocation));
             } catch (IOException ex) {
                 if (logger.isWarnEnabled()) {
-                    logger.warn("Could not load properties from " + resourceLocation + ": " + ex.getMessage());
+                    logger.warn("Could not load properties from " + resourceLocation + ": "
+                                + ex.getMessage());
                 }
             }
         }

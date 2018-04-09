@@ -14,19 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime.spi.deployment;
+package com.alipay.sofa.healthcheck.startup;
 
-/**
- * Module Deployment Validator, determine whether a module is sofa module
- *
- * @author xuanbei 18/3/1
- */
-public interface ModuleDeploymentValidator {
-    /**
-     * determine whether a module is sofa module
-     *
-     * @param deploymentDescriptor
-     * @return true or false
-     */
-    boolean isModuleDeployment(DeploymentDescriptor deploymentDescriptor);
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.event.ApplicationContextEvent;
+
+public class SofaBootBeforeReadinessCheckEvent extends ApplicationContextEvent {
+
+    public SofaBootBeforeReadinessCheckEvent(ApplicationContext source) {
+        super(source);
+    }
 }

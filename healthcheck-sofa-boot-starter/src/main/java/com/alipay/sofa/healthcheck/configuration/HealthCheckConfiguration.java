@@ -30,8 +30,9 @@ import java.util.Properties;
  * Created by liangen on 17/8/6.
  */
 public class HealthCheckConfiguration {
-    private static final Logger logger      = SofaBootHealthCheckLoggerFactory.getLogger(HealthCheckConfiguration.class
-                                                .getCanonicalName());
+    private static final Logger logger      = SofaBootHealthCheckLoggerFactory
+                                                .getLogger(HealthCheckConfiguration.class
+                                                    .getCanonicalName());
 
     //Used to store the read properties in a configuration file.
     private static Properties   properties  = new Properties();
@@ -65,8 +66,9 @@ public class HealthCheckConfiguration {
         }
         InputStream inputStream = null;
         try {
-            inputStream = classLoader != null ? classLoader.getResourceAsStream("META-INF/application.properties")
-                : ClassLoader.getSystemResourceAsStream("META-INF/application.properties");
+            inputStream = classLoader != null ? classLoader
+                .getResourceAsStream("META-INF/application.properties") : ClassLoader
+                .getSystemResourceAsStream("META-INF/application.properties");
             if (inputStream != null) {
                 properties.load(inputStream);
                 inputStream.close();
@@ -79,7 +81,8 @@ public class HealthCheckConfiguration {
                 try {
                     inputStream.close();
                 } catch (IOException e) {
-                    logger.error("the inputStream of read the application.properties close exception");
+                    logger
+                        .error("the inputStream of read the application.properties close exception");
 
                 }
             }
@@ -115,7 +118,8 @@ public class HealthCheckConfiguration {
             value = HealthCheckConfiguration.getProperty(key);
         }
         if (!StringUtils.hasText(value)) {
-            value = HealthCheckConfiguration.getProperty(HealthCheckConfigurationMapping.dotMap.get(key));
+            value = HealthCheckConfiguration.getProperty(HealthCheckConfigurationMapping.dotMap
+                .get(key));
         }
 
         return value;

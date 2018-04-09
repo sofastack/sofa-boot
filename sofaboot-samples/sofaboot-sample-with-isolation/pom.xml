@@ -31,13 +31,13 @@
 
     <dependencies>
 
-        <!-- import SOFA Boot Dependency healthcheck and infra -->
+        <!-- import SOFABoot Dependency healthcheck and infra -->
         <dependency>
             <groupId>com.alipay.sofa</groupId>
             <artifactId>healthcheck-sofa-boot-starter</artifactId>
         </dependency>
 
-        <!-- SOFA Boot Class Isolation Ability -->
+        <!-- SOFABoot Class Isolation Ability -->
         <dependency>
             <groupId>com.alipay.sofa</groupId>
             <artifactId>sofa-ark-springboot-starter</artifactId>
@@ -48,7 +48,7 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- SOFA Boot Class Isolation  Plugin -->
+        <!-- SOFABoot Class Isolation  Plugin -->
         <!--<dependency>-->
             <!--<groupId>com.alipay.sofa</groupId>-->
             <!--<artifactId>sample-ark-plugin</artifactId>-->

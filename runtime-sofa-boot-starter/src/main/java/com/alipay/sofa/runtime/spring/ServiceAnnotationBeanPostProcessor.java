@@ -57,14 +57,14 @@ public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, Pr
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName)
-        throws BeansException {
+                                                                               throws BeansException {
         processSofaReference(bean);
         return bean;
     }
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName)
-        throws BeansException {
+                                                                              throws BeansException {
         processSofaService(bean, beanName);
         return bean;
     }
@@ -86,7 +86,7 @@ public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, Pr
             if (interfaces == null || interfaces.length == 0 || interfaces.length > 1) {
                 throw new ServiceRuntimeException(
                     "Bean " + beanName
-                        + " does not has any interface or has more than one interface.");
+                            + " does not has any interface or has more than one interface.");
             }
 
             interfaceType = interfaces[0];
@@ -134,7 +134,7 @@ public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, Pr
             @Override
             public boolean matches(Field field) {
                 return !Modifier.isStatic(field.getModifiers())
-                    && field.isAnnotationPresent(SofaReference.class);
+                       && field.isAnnotationPresent(SofaReference.class);
             }
         });
     }

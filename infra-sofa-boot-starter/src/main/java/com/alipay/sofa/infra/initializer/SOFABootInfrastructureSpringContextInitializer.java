@@ -26,7 +26,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.util.StringUtils;
 
 /**
- * SOFA Boot Infrastructure 启动初始化器
+ * SOFABoot Infrastructure 启动初始化器
  * <p/>
  * 参考:org.springframework.core.io.support.SpringFactoriesLoader
  * <p/>
@@ -42,8 +42,9 @@ public class SOFABootInfrastructureSpringContextInitializer
         //init log
         this.logInit(applicationContext.getEnvironment());
 
-        InfraHealthCheckLoggerFactory.getLogger(SOFABootInfrastructureSpringContextInitializer.class)
-            .info("SOFA Boot Infrastructure Starting!");
+        InfraHealthCheckLoggerFactory.getLogger(
+            SOFABootInfrastructureSpringContextInitializer.class).info(
+            "SOFABoot Infrastructure Starting!");
 
     }
 
@@ -52,7 +53,8 @@ public class SOFABootInfrastructureSpringContextInitializer
         if (!StringUtils.isEmpty(loggingPath)) {
             initLoggingPath(loggingPath);
         }
-        String infraLogLevelKey = Constants.LOG_LEVEL_PREFIX + InfraHealthCheckLoggerFactory.INFRASTRUCTURE_LOG_SPACE;
+        String infraLogLevelKey = Constants.LOG_LEVEL_PREFIX
+                                  + InfraHealthCheckLoggerFactory.INFRASTRUCTURE_LOG_SPACE;
         String infraLogLevelValue = environment.getProperty(infraLogLevelKey);
         if (!StringUtils.isEmpty(infraLogLevelValue)) {
             System.setProperty(infraLogLevelKey, infraLogLevelValue);
@@ -66,10 +68,11 @@ public class SOFABootInfrastructureSpringContextInitializer
     }
 
     public static void initLoggingPath(String middlewareLoggingPath) {
-        if (StringUtils.isEmpty((String) System.getProperty(Constants.LOG_PATH)) &&
-            !StringUtils.isEmpty(middlewareLoggingPath)) {
+        if (StringUtils.isEmpty((String) System.getProperty(Constants.LOG_PATH))
+            && !StringUtils.isEmpty(middlewareLoggingPath)) {
             System.setProperty(Constants.LOG_PATH, middlewareLoggingPath);
-            ReportUtil.report("Actual " + Constants.LOG_PATH + " is [ " + middlewareLoggingPath + " ]");
+            ReportUtil.report("Actual " + Constants.LOG_PATH + " is [ " + middlewareLoggingPath
+                              + " ]");
         }
     }
 }

@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.alipay.sofa.runtime.spi.component;
 
 import com.alipay.sofa.runtime.api.component.Property;
@@ -34,18 +33,18 @@ import java.util.Set;
  */
 public class AbstractComponentTest {
 
-    private AbstractComponent   abstractComponent = new AbstractComponent() {
-        @Override
-        public ComponentType getType() {
-            return null;
-        }
+    private AbstractComponent abstractComponent = new AbstractComponent() {
+                                                    @Override
+                                                    public ComponentType getType() {
+                                                        return null;
+                                                    }
 
-        @Override
-        public Map<String, Property> getProperties() {
-            return null;
-        }
-    };
-    private MockSofaFramework   sofaFramework     = new MockSofaFramework();
+                                                    @Override
+                                                    public Map<String, Property> getProperties() {
+                                                        return null;
+                                                    }
+                                                };
+    private MockSofaFramework sofaFramework     = new MockSofaFramework();
 
     public static class MockSofaFramework implements SofaFramework {
 

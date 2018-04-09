@@ -26,24 +26,27 @@ import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 import java.util.ServiceLoader;
 
 /**
- * SOFA Boot 命名空间解析
+ * SOFABoot 命名空间解析
  * <p>
  * Created by yangguanchao on 16/9/1.
  */
 public class Slite2NamespaceHandler extends NamespaceHandlerSupport {
 
-    private static final Logger logger = InfraHealthCheckLoggerFactory.getLogger(Slite2NamespaceHandler.class);
+    private static final Logger logger = InfraHealthCheckLoggerFactory
+                                           .getLogger(Slite2NamespaceHandler.class);
 
     @Override
     public void init() {
-        ServiceLoader<Slite2MiddlewareTagNameSupport> serviceLoader = ServiceLoader.load(Slite2MiddlewareTagNameSupport.class);
-        ServiceLoader<SofaBootTagNameSupport> serviceLoaderSofaBoot = ServiceLoader.load(SofaBootTagNameSupport.class);
+        ServiceLoader<Slite2MiddlewareTagNameSupport> serviceLoader = ServiceLoader
+            .load(Slite2MiddlewareTagNameSupport.class);
+        ServiceLoader<SofaBootTagNameSupport> serviceLoaderSofaBoot = ServiceLoader
+            .load(SofaBootTagNameSupport.class);
 
         //compatible
         for (Slite2MiddlewareTagNameSupport tagNameSupport : serviceLoader) {
             this.registerTagParser(tagNameSupport);
         }
-        //SOFA Boot
+        //SOFABoot
         for (Slite2MiddlewareTagNameSupport tagNameSupport : serviceLoaderSofaBoot) {
             this.registerTagParser(tagNameSupport);
         }
@@ -51,7 +54,9 @@ public class Slite2NamespaceHandler extends NamespaceHandlerSupport {
 
     private void registerTagParser(Slite2MiddlewareTagNameSupport tagNameSupport) {
         if (!(tagNameSupport instanceof BeanDefinitionParser)) {
-            logger.error(tagNameSupport.getClass() + " tag name supported [" + tagNameSupport.supportTagName() + "] parser are not instance of " + BeanDefinitionParser.class);
+            logger.error(tagNameSupport.getClass() + " tag name supported ["
+                         + tagNameSupport.supportTagName() + "] parser are not instance of "
+                         + BeanDefinitionParser.class);
             return;
         }
         String tagName = tagNameSupport.supportTagName();

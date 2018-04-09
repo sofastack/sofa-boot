@@ -68,7 +68,7 @@ public abstract class AbstractComponent implements ComponentInfo {
     @Override
     public boolean isResolved() {
         return componentStatus == ComponentStatus.ACTIVATED
-            || componentStatus == ComponentStatus.RESOLVED;
+               || componentStatus == ComponentStatus.RESOLVED;
     }
 
     @Override

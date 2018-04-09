@@ -29,11 +29,11 @@
             <onMismatch>DENY</onMismatch>
         </filter>
         <!-- 日志名称 -->
-        <file>${logging.path}/health-check/sofaboot-common-error.log</file>
+        <file>${logging.path}/health-check/common-error.log</file>
         <!-- 每天生成一个日志文件，保存30天的日志文件 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--日志文件输出的文件名:按天回滚 daily -->
-            <FileNamePattern>${logging.path}/health-check/sofaboot-common-error.log.%d{yyyy-MM-dd}</FileNamePattern>
+            <FileNamePattern>${logging.path}/health-check/common-error.log.%d{yyyy-MM-dd}</FileNamePattern>
             <!--日志文件保留天数-->
             <MaxHistory>30</MaxHistory>
         </rollingPolicy>
@@ -51,11 +51,11 @@
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
         </filter>
-        <file>${logging.path}/health-check/sofaboot-common-default.log</file>
+        <file>${logging.path}/health-check/common-default.log</file>
         <!-- 每天生成一个日志文件，保存30天的日志文件 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--日志文件输出的文件名:按天回滚 daily -->
-            <FileNamePattern>${logging.path}/health-check/sofaboot-common-default.log.%d{yyyy-MM-dd}</FileNamePattern>
+            <FileNamePattern>${logging.path}/health-check/common-default.log.%d{yyyy-MM-dd}</FileNamePattern>
             <!--日志文件保留天数-->
             <MaxHistory>30</MaxHistory>
         </rollingPolicy>
