@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.boot.examples.demo.rpc;
 
-import com.alipay.sofa.boot.examples.demo.rpc.bean.Person;
+import com.alipay.sofa.boot.examples.demo.rpc.bean.PersonService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -26,15 +26,14 @@ import org.springframework.context.annotation.ImportResource;
 @ImportResource({ "classpath*:rpc-starter-example.xml" })
 public class SofaBootRpcDemoApplication {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         ApplicationContext applicationContext = SpringApplication.run(SofaBootRpcDemoApplication.class, args);
 
-        Person personBolt = (Person) applicationContext.getBean("personBolt");
-        Person personRest = (Person) applicationContext.getBean("personRest");
-        Person personDubbo = (Person) applicationContext.getBean("personDubbo");
+        PersonService personBolt = (PersonService) applicationContext.getBean("personReferenceBolt");
+        PersonService personRest = (PersonService) applicationContext.getBean("personReferenceRest");
 
         System.out.println(personBolt.sayName("bolt"));
         System.out.println(personRest.sayName("rest"));
-        System.out.println(personDubbo.sayName("dubbo"));
+
     }
 }

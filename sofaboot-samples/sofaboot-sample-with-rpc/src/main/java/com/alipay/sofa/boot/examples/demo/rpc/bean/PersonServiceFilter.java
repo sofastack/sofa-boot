@@ -16,24 +16,26 @@
  */
 package com.alipay.sofa.boot.examples.demo.rpc.bean;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import com.alipay.sofa.rpc.core.exception.SofaRpcException;
+import com.alipay.sofa.rpc.core.request.SofaRequest;
+import com.alipay.sofa.rpc.core.response.SofaResponse;
+import com.alipay.sofa.rpc.filter.Filter;
+import com.alipay.sofa.rpc.filter.FilterInvoker;
 
 /**
  *
  * @author liangen
- * @version $Id: Person.java, v 0.1 2018年04月09日 下午3:30 liangen Exp $
+ * @version $Id: Filter.java, v 0.1 2018年04月09日 下午4:17 liangen Exp $
  */
-@Path("/webapi/rest/person")
-@Consumes("application/json;charset=UTF-8")
-@Produces("application/json;charset=UTF-8")
-public interface Person {
+public class PersonServiceFilter extends Filter {
+    @Override
+    public SofaResponse invoke(FilterInvoker invoker, SofaRequest request) throws SofaRpcException {
 
-    @GET
-    @Path("/sayName/{string}")
-    String sayName(@PathParam("string") String string);
-
+        System.out.println("PersonFilter before");
+        try {
+            return invoker.invoke(request);
+        }finally {
+            System.out.println("PersonFilter after");
+        }
+    }
 }

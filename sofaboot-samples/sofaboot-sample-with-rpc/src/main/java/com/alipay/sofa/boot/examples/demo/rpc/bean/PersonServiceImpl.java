@@ -16,24 +16,15 @@
  */
 package com.alipay.sofa.boot.examples.demo.rpc.bean;
 
-import com.alipay.sofa.rpc.core.exception.SofaRpcException;
-import com.alipay.sofa.rpc.core.request.SofaRequest;
-import com.alipay.sofa.rpc.core.response.SofaResponse;
-import com.alipay.sofa.rpc.filter.Filter;
-import com.alipay.sofa.rpc.filter.FilterInvoker;
-
 /**
  *
  * @author liangen
- * @version $Id: Filter.java, v 0.1 2018年04月09日 下午4:17 liangen Exp $
+ * @version $Id: PersonImpl.java, v 0.1 2018年04月09日 下午3:32 liangen Exp $
  */
-public class PersonFilter extends Filter {
+public class PersonServiceImpl implements PersonService {
+
     @Override
-    public SofaResponse invoke(FilterInvoker invoker, SofaRequest request) throws SofaRpcException {
-
-        System.out.println("PersonFilter before");
-
-        return invoker.invoke(request);
-
+    public String sayName(String string) {
+        return "hi " + string + "!";
     }
 }

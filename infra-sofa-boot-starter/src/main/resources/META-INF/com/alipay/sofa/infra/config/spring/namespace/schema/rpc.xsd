@@ -413,6 +413,7 @@
                     <xsd:element name="binding.rest" type="RestBindingTRReference" minOccurs="0"/>
                     <xsd:element name="binding.dubbo" type="DubboBindingTRReference" minOccurs="0"/>
                 </xsd:all>
+                <xsd:attribute name="local-first" use="optional" type="xsd:boolean" default="false"/>
                 <xsd:attribute name="jvm-service" use="optional" type="xsd:boolean" default="false"/>
                 <xsd:attribute name="interface" type="xsd:string" use="required"/>
                 <xsd:attribute name="abstract" type="xsd:boolean" use="optional"/>

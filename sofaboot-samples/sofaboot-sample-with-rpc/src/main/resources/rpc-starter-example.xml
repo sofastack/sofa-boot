@@ -7,35 +7,26 @@
             http://sofastack.io/schema/sofaboot   http://sofastack.io/schema/sofaboot.xsd"
        default-autowire="byName">
 
-    <bean id="personImpl" class="com.alipay.sofa.boot.examples.demo.rpc.bean.PersonImpl"/>
+    <bean id="personServiceImpl" class="com.alipay.sofa.boot.examples.demo.rpc.bean.PersonServiceImpl"/>
 
-    <sofa:service ref="personImpl" interface="com.alipay.sofa.boot.examples.demo.rpc.bean.Person">
+    <sofa:service ref="personServiceImpl" interface="com.alipay.sofa.boot.examples.demo.rpc.bean.PersonService">
         <sofa:binding.bolt/>
         <sofa:binding.rest/>
-        <sofa:binding.dubbo/>
     </sofa:service>
 
 
-
-    <sofa:reference id="personBolt" interface="com.alipay.sofa.boot.examples.demo.rpc.bean.Person">
+    <sofa:reference id="personReferenceBolt" interface="com.alipay.sofa.boot.examples.demo.rpc.bean.PersonService" local-first="false">
         <sofa:binding.bolt>
-            <sofa:global-attrs filter="personFilter"/>
+            <sofa:global-attrs timeout="3000" address-wait-time="2000" filter="personFilter"/>
+            <!--<sofa:route target-url="127.0.0.1:22000"/>-->
+            <!--<sofa:method name="sayName" timeout="3000"/>-->
         </sofa:binding.bolt>
     </sofa:reference>
 
-    <sofa:reference id="personRest" interface="com.alipay.sofa.boot.examples.demo.rpc.bean.Person">
+    <sofa:reference id="personReferenceRest" interface="com.alipay.sofa.boot.examples.demo.rpc.bean.PersonService" local-first="false">
         <sofa:binding.rest/>
     </sofa:reference>
 
-    <sofa:reference id="personDubbo" interface="com.alipay.sofa.boot.examples.demo.rpc.bean.Person">
-        <sofa:binding.dubbo/>
-    </sofa:reference>
-
-    <bean id="personFilter" class="com.alipay.sofa.boot.examples.demo.rpc.bean.PersonFilter"/>
-
-
-
-
-
+    <bean id="personFilter" class="com.alipay.sofa.boot.examples.demo.rpc.bean.PersonServiceFilter"/>
 
 </beans>

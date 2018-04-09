@@ -16,15 +16,24 @@
  */
 package com.alipay.sofa.boot.examples.demo.rpc.bean;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+
 /**
  *
  * @author liangen
- * @version $Id: PersonImpl.java, v 0.1 2018年04月09日 下午3:32 liangen Exp $
+ * @version $Id: Person.java, v 0.1 2018年04月09日 下午3:30 liangen Exp $
  */
-public class PersonImpl implements Person{
+@Path("/webapi/rest/person")
+@Consumes("application/json;charset=UTF-8")
+@Produces("application/json;charset=UTF-8")
+public interface PersonService {
 
-    @Override
-    public String sayName(String string) {
-        return "hi " + string + "!";
-    }
+    @GET
+    @Path("/sayName/{string}")
+    String sayName(@PathParam("string") String string);
+
 }
