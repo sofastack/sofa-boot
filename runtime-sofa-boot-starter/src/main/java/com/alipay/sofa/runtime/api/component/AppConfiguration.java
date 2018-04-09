@@ -16,31 +16,12 @@
  */
 package com.alipay.sofa.runtime.api.component;
 
-import java.util.Map;
-
 /**
  * The SOFA configurations of an application.
  *
  * @author xuanbei 18/2/28
  */
 public interface AppConfiguration {
-
-    /** The host name of the system. */
-    String SYS_HOST_NAME = "sys_host_name";
-    /** The id address of the system. */
-    String SYS_IP        = "sys_ip";
-    /** The application name. */
-    String SYS_APP_NAME  = "app_name";
-    /** Run mode of the application. */
-    String SYS_RUN_MODE  = "run_mode";
-
-    /**
-     * Get the SOFA configuration as a safe map.
-     *
-     * @return The SOFA configuration as a safe map.
-     */
-    Map<String, String> getConfig();
-
     /**
      * Get a specific configuration value from SOFA configuration.
      *
@@ -58,32 +39,4 @@ public interface AppConfiguration {
      * @return The value of the configuration if it is not null. If it is null, return the specified default value.
      */
     String getPropertyValue(String key, String defaultValue);
-
-    /**
-     * Get the application name from SOFA configuration.
-     *
-     * @return The application name.
-     */
-    String getSysAppName();
-
-    /**
-     * Get the system IP from SOFA configuration.
-     *
-     * @return The system IP.
-     */
-    String getSysIp();
-
-    /**
-     * Get the system run mode from SOFA configuration.
-     *
-     * @return The system run mode.
-     */
-    String getSysRunMode();
-
-    /**
-     * Get the host name of SOFA configuration.
-     *
-     * @return The host name.
-     */
-    String getSysHostName();
 }
