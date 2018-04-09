@@ -2,7 +2,6 @@
 
 [![Build Status](https://travis-ci.org/alipay/sofa-boot.svg?branch=master)](https://travis-ci.org/alipay/sofa-boot)
 [![Coverage Status](https://coveralls.io/repos/github/alipay/sofa-boot/badge.svg?branch=master)](https://coveralls.io/github/alipay/sofa-boot?branch=master)
-[![Gitter](https://img.shields.io/badge/chat-on%20gitter-orange.svg)](https://gitter.im/alipay/sofa-boot)
 ![license](https://img.shields.io/badge/license-Apache--2.0-green.svg)
 ![maven](https://img.shields.io/badge/maven-2.3.0-green.svg)
 
@@ -42,11 +41,11 @@ Spring Boot 是一个非常优秀的开源框架，可以非常方便地就构�
 
 ## 三、快速开始
 
-请参考文档中的快速开始章节。
+请查看文档中的[快速开始](https://github.com/alipay/sofa-boot/wiki/QuickStart)来了解如何快速上手使用 SOFABoot。
 
 ## 四、如何贡献
 
-在贡献代码之前，请阅读[如何贡献](./CONTRIBUTING.md)来了解如何向 SOFABoot 贡献代码。在实际动手修改或者增加新功能之前，建议阅读开发者手册以更加深入地了解 SOFABoot。
+在贡献代码之前，请阅读[如何贡献](./CONTRIBUTING.md)来了解如何向 SOFABoot 贡献代码。
 
 SOFABoot 的编译环境的要求为 JDK7 或者 JDK8，需要采用 [Apache Maven 3.2.5](https://archive.apache.org/dist/maven/maven-3/3.2.5/binaries/) 或者更高的版本进行编译。
 
@@ -54,12 +53,12 @@ SOFABoot 的编译环境的要求为 JDK7 或者 JDK8，需要采用 [Apache Mav
 
 在此工程的 `sofaboot-samples` 目录下的是 SOFABoot 的示例工程，分别为：
 
-* [SOFABoot 示例工程](https://github.com/alipay/sofa-boot/tree/master/sofaboot-samples/sofaboot-sample)
-* [SOFABoot 示例工程（包含类隔离能力）](https://github.com/alipay/sofa-boot/tree/master/sofaboot-samples/sofaboot-sample-with-isolation)
+* [SOFABoot 示例工程](./sofaboot-samples/sofaboot-sample)
+* [SOFABoot 示例工程（包含类隔离能力）](./sofaboot-samples/sofaboot-sample-with-isolation)
  
 ## 六、文档
 
-关于 SOFABoot 的详细使用文档，请参考：此处需要提供 SOFABoot 在 WIKI 上的文档。
+请参考 [WIKI 中的 SOFABoot 的文档](https://github.com/alipay/sofa-boot/wiki)。
 
 
 
