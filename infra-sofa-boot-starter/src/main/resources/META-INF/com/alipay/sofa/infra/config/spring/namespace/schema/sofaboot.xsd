@@ -27,10 +27,7 @@
 
     <!-- Use xsd:include to bring in an XSD from the same or no namespace -->
     <!-- Use xsd:import to bring in an XSD from a different namespace -->
-
-    <xsd:include schemaLocation="classpath://META-INF/com/alipay/sofa/infra/config/spring/namespace/schema/rpc.xsd"/>
-
-
-
+    <!-- http://itdoc.hitachi.co.jp/manuals/3020/30203Y4340e/EY430034.HTM -->
+    <xsd:include schemaLocation="./rpc.xsd"/>
 
 </xsd:schema>

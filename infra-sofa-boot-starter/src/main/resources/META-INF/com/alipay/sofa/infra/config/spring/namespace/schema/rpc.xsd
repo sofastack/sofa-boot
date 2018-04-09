@@ -433,7 +433,6 @@
         <xsd:complexContent>
             <xsd:extension base="beans:identifiedType">
                 <xsd:all minOccurs="0" maxOccurs="1">
-                    <xsd:element name="binding" type="TBinding" minOccurs="0"/>
                     <xsd:element name="binding.bolt" type="BBindingTRService" minOccurs="0"/>
                     <xsd:element name="binding.rest" type="RestBindingTRService" minOccurs="0"/>
                     <xsd:element name="binding.dubbo" type="DubboBindingTRService" minOccurs="0"/>
