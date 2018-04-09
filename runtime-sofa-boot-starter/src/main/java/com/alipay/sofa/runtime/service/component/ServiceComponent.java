@@ -50,7 +50,7 @@ public class ServiceComponent extends AbstractComponent {
 
     private Service                   service;
     private BindingAdapterFactory     bindingAdapterFactory;
-    private Map<String, Property>     properties                    = new ConcurrentHashMap<String, Property>();
+    private Map<String, Property>     properties                    = new ConcurrentHashMap<>();
 
     public ServiceComponent(Implementation implementation, Service service,
                             SofaRuntimeContext sofaRuntimeContext) {

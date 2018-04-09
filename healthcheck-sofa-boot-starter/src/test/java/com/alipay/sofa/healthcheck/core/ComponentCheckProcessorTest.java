@@ -85,7 +85,7 @@ public class ComponentCheckProcessorTest {
         ReferenceA.setStrict(true);
         ReferenceA.setRetryCount(5);
 
-        Map<String, Health> details_1 = new HashMap<String, Health>();
+        Map<String, Health> details_1 = new HashMap<>();
         boolean result_1 = componentCheckProcessor.httpCheckComponent(details_1);
         Assert.assertFalse(result_1);
 

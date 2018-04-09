@@ -29,7 +29,7 @@ public class ServiceParam {
     private String             uniqueId;
     private Class<?>           interfaceType;
     private Object             instance;
-    private List<BindingParam> bindingParams = new ArrayList<BindingParam>();
+    private List<BindingParam> bindingParams = new ArrayList<>();
 
     /**
      * Get the unique id of the SOFA service to be created.

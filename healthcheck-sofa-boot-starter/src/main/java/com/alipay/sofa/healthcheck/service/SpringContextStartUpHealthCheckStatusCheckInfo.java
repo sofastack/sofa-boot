@@ -63,7 +63,7 @@ public class SpringContextStartUpHealthCheckStatusCheckInfo extends AbstractEndp
         Map<String, Health> afterHealthCheckCallbackDetails = StartUpHealthCheckStatus
             .getAfterHealthCheckCallbackDetails();
 
-        Map<String, Health> healths = new HashMap<String, Health>();
+        Map<String, Health> healths = new HashMap<>();
 
         //spring
         if (springContextStatus) {
