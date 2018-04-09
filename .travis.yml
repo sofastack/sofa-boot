@@ -6,13 +6,10 @@ jdk:
 - openjdk7
 
 install:
-- mvn clean install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+- mvn clean install -Dmaven.javadoc.skip=true -B -V
 
 script:
 - sh ./check_format.sh
 
 after_success:
-- mvn clean test cobertura:cobertura org.eluder.coveralls:coveralls-maven-plugin:report
-
-after_failure:
 - mvn clean test cobertura:cobertura org.eluder.coveralls:coveralls-maven-plugin:report
