@@ -31,6 +31,10 @@
     <version>2.3.0</version>
     <packaging>pom</packaging>
 
+    <properties>
+        <main.user.dir>${user.dir}/..</main.user.dir>
+    </properties>
+
     <build>
         <plugins>
             <!-- Don't upload to repo -->
