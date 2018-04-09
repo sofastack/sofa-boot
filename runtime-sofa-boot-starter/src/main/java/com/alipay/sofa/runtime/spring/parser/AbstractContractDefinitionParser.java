@@ -67,7 +67,7 @@ public abstract class AbstractContractDefinitionParser extends AbstractSingleBea
         builder.addPropertyValue(REPEAT_REFER_LIMIT_PROPERTY, repeatReferLimit);
 
         List<Element> childElements = DomUtils.getChildElements(element);
-        List<TypedStringValue> elementAsTypedStringValueList = new ArrayList<TypedStringValue>();
+        List<TypedStringValue> elementAsTypedStringValueList = new ArrayList<>();
 
         for (Element childElement : childElements) {
             try {

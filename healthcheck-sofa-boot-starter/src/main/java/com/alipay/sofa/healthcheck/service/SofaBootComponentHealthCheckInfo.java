@@ -39,7 +39,7 @@ public class SofaBootComponentHealthCheckInfo implements HealthIndicator {
     @Override
     public Health health() {
 
-        Map<String, Health> healths = new HashMap<String, Health>();
+        Map<String, Health> healths = new HashMap<>();
         boolean checkSuccessful = componentCheckProcessor.httpCheckComponent(healths);
 
         if (checkSuccessful) {

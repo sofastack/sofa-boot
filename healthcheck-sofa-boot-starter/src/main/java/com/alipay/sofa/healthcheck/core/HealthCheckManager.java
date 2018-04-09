@@ -48,7 +48,7 @@ public class HealthCheckManager {
     }
 
     public static List<HealthChecker> getHealthCheckers() {
-        List<HealthChecker> healthCheckers = new ArrayList<HealthChecker>();
+        List<HealthChecker> healthCheckers = new ArrayList<>();
 
         Map<String, HealthChecker> stringToHealthChecker = applicationContext
             .getBeansOfType(HealthChecker.class);
@@ -62,7 +62,7 @@ public class HealthCheckManager {
     }
 
     public static List<HealthIndicator> getHealthIndicator() {
-        List<HealthIndicator> healthIndicators = new ArrayList<HealthIndicator>();
+        List<HealthIndicator> healthIndicators = new ArrayList<>();
 
         Map<String, HealthIndicator> stringToHealthIndicator = applicationContext
             .getBeansOfType(HealthIndicator.class);
@@ -84,7 +84,7 @@ public class HealthCheckManager {
         Map<String, SofaBootAfterReadinessCheckCallback> stringToAfterReadinessCheckCallback = applicationContext
             .getBeansOfType(SofaBootAfterReadinessCheckCallback.class);
         if (!CollectionUtils.isEmpty(stringToAfterReadinessCheckCallback)) {
-            afterReadinessCheckCallbacks = new ArrayList<SofaBootAfterReadinessCheckCallback>(
+            afterReadinessCheckCallbacks = new ArrayList<>(
                 stringToAfterReadinessCheckCallback.values());
         } else {
             afterReadinessCheckCallbacks = Collections.EMPTY_LIST;
@@ -100,7 +100,7 @@ public class HealthCheckManager {
         Map<String, SofaBootMiddlewareAfterReadinessCheckCallback> stringToMiddlewareAfterReadinessCheckCallback = applicationContext
             .getBeansOfType(SofaBootMiddlewareAfterReadinessCheckCallback.class);
         if (!CollectionUtils.isEmpty(stringToMiddlewareAfterReadinessCheckCallback)) {
-            middlewareAfterReadinessCheckCallbacks = new ArrayList<SofaBootMiddlewareAfterReadinessCheckCallback>(
+            middlewareAfterReadinessCheckCallbacks = new ArrayList<>(
                 stringToMiddlewareAfterReadinessCheckCallback.values());
         } else {
             middlewareAfterReadinessCheckCallbacks = Collections.EMPTY_LIST;
