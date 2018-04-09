@@ -22,7 +22,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan({"com.alipay.sofa.boot.examples.demo.service"})
+@ComponentScan({ "com.alipay.sofa.boot.examples.demo.service" })
 public class SofaBootClassIsolationDemoApplication {
 
     public static void main(String[] args) {
