@@ -36,15 +36,15 @@ public class StartUpHealthCheckStatus {
 
     private static boolean                     componentStatus;
 
-    private static Map<String, Health>         componentDetail                 = new HashMap<String, Health>();
+    private static Map<String, Health>         componentDetail                 = new HashMap<>();
 
     private static boolean                     healthIndicatorStatus           = false;
 
-    private static List<HealthIndicatorDetail> healthIndicatorDetails          = new ArrayList<HealthIndicatorDetail>();
+    private static List<HealthIndicatorDetail> healthIndicatorDetails          = new ArrayList<>();
 
     private static boolean                     afterHealthCheckCallbackStatus;
 
-    private static Map<String, Health>         afterHealthCheckCallbackDetails = new HashMap<String, Health>();
+    private static Map<String, Health>         afterHealthCheckCallbackDetails = new HashMap<>();
 
     public static void setSpringContextStatus(boolean isHealth) {
         if (!isOpen) {

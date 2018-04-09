@@ -60,7 +60,7 @@ public abstract class AbstractContractFactoryBean implements InitializingBean,
     /** spring context */
     protected ApplicationContext      applicationContext;
     /** bindings */
-    protected List<Binding>           bindings                = new ArrayList<Binding>(2);
+    protected List<Binding>           bindings                = new ArrayList<>(2);
     /** document encoding */
     protected String                  documentEncoding;
     /** repeat times */
@@ -71,7 +71,7 @@ public abstract class AbstractContractFactoryBean implements InitializingBean,
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        List<Element> tempElements = new ArrayList<Element>();
+        List<Element> tempElements = new ArrayList<>();
         for (TypedStringValue element : elements) {
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             documentBuilderFactory.setNamespaceAware(true);
@@ -88,7 +88,7 @@ public abstract class AbstractContractFactoryBean implements InitializingBean,
 
     protected List<Binding> parseBindings(List<Element> parseElements,
                                           ApplicationContext appContext, boolean isInBinding) {
-        List<Binding> result = new ArrayList<Binding>();
+        List<Binding> result = new ArrayList<>();
 
         if (parseElements != null) {
             for (Element element : parseElements) {

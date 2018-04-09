@@ -34,7 +34,7 @@ import java.util.Set;
 public abstract class AbstractContract implements Contract {
 
     /** associated binding */
-    protected Set<Binding>        bindings      = new HashSet<Binding>(2);
+    protected Set<Binding>        bindings      = new HashSet<>(2);
     /** unique id */
     protected String              uniqueId      = "";
     /** interface class type */
@@ -42,7 +42,7 @@ public abstract class AbstractContract implements Contract {
     /** interface mode */
     protected InterfaceMode       interfaceMode = InterfaceMode.spring;
     /** properties of constract */
-    protected Map<String, String> property      = new HashMap<String, String>();
+    protected Map<String, String> property      = new HashMap<>();
 
     protected AbstractContract(String uniqueId, Class<?> interfaceType) {
         if (uniqueId == null) {

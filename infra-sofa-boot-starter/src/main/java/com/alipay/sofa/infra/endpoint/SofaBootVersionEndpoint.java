@@ -65,10 +65,10 @@ public class SofaBootVersionEndpoint extends AbstractEndpoint<Object> implements
             //cache
             return this.endpointResult;
         }
-        List<Object> result = new ArrayList<Object>();
+        List<Object> result = new ArrayList<>();
         //first https://stackoverflow.com/questions/9259819/how-to-read-values-from-properties-file
         try {
-            List<Properties> gavResult = new LinkedList<Properties>();
+            List<Properties> gavResult = new LinkedList<>();
             this.generateGavResult(gavResult);
             if (gavResult.size() > 0) {
                 result.addAll(gavResult);
@@ -106,8 +106,7 @@ public class SofaBootVersionEndpoint extends AbstractEndpoint<Object> implements
         if (pomResourceLocations == null || pomResourceLocations.size() <= 0) {
             return;
         }
-        for (int i = 0; i < pomResourceLocations.size(); i++) {
-            Resource sofaVersionsResource = pomResourceLocations.get(i);
+        for (Resource sofaVersionsResource : pomResourceLocations) {
             Properties sofaVersionsProperties = loadProperties(sofaVersionsResource);
             gavResult.add(sofaVersionsProperties);
         }
@@ -138,7 +137,7 @@ public class SofaBootVersionEndpoint extends AbstractEndpoint<Object> implements
     }
 
     private List<Resource> getSofaVersionsPropertiesResources() throws IOException {
-        List<String> paths = new ArrayList<String>();
+        List<String> paths = new ArrayList<>();
         String path1 = "classpath*:META-INF/sofa.versions.properties";
         paths.add(path1);
         return getResources(paths);
@@ -148,9 +147,9 @@ public class SofaBootVersionEndpoint extends AbstractEndpoint<Object> implements
         if (paths == null || paths.size() == 0) {
             return null;
         }
-        List<Resource> resultList = new ArrayList<Resource>();
-        for (int i = 0; i < paths.size(); i++) {
-            Resource[] resources = resourcePatternResolver.getResources(paths.get(i));
+        List<Resource> resultList = new ArrayList<>();
+        for (String path : paths) {
+            Resource[] resources = resourcePatternResolver.getResources(path);
             List<Resource> resourceList = Arrays.asList(resources);
             resultList.addAll(resourceList);
         }
@@ -163,7 +162,7 @@ public class SofaBootVersionEndpoint extends AbstractEndpoint<Object> implements
     }
 
     private Map<String, Object> getVersionInfo(AbstractSofaBootMiddlewareVersionFacade sofaBootMiddleware) {
-        Map<String, Object> result = new HashMap<String, Object>();
+        Map<String, Object> result = new HashMap<>();
         result.put("name", sofaBootMiddleware.getName());
         result.put("version", sofaBootMiddleware.getVersion());
         result.put("authors", sofaBootMiddleware.getAuthors());

@@ -27,7 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ClientFactoryImpl implements ClientFactoryInternal {
 
-    private Map<Class<?>, Object> clients = new ConcurrentHashMap<Class<?>, Object>(8);
+    private Map<Class<?>, Object> clients = new ConcurrentHashMap<>(8);
 
     @Override
     public void registerClient(Class<?> clientType, Object clientInstance) {

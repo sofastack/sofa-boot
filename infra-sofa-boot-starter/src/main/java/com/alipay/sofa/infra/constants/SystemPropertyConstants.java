@@ -39,7 +39,7 @@ public class SystemPropertyConstants {
 
     private static final String     ANTCLOUD_ENV_KEY        = "com.alipay.env";
 
-    public static final Set<String> KEYS                    = new HashSet<String>();
+    public static final Set<String> KEYS                    = new HashSet<>();
 
     static {
         KEYS.add(MIDDLEWARE_ACCESS_KEY);
