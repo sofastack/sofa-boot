@@ -41,7 +41,7 @@ Spring Boot 是一个非常优秀的开源框架，可以非常方便地就构�
 
 ## 三、快速开始
 
-请查看文档中的[快速开始](./wiki/QuickStart)来了解如何快速上手使用 SOFABoot。
+请查看文档中的[快速开始](https://github.com/alipay/sofa-boot/wiki/QuickStart)来了解如何快速上手使用 SOFABoot。
 
 ## 四、如何贡献
 
@@ -58,7 +58,7 @@ SOFABoot 的编译环境的要求为 JDK7 或者 JDK8，需要采用 [Apache Mav
  
 ## 六、文档
 
-请参考 [WIKI 中的 SOFABoot 的文档](./wiki)。
+请参考 [WIKI 中的 SOFABoot 的文档](https://github.com/alipay/sofa-boot/wiki)。
 
 
 
