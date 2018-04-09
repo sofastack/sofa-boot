@@ -13,3 +13,6 @@ script:
 
 after_success:
 - mvn clean test cobertura:cobertura org.eluder.coveralls:coveralls-maven-plugin:report
+
+after_failure:
+- mvn clean test cobertura:cobertura org.eluder.coveralls:coveralls-maven-plugin:report
