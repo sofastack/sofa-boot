@@ -16,13 +16,15 @@
  */
 package com.alipay.sofa.runtime.spring.health;
 
-import com.alipay.boot.sofarpc.configuration.Slite2Configuration;
 import com.alipay.sofa.healthcheck.core.DefaultHealthChecker;
+import com.alipay.sofa.infra.constants.CommonMiddlewareConstants;
 import com.alipay.sofa.runtime.spi.SofaFrameworkHolder;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.health.HealthResult;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.Status;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 /**
@@ -31,13 +33,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class ComponentHealthChecker extends DefaultHealthChecker {
 
+    @Autowired
+    private Environment environment;
+
     @Override
     public Health isHealthy() {
         boolean allPassed = true;
         Health.Builder builder = new Health.Builder();
         for (ComponentInfo componentInfo : SofaFrameworkHolder.getSofaFramework()
-            .getSofaRuntimeContext(Slite2Configuration.getAppName()).getComponentManager()
-            .getComponents()) {
+            .getSofaRuntimeContext(environment.getProperty(CommonMiddlewareConstants.APP_NAME_KEY))
+            .getComponentManager().getComponents()) {
             HealthResult healthy = componentInfo.isHealthy();
             if (healthy.isHealthy()) {
                 builder.withDetail(healthy.getHealthName(), "passed");

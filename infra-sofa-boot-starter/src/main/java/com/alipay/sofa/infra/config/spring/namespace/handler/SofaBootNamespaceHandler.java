@@ -14,9 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.boot.middleware.config.spring.namespace.handler;
+package com.alipay.sofa.infra.config.spring.namespace.handler;
 
-import com.alipay.boot.middleware.config.spring.namespace.spi.Slite2MiddlewareTagNameSupport;
 import com.alipay.sofa.infra.config.spring.namespace.spi.SofaBootTagNameSupport;
 import com.alipay.sofa.infra.log.InfraHealthCheckLoggerFactory;
 import org.slf4j.Logger;
@@ -26,33 +25,27 @@ import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 import java.util.ServiceLoader;
 
 /**
- * SOFABoot 命名空间解析
- * <p>
- * Created by yangguanchao on 16/9/1.
+ * SofaBootNamespaceHandler
+ *
+ * @author yangguanchao
+ * @since 2018/04/08
  */
-public class Slite2NamespaceHandler extends NamespaceHandlerSupport {
+public class SofaBootNamespaceHandler extends NamespaceHandlerSupport {
 
     private static final Logger logger = InfraHealthCheckLoggerFactory
-                                           .getLogger(Slite2NamespaceHandler.class);
+                                           .getLogger(SofaBootNamespaceHandler.class);
 
     @Override
     public void init() {
-        ServiceLoader<Slite2MiddlewareTagNameSupport> serviceLoader = ServiceLoader
-            .load(Slite2MiddlewareTagNameSupport.class);
         ServiceLoader<SofaBootTagNameSupport> serviceLoaderSofaBoot = ServiceLoader
             .load(SofaBootTagNameSupport.class);
-
-        //compatible
-        for (Slite2MiddlewareTagNameSupport tagNameSupport : serviceLoader) {
-            this.registerTagParser(tagNameSupport);
-        }
         //SOFABoot
-        for (Slite2MiddlewareTagNameSupport tagNameSupport : serviceLoaderSofaBoot) {
+        for (SofaBootTagNameSupport tagNameSupport : serviceLoaderSofaBoot) {
             this.registerTagParser(tagNameSupport);
         }
     }
 
-    private void registerTagParser(Slite2MiddlewareTagNameSupport tagNameSupport) {
+    private void registerTagParser(SofaBootTagNameSupport tagNameSupport) {
         if (!(tagNameSupport instanceof BeanDefinitionParser)) {
             logger.error(tagNameSupport.getClass() + " tag name supported ["
                          + tagNameSupport.supportTagName() + "] parser are not instance of "

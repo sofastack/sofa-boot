@@ -1,3 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+
 <!--
   ~ Licensed to the Apache Software Foundation (ASF) under one or more
   ~ contributor license agreements.  See the NOTICE file distributed with
@@ -15,22 +18,16 @@
   ~ limitations under the License.
   -->
 
-<xsd:schema xmlns="http://schema.alipay.com/sofa/schema/slite"
+<xsd:schema xmlns="http://sofastack.io/schema/sofaboot"
             xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:beans="http://www.springframework.org/schema/beans"
-            targetNamespace="http://schema.alipay.com/sofa/schema/slite"
+            targetNamespace="http://sofastack.io/schema/sofaboot"
             elementFormDefault="qualified" attributeFormDefault="unqualified">
 
     <xsd:import namespace="http://www.springframework.org/schema/beans"/>
 
-    <!-- mgw start -->
-    <xsd:element name="mobileservice" type="TMobilegw"/>
-    <xsd:complexType name="TMobilegw">
-    	<xsd:complexContent>
-    		<xsd:extension base="beans:identifiedType">
-    			<xsd:attribute name="scan-package" type="xsd:string" use="required"/>
-    		</xsd:extension>
-    	</xsd:complexContent>
-    </xsd:complexType>
-    <!-- mgw end -->
+    <!-- Use xsd:include to bring in an XSD from the same or no namespace -->
+    <!-- Use xsd:import to bring in an XSD from a different namespace -->
+    <!-- http://itdoc.hitachi.co.jp/manuals/3020/30203Y4340e/EY430034.HTM -->
+    <xsd:include schemaLocation="./rpc.xsd"/>
 
 </xsd:schema>
