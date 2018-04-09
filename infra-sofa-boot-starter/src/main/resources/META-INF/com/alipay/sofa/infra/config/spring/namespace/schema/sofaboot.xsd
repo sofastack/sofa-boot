@@ -25,6 +25,12 @@
 
     <xsd:import namespace="http://www.springframework.org/schema/beans"/>
 
+    <!-- Use xsd:include to bring in an XSD from the same or no namespace -->
+    <!-- Use xsd:import to bring in an XSD from a different namespace -->
+
+    <xsd:include schemaLocation="classpath://META-INF/com/alipay/sofa/infra/config/spring/namespace/schema/rpc.xsd"/>
+
+
 
 
 </xsd:schema>

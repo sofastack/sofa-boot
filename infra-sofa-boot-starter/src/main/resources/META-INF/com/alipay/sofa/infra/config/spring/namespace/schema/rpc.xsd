@@ -22,5 +22,430 @@
 
     <xsd:import namespace="http://www.springframework.org/schema/beans"/>
 
+    <xsd:complexType name="TBinding">
+        <xsd:complexContent>
+            <xsd:extension base="beans:identifiedType">
+                <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+                </xsd:sequence>
+                <xsd:attribute name="name" type="xsd:string" use="optional"/>
+                <xsd:attribute name="url" type="xsd:string" use="optional"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+
+    <!-- Bolt Start -->
+
+    <xsd:simpleType name="BInvokeMode">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="sync"/>
+            <xsd:enumeration value="oneway"/>
+            <xsd:enumeration value="future"/>
+            <xsd:enumeration value="callback"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="Bcontent">
+        <xsd:sequence minOccurs="1" maxOccurs="1">
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="Binterface">
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="Bcallback">
+        <xsd:sequence>
+            <xsd:element name="binding" type="xsd:string" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="BBinding">
+        <xsd:complexContent>
+            <xsd:extension base="beans:identifiedType">
+                <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+                </xsd:sequence>
+                <xsd:attribute name="name" type="xsd:string" use="optional"/>
+                <xsd:attribute name="url" type="xsd:string" use="optional"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <!-- method in reference binding.bolt -->
+    <xsd:complexType name="BBindingTRRefMethod">
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+        <xsd:attribute name="type" type="BInvokeMode" use="optional"/>
+        <xsd:attribute name="timeout" type="xsd:int" use="optional"/>
+        <xsd:attribute name="callback-class" type="xsd:string" use="optional"/>
+        <xsd:attribute name="callback-ref" type="xsd:string" use="optional"/>
+    </xsd:complexType>
+
+    <!-- route in reference binding.bolt-->
+    <xsd:complexType name="BBindingTRRefRoute">
+        <xsd:attribute name="target-url" type="xsd:string" use="optional"/>
+    </xsd:complexType>
+
+    <!-- global-attrs in reference binding.bolt -->
+    <xsd:complexType name="BBindingTRRefAttr">
+        <xsd:attribute name="timeout" type="xsd:int" use="optional"/>
+        <xsd:attribute name="type" type="BInvokeMode" use="optional"/>
+        <xsd:attribute name="address-wait-time" type="xsd:int" use="optional"/>
+        <xsd:attribute name="callback-class" type="xsd:string" use="optional"/>
+        <xsd:attribute name="callback-ref" type="xsd:string" use="optional"/>
+        <xsd:attribute name="connect.timeout" type="xsd:int" use="optional"/>
+        <xsd:attribute name="connect.num" type="xsd:int" use="optional"/>
+        <xsd:attribute name="idle.timeout" type="xsd:int" use="optional"/>
+        <xsd:attribute name="idle.timeout.read" type="xsd:int" use="optional"/>
+        <xsd:attribute name="generic-interface" type="xsd:string" use="optional"/>
+        <xsd:attribute name="filter" type="xsd:string" use="optional"/>
+    </xsd:complexType>
+
+    <!-- method in service binding.bolt -->
+    <xsd:complexType name="BBindingTRSerMethod">
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+        <xsd:attribute name="timeout" type="xsd:int" use="optional"/>
+    </xsd:complexType>
+    <!-- global-attrs in service binding.bolt -->
+    <xsd:complexType name="BBindingTRSerAttr">
+        <xsd:attribute name="timeout" type="xsd:int" use="optional"/>
+        <xsd:attribute name="filter" type="xsd:string" use="optional"/>
+        <xsd:attribute name="weight" type="xsd:int" use="optional" />
+        <xsd:attribute name="warm-up-weight" type="xsd:int" use="optional" />
+        <xsd:attribute name="warm-up-time" type="xsd:int" use="optional" />
+    </xsd:complexType>
+    <!-- binding.bolt in reference -->
+    <xsd:complexType name="BBindingTRReference">
+        <xsd:complexContent>
+            <xsd:extension base="TBinding">
+                <xsd:sequence minOccurs="0">
+                    <xsd:element name="global-attrs" type="BBindingTRRefAttr" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="route" type="BBindingTRRefRoute" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="method" type="BBindingTRRefMethod" minOccurs="0" maxOccurs="unbounded"/>
+                    <xsd:any minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+    <!-- binding.bolt in service -->
+    <xsd:complexType name="BBindingTRService">
+        <xsd:complexContent>
+            <xsd:extension base="BBinding">
+                <xsd:sequence minOccurs="0">
+                    <xsd:element name="global-attrs" type="BBindingTRSerAttr" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="method" type="BBindingTRSerMethod" minOccurs="0" maxOccurs="unbounded"/>
+                    <xsd:any minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+    <xsd:complexType name="Bcontract">
+        <xsd:complexContent>
+            <xsd:extension base="beans:identifiedType">
+                <xsd:sequence minOccurs="0" maxOccurs="1">
+                    <xsd:element name="interface" type="Binterface" minOccurs="0"/>
+                    <xsd:element name="description" type="Bcontent" minOccurs="0"/>
+                    <xsd:element name="binding" type="BBinding" minOccurs="0"/>
+                </xsd:sequence>
+                <xsd:attribute name="interface" type="xsd:string" use="optional"/>
+                <xsd:attribute name="version" type="xsd:string" use="optional" default="1.0"/>
+                <xsd:attribute name="group" type="xsd:string" use="optional"/>
+                <xsd:attribute name="policySet" type="xsd:string" use="optional"/>
+                <xsd:attribute name="abstract" type="xsd:boolean" use="optional"/>
+                <xsd:attribute name="parent" type="xsd:string" use="optional"/>
+                <xsd:attribute name="uniqueId" type="xsd:string" use="optional"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <!-- Bolt End -->
+
+    <!-- Rest Start -->
+
+    <xsd:simpleType name="RestInvokeMode">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="sync"/>
+            <xsd:enumeration value="future"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="Restcontent">
+        <xsd:sequence minOccurs="1" maxOccurs="1">
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="Restinterface">
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="Restcallback">
+        <xsd:sequence>
+            <xsd:element name="binding" type="xsd:string" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="RestBinding">
+        <xsd:complexContent>
+            <xsd:extension base="beans:identifiedType">
+                <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+                </xsd:sequence>
+                <xsd:attribute name="name" type="xsd:string" use="optional"/>
+                <xsd:attribute name="url" type="xsd:string" use="optional"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <!-- method in reference binding.rest -->
+    <xsd:complexType name="RestBindingTRRefMethod">
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+        <xsd:attribute name="type" type="RestInvokeMode" use="optional"/>
+        <xsd:attribute name="timeout" type="xsd:int" use="optional"/>
+    </xsd:complexType>
+
+    <!-- route in reference binding.rest-->
+    <xsd:complexType name="RestBindingTRRefRoute">
+        <xsd:attribute name="target-url" type="xsd:string" use="optional"/>
+    </xsd:complexType>
+
+    <!-- global-attrs in reference binding.rest -->
+    <xsd:complexType name="RestBindingTRRefAttr">
+        <xsd:attribute name="timeout" type="xsd:int" use="optional"/>
+        <xsd:attribute name="type" type="RestInvokeMode" use="optional"/>
+        <xsd:attribute name="address-wait-time" type="xsd:int" use="optional"/>
+        <xsd:attribute name="connect.timeout" type="xsd:int" use="optional"/>
+        <xsd:attribute name="connect.num" type="xsd:int" use="optional"/>
+        <xsd:attribute name="idle.timeout" type="xsd:int" use="optional"/>
+        <xsd:attribute name="idle.timeout.read" type="xsd:int" use="optional"/>
+    </xsd:complexType>
+
+    <!-- method in service binding.rest -->
+    <xsd:complexType name="RestBindingTRSerMethod">
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+        <xsd:attribute name="timeout" type="xsd:int" use="optional"/>
+    </xsd:complexType>
+    <!-- global-attrs in service binding.rest -->
+    <xsd:complexType name="RestBindingTRSerAttr">
+        <xsd:attribute name="timeout" type="xsd:int" use="optional"/>
+    </xsd:complexType>
+    <!-- binding.rest in reference -->
+    <xsd:complexType name="RestBindingTRReference">
+        <xsd:complexContent>
+            <xsd:extension base="RestBinding">
+                <xsd:sequence minOccurs="0">
+                    <xsd:element name="global-attrs" type="RestBindingTRRefAttr" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="route" type="RestBindingTRRefRoute" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="method" type="RestBindingTRRefMethod" minOccurs="0" maxOccurs="unbounded"/>
+                    <xsd:any minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+    <!-- binding.rest in service -->
+    <xsd:complexType name="RestBindingTRService">
+        <xsd:complexContent>
+            <xsd:extension base="RestBinding">
+                <xsd:sequence minOccurs="0">
+                    <xsd:element name="global-attrs" type="RestBindingTRSerAttr" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="method" type="RestBindingTRSerMethod" minOccurs="0" maxOccurs="unbounded"/>
+                    <xsd:any minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+    <xsd:complexType name="Restcontract">
+        <xsd:complexContent>
+            <xsd:extension base="beans:identifiedType">
+                <xsd:sequence minOccurs="0" maxOccurs="1">
+                    <xsd:element name="interface" type="Restinterface" minOccurs="0"/>
+                    <xsd:element name="description" type="Restcontent" minOccurs="0"/>
+                    <xsd:element name="binding" type="RestBinding" minOccurs="0"/>
+                </xsd:sequence>
+                <xsd:attribute name="interface" type="xsd:string" use="optional"/>
+                <xsd:attribute name="version" type="xsd:string" use="optional" default="1.0"/>
+                <xsd:attribute name="group" type="xsd:string" use="optional"/>
+                <xsd:attribute name="policySet" type="xsd:string" use="optional"/>
+                <xsd:attribute name="abstract" type="xsd:boolean" use="optional"/>
+                <xsd:attribute name="parent" type="xsd:string" use="optional"/>
+                <xsd:attribute name="uniqueId" type="xsd:string" use="optional"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <!-- Rest End -->
+
+
+    <!-- Dubbo Start -->
+
+    <xsd:simpleType name="DubboInvokeMode">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="sync"/>
+            <xsd:enumeration value="oneway"/>
+            <xsd:enumeration value="future"/>
+            <xsd:enumeration value="callback"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="Dubbocontent">
+        <xsd:sequence minOccurs="1" maxOccurs="1">
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="Dubbointerface">
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="Dubbocallback">
+        <xsd:sequence>
+            <xsd:element name="binding" type="xsd:string" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="DubboBinding">
+        <xsd:complexContent>
+            <xsd:extension base="beans:identifiedType">
+                <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+                </xsd:sequence>
+                <xsd:attribute name="name" type="xsd:string" use="optional"/>
+                <xsd:attribute name="url" type="xsd:string" use="optional"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <!-- method in reference binding.dubbo -->
+    <xsd:complexType name="DubboBindingTRRefMethod">
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+        <xsd:attribute name="type" type="DubboInvokeMode" use="optional"/>
+        <xsd:attribute name="timeout" type="xsd:int" use="optional"/>
+        <xsd:attribute name="callback-class" type="xsd:string" use="optional"/>
+        <xsd:attribute name="callback-ref" type="xsd:string" use="optional"/>
+    </xsd:complexType>
+
+    <!-- route in reference binding.dubbo-->
+    <xsd:complexType name="DubboBindingTRRefRoute">
+        <xsd:attribute name="target-url" type="xsd:string" use="optional"/>
+    </xsd:complexType>
+
+    <!-- global-attrs in reference binding.dubbo -->
+    <xsd:complexType name="DubboBindingTRRefAttr">
+        <xsd:attribute name="timeout" type="xsd:int" use="optional"/>
+        <xsd:attribute name="type" type="DubboInvokeMode" use="optional"/>
+        <xsd:attribute name="address-wait-time" type="xsd:int" use="optional"/>
+        <xsd:attribute name="callback-class" type="xsd:string" use="optional"/>
+        <xsd:attribute name="callback-ref" type="xsd:string" use="optional"/>
+        <xsd:attribute name="connect.timeout" type="xsd:int" use="optional"/>
+        <xsd:attribute name="connect.num" type="xsd:int" use="optional"/>
+        <xsd:attribute name="idle.timeout" type="xsd:int" use="optional"/>
+        <xsd:attribute name="idle.timeout.read" type="xsd:int" use="optional"/>
+    </xsd:complexType>
+
+    <!-- method in service binding.dubbo -->
+    <xsd:complexType name="DubboBindingTRSerMethod">
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+        <xsd:attribute name="timeout" type="xsd:int" use="optional"/>
+    </xsd:complexType>
+    <!-- global-attrs in service binding.dubbo -->
+    <xsd:complexType name="DubboBindingTRSerAttr">
+        <xsd:attribute name="timeout" type="xsd:int" use="optional"/>
+    </xsd:complexType>
+    <!-- binding.dubbo in reference -->
+    <xsd:complexType name="DubboBindingTRReference">
+        <xsd:complexContent>
+            <xsd:extension base="DubboBinding">
+                <xsd:sequence minOccurs="0">
+                    <xsd:element name="global-attrs" type="DubboBindingTRRefAttr" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="route" type="DubboBindingTRRefRoute" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="method" type="DubboBindingTRRefMethod" minOccurs="0" maxOccurs="unbounded"/>
+                    <xsd:any minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+    <!-- binding.dubbo in service -->
+    <xsd:complexType name="DubboBindingTRService">
+        <xsd:complexContent>
+            <xsd:extension base="DubboBinding">
+                <xsd:sequence minOccurs="0">
+                    <xsd:element name="global-attrs" type="DubboBindingTRSerAttr" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="method" type="DubboBindingTRSerMethod" minOccurs="0" maxOccurs="unbounded"/>
+                    <xsd:any minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+    <xsd:complexType name="Dubbocontract">
+        <xsd:complexContent>
+            <xsd:extension base="beans:identifiedType">
+                <xsd:sequence minOccurs="0" maxOccurs="1">
+                    <xsd:element name="interface" type="Dubbointerface" minOccurs="0"/>
+                    <xsd:element name="description" type="Dubbocontent" minOccurs="0"/>
+                    <xsd:element name="binding" type="DubboBinding" minOccurs="0"/>
+                </xsd:sequence>
+                <xsd:attribute name="interface" type="xsd:string" use="optional"/>
+                <xsd:attribute name="version" type="xsd:string" use="optional" default="1.0"/>
+                <xsd:attribute name="group" type="xsd:string" use="optional"/>
+                <xsd:attribute name="policySet" type="xsd:string" use="optional"/>
+                <xsd:attribute name="abstract" type="xsd:boolean" use="optional"/>
+                <xsd:attribute name="parent" type="xsd:string" use="optional"/>
+                <xsd:attribute name="uniqueId" type="xsd:string" use="optional"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <!-- Dubbo End -->
+
+    <!-- filter -->
+    <xsd:element name="rpc-global-filter" type="Tfilter"/>
+    <xsd:complexType name="Tfilter">
+        <xsd:complexContent>
+            <xsd:extension base="beans:identifiedType">
+                <xsd:attribute name="ref" type="xsd:string" use="optional"/>
+                <xsd:attribute name="class" type="xsd:string" use="optional"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <!-- reference -->
+    <xsd:element name="reference" type="Treference"/>
+    <xsd:complexType name="Treference">
+        <xsd:complexContent>
+            <xsd:extension base="beans:identifiedType">
+                <xsd:all minOccurs="0" maxOccurs="1">
+                    <xsd:element name="binding.bolt" type="BBindingTRReference" minOccurs="0"/>
+                    <xsd:element name="binding.rest" type="RestBindingTRReference" minOccurs="0"/>
+                    <xsd:element name="binding.dubbo" type="DubboBindingTRReference" minOccurs="0"/>
+                </xsd:all>
+                <xsd:attribute name="jvm-service" use="optional" type="xsd:boolean" default="false"/>
+                <xsd:attribute name="interface" type="xsd:string" use="required"/>
+                <xsd:attribute name="abstract" type="xsd:boolean" use="optional"/>
+                <xsd:attribute name="parent" type="xsd:string" use="optional"/>
+                <xsd:attribute name="unique-id" type="xsd:string" use="optional"/>
+
+                <!--<xsd:attribute name="filter" type="xsd:string" use="optional"/>-->
+                <!--<xsd:attribute name="registry" type="xsd:string" use="optional"/>-->
+                <xsd:attribute name="loadBalance" type="xsd:string" use="optional"/>
+                <xsd:attribute name="repeatReferLimit" type="xsd:int" use="optional"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <!-- service -->
+    <xsd:element name="service" type="Tservice"/>
+    <xsd:complexType name="Tservice">
+        <xsd:complexContent>
+            <xsd:extension base="beans:identifiedType">
+                <xsd:all minOccurs="0" maxOccurs="1">
+                    <xsd:element name="binding" type="TBinding" minOccurs="0"/>
+                    <xsd:element name="binding.bolt" type="BBindingTRService" minOccurs="0"/>
+                    <xsd:element name="binding.rest" type="RestBindingTRService" minOccurs="0"/>
+                    <xsd:element name="binding.dubbo" type="DubboBindingTRService" minOccurs="0"/>
+                </xsd:all>
+                <xsd:attribute name="ref" type="xsd:string" use="required"/>
+                <xsd:attribute name="interface" type="xsd:string" use="required"/>
+                <xsd:attribute name="abstract" type="xsd:boolean" use="optional"/>
+                <xsd:attribute name="parent" type="xsd:string" use="optional"/>
+                <xsd:attribute name="unique-id" type="xsd:string" use="optional"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+    <!-- registry.confreg -->
 
 </xsd:schema>
