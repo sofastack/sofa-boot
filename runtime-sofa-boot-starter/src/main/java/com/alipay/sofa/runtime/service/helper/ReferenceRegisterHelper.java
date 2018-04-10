@@ -16,8 +16,6 @@
  */
 package com.alipay.sofa.runtime.service.helper;
 
-import com.alipay.sofa.runtime.api.ServiceRuntimeException;
-import com.alipay.sofa.runtime.service.binding.JvmBinding;
 import com.alipay.sofa.runtime.service.component.Reference;
 import com.alipay.sofa.runtime.service.component.ReferenceComponent;
 import com.alipay.sofa.runtime.spi.binding.Binding;
@@ -25,7 +23,6 @@ import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.ComponentManager;
 import com.alipay.sofa.runtime.spi.component.DefaultImplementation;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
-import com.alipay.sofa.runtime.spi.constants.SofaConfigurationConstants;
 
 import java.util.Collection;
 
@@ -38,18 +35,6 @@ public class ReferenceRegisterHelper {
 
     public static Object registerReference(Reference reference,
                                            SofaRuntimeContext sofaRuntimeContext) {
-        Binding binding = (Binding) reference.getBindings().toArray()[0];
-
-        if (reference.jvmService() && binding.getBindingType().equals(JvmBinding.JVM_BINDING_TYPE)) {
-            throw new ServiceRuntimeException(
-                "jvm-service=\"true\" can not be used with JVM binding.");
-        }
-
-        if (!binding.getBindingType().equals(JvmBinding.JVM_BINDING_TYPE)
-            && isLocalFirst(reference, sofaRuntimeContext)) {
-            reference.addBinding(new JvmBinding());
-        }
-
         ComponentManager componentManager = sofaRuntimeContext.getComponentManager();
         ReferenceComponent referenceComponent = new ReferenceComponent(reference,
             new DefaultImplementation(), sofaRuntimeContext);
@@ -62,15 +47,6 @@ public class ReferenceRegisterHelper {
         ComponentInfo componentInfo = componentManager.registerAndGet(referenceComponent);
         return componentInfo.getImplementation().getTarget();
 
-    }
-
-    private static boolean isLocalFirst(Reference reference, SofaRuntimeContext sofaRuntimeContext) {
-        String localFirstDisabled = sofaRuntimeContext.getAppConfiguration().getPropertyValue(
-            SofaConfigurationConstants.SOFA_RUNTIME_DISABLE_LOCAL_FIRST);
-        if (localFirstDisabled != null && localFirstDisabled.equalsIgnoreCase("true")) {
-            return false;
-        }
-        return reference.isLocalFirst();
     }
 
     public static int generateBindingHashCode(Reference reference) {
