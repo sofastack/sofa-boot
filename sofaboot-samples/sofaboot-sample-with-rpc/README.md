@@ -64,7 +64,7 @@ SOFARPC Starter 是 SOFARPC 基于 SOFABoot 实现的框架，能够将 SOFARPC 
 
 ## 服务调用
 从 Spring 上下文中获取到需要的服务引用，发起远程调用。
-```xml
+```java
 PersonService personBolt = (PersonService) applicationContext.getBean("personReferenceBolt");
 PersonService personRest = (PersonService) applicationContext.getBean("personReferenceRest");
 
