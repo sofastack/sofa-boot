@@ -34,9 +34,7 @@ public class ReferenceFactoryBean extends AbstractContractFactoryBean {
     @Override
     protected void doAfterPropertiesSet() throws Exception {
         Reference reference = buildReference();
-        Assert
-            .isTrue(bindings.size() <= 1,
-                "Found more than one binding in <sofa:reference/>, <sofa:reference/> can only have one binding.");
+        Assert.isTrue(bindings.size() == 1, "<sofa:reference/> should have one binding.");
 
         reference.addBinding(bindings.get(0));
         proxy = ReferenceRegisterHelper.registerReference(reference, sofaRuntimeContext);
