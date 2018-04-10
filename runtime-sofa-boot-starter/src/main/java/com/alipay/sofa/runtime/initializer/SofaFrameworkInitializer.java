@@ -38,7 +38,6 @@ import com.alipay.sofa.runtime.spi.constants.SofaConfigurationConstants;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
 import com.alipay.sofa.runtime.spring.ClientFactoryBeanPostProcessor;
-import com.alipay.sofa.runtime.spring.ServiceAnnotationBeanPostProcessor;
 import com.alipay.sofa.runtime.spring.SofaRuntimeContextAwareProcessor;
 import org.springframework.context.ConfigurableApplicationContext;
 
@@ -76,9 +75,6 @@ public abstract class SofaFrameworkInitializer {
         applicationContext.getBeanFactory().addBeanPostProcessor(
             new SofaRuntimeContextAwareProcessor(SofaFrameworkHolder.getSofaFramework()
                 .getSofaRuntimeContext(appName)));
-        applicationContext.getBeanFactory().addBeanPostProcessor(
-            new ServiceAnnotationBeanPostProcessor(SofaFrameworkHolder.getSofaFramework()
-                .getSofaRuntimeContext(appName), applicationContext));
         applicationContext.getBeanFactory().addBeanPostProcessor(
             new ClientFactoryBeanPostProcessor(SofaFrameworkHolder.getSofaFramework()
                 .getSofaRuntimeContext(appName).getClientFactory()));

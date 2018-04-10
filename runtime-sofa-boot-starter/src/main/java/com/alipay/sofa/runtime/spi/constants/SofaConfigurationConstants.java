@@ -17,7 +17,6 @@
 package com.alipay.sofa.runtime.spi.constants;
 
 /**
- * TODO need change key？
  *
  * @author xuanbei 18/3/1
  */

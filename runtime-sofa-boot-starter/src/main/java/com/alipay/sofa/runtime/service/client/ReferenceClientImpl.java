@@ -22,7 +22,6 @@ import com.alipay.sofa.runtime.api.client.param.BindingParam;
 import com.alipay.sofa.runtime.api.client.param.ReferenceParam;
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.model.InterfaceMode;
-import com.alipay.sofa.runtime.service.binding.JvmBinding;
 import com.alipay.sofa.runtime.service.component.Reference;
 import com.alipay.sofa.runtime.service.component.ReferenceComponent;
 import com.alipay.sofa.runtime.service.component.impl.ReferenceImpl;
@@ -51,30 +50,26 @@ public class ReferenceClientImpl implements ReferenceClient {
 
     private <T> Reference getReferenceFromReferenceParam(ReferenceParam<T> referenceParam) {
         BindingParam bindingParam = referenceParam.getBindingParam();
+        if (bindingParam == null) {
+            throw new ServiceRuntimeException("bindingParam shouldn't be null."
+                                              + bindingParam.getBindingType());
+        }
 
         Reference reference = new ReferenceImpl(referenceParam.getUniqueId(),
-            referenceParam.getInterfaceType(), InterfaceMode.api, referenceParam.isLocalFirst(),
-            referenceParam.isJvmService(), null);
-
-        if (bindingParam == null) {
-            // add JVM Binding Default
-            reference.addBinding(new JvmBinding());
-        } else {
-            BindingConverter bindingConverter = BindingFactoryContainer
-                .getBindingConverterFactory().getBindingConverter(bindingParam.getBindingType());
-
-            if (bindingConverter == null) {
-                throw new ServiceRuntimeException(
-                    "Can not found binding converter for binding type "
-                            + bindingParam.getBindingType());
-            }
-            BindingConverterContext bindingConverterContext = new BindingConverterContext();
-            bindingConverterContext.setInBinding(true);
-            bindingConverterContext.setAppName(sofaRuntimeContext.getAppName());
-            bindingConverterContext.setAppClassLoader(sofaRuntimeContext.getAppClassLoader());
-            Binding binding = bindingConverter.convert(bindingParam, bindingConverterContext);
-            reference.addBinding(binding);
+            referenceParam.getInterfaceType(), InterfaceMode.api, null);
+        BindingConverter bindingConverter = BindingFactoryContainer.getBindingConverterFactory()
+            .getBindingConverter(bindingParam.getBindingType());
+        if (bindingConverter == null) {
+            throw new ServiceRuntimeException("Can not found binding converter for binding type "
+                                              + bindingParam.getBindingType());
         }
+        BindingConverterContext bindingConverterContext = new BindingConverterContext();
+        bindingConverterContext.setInBinding(true);
+        bindingConverterContext.setAppName(sofaRuntimeContext.getAppName());
+        bindingConverterContext.setAppClassLoader(sofaRuntimeContext.getAppClassLoader());
+        Binding binding = bindingConverter.convert(bindingParam, bindingConverterContext);
+        reference.addBinding(binding);
+
         return reference;
     }
 

@@ -18,23 +18,18 @@ package com.alipay.sofa.runtime.service.component;
 
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.client.ServiceClient;
-import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.api.component.Property;
 import com.alipay.sofa.runtime.model.ComponentType;
-import com.alipay.sofa.runtime.model.InterfaceMode;
-import com.alipay.sofa.runtime.service.binding.JvmBinding;
-import com.alipay.sofa.runtime.service.component.impl.ServiceImpl;
 import com.alipay.sofa.runtime.service.helper.ReferenceRegisterHelper;
 import com.alipay.sofa.runtime.service.impl.BindingFactoryContainer;
 import com.alipay.sofa.runtime.spi.binding.Binding;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapter;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
 import com.alipay.sofa.runtime.spi.component.*;
-import com.alipay.sofa.runtime.spi.constants.SofaConfigurationConstants;
 import com.alipay.sofa.runtime.spi.health.HealthResult;
 import com.alipay.sofa.runtime.spi.log.SofaLogger;
 import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
-import org.springframework.util.StringUtils;
+import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,38 +73,6 @@ public class ReferenceComponent extends AbstractComponent {
         return null;
     }
 
-    /**
-     * skip reference check or not
-     *
-     * @return true or false
-     */
-    private boolean skipJVMReferenceHealth() {
-        String skipJVMReferenceHealth = sofaRuntimeContext.getAppConfiguration().getPropertyValue(
-            SofaConfigurationConstants.SOFA_RUNTIME_SKIP_JVM_REFERENCE_HEALTH_CHECK, "true");
-
-        return StringUtils.hasText(skipJVMReferenceHealth)
-               && "true".equalsIgnoreCase(skipJVMReferenceHealth);
-    }
-
-    /**
-     * get service target
-     *
-     * @return service target
-     */
-    private Object getServiceTarget() {
-        Object serviceTarget = null;
-        ComponentName componentName = ComponentNameFactory.createComponentName(
-            ServiceComponent.SERVICE_COMPONENT_TYPE, reference.getInterfaceType(),
-            reference.getUniqueId());
-        ComponentInfo componentInfo = sofaRuntimeContext.getComponentManager().getComponentInfo(
-            componentName);
-
-        if (componentInfo != null) {
-            serviceTarget = componentInfo.getImplementation().getTarget();
-        }
-        return serviceTarget;
-    }
-
     @Override
     public HealthResult isHealthy() {
         if (!isActivated()) {
@@ -118,29 +81,6 @@ public class ReferenceComponent extends AbstractComponent {
 
         HealthResult result = new HealthResult(componentName.getRawName());
         List<HealthResult> bindingHealth = new ArrayList<>();
-
-        JvmBinding jvmBinding = null;
-        HealthResult jvmBindingHealthResult = null;
-
-        if (reference.hasBinding()) {
-            for (Binding binding : reference.getBindings()) {
-                bindingHealth.add(binding.healthCheck());
-                if (JvmBinding.JVM_BINDING_TYPE.equals(binding.getBindingType())) {
-                    jvmBinding = (JvmBinding) binding;
-                    jvmBindingHealthResult = bindingHealth.get(bindingHealth.size() - 1);
-                }
-            }
-        }
-
-        // check reference has a corresponding service
-        if (!skipJVMReferenceHealth() && jvmBinding != null) {
-            Object serviceTarget = getServiceTarget();
-            if (serviceTarget == null && !jvmBinding.hasBackupProxy()) {
-                jvmBindingHealthResult.setHealthy(false);
-                jvmBindingHealthResult.setHealthReport("can not find corresponding jvm service");
-            }
-        }
-
         List<HealthResult> failedBindingHealth = new ArrayList<>();
 
         for (HealthResult healthResult : bindingHealth) {
@@ -167,24 +107,12 @@ public class ReferenceComponent extends AbstractComponent {
     @Override
     public void activate() throws ServiceRuntimeException {
         if (reference.hasBinding()) {
-            Binding candidate = null;
             Set<Binding> bindings = reference.getBindings();
-            if (bindings.size() == 1) {
-                candidate = bindings.iterator().next();
-            } else if (bindings.size() > 1) {
-                Object backupProxy = null;
-                for (Binding binding : bindings) {
-                    if ("jvm".equals(binding.getName())) {
-                        candidate = binding;
-                    } else {
-                        backupProxy = createProxy(reference, binding);
-                    }
-                }
-                if (candidate != null) {
-                    ((JvmBinding) candidate).setBackupProxy(backupProxy);
-                }
-            }
+            Assert
+                .isTrue(bindings.size() <= 1,
+                    "Found more than one binding in <sofa:reference/>, <sofa:reference/> can only have one binding.");
 
+            Binding candidate = bindings.iterator().next();
             Object proxy = null;
             if (candidate != null) {
                 proxy = createProxy(reference, candidate);
@@ -193,8 +121,6 @@ public class ReferenceComponent extends AbstractComponent {
             this.implementation = new DefaultImplementation();
             implementation.setTarget(proxy);
         }
-
-        publishAsService(reference, implementation.getTarget());
 
         super.activate();
         latch.countDown();
@@ -270,27 +196,8 @@ public class ReferenceComponent extends AbstractComponent {
         return proxy;
     }
 
-    private void publishAsService(Reference reference, Object target) {
-        if (!reference.jvmService()) {
-            return;
-        }
-
-        Implementation serviceImplementation = new DefaultImplementation();
-        serviceImplementation.setTarget(target);
-        Service service = new ServiceImpl("", reference.getInterfaceType(), InterfaceMode.api,
-            target);
-        service.addBinding(new JvmBinding());
-        ComponentInfo serviceComponent = new ServiceComponent(implementation, service,
-            sofaRuntimeContext);
-        sofaRuntimeContext.getComponentManager().register(serviceComponent);
-    }
-
     private void removeService() {
-        if (!reference.jvmService()) {
-            return;
-        }
         sofaRuntimeContext.getClientFactory().getClient(ServiceClient.class)
             .removeService(reference.getInterfaceType(), 0);
-
     }
 }
