@@ -39,7 +39,7 @@
 
         <spring.boot.version>1.4.2.RELEASE</spring.boot.version>
         <sofa.boot.version>2.3.0</sofa.boot.version>
-        <sofa.ark.version>0.1.0</sofa.ark.version>
+        <sofa.ark.version>0.2.0</sofa.ark.version>
         <rpc.starter.version>5.3.0</rpc.starter.version>
         <!-- sofa-common-tools for log -->
         <sofa.common.tools.version>1.0.12</sofa.common.tools.version>
@@ -117,17 +117,18 @@
                 <version>${sofa.ark.version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>rpc-sofa-boot-starter</artifactId>
-                <version>${rpc.starter.version}</version>
-            </dependency>
             <!-- Ark Plugin Management -->
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>runtime-sofa-boot-starter</artifactId>
                 <classifier>ark-plugin</classifier>
                 <version>${sofa.boot.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>rpc-sofa-boot-starter</artifactId>
+                <version>${rpc.starter.version}</version>
             </dependency>
 
             <!-- starter management end -->
@@ -152,25 +153,29 @@
         </dependencies>
     </dependencyManagement>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
     <profiles>
         <profile>
             <id>release</id>
             <build>
                 <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.9.1</version>
-                        <executions>
-                            <execution>
-                                <id>attach-javadocs</id>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
                     <plugin>
                         <groupId>org.sonatype.plugins</groupId>
                         <artifactId>nexus-staging-maven-plugin</artifactId>
