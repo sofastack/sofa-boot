@@ -16,11 +16,7 @@
 
 
     <sofa:reference id="personReferenceBolt" interface="com.alipay.sofa.boot.examples.demo.rpc.bean.PersonService">
-        <sofa:binding.bolt>
-            <!--<sofa:global-attrs timeout="3000" address-wait-time="2000" filter="personFilter"/>-->
-            <!--<sofa:route target-url="127.0.0.1:22000"/>-->
-            <!--<sofa:method name="sayName" timeout="3000"/>-->
-        </sofa:binding.bolt>
+        <sofa:binding.bolt/>
     </sofa:reference>
 
     <sofa:reference id="personReferenceRest" interface="com.alipay.sofa.boot.examples.demo.rpc.bean.PersonService">
