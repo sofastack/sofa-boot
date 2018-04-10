@@ -33,11 +33,6 @@ public class AppConfigurationImpl implements AppConfiguration {
     }
 
     @Override
-    public Map<String, String> getConfig() {
-        return Collections.unmodifiableMap(sofaConfigMap);
-    }
-
-    @Override
     public String getPropertyValue(String key) {
         return sofaConfigMap.get(key);
     }
@@ -46,25 +41,5 @@ public class AppConfigurationImpl implements AppConfiguration {
     public String getPropertyValue(String key, String defaultValue) {
         String value = sofaConfigMap.get(key);
         return value == null ? defaultValue : value;
-    }
-
-    @Override
-    public String getSysAppName() {
-        return getPropertyValue(SYS_APP_NAME);
-    }
-
-    @Override
-    public String getSysIp() {
-        return getPropertyValue(SYS_IP);
-    }
-
-    @Override
-    public String getSysRunMode() {
-        return getPropertyValue(SYS_RUN_MODE);
-    }
-
-    @Override
-    public String getSysHostName() {
-        return getPropertyValue(SYS_HOST_NAME);
     }
 }
