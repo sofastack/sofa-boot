@@ -49,18 +49,18 @@ SOFARPC Starter 是 SOFARPC 基于 SOFABoot 实现的框架，能够将 SOFARPC 
 ## 服务引用
 在 XML 中配置如下，就能够引用 SOFARPC 服务。
 ```xml
-<sofa:reference id="personReferenceBolt" interface="com.alipay.sofa.boot.examples.demo.rpc.bean.PersonService" local-first="false">
+<sofa:reference id="personReferenceBolt" interface="com.alipay.sofa.boot.examples.demo.rpc.bean.PersonService">
     <sofa:binding.bolt/>
 </sofa:reference>
 
-<sofa:reference id="personReferenceRest" interface="com.alipay.sofa.boot.examples.demo.rpc.bean.PersonService" local-first="false">
+<sofa:reference id="personReferenceRest" interface="com.alipay.sofa.boot.examples.demo.rpc.bean.PersonService">
     <sofa:binding.rest/>
 </sofa:reference>
-<sofa:reference id="personReferenceDubbo" interface="com.alipay.sofa.boot.examples.demo.rpc.bean.PersonService" local-first="false">
+<sofa:reference id="personReferenceDubbo" interface="com.alipay.sofa.boot.examples.demo.rpc.bean.PersonService">
     <sofa:binding.dubbo/>
 </sofa:reference>
 ```
-其中 reference 元素表示引用该服务，binding 元素声明了该服务引用的调用的协议。如上就在 Spring 上下文中构建了两个服务的远程代理类，名字分别为 personReferenceBolt 和 personReferenceRest 。 local-first 属性表示是否优先调用本地发布的服务，这里设为 false ，通过网络进行调用。
+其中 reference 元素表示引用该服务，binding 元素声明了该服务引用的调用的协议。如上就在 Spring 上下文中构建了两个服务的远程代理类，名字分别为 personReferenceBolt 和 personReferenceRest 。
 
 ## 服务调用
 从 Spring 上下文中获取到需要的服务引用，发起远程调用。
@@ -75,7 +75,7 @@ System.out.println(personRest.sayName("rest"));
 ## 参数设置
 在声明服务发布或引用的同时也可以设置需要的参数。
 ```xml
-<sofa:reference id="personReferenceBolt" interface="com.alipay.sofa.boot.examples.demo.rpc.bean.PersonService" local-first="false">
+<sofa:reference id="personReferenceBolt" interface="com.alipay.sofa.boot.examples.demo.rpc.bean.PersonService">
     <sofa:binding.bolt>
         <sofa:global-attrs timeout="3000" address-wait-time="2000"/>
         <sofa:route target-url="127.0.0.1:22000"/>
@@ -95,7 +95,7 @@ System.out.println(personRest.sayName("rest"));
 2.服务生效方式。只对指定的服务生效。
 ```xml
 <bean id="personFilter" class="com.alipay.sofa.boot.examples.demo.rpc.bean.PersonServiceFilter"/>
-<sofa:reference id="personReferenceBolt" interface="com.alipay.sofa.boot.examples.demo.rpc.bean.PersonService" local-first="false">
+<sofa:reference id="personReferenceBolt" interface="com.alipay.sofa.boot.examples.demo.rpc.bean.PersonService">
     <sofa:binding.bolt>
         <sofa:global-attrs filter="personFilter"/>
     </sofa:binding.bolt>
