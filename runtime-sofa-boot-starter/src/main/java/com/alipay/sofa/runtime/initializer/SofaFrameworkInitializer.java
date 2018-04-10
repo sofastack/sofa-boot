@@ -19,10 +19,8 @@ package com.alipay.sofa.runtime.initializer;
 import com.alipay.sofa.runtime.SofaFrameworkImpl;
 import com.alipay.sofa.runtime.api.client.ReferenceClient;
 import com.alipay.sofa.runtime.api.client.ServiceClient;
-import com.alipay.sofa.runtime.api.component.AppConfiguration;
 import com.alipay.sofa.runtime.client.impl.ClientFactoryImpl;
 import com.alipay.sofa.runtime.component.impl.StandardSofaRuntimeManager;
-import com.alipay.sofa.runtime.impl.AppConfigurationImpl;
 import com.alipay.sofa.runtime.service.client.ReferenceClientImpl;
 import com.alipay.sofa.runtime.service.client.ServiceClientImpl;
 import com.alipay.sofa.runtime.service.impl.BindingAdapterFactoryImpl;
@@ -34,7 +32,6 @@ import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
 import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
 import com.alipay.sofa.runtime.spi.component.ComponentManager;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
-import com.alipay.sofa.runtime.spi.constants.SofaConfigurationConstants;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
 import com.alipay.sofa.runtime.spring.ClientFactoryBeanPostProcessor;
@@ -88,11 +85,9 @@ public abstract class SofaFrameworkInitializer {
 
         SofaFrameworkImpl sofaFramework = (SofaFrameworkImpl) SofaFrameworkHolder
             .getSofaFramework();
-        AppConfiguration applicationConfiguration = createAppConfigurationImpl(applicationContext);
         ClientFactoryInternal clientFactoryInternal = new ClientFactoryImpl();
         SofaRuntimeManager sofaRuntimeManager = new StandardSofaRuntimeManager(appName,
-            SofaFrameworkInitializer.class.getClassLoader(), applicationConfiguration,
-            clientFactoryInternal);
+            SofaFrameworkInitializer.class.getClassLoader(), clientFactoryInternal);
         ComponentManager componentManager = sofaRuntimeManager.getComponentManager();
 
         // register service client & reference client
@@ -102,18 +97,6 @@ public abstract class SofaFrameworkInitializer {
             sofaRuntimeManager.getSofaRuntimeContext()));
 
         sofaFramework.registerSofaRuntimeManager(sofaRuntimeManager);
-    }
-
-    private static AppConfigurationImpl createAppConfigurationImpl(ConfigurableApplicationContext applicationContext) {
-        Map<String, String> properties = new HashMap<>();
-        for (String configurationKey : getAllConfigurationConstants(SofaConfigurationConstants.class)) {
-            String configurationValue = applicationContext.getEnvironment().getProperty(
-                configurationKey);
-            if (configurationValue != null) {
-                properties.put(configurationKey, configurationValue);
-            }
-        }
-        return new AppConfigurationImpl(properties);
     }
 
     private static List<String> getAllConfigurationConstants(Class<?> clazz) {

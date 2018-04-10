@@ -17,7 +17,6 @@
 package com.alipay.sofa.runtime.spi.component;
 
 import com.alipay.sofa.runtime.api.client.ClientFactory;
-import com.alipay.sofa.runtime.api.component.AppConfiguration;
 
 /**
  * SOFA Runtime Context
@@ -27,19 +26,15 @@ import com.alipay.sofa.runtime.api.component.AppConfiguration;
 public class SofaRuntimeContext {
     /** component manager */
     private ComponentManager   componentManager;
-    /** app configuration */
-    private AppConfiguration   appConfiguration;
     /** client factory */
     private ClientFactory      clientFactory;
     private SofaRuntimeManager sofaRuntimeManager;
 
     public SofaRuntimeContext(SofaRuntimeManager sofaRuntimeManager,
-                              ComponentManager componentManager, ClientFactory clientFactory,
-                              AppConfiguration appConfiguration) {
+                              ComponentManager componentManager, ClientFactory clientFactory) {
         this.sofaRuntimeManager = sofaRuntimeManager;
         this.componentManager = componentManager;
         this.clientFactory = clientFactory;
-        this.appConfiguration = appConfiguration;
     }
 
     public String getAppName() {
@@ -52,10 +47,6 @@ public class SofaRuntimeContext {
 
     public ComponentManager getComponentManager() {
         return componentManager;
-    }
-
-    public AppConfiguration getAppConfiguration() {
-        return appConfiguration;
     }
 
     public ClientFactory getClientFactory() {
