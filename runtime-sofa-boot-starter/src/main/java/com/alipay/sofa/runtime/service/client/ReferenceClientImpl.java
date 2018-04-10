@@ -33,6 +33,7 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
 import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
+import org.springframework.util.Assert;
 
 import java.util.Collection;
 
@@ -50,10 +51,7 @@ public class ReferenceClientImpl implements ReferenceClient {
 
     private <T> Reference getReferenceFromReferenceParam(ReferenceParam<T> referenceParam) {
         BindingParam bindingParam = referenceParam.getBindingParam();
-        if (bindingParam == null) {
-            throw new ServiceRuntimeException("bindingParam shouldn't be null."
-                                              + bindingParam.getBindingType());
-        }
+        Assert.notNull(bindingParam, "bindingParam shouldn't be null.");
 
         Reference reference = new ReferenceImpl(referenceParam.getUniqueId(),
             referenceParam.getInterfaceType(), InterfaceMode.api, null);

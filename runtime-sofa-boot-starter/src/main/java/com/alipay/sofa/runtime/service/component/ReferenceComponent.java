@@ -108,9 +108,7 @@ public class ReferenceComponent extends AbstractComponent {
     public void activate() throws ServiceRuntimeException {
         if (reference.hasBinding()) {
             Set<Binding> bindings = reference.getBindings();
-            Assert
-                .isTrue(bindings.size() <= 1,
-                    "Found more than one binding in <sofa:reference/>, <sofa:reference/> can only have one binding.");
+            Assert.isTrue(bindings.size() == 1, "<sofa:reference/> should have one binding.");
 
             Binding candidate = bindings.iterator().next();
             Object proxy = null;
