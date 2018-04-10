@@ -117,17 +117,18 @@
                 <version>${sofa.ark.version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>rpc-sofa-boot-starter</artifactId>
-                <version>${rpc.starter.version}</version>
-            </dependency>
             <!-- Ark Plugin Management -->
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>runtime-sofa-boot-starter</artifactId>
                 <classifier>ark-plugin</classifier>
                 <version>${sofa.boot.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>rpc-sofa-boot-starter</artifactId>
+                <version>${rpc.starter.version}</version>
             </dependency>
 
             <!-- starter management end -->
