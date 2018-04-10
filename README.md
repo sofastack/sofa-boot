@@ -55,6 +55,7 @@ SOFABoot 的编译环境的要求为 JDK7 或者 JDK8，需要采用 [Apache Mav
 
 * [SOFABoot 示例工程](./sofaboot-samples/sofaboot-sample)
 * [SOFABoot 示例工程（包含类隔离能力）](./sofaboot-samples/sofaboot-sample-with-isolation)
+* [SOFABoot 示例工程（使用 SOFARPC）](./sofaboot-samples/sofaboot-sample-with-rpc)
  
 ## 六、文档
 
