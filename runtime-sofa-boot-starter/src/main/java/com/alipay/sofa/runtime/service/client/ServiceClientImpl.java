@@ -22,7 +22,6 @@ import com.alipay.sofa.runtime.api.client.param.BindingParam;
 import com.alipay.sofa.runtime.api.client.param.ServiceParam;
 import com.alipay.sofa.runtime.api.component.Property;
 import com.alipay.sofa.runtime.model.InterfaceMode;
-import com.alipay.sofa.runtime.service.binding.JvmBinding;
 import com.alipay.sofa.runtime.service.component.Service;
 import com.alipay.sofa.runtime.service.component.ServiceComponent;
 import com.alipay.sofa.runtime.service.component.impl.ServiceImpl;
@@ -77,19 +76,6 @@ public class ServiceClientImpl implements ServiceClient {
             bindingConverterContext.setAppClassLoader(sofaRuntimeContext.getAppClassLoader());
             Binding binding = bindingConverter.convert(bindingParam, bindingConverterContext);
             service.addBinding(binding);
-        }
-
-        boolean hasJvmBinding = false;
-
-        for (Binding binding : service.getBindings()) {
-            if (binding.getBindingType().equals(JvmBinding.JVM_BINDING_TYPE)) {
-                hasJvmBinding = true;
-                break;
-            }
-        }
-
-        if (!hasJvmBinding) {
-            service.addBinding(new JvmBinding());
         }
 
         ComponentInfo componentInfo = new ServiceComponent(implementation, service,
