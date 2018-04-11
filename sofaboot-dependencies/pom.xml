@@ -76,6 +76,7 @@
     </developers>
 
     <scm>
+        <!-- http://maven.apache.org/scm/git.html -->
         <connection>scm:git:git://github.com/alipay/sofa-boot.git</connection>
         <developerConnection>scm:git:ssh://github.com/alipay/sofa-boot.git</developerConnection>
         <url>https://github.com/alipay/sofa-boot/tree/master</url>
