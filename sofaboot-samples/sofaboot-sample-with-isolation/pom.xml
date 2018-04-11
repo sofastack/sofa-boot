@@ -54,6 +54,12 @@
 
         <!-- SOFABoot Class Isolation  Plugin -->
         <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>rpc-sofa-boot-starter</artifactId>
+            <classifier>ark-plugin</classifier>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>

@@ -14,30 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.boot.test;
+package com.alipay.sofa.boot.examples.demo.service;
 
-import com.alipay.sofa.boot.examples.demo.isolation.SofaBootClassIsolationDemoApplication;
+import com.alipay.sofa.boot.examples.demo.service.facade.ReferenceService;
 import com.alipay.sofa.boot.examples.demo.service.facade.SampleService;
-import com.alipay.sofa.test.runner.SofaBootRunner;
+import com.alipay.sofa.rpc.config.ConsumerConfig;
 import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 /**
  * @author qilong.zql
  * @since 2.3.0
  */
-@RunWith(SofaBootRunner.class)
-@SpringBootTest(classes = SofaBootClassIsolationDemoApplication.class)
-public class IntegrationTestCaseRunWithIsolation {
+public class ReferenceServiceImpl implements ReferenceService {
 
-    @Autowired
-    private SampleService sampleService;
+    @Override
+    public void reference() {
+        ConsumerConfig<SampleService> consumerConfig = new ConsumerConfig<SampleService>()
+            .setInterfaceId(SampleService.class.getName()).setProtocol("bolt")
+            .setDirectUrl("127.0.0.1:9696");
 
-    @Test
-    public void test() {
+        SampleService sampleService = consumerConfig.refer();
+
         Assert.assertTrue("service".equals(sampleService.service()));
     }
 
