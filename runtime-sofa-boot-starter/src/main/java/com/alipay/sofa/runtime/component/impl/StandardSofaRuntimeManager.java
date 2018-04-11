@@ -82,7 +82,7 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager {
     /**
      * shutdown sofa runtime manager
      *
-     * @throws Exception
+     * @throws ServiceRuntimeException
      */
     public void shutdown() throws ServiceRuntimeException {
         if (componentManager != null) {

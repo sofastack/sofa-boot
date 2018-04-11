@@ -27,9 +27,7 @@ import org.springframework.util.StringUtils;
 
 /**
  * SOFABoot Infrastructure 启动初始化器
- * <p/>
- * 参考:org.springframework.core.io.support.SpringFactoriesLoader
- * <p/>
+ * <p> 参考:org.springframework.core.io.support.SpringFactoriesLoader </p>
  * Created by yangguanchao on 18/01/04.
  */
 public class SOFABootInfrastructureSpringContextInitializer

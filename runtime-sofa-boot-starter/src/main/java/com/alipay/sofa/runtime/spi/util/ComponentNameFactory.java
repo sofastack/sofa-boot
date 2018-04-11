@@ -28,8 +28,8 @@ public class ComponentNameFactory {
     /**
      * create ComponentName by component type and class type
      *
+     * @param clazz
      * @param type
-     * @return
      */
     public static ComponentName createComponentName(ComponentType type, Class<?> clazz) {
         return new ComponentName(type, mergeComponentName(clazz, null));
@@ -50,7 +50,8 @@ public class ComponentNameFactory {
      * create ComponentName by component type,class type and unique id
      *
      * @param type
-     * @return
+     * @param clazz
+     * @param uniqueId
      */
     public static ComponentName createComponentName(ComponentType type, Class<?> clazz,
                                                     String uniqueId) {
@@ -62,7 +63,6 @@ public class ComponentNameFactory {
      *
      * @param clazz
      * @param uniqueId
-     * @return
      */
     private static String mergeComponentName(Class<?> clazz, String uniqueId) {
         String ret = clazz.getName();

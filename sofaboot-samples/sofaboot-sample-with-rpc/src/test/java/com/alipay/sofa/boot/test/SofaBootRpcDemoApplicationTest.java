@@ -41,7 +41,7 @@ public class SofaBootRpcDemoApplicationTest {
     private PersonService personReferenceRest;
 
     @Test
-    public void test(){
+    public void test() {
         Assert.assertEquals("hi Bolt!", personReferenceBolt.sayName("Bolt"));
         Assert.assertEquals("hi Rest!", personReferenceRest.sayName("Rest"));
     }

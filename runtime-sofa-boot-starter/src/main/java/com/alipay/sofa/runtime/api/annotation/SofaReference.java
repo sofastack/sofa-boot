@@ -41,11 +41,15 @@ public @interface SofaReference {
 
     /**
      * The type of the SOFA reference to be created. Default to the type of field annotated when not specified.
+     *
+     * @return return interface type
      */
     Class<?> interfaceType() default void.class;
 
     /**
      * The unique id of the SOFA reference to be created. Default to an empty string when not specified.
+     *
+     * @return return reference unique-id
      */
     String uniqueId() default "";
 }

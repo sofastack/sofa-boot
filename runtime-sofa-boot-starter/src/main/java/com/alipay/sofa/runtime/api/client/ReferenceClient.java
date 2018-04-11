@@ -50,7 +50,7 @@ public interface ReferenceClient {
      * Remove a specified SOFA reference
      *
      * @param referenceParam The parameter of the SOFA reference to remove
-     * @param <T>
+     * @param <T> The type of the SOFA reference to remove
      */
     <T> void removeReference(ReferenceParam<T> referenceParam);
 

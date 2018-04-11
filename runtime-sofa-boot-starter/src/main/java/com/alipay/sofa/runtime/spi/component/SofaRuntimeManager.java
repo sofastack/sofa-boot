@@ -73,7 +73,7 @@ public interface SofaRuntimeManager {
     /**
      * shutdown manager
      *
-     * @throws Exception
+     * @throws ServiceRuntimeException
      */
     void shutdown() throws ServiceRuntimeException;
 }

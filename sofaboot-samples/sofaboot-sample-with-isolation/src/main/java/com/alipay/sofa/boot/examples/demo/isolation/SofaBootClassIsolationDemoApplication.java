@@ -18,10 +18,10 @@ package com.alipay.sofa.boot.examples.demo.isolation;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.ImportResource;
 
+@ImportResource({ "classpath*:spring/bean.xml" })
 @SpringBootApplication
-@ComponentScan({ "com.alipay.sofa.boot.examples.demo.service" })
 public class SofaBootClassIsolationDemoApplication {
 
     public static void main(String[] args) {
