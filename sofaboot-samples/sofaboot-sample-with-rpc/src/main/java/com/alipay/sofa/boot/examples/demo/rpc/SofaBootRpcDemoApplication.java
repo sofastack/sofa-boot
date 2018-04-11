@@ -27,10 +27,13 @@ import org.springframework.context.annotation.ImportResource;
 public class SofaBootRpcDemoApplication {
 
     public static void main(String[] args) throws InterruptedException {
-        ApplicationContext applicationContext = SpringApplication.run(SofaBootRpcDemoApplication.class, args);
+        ApplicationContext applicationContext = SpringApplication.run(
+            SofaBootRpcDemoApplication.class, args);
 
-        PersonService personBolt = (PersonService) applicationContext.getBean("personReferenceBolt");
-        PersonService personRest = (PersonService) applicationContext.getBean("personReferenceRest");
+        PersonService personBolt = (PersonService) applicationContext
+            .getBean("personReferenceBolt");
+        PersonService personRest = (PersonService) applicationContext
+            .getBean("personReferenceRest");
 
         System.out.println(personBolt.sayName("bolt"));
         System.out.println(personRest.sayName("rest"));

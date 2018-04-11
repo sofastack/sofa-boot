@@ -34,7 +34,7 @@ public class PersonServiceFilter extends Filter {
         System.out.println("PersonFilter before");
         try {
             return invoker.invoke(request);
-        }finally {
+        } finally {
             System.out.println("PersonFilter after");
         }
     }
