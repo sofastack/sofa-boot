@@ -27,31 +27,31 @@ import java.lang.annotation.Target;
  * client in {@link com.alipay.sofa.runtime.api.client.ClientFactory} such as
  * {@link com.alipay.sofa.runtime.api.client.ServiceClient} in a Spring bean.
  * </p>
+ *
  * <p>
  * Sample of getting an instance of {@link com.alipay.sofa.runtime.api.client.ClientFactory} in a Spring bean:
  *
- * <pre>
- *
+ * <code>
  * public class ClientAnnotatedBean {
  *
  *     &#064;SofaClientFactory
  *     private ClientFactory clientFactory;
  * }
- * </pre>
+ * </code>
  *
  * </p>
+ *
  * <p>
  * Sample of getting an instance of specific client in {@link com.alipay.sofa.runtime.api.client.ClientFactory} in a
  * Spring bean:
  *
- * <pre>
- *
+ * <code>
  * public class ClientAnnotatedBean {
  *
  *     &#064;SofaClientFactory
  *     private ServiceClient serviceClient;
  * }
- * </pre>
+ * </code>
  *
  * </p>
  *

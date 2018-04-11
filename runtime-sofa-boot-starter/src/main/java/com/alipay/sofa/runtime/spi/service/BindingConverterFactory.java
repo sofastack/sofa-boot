@@ -46,7 +46,7 @@ public interface BindingConverterFactory {
     /***
      * add binding converters
      *
-     * @param bindingConverters Set<BindingConverter>
+     * @param bindingConverters
      */
     void addBindingConverters(Set<BindingConverter> bindingConverters);
 }

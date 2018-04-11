@@ -17,7 +17,7 @@
 package com.alipay.sofa.test.runner;
 
 /**
- * Corresponding to {@see org.springframework.test.context.junit4.SpringRunner}
+ * Corresponding to {@linkplain org.springframework.test.context.junit4.SpringRunner}
  *
  * @author qilong.zql
  * @since 2.3.0

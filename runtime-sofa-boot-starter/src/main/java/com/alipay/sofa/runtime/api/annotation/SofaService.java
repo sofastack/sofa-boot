@@ -47,11 +47,15 @@ public @interface SofaService {
      * when not specified. When the annotated Spring bean has more than one interface, this field must be specified.
      * When you want to create a SOFA service which's interface type is not a java interface but and concrete java
      * class, this field must be specified.
+     *
+     * @return return interface type
      */
     Class<?> interfaceType() default void.class;
 
     /**
      * The unique id of the SOFA service to be created. Default to an empty string when not specified.
+     *
+     * @return return service unique-id
      */
     String uniqueId() default "";
 }

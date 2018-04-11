@@ -75,7 +75,6 @@ public interface Implementation {
     /**
      * validate
      *
-     * @return true or false。
      * @throws ServiceValidationException
      */
     void validate() throws ServiceValidationException;
