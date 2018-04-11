@@ -50,7 +50,7 @@ public interface ComponentManager {
      * remove component in this manager
      *
      * @param componentInfo
-     * @throws Exception
+     * @throws ServiceRuntimeException
      */
     void unregister(ComponentInfo componentInfo) throws ServiceRuntimeException;
 
@@ -93,9 +93,10 @@ public interface ComponentManager {
     int size();
 
     /**
+     * <p>
      * Shuts down the component registry.
-     * <p/>
      * This unregisters all objects registered in this registry.
+     * </p>
      */
     void shutdown();
 

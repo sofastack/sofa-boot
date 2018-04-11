@@ -20,9 +20,10 @@ import com.alipay.sofa.runtime.api.binding.BindingType;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 
 /**
- * Binding Adapter for SOFA service & reference
- * <p/>
- * <p>refer {@link BindingType} to get supported binding types.
+ * <p>
+ * Binding Adapter for SOFA service and reference
+ * refer {@link BindingType} to get supported binding types.
+ * </p>
  *
  * @author xuanbei 18/2/28
  */

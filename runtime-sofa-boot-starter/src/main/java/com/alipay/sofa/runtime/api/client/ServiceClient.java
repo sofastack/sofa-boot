@@ -48,6 +48,9 @@ public interface ServiceClient {
     /**
      * Equivalent to {@link ServiceClient#removeService(Class, String, int)} except that the uniqueId parameter is
      * default to an empty string.
+     *
+     * @param interfaceClass the interface type to be removed
+     * @param millisecondsToDelay after the specified time, then service would be removed
      */
     void removeService(Class<?> interfaceClass, int millisecondsToDelay);
 

@@ -14,21 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime.spi.constants;
+package com.alipay.sofa.boot.examples.demo.rpc.bean;
 
 /**
- * TODO need change key？
  *
- * @author xuanbei 18/3/1
+ * @author liangen
+ * @version $Id: PersonImpl.java, v 0.1 2018年04月09日 下午3:32 liangen Exp $
  */
-public interface SofaConfigurationConstants {
-    /**
-     * skip jvm reference check or not
-     */
-    String SOFA_RUNTIME_SKIP_JVM_REFERENCE_HEALTH_CHECK = "sofa_runtime_skip_jvm_reference_health_check";
+public class PersonServiceImpl implements PersonService {
 
-    /**
-     * disable local first or not
-     **/
-    String SOFA_RUNTIME_DISABLE_LOCAL_FIRST             = "sofa_runtime_disable_local_first";
+    @Override
+    public String sayName(String string) {
+        return "hi " + string + "!";
+    }
 }

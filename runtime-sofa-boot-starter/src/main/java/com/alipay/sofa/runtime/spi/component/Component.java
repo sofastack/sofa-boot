@@ -19,9 +19,9 @@ package com.alipay.sofa.runtime.spi.component;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 
 /**
+ * <p>
  * SOFA Component Interface.
- * <p/>
- * <p> Component Lifecycle:
+ * Component Lifecycle:
  * <pre>
  *                  [UNREGISTERED]
  *                      |   ▲

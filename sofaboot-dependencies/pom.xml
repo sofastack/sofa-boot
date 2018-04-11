@@ -43,6 +43,8 @@
         <rpc.starter.version>5.3.0</rpc.starter.version>
         <!-- sofa-common-tools for log -->
         <sofa.common.tools.version>1.0.12</sofa.common.tools.version>
+        <bolt.version>1.4.1</bolt.version>
+        <hessian.version>3.3.0</hessian.version>
         <!-- 3rd lib dependency -->
         <fastjson.version>1.2.47</fastjson.version>
     </properties>
@@ -76,8 +78,9 @@
     </developers>
 
     <scm>
-        <connection>scm:git:git://github.com:alipay/sofa-boot.git</connection>
-        <developerConnection>scm:git:ssh://github.com:alipay/sofa-boot.git</developerConnection>
+        <!-- http://maven.apache.org/scm/git.html -->
+        <connection>scm:git:git://github.com/alipay/sofa-boot.git</connection>
+        <developerConnection>scm:git:ssh://github.com/alipay/sofa-boot.git</developerConnection>
         <url>https://github.com/alipay/sofa-boot/tree/master</url>
     </scm>
 
@@ -105,40 +108,52 @@
                 <artifactId>test-sofa-boot-starter</artifactId>
                 <version>${sofa.boot.version}</version>
             </dependency>
-            <!-- SOFA Ark Plugin -->
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>rpc-sofa-boot-starter</artifactId>
+                <version>${rpc.starter.version}</version>
+            </dependency>
+            <!-- starter management end -->
+
+            <!-- SOFA Ark Management begin -->
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>sofa-ark-springboot-starter</artifactId>
                 <version>${sofa.ark.version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>sofa-ark-maven-plugin</artifactId>
-                <version>${sofa.ark.version}</version>
-            </dependency>
+            <!-- SOFA Ark Management end -->
 
-            <!-- Ark Plugin Management -->
+            <!-- Ark Plugin Management begin -->
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>runtime-sofa-boot-starter</artifactId>
                 <classifier>ark-plugin</classifier>
                 <version>${sofa.boot.version}</version>
             </dependency>
-
+          
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>rpc-sofa-boot-starter</artifactId>
+                <classifier>ark-plugin</classifier>
                 <version>${rpc.starter.version}</version>
             </dependency>
-
-            <!-- starter management end -->
+            <!-- Ark Plugin Management end -->
 
             <!-- 2nd dependency begin -->
-
             <dependency>
                 <groupId>com.alipay.sofa.common</groupId>
                 <artifactId>sofa-common-tools</artifactId>
                 <version>${sofa.common.tools.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>bolt</artifactId>
+                <version>${bolt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>hessian</artifactId>
+                <version>${hessian.version}</version>
             </dependency>
             <!-- 2nd dependency end -->
 
@@ -154,21 +169,15 @@
     </dependencyManagement>
 
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9.1</version>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.alipay.sofa</groupId>
+                    <artifactId>sofa-ark-maven-plugin</artifactId>
+                    <version>${sofa.ark.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 
     <profiles>
