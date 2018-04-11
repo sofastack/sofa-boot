@@ -19,7 +19,6 @@ package com.alipay.sofa.runtime.spring.factory;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.annotation.SofaService;
 import com.alipay.sofa.runtime.model.InterfaceMode;
-import com.alipay.sofa.runtime.service.binding.JvmBinding;
 import com.alipay.sofa.runtime.service.component.Service;
 import com.alipay.sofa.runtime.service.component.ServiceComponent;
 import com.alipay.sofa.runtime.service.component.impl.ServiceImpl;
@@ -48,10 +47,6 @@ public class ServiceFactoryBean extends AbstractContractFactoryBean {
         Implementation implementation = new DefaultImplementation();
         implementation.setTarget(ref);
         service = buildService();
-
-        if (bindings.size() == 0) {
-            bindings.add(new JvmBinding());
-        }
 
         for (Binding binding : bindings) {
             service.addBinding(binding);

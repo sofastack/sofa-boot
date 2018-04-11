@@ -14,32 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime.impl;
+package com.alipay.sofa.boot.examples.demo.rpc.bean;
 
-import com.alipay.sofa.runtime.api.component.AppConfiguration;
-
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import com.alipay.sofa.rpc.core.exception.SofaRpcException;
+import com.alipay.sofa.rpc.core.request.SofaRequest;
+import com.alipay.sofa.rpc.core.response.SofaResponse;
+import com.alipay.sofa.rpc.filter.Filter;
+import com.alipay.sofa.rpc.filter.FilterInvoker;
 
 /**
- * @author xuanbei 18/3/2
+ *
+ * @author liangen
+ * @version $Id: Filter.java, v 0.1 2018年04月09日 下午4:17 liangen Exp $
  */
-public class AppConfigurationImpl implements AppConfiguration {
-    private Map<String, String> sofaConfigMap = new HashMap<>();
-
-    public AppConfigurationImpl(Map<String, String> sofaConfigMap) {
-        this.sofaConfigMap = sofaConfigMap;
-    }
-
+public class PersonServiceFilter extends Filter {
     @Override
-    public String getPropertyValue(String key) {
-        return sofaConfigMap.get(key);
-    }
+    public SofaResponse invoke(FilterInvoker invoker, SofaRequest request) throws SofaRpcException {
 
-    @Override
-    public String getPropertyValue(String key, String defaultValue) {
-        String value = sofaConfigMap.get(key);
-        return value == null ? defaultValue : value;
+        System.out.println("PersonFilter before");
+        try {
+            return invoker.invoke(request);
+        } finally {
+            System.out.println("PersonFilter after");
+        }
     }
 }
