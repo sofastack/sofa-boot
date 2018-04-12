@@ -112,6 +112,7 @@
         <xsd:attribute name="weight" type="xsd:int" use="optional" />
         <xsd:attribute name="warm-up-weight" type="xsd:int" use="optional" />
         <xsd:attribute name="warm-up-time" type="xsd:int" use="optional" />
+        <xsd:attribute name="thread-pool-ref" type="xsd:string" use="optional" />
     </xsd:complexType>
     <!-- binding.bolt in reference -->
     <xsd:complexType name="BBindingTRReference">
