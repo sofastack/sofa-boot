@@ -40,12 +40,12 @@ import java.util.Map;
 public class ReadinessCheckProcessorTest {
 
     private static ClassPathXmlApplicationContext applicationContext;
-    private final ReadinessCheckProcessor readinessCheckProcessor = new ReadinessCheckProcessor();
+    private final ReadinessCheckProcessor         readinessCheckProcessor = new ReadinessCheckProcessor();
 
     @BeforeClass
     public static void init() {
         applicationContext = new ClassPathXmlApplicationContext(
-                "com/alipay/sofa/healthcheck/application_healthcheck_test_1.xml");
+            "com/alipay/sofa/healthcheck/application_healthcheck_test_1.xml");
 
         HealthCheckManager.init(applicationContext);
     }
@@ -63,9 +63,9 @@ public class ReadinessCheckProcessorTest {
         boolean afterStatus = StartUpHealthCheckStatus.getAfterHealthCheckCallbackStatus();
         Map<String, Health> componentDetail = StartUpHealthCheckStatus.getComponentDetail();
         List<HealthIndicatorDetail> healthIndicatorDetail = StartUpHealthCheckStatus
-                .getHealthIndicatorDetails();
+            .getHealthIndicatorDetails();
         Map<String, Health> afterDetail = StartUpHealthCheckStatus
-                .getAfterHealthCheckCallbackDetails();
+            .getAfterHealthCheckCallbackDetails();
 
         Assert.assertTrue(springStatus);
         Assert.assertTrue(componentStatus);
@@ -79,9 +79,9 @@ public class ReadinessCheckProcessorTest {
         Assert.assertEquals("memory is ok", componentDetail.get("AAA").getDetails().get("memory"));
         Assert.assertEquals("HealthIndicatorB", healthIndicatorDetail.get(0).getName());
         Assert.assertEquals("hard disk is ok", healthIndicatorDetail.get(0).getHealth()
-                .getDetails().get("hard disk"));
+            .getDetails().get("hard disk"));
         Assert.assertEquals("server is ok", afterDetail.get("AfterReadinessCheckCallbackA")
-                .getDetails().get("server"));
+            .getDetails().get("server"));
 
         StartUpHealthCheckStatus.clean();
     }
@@ -101,9 +101,9 @@ public class ReadinessCheckProcessorTest {
         boolean afterStatus = StartUpHealthCheckStatus.getAfterHealthCheckCallbackStatus();
         Map<String, Health> componentDetail = StartUpHealthCheckStatus.getComponentDetail();
         List<HealthIndicatorDetail> healthIndicatorDetail = StartUpHealthCheckStatus
-                .getHealthIndicatorDetails();
+            .getHealthIndicatorDetails();
         Map<String, Health> afterDetail = StartUpHealthCheckStatus
-                .getAfterHealthCheckCallbackDetails();
+            .getAfterHealthCheckCallbackDetails();
 
         Assert.assertTrue(springStatus);
         Assert.assertFalse(componentStatus);
@@ -115,10 +115,10 @@ public class ReadinessCheckProcessorTest {
         Assert.assertEquals(0, afterDetail.size());
 
         Assert.assertEquals("memory is deficiency",
-                componentDetail.get("AAA").getDetails().get("memory"));
+            componentDetail.get("AAA").getDetails().get("memory"));
         Assert.assertEquals("HealthIndicatorB", healthIndicatorDetail.get(0).getName());
         Assert.assertEquals("hard disk is bad", healthIndicatorDetail.get(0).getHealth()
-                .getDetails().get("hard disk"));
+            .getDetails().get("hard disk"));
 
         StartUpHealthCheckStatus.clean();
 

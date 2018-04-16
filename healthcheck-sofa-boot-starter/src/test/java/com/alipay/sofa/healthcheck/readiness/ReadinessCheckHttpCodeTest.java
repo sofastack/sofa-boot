@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.alipay.sofa.healthcheck.readiness;
 
 import org.junit.Assert;
@@ -39,7 +38,8 @@ public class ReadinessCheckHttpCodeTest {
 
     @Test
     public void testReadinessCheckFailedHttpCode() throws IOException {
-        HttpURLConnection huc = (HttpURLConnection) (new URL("http://localhost:8080/health/readiness").openConnection());
+        HttpURLConnection huc = (HttpURLConnection) (new URL(
+            "http://localhost:8080/health/readiness").openConnection());
         huc.setRequestMethod("HEAD");
         huc.connect();
         int respCode = huc.getResponseCode();
