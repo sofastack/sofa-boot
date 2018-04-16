@@ -28,9 +28,9 @@ import org.springframework.util.StringUtils;
  * Health check start checker.
  * Created by liangen on 17/8/5.
  */
-public class HealthCheckStartupProcessor {
+public class ReadinessCheckProcessor {
     private static Logger                           logger                            = SofaBootHealthCheckLoggerFactory
-                                                                                          .getLogger(HealthCheckStartupProcessor.class
+                                                                                          .getLogger(ReadinessCheckProcessor.class
                                                                                               .getCanonicalName());
 
     private final SpringContextCheckProcessor       springContextCheckProcessor       = new SpringContextCheckProcessor();
@@ -49,7 +49,7 @@ public class HealthCheckStartupProcessor {
         boolean result = false;
         try {
 
-            StartUpHealthCheckStatus.openStartStatu();
+            StartUpHealthCheckStatus.openStartStatus();
 
             //run the startup check
             if (startHealthCheckProcess()) {
@@ -63,7 +63,7 @@ public class HealthCheckStartupProcessor {
                 logger.error("Readiness check result: fail");
             }
 
-            StartUpHealthCheckStatus.closeStartStatu();
+            StartUpHealthCheckStatus.closeStartStatus();
         }
     }
 

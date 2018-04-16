@@ -130,11 +130,11 @@ public class StartUpHealthCheckStatus {
         return componentDetail;
     }
 
-    public static void openStartStatu() {
+    public static void openStartStatus() {
         isOpen = true;
     }
 
-    public static void closeStartStatu() {
+    public static void closeStartStatus() {
         isOpen = false;
     }
 
