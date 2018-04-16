@@ -26,8 +26,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
- * AllRestLoggerFactoryTest
- * <p/>
  * Created by yangguanchao on 18/01/04.
  */
 public class AllInfraLoggerFactoryTest extends AbstraceTestBase {
@@ -46,15 +44,11 @@ public class AllInfraLoggerFactoryTest extends AbstraceTestBase {
     }
 
     @Test
-    public void testGetLogger() throws Exception {
-        try {
-            org.slf4j.Logger logger = InfraHealthCheckLoggerFactory.getLogger(this.getClass());
-            assertNotNull(logger);
-            logger.info("ok testGetLogger by class");
-            assertTrue(logger.isErrorEnabled());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public void testGetLogger() {
+        org.slf4j.Logger logger = InfraHealthCheckLoggerFactory.getLogger(this.getClass());
+        assertNotNull(logger);
+        logger.info("ok testGetLogger by class");
+        assertTrue(logger.isErrorEnabled());
     }
 
     /**
@@ -64,25 +58,19 @@ public class AllInfraLoggerFactoryTest extends AbstraceTestBase {
      * Method: getLogger(String name)
      */
     @Test
-    public void testInfoGetLogger() throws Exception {
-        //TODO: Test goes here...
-        try {
-            String name1 = "com.test.3";
-            org.slf4j.Logger logger = InfraHealthCheckLoggerFactory.getLogger(name1);
-            System.err.println("\nLoggerName1 : " + logger.getName() + " ,logger1:" + logger);
-            assertNotNull(logger);
-            logger.info("test1 info ok");
+    public void testInfoGetLogger() {
+        String name1 = "com.test.3";
+        org.slf4j.Logger logger = InfraHealthCheckLoggerFactory.getLogger(name1);
+        System.err.println("\nLoggerName1 : " + logger.getName() + " ,logger1:" + logger);
+        assertNotNull(logger);
+        logger.info("test1 info ok");
 
-            String name2 = "com.test.4";
-            org.slf4j.Logger logger2 = InfraHealthCheckLoggerFactory.getLogger(name2);
-            System.err.println("\nLoggerName2 : " + logger2.getName() + " ,logger2:" + logger2);
-            logger2.info("test2 info ok");
+        String name2 = "com.test.4";
+        org.slf4j.Logger logger2 = InfraHealthCheckLoggerFactory.getLogger(name2);
+        System.err.println("\nLoggerName2 : " + logger2.getName() + " ,logger2:" + logger2);
+        logger2.info("test2 info ok");
 
-            assertTrue(logger.isInfoEnabled());
-            assertTrue(logger.isDebugEnabled());
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        assertTrue(logger.isInfoEnabled());
+        assertTrue(logger.isDebugEnabled());
     }
 }

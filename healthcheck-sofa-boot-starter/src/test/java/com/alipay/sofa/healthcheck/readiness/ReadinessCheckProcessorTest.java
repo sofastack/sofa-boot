@@ -14,12 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.healthcheck.startup;
+package com.alipay.sofa.healthcheck.readiness;
 
 import com.alipay.sofa.healthcheck.bean.AfterReadinessCheckCallbackA;
 import com.alipay.sofa.healthcheck.bean.HealthIndicatorB;
 import com.alipay.sofa.healthcheck.bean.ReferenceA;
 import com.alipay.sofa.healthcheck.core.HealthCheckManager;
+import com.alipay.sofa.healthcheck.startup.ReadinessCheckProcessor;
+import com.alipay.sofa.healthcheck.startup.StartUpHealthCheckStatus;
 import com.alipay.sofa.healthcheck.startup.StartUpHealthCheckStatus.HealthIndicatorDetail;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -32,30 +34,28 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
  * @author liangen
- * @version $Id: HealthCheckStartupProcessorTest.java, v 0.1 2018年03月12日 下午4:11 liangen Exp $
+ * @version $Id: ReadinessCheckProcessorTest.java, v 0.1 2018年03月12日 下午4:11 liangen Exp $
  */
-public class HealthCheckStartupProcessorTest {
+public class ReadinessCheckProcessorTest {
 
     private static ClassPathXmlApplicationContext applicationContext;
-    private final HealthCheckStartupProcessor     healthCheckStartupProcessor = new HealthCheckStartupProcessor();
+    private final ReadinessCheckProcessor readinessCheckProcessor = new ReadinessCheckProcessor();
 
     @BeforeClass
     public static void init() {
         applicationContext = new ClassPathXmlApplicationContext(
-            "com/alipay/sofa/healthcheck/application_healthcheck_test_1.xml");
+                "com/alipay/sofa/healthcheck/application_healthcheck_test_1.xml");
 
         HealthCheckManager.init(applicationContext);
     }
 
     @Test
     public void testCheckHealthSuccess() {
-
         ReferenceA.setCount(5);
         HealthIndicatorB.setHealth(true);
         AfterReadinessCheckCallbackA.setHealth(true);
-        healthCheckStartupProcessor.checkHealth();
+        readinessCheckProcessor.checkHealth();
 
         boolean springStatus = StartUpHealthCheckStatus.getSpringContextStatus();
         boolean componentStatus = StartUpHealthCheckStatus.getComponentStatus();
@@ -63,9 +63,9 @@ public class HealthCheckStartupProcessorTest {
         boolean afterStatus = StartUpHealthCheckStatus.getAfterHealthCheckCallbackStatus();
         Map<String, Health> componentDetail = StartUpHealthCheckStatus.getComponentDetail();
         List<HealthIndicatorDetail> healthIndicatorDetail = StartUpHealthCheckStatus
-            .getHealthIndicatorDetails();
+                .getHealthIndicatorDetails();
         Map<String, Health> afterDetail = StartUpHealthCheckStatus
-            .getAfterHealthCheckCallbackDetails();
+                .getAfterHealthCheckCallbackDetails();
 
         Assert.assertTrue(springStatus);
         Assert.assertTrue(componentStatus);
@@ -79,9 +79,9 @@ public class HealthCheckStartupProcessorTest {
         Assert.assertEquals("memory is ok", componentDetail.get("AAA").getDetails().get("memory"));
         Assert.assertEquals("HealthIndicatorB", healthIndicatorDetail.get(0).getName());
         Assert.assertEquals("hard disk is ok", healthIndicatorDetail.get(0).getHealth()
-            .getDetails().get("hard disk"));
+                .getDetails().get("hard disk"));
         Assert.assertEquals("server is ok", afterDetail.get("AfterReadinessCheckCallbackA")
-            .getDetails().get("server"));
+                .getDetails().get("server"));
 
         StartUpHealthCheckStatus.clean();
     }
@@ -93,7 +93,7 @@ public class HealthCheckStartupProcessorTest {
         ReferenceA.setStrict(true);
         HealthIndicatorB.setHealth(false);
         AfterReadinessCheckCallbackA.setHealth(true);
-        healthCheckStartupProcessor.checkHealth();
+        readinessCheckProcessor.checkHealth();
 
         boolean springStatus = StartUpHealthCheckStatus.getSpringContextStatus();
         boolean componentStatus = StartUpHealthCheckStatus.getComponentStatus();
@@ -101,9 +101,9 @@ public class HealthCheckStartupProcessorTest {
         boolean afterStatus = StartUpHealthCheckStatus.getAfterHealthCheckCallbackStatus();
         Map<String, Health> componentDetail = StartUpHealthCheckStatus.getComponentDetail();
         List<HealthIndicatorDetail> healthIndicatorDetail = StartUpHealthCheckStatus
-            .getHealthIndicatorDetails();
+                .getHealthIndicatorDetails();
         Map<String, Health> afterDetail = StartUpHealthCheckStatus
-            .getAfterHealthCheckCallbackDetails();
+                .getAfterHealthCheckCallbackDetails();
 
         Assert.assertTrue(springStatus);
         Assert.assertFalse(componentStatus);
@@ -115,10 +115,10 @@ public class HealthCheckStartupProcessorTest {
         Assert.assertEquals(0, afterDetail.size());
 
         Assert.assertEquals("memory is deficiency",
-            componentDetail.get("AAA").getDetails().get("memory"));
+                componentDetail.get("AAA").getDetails().get("memory"));
         Assert.assertEquals("HealthIndicatorB", healthIndicatorDetail.get(0).getName());
         Assert.assertEquals("hard disk is bad", healthIndicatorDetail.get(0).getHealth()
-            .getDetails().get("hard disk"));
+                .getDetails().get("hard disk"));
 
         StartUpHealthCheckStatus.clean();
 

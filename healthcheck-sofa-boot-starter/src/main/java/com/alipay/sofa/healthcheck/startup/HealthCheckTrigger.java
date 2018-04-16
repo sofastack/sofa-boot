@@ -43,9 +43,8 @@ public class HealthCheckTrigger implements ApplicationListener<ContextRefreshedE
 
         logPrintCheckers();
 
-        HealthCheckStartupProcessor healthCheckStartupProcessor = new HealthCheckStartupProcessor();
+        ReadinessCheckProcessor healthCheckStartupProcessor = new ReadinessCheckProcessor();
         healthCheckStartupProcessor.checkHealth();
-
     }
 
     private void logPrintCheckers() {
