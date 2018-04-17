@@ -66,7 +66,7 @@ public class SOFABootInfrastructureSpringContextInitializer
     }
 
     public static void initLoggingPath(String middlewareLoggingPath) {
-        if (StringUtils.isEmpty((String) System.getProperty(Constants.LOG_PATH))
+        if (StringUtils.isEmpty(System.getProperty(Constants.LOG_PATH))
             && !StringUtils.isEmpty(middlewareLoggingPath)) {
             System.setProperty(Constants.LOG_PATH, middlewareLoggingPath);
             ReportUtil.report("Actual " + Constants.LOG_PATH + " is [ " + middlewareLoggingPath

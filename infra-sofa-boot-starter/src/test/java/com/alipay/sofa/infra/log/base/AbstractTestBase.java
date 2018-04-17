@@ -21,11 +21,11 @@ import com.alipay.sofa.common.log.Constants;
 import com.alipay.sofa.common.log.LoggerSpaceManager;
 
 /**
- * AbstraceTestBase
+ * AbstractTestBase
  * <p/>
  * Created by yangguanchao on 18/01/04.
  */
-public abstract class AbstraceTestBase {
+public abstract class AbstractTestBase {
 
     public static final String restLogLevel = Constants.LOG_LEVEL_PREFIX
                                               + InfraHealthCheckLoggerFactory.INFRASTRUCTURE_LOG_SPACE;

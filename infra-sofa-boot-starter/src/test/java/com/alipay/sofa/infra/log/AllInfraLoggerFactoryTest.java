@@ -17,7 +17,7 @@
 package com.alipay.sofa.infra.log;
 
 import com.alipay.sofa.common.log.Constants;
-import com.alipay.sofa.infra.log.base.AbstraceTestBase;
+import com.alipay.sofa.infra.log.base.AbstractTestBase;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,7 +28,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by yangguanchao on 18/01/04.
  */
-public class AllInfraLoggerFactoryTest extends AbstraceTestBase {
+public class AllInfraLoggerFactoryTest extends AbstractTestBase {
 
     @Before
     public void before() throws Exception {

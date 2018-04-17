@@ -17,7 +17,7 @@
 package com.alipay.sofa.infra.log;
 
 import com.alipay.sofa.common.log.Constants;
-import com.alipay.sofa.infra.log.base.AbstraceTestBase;
+import com.alipay.sofa.infra.log.base.AbstractTestBase;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,7 +31,7 @@ import static org.junit.Assert.*;
  * @version 1.0
  * @since <pre>一月 05, 2018</pre>
  */
-public class LogbackRestLoggerFactoryTest extends AbstraceTestBase {
+public class LogbackRestLoggerFactoryTest extends AbstractTestBase {
 
     @Before
     public void before() throws Exception {

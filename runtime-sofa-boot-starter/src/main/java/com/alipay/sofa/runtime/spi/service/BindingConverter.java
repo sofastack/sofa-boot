@@ -31,7 +31,7 @@ public interface BindingConverter<L extends BindingParam, R extends Binding> ext
     /**
      * convert {@link BindingParam} to concrete {@link Binding}
      *
-     * @param bindingParam binding paramter
+     * @param bindingParam binding parameter
      * @param bindingConverterContext binding converter context
      * @return Binding Object
      */
