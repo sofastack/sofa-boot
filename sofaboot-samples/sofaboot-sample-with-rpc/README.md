@@ -87,6 +87,7 @@ System.out.println(personRest.sayName("rest"));
 
 ## Filter配置
 在 SOFABoot 环境中可以方便的进行 Filter 的配置。
+
 1.全局生效方式。通过 rpc-global-filter 元素配置一个对所有服务都会生效的 Filter 。
 ```xml
 <bean id="personFilter" class="com.alipay.sofa.boot.examples.demo.rpc.bean.PersonServiceFilter"/>

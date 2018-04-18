@@ -14,43 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.infra.initializer;
+package com.alipay.sofa.healthcheck.readiness;
 
-import org.junit.Test;
-import org.junit.Before;
-import org.junit.After;
+import org.springframework.boot.actuate.health.Health;
+import org.springframework.boot.actuate.health.HealthIndicator;
+import org.springframework.stereotype.Component;
 
-/**
- * SOFABootInfrastructureSpringContextInitializer Tester.
- *
- * @author <guanchao.ygc>
- * @version 1.0
- * @since <pre>一月 4, 2018</pre>
- */
-public class SOFABootInfrastructureSpringContextInitializerTest {
-
-    @Before
-    public void before() throws Exception {
+@Component
+public class DownHealthIndicator implements HealthIndicator {
+    @Override
+    public Health health() {
+        return Health.down().build();
     }
-
-    @After
-    public void after() throws Exception {
-    }
-
-    /**
-     * Method: initialize(ConfigurableApplicationContext applicationContext)
-     */
-    @Test
-    public void testInitialize() throws Exception {
-
-    }
-
-    /**
-     * Method: getOrder()
-     */
-    @Test
-    public void testGetOrder() throws Exception {
-
-    }
-
 }

@@ -31,15 +31,16 @@ import java.util.Map;
 
 /**
  * The health check HTTP checker for start status.
+ *
  * @author liangen
  * @version $Id: StartUpHealthCheckStatusCheckInfo.java, v 0.1 2018年02月02日 下午11:34 liangen Exp $
  */
 
-public class SpringContextStartUpHealthCheckStatusCheckInfo extends AbstractEndpoint<Health> {
+public class SofaBootReadinessCheckEndpoint extends AbstractEndpoint<Health> {
 
     private final HealthAggregator healthAggregator = new OrderedHealthAggregator();
 
-    public SpringContextStartUpHealthCheckStatusCheckInfo(String id, boolean sensitive) {
+    public SofaBootReadinessCheckEndpoint(String id, boolean sensitive) {
         super(id, sensitive);
     }
 
@@ -74,9 +75,8 @@ public class SpringContextStartUpHealthCheckStatusCheckInfo extends AbstractEndp
         }
 
         //component and callback
-        Builder builder = null;
+        Builder builder;
         if (componentStatus && healthIndicatorStatus && afterHealthCheckCallbackStatus) {
-
             builder = Health.up();
         } else {
             builder = Health.down();

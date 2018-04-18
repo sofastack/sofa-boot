@@ -31,9 +31,9 @@ public interface BindingAdapter<T extends Binding> {
     /**
      * pre out binding
      *
-     * @param contract binding contract
-     * @param binding binding object
-     * @param target  binding target
+     * @param contract           binding contract
+     * @param binding            binding object
+     * @param target             binding target
      * @param sofaRuntimeContext sofa runtime context
      */
     void preOutBinding(Object contract, T binding, Object target,
@@ -42,9 +42,9 @@ public interface BindingAdapter<T extends Binding> {
     /**
      * out binding, out binding means provide service
      *
-     * @param contract binding contract
-     * @param binding binding object
-     * @param target  binding target
+     * @param contract           binding contract
+     * @param binding            binding object
+     * @param target             binding target
      * @param sofaRuntimeContext sofa runtime context
      * @return binding result
      */
@@ -52,11 +52,11 @@ public interface BindingAdapter<T extends Binding> {
                       SofaRuntimeContext sofaRuntimeContext);
 
     /**
-     * pre unout binding
+     * pre un-out binding
      *
-     * @param contract binding contract
-     * @param binding binding object
-     * @param target  binding target
+     * @param contract           binding contract
+     * @param binding            binding object
+     * @param target             binding target
      * @param sofaRuntimeContext sofa runtime context
      */
     void preUnoutBinding(Object contract, T binding, Object target,
@@ -65,9 +65,9 @@ public interface BindingAdapter<T extends Binding> {
     /**
      * post unout binding
      *
-     * @param contract binding contract
-     * @param binding binding object
-     * @param target  binding target
+     * @param contract           binding contract
+     * @param binding            binding object
+     * @param target             binding target
      * @param sofaRuntimeContext sofa runtime context
      */
     void postUnoutBinding(Object contract, T binding, Object target,
@@ -76,8 +76,8 @@ public interface BindingAdapter<T extends Binding> {
     /**
      * in binding, in binding means reference service
      *
-     * @param contract binding contract
-     * @param binding binding object
+     * @param contract           binding contract
+     * @param binding            binding object
      * @param sofaRuntimeContext sofa runtime context
      */
     Object inBinding(Object contract, T binding, SofaRuntimeContext sofaRuntimeContext);
