@@ -14,12 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.healthcheck.startup;
+package com.alipay.sofa.healthcheck.readiness;
 
 import com.alipay.sofa.healthcheck.bean.AfterReadinessCheckCallbackA;
 import com.alipay.sofa.healthcheck.bean.HealthIndicatorB;
 import com.alipay.sofa.healthcheck.bean.ReferenceA;
 import com.alipay.sofa.healthcheck.core.HealthCheckManager;
+import com.alipay.sofa.healthcheck.startup.ReadinessCheckProcessor;
+import com.alipay.sofa.healthcheck.startup.StartUpHealthCheckStatus;
 import com.alipay.sofa.healthcheck.startup.StartUpHealthCheckStatus.HealthIndicatorDetail;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -32,14 +34,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
  * @author liangen
- * @version $Id: HealthCheckStartupProcessorTest.java, v 0.1 2018年03月12日 下午4:11 liangen Exp $
+ * @version $Id: ReadinessCheckProcessorTest.java, v 0.1 2018年03月12日 下午4:11 liangen Exp $
  */
-public class HealthCheckStartupProcessorTest {
+public class ReadinessCheckProcessorTest {
 
     private static ClassPathXmlApplicationContext applicationContext;
-    private final HealthCheckStartupProcessor     healthCheckStartupProcessor = new HealthCheckStartupProcessor();
+    private final ReadinessCheckProcessor         readinessCheckProcessor = new ReadinessCheckProcessor();
 
     @BeforeClass
     public static void init() {
@@ -51,11 +52,10 @@ public class HealthCheckStartupProcessorTest {
 
     @Test
     public void testCheckHealthSuccess() {
-
         ReferenceA.setCount(5);
         HealthIndicatorB.setHealth(true);
         AfterReadinessCheckCallbackA.setHealth(true);
-        healthCheckStartupProcessor.checkHealth();
+        readinessCheckProcessor.checkHealth();
 
         boolean springStatus = StartUpHealthCheckStatus.getSpringContextStatus();
         boolean componentStatus = StartUpHealthCheckStatus.getComponentStatus();
@@ -93,7 +93,7 @@ public class HealthCheckStartupProcessorTest {
         ReferenceA.setStrict(true);
         HealthIndicatorB.setHealth(false);
         AfterReadinessCheckCallbackA.setHealth(true);
-        healthCheckStartupProcessor.checkHealth();
+        readinessCheckProcessor.checkHealth();
 
         boolean springStatus = StartUpHealthCheckStatus.getSpringContextStatus();
         boolean componentStatus = StartUpHealthCheckStatus.getComponentStatus();
