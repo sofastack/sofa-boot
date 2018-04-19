@@ -19,32 +19,26 @@ package com.alipay.sofa.healthcheck.readiness;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.SpringApplication;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @SpringBootApplication
 public class ReadinessCheckHttpCodeTest {
 
-    @Test
-    public void testReadinessCheckFailedHttpCode() throws IOException {
-        HttpURLConnection huc = (HttpURLConnection) (new URL(
-            "http://localhost:8080/health/readiness").openConnection());
-        huc.setRequestMethod("HEAD");
-        huc.connect();
-        int respCode = huc.getResponseCode();
-        System.out.println(huc.getResponseMessage());
-        Assert.assertEquals(503, respCode);
-    }
+    @Autowired
+    private TestRestTemplate restTemplate;
 
-    public static void main(String[] args) {
-        SpringApplication.run(ReadinessCheckHttpCodeTest.class, args);
+    @Test
+    public void testReadinessCheckFailedHttpCode() {
+        ResponseEntity<String> response = restTemplate.getForEntity("/health/readiness",
+            String.class);
+        Assert.assertEquals(HttpStatus.SERVICE_UNAVAILABLE, response.getStatusCode());
     }
 }
