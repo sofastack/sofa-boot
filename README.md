@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/alipay/sofa-boot.svg?branch=master)](https://travis-ci.org/alipay/sofa-boot)
 [![Coverage Status](https://coveralls.io/repos/github/alipay/sofa-boot/badge.svg?branch=master)](https://coveralls.io/github/alipay/sofa-boot?branch=master)
 ![license](https://img.shields.io/badge/license-Apache--2.0-green.svg)
-![maven](https://img.shields.io/badge/maven-2.3.0-green.svg)
+![maven](https://img.shields.io/badge/maven-2.3.1-green.svg)
 
 SOFABoot 是蚂蚁金服开源的基于 Spring Boot 的研发框架，它在 Spring Boot 的基础上，提供了诸如 Readiness Check，类隔离，日志空间隔离等等能力。在增强了 Spring Boot 的同时，SOFABoot 提供了让用户可以在 Spring Boot 中非常方便地使用 SOFAStack 相关中间件的能力。
 
