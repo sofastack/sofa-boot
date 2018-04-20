@@ -27,20 +27,19 @@ import org.springframework.context.ApplicationContext;
  */
 public class AfterReadinessCheckCallbackB implements SofaBootAfterReadinessCheckCallback {
 
-    private static boolean mark = false;
+    private boolean mark;
+
+    public AfterReadinessCheckCallbackB(boolean mark) {
+        this.mark = mark;
+    }
 
     @Override
     public Health onHealthy(ApplicationContext applicationContext) {
         mark = true;
         return Health.up().withDetail("port", "port is ok").build();
-
     }
 
-    public static boolean isMark() {
+    public boolean isMark() {
         return mark;
-    }
-
-    public static void setMark(boolean mark) {
-        AfterReadinessCheckCallbackB.mark = mark;
     }
 }
