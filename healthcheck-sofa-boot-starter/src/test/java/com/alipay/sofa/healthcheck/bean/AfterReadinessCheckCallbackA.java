@@ -27,10 +27,7 @@ import org.springframework.context.ApplicationContext;
  */
 public class AfterReadinessCheckCallbackA implements SofaBootMiddlewareAfterReadinessCheckCallback {
 
-    private boolean health = false;
-
-    public AfterReadinessCheckCallbackA() {
-    }
+    private boolean health;
 
     public AfterReadinessCheckCallbackA(boolean health) {
         this.health = health;

@@ -27,10 +27,7 @@ import org.springframework.context.ApplicationContext;
  */
 public class AfterReadinessCheckCallbackB implements SofaBootAfterReadinessCheckCallback {
 
-    private boolean mark = false;
-
-    public AfterReadinessCheckCallbackB() {
-    }
+    private boolean mark;
 
     public AfterReadinessCheckCallbackB(boolean mark) {
         this.mark = mark;
@@ -44,9 +41,5 @@ public class AfterReadinessCheckCallbackB implements SofaBootAfterReadinessCheck
 
     public boolean isMark() {
         return mark;
-    }
-
-    public void setMark(boolean mark) {
-        this.mark = mark;
     }
 }

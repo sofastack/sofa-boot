@@ -30,9 +30,6 @@ public class ReferenceB implements HealthChecker {
 
     private int     retryCount;
 
-    public ReferenceB() {
-    }
-
     public ReferenceB(boolean isStrict, int retryCount) {
         this.isStrict = isStrict;
         this.retryCount = retryCount;
@@ -61,13 +58,5 @@ public class ReferenceB implements HealthChecker {
     @Override
     public boolean isStrictCheck() {
         return isStrict;
-    }
-
-    public void setStrict(boolean strict) {
-        isStrict = strict;
-    }
-
-    public void setRetryCount(int retryCount) {
-        this.retryCount = retryCount;
     }
 }

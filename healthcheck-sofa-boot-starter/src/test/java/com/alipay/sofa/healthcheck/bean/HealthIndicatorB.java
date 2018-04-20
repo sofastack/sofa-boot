@@ -26,10 +26,7 @@ import org.springframework.boot.actuate.health.HealthIndicator;
  */
 public class HealthIndicatorB implements HealthIndicator {
 
-    private boolean health = false;
-
-    public HealthIndicatorB() {
-    }
+    private boolean health;
 
     public HealthIndicatorB(boolean health) {
         this.health = health;

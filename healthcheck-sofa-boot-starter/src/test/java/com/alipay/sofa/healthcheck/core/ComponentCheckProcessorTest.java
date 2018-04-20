@@ -59,15 +59,16 @@ public class ComponentCheckProcessorTest extends BaseHealthCheckTest {
     static class ReferenceConfiguration {
 
         @Bean
-        public ReferenceA referenceA(@Value("${reference-a.count}") int count,
-                                     @Value("${reference-a.strict}") boolean strict,
-                                     @Value("${reference-a.retry-count}") int retryCount) {
+        public ReferenceA referenceA(@Value("${reference-a.count:0}") int count,
+                                     @Value("${reference-a.strict:false}") boolean strict,
+                                     @Value("${reference-a.retry-count:0}") int retryCount) {
             return new ReferenceA(count, strict, retryCount);
         }
 
         @Bean
-        public ReferenceB referenceB() {
-            return new ReferenceB();
+        public ReferenceB referenceB(@Value("${reference-b.strict:false}") boolean strict,
+                                     @Value("${reference-b.retry-count:0}") int retryCount) {
+            return new ReferenceB(strict, retryCount);
         }
     }
 
