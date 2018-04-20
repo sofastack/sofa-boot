@@ -49,7 +49,11 @@ Spring Boot 是一个非常优秀的开源框架，可以非常方便地就构�
 
 SOFABoot 的编译环境的要求为 JDK7 或者 JDK8，需要采用 [Apache Maven 3.2.5](https://archive.apache.org/dist/maven/maven-3/3.2.5/binaries/) 或者更高的版本进行编译。
 
-## 五、示例
+## 五、感谢
+
+SOFA 的第一个版本是阿玺创造的，感谢阿玺给 SOFA 打下了坚实地基础，也非常感谢在 SOFA 的历史中给 SOFA 贡献过代码的人们。
+
+## 六、示例
 
 在此工程的 `sofaboot-samples` 目录下的是 SOFABoot 的示例工程，分别为：
 
@@ -57,7 +61,7 @@ SOFABoot 的编译环境的要求为 JDK7 或者 JDK8，需要采用 [Apache Mav
 * [SOFABoot 示例工程（包含类隔离能力）](./sofaboot-samples/sofaboot-sample-with-isolation)
 * [SOFABoot 示例工程（使用 SOFARPC）](./sofaboot-samples/sofaboot-sample-with-rpc)
  
-## 六、文档
+## 七、文档
 
 请参考 [WIKI 中的 SOFABoot 的文档](https://github.com/alipay/sofa-boot/wiki)。
 
