@@ -31,7 +31,7 @@ import java.util.Map;
  */
 public class BaseHealthCheckTest {
 
-    protected final AnnotationConfigApplicationContext applicationContext            = new AnnotationConfigApplicationContext();
+    protected final AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
 
     @Before
     public void init() {
@@ -45,10 +45,11 @@ public class BaseHealthCheckTest {
         this.applicationContext.close();
     }
 
-    protected void initApplicationContext(Map<String, Object> properties, Class<?>... annotatedClasses) {
+    protected void initApplicationContext(Map<String, Object> properties,
+                                          Class<?>... annotatedClasses) {
         for (Map.Entry<String, Object> property : properties.entrySet()) {
-            EnvironmentTestUtils.addEnvironment(
-                    this.applicationContext, buildProperty(property.getKey(), property.getValue()));
+            EnvironmentTestUtils.addEnvironment(this.applicationContext,
+                buildProperty(property.getKey(), property.getValue()));
         }
 
         this.applicationContext.register(annotatedClasses);

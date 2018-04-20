@@ -58,8 +58,7 @@ public class ReadinessCheckProcessorTest extends BaseHealthCheckTest {
         }
 
         @Bean
-        public AfterReadinessCheckCallbackA afterReadinessCheckCallbackA(
-                @Value("${after-readiness-check-callback-a.health:false}") boolean health) {
+        public AfterReadinessCheckCallbackA afterReadinessCheckCallbackA(@Value("${after-readiness-check-callback-a.health:false}") boolean health) {
             return new AfterReadinessCheckCallbackA(health);
         }
     }
