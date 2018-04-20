@@ -19,17 +19,18 @@ package com.alipay.sofa.healthcheck.readiness;
 import com.alipay.sofa.healthcheck.bean.AfterReadinessCheckCallbackA;
 import com.alipay.sofa.healthcheck.bean.HealthIndicatorB;
 import com.alipay.sofa.healthcheck.bean.ReferenceA;
-import com.alipay.sofa.healthcheck.core.HealthCheckManager;
 import com.alipay.sofa.healthcheck.startup.ReadinessCheckProcessor;
 import com.alipay.sofa.healthcheck.startup.StartUpHealthCheckStatus;
 import com.alipay.sofa.healthcheck.startup.StartUpHealthCheckStatus.HealthIndicatorDetail;
-import org.junit.AfterClass;
+import com.alipay.sofa.healthcheck.util.BaseHealthCheckTest;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.Health;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,24 +38,40 @@ import java.util.Map;
  * @author liangen
  * @version $Id: ReadinessCheckProcessorTest.java, v 0.1 2018年03月12日 下午4:11 liangen Exp $
  */
-public class ReadinessCheckProcessorTest {
+public class ReadinessCheckProcessorTest extends BaseHealthCheckTest {
 
-    private static ClassPathXmlApplicationContext applicationContext;
-    private final ReadinessCheckProcessor         readinessCheckProcessor = new ReadinessCheckProcessor();
+    private final ReadinessCheckProcessor readinessCheckProcessor = new ReadinessCheckProcessor();
 
-    @BeforeClass
-    public static void init() {
-        applicationContext = new ClassPathXmlApplicationContext(
-            "com/alipay/sofa/healthcheck/application_healthcheck_test_1.xml");
+    @Configuration
+    static class HealthCheckConfiguration {
 
-        HealthCheckManager.init(applicationContext);
+        @Bean
+        public ReferenceA referenceA(@Value("${reference-a.count:0}") int count,
+                                     @Value("${reference-a.strict:false}") boolean strict,
+                                     @Value("${reference-a.retry-count:0}") int retryCount) {
+            return new ReferenceA(count, strict, retryCount);
+        }
+
+        @Bean
+        public HealthIndicatorB healthIndicatorB(@Value("${health-indicator-b.health:false}") boolean health) {
+            return new HealthIndicatorB(health);
+        }
+
+        @Bean
+        public AfterReadinessCheckCallbackA afterReadinessCheckCallbackA(
+                @Value("${after-readiness-check-callback-a.health:false}") boolean health) {
+            return new AfterReadinessCheckCallbackA(health);
+        }
     }
 
     @Test
     public void testCheckHealthSuccess() {
-        ReferenceA.setCount(5);
-        HealthIndicatorB.setHealth(true);
-        AfterReadinessCheckCallbackA.setHealth(true);
+        Map<String, Object> properties = new LinkedHashMap<>();
+        properties.put("reference-a.count", 5);
+        properties.put("health-indicator-b.health", true);
+        properties.put("after-readiness-check-callback-a.health", true);
+        initApplicationContext(properties, HealthCheckConfiguration.class);
+
         readinessCheckProcessor.checkHealth();
 
         boolean springStatus = StartUpHealthCheckStatus.getSpringContextStatus();
@@ -88,11 +105,14 @@ public class ReadinessCheckProcessorTest {
 
     @Test
     public void testCheckHealthFail() {
-        ReferenceA.setCount(0);
-        ReferenceA.setRetryCount(4);
-        ReferenceA.setStrict(true);
-        HealthIndicatorB.setHealth(false);
-        AfterReadinessCheckCallbackA.setHealth(true);
+        Map<String, Object> properties = new LinkedHashMap<>();
+        properties.put("reference-a.count", 0);
+        properties.put("reference-a.strict", true);
+        properties.put("reference-a.retry-count", 4);
+        properties.put("health-indicator-b.health", false);
+        properties.put("after-readiness-check-callback-a.health", true);
+        initApplicationContext(properties, HealthCheckConfiguration.class);
+
         readinessCheckProcessor.checkHealth();
 
         boolean springStatus = StartUpHealthCheckStatus.getSpringContextStatus();
@@ -121,15 +141,5 @@ public class ReadinessCheckProcessorTest {
             .getDetails().get("hard disk"));
 
         StartUpHealthCheckStatus.clean();
-
     }
-
-    @AfterClass
-    public static void clean() {
-        if (applicationContext != null) {
-            applicationContext.close();
-            HealthCheckManager.init(null);
-        }
-    }
-
 }

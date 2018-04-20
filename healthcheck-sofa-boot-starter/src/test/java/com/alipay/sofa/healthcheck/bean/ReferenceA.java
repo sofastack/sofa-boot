@@ -26,11 +26,20 @@ import org.springframework.boot.actuate.health.Health;
  */
 public class ReferenceA implements HealthChecker {
 
-    private static int     count = 0;
+    private int     count;
 
-    private static boolean isStrict;
+    private boolean isStrict;
 
-    private static int     retryCount;
+    private int     retryCount;
+
+    public ReferenceA() {
+    }
+
+    public ReferenceA(int count, boolean isStrict, int retryCount) {
+        this.count = count;
+        this.isStrict = isStrict;
+        this.retryCount = retryCount;
+    }
 
     @Override
     public Health isHealthy() {
@@ -65,19 +74,19 @@ public class ReferenceA implements HealthChecker {
         return isStrict;
     }
 
-    public static int getCount() {
+    public int getCount() {
         return count;
     }
 
-    public static void setCount(int count) {
-        ReferenceA.count = count;
+    public void setCount(int count) {
+        this.count = count;
     }
 
-    public static void setStrict(boolean strict) {
+    public void setStrict(boolean strict) {
         isStrict = strict;
     }
 
-    public static void setRetryCount(int retryCount) {
-        ReferenceA.retryCount = retryCount;
+    public void setRetryCount(int retryCount) {
+        this.retryCount = retryCount;
     }
 }

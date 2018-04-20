@@ -16,10 +16,21 @@
  */
 package com.alipay.sofa.healthcheck.core;
 
+import com.alipay.sofa.healthcheck.bean.ErrorBean;
+import com.alipay.sofa.healthcheck.bean.ReferenceA;
+import com.alipay.sofa.healthcheck.bean.ReferenceB;
+import com.alipay.sofa.healthcheck.startup.StartUpHealthCheckStatus;
+import com.alipay.sofa.healthcheck.util.BaseHealthCheckTest;
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
@@ -27,34 +38,29 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * @author liangen
  * @version $Id: SpringContextCheckProcessorTest.java, v 0.1 2018年03月12日 下午2:38 liangen Exp $
  */
-public class SpringContextCheckProcessorTest {
+public class SpringContextCheckProcessorTest extends BaseHealthCheckTest {
 
-    private static ClassPathXmlApplicationContext applicationContext;
-    private final SpringContextCheckProcessor     springContextCheckProcessor = new SpringContextCheckProcessor();
+    private final SpringContextCheckProcessor springContextCheckProcessor = new SpringContextCheckProcessor();
 
-    @BeforeClass
-    public static void init() {
-        try {
-            applicationContext = new ClassPathXmlApplicationContext(
-                "com/alipay/sofa/healthcheck/application_healthcheck_test_error.xml");
+    @Configuration
+    static class ErrorBeanConfiguration {
 
-        } catch (Exception e) {
-            System.out.println(e);
+        @Bean
+        public ErrorBean errorBean() {
+            return new ErrorBean();
         }
-        HealthCheckManager.init(applicationContext);
     }
 
     @Test
     public void testSpringContextCheck() {
+        try {
+            this.applicationContext.register(ErrorBeanConfiguration.class);
+            this.applicationContext.refresh();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
         boolean result = springContextCheckProcessor.springContextCheck();
         Assert.assertFalse(result);
-    }
-
-    @AfterClass
-    public static void clean() {
-        if (applicationContext != null) {
-            applicationContext.close();
-            HealthCheckManager.init(null);
-        }
     }
 }

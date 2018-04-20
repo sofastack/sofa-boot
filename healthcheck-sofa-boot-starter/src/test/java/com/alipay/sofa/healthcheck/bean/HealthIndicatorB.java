@@ -26,7 +26,14 @@ import org.springframework.boot.actuate.health.HealthIndicator;
  */
 public class HealthIndicatorB implements HealthIndicator {
 
-    private static boolean health = false;
+    private boolean health = false;
+
+    public HealthIndicatorB() {
+    }
+
+    public HealthIndicatorB(boolean health) {
+        this.health = health;
+    }
 
     @Override
     public Health health() {
@@ -34,11 +41,6 @@ public class HealthIndicatorB implements HealthIndicator {
             return Health.up().withDetail("hard disk", "hard disk is ok").build();
         } else {
             return Health.down().withDetail("hard disk", "hard disk is bad").build();
-
         }
-    }
-
-    public static void setHealth(boolean health) {
-        HealthIndicatorB.health = health;
     }
 }

@@ -27,7 +27,14 @@ import org.springframework.context.ApplicationContext;
  */
 public class AfterReadinessCheckCallbackA implements SofaBootMiddlewareAfterReadinessCheckCallback {
 
-    private static boolean health = false;
+    private boolean health = false;
+
+    public AfterReadinessCheckCallbackA() {
+    }
+
+    public AfterReadinessCheckCallbackA(boolean health) {
+        this.health = health;
+    }
 
     @Override
     public Health onHealthy(ApplicationContext applicationContext) {
@@ -35,11 +42,6 @@ public class AfterReadinessCheckCallbackA implements SofaBootMiddlewareAfterRead
             return Health.up().withDetail("server", "server is ok").build();
         } else {
             return Health.down().withDetail("server", "server is bad").build();
-
         }
-    }
-
-    public static void setHealth(boolean health) {
-        AfterReadinessCheckCallbackA.health = health;
     }
 }
