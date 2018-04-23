@@ -20,16 +20,20 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.health.Health;
+import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @SpringBootApplication
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ReadinessCheckHttpCodeTest {
 
     @Autowired
@@ -40,5 +44,18 @@ public class ReadinessCheckHttpCodeTest {
         ResponseEntity<String> response = restTemplate.getForEntity("/health/readiness",
             String.class);
         Assert.assertEquals(HttpStatus.SERVICE_UNAVAILABLE, response.getStatusCode());
+    }
+
+    @Configuration
+    static class DownHealthIndicatorConfiguration {
+        @Bean
+        public HealthIndicator downHealthIndicator() {
+            return new HealthIndicator() {
+                @Override
+                public Health health() {
+                    return Health.down().build();
+                }
+            };
+        }
     }
 }
