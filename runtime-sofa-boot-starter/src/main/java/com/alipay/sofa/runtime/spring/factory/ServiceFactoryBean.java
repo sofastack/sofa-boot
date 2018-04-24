@@ -36,7 +36,7 @@ public class ServiceFactoryBean extends AbstractContractFactoryBean {
     protected Service service;
 
     @Override
-    protected void doAfterPropertiesSet() throws Exception {
+    protected void doAfterPropertiesSet() {
         if (hasSofaServiceAnnotation()) {
             throw new ServiceRuntimeException(
                 "Bean " + beanId + " of type " + ref.getClass()
