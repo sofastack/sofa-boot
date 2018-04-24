@@ -19,7 +19,8 @@ package com.alipay.sofa.runtime.beans.impl;
 import com.alipay.sofa.runtime.beans.service.SampleService;
 
 /**
- * @author qilong.zql 18/4/24-下午5:08
+ * @author qilong.zql
+ * @since 2.3.1
  */
 public class XmlSampleServiceWithUniqueId implements SampleService {
     @Override
