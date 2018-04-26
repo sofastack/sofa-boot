@@ -14,16 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.healthcheck.readiness;
+package com.alipay.sofa.runtime.integration.base;
 
-import org.springframework.boot.actuate.health.Health;
-import org.springframework.boot.actuate.health.HealthIndicator;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.annotation.ImportResource;
 
-@Component
-public class DownHealthIndicator implements HealthIndicator {
-    @Override
-    public Health health() {
-        return Health.down().build();
+/**
+ * @author qilong.zql
+ * @since 2.3.1
+ */
+@ImportResource({ "classpath*:META-INF/spring/*.xml" })
+@org.springframework.boot.autoconfigure.SpringBootApplication
+public class SofaBootTestApplication {
+
+    public static void main(String[] args) {
+        SpringApplication springApplication = new SpringApplication(SofaBootTestApplication.class);
+        springApplication.run(args);
     }
+
 }

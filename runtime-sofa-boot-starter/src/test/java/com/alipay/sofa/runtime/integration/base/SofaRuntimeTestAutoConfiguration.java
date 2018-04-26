@@ -14,32 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.healthcheck.bean;
+package com.alipay.sofa.runtime.integration.base;
 
-import com.alipay.sofa.healthcheck.startup.SofaBootAfterReadinessCheckCallback;
-import org.springframework.boot.actuate.health.Health;
-import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 
 /**
- *
- * @author liangen
- * @version $Id: AfterReadinessCheckCallbackA.java, v 0.1 2018年03月11日 下午2:40 liangen Exp $
+ * @author qilong.zql
+ * @since 2.3.1
  */
-public class AfterReadinessCheckCallbackB implements SofaBootAfterReadinessCheckCallback {
-
-    private boolean mark;
-
-    public AfterReadinessCheckCallbackB(boolean mark) {
-        this.mark = mark;
-    }
-
-    @Override
-    public Health onHealthy(ApplicationContext applicationContext) {
-        mark = true;
-        return Health.up().withDetail("port", "port is ok").build();
-    }
-
-    public boolean isMark() {
-        return mark;
-    }
+@Configuration
+@ComponentScan(value = { "com.alipay.sofa.runtime.integration.features" })
+public class SofaRuntimeTestAutoConfiguration {
 }
