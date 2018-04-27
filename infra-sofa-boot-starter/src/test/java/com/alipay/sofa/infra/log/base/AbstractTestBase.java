@@ -16,9 +16,9 @@
  */
 package com.alipay.sofa.infra.log.base;
 
-import com.alipay.sofa.infra.log.InfraHealthCheckLoggerFactory;
 import com.alipay.sofa.common.log.Constants;
 import com.alipay.sofa.common.log.LoggerSpaceManager;
+import com.alipay.sofa.infra.log.InfraHealthCheckLoggerFactory;
 
 /**
  * AbstractTestBase
