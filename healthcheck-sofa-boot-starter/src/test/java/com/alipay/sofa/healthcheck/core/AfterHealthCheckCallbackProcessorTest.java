@@ -18,49 +18,59 @@ package com.alipay.sofa.healthcheck.core;
 
 import com.alipay.sofa.healthcheck.bean.AfterReadinessCheckCallbackA;
 import com.alipay.sofa.healthcheck.bean.AfterReadinessCheckCallbackB;
-import org.junit.AfterClass;
+import com.alipay.sofa.healthcheck.util.BaseHealthCheckTest;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  *
  * @author liangen
  * @version $Id: AfterHealthCheckCallbackProcessorTest.java, v 0.1 2018年03月11日 下午2:39 liangen Exp $
  */
-public class AfterHealthCheckCallbackProcessorTest {
+public class AfterHealthCheckCallbackProcessorTest extends BaseHealthCheckTest {
 
-    private static ClassPathXmlApplicationContext   applicationContext;
     private final AfterHealthCheckCallbackProcessor afterHealthCheckCallbackProcessor = new AfterHealthCheckCallbackProcessor();
 
-    @BeforeClass
-    public static void init() {
-        applicationContext = new ClassPathXmlApplicationContext(
-            "com/alipay/sofa/healthcheck/application_healthcheck_test.xml");
-        HealthCheckManager.init(applicationContext);
+    @Configuration
+    static class AfterReadinessCheckCallbackConfiguration {
+
+        @Bean
+        public AfterReadinessCheckCallbackA afterReadinessCheckCallbackA(@Value("${after-readiness-check-callback-a.health:false}") boolean health) {
+            return new AfterReadinessCheckCallbackA(health);
+        }
+
+        @Bean
+        public AfterReadinessCheckCallbackB afterReadinessCheckCallbackB(@Value("${after-readiness-check-callback-b.mark:false}") boolean mark) {
+            return new AfterReadinessCheckCallbackB(mark);
+        }
     }
 
     @Test
-    public void testAfterHealthCheckCallback() {
-
-        AfterReadinessCheckCallbackA.setHealth(true);
-        AfterReadinessCheckCallbackB.setMark(false);
-        boolean result_1 = afterHealthCheckCallbackProcessor.checkAfterHealthCheckCallback();
-        Assert.assertTrue(result_1);
-        Assert.assertTrue(AfterReadinessCheckCallbackB.isMark());
-
-        AfterReadinessCheckCallbackA.setHealth(false);
-        AfterReadinessCheckCallbackB.setMark(false);
-        boolean result_2 = afterHealthCheckCallbackProcessor.checkAfterHealthCheckCallback();
-        Assert.assertFalse(result_2);
-        Assert.assertFalse(AfterReadinessCheckCallbackB.isMark());
-
+    public void testAfterHealthCheckCallbackMarked() {
+        initApplicationContext(true, false);
+        boolean result = afterHealthCheckCallbackProcessor.checkAfterHealthCheckCallback();
+        Assert.assertTrue(result);
+        Assert.assertTrue(applicationContext.getBean(AfterReadinessCheckCallbackB.class).isMark());
     }
 
-    @AfterClass
-    public static void clean() {
-        applicationContext.close();
-        HealthCheckManager.init(null);
+    @Test
+    public void testAfterHealthCheckCallbackUnMarked() {
+        initApplicationContext(false, false);
+        boolean result = afterHealthCheckCallbackProcessor.checkAfterHealthCheckCallback();
+        Assert.assertFalse(result);
+        Assert.assertFalse(applicationContext.getBean(AfterReadinessCheckCallbackB.class).isMark());
+    }
+
+    private void initApplicationContext(boolean health, boolean mark) {
+        Map<String, Object> properties = new LinkedHashMap<>();
+        properties.put("after-readiness-check-callback-a.health", health);
+        properties.put("after-readiness-check-callback-b.mark", mark);
+        initApplicationContext(properties, AfterReadinessCheckCallbackConfiguration.class);
     }
 }

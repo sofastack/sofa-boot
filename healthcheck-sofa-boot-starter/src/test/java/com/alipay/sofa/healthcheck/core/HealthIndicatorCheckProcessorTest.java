@@ -17,47 +17,52 @@
 package com.alipay.sofa.healthcheck.core;
 
 import com.alipay.sofa.healthcheck.bean.HealthIndicatorB;
-import com.alipay.sofa.healthcheck.startup.StartUpHealthCheckStatus;
-import org.junit.AfterClass;
+import com.alipay.sofa.healthcheck.util.BaseHealthCheckTest;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  *
  * @author liangen
  * @version $Id: HealthIndicatorCheckProcessorTest.java, v 0.1 2018年03月11日 下午1:39 liangen Exp $
  */
-public class HealthIndicatorCheckProcessorTest {
+public class HealthIndicatorCheckProcessorTest extends BaseHealthCheckTest {
 
-    private static ClassPathXmlApplicationContext applicationContext;
-    private final HealthIndicatorCheckProcessor   healthIndicatorCheckProcessor = new HealthIndicatorCheckProcessor();
+    private final HealthIndicatorCheckProcessor healthIndicatorCheckProcessor = new HealthIndicatorCheckProcessor();
 
-    @BeforeClass
-    public static void init() {
-        applicationContext = new ClassPathXmlApplicationContext(
-            "com/alipay/sofa/healthcheck/application_healthcheck_test.xml");
-        HealthCheckManager.init(applicationContext);
+    @Configuration
+    static class HealthIndicatorConfiguration {
+
+        @Bean
+        public HealthIndicatorB healthIndicatorB(@Value("${health-indicator-b.health}") boolean health) {
+            return new HealthIndicatorB(health);
+        }
     }
 
     @Test
-    public void testCheckIndicator() {
-        HealthIndicatorB.setHealth(true);
-        boolean result_1 = healthIndicatorCheckProcessor.checkIndicator();
-        Assert.assertTrue(result_1);
-
-        HealthIndicatorB.setHealth(false);
-        boolean result_2 = healthIndicatorCheckProcessor.checkIndicator();
-        Assert.assertFalse(result_2);
-
+    public void testCheckIndicatorPassed() {
+        initApplicationContext(true);
+        boolean result = healthIndicatorCheckProcessor.checkIndicator();
+        Assert.assertTrue(result);
     }
 
-    @AfterClass
-    public static void clean() {
-        applicationContext.close();
-        HealthCheckManager.init(null);
-        StartUpHealthCheckStatus.clean();
+    @Test
+    public void testCheckIndicatorFailed() {
+        initApplicationContext(false);
+        boolean result = healthIndicatorCheckProcessor.checkIndicator();
+        Assert.assertFalse(result);
+    }
+
+    private void initApplicationContext(boolean health) {
+        Map<String, Object> properties = new LinkedHashMap<>();
+        properties.put("health-indicator-b.health", health);
+        initApplicationContext(properties, HealthIndicatorConfiguration.class);
     }
 
 }
