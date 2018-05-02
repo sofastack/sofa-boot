@@ -49,6 +49,7 @@ public class SofaBootReadinessCheckMvcEndpoint
     SofaBootReadinessCheckMvcEndpoint(SofaBootReadinessCheckEndpoint delegate) {
         super(delegate);
         setupDefaultStatusMapping();
+        setPath(EndPointConfig.READINESS_CHECK_ENDPOINT_NAME.replace("_", "/"));
     }
 
     @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)

@@ -16,9 +16,9 @@
  */
 package com.alipay.sofa.infra.initializer;
 
-import com.alipay.sofa.infra.log.InfraHealthCheckLoggerFactory;
 import com.alipay.sofa.common.log.Constants;
 import com.alipay.sofa.common.log.ReportUtil;
+import com.alipay.sofa.infra.log.InfraHealthCheckLoggerFactory;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.PriorityOrdered;
@@ -65,7 +65,7 @@ public class SOFABootInfrastructureSpringContextInitializer
         return HIGHEST_PRECEDENCE;
     }
 
-    public static void initLoggingPath(String middlewareLoggingPath) {
+    private static void initLoggingPath(String middlewareLoggingPath) {
         if (StringUtils.isEmpty(System.getProperty(Constants.LOG_PATH))
             && !StringUtils.isEmpty(middlewareLoggingPath)) {
             System.setProperty(Constants.LOG_PATH, middlewareLoggingPath);

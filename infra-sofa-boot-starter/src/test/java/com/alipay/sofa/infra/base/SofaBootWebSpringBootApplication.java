@@ -16,10 +16,8 @@
  */
 package com.alipay.sofa.infra.base;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
-import org.springframework.context.ApplicationContext;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ImportResource;
 
 /**
@@ -28,16 +26,12 @@ import org.springframework.context.annotation.ImportResource;
  * Created by yangguanchao on 16/7/22.
  */
 @ImportResource({ "classpath*:META-INF/sofaboot-web-test/*.xml" })
-@org.springframework.boot.autoconfigure.SpringBootApplication
+@SpringBootApplication
 public class SofaBootWebSpringBootApplication {
 
-    // 在Java类中创建 logger 实例
-    private static final Logger logger = LoggerFactory
-                                           .getLogger(SofaBootWebSpringBootApplication.class);
-
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         SpringApplication springApplication = new SpringApplication(
             SofaBootWebSpringBootApplication.class);
-        ApplicationContext applicationContext = springApplication.run(args);
+        springApplication.run(args);
     }
 }
