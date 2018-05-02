@@ -44,7 +44,7 @@ import java.util.*;
 public class SofaBootVersionEndpoint extends AbstractEndpoint<Object> implements
                                                                      ApplicationContextAware {
 
-    public static final String                  SOFA_BOOT_VERSION_PREFIX = "sofaboot/versions";
+    public static final String                  SOFA_BOOT_VERSION_PREFIX = "sofaboot_versions";
 
     private Logger                              logger                   = InfraHealthCheckLoggerFactory
                                                                              .getLogger(SofaBootVersionEndpoint.class);
@@ -116,9 +116,8 @@ public class SofaBootVersionEndpoint extends AbstractEndpoint<Object> implements
      * Load properties into the given instance.
      *
      * @param resourceLocation the Resource locations to load
-     * @throws IOException in case of I/O errors
      */
-    private Properties loadProperties(Resource resourceLocation) throws IOException {
+    private Properties loadProperties(Resource resourceLocation) {
         Properties result = new Properties();
         if (resourceLocation != null) {
             if (logger.isInfoEnabled()) {
