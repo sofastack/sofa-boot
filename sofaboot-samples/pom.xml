@@ -29,6 +29,12 @@
     <artifactId>sofaboot-samples</artifactId>
     <packaging>pom</packaging>
 
+    <modules>
+        <module>sofaboot-sample</module>
+        <module>sofaboot-sample-with-isolation</module>
+        <module>sofaboot-sample-with-rpc</module>
+    </modules>
+
     <properties>
         <main.user.dir>${user.dir}/..</main.user.dir>
     </properties>
