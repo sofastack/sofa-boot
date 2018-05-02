@@ -102,6 +102,7 @@
         <xsd:attribute name="loadBalancer" type="xsd:string" use="optional"/>
         <xsd:attribute name="lazy" type="xsd:boolean" use="optional"/>
         <xsd:attribute name="check" type="xsd:boolean" use="optional"/>
+        <xsd:attribute name="registry" type="xsd:string" use="optional"/>
     </xsd:complexType>
 
     <!-- method in service binding.bolt -->
@@ -112,11 +113,12 @@
     <!-- global-attrs in service binding.bolt -->
     <xsd:complexType name="BBindingTRSerAttr">
         <xsd:attribute name="timeout" type="xsd:int" use="optional"/>
-        <xsd:attribute name="filter" type="xsd:string" use="optional"/>
         <xsd:attribute name="weight" type="xsd:int" use="optional" />
         <xsd:attribute name="warm-up-weight" type="xsd:int" use="optional" />
         <xsd:attribute name="warm-up-time" type="xsd:int" use="optional" />
         <xsd:attribute name="thread-pool-ref" type="xsd:string" use="optional" />
+        <xsd:attribute name="filter" type="xsd:string" use="optional"/>
+        <xsd:attribute name="registry" type="xsd:string" use="optional"/>
     </xsd:complexType>
     <!-- binding.bolt in reference -->
     <xsd:complexType name="BBindingTRReference">
@@ -426,9 +428,6 @@
                 <xsd:attribute name="abstract" type="xsd:boolean" use="optional"/>
                 <xsd:attribute name="parent" type="xsd:string" use="optional"/>
                 <xsd:attribute name="unique-id" type="xsd:string" use="optional"/>
-
-                <!--<xsd:attribute name="filter" type="xsd:string" use="optional"/>-->
-                <!--<xsd:attribute name="registry" type="xsd:string" use="optional"/>-->
                 <xsd:attribute name="loadBalance" type="xsd:string" use="optional"/>
                 <xsd:attribute name="repeatReferLimit" type="xsd:int" use="optional"/>
             </xsd:extension>
