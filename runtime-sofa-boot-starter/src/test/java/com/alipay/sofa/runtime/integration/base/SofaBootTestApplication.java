@@ -14,16 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.infra.autoconfigure;
+package com.alipay.sofa.runtime.integration.base;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.annotation.ImportResource;
 
 /**
- * SofaBootInfraProperties
- *
- * @author yangguanchao
- * @since 2018/03/10
+ * @author qilong.zql
+ * @since 2.3.1
  */
-@ConfigurationProperties(prefix = "com.alipay.sofa.infra")
-public class SofaBootInfraProperties {
+@ImportResource({ "classpath*:META-INF/spring/*.xml" })
+@org.springframework.boot.autoconfigure.SpringBootApplication
+public class SofaBootTestApplication {
+
+    public static void main(String[] args) {
+        SpringApplication springApplication = new SpringApplication(SofaBootTestApplication.class);
+        springApplication.run(args);
+    }
+
 }

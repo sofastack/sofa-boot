@@ -14,22 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.boot.examples.demo.rpc.bean;
+package com.alipay.sofa.runtime.beans.impl;
 
-import javax.ws.rs.*;
+import com.alipay.sofa.runtime.beans.service.SampleService;
 
 /**
- *
- * @author liangen
- * @version $Id: Person.java, v 0.1 2018年04月09日 下午3:30 liangen Exp $
+ * @author qilong.zql
+ * @since 2.3.1
  */
-@Path("/webapi/rest/person")
-@Consumes("application/json;charset=UTF-8")
-@Produces("application/json;charset=UTF-8")
-public interface PersonService {
-
-    @GET
-    @Path("/sayName/{string}")
-    String sayName(@PathParam("string") String string);
-
+public class XmlSampleService implements SampleService {
+    @Override
+    public String service() {
+        return "XmlSampleService";
+    }
 }

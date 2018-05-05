@@ -14,22 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.boot.examples.demo.rpc.bean;
+package com.alipay.sofa.runtime.integration.base;
 
-import javax.ws.rs.*;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
- *
- * @author liangen
- * @version $Id: Person.java, v 0.1 2018年04月09日 下午3:30 liangen Exp $
+ * @author qilong.zql
+ * @since 2.3.1
  */
-@Path("/webapi/rest/person")
-@Consumes("application/json;charset=UTF-8")
-@Produces("application/json;charset=UTF-8")
-public interface PersonService {
-
-    @GET
-    @Path("/sayName/{string}")
-    String sayName(@PathParam("string") String string);
-
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest(classes = SofaBootTestApplication.class)
+public abstract class AbstractTestBase {
 }
