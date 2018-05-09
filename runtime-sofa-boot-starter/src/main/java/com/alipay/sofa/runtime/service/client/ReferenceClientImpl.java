@@ -22,6 +22,7 @@ import com.alipay.sofa.runtime.api.client.param.BindingParam;
 import com.alipay.sofa.runtime.api.client.param.ReferenceParam;
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.model.InterfaceMode;
+import com.alipay.sofa.runtime.service.binding.JvmBinding;
 import com.alipay.sofa.runtime.service.component.Reference;
 import com.alipay.sofa.runtime.service.component.ReferenceComponent;
 import com.alipay.sofa.runtime.service.component.impl.ReferenceImpl;
@@ -33,7 +34,8 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
 import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
-import org.springframework.util.Assert;
+import com.alipay.sofa.runtime.spring.config.SofaRuntimeProperties;
+import org.springframework.context.ApplicationContext;
 
 import java.util.Collection;
 
@@ -44,29 +46,38 @@ import java.util.Collection;
  */
 public class ReferenceClientImpl implements ReferenceClient {
     private SofaRuntimeContext sofaRuntimeContext;
+    private ApplicationContext applicationContext;
 
-    public ReferenceClientImpl(SofaRuntimeContext sofaRuntimeContext) {
+    public ReferenceClientImpl(SofaRuntimeContext sofaRuntimeContext,
+                               ApplicationContext applicationContext) {
         this.sofaRuntimeContext = sofaRuntimeContext;
+        this.applicationContext = applicationContext;
     }
 
     private <T> Reference getReferenceFromReferenceParam(ReferenceParam<T> referenceParam) {
         BindingParam bindingParam = referenceParam.getBindingParam();
-        Assert.notNull(bindingParam, "bindingParam shouldn't be null.");
-
         Reference reference = new ReferenceImpl(referenceParam.getUniqueId(),
-            referenceParam.getInterfaceType(), InterfaceMode.api, null);
-        BindingConverter bindingConverter = BindingFactoryContainer.getBindingConverterFactory()
-            .getBindingConverter(bindingParam.getBindingType());
-        if (bindingConverter == null) {
-            throw new ServiceRuntimeException("Can not found binding converter for binding type "
-                                              + bindingParam.getBindingType());
+            referenceParam.getInterfaceType(), InterfaceMode.api, referenceParam.isLocalFirst(),
+            referenceParam.isJvmService(), null);
+
+        if (bindingParam == null) {
+            // add JVM Binding Default
+            reference.addBinding(new JvmBinding());
+        } else {
+            BindingConverter bindingConverter = BindingFactoryContainer
+                .getBindingConverterFactory().getBindingConverter(bindingParam.getBindingType());
+            if (bindingConverter == null) {
+                throw new ServiceRuntimeException(
+                    "Can not found binding converter for binding type "
+                            + bindingParam.getBindingType());
+            }
+            BindingConverterContext bindingConverterContext = new BindingConverterContext();
+            bindingConverterContext.setInBinding(true);
+            bindingConverterContext.setAppName(sofaRuntimeContext.getAppName());
+            bindingConverterContext.setAppClassLoader(sofaRuntimeContext.getAppClassLoader());
+            Binding binding = bindingConverter.convert(bindingParam, bindingConverterContext);
+            reference.addBinding(binding);
         }
-        BindingConverterContext bindingConverterContext = new BindingConverterContext();
-        bindingConverterContext.setInBinding(true);
-        bindingConverterContext.setAppName(sofaRuntimeContext.getAppName());
-        bindingConverterContext.setAppClassLoader(sofaRuntimeContext.getAppClassLoader());
-        Binding binding = bindingConverter.convert(bindingParam, bindingConverterContext);
-        reference.addBinding(binding);
 
         return reference;
     }
@@ -74,7 +85,8 @@ public class ReferenceClientImpl implements ReferenceClient {
     @SuppressWarnings("unchecked")
     public <T> T reference(ReferenceParam<T> referenceParam) {
         T result = (T) ReferenceRegisterHelper.registerReference(
-            getReferenceFromReferenceParam(referenceParam), sofaRuntimeContext);
+            getReferenceFromReferenceParam(referenceParam),
+            applicationContext.getBean(SofaRuntimeProperties.class), sofaRuntimeContext);
 
         return result;
     }

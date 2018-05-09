@@ -17,27 +17,42 @@
 package com.alipay.sofa.runtime.spring.factory;
 
 import com.alipay.sofa.runtime.model.InterfaceMode;
+import com.alipay.sofa.runtime.service.binding.JvmBinding;
 import com.alipay.sofa.runtime.service.component.Reference;
 import com.alipay.sofa.runtime.service.component.impl.ReferenceImpl;
 import com.alipay.sofa.runtime.service.helper.ReferenceRegisterHelper;
 import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
+import com.alipay.sofa.runtime.spring.config.SofaRuntimeProperties;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.util.Assert;
 
 /**
  * @author xuanbei 18/3/1
  */
 public class ReferenceFactoryBean extends AbstractContractFactoryBean {
-    private Object proxy;
+    private Object    proxy;
+    /** local first or not */
+    protected boolean localFirst = true;
+    /** jvm service or not */
+    protected boolean jvmService;
     /** load balance **/
-    private String loadBalance;
+    private String    loadBalance;
 
     @Override
     protected void doAfterPropertiesSet() throws Exception {
         Reference reference = buildReference();
-        Assert.isTrue(bindings.size() == 1, "<sofa:reference/> should have one binding.");
+        Assert
+            .isTrue(bindings.size() <= 1,
+                "Found more than one binding in <sofa:reference/>, <sofa:reference/> can only have one binding.");
+
+        if (bindings.size() == 0) {
+            bindings.add(new JvmBinding());
+        }
 
         reference.addBinding(bindings.get(0));
-        proxy = ReferenceRegisterHelper.registerReference(reference, sofaRuntimeContext);
+        proxy = ReferenceRegisterHelper.registerReference(reference,
+            applicationContext.getBean(SofaRuntimeProperties.class), sofaRuntimeContext);
     }
 
     @Override
@@ -47,7 +62,8 @@ public class ReferenceFactoryBean extends AbstractContractFactoryBean {
     }
 
     protected Reference buildReference() {
-        return new ReferenceImpl(uniqueId, getInterfaceClass(), InterfaceMode.spring);
+        return new ReferenceImpl(uniqueId, getInterfaceClass(), InterfaceMode.spring, localFirst,
+            jvmService);
     }
 
     @Override
@@ -63,6 +79,14 @@ public class ReferenceFactoryBean extends AbstractContractFactoryBean {
     @Override
     protected boolean isInBinding() {
         return true;
+    }
+
+    public void setLocalFirst(boolean localFirst) {
+        this.localFirst = localFirst;
+    }
+
+    public void setJvmService(boolean jvmService) {
+        this.jvmService = jvmService;
     }
 
     public String getLoadBalance() {

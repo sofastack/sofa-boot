@@ -94,7 +94,7 @@ public abstract class SofaFrameworkInitializer {
         componentManager.registerComponentClient(ServiceClient.class, new ServiceClientImpl(
             sofaRuntimeManager.getSofaRuntimeContext()));
         componentManager.registerComponentClient(ReferenceClient.class, new ReferenceClientImpl(
-            sofaRuntimeManager.getSofaRuntimeContext()));
+            sofaRuntimeManager.getSofaRuntimeContext(), applicationContext));
 
         sofaFramework.registerSofaRuntimeManager(sofaRuntimeManager);
     }

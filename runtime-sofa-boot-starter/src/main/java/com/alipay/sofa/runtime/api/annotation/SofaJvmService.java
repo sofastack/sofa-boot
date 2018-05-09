@@ -26,7 +26,7 @@ import java.lang.annotation.Target;
  *
  * <pre>
  *
- * &#064;SofaService(uniqueId = &quot;aop&quot;)
+ * &#064;SofaJvmService(uniqueId = &quot;aop&quot;)
  * public class SampleServiceImpl implements SampleService {
  *
  *     &#064;Override
@@ -40,7 +40,7 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface SofaService {
+public @interface SofaJvmService {
 
     /**
      * The interface type of the SOFA service to be create. Default to the only interface of the annotated Spring bean

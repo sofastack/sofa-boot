@@ -37,10 +37,10 @@ public abstract class ServiceProxy implements MethodInterceptor {
             Thread.currentThread().setContextClassLoader(serviceClassLoader);
             return doInvoke(invocation);
         } catch (Throwable e) {
-            do_catch(invocation, e, startTime);
+            doCatch(invocation, e, startTime);
             throw e;
         } finally {
-            do_finally(invocation, startTime);
+            doFinally(invocation, startTime);
             Thread.currentThread().setContextClassLoader(oldClassLoader);
         }
     }
@@ -85,7 +85,7 @@ public abstract class ServiceProxy implements MethodInterceptor {
 
     protected abstract Object doInvoke(MethodInvocation invocation) throws Throwable;
 
-    protected abstract void do_catch(MethodInvocation invocation, Throwable e, long startTime);
+    protected abstract void doCatch(MethodInvocation invocation, Throwable e, long startTime);
 
-    protected abstract void do_finally(MethodInvocation invocation, long startTime);
+    protected abstract void doFinally(MethodInvocation invocation, long startTime);
 }

@@ -28,7 +28,7 @@ import java.lang.annotation.Target;
  *
  * public class ReferenceAnnotationSample {
  *
- *     &#064;SofaReference
+ *     &#064;SofaJvmReference
  *     private SampleService sampleService;
  * }
  * </pre>
@@ -37,7 +37,7 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface SofaReference {
+public @interface SofaJvmReference {
 
     /**
      * The type of the SOFA reference to be created. Default to the type of field annotated when not specified.
