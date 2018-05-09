@@ -45,7 +45,6 @@ import com.alipay.sofa.runtime.api.ServiceRuntimeException;
  * @author xuanbei 18/2/28
  */
 public interface Component {
-
     /**
      * register component
      */

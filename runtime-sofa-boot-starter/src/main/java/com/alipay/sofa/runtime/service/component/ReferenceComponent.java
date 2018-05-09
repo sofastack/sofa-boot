@@ -25,7 +25,6 @@ import com.alipay.sofa.runtime.model.InterfaceMode;
 import com.alipay.sofa.runtime.service.binding.JvmBinding;
 import com.alipay.sofa.runtime.service.component.impl.ServiceImpl;
 import com.alipay.sofa.runtime.service.helper.ReferenceRegisterHelper;
-import com.alipay.sofa.runtime.service.impl.BindingFactoryContainer;
 import com.alipay.sofa.runtime.spi.binding.Binding;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapter;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
@@ -47,7 +46,6 @@ import java.util.concurrent.CountDownLatch;
  * @author xuanbei 18/3/1
  */
 public class ReferenceComponent extends AbstractComponent {
-
     public static final ComponentType REFERENCE_COMPONENT_TYPE = new ComponentType("reference");
 
     private BindingAdapterFactory     bindingAdapterFactory;
@@ -56,6 +54,7 @@ public class ReferenceComponent extends AbstractComponent {
     private CountDownLatch            latch                    = new CountDownLatch(1);
 
     public ReferenceComponent(Reference reference, Implementation implementation,
+                              BindingAdapterFactory bindingAdapterFactory,
                               SofaRuntimeProperties sofaRuntimeProperties,
                               SofaRuntimeContext sofaRuntimeContext) {
         this.componentName = ComponentNameFactory.createComponentName(
@@ -67,7 +66,7 @@ public class ReferenceComponent extends AbstractComponent {
         this.implementation = implementation;
         this.sofaRuntimeProperties = sofaRuntimeProperties;
         this.sofaRuntimeContext = sofaRuntimeContext;
-        bindingAdapterFactory = BindingFactoryContainer.getBindingAdapterFactory();
+        this.bindingAdapterFactory = bindingAdapterFactory;
     }
 
     @Override
@@ -228,7 +227,7 @@ public class ReferenceComponent extends AbstractComponent {
                                               + reference + ".");
         }
         SofaLogger.info(" >>In Binding [{0}] Begins - {1}.", binding.getBindingType(), reference);
-        Object proxy = null;
+        Object proxy;
         try {
             proxy = bindingAdapter.inBinding(reference, binding, sofaRuntimeContext);
         } finally {
@@ -275,7 +274,7 @@ public class ReferenceComponent extends AbstractComponent {
             target);
         service.addBinding(new JvmBinding());
         ComponentInfo serviceComponent = new ServiceComponent(implementation, service,
-            sofaRuntimeContext);
+            bindingAdapterFactory, sofaRuntimeContext);
         sofaRuntimeContext.getComponentManager().register(serviceComponent);
     }
 }

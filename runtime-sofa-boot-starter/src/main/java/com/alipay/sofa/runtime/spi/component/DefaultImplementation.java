@@ -33,6 +33,10 @@ public class DefaultImplementation implements Implementation {
         this.name = name;
     }
 
+    public DefaultImplementation(Object target) {
+        this.target = target;
+    }
+
     @Override
     public String getName() {
         return name;

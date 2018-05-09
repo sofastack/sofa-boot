@@ -23,7 +23,6 @@ import com.alipay.sofa.runtime.api.client.ReferenceClient;
 import com.alipay.sofa.runtime.api.client.ServiceClient;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.spring.SofaRuntimeContextAware;
-import org.junit.Test;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;

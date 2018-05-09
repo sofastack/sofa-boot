@@ -28,22 +28,17 @@ import com.alipay.sofa.runtime.spi.log.SofaLogger;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author xuanbei 18/3/9
  */
 public class ComponentManagerImpl implements ComponentManager {
-
     /** container for all components */
     protected ConcurrentMap<ComponentName, ComponentInfo>                     registry;
     /** container for resolved components */
     protected ConcurrentMap<ComponentType, Map<ComponentName, ComponentInfo>> resolvedRegistry;
     /** client factory */
     protected ClientFactoryInternal                                           clientFactoryInternal;
-    /** allow publish or not */
-    private AtomicBoolean                                                     allowPublish = new AtomicBoolean(
-                                                                                               false);
 
     public ComponentManagerImpl(ClientFactoryInternal clientFactoryInternal) {
         this.registry = new ConcurrentHashMap(16);

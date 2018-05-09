@@ -19,7 +19,6 @@ package com.alipay.sofa.runtime.integration;
 import com.alipay.sofa.healthcheck.core.HealthChecker;
 import com.alipay.sofa.runtime.integration.base.AbstractTestBase;
 import com.alipay.sofa.runtime.integration.features.AwareTest;
-import com.alipay.sofa.runtime.spi.SofaFrameworkHolder;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import org.junit.Assert;
 import org.junit.Test;
@@ -32,7 +31,6 @@ import org.springframework.context.ApplicationContext;
  * @since 2.3.1
  */
 public class IntegrationTest extends AbstractTestBase {
-
     @Autowired
     private AwareTest awareTest;
 
@@ -54,8 +52,6 @@ public class IntegrationTest extends AbstractTestBase {
         Assert.assertTrue(sofaRuntimeContext.getAppName().equals("runtime-test"));
         Assert.assertTrue(sofaRuntimeContext.getClientFactory()
             .equals(awareTest.getClientFactory()));
-        Assert.assertTrue(sofaRuntimeContext.equals(SofaFrameworkHolder.getSofaFramework()
-            .getSofaRuntimeContext("runtime-test")));
 
     }
 

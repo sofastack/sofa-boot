@@ -27,15 +27,15 @@ import com.alipay.sofa.runtime.service.component.Reference;
 import com.alipay.sofa.runtime.service.component.ReferenceComponent;
 import com.alipay.sofa.runtime.service.component.impl.ReferenceImpl;
 import com.alipay.sofa.runtime.service.helper.ReferenceRegisterHelper;
-import com.alipay.sofa.runtime.service.impl.BindingFactoryContainer;
 import com.alipay.sofa.runtime.spi.binding.Binding;
+import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
+import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
 import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
 import com.alipay.sofa.runtime.spring.config.SofaRuntimeProperties;
-import org.springframework.context.ApplicationContext;
 
 import java.util.Collection;
 
@@ -45,15 +45,22 @@ import java.util.Collection;
  * @author xuanbei 18/3/1
  */
 public class ReferenceClientImpl implements ReferenceClient {
-    private SofaRuntimeContext sofaRuntimeContext;
-    private ApplicationContext applicationContext;
+    private SofaRuntimeContext      sofaRuntimeContext;
+    private BindingConverterFactory bindingConverterFactory;
+    private BindingAdapterFactory   bindingAdapterFactory;
+    private SofaRuntimeProperties   sofaRuntimeProperties;
 
     public ReferenceClientImpl(SofaRuntimeContext sofaRuntimeContext,
-                               ApplicationContext applicationContext) {
+                               BindingConverterFactory bindingConverterFactory,
+                               BindingAdapterFactory bindingAdapterFactory,
+                               SofaRuntimeProperties sofaRuntimeProperties) {
         this.sofaRuntimeContext = sofaRuntimeContext;
-        this.applicationContext = applicationContext;
+        this.bindingConverterFactory = bindingConverterFactory;
+        this.bindingAdapterFactory = bindingAdapterFactory;
+        this.sofaRuntimeProperties = sofaRuntimeProperties;
     }
 
+    @SuppressWarnings("unchecked")
     private <T> Reference getReferenceFromReferenceParam(ReferenceParam<T> referenceParam) {
         BindingParam bindingParam = referenceParam.getBindingParam();
         Reference reference = new ReferenceImpl(referenceParam.getUniqueId(),
@@ -64,8 +71,8 @@ public class ReferenceClientImpl implements ReferenceClient {
             // add JVM Binding Default
             reference.addBinding(new JvmBinding());
         } else {
-            BindingConverter bindingConverter = BindingFactoryContainer
-                .getBindingConverterFactory().getBindingConverter(bindingParam.getBindingType());
+            BindingConverter bindingConverter = bindingConverterFactory
+                .getBindingConverter(bindingParam.getBindingType());
             if (bindingConverter == null) {
                 throw new ServiceRuntimeException(
                     "Can not found binding converter for binding type "
@@ -84,11 +91,10 @@ public class ReferenceClientImpl implements ReferenceClient {
 
     @SuppressWarnings("unchecked")
     public <T> T reference(ReferenceParam<T> referenceParam) {
-        T result = (T) ReferenceRegisterHelper.registerReference(
-            getReferenceFromReferenceParam(referenceParam),
-            applicationContext.getBean(SofaRuntimeProperties.class), sofaRuntimeContext);
 
-        return result;
+        return (T) ReferenceRegisterHelper.registerReference(
+            getReferenceFromReferenceParam(referenceParam), bindingAdapterFactory,
+            sofaRuntimeProperties, sofaRuntimeContext);
     }
 
     @Override

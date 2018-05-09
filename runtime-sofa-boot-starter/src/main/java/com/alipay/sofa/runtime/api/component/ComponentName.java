@@ -75,10 +75,7 @@ public class ComponentName implements Serializable {
         if (obj == this) {
             return true;
         }
-        if (obj instanceof ComponentName) {
-            return rawName.equals(((ComponentName) obj).rawName);
-        }
-        return false;
+        return obj instanceof ComponentName && rawName.equals(((ComponentName) obj).rawName);
     }
 
     @Override

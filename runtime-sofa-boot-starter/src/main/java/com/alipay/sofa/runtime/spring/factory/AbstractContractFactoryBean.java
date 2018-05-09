@@ -16,8 +16,8 @@
  */
 package com.alipay.sofa.runtime.spring.factory;
 
-import com.alipay.sofa.runtime.service.impl.BindingFactoryContainer;
 import com.alipay.sofa.runtime.spi.binding.Binding;
+import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
@@ -60,14 +60,15 @@ public abstract class AbstractContractFactoryBean implements InitializingBean,
     /** spring context */
     protected ApplicationContext      applicationContext;
     /** bindings */
-    protected List<Binding>           bindings                = new ArrayList<>(2);
+    protected List<Binding>           bindings = new ArrayList<>(2);
     /** document encoding */
     protected String                  documentEncoding;
     /** repeat times */
     protected String                  repeatReferLimit;
     /** binding converter factory */
-    protected BindingConverterFactory bindingConverterFactory = BindingFactoryContainer
-                                                                  .getBindingConverterFactory();
+    protected BindingConverterFactory bindingConverterFactory;
+    /** binding adapter factory */
+    protected BindingAdapterFactory   bindingAdapterFactory;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -83,6 +84,10 @@ public abstract class AbstractContractFactoryBean implements InitializingBean,
             tempElements.add(node);
         }
         this.bindings = parseBindings(tempElements, applicationContext, isInBinding());
+        bindingConverterFactory = applicationContext.getBean("bindingConverterFactory",
+            BindingConverterFactory.class);
+        bindingAdapterFactory = applicationContext.getBean("bindingAdapterFactory",
+            BindingAdapterFactory.class);
         doAfterPropertiesSet();
     }
 

@@ -21,6 +21,7 @@ import com.alipay.sofa.runtime.service.binding.JvmBinding;
 import com.alipay.sofa.runtime.service.component.Reference;
 import com.alipay.sofa.runtime.service.component.ReferenceComponent;
 import com.alipay.sofa.runtime.spi.binding.Binding;
+import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.ComponentManager;
 import com.alipay.sofa.runtime.spi.component.DefaultImplementation;
@@ -36,6 +37,7 @@ import java.util.Collection;
  */
 public class ReferenceRegisterHelper {
     public static Object registerReference(Reference reference,
+                                           BindingAdapterFactory bindingAdapterFactory,
                                            SofaRuntimeProperties sofaRuntimeProperties,
                                            SofaRuntimeContext sofaRuntimeContext) {
         Binding binding = (Binding) reference.getBindings().toArray()[0];
@@ -52,7 +54,8 @@ public class ReferenceRegisterHelper {
 
         ComponentManager componentManager = sofaRuntimeContext.getComponentManager();
         ReferenceComponent referenceComponent = new ReferenceComponent(reference,
-            new DefaultImplementation(), sofaRuntimeProperties, sofaRuntimeContext);
+            new DefaultImplementation(), bindingAdapterFactory, sofaRuntimeProperties,
+            sofaRuntimeContext);
 
         if (componentManager.isRegistered(referenceComponent.getName())) {
             return componentManager.getComponentInfo(referenceComponent.getName())

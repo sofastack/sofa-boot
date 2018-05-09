@@ -39,7 +39,6 @@ import java.lang.reflect.Proxy;
  * @version $Id: DefaultBindingAdapter.java,v 0.1 2009-10-12 17:14:41 xi.hux Exp $
  */
 public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
-
     public JvmBindingAdapter() {
     }
 
@@ -93,8 +92,8 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
      *
      * @return proxy object
      */
-    protected Object createServiceProxy(Contract contract, JvmBinding binding,
-                                        SofaRuntimeContext sofaRuntimeContext) {
+    private Object createServiceProxy(Contract contract, JvmBinding binding,
+                                      SofaRuntimeContext sofaRuntimeContext) {
 
         ClassLoader newClassLoader;
         ClassLoader appClassLoader = sofaRuntimeContext.getAppClassLoader();
@@ -183,8 +182,7 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
             ClassLoader tcl = Thread.currentThread().getContextClassLoader();
             try {
                 pushThreadContextClassLoader(sofaRuntimeContext.getAppClassLoader());
-                final Object finalTargetObj = targetObj;
-                retVal = invocation.getMethod().invoke(finalTargetObj, invocation.getArguments());
+                retVal = invocation.getMethod().invoke(targetObj, invocation.getArguments());
             } catch (InvocationTargetException ex) {
                 throw ex.getTargetException();
             } finally {

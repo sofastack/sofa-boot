@@ -24,7 +24,6 @@ import com.alipay.sofa.runtime.api.ServiceValidationException;
  * @author xuanbei 18/2/28
  */
 public interface Implementation {
-
     /**
      * get name
      *

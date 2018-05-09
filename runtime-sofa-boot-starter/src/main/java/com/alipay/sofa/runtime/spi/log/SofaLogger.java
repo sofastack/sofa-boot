@@ -47,7 +47,7 @@ public class SofaLogger {
         DEFAULT_LOG.error(getMessage(format, args), t);
     }
 
-    public static String getMessage(String format, Object... args) {
+    private static String getMessage(String format, Object... args) {
         return MessageFormat.format(format, args);
     }
 

@@ -21,10 +21,9 @@ import com.alipay.sofa.runtime.service.binding.JvmBinding;
 import com.alipay.sofa.runtime.service.component.Reference;
 import com.alipay.sofa.runtime.service.component.impl.ReferenceImpl;
 import com.alipay.sofa.runtime.service.helper.ReferenceRegisterHelper;
+import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
 import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
 import com.alipay.sofa.runtime.spring.config.SofaRuntimeProperties;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.util.Assert;
 
 /**
@@ -52,7 +51,9 @@ public class ReferenceFactoryBean extends AbstractContractFactoryBean {
 
         reference.addBinding(bindings.get(0));
         proxy = ReferenceRegisterHelper.registerReference(reference,
-            applicationContext.getBean(SofaRuntimeProperties.class), sofaRuntimeContext);
+            applicationContext.getBean("bindingAdapterFactory", BindingAdapterFactory.class),
+            applicationContext.getBean("sofaRuntimeProperties", SofaRuntimeProperties.class),
+            sofaRuntimeContext);
     }
 
     @Override

@@ -26,7 +26,6 @@ import java.util.Set;
  * @author xuanbei 18/2/28
  */
 public interface BindingAdapterFactory {
-
     /**
      * whether exists binding adapter for given type
      *

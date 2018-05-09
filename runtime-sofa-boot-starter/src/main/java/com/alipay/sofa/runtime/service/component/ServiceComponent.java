@@ -20,7 +20,6 @@ import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.api.component.Property;
 import com.alipay.sofa.runtime.model.ComponentType;
-import com.alipay.sofa.runtime.service.impl.BindingFactoryContainer;
 import com.alipay.sofa.runtime.spi.binding.Binding;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapter;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
@@ -44,7 +43,6 @@ import java.util.concurrent.TimeUnit;
  * @author xuanbei 18/3/9
  */
 public class ServiceComponent extends AbstractComponent {
-
     public static final String        UNREGISTER_DELAY_MILLISECONDS = "UNREGISTER_DELAY_MILLISECONDS";
     public static final ComponentType SERVICE_COMPONENT_TYPE        = new ComponentType("service");
 
@@ -53,12 +51,13 @@ public class ServiceComponent extends AbstractComponent {
     private Map<String, Property>     properties                    = new ConcurrentHashMap<>();
 
     public ServiceComponent(Implementation implementation, Service service,
+                            BindingAdapterFactory bindingAdapterFactory,
                             SofaRuntimeContext sofaRuntimeContext) {
         this.componentName = ComponentNameFactory.createComponentName(SERVICE_COMPONENT_TYPE,
             service.getInterfaceType(), service.getUniqueId());
         this.implementation = implementation;
         this.service = service;
-        this.bindingAdapterFactory = BindingFactoryContainer.getBindingAdapterFactory();
+        this.bindingAdapterFactory = bindingAdapterFactory;
         this.sofaRuntimeContext = sofaRuntimeContext;
     }
 

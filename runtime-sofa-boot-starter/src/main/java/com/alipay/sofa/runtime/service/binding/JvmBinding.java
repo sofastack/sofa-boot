@@ -28,7 +28,6 @@ import org.w3c.dom.Element;
  * @version $Id: JVMBinding.java,v 0.1 2009-9-8 22:03:49 xi.hux Exp $
  */
 public class JvmBinding extends AbstractBinding {
-
     /**
      * binding type: JVM
      */

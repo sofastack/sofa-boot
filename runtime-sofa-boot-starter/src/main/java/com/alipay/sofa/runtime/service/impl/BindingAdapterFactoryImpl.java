@@ -28,7 +28,6 @@ import java.util.Set;
  * @author xuanbei 18/2/28
  */
 public class BindingAdapterFactoryImpl implements BindingAdapterFactory {
-
     private Map<BindingType, BindingAdapter> bindingTypeBindingAdapterMap = new HashMap<>();
 
     @Override

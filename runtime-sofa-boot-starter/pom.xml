@@ -114,10 +114,6 @@
                                 </packages>
 
                                 <classes>
-                                    <class>com.alipay.sofa.runtime.spi.SofaFramework</class>
-                                    <class>com.alipay.sofa.runtime.spi.SofaFrameworkHolder</class>
-                                    <class>com.alipay.sofa.runtime.SofaFrameworkImpl</class>
-                                    <class>com.alipay.sofa.runtime.SofaFrameworkInternal</class>
                                     <class>com.alipay.sofa.runtime.service.component.AbstractContract</class>
                                     <class>com.alipay.sofa.runtime.service.component.Reference</class>
                                     <class>com.alipay.sofa.runtime.service.component.Service</class>

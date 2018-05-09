@@ -17,12 +17,10 @@
 package com.alipay.sofa.runtime.spring.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 
 /**
  * @author xuanbei 18/5/9
  */
-@Component
 @ConfigurationProperties(SofaRuntimeProperties.PREFIX)
 public class SofaRuntimeProperties {
     static final String PREFIX                      = "com.alipay.sofa.runtime";

@@ -65,16 +65,14 @@ public abstract class ServiceProxy implements MethodInterceptor {
 
         long endTime = System.currentTimeMillis();
 
-        StringBuffer sb = new StringBuffer("SOFA-Reference" + appStart + "(");
+        StringBuilder sb = new StringBuilder("SOFA-Reference" + appStart + "(");
 
-        sb.append(invocation.getMethod().getName());
-        sb.append(",");
+        sb.append(invocation.getMethod().getName()).append(",");
         for (Object o : invocation.getArguments()) {
             sb.append(o);
             sb.append(",");
         }
-        sb.append((endTime - startTime) + "ms");
-        sb.append(")");
+        sb.append((endTime - startTime)).append("ms").append(")");
 
         return sb.toString();
     }

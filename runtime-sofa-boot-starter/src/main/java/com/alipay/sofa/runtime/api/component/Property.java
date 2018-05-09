@@ -23,11 +23,11 @@ import java.util.List;
  */
 public class Property {
 
-    public String name;
+    private String name;
 
-    public String type = "string";
+    private String type = "string";
 
-    public Object value;
+    private Object value;
 
     public void setStringValue(String value) {
         this.value = value;

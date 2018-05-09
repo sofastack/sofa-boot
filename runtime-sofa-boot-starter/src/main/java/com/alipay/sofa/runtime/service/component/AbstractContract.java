@@ -32,7 +32,6 @@ import java.util.Set;
  * @author xuanbei 18/3/1
  */
 public abstract class AbstractContract implements Contract {
-
     /** associated binding */
     protected Set<Binding>        bindings      = new HashSet<>(2);
     /** unique id */
