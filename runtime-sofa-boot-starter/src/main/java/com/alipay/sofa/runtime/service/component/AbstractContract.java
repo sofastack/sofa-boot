@@ -40,7 +40,7 @@ public abstract class AbstractContract implements Contract {
     protected Class<?>            interfaceType;
     /** interface mode */
     protected InterfaceMode       interfaceMode = InterfaceMode.spring;
-    /** properties of constract */
+    /** config of constract */
     protected Map<String, String> property      = new HashMap<>();
 
     protected AbstractContract(String uniqueId, Class<?> interfaceType) {

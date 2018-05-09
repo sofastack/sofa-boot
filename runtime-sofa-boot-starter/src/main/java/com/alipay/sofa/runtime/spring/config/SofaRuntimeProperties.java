@@ -23,7 +23,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @ConfigurationProperties(SofaRuntimeProperties.PREFIX)
 public class SofaRuntimeProperties {
-    static final String PREFIX                      = "com.alipay.sofa.runtime";
+    static final String PREFIX                      = "com.alipay.sofa.boot";
 
     private boolean     skipJvmReferenceHealthCheck = false;
     private boolean     disableLocalFirst           = false;
