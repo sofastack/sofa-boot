@@ -19,7 +19,7 @@
   -->
 
 <xsd:schema xmlns="http://sofastack.io/schema/sofaboot"
-            xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:beans="http://www.springframework.org/schema/beans"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
             targetNamespace="http://sofastack.io/schema/sofaboot"
             elementFormDefault="qualified" attributeFormDefault="unqualified">
 

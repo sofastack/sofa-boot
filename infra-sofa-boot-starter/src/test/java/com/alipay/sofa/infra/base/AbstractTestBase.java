@@ -19,7 +19,6 @@ package com.alipay.sofa.infra.base;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.embedded.EmbeddedWebApplicationContext;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -27,41 +26,33 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
  * 参考文档: http://docs.spring.io/spring-boot/docs/1.4.2.RELEASE/reference/htmlsingle/#boot-features-testing
- *
+ * <p>
  * mock : https://docs.spring.io/spring-boot/docs/1.4.2.RELEASE/reference/htmlsingle/#boot-features-testing-spring-boot-applications-mocking-beans
- *
+ * <p>
  * OutputCapture : https://docs.spring.io/spring-boot/docs/1.4.2.RELEASE/reference/htmlsingle/#boot-features-output-capture-test-utility
- *
+ * <p>
  * <p>
  * <p>
  * <p/>
  * Created by yangguanchao on 16/11/18.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = com.alipay.sofa.infra.base.SofaBootWebSpringBootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(classes = SofaBootWebSpringBootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public abstract class AbstractTestBase {
-
-    public static final String           SOFA_REST_PORT = "8341";
-
-    @Autowired
-    public EmbeddedWebApplicationContext server;
 
     /**
      * 8080
      */
     @LocalServerPort
-    public int                           definedPort;
+    private int             definedPort;
 
     @Autowired
-    public TestRestTemplate              testRestTemplate;
+    public TestRestTemplate testRestTemplate;
 
-    public String                        urlHttpPrefix;
-
-    public String                        sofaRestHttpPrefix;
+    protected String        urlHttpPrefix;
 
     @Before
-    public void setUp() throws Exception {
-        sofaRestHttpPrefix = "http://localhost:" + SOFA_REST_PORT;
+    public void setUp() {
         urlHttpPrefix = "http://localhost:" + definedPort;
     }
 

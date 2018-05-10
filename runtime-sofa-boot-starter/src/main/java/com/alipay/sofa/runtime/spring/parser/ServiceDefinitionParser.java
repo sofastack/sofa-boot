@@ -17,7 +17,6 @@
 package com.alipay.sofa.runtime.spring.parser;
 
 import com.alipay.sofa.runtime.spring.factory.ServiceFactoryBean;
-import com.alipay.sofa.runtime.spring.parser.AbstractContractDefinitionParser;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;

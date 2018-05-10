@@ -27,7 +27,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class EndPointConfig {
-    private static final String READINESS_CHECK_ENDPOINT_NAME = "health/readiness";
+    static final String READINESS_CHECK_ENDPOINT_NAME = "health_readiness";
 
     @Bean
     public SofaBootReadinessCheckEndpoint readinessCheck() {

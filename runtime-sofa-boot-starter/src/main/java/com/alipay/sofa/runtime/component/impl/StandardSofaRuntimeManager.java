@@ -18,7 +18,9 @@ package com.alipay.sofa.runtime.component.impl;
 
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
-import com.alipay.sofa.runtime.spi.component.*;
+import com.alipay.sofa.runtime.spi.component.ComponentManager;
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 
 /**
  * Default Sofa Runtime Manager
