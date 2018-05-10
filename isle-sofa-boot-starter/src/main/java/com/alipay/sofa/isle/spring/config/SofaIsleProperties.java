@@ -17,7 +17,6 @@
 package com.alipay.sofa.isle.spring.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 
 import static com.alipay.sofa.isle.spring.config.SofaIsleProperties.PREFIX;
 
@@ -26,7 +25,6 @@ import static com.alipay.sofa.isle.spring.config.SofaIsleProperties.PREFIX;
  *
  * @author xuanbei 18/5/6
  */
-@Component
 @ConfigurationProperties(prefix = PREFIX)
 public class SofaIsleProperties {
     static final String PREFIX                        = "com.alipay.sofa.boot";

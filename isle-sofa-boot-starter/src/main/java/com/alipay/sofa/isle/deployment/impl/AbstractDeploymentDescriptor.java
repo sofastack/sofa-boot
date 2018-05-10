@@ -34,7 +34,7 @@ public abstract class AbstractDeploymentDescriptor implements DeploymentDescript
     private final Properties                        properties;
     private final DeploymentDescriptorConfiguration deploymentDescriptorConfiguration;
     private final ClassLoader                       classLoader;
-    private final List<String>                      installedXmls = new ArrayList<>();
+    private final List<String>                      installedSpringXml = new ArrayList<>();
     private ApplicationContext                      applicationContext;
     private long                                    startTime;
     private long                                    elapsedTime;
@@ -145,7 +145,7 @@ public abstract class AbstractDeploymentDescriptor implements DeploymentDescript
 
     @Override
     public void addInstalledSpringXml(String fileName) {
-        installedXmls.add(fileName);
+        installedSpringXml.add(fileName);
     }
 
     @Override
@@ -182,8 +182,8 @@ public abstract class AbstractDeploymentDescriptor implements DeploymentDescript
 
     @Override
     public List<String> getInstalledSpringXml() {
-        Collections.sort(installedXmls);
-        return installedXmls;
+        Collections.sort(installedSpringXml);
+        return installedSpringXml;
     }
 
     private List<String> getFormattedModuleInfo(String key) {

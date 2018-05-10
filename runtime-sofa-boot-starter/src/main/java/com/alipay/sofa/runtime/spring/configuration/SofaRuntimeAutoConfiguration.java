@@ -51,7 +51,6 @@ import java.util.Set;
  * @author xuanbei 18/3/17
  */
 @Configuration
-@ComponentScan(value = { "com.alipay.sofa.runtime.spring" })
 public class SofaRuntimeAutoConfiguration {
     @Bean
     public SofaRuntimeProperties sofaRuntimeProperties() {

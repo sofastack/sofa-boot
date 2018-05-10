@@ -25,14 +25,12 @@ import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.Status;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.stereotype.Component;
 
 /**
  * SofaIsle Module health checker
  *
  * @author xuanbei 18/5/6
  */
-@Component
 public class SofaIsleModuleHealthChecker extends DefaultHealthChecker implements
                                                                      ApplicationContextAware {
     private ApplicationContext applicationContext;

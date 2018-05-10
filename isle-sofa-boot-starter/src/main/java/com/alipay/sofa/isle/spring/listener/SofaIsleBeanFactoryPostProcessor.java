@@ -23,7 +23,6 @@ import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.annotation.ConfigurationClassPostProcessor;
-import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +32,6 @@ import java.util.Map;
  *
  * @author xuanbei 18/3/26
  */
-@Component
 public class SofaIsleBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
     /** spring will add automatically  **/
     private final String[] whiteNameList = new String[] {

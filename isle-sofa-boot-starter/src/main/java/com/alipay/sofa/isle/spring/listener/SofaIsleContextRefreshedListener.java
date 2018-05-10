@@ -27,14 +27,12 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.core.Ordered;
 import org.springframework.core.PriorityOrdered;
-import org.springframework.stereotype.Component;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author xuanbei 18/3/12
  */
-@Component
 public class SofaIsleContextRefreshedListener implements PriorityOrdered,
                                              ApplicationListener<ContextRefreshedEvent> {
     private static final Logger        LOGGER = SofaIsleLoggerFactory

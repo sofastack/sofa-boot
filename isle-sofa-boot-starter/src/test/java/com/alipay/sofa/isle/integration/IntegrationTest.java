@@ -18,11 +18,13 @@ package com.alipay.sofa.isle.integration;
 
 import com.alipay.sofa.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.isle.constants.SofaIsleFrameworkConstants;
+import com.alipay.sofa.isle.spring.config.SofaIsleProperties;
 import com.alipay.sofa.isle.util.ClassPathUtil;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -38,37 +40,46 @@ import static org.junit.Assert.assertTrue;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = SofaBootTestApplication.class)
-public abstract class IntegrationTest implements ApplicationContextAware {
+public class IntegrationTest implements ApplicationContextAware {
     private ApplicationContext applicationContext;
+
+    @Autowired
+    private SofaIsleProperties sofaIsleProperties;
 
     @BeforeClass
     public static void before() throws Exception {
         // test JarDeploymentDescriptor, add jar file at runtime
-        ClassPathUtil.addClassPathAtRuntime("service-0.1.0.jar");
-        ClassPathUtil.addClassPathAtRuntime("require-module-0.1.0.jar");
+        ClassPathUtil.addClassPathAtRuntime("dev-module-0.1.0.jar");
+        ClassPathUtil.addClassPathAtRuntime("test-module-0.1.0.jar");
+
+        // add argument in System properties
+        System.setProperty("com.alipay.sofa.boot.moduleStartUpParallel", "true");
     }
 
     @Test
     public void test() {
+        // test sofaIsleProperties
+        assertEquals(sofaIsleProperties.getActiveProfiles(), "dev");
+        assertEquals(sofaIsleProperties.isModuleStartUpParallel(), true);
+        assertEquals(sofaIsleProperties.isAllowBeanDefinitionOverriding(), true);
+        assertEquals(sofaIsleProperties.getBeanLoadCost(), 10);
+
         ApplicationRuntimeModel applicationRuntimeModel = (ApplicationRuntimeModel) applicationContext
             .getBean(SofaIsleFrameworkConstants.APPLICATION);
 
         // contains three Deployments
-        assertEquals(3, applicationRuntimeModel.getAllDeployments().size());
-        assertEquals(3, applicationRuntimeModel.getInstalled().size());
+        assertEquals(2, applicationRuntimeModel.getAllDeployments().size());
+        assertEquals(2, applicationRuntimeModel.getInstalled().size());
         assertEquals(0, applicationRuntimeModel.getFailed().size());
-        assertEquals(0, applicationRuntimeModel.getAllInactiveDeployments().size());
+        assertEquals(1, applicationRuntimeModel.getAllInactiveDeployments().size());
 
         // check module name
-        assertTrue(Arrays.asList("com.alipay.sofa.isle.sample", "com.alipay.sofa.service",
-            "com.alipay.sofa.require.module").contains(
-            applicationRuntimeModel.getAllDeployments().get(0).getModuleName()));
-        assertTrue(Arrays.asList("com.alipay.sofa.isle.sample", "com.alipay.sofa.service",
-            "com.alipay.sofa.require.module").contains(
-            applicationRuntimeModel.getAllDeployments().get(1).getModuleName()));
-        assertTrue(Arrays.asList("com.alipay.sofa.isle.sample", "com.alipay.sofa.service",
-            "com.alipay.sofa.require.module").contains(
-            applicationRuntimeModel.getAllDeployments().get(2).getModuleName()));
+        assertTrue(Arrays.asList("com.alipay.sofa.isle.sample", "com.alipay.sofa.dev").contains(
+            applicationRuntimeModel.getInstalled().get(0).getModuleName()));
+        assertTrue(Arrays.asList("com.alipay.sofa.isle.sample", "com.alipay.sofa.dev").contains(
+            applicationRuntimeModel.getInstalled().get(1).getModuleName()));
+        assertEquals("com.alipay.sofa.test", applicationRuntimeModel.getAllInactiveDeployments()
+            .get(0).getModuleName());
     }
 
     @Override

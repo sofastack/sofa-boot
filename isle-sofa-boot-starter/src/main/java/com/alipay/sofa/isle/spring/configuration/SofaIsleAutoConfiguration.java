@@ -16,13 +16,35 @@
  */
 package com.alipay.sofa.isle.spring.configuration;
 
-import org.springframework.context.annotation.ComponentScan;
+import com.alipay.sofa.isle.spring.config.SofaIsleProperties;
+import com.alipay.sofa.isle.spring.health.SofaIsleModuleHealthChecker;
+import com.alipay.sofa.isle.spring.listener.SofaIsleBeanFactoryPostProcessor;
+import com.alipay.sofa.isle.spring.listener.SofaIsleContextRefreshedListener;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
  * @author xuanbei 18/3/12
  */
 @Configuration
-@ComponentScan(value = { "com.alipay.sofa.isle.spring" })
 public class SofaIsleAutoConfiguration {
+    @Bean
+    public SofaIsleProperties sofaIsleProperties() {
+        return new SofaIsleProperties();
+    }
+
+    @Bean
+    public SofaIsleModuleHealthChecker sofaIsleModuleHealthChecker() {
+        return new SofaIsleModuleHealthChecker();
+    }
+
+    @Bean
+    public SofaIsleBeanFactoryPostProcessor sofaIsleBeanFactoryPostProcessor() {
+        return new SofaIsleBeanFactoryPostProcessor();
+    }
+
+    @Bean
+    public SofaIsleContextRefreshedListener sofaIsleContextRefreshedListener() {
+        return new SofaIsleContextRefreshedListener();
+    }
 }
