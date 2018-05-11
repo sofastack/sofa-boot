@@ -34,7 +34,7 @@ public class HealthCheckConfiguration {
                                                 .getLogger(HealthCheckConfiguration.class
                                                     .getCanonicalName());
 
-    //Used to store the read config in a configuration file.
+    //Used to store the read properties in a configuration file.
     private static Properties   properties  = new Properties();
 
     private static Environment  environment = null;
@@ -67,21 +67,22 @@ public class HealthCheckConfiguration {
         InputStream inputStream = null;
         try {
             inputStream = classLoader != null ? classLoader
-                .getResourceAsStream("META-INF/application.config") : ClassLoader
-                .getSystemResourceAsStream("META-INF/application.config");
+                .getResourceAsStream("META-INF/application.properties") : ClassLoader
+                .getSystemResourceAsStream("META-INF/application.properties");
             if (inputStream != null) {
                 properties.load(inputStream);
                 inputStream.close();
             }
         } catch (Exception e) {
             logger
-                .error("the default config of application.config does not exist in fisrt level of the resource path ");
+                .error("the default config of application.properties does not exist in fisrt level of the resource path ");
         } finally {
             if (inputStream != null) {
                 try {
                     inputStream.close();
                 } catch (IOException e) {
-                    logger.error("the inputStream of read the application.config close exception");
+                    logger
+                        .error("the inputStream of read the application.properties close exception");
 
                 }
             }
@@ -97,7 +98,7 @@ public class HealthCheckConfiguration {
     }
 
     /**
-     * Reads the value of the specified key from the system config and configuration files.
+     * Reads the value of the specified key from the system properties and configuration files.
      * If this value exists in the system property, the value of the system attribute is preferred.
      * I will try to read the value in the key naming mode of XXX. XXX. If I do not try xxx_xxx_xxx, I will read it.
      * The mapping of the two naming methods is defined {@link HealthCheckConfigurationMapping}

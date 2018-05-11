@@ -19,11 +19,10 @@ package com.alipay.sofa.isle.loader;
 import com.alipay.sofa.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.isle.constants.SofaIsleFrameworkConstants;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
-import com.alipay.sofa.isle.log.SofaIsleLoggerFactory;
+import com.alipay.sofa.isle.spring.config.SofaIsleProperties;
 import com.alipay.sofa.isle.spring.context.SofaIsleApplicationContext;
 import com.alipay.sofa.isle.spring.factory.BeanLoadCostBeanFactory;
-import com.alipay.sofa.isle.spring.config.SofaIsleProperties;
-import org.slf4j.Logger;
+import com.alipay.sofa.runtime.spi.log.SofaLogger;
 import org.springframework.beans.CachedIntrospectionResults;
 import org.springframework.beans.PropertyEditorRegistrar;
 import org.springframework.beans.PropertyEditorRegistry;
@@ -49,8 +48,6 @@ import java.util.Map;
  * @date 2011-7-26
  */
 public class DynamicSpringContextLoader implements SpringContextLoader {
-    private static final Logger                  LOGGER = SofaIsleLoggerFactory
-                                                            .getLogger(DynamicSpringContextLoader.class);
     private final ConfigurableApplicationContext rootApplicationContext;
 
     public DynamicSpringContextLoader(ApplicationContext applicationContext) {
@@ -60,16 +57,17 @@ public class DynamicSpringContextLoader implements SpringContextLoader {
     @Override
     public void loadSpringContext(DeploymentDescriptor deployment,
                                   ApplicationRuntimeModel application) throws Exception {
-        BeanLoadCostBeanFactory beanFactory = new BeanLoadCostBeanFactory(rootApplicationContext
-            .getBean(SofaIsleProperties.class).getBeanLoadCost());
+        SofaIsleProperties sofaIsleProperties = rootApplicationContext.getBean(
+            "sofaIsleProperties", SofaIsleProperties.class);
+        BeanLoadCostBeanFactory beanFactory = new BeanLoadCostBeanFactory(
+            sofaIsleProperties.getBeanLoadCost());
         beanFactory.setParameterNameDiscoverer(new LocalVariableTableParameterNameDiscoverer());
         beanFactory
             .setAutowireCandidateResolver(new QualifierAnnotationAutowireCandidateResolver());
 
-        SofaIsleApplicationContext ctx = new SofaIsleApplicationContext(beanFactory);
-        // set profile
-        String sofaIsleActiveProfiles = rootApplicationContext.getBean(SofaIsleProperties.class)
-            .getActiveProfiles();
+        GenericApplicationContext ctx = sofaIsleProperties.isPublishEventToParent() ? new GenericApplicationContext(
+            beanFactory) : new SofaIsleApplicationContext(beanFactory);
+        String sofaIsleActiveProfiles = sofaIsleProperties.getActiveProfiles();
         if (StringUtils.hasText(sofaIsleActiveProfiles)) {
             String[] activeProfiles = sofaIsleActiveProfiles
                 .split(SofaIsleFrameworkConstants.PROFILE_SPLITTER);
@@ -134,8 +132,8 @@ public class DynamicSpringContextLoader implements SpringContextLoader {
                     parentSpringContext = (ConfigurableApplicationContext) parent
                         .getApplicationContext();
                     if (parentSpringContext == null) {
-                        LOGGER.warn("Module [" + deployment.getModuleName() + "]'s Spring-Parent ["
-                                    + springParent + "] is Null!");
+                        SofaLogger.warn("Module [{0}]'s Spring-Parent [{1}] is Null!",
+                            deployment.getModuleName(), springParent);
                     }
                 }
             }

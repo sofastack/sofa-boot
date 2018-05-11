@@ -26,7 +26,7 @@ public class SofaRuntimeProperties {
     static final String PREFIX                      = "com.alipay.sofa.boot";
 
     private boolean     skipJvmReferenceHealthCheck = false;
-    private boolean     disableLocalFirst           = false;
+    private boolean     disableJvmFirst             = false;
 
     public boolean isSkipJvmReferenceHealthCheck() {
         return skipJvmReferenceHealthCheck;
@@ -36,11 +36,11 @@ public class SofaRuntimeProperties {
         this.skipJvmReferenceHealthCheck = skipJvmReferenceHealthCheck;
     }
 
-    public boolean isDisableLocalFirst() {
-        return disableLocalFirst;
+    public boolean isDisableJvmFirst() {
+        return disableJvmFirst;
     }
 
-    public void setDisableLocalFirst(boolean disableLocalFirst) {
-        this.disableLocalFirst = disableLocalFirst;
+    public void setDisableJvmFirst(boolean disableJvmFirst) {
+        this.disableJvmFirst = disableJvmFirst;
     }
 }

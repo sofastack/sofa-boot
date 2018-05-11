@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.runtime.service.helper;
 
-import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.service.binding.JvmBinding;
 import com.alipay.sofa.runtime.service.component.Reference;
 import com.alipay.sofa.runtime.service.component.ReferenceComponent;
@@ -42,13 +41,8 @@ public class ReferenceRegisterHelper {
                                            SofaRuntimeContext sofaRuntimeContext) {
         Binding binding = (Binding) reference.getBindings().toArray()[0];
 
-        if (reference.jvmService() && binding.getBindingType().equals(JvmBinding.JVM_BINDING_TYPE)) {
-            throw new ServiceRuntimeException(
-                "jvm-service=\"true\" can not be used with JVM binding.");
-        }
-
         if (!binding.getBindingType().equals(JvmBinding.JVM_BINDING_TYPE)
-            && sofaRuntimeProperties.isDisableLocalFirst() ? false : reference.isLocalFirst()) {
+            && (sofaRuntimeProperties.isDisableJvmFirst() ? false : reference.isJvmFirst())) {
             reference.addBinding(new JvmBinding());
         }
 

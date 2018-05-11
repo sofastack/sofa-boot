@@ -20,10 +20,6 @@ package com.alipay.sofa.runtime.spi.health;
  * @author xuanbei 18/2/28
  */
 public class HealthResult {
-    public HealthResult() {
-
-    }
-
     public HealthResult(String healthName) {
         this.healthName = healthName;
     }
@@ -44,10 +40,6 @@ public class HealthResult {
 
     public void setHealthy(boolean isHealthy) {
         this.isHealthy = isHealthy;
-    }
-
-    public void setHealthName(String healthName) {
-        this.healthName = healthName;
     }
 
     public String getHealthReport() {

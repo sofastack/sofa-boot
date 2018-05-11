@@ -27,19 +27,6 @@ public class SofaRuntimeLoggerFactory {
      */
     public static final String SOFA_RUNTIME_LOG_SPACE = "com.alipay.sofa.runtime";
 
-    /***
-     * get Logger Object
-     *
-     * @param clazz
-     * @return Logger Object
-     */
-    public static org.slf4j.Logger getLogger(Class<?> clazz) {
-        if (clazz == null) {
-            return null;
-        }
-        return getLogger(clazz.getCanonicalName());
-    }
-
     /**
      * get Logger Object
      *

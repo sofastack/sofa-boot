@@ -14,37 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime.client.impl;
+package com.alipay.sofa.runtime.integration.features;
 
-import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
-
-import java.util.Collection;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import com.alipay.sofa.runtime.api.annotation.SofaService;
+import com.alipay.sofa.runtime.beans.service.SampleService;
+import org.springframework.stereotype.Component;
 
 /**
- * @author xuanbei 18/3/9
+ * @author xuanbei 18/5/10
  */
-public class ClientFactoryImpl implements ClientFactoryInternal {
-
-    private Map<Class<?>, Object> clients = new ConcurrentHashMap<>(8);
-
+@Component
+@SofaService(uniqueId = "annotation")
+public class SampleServiceAnnotationImplWithUniqueId implements SampleService {
     @Override
-    public void registerClient(Class<?> clientType, Object clientInstance) {
-        if (clients.containsKey(clientType)) {
-            return;
-        }
-
-        clients.put(clientType, clientInstance);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T> T getClient(Class<T> clazz) {
-        return (T) clients.get(clazz);
-    }
-
-    public Collection<Class<?>> getAllClientTypes() {
-        return clients.keySet();
+    public String service() {
+        return "SampleServiceAnnotationImplWithUniqueId";
     }
 }

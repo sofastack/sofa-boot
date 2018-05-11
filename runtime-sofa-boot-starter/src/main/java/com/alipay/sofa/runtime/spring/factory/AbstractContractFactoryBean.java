@@ -16,6 +16,8 @@
  */
 package com.alipay.sofa.runtime.spring.factory;
 
+import com.alipay.sofa.runtime.api.ServiceRuntimeException;
+import com.alipay.sofa.runtime.service.binding.JvmBinding;
 import com.alipay.sofa.runtime.spi.binding.Binding;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
@@ -83,11 +85,11 @@ public abstract class AbstractContractFactoryBean implements InitializingBean,
                 .getDocumentElement();
             tempElements.add(node);
         }
-        this.bindings = parseBindings(tempElements, applicationContext, isInBinding());
         bindingConverterFactory = applicationContext.getBean("bindingConverterFactory",
             BindingConverterFactory.class);
         bindingAdapterFactory = applicationContext.getBean("bindingAdapterFactory",
             BindingAdapterFactory.class);
+        this.bindings = parseBindings(tempElements, applicationContext, isInBinding());
         doAfterPropertiesSet();
     }
 
@@ -102,6 +104,10 @@ public abstract class AbstractContractFactoryBean implements InitializingBean,
                     .getBindingConverterByTagName(tagName);
 
                 if (bindingConverter == null) {
+                    if (!tagName.equals("binding." + JvmBinding.JVM_BINDING_TYPE.toString())) {
+                        throw new ServiceRuntimeException("Can't find BindingConverter of type "
+                                                          + tagName);
+                    }
                     continue;
                 }
 

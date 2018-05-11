@@ -17,8 +17,7 @@
 package com.alipay.sofa.isle.stage;
 
 import com.alipay.sofa.isle.constants.SofaIsleFrameworkConstants;
-import com.alipay.sofa.isle.log.SofaIsleLoggerFactory;
-import org.slf4j.Logger;
+import com.alipay.sofa.runtime.spi.log.SofaLogger;
 import org.springframework.context.support.AbstractApplicationContext;
 
 /**
@@ -27,8 +26,6 @@ import org.springframework.context.support.AbstractApplicationContext;
  * @author xuanbei 18/3/1
  */
 public abstract class AbstractPipelineStage implements PipelineStage {
-    static final Logger              LOGGER         = SofaIsleLoggerFactory
-                                                        .getLogger(AbstractPipelineStage.class);
     final ClassLoader                appClassLoader = AbstractPipelineStage.class.getClassLoader();
     final AbstractApplicationContext applicationContext;
     final String                     appName;
@@ -41,11 +38,11 @@ public abstract class AbstractPipelineStage implements PipelineStage {
 
     @Override
     public void process() throws Exception {
-        LOGGER.info("++++++++++++++++++ " + appName + "'s " + this.getClass().getSimpleName()
-                    + " Start +++++++++++++++++");
+        SofaLogger.info("++++++++++++++++++ {0}'s {1} Start +++++++++++++++++", appName, this
+            .getClass().getSimpleName());
         doProcess();
-        LOGGER.info("++++++++++++++++++ " + appName + "'s " + this.getClass().getSimpleName()
-                    + " End +++++++++++++++++");
+        SofaLogger.info("++++++++++++++++++ {0}'s {1} End +++++++++++++++++", appName, this
+            .getClass().getSimpleName());
     }
 
     /**

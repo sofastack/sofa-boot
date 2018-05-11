@@ -17,7 +17,7 @@
 package com.alipay.sofa.runtime.spring.factory;
 
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
-import com.alipay.sofa.runtime.api.annotation.SofaJvmService;
+import com.alipay.sofa.runtime.api.annotation.SofaService;
 import com.alipay.sofa.runtime.model.InterfaceMode;
 import com.alipay.sofa.runtime.service.binding.JvmBinding;
 import com.alipay.sofa.runtime.service.component.Service;
@@ -33,21 +33,20 @@ import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
  * @author xuanbei 18/3/1
  */
 public class ServiceFactoryBean extends AbstractContractFactoryBean {
-    private Object  ref;
-    private Service service;
+    private Object ref;
 
     @Override
     protected void doAfterPropertiesSet() {
         if (hasSofaServiceAnnotation()) {
             throw new ServiceRuntimeException(
                 "Bean " + beanId + " of type " + ref.getClass()
-                        + " has already annotated by @SofaJvmService,"
+                        + " has already annotated by @SofaService,"
                         + " can not be registered using xml. Please check it.");
         }
 
         Implementation implementation = new DefaultImplementation();
         implementation.setTarget(ref);
-        service = buildService();
+        Service service = buildService();
 
         if (bindings.size() == 0) {
             bindings.add(new JvmBinding());
@@ -64,12 +63,12 @@ public class ServiceFactoryBean extends AbstractContractFactoryBean {
 
     private boolean hasSofaServiceAnnotation() {
         Class<?> implementationClazz = ref.getClass();
-        SofaJvmService sofaJvmService = implementationClazz.getAnnotation(SofaJvmService.class);
-        if (sofaJvmService == null) {
+        SofaService sofaService = implementationClazz.getAnnotation(SofaService.class);
+        if (sofaService == null) {
             return false;
         }
 
-        String annotationUniqueId = sofaJvmService.uniqueId();
+        String annotationUniqueId = sofaService.uniqueId();
         if ((uniqueId == null || uniqueId.isEmpty())
             && (annotationUniqueId == null || annotationUniqueId.isEmpty())) {
             return true;

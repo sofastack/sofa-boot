@@ -21,9 +21,7 @@ import com.alipay.sofa.runtime.api.client.ServiceClient;
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.api.component.Property;
 import com.alipay.sofa.runtime.model.ComponentType;
-import com.alipay.sofa.runtime.model.InterfaceMode;
 import com.alipay.sofa.runtime.service.binding.JvmBinding;
-import com.alipay.sofa.runtime.service.component.impl.ServiceImpl;
 import com.alipay.sofa.runtime.service.helper.ReferenceRegisterHelper;
 import com.alipay.sofa.runtime.spi.binding.Binding;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapter;
@@ -161,7 +159,6 @@ public class ReferenceComponent extends AbstractComponent {
             this.implementation = new DefaultImplementation();
             implementation.setTarget(proxy);
         }
-        publishAsService(reference, implementation.getTarget());
         super.activate();
         latch.countDown();
     }
@@ -237,9 +234,6 @@ public class ReferenceComponent extends AbstractComponent {
     }
 
     private void removeService() {
-        if (!reference.jvmService()) {
-            return;
-        }
         sofaRuntimeContext.getClientFactory().getClient(ServiceClient.class)
             .removeService(reference.getInterfaceType(), 0);
     }
@@ -261,20 +255,5 @@ public class ReferenceComponent extends AbstractComponent {
             serviceTarget = componentInfo.getImplementation().getTarget();
         }
         return serviceTarget;
-    }
-
-    private void publishAsService(Reference reference, Object target) {
-        if (!reference.jvmService()) {
-            return;
-        }
-
-        Implementation serviceImplementation = new DefaultImplementation();
-        serviceImplementation.setTarget(target);
-        Service service = new ServiceImpl("", reference.getInterfaceType(), InterfaceMode.api,
-            target);
-        service.addBinding(new JvmBinding());
-        ComponentInfo serviceComponent = new ServiceComponent(implementation, service,
-            bindingAdapterFactory, sofaRuntimeContext);
-        sofaRuntimeContext.getComponentManager().register(serviceComponent);
     }
 }

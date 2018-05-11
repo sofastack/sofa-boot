@@ -17,6 +17,7 @@
 package com.alipay.sofa.runtime.spi.service;
 
 import com.alipay.sofa.runtime.api.binding.BindingType;
+import com.alipay.sofa.runtime.api.binding.SofaServiceDefinition;
 import com.alipay.sofa.runtime.api.client.param.BindingParam;
 import com.alipay.sofa.runtime.spi.binding.Binding;
 import com.alipay.sofa.runtime.spi.spring.TagNameSupport;
@@ -45,6 +46,16 @@ public interface BindingConverter<L extends BindingParam, R extends Binding> ext
      * @return Binding Object
      */
     R convert(Element element, BindingConverterContext bindingConverterContext);
+
+    /**
+     * convert {@link SofaServiceDefinition} to concrete {@link Binding}
+     *
+     * @param bindingDefinition xml Element
+     * @param bindingConverterContext binding converter context
+     * @return Binding Object
+     */
+    R convert(SofaServiceDefinition bindingDefinition,
+              BindingConverterContext bindingConverterContext);
 
     /**
      * get supported binding type

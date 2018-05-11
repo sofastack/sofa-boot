@@ -26,27 +26,6 @@ import com.alipay.sofa.runtime.model.ComponentType;
  */
 public class ComponentNameFactory {
     /**
-     * create ComponentName by component type and class type
-     *
-     * @param clazz
-     * @param type
-     */
-    public static ComponentName createComponentName(ComponentType type, Class<?> clazz) {
-        return new ComponentName(type, mergeComponentName(clazz, null));
-    }
-
-    /**
-     * create ComponentName by component type and component name
-     *
-     * @param type
-     * @param name
-     * @return
-     */
-    public static ComponentName createComponentName(ComponentType type, String name) {
-        return new ComponentName(type, name);
-    }
-
-    /**
      * create ComponentName by component type,class type and unique id
      *
      * @param type

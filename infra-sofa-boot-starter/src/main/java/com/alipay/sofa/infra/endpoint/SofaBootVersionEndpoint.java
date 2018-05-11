@@ -74,7 +74,7 @@ public class SofaBootVersionEndpoint extends AbstractEndpoint<Object> implements
                 result.addAll(gavResult);
             }
         } catch (Exception ex) {
-            logger.warn("Load config failed " + " : " + ex.getMessage());
+            logger.warn("Load properties failed " + " : " + ex.getMessage());
         }
         //second Interface
         @SuppressWarnings("rawtypes")
@@ -97,7 +97,7 @@ public class SofaBootVersionEndpoint extends AbstractEndpoint<Object> implements
     }
 
     private void generateGavResult(List<Properties> gavResult) throws IOException {
-        //read sofa.versions.config
+        //read sofa.versions.properties
         this.generateSofaVersionProperties(gavResult);
     }
 
@@ -113,7 +113,7 @@ public class SofaBootVersionEndpoint extends AbstractEndpoint<Object> implements
     }
 
     /**
-     * Load config into the given instance.
+     * Load properties into the given instance.
      *
      * @param resourceLocation the Resource locations to load
      */
@@ -121,13 +121,13 @@ public class SofaBootVersionEndpoint extends AbstractEndpoint<Object> implements
         Properties result = new Properties();
         if (resourceLocation != null) {
             if (logger.isInfoEnabled()) {
-                logger.info("Loading config file from " + resourceLocation);
+                logger.info("Loading properties file from " + resourceLocation);
             }
             try {
                 PropertiesLoaderUtils.fillProperties(result, new EncodedResource(resourceLocation));
             } catch (IOException ex) {
                 if (logger.isWarnEnabled()) {
-                    logger.warn("Could not load config from " + resourceLocation + ": "
+                    logger.warn("Could not load properties from " + resourceLocation + ": "
                                 + ex.getMessage());
                 }
             }
@@ -137,7 +137,7 @@ public class SofaBootVersionEndpoint extends AbstractEndpoint<Object> implements
 
     private List<Resource> getSofaVersionsPropertiesResources() throws IOException {
         List<String> paths = new ArrayList<>();
-        String path1 = "classpath*:META-INF/sofa.versions.config";
+        String path1 = "classpath*:META-INF/sofa.versions.properties";
         paths.add(path1);
         return getResources(paths);
     }

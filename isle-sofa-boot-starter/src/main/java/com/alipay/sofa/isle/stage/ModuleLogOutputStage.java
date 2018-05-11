@@ -20,6 +20,7 @@ import com.alipay.sofa.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.isle.constants.SofaIsleFrameworkConstants;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
 import com.alipay.sofa.isle.spring.factory.BeanLoadCostBeanFactory;
+import com.alipay.sofa.runtime.spi.log.SofaLogger;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
@@ -58,7 +59,7 @@ public class ModuleLogOutputStage extends AbstractPipelineStage {
         logFailedModules(stringBuilder, application.getFailed());
         logInfoBeanCost(stringBuilder, application.getInstalled());
 
-        LOGGER.info(stringBuilder.toString());
+        SofaLogger.info(stringBuilder.toString());
     }
 
     private void logInstalledModules(StringBuilder stringBuilder, List<DeploymentDescriptor> deploys) {

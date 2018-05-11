@@ -38,7 +38,7 @@ public class ComponentManagerImpl implements ComponentManager {
     /** container for resolved components */
     protected ConcurrentMap<ComponentType, Map<ComponentName, ComponentInfo>> resolvedRegistry;
     /** client factory */
-    protected ClientFactoryInternal                                           clientFactoryInternal;
+    private ClientFactoryInternal                                             clientFactoryInternal;
 
     public ComponentManagerImpl(ClientFactoryInternal clientFactoryInternal) {
         this.registry = new ConcurrentHashMap(16);
@@ -108,11 +108,11 @@ public class ComponentManagerImpl implements ComponentManager {
 
     @Override
     public void register(ComponentInfo componentInfo) {
-        _register(componentInfo);
+        doRegister(componentInfo);
     }
 
     public ComponentInfo registerAndGet(ComponentInfo componentInfo) {
-        return _register(componentInfo);
+        return doRegister(componentInfo);
     }
 
     @Override
@@ -120,7 +120,7 @@ public class ComponentManagerImpl implements ComponentManager {
         clientFactoryInternal.registerClient(clientType, client);
     }
 
-    private ComponentInfo _register(ComponentInfo ci) {
+    private ComponentInfo doRegister(ComponentInfo ci) {
         ComponentName name = ci.getName();
         if (isRegistered(name)) {
             SofaLogger.error("Component was already registered: {0}", name);
@@ -143,7 +143,7 @@ public class ComponentManagerImpl implements ComponentManager {
                 return old;
             }
             if (ci.resolve()) {
-                _typeRegistry(ci);
+                typeRegistry(ci);
                 ci.activate();
             }
         } catch (Exception e) {
@@ -180,7 +180,7 @@ public class ComponentManagerImpl implements ComponentManager {
         return componentInfos;
     }
 
-    protected void _typeRegistry(ComponentInfo componentInfo) {
+    private void typeRegistry(ComponentInfo componentInfo) {
         ComponentName name = componentInfo.getName();
         if (name != null) {
             ComponentType type = name.getType();

@@ -22,7 +22,6 @@ package com.alipay.sofa.isle.stage;
  * @author xuanbei 18/3/1
  */
 public interface PipelineStage {
-
     /**
      * process this pipeline stage.
      *

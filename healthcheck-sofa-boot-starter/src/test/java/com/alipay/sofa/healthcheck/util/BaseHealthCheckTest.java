@@ -26,7 +26,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import java.util.Map;
 
 /**
- * init an annotation application context with config and classes
+ * init an annotation application context with properties and classes
  * @author scienjus
  */
 public class BaseHealthCheckTest {

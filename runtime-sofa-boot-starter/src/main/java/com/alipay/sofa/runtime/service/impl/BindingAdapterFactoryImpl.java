@@ -31,11 +31,6 @@ public class BindingAdapterFactoryImpl implements BindingAdapterFactory {
     private Map<BindingType, BindingAdapter> bindingTypeBindingAdapterMap = new HashMap<>();
 
     @Override
-    public boolean hasBindingAdapter(BindingType bindingType) {
-        return bindingTypeBindingAdapterMap.containsKey(bindingType);
-    }
-
-    @Override
     public BindingAdapter getBindingAdapter(BindingType bindingType) {
         return bindingTypeBindingAdapterMap.get(bindingType);
     }

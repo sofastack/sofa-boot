@@ -39,10 +39,8 @@ import com.alipay.sofa.runtime.spring.config.SofaRuntimeProperties;
 import com.alipay.sofa.runtime.spring.health.ComponentHealthChecker;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.ServiceLoader;
 import java.util.Set;
@@ -98,9 +96,10 @@ public class SofaRuntimeAutoConfiguration {
     @Bean
     public ServiceAnnotationBeanPostProcessor serviceAnnotationBeanPostProcessor(SofaRuntimeContext sofaRuntimeContext,
                                                                                  SofaRuntimeProperties sofaRuntimeProperties,
-                                                                                 BindingAdapterFactory bindingAdapterFactory) {
+                                                                                 BindingAdapterFactory bindingAdapterFactory,
+                                                                                 BindingConverterFactory bindingConverterFactory) {
         return new ServiceAnnotationBeanPostProcessor(sofaRuntimeContext, sofaRuntimeProperties,
-            bindingAdapterFactory);
+            bindingAdapterFactory, bindingConverterFactory);
     }
 
     @Bean

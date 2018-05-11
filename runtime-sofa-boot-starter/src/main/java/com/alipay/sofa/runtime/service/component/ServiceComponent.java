@@ -17,7 +17,6 @@
 package com.alipay.sofa.runtime.service.component;
 
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
-import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.api.component.Property;
 import com.alipay.sofa.runtime.model.ComponentType;
 import com.alipay.sofa.runtime.spi.binding.Binding;
@@ -31,7 +30,6 @@ import com.alipay.sofa.runtime.spi.log.SofaLogger;
 import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -89,9 +87,7 @@ public class ServiceComponent extends AbstractComponent {
 
         if (service.hasBinding()) {
             Set<Binding> bindings = service.getBindings();
-            Iterator<Binding> it = bindings.iterator();
-            while (it.hasNext()) {
-                Binding binding = it.next();
+            for (Binding binding : bindings) {
                 BindingAdapter<Binding> bindingAdapter = this.bindingAdapterFactory
                     .getBindingAdapter(binding.getBindingType());
 
@@ -129,9 +125,7 @@ public class ServiceComponent extends AbstractComponent {
 
         if (service.hasBinding()) {
             Set<Binding> bindings = service.getBindings();
-            Iterator<Binding> it = bindings.iterator();
-            while (it.hasNext()) {
-                Binding binding = it.next();
+            for (Binding binding : bindings) {
                 BindingAdapter<Binding> bindingAdapter = this.bindingAdapterFactory
                     .getBindingAdapter(binding.getBindingType());
 
@@ -262,9 +256,5 @@ public class ServiceComponent extends AbstractComponent {
         HealthResult healthResult = new HealthResult(componentName.getRawName());
         healthResult.setHealthy(true);
         return healthResult;
-    }
-
-    public void setComponentName(ComponentName componentName) {
-        this.componentName = componentName;
     }
 }

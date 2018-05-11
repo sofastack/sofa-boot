@@ -37,7 +37,6 @@ public class HealthCheckTrigger implements ApplicationListener<ContextRefreshedE
                                      .getLogger(HealthCheckTrigger.class.getCanonicalName());
 
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-
         ApplicationContext applicationContext = contextRefreshedEvent.getApplicationContext();
         HealthCheckManager.init(applicationContext);
 

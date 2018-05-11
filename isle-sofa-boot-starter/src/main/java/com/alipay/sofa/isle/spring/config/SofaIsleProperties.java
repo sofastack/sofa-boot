@@ -33,6 +33,7 @@ public class SofaIsleProperties {
     private long        beanLoadCost                  = 100;
     private boolean     allowBeanDefinitionOverriding = false;
     private boolean     moduleStartUpParallel         = true;
+    private boolean     publishEventToParent          = false;
 
     public String getActiveProfiles() {
         return activeProfiles;
@@ -64,5 +65,13 @@ public class SofaIsleProperties {
 
     public void setBeanLoadCost(long beanLoadCost) {
         this.beanLoadCost = beanLoadCost;
+    }
+
+    public boolean isPublishEventToParent() {
+        return publishEventToParent;
+    }
+
+    public void setPublishEventToParent(boolean publishEventToParent) {
+        this.publishEventToParent = publishEventToParent;
     }
 }

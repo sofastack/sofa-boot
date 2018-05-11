@@ -41,8 +41,8 @@ public class DefaultSofaIsleProfileEnvironment implements SofaIsleProfileEnviron
             return;
         }
 
-        String activeProfiles = applicationContext.getBean(SofaIsleProperties.class)
-            .getActiveProfiles();
+        String activeProfiles = applicationContext.getBean("sofaIsleProperties",
+            SofaIsleProperties.class).getActiveProfiles();
         if (StringUtils.hasText(activeProfiles)) {
             String[] activeConfigProfileList = activeProfiles
                 .split(SofaIsleFrameworkConstants.PROFILE_SPLITTER);

@@ -16,12 +16,11 @@
  */
 package com.alipay.sofa.isle.spring.listener;
 
-import com.alipay.sofa.isle.log.SofaIsleLoggerFactory;
 import com.alipay.sofa.isle.stage.DefaultPipelineContext;
 import com.alipay.sofa.isle.stage.ModelCreatingStage;
 import com.alipay.sofa.isle.stage.ModuleLogOutputStage;
 import com.alipay.sofa.isle.stage.SpringContextInstallStage;
-import org.slf4j.Logger;
+import com.alipay.sofa.runtime.spi.log.SofaLogger;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.support.AbstractApplicationContext;
@@ -35,9 +34,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class SofaIsleContextRefreshedListener implements PriorityOrdered,
                                              ApplicationListener<ContextRefreshedEvent> {
-    private static final Logger        LOGGER = SofaIsleLoggerFactory
-                                                  .getLogger(SofaIsleContextRefreshedListener.class);
-    private static final AtomicBoolean INIT   = new AtomicBoolean(false);
+    private static final AtomicBoolean INIT = new AtomicBoolean(false);
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -52,7 +49,7 @@ public class SofaIsleContextRefreshedListener implements PriorityOrdered,
             try {
                 pipelineContext.process();
             } catch (Throwable t) {
-                LOGGER.error("process pipeline error", t);
+                SofaLogger.error(t, "process pipeline error");
                 throw new RuntimeException(t);
             }
         }

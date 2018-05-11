@@ -25,6 +25,7 @@ import com.alipay.sofa.isle.loader.DynamicSpringContextLoader;
 import com.alipay.sofa.isle.loader.SpringContextLoader;
 import com.alipay.sofa.isle.spring.config.SofaIsleProperties;
 import com.alipay.sofa.isle.utils.NamedThreadFactory;
+import com.alipay.sofa.runtime.spi.log.SofaLogger;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.util.StringUtils;
@@ -59,7 +60,7 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
         try {
             doProcess(application);
         } catch (Exception e) {
-            LOGGER.error("Install Spring Context got an error.", e);
+            SofaLogger.error(e, "Install Spring Context got an error.");
             throw new DeploymentException("Install Spring Context got an error.", e);
         }
     }
@@ -69,7 +70,8 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
         SpringContextLoader springContextLoader = new DynamicSpringContextLoader(applicationContext);
         installSpringContext(application, springContextLoader);
 
-        if (applicationContext.getBean(SofaIsleProperties.class).isModuleStartUpParallel()) {
+        if (applicationContext.getBean("sofaIsleProperties", SofaIsleProperties.class)
+            .isModuleStartUpParallel()) {
             refreshSpringContextParallel(application);
         } else {
             refreshSpringContext(application);
@@ -82,13 +84,13 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
 
         for (DeploymentDescriptor deployment : application.getResolvedDeployments()) {
             if (deployment.isSpringPowered()) {
-                LOGGER.info("Start install " + application.getAppName() + "'s module: "
-                            + deployment.getName());
+                SofaLogger.info("Start install " + application.getAppName() + "'s module: "
+                                + deployment.getName());
                 try {
                     Thread.currentThread().setContextClassLoader(deployment.getClassLoader());
                     springContextLoader.loadSpringContext(deployment, application);
                 } catch (Throwable e) {
-                    LOGGER.error("Install module " + deployment.getName() + " got an error!", e);
+                    SofaLogger.error(e, "Install module {0} got an error!", deployment.getName());
                     application.addFailed(deployment);
                 } finally {
                     Thread.currentThread().setContextClassLoader(oldClassLoader);
@@ -108,11 +110,11 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
             "All activated module list");
         writeMessageToStringBuilder(stringBuilder, application.getResolvedDeployments(),
             "Modules that could install");
-        LOGGER.info(stringBuilder.toString());
+        SofaLogger.info(stringBuilder.toString());
 
         String errorMessage = getErrorMessageByApplicationModule(application);
         if (StringUtils.hasText(errorMessage)) {
-            LOGGER.error(errorMessage);
+            SofaLogger.error(errorMessage);
         }
 
         if (application.getDeployRegistry().getPendingEntries().size() > 0) {
@@ -247,9 +249,9 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
                         }
                     }
                 } catch (Throwable e) {
-                    LOGGER.error(
-                        "Refreshing Spring Application Context of module " + deployment.getName()
-                                + " got an error.", e);
+                    SofaLogger.error(e,
+                        "Refreshing Spring Application Context of module {0} got an error."
+                                + deployment.getName());
                     throw new RuntimeException("Refreshing Spring Application Context of module "
                                                + deployment.getName() + " got an error.", e);
                 } finally {
@@ -262,8 +264,9 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
 
     private void doRefreshSpringContext(DeploymentDescriptor deployment,
                                         ApplicationRuntimeModel application) {
-        LOGGER.info("Begin refresh Spring Application Context of module " + deployment.getName()
-                    + " of application " + application.getAppName());
+        SofaLogger.info(
+            "Begin refresh Spring Application Context of module {0} of application {1}.",
+            deployment.getName(), application.getAppName());
         ConfigurableApplicationContext ctx = (ConfigurableApplicationContext) deployment
             .getApplicationContext();
         if (ctx != null) {
@@ -272,17 +275,17 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
                 ctx.refresh();
                 application.addInstalled(deployment);
             } catch (Throwable t) {
-                LOGGER.error(
-                    "Refreshing Spring Application Context of module " + deployment.getName()
-                            + " got an error.", t);
+                SofaLogger.error(t,
+                    "Refreshing Spring Application Context of module {0} got an error.",
+                    deployment.getName());
                 application.addFailed(deployment);
             } finally {
                 deployment.deployFinish();
             }
         } else {
             application.addFailed(deployment);
-            LOGGER.error("", new RuntimeException("Spring Application Context of module "
-                                                  + deployment.getName() + " is null!"));
+            SofaLogger.error(new RuntimeException("Spring Application Context of module "
+                                                  + deployment.getName() + " is null!"), "");
         }
     }
 

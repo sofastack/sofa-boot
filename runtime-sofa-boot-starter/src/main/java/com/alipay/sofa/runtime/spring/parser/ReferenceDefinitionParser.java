@@ -25,41 +25,23 @@ import org.w3c.dom.Element;
  * @author xuanbei 18/3/1
  */
 public class ReferenceDefinitionParser extends AbstractContractDefinitionParser {
-    private static final String LOCAL_FIRST           = "local-first";
-    private static final String JVM_SERVICE           = "jvm-service";
-    private static final String PROPERTY_LOCAL_FIRST  = "localFirst";
-    private static final String PROPERTY_JVM_SERVICE  = "jvmService";
+    private static final String JVM_FIRST             = "jvm-first";
+    private static final String PROPERTY_JVM_FIRST    = "jvmFirst";
     private static final String PROPERTY_LOAD_BALANCE = "loadBalance";
 
     @Override
     protected void doParseInternal(Element element, ParserContext parserContext,
                                    BeanDefinitionBuilder builder) {
-        String localFirstString = element.getAttribute(LOCAL_FIRST);
+        String jvmFirstString = element.getAttribute(JVM_FIRST);
 
-        if (localFirstString != null && localFirstString.length() > 0) {
-            if ("true".equalsIgnoreCase(localFirstString)) {
-                builder.addPropertyValue(PROPERTY_LOCAL_FIRST, true);
-            } else if ("false".equalsIgnoreCase(localFirstString)) {
-                builder.addPropertyValue(PROPERTY_LOCAL_FIRST, false);
+        if (jvmFirstString != null && jvmFirstString.length() > 0) {
+            if ("true".equalsIgnoreCase(jvmFirstString)) {
+                builder.addPropertyValue(PROPERTY_JVM_FIRST, true);
+            } else if ("false".equalsIgnoreCase(jvmFirstString)) {
+                builder.addPropertyValue(PROPERTY_JVM_FIRST, false);
             } else {
                 throw new RuntimeException(
-                    "Invalid value of property local-first, can only be true or false.");
-            }
-        }
-
-        String jvmServiceString = element.getAttribute(JVM_SERVICE);
-        String id = element.getAttribute("id");
-
-        if (jvmServiceString != null && jvmServiceString.length() > 0) {
-            if ("true".equalsIgnoreCase(jvmServiceString)) {
-                if (id != null && id.length() > 0) {
-                    builder.addPropertyValue(PROPERTY_JVM_SERVICE, true);
-                }
-            } else if ("false".equalsIgnoreCase(jvmServiceString)) {
-                builder.addPropertyValue(PROPERTY_JVM_SERVICE, false);
-            } else {
-                throw new RuntimeException(
-                    "Invalid value of property jvm-service, can only be true or false");
+                    "Invalid value of property jvm-first, can only be true or false.");
             }
         }
 

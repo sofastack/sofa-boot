@@ -61,6 +61,7 @@ public class IntegrationTest implements ApplicationContextAware {
         // test sofaIsleProperties
         assertEquals(sofaIsleProperties.getActiveProfiles(), "dev");
         assertEquals(sofaIsleProperties.isModuleStartUpParallel(), true);
+        assertEquals(sofaIsleProperties.isPublishEventToParent(), false);
         assertEquals(sofaIsleProperties.isAllowBeanDefinitionOverriding(), true);
         assertEquals(sofaIsleProperties.getBeanLoadCost(), 10);
 

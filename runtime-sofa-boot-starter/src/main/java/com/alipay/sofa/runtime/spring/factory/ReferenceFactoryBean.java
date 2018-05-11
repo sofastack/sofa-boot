@@ -30,13 +30,11 @@ import org.springframework.util.Assert;
  * @author xuanbei 18/3/1
  */
 public class ReferenceFactoryBean extends AbstractContractFactoryBean {
-    private Object    proxy;
-    /** local first or not */
-    protected boolean localFirst = true;
-    /** jvm service or not */
-    protected boolean jvmService;
+    private Object  proxy;
+    /** jvm first or not */
+    private boolean jvmFirst = true;
     /** load balance **/
-    private String    loadBalance;
+    private String  loadBalance;
 
     @Override
     protected void doAfterPropertiesSet() throws Exception {
@@ -62,9 +60,8 @@ public class ReferenceFactoryBean extends AbstractContractFactoryBean {
         bindingConverterContext.setBeanId(beanId);
     }
 
-    protected Reference buildReference() {
-        return new ReferenceImpl(uniqueId, getInterfaceClass(), InterfaceMode.spring, localFirst,
-            jvmService);
+    private Reference buildReference() {
+        return new ReferenceImpl(uniqueId, getInterfaceClass(), InterfaceMode.spring, jvmFirst);
     }
 
     @Override
@@ -82,12 +79,8 @@ public class ReferenceFactoryBean extends AbstractContractFactoryBean {
         return true;
     }
 
-    public void setLocalFirst(boolean localFirst) {
-        this.localFirst = localFirst;
-    }
-
-    public void setJvmService(boolean jvmService) {
-        this.jvmService = jvmService;
+    public void setJvmFirst(boolean jvmFirst) {
+        this.jvmFirst = jvmFirst;
     }
 
     public String getLoadBalance() {

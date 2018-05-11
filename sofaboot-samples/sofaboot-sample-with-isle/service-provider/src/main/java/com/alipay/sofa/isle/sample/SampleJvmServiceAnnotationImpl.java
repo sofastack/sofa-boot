@@ -16,12 +16,12 @@
  */
 package com.alipay.sofa.isle.sample;
 
-import com.alipay.sofa.runtime.api.annotation.SofaJvmService;
+import com.alipay.sofa.runtime.api.annotation.SofaService;
 
 /**
  * @author xuanbei 18/5/5
  */
-@SofaJvmService(uniqueId = "annotationImpl")
+@SofaService(uniqueId = "annotationImpl")
 public class SampleJvmServiceAnnotationImpl implements SampleJvmService {
     @Override
     public void message() {

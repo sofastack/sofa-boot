@@ -1,5 +1,2 @@
-org.springframework.context.ApplicationContextInitializer=\
-com.alipay.sofa.isle.spring.initializer.SofaIsleSpringContextInitializer
-
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 com.alipay.sofa.isle.spring.configuration.SofaIsleAutoConfiguration

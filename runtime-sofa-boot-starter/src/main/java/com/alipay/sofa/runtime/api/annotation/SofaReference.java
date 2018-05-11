@@ -22,40 +22,48 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation used to create a SOFA service of a spring bean. Sample usage:
+ * Annotation used to create a SOFA reference and set it to the annotated field of a Spring bean. Sample usage:
  *
  * <pre>
  *
- * &#064;SofaJvmService(uniqueId = &quot;aop&quot;)
- * public class SampleServiceImpl implements SampleService {
+ * public class ReferenceAnnotationSample {
  *
- *     &#064;Override
- *     public String say() {
- *         return &quot;sampleService&quot;;
- *     }
+ *     &#064;SofaReference
+ *     private SampleService sampleService;
  * }
  * </pre>
  *
- * @author xuanbei 18/3/1
+ * @author xuanbei 18/3/2
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface SofaJvmService {
+@Target(ElementType.FIELD)
+public @interface SofaReference {
 
     /**
-     * The interface type of the SOFA service to be create. Default to the only interface of the annotated Spring bean
-     * when not specified. When the annotated Spring bean has more than one interface, this field must be specified.
-     * When you want to create a SOFA service which's interface type is not a java interface but and concrete java
-     * class, this field must be specified.
+     * The type of the SOFA reference to be created. Default to the type of field annotated when not specified.
      *
      * @return return interface type
      */
     Class<?> interfaceType() default void.class;
 
     /**
-     * The unique id of the SOFA service to be created. Default to an empty string when not specified.
+     * The unique id of the SOFA reference to be created. Default to an empty string when not specified.
      *
-     * @return return service unique-id
+     * @return return reference unique-id
      */
     String uniqueId() default "";
+
+    /**
+     * invoke jvm service first
+     *
+     * @return
+     */
+    boolean jvmFirst() default true;
+
+    /**
+     *
+     *
+     * @return
+     */
+    SofaBinding binding() default @SofaBinding();
 }

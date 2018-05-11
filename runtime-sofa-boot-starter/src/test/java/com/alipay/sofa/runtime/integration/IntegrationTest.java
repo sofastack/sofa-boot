@@ -17,6 +17,7 @@
 package com.alipay.sofa.runtime.integration;
 
 import com.alipay.sofa.healthcheck.core.HealthChecker;
+import com.alipay.sofa.runtime.beans.service.SampleService;
 import com.alipay.sofa.runtime.integration.base.AbstractTestBase;
 import com.alipay.sofa.runtime.integration.features.AwareTest;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
@@ -66,4 +67,17 @@ public class IntegrationTest extends AbstractTestBase {
         Assert.assertTrue(healthChecker.isHealthy().getStatus().equals(Status.UP));
     }
 
+    @Test
+    public void testServiceAndReference() {
+        Assert.assertEquals(awareTest.getSampleServiceAnnotationWithUniqueId().service(),
+            "SampleServiceAnnotationImplWithUniqueId");
+        Assert.assertEquals(awareTest.getSampleServicePublishedByServiceClient().service(),
+            "SampleServiceImpl published by service client.");
+        Assert.assertEquals(
+            ((SampleService) awareTest.getApplicationContext().getBean("xmlReference")).service(),
+            "XmlSampleService");
+        Assert.assertEquals(
+            ((SampleService) awareTest.getApplicationContext().getBean("xmlReferenceWithUniqueId"))
+                .service(), "XmlSampleServiceWithUniqueId");
+    }
 }

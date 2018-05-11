@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.isle.sample;
 
-import com.alipay.sofa.runtime.api.annotation.SofaJvmReference;
+import com.alipay.sofa.runtime.api.annotation.SofaReference;
 import com.alipay.sofa.runtime.api.aware.ClientFactoryAware;
 import com.alipay.sofa.runtime.api.client.ClientFactory;
 import com.alipay.sofa.runtime.api.client.ReferenceClient;
@@ -32,7 +32,7 @@ public class JvmServiceConsumer implements ClientFactoryAware {
     @Autowired
     private SampleJvmService sampleJvmService;
 
-    @SofaJvmReference(uniqueId = "annotationImpl")
+    @SofaReference(uniqueId = "annotationImpl")
     private SampleJvmService sampleJvmServiceAnnotationImpl;
 
     public void init() {

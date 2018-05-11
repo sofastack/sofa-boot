@@ -50,7 +50,8 @@ public class SofaIsleProfileUtilTest {
 
         SofaIsleProperties sofaIsleProperties = new SofaIsleProperties();
         sofaIsleProperties.setActiveProfiles("dev,product");
-        when(applicationContext.getBean(SofaIsleProperties.class)).thenReturn(sofaIsleProperties);
+        when(applicationContext.getBean("sofaIsleProperties", SofaIsleProperties.class))
+            .thenReturn(sofaIsleProperties);
 
         // new DeploymentDescriptorConfiguration instance
         DeploymentDescriptorConfiguration deploymentDescriptorConfiguration = new DeploymentDescriptorConfiguration(

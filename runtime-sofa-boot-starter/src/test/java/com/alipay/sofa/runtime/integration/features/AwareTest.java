@@ -17,13 +17,19 @@
 package com.alipay.sofa.runtime.integration.features;
 
 import com.alipay.sofa.runtime.api.annotation.SofaClientFactory;
+import com.alipay.sofa.runtime.api.annotation.SofaReference;
 import com.alipay.sofa.runtime.api.aware.ClientFactoryAware;
 import com.alipay.sofa.runtime.api.client.ClientFactory;
 import com.alipay.sofa.runtime.api.client.ReferenceClient;
 import com.alipay.sofa.runtime.api.client.ServiceClient;
+import com.alipay.sofa.runtime.api.client.param.ReferenceParam;
+import com.alipay.sofa.runtime.api.client.param.ServiceParam;
+import com.alipay.sofa.runtime.beans.service.SampleService;
+import com.alipay.sofa.runtime.beans.impl.SampleServiceImpl;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.spring.SofaRuntimeContextAware;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
@@ -34,7 +40,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class AwareTest implements ClientFactoryAware, SofaRuntimeContextAware,
-                      ApplicationContextAware {
+                      ApplicationContextAware, InitializingBean {
 
     private ClientFactory      clientFactoryAware;
 
@@ -50,6 +56,26 @@ public class AwareTest implements ClientFactoryAware, SofaRuntimeContextAware,
 
     @SofaClientFactory
     private ReferenceClient    referenceClient;
+
+    @SofaReference(uniqueId = "annotation")
+    private SampleService      sampleServiceAnnotationWithUniqueId;
+
+    private SampleService      sampleServicePublishedByServiceClient;
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        ServiceParam serviceParam = new ServiceParam();
+        serviceParam.setInstance(new SampleServiceImpl(
+            "SampleServiceImpl published by service client."));
+        serviceParam.setInterfaceType(SampleService.class);
+        serviceParam.setUniqueId("serviceClientImpl");
+        serviceClient.service(serviceParam);
+
+        ReferenceParam<SampleService> referenceParam = new ReferenceParam<>();
+        referenceParam.setInterfaceType(SampleService.class);
+        referenceParam.setUniqueId("serviceClientImpl");
+        sampleServicePublishedByServiceClient = referenceClient.reference(referenceParam);
+    }
 
     @Override
     public void setClientFactory(ClientFactory clientFactory) {
@@ -88,5 +114,13 @@ public class AwareTest implements ClientFactoryAware, SofaRuntimeContextAware,
 
     public ReferenceClient getReferenceClient() {
         return referenceClient;
+    }
+
+    public SampleService getSampleServiceAnnotationWithUniqueId() {
+        return sampleServiceAnnotationWithUniqueId;
+    }
+
+    public SampleService getSampleServicePublishedByServiceClient() {
+        return sampleServicePublishedByServiceClient;
     }
 }
