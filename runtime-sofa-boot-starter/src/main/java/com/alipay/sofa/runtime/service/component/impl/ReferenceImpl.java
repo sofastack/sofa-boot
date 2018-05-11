@@ -37,12 +37,6 @@ public class ReferenceImpl extends AbstractContract implements Reference {
         this.jvmFirst = jvmFirst;
     }
 
-    public ReferenceImpl(String uniqueId, Class<?> interfaceType, InterfaceMode interfaceMode,
-                         boolean jvmFirst, Map<String, String> properties) {
-        super(uniqueId, interfaceType, interfaceMode, properties);
-        this.jvmFirst = jvmFirst;
-    }
-
     @Override
     public boolean isJvmFirst() {
         return jvmFirst;

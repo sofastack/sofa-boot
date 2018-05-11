@@ -14,67 +14,71 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime.spi.component;
-
-import com.alipay.sofa.runtime.api.ServiceValidationException;
+package com.alipay.sofa.runtime.api.annotation;
 
 /**
- * implementation interface
- *
- * @author xuanbei 18/2/28
+ * @author xuanbei 18/5/11
  */
-public interface Implementation {
+public @interface SofaServiceBinding {
     /**
-     * get name
+     * protocol info, maybe jvm/bolt/rest
      *
-     * @return name
+     * @return
      */
-    String getName();
+    String bindingType() default "jvm";
 
     /**
-     * get target object
+     * service version
      *
-     * @return target object
+     * @return
      */
-    Object getTarget();
+    String version() default "1.0";
 
     /**
-     * get target object class type
-     *
-     * @return target class type
+     * normal weight,when default,will use rpc default value, 100
      */
-    Class<?> getTargetClass();
+
+    int weight() default 0;
 
     /**
-     * is singleton or not
+     * when warmup,the weight.
      *
-     * @return true or false。
+     * @return
      */
-    boolean isSingleton();
+    int warmUpWeight() default 0;
 
     /**
-     * is lazy init or not
+     * warmup time, default is 0
      *
-     * @return true or false。
+     * @return
      */
-    boolean isLazyInit();
+    int warmUpTime() default 0;
 
     /**
-     * set target object
+     * filter beans
+     *
+     * @return
      */
-    void setTarget(Object target);
+    String[] filters() default {};
 
     /**
-     * is Factory or not
+     * custorm thread pool for current service
      *
-     * @return true or false。
+     * @return
      */
-    boolean isFactory();
+    String userThreadPool() default "";
 
     /**
-     * validate
+     * registry for this provider
      *
-     * @throws ServiceValidationException
+     * @return
      */
-    void validate() throws ServiceValidationException;
+    String registry() default "";
+
+    /**
+     * timeout
+     *
+     * @return
+     */
+    int timeout() default 3000;
 }

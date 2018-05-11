@@ -30,20 +30,9 @@ import java.util.Map;
 public class ServiceImpl extends AbstractContract implements Service {
     private Object target;
 
-    public ServiceImpl(String uniqueId, Class<?> interfaceType, Object target) {
-        super(uniqueId, interfaceType);
-        this.target = target;
-    }
-
     public ServiceImpl(String uniqueId, Class<?> interfaceType, InterfaceMode interfaceMode,
                        Object target) {
         super(uniqueId, interfaceType, interfaceMode);
-        this.target = target;
-    }
-
-    public ServiceImpl(String uniqueId, Class<?> interfaceType, InterfaceMode interfaceMode,
-                       Object target, Map<String, String> property) {
-        super(uniqueId, interfaceType, interfaceMode, property);
         this.target = target;
     }
 

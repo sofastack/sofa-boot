@@ -14,14 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime.api.binding;
+package com.alipay.sofa.runtime.service;
 
 /**
- * Definition of {@link com.alipay.sofa.runtime.api.annotation.SofaService} & {@link com.alipay.sofa.runtime.api.annotation.SofaReference} &{@link com.alipay.sofa.runtime.api.annotation.SofaBinding}
- *
- * @author xuanbei 18/5/10
+ * @author xuanbei 18/5/11
  */
-public class SofaServiceDefinition {
+public class SofaReferenceDefinition {
     /** service interface */
     private Class    interfaceType;
     /** unique id **/
@@ -44,14 +42,8 @@ public class SofaServiceDefinition {
     private String   callBackHandler;
     /** registry for this consumer */
     private String   registry;
-    /** normal weight,when default,will use rpc default value, 100 */
-    private int      weight;
-    /** when warm up,the weight. */
-    private int      warmUpWeight;
-    /** warm up time, default is 0 */
-    private int      warmUpTime;
-    /** user thread pool for current service */
-    private String   userThreadPool;
+    /** version */
+    private String   version;
     /** jvm first */
     private boolean  jvmFirst;
 
@@ -143,36 +135,12 @@ public class SofaServiceDefinition {
         this.registry = registry;
     }
 
-    public int getWeight() {
-        return weight;
+    public String getVersion() {
+        return version;
     }
 
-    public void setWeight(int weight) {
-        this.weight = weight;
-    }
-
-    public int getWarmUpWeight() {
-        return warmUpWeight;
-    }
-
-    public void setWarmUpWeight(int warmUpWeight) {
-        this.warmUpWeight = warmUpWeight;
-    }
-
-    public int getWarmUpTime() {
-        return warmUpTime;
-    }
-
-    public void setWarmUpTime(int warmUpTime) {
-        this.warmUpTime = warmUpTime;
-    }
-
-    public String getUserThreadPool() {
-        return userThreadPool;
-    }
-
-    public void setUserThreadPool(String userThreadPool) {
-        this.userThreadPool = userThreadPool;
+    public void setVersion(String version) {
+        this.version = version;
     }
 
     public boolean isJvmFirst() {

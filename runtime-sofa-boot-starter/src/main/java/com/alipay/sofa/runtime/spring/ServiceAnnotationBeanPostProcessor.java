@@ -17,12 +17,11 @@
 package com.alipay.sofa.runtime.spring;
 
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
-import com.alipay.sofa.runtime.api.annotation.SofaBinding;
-import com.alipay.sofa.runtime.api.annotation.SofaReference;
-import com.alipay.sofa.runtime.api.annotation.SofaService;
+import com.alipay.sofa.runtime.api.annotation.*;
 import com.alipay.sofa.runtime.api.binding.BindingType;
-import com.alipay.sofa.runtime.api.binding.SofaServiceDefinition;
 import com.alipay.sofa.runtime.model.InterfaceMode;
+import com.alipay.sofa.runtime.service.SofaReferenceDefinition;
+import com.alipay.sofa.runtime.service.SofaServiceDefinition;
 import com.alipay.sofa.runtime.service.binding.JvmBinding;
 import com.alipay.sofa.runtime.service.component.Reference;
 import com.alipay.sofa.runtime.service.component.Service;
@@ -108,8 +107,8 @@ public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, Pr
         Service service = new ServiceImpl(sofaServiceAnnotation.uniqueId(), interfaceType,
             InterfaceMode.annotation, bean);
 
-        for (SofaBinding sofaBinding : sofaServiceAnnotation.bindings()) {
-            if ("jvm".equals(sofaBinding.bindingType())) {
+        for (SofaServiceBinding sofaServiceBinding : sofaServiceAnnotation.bindings()) {
+            if ("jvm".equals(sofaServiceBinding.bindingType())) {
                 service.addBinding(new JvmBinding());
             } else {
                 BindingConverterContext bindingConverterContext = new BindingConverterContext();
@@ -117,10 +116,10 @@ public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, Pr
                 bindingConverterContext.setAppName(sofaRuntimeContext.getAppName());
                 bindingConverterContext.setAppClassLoader(sofaRuntimeContext.getAppClassLoader());
                 SofaServiceDefinition sofaServiceDefinition = convertSofaService(
-                    sofaServiceAnnotation, sofaBinding);
+                    sofaServiceAnnotation, sofaServiceBinding);
                 service.addBinding(bindingConverterFactory.getBindingConverter(
-                    new BindingType(sofaBinding.bindingType())).convert(sofaServiceDefinition,
-                    bindingConverterContext));
+                    new BindingType(sofaServiceBinding.bindingType())).convert(
+                    sofaServiceDefinition, bindingConverterContext));
             }
         }
 
@@ -158,11 +157,11 @@ public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, Pr
                     bindingConverterContext.setAppName(sofaRuntimeContext.getAppName());
                     bindingConverterContext.setAppClassLoader(sofaRuntimeContext
                         .getAppClassLoader());
-                    SofaServiceDefinition sofaServiceDefinition = convertSofaService(
+                    SofaReferenceDefinition sofaReferenceDefinition = convertSofaReference(
                         sofaReferenceAnnotation, sofaReferenceAnnotation.binding());
                     reference.addBinding(bindingConverterFactory.getBindingConverter(
                         new BindingType(sofaReferenceAnnotation.binding().bindingType())).convert(
-                        sofaServiceDefinition, bindingConverterContext));
+                        sofaReferenceDefinition, bindingConverterContext));
                 }
                 Object proxy = ReferenceRegisterHelper.registerReference(reference,
                     bindingAdapterFactory, sofaRuntimeProperties, sofaRuntimeContext);
@@ -184,38 +183,37 @@ public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, Pr
         return Ordered.LOWEST_PRECEDENCE;
     }
 
-    private SofaServiceDefinition convertSofaService(SofaReference sofaReferenceAnnotation,
-                                                     SofaBinding sofaBinding) {
-        SofaServiceDefinition sofaServiceDefinition = convertSofaBinding(sofaBinding);
-        sofaServiceDefinition.setInterfaceType(sofaReferenceAnnotation.interfaceType());
-        sofaServiceDefinition.setUniqueId(sofaReferenceAnnotation.uniqueId());
-        sofaServiceDefinition.setJvmFirst(sofaReferenceAnnotation.jvmFirst());
-        return sofaServiceDefinition;
-    }
-
     private SofaServiceDefinition convertSofaService(SofaService sofaServiceAnnotation,
-                                                     SofaBinding sofaBinding) {
-        SofaServiceDefinition sofaServiceDefinition = convertSofaBinding(sofaBinding);
+                                                     SofaServiceBinding sofaServiceBinding) {
+        SofaServiceDefinition sofaServiceDefinition = new SofaServiceDefinition();
+        sofaServiceDefinition.setBindingType(sofaServiceBinding.bindingType());
+        sofaServiceDefinition.setFilters(sofaServiceBinding.filters());
+        sofaServiceDefinition.setRegistry(sofaServiceBinding.registry());
+        sofaServiceDefinition.setTimeout(sofaServiceBinding.timeout());
+        sofaServiceDefinition.setUserThreadPool(sofaServiceBinding.userThreadPool());
+        sofaServiceDefinition.setWarmUpTime(sofaServiceBinding.warmUpTime());
+        sofaServiceDefinition.setWarmUpWeight(sofaServiceBinding.warmUpWeight());
+        sofaServiceDefinition.setWeight(sofaServiceBinding.weight());
         sofaServiceDefinition.setInterfaceType(sofaServiceAnnotation.interfaceType());
         sofaServiceDefinition.setUniqueId(sofaServiceAnnotation.uniqueId());
         return sofaServiceDefinition;
     }
 
-    private SofaServiceDefinition convertSofaBinding(SofaBinding sofaBinding) {
-        SofaServiceDefinition sofaServiceDefinition = new SofaServiceDefinition();
-        sofaServiceDefinition.setAddressWaitTime(sofaBinding.addressWaitTime());
-        sofaServiceDefinition.setBindingType(sofaBinding.bindingType());
-        sofaServiceDefinition.setCallBackHandler(sofaBinding.callBackHandler());
-        sofaServiceDefinition.setDirectUrl(sofaBinding.directUrl());
-        sofaServiceDefinition.setFilters(sofaBinding.filters());
-        sofaServiceDefinition.setInvokeType(sofaBinding.invokeType());
-        sofaServiceDefinition.setRegistry(sofaBinding.registry());
-        sofaServiceDefinition.setRetries(sofaBinding.retries());
-        sofaServiceDefinition.setTimeout(sofaBinding.timeout());
-        sofaServiceDefinition.setUserThreadPool(sofaBinding.userThreadPool());
-        sofaServiceDefinition.setWarmUpTime(sofaBinding.warmUpTime());
-        sofaServiceDefinition.setWarmUpWeight(sofaBinding.warmUpWeight());
-        sofaServiceDefinition.setWeight(sofaBinding.weight());
-        return sofaServiceDefinition;
+    private SofaReferenceDefinition convertSofaReference(SofaReference sofaReferenceAnnotation,
+                                                         SofaReferenceBinding sofaReferenceBinding) {
+        SofaReferenceDefinition sofaReferenceDefinition = new SofaReferenceDefinition();
+        sofaReferenceDefinition.setAddressWaitTime(sofaReferenceBinding.addressWaitTime());
+        sofaReferenceDefinition.setBindingType(sofaReferenceBinding.bindingType());
+        sofaReferenceDefinition.setCallBackHandler(sofaReferenceBinding.callBackHandler());
+        sofaReferenceDefinition.setDirectUrl(sofaReferenceBinding.directUrl());
+        sofaReferenceDefinition.setFilters(sofaReferenceBinding.filters());
+        sofaReferenceDefinition.setInvokeType(sofaReferenceBinding.invokeType());
+        sofaReferenceDefinition.setRegistry(sofaReferenceBinding.registry());
+        sofaReferenceDefinition.setRetries(sofaReferenceBinding.retries());
+        sofaReferenceDefinition.setTimeout(sofaReferenceBinding.timeout());
+        sofaReferenceDefinition.setInterfaceType(sofaReferenceAnnotation.interfaceType());
+        sofaReferenceDefinition.setUniqueId(sofaReferenceAnnotation.uniqueId());
+        sofaReferenceDefinition.setJvmFirst(sofaReferenceAnnotation.jvmFirst());
+        return sofaReferenceDefinition;
     }
 }

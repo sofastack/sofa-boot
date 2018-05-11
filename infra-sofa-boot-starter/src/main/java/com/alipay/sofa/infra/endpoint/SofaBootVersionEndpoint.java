@@ -43,7 +43,6 @@ import java.util.*;
  */
 public class SofaBootVersionEndpoint extends AbstractEndpoint<Object> implements
                                                                      ApplicationContextAware {
-
     public static final String                  SOFA_BOOT_VERSION_PREFIX = "sofaboot_versions";
 
     private Logger                              logger                   = InfraHealthCheckLoggerFactory

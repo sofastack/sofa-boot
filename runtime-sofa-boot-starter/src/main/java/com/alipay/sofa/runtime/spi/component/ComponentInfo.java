@@ -59,9 +59,9 @@ public interface ComponentInfo extends Component {
     SofaRuntimeContext getContext();
 
     /**
-     * get all config
+     * get all properties
      *
-     * @return config
+     * @return properties
      */
     Map<String, Property> getProperties();
 

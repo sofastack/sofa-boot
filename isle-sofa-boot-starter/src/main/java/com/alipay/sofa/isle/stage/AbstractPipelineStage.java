@@ -38,10 +38,10 @@ public abstract class AbstractPipelineStage implements PipelineStage {
 
     @Override
     public void process() throws Exception {
-        SofaLogger.info("++++++++++++++++++ {0}'s {1} Start +++++++++++++++++", appName, this
+        SofaLogger.info("++++++++++++++++++ {1} of {0} Start +++++++++++++++++", appName, this
             .getClass().getSimpleName());
         doProcess();
-        SofaLogger.info("++++++++++++++++++ {0}'s {1} End +++++++++++++++++", appName, this
+        SofaLogger.info("++++++++++++++++++ {1} of {0} End +++++++++++++++++", appName, this
             .getClass().getSimpleName());
     }
 

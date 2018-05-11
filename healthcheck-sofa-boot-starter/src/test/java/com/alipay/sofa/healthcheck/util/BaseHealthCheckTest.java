@@ -30,7 +30,6 @@ import java.util.Map;
  * @author scienjus
  */
 public class BaseHealthCheckTest {
-
     protected final AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
 
     @Before

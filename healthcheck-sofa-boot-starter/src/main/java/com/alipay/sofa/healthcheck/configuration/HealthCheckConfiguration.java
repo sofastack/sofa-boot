@@ -75,7 +75,7 @@ public class HealthCheckConfiguration {
             }
         } catch (Exception e) {
             logger
-                .error("the default config of application.properties does not exist in fisrt level of the resource path ");
+                .error("the default properties of application.properties does not exist in fisrt level of the resource path ");
         } finally {
             if (inputStream != null) {
                 try {

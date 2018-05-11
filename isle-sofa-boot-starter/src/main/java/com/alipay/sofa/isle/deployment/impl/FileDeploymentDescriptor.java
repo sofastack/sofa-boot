@@ -32,7 +32,6 @@ import static com.alipay.sofa.isle.constants.SofaIsleFrameworkConstants.ISLE_MOD
  * @version $Id: FileDescriptor.java, v 0.1 2012-1-11 17:41:52 yangyanzhao Exp $
 */
 public class FileDeploymentDescriptor extends AbstractDeploymentDescriptor {
-
     public FileDeploymentDescriptor(URL url,
                                     Properties props,
                                     DeploymentDescriptorConfiguration deploymentDescriptorConfiguration,

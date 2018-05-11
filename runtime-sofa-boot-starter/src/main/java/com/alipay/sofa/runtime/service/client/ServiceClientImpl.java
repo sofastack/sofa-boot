@@ -66,7 +66,7 @@ public class ServiceClientImpl implements ServiceClient {
                 "Interface type is null. Interface type is required while publish a service.");
         }
         Service service = new ServiceImpl(serviceParam.getUniqueId(),
-            serviceParam.getInterfaceType(), InterfaceMode.api, serviceParam.getInstance(), null);
+            serviceParam.getInterfaceType(), InterfaceMode.api, serviceParam.getInstance());
 
         for (BindingParam bindingParam : serviceParam.getBindingParams()) {
             BindingConverter bindingConverter = bindingConverterFactory

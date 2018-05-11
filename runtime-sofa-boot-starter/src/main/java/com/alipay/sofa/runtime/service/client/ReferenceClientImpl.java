@@ -60,11 +60,10 @@ public class ReferenceClientImpl implements ReferenceClient {
         this.sofaRuntimeProperties = sofaRuntimeProperties;
     }
 
-    @SuppressWarnings("unchecked")
     private <T> Reference getReferenceFromReferenceParam(ReferenceParam<T> referenceParam) {
         BindingParam bindingParam = referenceParam.getBindingParam();
         Reference reference = new ReferenceImpl(referenceParam.getUniqueId(),
-            referenceParam.getInterfaceType(), InterfaceMode.api, referenceParam.isJvmFirst(), null);
+            referenceParam.getInterfaceType(), InterfaceMode.api, referenceParam.isJvmFirst());
 
         if (bindingParam == null) {
             // add JVM Binding Default

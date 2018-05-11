@@ -16,6 +16,8 @@
  */
 package com.alipay.sofa.runtime.spi.component;
 
+import com.alipay.sofa.runtime.api.ServiceValidationException;
+
 /**
  * @author xuanbei 18/3/1
  */
@@ -25,6 +27,10 @@ public class DefaultImplementation implements Implementation {
 
     public DefaultImplementation() {
 
+    }
+
+    public DefaultImplementation(String name) {
+        this.name = name;
     }
 
     public DefaultImplementation(Object target) {
@@ -49,5 +55,25 @@ public class DefaultImplementation implements Implementation {
     @Override
     public boolean isFactory() {
         return false;
+    }
+
+    @Override
+    public Class<?> getTargetClass() {
+        return target.getClass();
+    }
+
+    @Override
+    public boolean isSingleton() {
+        return false;
+    }
+
+    @Override
+    public boolean isLazyInit() {
+        return false;
+    }
+
+    @Override
+    public void validate() throws ServiceValidationException {
+
     }
 }

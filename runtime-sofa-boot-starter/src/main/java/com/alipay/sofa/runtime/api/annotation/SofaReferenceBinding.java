@@ -14,67 +14,79 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime.spi.component;
-
-import com.alipay.sofa.runtime.api.ServiceValidationException;
+package com.alipay.sofa.runtime.api.annotation;
 
 /**
- * implementation interface
- *
- * @author xuanbei 18/2/28
+ * @author xuanbei 18/5/11
  */
-public interface Implementation {
+public @interface SofaReferenceBinding {
     /**
-     * get name
+     * protocol info, maybe jvm/bolt/rest
      *
-     * @return name
+     * @return
      */
-    String getName();
+    String bindingType() default "jvm";
 
     /**
-     * get target object
+     * timeout
      *
-     * @return target object
+     * @return
      */
-    Object getTarget();
+    int timeout() default 3000;
 
     /**
-     * get target object class type
+     * retry times
      *
-     * @return target class type
+     * @return
      */
-    Class<?> getTargetClass();
+    int retries() default 0;
 
     /**
-     * is singleton or not
+     * address time out
      *
-     * @return true or false。
+     * @return
      */
-    boolean isSingleton();
+    int addressWaitTime() default 0;
 
     /**
-     * is lazy init or not
+     * invoke type
      *
-     * @return true or false。
+     * @return
      */
-    boolean isLazyInit();
+    String invokeType() default "sync";
 
     /**
-     * set target object
+     * filter beans
+     *
+     * @return
      */
-    void setTarget(Object target);
+    String[] filters() default {};
 
     /**
-     * is Factory or not
+     * direct url
      *
-     * @return true or false。
+     * @return
      */
-    boolean isFactory();
+    String directUrl() default "";
 
     /**
-     * validate
+     * call back handler,when invoke type is callback,it
      *
-     * @throws ServiceValidationException
+     * @return
      */
-    void validate() throws ServiceValidationException;
+    String callBackHandler() default "";
+
+    /**
+     * registry for this consumer
+     *
+     * @return
+     */
+    String registry() default "";
+
+    /**
+     * service version
+     *
+     * @return
+     */
+    String version() default "1.0";
 }

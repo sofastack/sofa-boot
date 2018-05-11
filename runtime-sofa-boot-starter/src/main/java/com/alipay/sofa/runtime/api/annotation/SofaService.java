@@ -64,5 +64,5 @@ public @interface SofaService {
      *
      * @return
      */
-    SofaBinding[] bindings() default { @SofaBinding };
+    SofaServiceBinding[] bindings() default { @SofaServiceBinding };
 }
