@@ -16,8 +16,8 @@
  */
 package com.alipay.sofa.isle.profile;
 
-import com.alipay.sofa.isle.constants.SofaIsleFrameworkConstants;
-import com.alipay.sofa.isle.spring.config.SofaIsleProperties;
+import com.alipay.sofa.isle.constants.SofaModuleFrameworkConstants;
+import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -29,23 +29,24 @@ import java.util.Set;
  *
  * Created by yangguanchao on 16/4/1.
  */
-public class DefaultSofaIsleProfileEnvironment implements SofaIsleProfileEnvironment {
+public class DefaultSofaModuleProfileEnvironment implements SofaModuleProfileEnvironment {
     /** active sofa profiles */
     private final Set<String> activeProfiles = new HashSet<>();
 
     @Override
     public void initEnvironment(ApplicationContext applicationContext) {
         this.activeProfiles.clear();
-        this.activeProfiles.add(SofaIsleFrameworkConstants.DEFAULT_PROFILE_VALUE);
+        this.activeProfiles.add(SofaModuleFrameworkConstants.DEFAULT_PROFILE_VALUE);
         if (applicationContext == null || applicationContext.getEnvironment() == null) {
             return;
         }
 
-        String activeProfiles = applicationContext.getBean("sofaIsleProperties",
-            SofaIsleProperties.class).getActiveProfiles();
+        String activeProfiles = applicationContext
+            .getBean(SofaModuleFrameworkConstants.SOFA_MODULE_PROPERTIES_BEAN_ID,
+                SofaModuleProperties.class).getActiveProfiles();
         if (StringUtils.hasText(activeProfiles)) {
             String[] activeConfigProfileList = activeProfiles
-                .split(SofaIsleFrameworkConstants.PROFILE_SPLITTER);
+                .split(SofaModuleFrameworkConstants.PROFILE_SPLITTER);
             initActiveProfiles(activeConfigProfileList);
         }
     }
@@ -54,7 +55,7 @@ public class DefaultSofaIsleProfileEnvironment implements SofaIsleProfileEnviron
     public boolean acceptsProfiles(String[] sofaModuleProfiles) {
         Assert.notEmpty(sofaModuleProfiles,
             "Must specify at least one sofa module profile,at least one profile value is "
-                    + SofaIsleFrameworkConstants.DEFAULT_PROFILE_VALUE);
+                    + SofaModuleFrameworkConstants.DEFAULT_PROFILE_VALUE);
         for (String sofaModuleProfile : sofaModuleProfiles) {
             if (StringUtils.hasText(sofaModuleProfile) && sofaModuleProfile.charAt(0) == '!') {
                 if (!isProfileActive(sofaModuleProfile.substring(1))) {
@@ -86,7 +87,7 @@ public class DefaultSofaIsleProfileEnvironment implements SofaIsleProfileEnviron
         if (!StringUtils.hasText(profile)) {
             throw new IllegalArgumentException("Invalid profile [" + profile
                                                + "]: must contain text and at least a value "
-                                               + SofaIsleFrameworkConstants.DEFAULT_PROFILE_VALUE);
+                                               + SofaModuleFrameworkConstants.DEFAULT_PROFILE_VALUE);
         }
 
         if (profile.charAt(0) == '!') {

@@ -24,7 +24,7 @@ package com.alipay.sofa.runtime.spi.binding;
 public abstract class AbstractBinding implements Binding {
     protected boolean isHealthy   = true;
 
-    private boolean   isDestroyed = false;
+    protected boolean isDestroyed = false;
 
     @Override
     public String dump() {

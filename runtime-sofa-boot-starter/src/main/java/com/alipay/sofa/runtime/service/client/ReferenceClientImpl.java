@@ -63,7 +63,7 @@ public class ReferenceClientImpl implements ReferenceClient {
     private <T> Reference getReferenceFromReferenceParam(ReferenceParam<T> referenceParam) {
         BindingParam bindingParam = referenceParam.getBindingParam();
         Reference reference = new ReferenceImpl(referenceParam.getUniqueId(),
-            referenceParam.getInterfaceType(), InterfaceMode.api, referenceParam.isJvmFirst());
+            referenceParam.getInterfaceType(), InterfaceMode.api, referenceParam.isJvmFirst(), null);
 
         if (bindingParam == null) {
             // add JVM Binding Default

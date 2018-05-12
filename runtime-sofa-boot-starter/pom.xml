@@ -104,13 +104,11 @@
                                     <package>com.alipay.sofa.runtime.model</package>
                                     <package>com.alipay.sofa.runtime.spi.client</package>
                                     <package>com.alipay.sofa.runtime.spi.component</package>
-                                    <package>com.alipay.sofa.runtime.spi.constants</package>
                                     <package>com.alipay.sofa.runtime.spi.health</package>
                                     <package>com.alipay.sofa.runtime.spi.log</package>
                                     <package>com.alipay.sofa.runtime.spi.util</package>
                                     <package>com.alipay.sofa.runtime.client.impl</package>
                                     <package>com.alipay.sofa.runtime.component.impl</package>
-                                    <package>com.alipay.sofa.runtime.impl</package>
                                 </packages>
 
                                 <classes>

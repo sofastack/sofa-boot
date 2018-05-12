@@ -17,10 +17,10 @@
 package com.alipay.sofa.isle.loader;
 
 import com.alipay.sofa.isle.ApplicationRuntimeModel;
-import com.alipay.sofa.isle.constants.SofaIsleFrameworkConstants;
+import com.alipay.sofa.isle.constants.SofaModuleFrameworkConstants;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
-import com.alipay.sofa.isle.spring.config.SofaIsleProperties;
-import com.alipay.sofa.isle.spring.context.SofaIsleApplicationContext;
+import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
+import com.alipay.sofa.isle.spring.context.SofaModuleApplicationContext;
 import com.alipay.sofa.isle.spring.factory.BeanLoadCostBeanFactory;
 import com.alipay.sofa.runtime.spi.log.SofaLogger;
 import org.springframework.beans.CachedIntrospectionResults;
@@ -57,21 +57,21 @@ public class DynamicSpringContextLoader implements SpringContextLoader {
     @Override
     public void loadSpringContext(DeploymentDescriptor deployment,
                                   ApplicationRuntimeModel application) throws Exception {
-        SofaIsleProperties sofaIsleProperties = rootApplicationContext.getBean(
-            "sofaIsleProperties", SofaIsleProperties.class);
+        SofaModuleProperties sofaModuleProperties = rootApplicationContext
+            .getBean(SofaModuleFrameworkConstants.SOFA_MODULE_PROPERTIES_BEAN_ID,
+                SofaModuleProperties.class);
         BeanLoadCostBeanFactory beanFactory = new BeanLoadCostBeanFactory(
-            sofaIsleProperties.getBeanLoadCost());
+            sofaModuleProperties.getBeanLoadCost());
         beanFactory.setParameterNameDiscoverer(new LocalVariableTableParameterNameDiscoverer());
         beanFactory
             .setAutowireCandidateResolver(new QualifierAnnotationAutowireCandidateResolver());
 
-        GenericApplicationContext ctx = sofaIsleProperties.isPublishEventToParent() ? new GenericApplicationContext(
-            beanFactory) : new SofaIsleApplicationContext(beanFactory);
-        String sofaIsleActiveProfiles = sofaIsleProperties.getActiveProfiles();
-        if (StringUtils.hasText(sofaIsleActiveProfiles)) {
-            String[] activeProfiles = sofaIsleActiveProfiles
-                .split(SofaIsleFrameworkConstants.PROFILE_SPLITTER);
-            ctx.getEnvironment().setActiveProfiles(activeProfiles);
+        GenericApplicationContext ctx = sofaModuleProperties.isPublishEventToParent() ? new GenericApplicationContext(
+            beanFactory) : new SofaModuleApplicationContext(beanFactory);
+        String activeProfiles = sofaModuleProperties.getActiveProfiles();
+        if (StringUtils.hasText(activeProfiles)) {
+            String[] profiles = activeProfiles.split(SofaModuleFrameworkConstants.PROFILE_SPLITTER);
+            ctx.getEnvironment().setActiveProfiles(profiles);
         }
         setUpParentSpringContext(ctx, deployment, application);
         final ClassLoader moduleClassLoader = deployment.getClassLoader();
@@ -80,7 +80,7 @@ public class DynamicSpringContextLoader implements SpringContextLoader {
 
         // set allowBeanDefinitionOverriding
         ctx.setAllowBeanDefinitionOverriding(rootApplicationContext.getBean(
-            SofaIsleProperties.class).isAllowBeanDefinitionOverriding());
+            SofaModuleProperties.class).isAllowBeanDefinitionOverriding());
 
         ctx.getBeanFactory().setBeanClassLoader(moduleClassLoader);
         ctx.getBeanFactory().addPropertyEditorRegistrar(new PropertyEditorRegistrar() {
@@ -144,7 +144,7 @@ public class DynamicSpringContextLoader implements SpringContextLoader {
     @SuppressWarnings("unchecked")
     private void addPostProcessors(DefaultListableBeanFactory beanFactory) {
         Map<String, BeanDefinition> processors = (Map<String, BeanDefinition>) rootApplicationContext
-            .getBean(SofaIsleFrameworkConstants.PROCESSORS_OF_ROOT_APPLICATION_CONTEXT);
+            .getBean(SofaModuleFrameworkConstants.PROCESSORS_OF_ROOT_APPLICATION_CONTEXT);
         for (Map.Entry<String, BeanDefinition> entry : processors.entrySet()) {
             beanFactory.registerBeanDefinition(entry.getKey(), entry.getValue());
         }

@@ -18,7 +18,7 @@ package com.alipay.sofa.isle.spring.health;
 
 import com.alipay.sofa.healthcheck.core.DefaultHealthChecker;
 import com.alipay.sofa.isle.ApplicationRuntimeModel;
-import com.alipay.sofa.isle.constants.SofaIsleFrameworkConstants;
+import com.alipay.sofa.isle.constants.SofaModuleFrameworkConstants;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
 import org.springframework.beans.BeansException;
 import org.springframework.boot.actuate.health.Health;
@@ -27,19 +27,19 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
 /**
- * SofaIsle Module health checker
+ * SofaBoot Module health checker
  *
  * @author xuanbei 18/5/6
  */
-public class SofaIsleModuleHealthChecker extends DefaultHealthChecker implements
-                                                                     ApplicationContextAware {
+public class SofaModuleHealthChecker extends DefaultHealthChecker implements
+                                                                 ApplicationContextAware {
     private ApplicationContext applicationContext;
 
     @Override
     public Health isHealthy() {
         Health.Builder builder = new Health.Builder();
         ApplicationRuntimeModel application = applicationContext.getBean(
-            SofaIsleFrameworkConstants.APPLICATION, ApplicationRuntimeModel.class);
+            SofaModuleFrameworkConstants.APPLICATION, ApplicationRuntimeModel.class);
         for (DeploymentDescriptor deploymentDescriptor : application.getInstalled()) {
             builder.withDetail(deploymentDescriptor.getName(), "passed");
         }
@@ -57,7 +57,7 @@ public class SofaIsleModuleHealthChecker extends DefaultHealthChecker implements
 
     @Override
     public String getComponentName() {
-        return "SOFA ISLE";
+        return "SOFABoot Modules";
     }
 
     @Override

@@ -62,6 +62,8 @@ public class AwareTest implements ClientFactoryAware, SofaRuntimeContextAware,
 
     private SampleService      sampleServicePublishedByServiceClient;
 
+    private SampleService      sampleServiceAnnotationImplWithMethod;
+
     @Override
     public void afterPropertiesSet() throws Exception {
         ServiceParam serviceParam = new ServiceParam();
@@ -122,5 +124,14 @@ public class AwareTest implements ClientFactoryAware, SofaRuntimeContextAware,
 
     public SampleService getSampleServicePublishedByServiceClient() {
         return sampleServicePublishedByServiceClient;
+    }
+
+    public SampleService getSampleServiceAnnotationImplWithMethod() {
+        return sampleServiceAnnotationImplWithMethod;
+    }
+
+    @SofaReference(uniqueId = "method")
+    public void setSampleServiceAnnotationImplWithMethod(SampleService sampleServiceAnnotationImplWithMethod) {
+        this.sampleServiceAnnotationImplWithMethod = sampleServiceAnnotationImplWithMethod;
     }
 }

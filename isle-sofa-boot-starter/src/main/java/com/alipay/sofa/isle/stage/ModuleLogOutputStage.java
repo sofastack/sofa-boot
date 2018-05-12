@@ -17,7 +17,7 @@
 package com.alipay.sofa.isle.stage;
 
 import com.alipay.sofa.isle.ApplicationRuntimeModel;
-import com.alipay.sofa.isle.constants.SofaIsleFrameworkConstants;
+import com.alipay.sofa.isle.constants.SofaModuleFrameworkConstants;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
 import com.alipay.sofa.isle.spring.factory.BeanLoadCostBeanFactory;
 import com.alipay.sofa.runtime.spi.log.SofaLogger;
@@ -52,7 +52,7 @@ public class ModuleLogOutputStage extends AbstractPipelineStage {
     @Override
     protected void doProcess() throws Exception {
         ApplicationRuntimeModel application = applicationContext.getBean(
-            SofaIsleFrameworkConstants.APPLICATION, ApplicationRuntimeModel.class);
+            SofaModuleFrameworkConstants.APPLICATION, ApplicationRuntimeModel.class);
 
         StringBuilder stringBuilder = new StringBuilder();
         logInstalledModules(stringBuilder, application.getInstalled());

@@ -71,7 +71,6 @@ public class ServiceComponent extends AbstractComponent {
 
     @Override
     public boolean resolve() {
-
         resolveBinding();
         return super.resolve();
     }
@@ -87,6 +86,7 @@ public class ServiceComponent extends AbstractComponent {
 
         if (service.hasBinding()) {
             Set<Binding> bindings = service.getBindings();
+            boolean allPassed = true;
             for (Binding binding : bindings) {
                 BindingAdapter<Binding> bindingAdapter = this.bindingAdapterFactory
                     .getBindingAdapter(binding.getBindingType());
@@ -100,9 +100,21 @@ public class ServiceComponent extends AbstractComponent {
 
                 SofaLogger.info(" <<PreOut Binding [{0}] Begins - {1}.", binding.getBindingType(),
                     service);
-                bindingAdapter.preOutBinding(service, binding, target, getContext());
+                try {
+                    bindingAdapter.preOutBinding(service, binding, target, getContext());
+                } catch (Throwable t) {
+                    allPassed = false;
+                    SofaLogger.error(t, " <<PreOut Binding [{0}] for [{1}] occur exception.",
+                        binding.getBindingType(), service);
+                    continue;
+                }
                 SofaLogger.info(" <<PreOut Binding [{0}] Ends - {1}.", binding.getBindingType(),
                     service);
+            }
+
+            if (!allPassed) {
+                throw new ServiceRuntimeException(" <<PreOut Binding [" + service
+                                                  + "] occur exception.");
             }
         }
     }
@@ -124,6 +136,7 @@ public class ServiceComponent extends AbstractComponent {
         }
 
         if (service.hasBinding()) {
+            boolean allPassed = true;
             Set<Binding> bindings = service.getBindings();
             for (Binding binding : bindings) {
                 BindingAdapter<Binding> bindingAdapter = this.bindingAdapterFactory
@@ -136,10 +149,18 @@ public class ServiceComponent extends AbstractComponent {
                                                       + ".");
                 }
 
+                Object outBindingResult;
                 SofaLogger.info(" <<Out Binding [{0}] Begins - {1}.", binding.getBindingType(),
                     service);
-                Object outBindingResult = bindingAdapter.outBinding(service, binding, target,
-                    getContext());
+                try {
+                    outBindingResult = bindingAdapter.outBinding(service, binding, target,
+                        getContext());
+                } catch (Throwable t) {
+                    allPassed = false;
+                    SofaLogger.error(t, " <<Out binding [{0}] for [{1}] occur exception.",
+                        binding.getBindingType(), service);
+                    continue;
+                }
                 if (!Boolean.FALSE.equals(outBindingResult)) {
                     SofaLogger.info(" <<Out Binding [{0}] Ends - {1}.", binding.getBindingType(),
                         service);
@@ -148,6 +169,11 @@ public class ServiceComponent extends AbstractComponent {
                     SofaLogger.info(" <<Out Binding [{0}] Fails, Don't publish service - {1}.",
                         binding.getBindingType(), service);
                 }
+            }
+
+            if (!allPassed) {
+                throw new ServiceRuntimeException(" <<Out Binding [" + service
+                                                  + "] occur exception.");
             }
         }
 
@@ -164,6 +190,7 @@ public class ServiceComponent extends AbstractComponent {
         }
 
         if (service.hasBinding()) {
+            boolean allPassed = true;
             Set<Binding> bindings = service.getBindings();
             for (Binding binding : bindings) {
                 BindingAdapter<Binding> bindingAdapter = this.bindingAdapterFactory
@@ -178,9 +205,21 @@ public class ServiceComponent extends AbstractComponent {
 
                 SofaLogger.info(" <<Pre un-out Binding [{0}] Begins - {1}.",
                     binding.getBindingType(), service);
-                bindingAdapter.preUnoutBinding(service, binding, target, getContext());
+                try {
+                    bindingAdapter.preUnoutBinding(service, binding, target, getContext());
+                } catch (Throwable t) {
+                    allPassed = false;
+                    SofaLogger.error(t, " <<Pre un-out Binding [{0}] for [{1}] occur exception.",
+                        binding.getBindingType(), service);
+                    continue;
+                }
                 SofaLogger.info(" <<Pre un-out Binding [{0}] Ends - {1}.",
                     binding.getBindingType(), service);
+            }
+
+            if (!allPassed) {
+                throw new ServiceRuntimeException(" <<Pre un-out Binding [" + service
+                                                  + "] occur exception.");
             }
         }
 
@@ -213,6 +252,7 @@ public class ServiceComponent extends AbstractComponent {
         }
 
         if (service.hasBinding()) {
+            boolean allPassed = true;
             Set<Binding> bindings = service.getBindings();
             for (Binding binding : bindings) {
                 BindingAdapter<Binding> bindingAdapter = this.bindingAdapterFactory
@@ -227,9 +267,21 @@ public class ServiceComponent extends AbstractComponent {
 
                 SofaLogger.info(" <<Post un-out Binding [{0}] Begins - {1}.",
                     binding.getBindingType(), service);
-                bindingAdapter.postUnoutBinding(service, binding, target, getContext());
+                try {
+                    bindingAdapter.postUnoutBinding(service, binding, target, getContext());
+                } catch (Throwable t) {
+                    allPassed = false;
+                    SofaLogger.error(t, " <<Post un-out Binding [{0}] for [{1}] occur exception.",
+                        binding.getBindingType(), service);
+                    continue;
+                }
                 SofaLogger.info(" <<Post un-out Binding [{0}] Ends - {1}.",
                     binding.getBindingType(), service);
+            }
+
+            if (!allPassed) {
+                throw new ServiceRuntimeException(" <<Post un-out Binding [" + service
+                                                  + "] occur exception.");
             }
         }
     }

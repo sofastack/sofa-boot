@@ -14,30 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime.spi.log;
+package com.alipay.sofa.isle.profile;
 
-import com.alipay.sofa.common.log.LoggerSpaceManager;
-import org.slf4j.Logger;
+import org.springframework.context.ApplicationContext;
 
 /**
- * @author xuanbei 18/2/28
+ *
+ * Created by yangguanchao on 16/4/1.
  */
-public class SofaRuntimeLoggerFactory {
+public interface SofaModuleProfileEnvironment {
     /***
-     * sofa runtime log space
-     */
-    public static final String SOFA_RUNTIME_LOG_SPACE = "com.alipay.sofa.runtime";
-
-    /**
-     * get Logger Object
+     * init method
      *
-     * @param name
-     * @return Logger Object
+     * @param applicationContext
      */
-    public static Logger getLogger(String name) {
-        if (name == null || name.isEmpty()) {
-            return null;
-        }
-        return LoggerSpaceManager.getLoggerBySpace(name, SOFA_RUNTIME_LOG_SPACE);
-    }
+    void initEnvironment(ApplicationContext applicationContext);
+
+    /***
+     * determine whether the module should be activate
+     *
+     * @param sofaModuleProfiles
+     * @return true or false
+     */
+    boolean acceptsProfiles(String[] sofaModuleProfiles);
 }

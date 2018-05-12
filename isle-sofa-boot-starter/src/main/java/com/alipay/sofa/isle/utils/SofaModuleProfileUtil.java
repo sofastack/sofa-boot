@@ -16,10 +16,10 @@
  */
 package com.alipay.sofa.isle.utils;
 
-import com.alipay.sofa.isle.constants.SofaIsleFrameworkConstants;
+import com.alipay.sofa.isle.constants.SofaModuleFrameworkConstants;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
-import com.alipay.sofa.isle.profile.DefaultSofaIsleProfileEnvironment;
-import com.alipay.sofa.isle.profile.SofaIsleProfileEnvironment;
+import com.alipay.sofa.isle.profile.DefaultSofaModuleProfileEnvironment;
+import com.alipay.sofa.isle.profile.SofaModuleProfileEnvironment;
 import org.springframework.context.ApplicationContext;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -28,34 +28,36 @@ import java.util.concurrent.ConcurrentMap;
 /**
  * @author xuanbei 18/5/3
  */
-public class SofaIsleProfileUtil {
-    private static final ConcurrentMap<ApplicationContext, SofaIsleProfileEnvironment> map = new ConcurrentHashMap<>();
+public class SofaModuleProfileUtil {
+    private static final ConcurrentMap<ApplicationContext, SofaModuleProfileEnvironment> map = new ConcurrentHashMap<>();
 
     public static boolean acceptProfile(ApplicationContext applicationContext,
                                         DeploymentDescriptor dd) {
-        SofaIsleProfileEnvironment sofaProfileEnvironment = createSofaProfileEnvironment(applicationContext);
+        SofaModuleProfileEnvironment sofaProfileEnvironment = createSofaProfileEnvironment(applicationContext);
         return sofaProfileEnvironment.acceptsProfiles(getActiveModuleProfiles(dd));
     }
 
-    private static SofaIsleProfileEnvironment createSofaProfileEnvironment(ApplicationContext applicationContext) {
-        SofaIsleProfileEnvironment environment = map.get(applicationContext);
+    private static SofaModuleProfileEnvironment createSofaProfileEnvironment(ApplicationContext applicationContext) {
+        SofaModuleProfileEnvironment environment = map.get(applicationContext);
         if (environment == null) {
-            DefaultSofaIsleProfileEnvironment sofaProfileEnvironment = new DefaultSofaIsleProfileEnvironment();
+            DefaultSofaModuleProfileEnvironment sofaProfileEnvironment = new DefaultSofaModuleProfileEnvironment();
             sofaProfileEnvironment.initEnvironment(applicationContext);
-            map.putIfAbsent(applicationContext, sofaProfileEnvironment);
-            environment = map.get(applicationContext);
+            environment = map.putIfAbsent(applicationContext, sofaProfileEnvironment);
+            if (environment == null) {
+                environment = sofaProfileEnvironment;
+            }
         }
         return environment;
     }
 
     private static String[] getActiveModuleProfiles(DeploymentDescriptor deploymentDescriptor) {
-        String[] activeModuleProfiles = new String[] { SofaIsleFrameworkConstants.DEFAULT_PROFILE_VALUE };
+        String[] activeModuleProfiles = new String[] { SofaModuleFrameworkConstants.DEFAULT_PROFILE_VALUE };
         String profiles = deploymentDescriptor
-            .getProperty(SofaIsleFrameworkConstants.MODULE_PROFILE);
+            .getProperty(SofaModuleFrameworkConstants.MODULE_PROFILE);
         if (profiles == null || profiles.length() == 0) {
             return activeModuleProfiles;
         }
-        activeModuleProfiles = profiles.split(SofaIsleFrameworkConstants.PROFILE_SPLITTER);
+        activeModuleProfiles = profiles.split(SofaModuleFrameworkConstants.PROFILE_SPLITTER);
         return activeModuleProfiles;
     }
 }

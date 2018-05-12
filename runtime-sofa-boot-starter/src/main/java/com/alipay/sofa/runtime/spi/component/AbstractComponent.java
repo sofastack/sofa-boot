@@ -30,7 +30,7 @@ public abstract class AbstractComponent implements ComponentInfo {
     /**
      * component status
      */
-    private ComponentStatus      componentStatus = ComponentStatus.UNREGISTERED;
+    protected ComponentStatus    componentStatus = ComponentStatus.UNREGISTERED;
 
     protected Implementation     implementation;
 

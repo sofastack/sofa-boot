@@ -140,7 +140,7 @@ public class ReferenceComponent extends AbstractComponent {
             } else if (bindings.size() > 1) {
                 Object backupProxy = null;
                 for (Binding binding : bindings) {
-                    if ("jvm".equals(binding.getName())) {
+                    if (JvmBinding.JVM_BINDING_TYPE.getType().equals(binding.getName())) {
                         candidate = binding;
                     } else {
                         backupProxy = createProxy(reference, binding);

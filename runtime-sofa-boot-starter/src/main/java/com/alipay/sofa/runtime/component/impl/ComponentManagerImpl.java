@@ -85,7 +85,7 @@ public class ComponentManagerImpl implements ComponentManager {
         for (ComponentInfo ri : elems) {
             try {
                 unregister(ri);
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 SofaLogger.error(e, "failed to shutdown component manager");
             }
         }
@@ -96,7 +96,7 @@ public class ComponentManagerImpl implements ComponentManager {
             resolvedRegistry.clear();
             resolvedRegistry = null;
             clientFactoryInternal = null;
-        } catch (Exception e) {
+        } catch (Throwable e) {
             SofaLogger.error(e, "Failed to shutdown registry manager");
         }
     }
@@ -129,7 +129,7 @@ public class ComponentManagerImpl implements ComponentManager {
 
         try {
             ci.register();
-        } catch (Exception e) {
+        } catch (Throwable e) {
             SofaLogger.error(e, "Failed to register component: {0}", ci.getName());
             return null;
         }
@@ -146,8 +146,8 @@ public class ComponentManagerImpl implements ComponentManager {
                 typeRegistry(ci);
                 ci.activate();
             }
-        } catch (Exception e) {
-            ci.exception(e);
+        } catch (Throwable e) {
+            ci.exception(new Exception(e));
             SofaLogger.error(e, "Failed to create the component {0}", ci.getName());
         }
 

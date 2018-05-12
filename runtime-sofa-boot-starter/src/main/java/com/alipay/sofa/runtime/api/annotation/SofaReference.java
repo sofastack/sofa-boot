@@ -36,7 +36,7 @@ import java.lang.annotation.Target;
  * @author xuanbei 18/3/2
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
+@Target({ ElementType.FIELD, ElementType.METHOD })
 public @interface SofaReference {
 
     /**

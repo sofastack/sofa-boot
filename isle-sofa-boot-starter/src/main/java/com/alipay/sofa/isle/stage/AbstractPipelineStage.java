@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.isle.stage;
 
-import com.alipay.sofa.isle.constants.SofaIsleFrameworkConstants;
+import com.alipay.sofa.isle.constants.SofaModuleFrameworkConstants;
 import com.alipay.sofa.runtime.spi.log.SofaLogger;
 import org.springframework.context.support.AbstractApplicationContext;
 
@@ -33,16 +33,16 @@ public abstract class AbstractPipelineStage implements PipelineStage {
     public AbstractPipelineStage(AbstractApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
         appName = applicationContext.getEnvironment().getProperty(
-            SofaIsleFrameworkConstants.APPLICATION_NAME);
+            SofaModuleFrameworkConstants.APPLICATION_NAME);
     }
 
     @Override
     public void process() throws Exception {
-        SofaLogger.info("++++++++++++++++++ {1} of {0} Start +++++++++++++++++", appName, this
-            .getClass().getSimpleName());
+        SofaLogger.info("++++++++++++++++++ {0} of {1} Start +++++++++++++++++", this.getClass()
+            .getSimpleName(), appName);
         doProcess();
-        SofaLogger.info("++++++++++++++++++ {1} of {0} End +++++++++++++++++", appName, this
-            .getClass().getSimpleName());
+        SofaLogger.info("++++++++++++++++++ {0} of {1} End +++++++++++++++++", this.getClass()
+            .getSimpleName(), appName);
     }
 
     /**

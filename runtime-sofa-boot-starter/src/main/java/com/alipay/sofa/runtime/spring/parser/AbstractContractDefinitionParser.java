@@ -77,7 +77,7 @@ public abstract class AbstractContractDefinitionParser extends AbstractSingleBea
                 transformer.transform(new DOMSource(childElement), new StreamResult(buffer));
                 String str = buffer.toString();
                 elementAsTypedStringValueList.add(new TypedStringValue(str, Element.class));
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 throw new ServiceRuntimeException(e);
             }
         }

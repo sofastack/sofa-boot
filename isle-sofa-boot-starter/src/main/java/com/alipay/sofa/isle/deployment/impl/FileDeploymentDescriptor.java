@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.isle.deployment.impl;
 
-import com.alipay.sofa.isle.constants.SofaIsleFrameworkConstants;
+import com.alipay.sofa.isle.constants.SofaModuleFrameworkConstants;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptorConfiguration;
 import org.springframework.core.io.FileSystemResource;
 
@@ -24,7 +24,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.*;
 
-import static com.alipay.sofa.isle.constants.SofaIsleFrameworkConstants.ISLE_MODULE_FILE;
+import static com.alipay.sofa.isle.constants.SofaModuleFrameworkConstants.SOFA_MODULE_FILE;
 
 /**
  *
@@ -43,8 +43,8 @@ public class FileDeploymentDescriptor extends AbstractDeploymentDescriptor {
     public void loadSpringXMLs() {
         springResources = new HashMap<>();
         File springXml = new File(url.getFile().substring(0,
-            url.getFile().length() - ISLE_MODULE_FILE.length()),
-            SofaIsleFrameworkConstants.SPRING_CONTEXT_PATH);
+            url.getFile().length() - SOFA_MODULE_FILE.length()),
+            SofaModuleFrameworkConstants.SPRING_CONTEXT_PATH);
         List<File> springFiles = new ArrayList<>();
         if (springXml.exists()) {
             listFiles(springFiles, springXml, ".xml");
@@ -53,7 +53,7 @@ public class FileDeploymentDescriptor extends AbstractDeploymentDescriptor {
             for (File f : springFiles) {
                 springResources.put(f.getAbsolutePath(), new FileSystemResource(f));
             }
-        } catch (Exception e) {
+        } catch (Throwable e) {
             throw new RuntimeException(e);
         }
     }

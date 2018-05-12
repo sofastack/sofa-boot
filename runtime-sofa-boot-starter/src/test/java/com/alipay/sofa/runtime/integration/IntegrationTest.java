@@ -71,6 +71,8 @@ public class IntegrationTest extends AbstractTestBase {
     public void testServiceAndReference() {
         Assert.assertEquals(awareTest.getSampleServiceAnnotationWithUniqueId().service(),
             "SampleServiceAnnotationImplWithUniqueId");
+        Assert.assertEquals(awareTest.getSampleServiceAnnotationImplWithMethod().service(),
+            "SampleServiceAnnotationImplWithMethod");
         Assert.assertEquals(awareTest.getSampleServicePublishedByServiceClient().service(),
             "SampleServiceImpl published by service client.");
         Assert.assertEquals(

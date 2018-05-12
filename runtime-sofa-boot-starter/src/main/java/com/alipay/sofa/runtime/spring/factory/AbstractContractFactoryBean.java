@@ -17,6 +17,7 @@
 package com.alipay.sofa.runtime.spring.factory;
 
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
+import com.alipay.sofa.runtime.constants.SofaRuntimeFrameworkConstants;
 import com.alipay.sofa.runtime.service.binding.JvmBinding;
 import com.alipay.sofa.runtime.spi.binding.Binding;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
@@ -85,9 +86,11 @@ public abstract class AbstractContractFactoryBean implements InitializingBean,
                 .getDocumentElement();
             tempElements.add(node);
         }
-        bindingConverterFactory = applicationContext.getBean("bindingConverterFactory",
+        bindingConverterFactory = applicationContext.getBean(
+            SofaRuntimeFrameworkConstants.BINDING_CONVERTER_FACTORY_BEAN_ID,
             BindingConverterFactory.class);
-        bindingAdapterFactory = applicationContext.getBean("bindingAdapterFactory",
+        bindingAdapterFactory = applicationContext.getBean(
+            SofaRuntimeFrameworkConstants.BINDING_ADAPTER_FACTORY_BEAN_ID,
             BindingAdapterFactory.class);
         this.bindings = parseBindings(tempElements, applicationContext, isInBinding());
         doAfterPropertiesSet();

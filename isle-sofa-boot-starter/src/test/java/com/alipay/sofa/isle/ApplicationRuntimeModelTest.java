@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.isle;
 
-import com.alipay.sofa.isle.constants.SofaIsleFrameworkConstants;
+import com.alipay.sofa.isle.constants.SofaModuleFrameworkConstants;
 import com.alipay.sofa.isle.deployment.DeploymentBuilder;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptorConfiguration;
@@ -30,8 +30,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Properties;
 
-import static com.alipay.sofa.isle.constants.SofaIsleFrameworkConstants.MODULE_NAME;
-import static com.alipay.sofa.isle.constants.SofaIsleFrameworkConstants.REQUIRE_MODULE;
+import static com.alipay.sofa.isle.constants.SofaModuleFrameworkConstants.MODULE_NAME;
+import static com.alipay.sofa.isle.constants.SofaModuleFrameworkConstants.REQUIRE_MODULE;
 import static org.junit.Assert.*;
 
 /**
@@ -47,8 +47,8 @@ public class ApplicationRuntimeModelTest {
 
         // new DeploymentDescriptorConfiguration instance
         DeploymentDescriptorConfiguration deploymentDescriptorConfiguration = new DeploymentDescriptorConfiguration(
-            Collections.singletonList(SofaIsleFrameworkConstants.MODULE_NAME),
-            Collections.singletonList(SofaIsleFrameworkConstants.REQUIRE_MODULE));
+            Collections.singletonList(SofaModuleFrameworkConstants.MODULE_NAME),
+            Collections.singletonList(SofaModuleFrameworkConstants.REQUIRE_MODULE));
 
         // add first SOFAIsle module
         Properties props = new Properties();

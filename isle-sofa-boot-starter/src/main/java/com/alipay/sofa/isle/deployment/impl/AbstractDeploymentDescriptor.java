@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.isle.deployment.impl;
 
-import com.alipay.sofa.isle.constants.SofaIsleFrameworkConstants;
+import com.alipay.sofa.isle.constants.SofaModuleFrameworkConstants;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptorConfiguration;
 import org.springframework.context.ApplicationContext;
@@ -122,7 +122,7 @@ public abstract class AbstractDeploymentDescriptor implements DeploymentDescript
 
     @Override
     public String getSpringParent() {
-        List<String> name = getFormattedModuleInfo(SofaIsleFrameworkConstants.SPRING_PARENT);
+        List<String> name = getFormattedModuleInfo(SofaModuleFrameworkConstants.SPRING_PARENT);
         return name == null ? null : name.get(0);
     }
 

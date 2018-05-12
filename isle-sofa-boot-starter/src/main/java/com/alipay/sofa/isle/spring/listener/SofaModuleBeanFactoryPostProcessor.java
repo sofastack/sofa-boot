@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.isle.spring.listener;
 
-import com.alipay.sofa.isle.constants.SofaIsleFrameworkConstants;
+import com.alipay.sofa.isle.constants.SofaModuleFrameworkConstants;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
@@ -32,7 +32,7 @@ import java.util.Map;
  *
  * @author xuanbei 18/3/26
  */
-public class SofaIsleBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
+public class SofaModuleBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
     /** spring will add automatically  **/
     private final String[] whiteNameList = new String[] {
             ConfigurationClassPostProcessor.class.getName() + ".importAwareProcessor",
@@ -45,7 +45,7 @@ public class SofaIsleBeanFactoryPostProcessor implements BeanFactoryPostProcesso
         Map<String, BeanDefinition> postProcessorDefinitions = getBeanDefinitionsForType(
             beanFactory, BeanPostProcessor.class, BeanFactoryPostProcessor.class);
         beanFactory.registerSingleton(
-            SofaIsleFrameworkConstants.PROCESSORS_OF_ROOT_APPLICATION_CONTEXT,
+            SofaModuleFrameworkConstants.PROCESSORS_OF_ROOT_APPLICATION_CONTEXT,
             postProcessorDefinitions);
     }
 

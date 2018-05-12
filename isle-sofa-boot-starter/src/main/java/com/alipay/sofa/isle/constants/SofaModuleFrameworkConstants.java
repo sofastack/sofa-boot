@@ -17,21 +17,22 @@
 package com.alipay.sofa.isle.constants;
 
 /**
- * SOFAIsle Framework Constants
+ * Framework Constants
  *
  * @author khotyn 7/25/14 8:21 PM
  */
-public interface SofaIsleFrameworkConstants {
-    /** SOFAIsle framework constants **/
-    String APPLICATION                            = "SOFAIsle-APPLICATION";
+public interface SofaModuleFrameworkConstants {
+    /** framework constants **/
+    String APPLICATION                            = "SOFABOOT-APPLICATION";
     String PROCESSORS_OF_ROOT_APPLICATION_CONTEXT = "PROCESSORS_OF_ROOT_APPLICATION_CONTEXT";
-    String ISLE_MODULE_FILE                       = "isle-module.properties";
+    String SOFA_MODULE_FILE                       = "sofa-module.properties";
     String APPLICATION_NAME                       = "spring.application.name";
     String SPRING_CONTEXT_PATH                    = "META-INF/spring";
     String PROFILE_SPLITTER                       = ",";
     String DEFAULT_PROFILE_VALUE                  = "default";
+    String SOFA_MODULE_PROPERTIES_BEAN_ID         = "sofaModuleProperties";
 
-    /** isle-module.config keywords **/
+    /** sofa-module.properties keywords **/
     String SPRING_PARENT                          = "Spring-Parent";
     String MODULE_NAME                            = "Module-Name";
     String REQUIRE_MODULE                         = "Require-Module";

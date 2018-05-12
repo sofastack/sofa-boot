@@ -17,13 +17,13 @@
 package com.alipay.sofa.isle.stage;
 
 import com.alipay.sofa.isle.ApplicationRuntimeModel;
-import com.alipay.sofa.isle.constants.SofaIsleFrameworkConstants;
+import com.alipay.sofa.isle.constants.SofaModuleFrameworkConstants;
 import com.alipay.sofa.isle.deployment.DependencyTree;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
 import com.alipay.sofa.isle.deployment.DeploymentException;
 import com.alipay.sofa.isle.loader.DynamicSpringContextLoader;
 import com.alipay.sofa.isle.loader.SpringContextLoader;
-import com.alipay.sofa.isle.spring.config.SofaIsleProperties;
+import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
 import com.alipay.sofa.isle.utils.NamedThreadFactory;
 import com.alipay.sofa.runtime.spi.log.SofaLogger;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -55,11 +55,11 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
     @Override
     protected void doProcess() throws Exception {
         ApplicationRuntimeModel application = applicationContext.getBean(
-            SofaIsleFrameworkConstants.APPLICATION, ApplicationRuntimeModel.class);
+            SofaModuleFrameworkConstants.APPLICATION, ApplicationRuntimeModel.class);
 
         try {
             doProcess(application);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             SofaLogger.error(e, "Install Spring Context got an error.");
             throw new DeploymentException("Install Spring Context got an error.", e);
         }
@@ -70,8 +70,8 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
         SpringContextLoader springContextLoader = new DynamicSpringContextLoader(applicationContext);
         installSpringContext(application, springContextLoader);
 
-        if (applicationContext.getBean("sofaIsleProperties", SofaIsleProperties.class)
-            .isModuleStartUpParallel()) {
+        if (applicationContext.getBean(SofaModuleFrameworkConstants.SOFA_MODULE_PROPERTIES_BEAN_ID,
+            SofaModuleProperties.class).isModuleStartUpParallel()) {
             refreshSpringContextParallel(application);
         } else {
             refreshSpringContext(application);
@@ -119,7 +119,7 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
 
         if (application.getDeployRegistry().getPendingEntries().size() > 0) {
             throw new DeploymentException(
-                "Some SOFAIsle module could not be install because of module dependency problem.");
+                "Some SOFABoot module could not be install because of module dependency problem.");
         }
     }
 

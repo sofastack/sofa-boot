@@ -14,27 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.isle.profile;
-
-import org.springframework.context.ApplicationContext;
+package com.alipay.sofa.runtime.constants;
 
 /**
+ * Framework Constants
  *
- * Created by yangguanchao on 16/4/1.
+ * @author xuanbei 18/5/12
  */
-public interface SofaIsleProfileEnvironment {
-    /***
-     * init method
-     *
-     * @param applicationContext
-     */
-    void initEnvironment(ApplicationContext applicationContext);
-
-    /***
-     * determine whether the module should be activate
-     *
-     * @param sofaModuleProfiles
-     * @return true or false
-     */
-    boolean acceptsProfiles(String[] sofaModuleProfiles);
+public interface SofaRuntimeFrameworkConstants {
+    String BINDING_CONVERTER_FACTORY_BEAN_ID = "bindingConverterFactory";
+    String BINDING_ADAPTER_FACTORY_BEAN_ID   = "bindingAdapterFactory";
+    String SOFA_RUNTIME_PROPERTIES_BEAN_ID   = "sofaRuntimeProperties";
 }

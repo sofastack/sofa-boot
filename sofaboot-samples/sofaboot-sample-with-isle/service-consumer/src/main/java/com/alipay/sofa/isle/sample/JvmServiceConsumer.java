@@ -33,11 +33,11 @@ public class JvmServiceConsumer implements ClientFactoryAware {
     private SampleJvmService sampleJvmService;
 
     @SofaReference(uniqueId = "annotationImpl")
-    private SampleJvmService sampleJvmServiceAnnotationImpl;
+    private SampleJvmService sampleJvmServiceByFieldAnnotation;
 
     public void init() {
         sampleJvmService.message();
-        sampleJvmServiceAnnotationImpl.message();
+        sampleJvmServiceByFieldAnnotation.message();
 
         ReferenceClient referenceClient = clientFactory.getClient(ReferenceClient.class);
         ReferenceParam<SampleJvmService> referenceParam = new ReferenceParam<>();

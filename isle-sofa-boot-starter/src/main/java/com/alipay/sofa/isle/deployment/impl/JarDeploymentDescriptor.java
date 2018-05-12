@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.isle.deployment.impl;
 
-import com.alipay.sofa.isle.constants.SofaIsleFrameworkConstants;
+import com.alipay.sofa.isle.constants.SofaModuleFrameworkConstants;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptorConfiguration;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.util.Assert;
@@ -61,10 +61,10 @@ public class JarDeploymentDescriptor extends AbstractDeploymentDescriptor {
             for (Enumeration<JarEntry> entries = jarFile.entries(); entries.hasMoreElements();) {
                 JarEntry entry = entries.nextElement();
                 String entryPath = entry.getName();
-                if (entryPath.startsWith(SofaIsleFrameworkConstants.SPRING_CONTEXT_PATH)
+                if (entryPath.startsWith(SofaModuleFrameworkConstants.SPRING_CONTEXT_PATH)
                     && entryPath.endsWith("xml")) {
                     String fileName = entry.getName().substring(
-                        SofaIsleFrameworkConstants.SPRING_CONTEXT_PATH.length() + 1);
+                        SofaModuleFrameworkConstants.SPRING_CONTEXT_PATH.length() + 1);
                     springResources.put(fileName,
                         convertToByteArrayResource(jarFile.getInputStream(entry)));
                 }

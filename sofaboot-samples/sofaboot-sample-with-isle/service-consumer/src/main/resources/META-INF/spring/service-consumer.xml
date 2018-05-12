@@ -6,13 +6,9 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
             http://sofastack.io/schema/sofaboot http://sofastack.io/schema/sofaboot.xsd"
        default-autowire="byName">
-
-    <bean id="sampleService" class="com.alipay.sofa.isle.sample.SampleService" init-method="init">
-        <property name="message" value="hello from service consumer module."/>
-    </bean>
-
-    <sofa:reference id="sampleJvmService" interface="com.alipay.sofa.isle.sample.SampleJvmService"/>
+    <sofa:reference id="sampleJvmService" interface="com.alipay.sofa.isle.sample.SampleJvmService">
+        <sofa:binding.jvm/>
+    </sofa:reference>
 
     <bean id="consumer" class="com.alipay.sofa.isle.sample.JvmServiceConsumer" init-method="init" />
-
 </beans>

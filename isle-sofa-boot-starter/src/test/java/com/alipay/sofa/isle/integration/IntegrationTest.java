@@ -17,8 +17,8 @@
 package com.alipay.sofa.isle.integration;
 
 import com.alipay.sofa.isle.ApplicationRuntimeModel;
-import com.alipay.sofa.isle.constants.SofaIsleFrameworkConstants;
-import com.alipay.sofa.isle.spring.config.SofaIsleProperties;
+import com.alipay.sofa.isle.constants.SofaModuleFrameworkConstants;
+import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
 import com.alipay.sofa.isle.util.ClassPathUtil;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -41,10 +41,10 @@ import static org.junit.Assert.assertTrue;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = SofaBootTestApplication.class)
 public class IntegrationTest implements ApplicationContextAware {
-    private ApplicationContext applicationContext;
+    private ApplicationContext   applicationContext;
 
     @Autowired
-    private SofaIsleProperties sofaIsleProperties;
+    private SofaModuleProperties sofaModuleProperties;
 
     @BeforeClass
     public static void before() throws Exception {
@@ -53,20 +53,20 @@ public class IntegrationTest implements ApplicationContextAware {
         ClassPathUtil.addClassPathAtRuntime("test-module-0.1.0.jar");
 
         // add argument in System properties
-        System.setProperty("com.alipay.sofa.boot.moduleStartUpParallel", "true");
+        System.setProperty("com.alipay.sofa.boot.module-start-up-parallel", "true");
     }
 
     @Test
     public void test() {
-        // test sofaIsleProperties
-        assertEquals(sofaIsleProperties.getActiveProfiles(), "dev");
-        assertEquals(sofaIsleProperties.isModuleStartUpParallel(), true);
-        assertEquals(sofaIsleProperties.isPublishEventToParent(), false);
-        assertEquals(sofaIsleProperties.isAllowBeanDefinitionOverriding(), true);
-        assertEquals(sofaIsleProperties.getBeanLoadCost(), 10);
+        // test sofaModuleProperties
+        assertEquals(sofaModuleProperties.getActiveProfiles(), "dev");
+        assertEquals(sofaModuleProperties.isModuleStartUpParallel(), true);
+        assertEquals(sofaModuleProperties.isPublishEventToParent(), false);
+        assertEquals(sofaModuleProperties.isAllowBeanDefinitionOverriding(), true);
+        assertEquals(sofaModuleProperties.getBeanLoadCost(), 10);
 
         ApplicationRuntimeModel applicationRuntimeModel = (ApplicationRuntimeModel) applicationContext
-            .getBean(SofaIsleFrameworkConstants.APPLICATION);
+            .getBean(SofaModuleFrameworkConstants.APPLICATION);
 
         // contains three Deployments
         assertEquals(2, applicationRuntimeModel.getAllDeployments().size());

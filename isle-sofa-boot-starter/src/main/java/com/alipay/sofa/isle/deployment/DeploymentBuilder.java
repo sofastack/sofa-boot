@@ -23,15 +23,16 @@ import java.net.URL;
 import java.util.Properties;
 
 /**
+ * SOFABoot Module deployment creator
  *
  * @author yangyanzhao
  * @version $Id: DeploymentBuilder.java, v 0.1 2012-1-11 07:40:11 yangyanzhao Exp $
  */
 public class DeploymentBuilder {
     /**
-     * build a SOFAIsle deployment descriptor
+     * build a SOFABoot Module deployment descriptor
      *
-     * @param url SOFAIsle module file url
+     * @param url SOFABoot module file url
      * @param deploymentDescriptorConfiguration
      * @return
      */

@@ -34,7 +34,7 @@ import java.util.Set;
  *
  * @author xuanbei 18/3/5
  */
-public class SofaIsleApplicationContext extends GenericApplicationContext {
+public class SofaModuleApplicationContext extends GenericApplicationContext {
     private static final Method getApplicationEventMulticasterMethod;
     private static final Field  earlyApplicationEventsField;
     static {
@@ -51,12 +51,12 @@ public class SofaIsleApplicationContext extends GenericApplicationContext {
     }
 
     /**
-     * Create a new SofaIsleApplicationContext with the given DefaultListableBeanFactory.
+     * Create a new SofaModuleApplicationContext with the given DefaultListableBeanFactory.
      * @param beanFactory the DefaultListableBeanFactory instance to use for this context
      * @see #registerBeanDefinition
      * @see #refresh
      */
-    public SofaIsleApplicationContext(DefaultListableBeanFactory beanFactory) {
+    public SofaModuleApplicationContext(DefaultListableBeanFactory beanFactory) {
         super(beanFactory);
     }
 
@@ -105,7 +105,7 @@ public class SofaIsleApplicationContext extends GenericApplicationContext {
     private <T> T getMethodValueByReflect(Method method, Object obj, Object... args) {
         try {
             return (T) method.invoke(obj, args);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             throw new RuntimeException(e);
         }
     }

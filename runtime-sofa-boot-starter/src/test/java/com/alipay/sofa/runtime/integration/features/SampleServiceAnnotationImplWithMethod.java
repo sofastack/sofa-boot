@@ -14,23 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.isle.sample;
+package com.alipay.sofa.runtime.integration.features;
+
+import com.alipay.sofa.runtime.api.annotation.SofaService;
+import com.alipay.sofa.runtime.beans.service.SampleService;
+import org.springframework.stereotype.Component;
 
 /**
- * @author xuanbei 18/5/5
+ * @author xuanbei 18/5/12
  */
-public class SampleService {
-    private String message;
-
-    public void init() {
-        System.out.println(message);
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
+@Component
+@SofaService(uniqueId = "method")
+public class SampleServiceAnnotationImplWithMethod implements SampleService {
+    @Override
+    public String service() {
+        return "SampleServiceAnnotationImplWithMethod";
     }
 }

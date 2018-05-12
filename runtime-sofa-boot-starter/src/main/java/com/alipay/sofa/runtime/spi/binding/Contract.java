@@ -73,9 +73,9 @@ public interface Contract {
     String getProperty(String key);
 
     /***
-     * get all config
+     * get all properties
      *
-     * @return all config
+     * @return all properties
      */
     Map<String, String> getProperty();
 

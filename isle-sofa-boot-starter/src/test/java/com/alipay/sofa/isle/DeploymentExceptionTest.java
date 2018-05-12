@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.isle;
 
-import com.alipay.sofa.isle.constants.SofaIsleFrameworkConstants;
+import com.alipay.sofa.isle.constants.SofaModuleFrameworkConstants;
 import com.alipay.sofa.isle.deployment.DeploymentBuilder;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptorConfiguration;
 import com.alipay.sofa.isle.deployment.DeploymentException;
@@ -30,8 +30,8 @@ import java.net.URL;
 import java.util.Collections;
 import java.util.Properties;
 
-import static com.alipay.sofa.isle.constants.SofaIsleFrameworkConstants.MODULE_NAME;
-import static com.alipay.sofa.isle.constants.SofaIsleFrameworkConstants.REQUIRE_MODULE;
+import static com.alipay.sofa.isle.constants.SofaModuleFrameworkConstants.MODULE_NAME;
+import static com.alipay.sofa.isle.constants.SofaModuleFrameworkConstants.REQUIRE_MODULE;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -46,8 +46,8 @@ public class DeploymentExceptionTest {
         application.setAppName("testCase");
         application.setModuleDeploymentValidator(new DefaultModuleDeploymentValidator());
         DeploymentDescriptorConfiguration deploymentDescriptorConfiguration = new DeploymentDescriptorConfiguration(
-            Collections.singletonList(SofaIsleFrameworkConstants.MODULE_NAME),
-            Collections.singletonList(SofaIsleFrameworkConstants.REQUIRE_MODULE));
+            Collections.singletonList(SofaModuleFrameworkConstants.MODULE_NAME),
+            Collections.singletonList(SofaModuleFrameworkConstants.REQUIRE_MODULE));
         Properties props = new Properties();
         props.setProperty(MODULE_NAME, "com.alipay.test");
         props.setProperty(REQUIRE_MODULE, "com.alipay.dependency");
@@ -58,12 +58,12 @@ public class DeploymentExceptionTest {
         // mock ApplicationContext
         AbstractApplicationContext applicationContext = mock(AbstractApplicationContext.class);
         when(
-            applicationContext.getBean(SofaIsleFrameworkConstants.APPLICATION,
+            applicationContext.getBean(SofaModuleFrameworkConstants.APPLICATION,
                 ApplicationRuntimeModel.class)).thenReturn(application);
 
         ConfigurableEnvironment environment = mock(ConfigurableEnvironment.class);
         when(applicationContext.getEnvironment()).thenReturn(environment);
-        when(environment.getProperty(SofaIsleFrameworkConstants.APPLICATION_NAME)).thenReturn(
+        when(environment.getProperty(SofaModuleFrameworkConstants.APPLICATION_NAME)).thenReturn(
             "testCase");
 
         new SpringContextInstallStage(applicationContext).process();

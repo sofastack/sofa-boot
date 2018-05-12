@@ -32,8 +32,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * @author xuanbei 18/3/12
  */
-public class SofaIsleContextRefreshedListener implements PriorityOrdered,
-                                             ApplicationListener<ContextRefreshedEvent> {
+public class SofaModuleContextRefreshedListener implements PriorityOrdered,
+                                               ApplicationListener<ContextRefreshedEvent> {
     private static final AtomicBoolean INIT = new AtomicBoolean(false);
 
     @Override

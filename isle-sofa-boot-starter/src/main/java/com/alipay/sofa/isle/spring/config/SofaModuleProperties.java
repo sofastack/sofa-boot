@@ -18,15 +18,15 @@ package com.alipay.sofa.isle.spring.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import static com.alipay.sofa.isle.spring.config.SofaIsleProperties.PREFIX;
+import static com.alipay.sofa.isle.spring.config.SofaModuleProperties.PREFIX;
 
 /**
- * SOFAIsle Properties
+ * Properties
  *
  * @author xuanbei 18/5/6
  */
 @ConfigurationProperties(prefix = PREFIX)
-public class SofaIsleProperties {
+public class SofaModuleProperties {
     static final String PREFIX                        = "com.alipay.sofa.boot";
 
     private String      activeProfiles;

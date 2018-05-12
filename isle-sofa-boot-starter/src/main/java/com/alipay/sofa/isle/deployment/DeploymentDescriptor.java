@@ -23,16 +23,16 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * SOFAIsle Module Deployment Descriptor.
+ * SOFABoot Module Deployment Descriptor.
  *
  * @author yangyanzhao
  * @version $Id: DeploymentDescriptor.java, v 0.1 2012-1-10 12:28:28 yangyanzhao Exp $
  */
 public interface DeploymentDescriptor extends Comparable<DeploymentDescriptor> {
     /**
-     * get SOFAIsle Module Name.
+     * get SOFABoot Module Name.
      *
-     * @return SOFAIsle Module Name
+     * @return SOFABoot Module Name
      */
     String getModuleName();
 
@@ -59,56 +59,56 @@ public interface DeploymentDescriptor extends Comparable<DeploymentDescriptor> {
     String getProperty(String key);
 
     /**
-     * get Spring Parent of this SOFAIsle module.
+     * get Spring Parent of this SOFABoot module.
      *
-     * @return Spring Parent of this SOFAIsle module
+     * @return Spring Parent of this SOFABoot module
      */
     String getSpringParent();
 
     /**
-     * get classloader of this SOFAIsle module.
+     * get classloader of this SOFABoot module.
      *
-     * @return classloader of this SOFAIsle module
+     * @return classloader of this SOFABoot module
      */
     ClassLoader getClassLoader();
 
     /**
-     * set application context of this SOFAIsle module.
+     * set application context of this SOFABoot module.
      *
-     * @param context application context of this SOFAIsle module.
+     * @param context application context of this SOFABoot module.
      */
     void setApplicationContext(ApplicationContext context);
 
     /**
-     * get application context of this SOFAIsle module.
+     * get application context of this SOFABoot module.
      *
-     * @return application context of this SOFAIsle module
+     * @return application context of this SOFABoot module
      */
     ApplicationContext getApplicationContext();
 
     /**
-     * add installed spring xml of this SOFAIsle module.
+     * add installed spring xml of this SOFABoot module.
      *
      * @param fileName spring xml filename
      */
     void addInstalledSpringXml(String fileName);
 
     /**
-     * get all installed spring xml files of this SOFAIsle module.
+     * get all installed spring xml files of this SOFABoot module.
      *
      * @return
      */
     List<String> getInstalledSpringXml();
 
     /**
-     * determine whether this SOFAIsle module is spring powered.
+     * determine whether this SOFABoot module is spring powered.
      *
      * @return true or false
      */
     boolean isSpringPowered();
 
     /**
-     * invoke when deploy this SOFAIsle module.
+     * invoke when deploy this SOFABoot module.
      */
     void startDeploy();
 
@@ -118,21 +118,21 @@ public interface DeploymentDescriptor extends Comparable<DeploymentDescriptor> {
     void deployFinish();
 
     /**
-     * get Spring resources of this SOFAIsle module.
+     * get Spring resources of this SOFABoot module.
      *
      * @return
      */
     Map<String, Resource> getSpringResources();
 
     /**
-     * get deploy elapsed time of this SOFAIsle module.
+     * get deploy elapsed time of this SOFABoot module.
      *
      * @return
      */
     long getElapsedTime();
 
     /**
-     * get start deploy time of this SOFAIsle module.
+     * get start deploy time of this SOFABoot module.
      *
      * @return
      */

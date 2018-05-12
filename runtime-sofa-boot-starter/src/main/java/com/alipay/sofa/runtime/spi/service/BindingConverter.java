@@ -16,10 +16,12 @@
  */
 package com.alipay.sofa.runtime.spi.service;
 
+import com.alipay.sofa.runtime.api.annotation.SofaReference;
+import com.alipay.sofa.runtime.api.annotation.SofaReferenceBinding;
+import com.alipay.sofa.runtime.api.annotation.SofaService;
+import com.alipay.sofa.runtime.api.annotation.SofaServiceBinding;
 import com.alipay.sofa.runtime.api.binding.BindingType;
 import com.alipay.sofa.runtime.api.client.param.BindingParam;
-import com.alipay.sofa.runtime.service.SofaReferenceDefinition;
-import com.alipay.sofa.runtime.service.SofaServiceDefinition;
 import com.alipay.sofa.runtime.spi.binding.Binding;
 import com.alipay.sofa.runtime.spi.spring.TagNameSupport;
 import org.w3c.dom.Element;
@@ -49,24 +51,28 @@ public interface BindingConverter<L extends BindingParam, R extends Binding> ext
     R convert(Element element, BindingConverterContext bindingConverterContext);
 
     /**
-     * convert {@link SofaServiceDefinition} to concrete {@link Binding}
+     * convert annotation Element to concrete {@link Binding}
      *
-     * @param sofaServiceDefinition sofa service definition
+     * @param sofaServiceAnnotation {@link SofaService} Annotation
+     * @param sofaServiceBindingAnnotation {@link SofaServiceBinding} Annotation
      * @param bindingConverterContext binding converter context
      * @return Binding Object
      */
-    R convert(SofaServiceDefinition sofaServiceDefinition,
-              BindingConverterContext bindingConverterContext);
+    Binding convert(SofaService sofaServiceAnnotation,
+                    SofaServiceBinding sofaServiceBindingAnnotation,
+                    BindingConverterContext bindingConverterContext);
 
     /**
-     * convert {@link SofaReferenceDefinition} to concrete {@link Binding}
+     * convert annotation Element to concrete {@link Binding}
      *
-     * @param sofaReferenceDefinition sofa reference definition
+     * @param sofaReferenceAnnotation {@link SofaReference} Annotation
+     * @param sofaReferenceBindingAnnotation {@link SofaReferenceBinding} Annotation
      * @param bindingConverterContext binding converter context
      * @return Binding Object
      */
-    R convert(SofaReferenceDefinition sofaReferenceDefinition,
-              BindingConverterContext bindingConverterContext);
+    Binding convert(SofaReference sofaReferenceAnnotation,
+                    SofaReferenceBinding sofaReferenceBindingAnnotation,
+                    BindingConverterContext bindingConverterContext);
 
     /**
      * get supported binding type

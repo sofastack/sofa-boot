@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.runtime.spring.factory;
 
+import com.alipay.sofa.runtime.constants.SofaRuntimeFrameworkConstants;
 import com.alipay.sofa.runtime.model.InterfaceMode;
 import com.alipay.sofa.runtime.service.binding.JvmBinding;
 import com.alipay.sofa.runtime.service.component.Reference;
@@ -48,10 +49,11 @@ public class ReferenceFactoryBean extends AbstractContractFactoryBean {
         }
 
         reference.addBinding(bindings.get(0));
-        proxy = ReferenceRegisterHelper.registerReference(reference,
-            applicationContext.getBean("bindingAdapterFactory", BindingAdapterFactory.class),
-            applicationContext.getBean("sofaRuntimeProperties", SofaRuntimeProperties.class),
-            sofaRuntimeContext);
+        proxy = ReferenceRegisterHelper.registerReference(reference, applicationContext.getBean(
+            SofaRuntimeFrameworkConstants.BINDING_ADAPTER_FACTORY_BEAN_ID,
+            BindingAdapterFactory.class), applicationContext.getBean(
+            SofaRuntimeFrameworkConstants.SOFA_RUNTIME_PROPERTIES_BEAN_ID,
+            SofaRuntimeProperties.class), sofaRuntimeContext);
     }
 
     @Override

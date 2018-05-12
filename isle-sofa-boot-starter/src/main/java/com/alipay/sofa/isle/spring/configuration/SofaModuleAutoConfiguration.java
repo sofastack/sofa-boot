@@ -16,10 +16,10 @@
  */
 package com.alipay.sofa.isle.spring.configuration;
 
-import com.alipay.sofa.isle.spring.config.SofaIsleProperties;
-import com.alipay.sofa.isle.spring.health.SofaIsleModuleHealthChecker;
-import com.alipay.sofa.isle.spring.listener.SofaIsleBeanFactoryPostProcessor;
-import com.alipay.sofa.isle.spring.listener.SofaIsleContextRefreshedListener;
+import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
+import com.alipay.sofa.isle.spring.health.SofaModuleHealthChecker;
+import com.alipay.sofa.isle.spring.listener.SofaModuleBeanFactoryPostProcessor;
+import com.alipay.sofa.isle.spring.listener.SofaModuleContextRefreshedListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -27,24 +27,24 @@ import org.springframework.context.annotation.Configuration;
  * @author xuanbei 18/3/12
  */
 @Configuration
-public class SofaIsleAutoConfiguration {
+public class SofaModuleAutoConfiguration {
     @Bean
-    public SofaIsleProperties sofaIsleProperties() {
-        return new SofaIsleProperties();
+    public SofaModuleProperties sofaModuleProperties() {
+        return new SofaModuleProperties();
     }
 
     @Bean
-    public SofaIsleModuleHealthChecker sofaIsleModuleHealthChecker() {
-        return new SofaIsleModuleHealthChecker();
+    public SofaModuleHealthChecker sofaModuleHealthChecker() {
+        return new SofaModuleHealthChecker();
     }
 
     @Bean
-    public SofaIsleBeanFactoryPostProcessor sofaIsleBeanFactoryPostProcessor() {
-        return new SofaIsleBeanFactoryPostProcessor();
+    public SofaModuleBeanFactoryPostProcessor sofaModuleBeanFactoryPostProcessor() {
+        return new SofaModuleBeanFactoryPostProcessor();
     }
 
     @Bean
-    public SofaIsleContextRefreshedListener sofaIsleContextRefreshedListener() {
-        return new SofaIsleContextRefreshedListener();
+    public SofaModuleContextRefreshedListener sofaModuleContextRefreshedListener() {
+        return new SofaModuleContextRefreshedListener();
     }
 }
