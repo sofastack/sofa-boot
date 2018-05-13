@@ -39,6 +39,10 @@ Spring Boot 是一个非常优秀的开源框架，可以非常方便地就构�
 
 基于 Spring Boot 的自动配置能力，SOFABoot 提供了 SOFA 中间件统一易用的编程接口以及 Spring Boot 的 Starter，方便在 Spring Boot 环境下使用 SOFA 中间件，SOFA 中间件中的各个组件都是独立可插拔的，节约开发时间，和后期维护的成本。
 
+### 2.5 模块化开发
+
+SOFABoot 从 2.4.0 版本开始支持基于 Spring 上下文隔离的模块化开发能力，每个 SOFABoot 模块使用独立的 Spring 上下文，避免不同 SOFABoot 模块间的 BeanId 冲突，有效降低企业级多模块开发时团队间的沟通成本。
+
 ## 三、快速开始
 
 请查看文档中的[快速开始](https://github.com/alipay/sofa-boot/wiki/QuickStart)来了解如何快速上手使用 SOFABoot。
