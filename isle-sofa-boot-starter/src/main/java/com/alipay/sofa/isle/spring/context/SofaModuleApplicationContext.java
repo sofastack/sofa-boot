@@ -69,6 +69,9 @@ public class SofaModuleApplicationContext extends GenericApplicationContext {
      */
     protected void publishEvent(Object event, ResolvableType eventType) {
         Assert.notNull(event, "Event must not be null");
+        if (logger.isTraceEnabled()) {
+            logger.trace("Publishing event in " + getDisplayName() + ": " + event);
+        }
 
         // Decorate event as an ApplicationEvent if necessary
         ApplicationEvent applicationEvent;

@@ -29,6 +29,7 @@ import com.alipay.sofa.runtime.service.component.ServiceComponent;
 import com.alipay.sofa.runtime.service.component.impl.ReferenceImpl;
 import com.alipay.sofa.runtime.service.component.impl.ServiceImpl;
 import com.alipay.sofa.runtime.service.helper.ReferenceRegisterHelper;
+import com.alipay.sofa.runtime.spi.binding.Binding;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.DefaultImplementation;
@@ -117,9 +118,10 @@ public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, Pr
                 bindingConverterContext.setInBinding(false);
                 bindingConverterContext.setAppName(sofaRuntimeContext.getAppName());
                 bindingConverterContext.setAppClassLoader(sofaRuntimeContext.getAppClassLoader());
-                service.addBinding(bindingConverterFactory.getBindingConverter(
+                Binding binding = bindingConverterFactory.getBindingConverter(
                     new BindingType(sofaServiceBinding.bindingType())).convert(
-                    sofaServiceAnnotation, sofaServiceBinding, bindingConverterContext));
+                    sofaServiceAnnotation, sofaServiceBinding, bindingConverterContext);
+                service.addBinding(binding);
             }
         }
 
@@ -196,13 +198,14 @@ public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, Pr
             reference.addBinding(new JvmBinding());
         } else {
             BindingConverterContext bindingConverterContext = new BindingConverterContext();
-            bindingConverterContext.setInBinding(false);
+            bindingConverterContext.setInBinding(true);
             bindingConverterContext.setAppName(sofaRuntimeContext.getAppName());
             bindingConverterContext.setAppClassLoader(sofaRuntimeContext.getAppClassLoader());
-            reference.addBinding(bindingConverterFactory.getBindingConverter(
+            Binding binding = bindingConverterFactory.getBindingConverter(
                 new BindingType(sofaReferenceAnnotation.binding().bindingType()))
                 .convert(sofaReferenceAnnotation, sofaReferenceAnnotation.binding(),
-                    bindingConverterContext));
+                    bindingConverterContext);
+            reference.addBinding(binding);
         }
         return ReferenceRegisterHelper.registerReference(reference, bindingAdapterFactory,
             sofaRuntimeProperties, sofaRuntimeContext);

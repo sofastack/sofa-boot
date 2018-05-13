@@ -34,6 +34,7 @@ import java.util.List;
  *
  * @author fengqi.lin
  * @author yangyanzhao
+ * @version $Id: ModuleLogOutputStage.java, v 0.1 2012-3-16 18:17:48 fengqi.lin Exp $
  */
 public class ModuleLogOutputStage extends AbstractPipelineStage {
     private static final String SYMBOLIC1 = "  ├─ ";

@@ -33,15 +33,15 @@ import java.util.Set;
  */
 public abstract class AbstractContract implements Contract {
     /** associated binding */
-    private Set<Binding>        bindings      = new HashSet<>(2);
+    protected Set<Binding>        bindings      = new HashSet<>(2);
     /** unique id */
-    protected String            uniqueId      = "";
+    protected String              uniqueId      = "";
     /** interface class type */
-    private Class<?>            interfaceType;
+    protected Class<?>            interfaceType;
     /** interface mode */
-    private InterfaceMode       interfaceMode = InterfaceMode.spring;
+    protected InterfaceMode       interfaceMode = InterfaceMode.spring;
     /** config of contract */
-    private Map<String, String> property      = new HashMap<>();
+    protected Map<String, String> property      = new HashMap<>();
 
     protected AbstractContract(String uniqueId, Class<?> interfaceType) {
         if (uniqueId == null) {

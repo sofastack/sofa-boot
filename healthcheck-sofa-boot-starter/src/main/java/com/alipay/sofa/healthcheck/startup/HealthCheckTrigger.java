@@ -30,7 +30,7 @@ import org.springframework.core.Ordered;
 import java.util.List;
 
 /**
- * HealthCheckTrigger, Listen to ContextRefreshedEvent, SofaModuleContextRefreshedListener of isle-sofa-boot-starter should execute before this class.
+ * HealthCheckTrigger listens to ContextRefreshedEvent, SofaModuleContextRefreshedListener of isle-sofa-boot-starter should execute before this class.
  * In order to ensure this class execute at last, please don't implement ${@link PriorityOrdered} or ${@link Ordered} interface.
  *
  * Created by liangen on 17/8/4.

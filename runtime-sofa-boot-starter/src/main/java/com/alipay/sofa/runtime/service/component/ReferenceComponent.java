@@ -159,6 +159,7 @@ public class ReferenceComponent extends AbstractComponent {
             this.implementation = new DefaultImplementation();
             implementation.setTarget(proxy);
         }
+
         super.activate();
         latch.countDown();
     }

@@ -34,6 +34,7 @@ import java.util.*;
  *
  * @author fengqi.lin
  * @author yangyanzhao
+ * @version $Id: ModelCreatingStage.java, v 0.1 2012-3-16 14:17:48 fengqi.lin Exp $
  */
 public class ModelCreatingStage extends AbstractPipelineStage {
     public ModelCreatingStage(AbstractApplicationContext applicationContext) {
@@ -55,11 +56,6 @@ public class ModelCreatingStage extends AbstractPipelineStage {
         if (urls == null || !urls.hasMoreElements())
             return;
 
-        getAllDeployments(application, urls);
-    }
-
-    private void getAllDeployments(ApplicationRuntimeModel application, Enumeration<URL> urls)
-                                                                                              throws IOException {
         while (urls.hasMoreElements()) {
             URL url = urls.nextElement();
             UrlResource urlResource = new UrlResource(url);

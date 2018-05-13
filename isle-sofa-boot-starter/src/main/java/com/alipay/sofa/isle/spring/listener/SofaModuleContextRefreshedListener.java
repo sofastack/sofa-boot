@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.isle.spring.listener;
 
+import com.alipay.sofa.healthcheck.startup.HealthCheckTrigger;
 import com.alipay.sofa.isle.stage.DefaultPipelineContext;
 import com.alipay.sofa.isle.stage.ModelCreatingStage;
 import com.alipay.sofa.isle.stage.ModuleLogOutputStage;
@@ -30,6 +31,9 @@ import org.springframework.core.PriorityOrdered;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
+ * SofaModuleContextRefreshedListener listens to ContextRefreshedEvent, this class should execute before ${@link HealthCheckTrigger}.
+ * In order to ensure this class execute at first, this class implement ${@link PriorityOrdered} interface and return ${@link Ordered#HIGHEST_PRECEDENCE}.
+ *
  * @author xuanbei 18/3/12
  */
 public class SofaModuleContextRefreshedListener implements PriorityOrdered,

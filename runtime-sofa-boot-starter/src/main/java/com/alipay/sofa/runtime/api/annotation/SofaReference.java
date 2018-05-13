@@ -65,5 +65,5 @@ public @interface SofaReference {
      *
      * @return
      */
-    SofaReferenceBinding binding() default @SofaReferenceBinding();
+    SofaReferenceBinding binding() default @SofaReferenceBinding;
 }

@@ -40,12 +40,16 @@ public class SofaModuleHealthChecker extends DefaultHealthChecker implements
         Health.Builder builder = new Health.Builder();
         ApplicationRuntimeModel application = applicationContext.getBean(
             SofaModuleFrameworkConstants.APPLICATION, ApplicationRuntimeModel.class);
-        for (DeploymentDescriptor deploymentDescriptor : application.getInstalled()) {
-            builder.withDetail(deploymentDescriptor.getName(), "passed");
-        }
-
         for (DeploymentDescriptor deploymentDescriptor : application.getFailed()) {
             builder.withDetail(deploymentDescriptor.getName(), "failed");
+        }
+
+        for (DeploymentDescriptor deploymentDescriptor : application.getAllInactiveDeployments()) {
+            builder.withDetail(deploymentDescriptor.getName(), "inactive");
+        }
+
+        for (DeploymentDescriptor deploymentDescriptor : application.getInstalled()) {
+            builder.withDetail(deploymentDescriptor.getName(), "passed");
         }
 
         if (application.getFailed().size() == 0) {

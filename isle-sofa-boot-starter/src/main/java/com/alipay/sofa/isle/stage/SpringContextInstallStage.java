@@ -40,7 +40,7 @@ import java.util.concurrent.*;
  * @author yangyanzhao
  * @author khotyn
  * @mail fengqi.lin@alipay.com
- * @date 2011-5-12
+ * @version $Id: SpringContextInstallStage.java, v 0.1 2012-3-16 21:17:48 fengqi.lin Exp $
  */
 public class SpringContextInstallStage extends AbstractPipelineStage {
     private static final String SYMBOLIC1 = "  ├─ ";

@@ -94,7 +94,6 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
      */
     private Object createServiceProxy(Contract contract, JvmBinding binding,
                                       SofaRuntimeContext sofaRuntimeContext) {
-
         ClassLoader newClassLoader;
         ClassLoader appClassLoader = sofaRuntimeContext.getAppClassLoader();
         Class<?> javaClass = contract.getInterfaceType();

@@ -107,7 +107,8 @@ public abstract class AbstractContractFactoryBean implements InitializingBean,
                     .getBindingConverterByTagName(tagName);
 
                 if (bindingConverter == null) {
-                    if (!tagName.equals("binding." + JvmBinding.JVM_BINDING_TYPE.toString())) {
+                    if (!tagName.equals(SofaRuntimeFrameworkConstants.BINDING_PREFIX
+                                        + JvmBinding.JVM_BINDING_TYPE.toString())) {
                         throw new ServiceRuntimeException("Can't find BindingConverter of type "
                                                           + tagName);
                     }
