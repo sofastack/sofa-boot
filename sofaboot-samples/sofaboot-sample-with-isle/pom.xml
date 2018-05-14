@@ -15,7 +15,7 @@
         <module>service-facade</module>
         <module>service-provider</module>
         <module>service-consumer</module>
-        <module>isle-sofa-boot-run</module>
+        <module>sofa-boot-run</module>
     </modules>
 
     <properties>
@@ -41,7 +41,7 @@
             </dependency>
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
-                <artifactId>isle-sofa-boot-run</artifactId>
+                <artifactId>sofa-boot-run</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

@@ -11,7 +11,7 @@
 │ 
 ├── service-consumer
 │ 
-└── isle-sofa-boot-run
+└── sofa-boot-run
 ```
 
 各个模块的作用如下：
@@ -19,7 +19,7 @@
 - service-facade: 演示 JVM 服务发布与引用的 API 包；
 - service-provider: 演示 XML 方式、Annotation 方式、API 方式发布 JVM 服务；
 - service-consumer: 演示 XML 方式、Annotation 方式、API 方式引用 JVM 服务；
-- isle-sofa-boot-run: 启动包含 SOFABoot 模块的 SOFA Boot 应用。
+- sofa-boot-run: 启动包含 SOFABoot 模块的 SOFA Boot 应用。
 
 ## service-facade
 
@@ -191,7 +191,7 @@ public class JvmServiceConsumer implements ClientFactoryAware {
 }
 ```
 
-## isle-sofa-boot-run
+## sofa-boot-run
 
 将模块 parent 配置为 SOFABoot:
 
