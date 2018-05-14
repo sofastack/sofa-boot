@@ -40,11 +40,12 @@ public class SofaModuleProfileUtil {
     private static SofaModuleProfileEnvironment createSofaProfileEnvironment(ApplicationContext applicationContext) {
         SofaModuleProfileEnvironment environment = map.get(applicationContext);
         if (environment == null) {
-            DefaultSofaModuleProfileEnvironment sofaProfileEnvironment = new DefaultSofaModuleProfileEnvironment();
-            sofaProfileEnvironment.initEnvironment(applicationContext);
-            environment = map.putIfAbsent(applicationContext, sofaProfileEnvironment);
-            if (environment == null) {
-                environment = sofaProfileEnvironment;
+            environment = new DefaultSofaModuleProfileEnvironment();
+            environment.initEnvironment(applicationContext);
+            SofaModuleProfileEnvironment oldEnvironment = map.putIfAbsent(applicationContext,
+                environment);
+            if (oldEnvironment != null) {
+                environment = oldEnvironment;
             }
         }
         return environment;
@@ -57,7 +58,7 @@ public class SofaModuleProfileUtil {
         if (profiles == null || profiles.length() == 0) {
             return activeModuleProfiles;
         }
-        activeModuleProfiles = profiles.split(SofaModuleFrameworkConstants.PROFILE_SPLITTER);
+        activeModuleProfiles = profiles.split(SofaModuleFrameworkConstants.PROFILE_SEPARATOR);
         return activeModuleProfiles;
     }
 }

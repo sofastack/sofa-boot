@@ -133,7 +133,6 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
      * JVM Service Invoker
      */
     static class JvmServiceInvoker extends ServiceProxy {
-
         private Contract           contract;
         private JvmBinding         binding;
         private Object             target;

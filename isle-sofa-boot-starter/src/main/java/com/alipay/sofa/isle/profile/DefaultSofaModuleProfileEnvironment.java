@@ -46,7 +46,7 @@ public class DefaultSofaModuleProfileEnvironment implements SofaModuleProfileEnv
                 SofaModuleProperties.class).getActiveProfiles();
         if (StringUtils.hasText(activeProfiles)) {
             String[] activeConfigProfileList = activeProfiles
-                .split(SofaModuleFrameworkConstants.PROFILE_SPLITTER);
+                .split(SofaModuleFrameworkConstants.PROFILE_SEPARATOR);
             initActiveProfiles(activeConfigProfileList);
         }
     }

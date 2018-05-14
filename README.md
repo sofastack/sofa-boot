@@ -63,6 +63,7 @@ SOFA 的第一个版本是阿玺创造的，感谢阿玺给 SOFA 打下了坚实
 
 * [SOFABoot 示例工程](./sofaboot-samples/sofaboot-sample)
 * [SOFABoot 示例工程（包含类隔离能力）](./sofaboot-samples/sofaboot-sample-with-isolation)
+* [SOFABoot 示例工程（包含模块化开发能力）](./sofaboot-samples/sofaboot-sample-with-isle)
 * [SOFABoot 示例工程（使用 SOFARPC）](./sofaboot-samples/sofaboot-sample-with-rpc)
  
 ## 七、文档

@@ -82,11 +82,4 @@ public @interface SofaReferenceBinding {
      * @return registry for this consumer
      */
     String registry() default "";
-
-    /**
-     * service version
-     *
-     * @return service version
-     */
-    String version() default "1.0";
 }

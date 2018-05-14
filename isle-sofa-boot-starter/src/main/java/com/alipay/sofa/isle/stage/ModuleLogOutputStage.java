@@ -24,6 +24,7 @@ import com.alipay.sofa.runtime.spi.log.SofaLogger;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -166,7 +167,7 @@ public class ModuleLogOutputStage extends AbstractPipelineStage {
         BeanLoadCostBeanFactory beanLoad = (BeanLoadCostBeanFactory) beanFactory;
         List<BeanLoadCostBeanFactory.BeanNode> beanCosts = beanLoad.getBeanLoadList();
 
-        if (beanCosts != null && !beanCosts.isEmpty()) {
+        if (!CollectionUtils.isEmpty(beanCosts)) {
             Collections.sort(beanCosts, new Comparator<BeanLoadCostBeanFactory.BeanNode>() {
 
                 @Override

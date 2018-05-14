@@ -49,7 +49,7 @@ public class BeanLoadCostBeanFactory extends DefaultListableBeanFactory {
         if (mbd.getBeanClassName() == null) {
             beanNameNode.beanClassName = "Factory (" + mbd.getFactoryBeanName() + ")";
         } else {
-            if (object != null && object instanceof ServiceFactoryBean) {
+            if (object instanceof ServiceFactoryBean) {
                 beanNameNode.beanClassName = mbd.getBeanClassName() + " ("
                                              + ((ServiceFactoryBean) object).getBeanId() + ")";
             } else {

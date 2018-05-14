@@ -55,20 +55,20 @@ public class SampleJvmServiceImpl implements SampleJvmService {
     public void message() {
         System.out.println(message);
     }
-															   
-	// getters and setters
+
+    // getters and setters
 }
 ```
 
 增加 META-INF/spring/service-provide.xml 文件，将 SampleJvmServiceImpl 发布为 JVM 服务:
 
 ```java
- <bean id="sampleJvmService" class="com.alipay.sofa.isle.sample.SampleJvmServiceImpl">
-     <property name="message" value="Hello, jvm service xml implementation."/>
- </bean>
+<bean id="sampleJvmService" class="com.alipay.sofa.isle.sample.SampleJvmServiceImpl">
+    <property name="message" value="Hello, jvm service xml implementation."/>
+</bean>
 
 <sofa:service ref="sampleJvmService" interface="com.alipay.sofa.isle.sample.SampleJvmService">
-	<sofa:binding.jvm/>
+    <sofa:binding.jvm/>
 </sofa:service>
 ```
 
@@ -146,7 +146,7 @@ Require-Module=com.alipay.sofa.service-provider
 
 ```java
 <sofa:reference id="sampleJvmService" interface="com.alipay.sofa.isle.sample.SampleJvmService">
-	<sofa:binding.jvm/>
+    <sofa:binding.jvm/>
 </sofa:service>
 ```
 
@@ -156,7 +156,7 @@ Require-Module=com.alipay.sofa.service-provider
 
 ```java
 public class JvmServiceConsumer implements ClientFactoryAware {
-	@SofaReference(uniqueId = "annotationImpl")
+    @SofaReference(uniqueId = "annotationImpl")
     private SampleJvmService sampleJvmServiceAnnotationImpl;
 }
 ```
@@ -183,8 +183,8 @@ public class JvmServiceConsumer implements ClientFactoryAware {
         SampleJvmService sampleJvmServiceClientImpl = referenceClient.reference(referenceParam);
         sampleJvmServiceClientImpl.message();
     }
-															   
-	@Override
+
+    @Override
     public void setClientFactory(ClientFactory clientFactory) {
         this.clientFactory = clientFactory;
     }

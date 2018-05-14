@@ -28,13 +28,6 @@ public @interface SofaServiceBinding {
     String bindingType() default "jvm";
 
     /**
-     * service version
-     *
-     * @return service version
-     */
-    String version() default "1.0";
-
-    /**
      * normal weight, default is 100
      *
      * @return normal weight

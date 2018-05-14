@@ -70,7 +70,8 @@ public class DynamicSpringContextLoader implements SpringContextLoader {
             beanFactory) : new SofaModuleApplicationContext(beanFactory);
         String activeProfiles = sofaModuleProperties.getActiveProfiles();
         if (StringUtils.hasText(activeProfiles)) {
-            String[] profiles = activeProfiles.split(SofaModuleFrameworkConstants.PROFILE_SPLITTER);
+            String[] profiles = activeProfiles
+                .split(SofaModuleFrameworkConstants.PROFILE_SEPARATOR);
             ctx.getEnvironment().setActiveProfiles(profiles);
         }
         setUpParentSpringContext(ctx, deployment, application);
@@ -126,7 +127,7 @@ public class DynamicSpringContextLoader implements SpringContextLoader {
         if (deployment.getSpringParent() != null) {
             String springParent = deployment.getSpringParent();
 
-            if (springParent != null && springParent.length() > 0) {
+            if (StringUtils.hasText(springParent)) {
                 DeploymentDescriptor parent = application.getSpringPoweredDeployment(springParent);
                 if (parent != null) {
                     parentSpringContext = (ConfigurableApplicationContext) parent

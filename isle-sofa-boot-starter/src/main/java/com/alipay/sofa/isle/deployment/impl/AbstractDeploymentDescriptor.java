@@ -21,6 +21,8 @@ import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptorConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.net.URL;
 import java.util.*;
@@ -62,7 +64,7 @@ public abstract class AbstractDeploymentDescriptor implements DeploymentDescript
 
         for (String moduleNameIdentity : moduleNameIdentities) {
             String name = (String) properties.get(moduleNameIdentity);
-            if (name != null && name.length() > 0) {
+            if (StringUtils.hasText(name)) {
                 return name;
             }
         }
@@ -100,7 +102,7 @@ public abstract class AbstractDeploymentDescriptor implements DeploymentDescript
 
         for (String requireModuleIdentity : requireModuleIdentities) {
             requires = getFormattedModuleInfo(requireModuleIdentity);
-            if (requires != null && requires.size() > 0) {
+            if (!CollectionUtils.isEmpty(requires)) {
                 break;
             }
         }

@@ -28,7 +28,7 @@ public interface SofaModuleFrameworkConstants {
     String SOFA_MODULE_FILE                       = "sofa-module.properties";
     String APPLICATION_NAME                       = "spring.application.name";
     String SPRING_CONTEXT_PATH                    = "META-INF/spring";
-    String PROFILE_SPLITTER                       = ",";
+    String PROFILE_SEPARATOR                      = ",";
     String DEFAULT_PROFILE_VALUE                  = "default";
     String SOFA_MODULE_PROPERTIES_BEAN_ID         = "sofaModuleProperties";
 

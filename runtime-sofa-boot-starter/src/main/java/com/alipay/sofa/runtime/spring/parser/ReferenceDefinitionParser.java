@@ -19,6 +19,7 @@ package com.alipay.sofa.runtime.spring.parser;
 import com.alipay.sofa.runtime.spring.factory.ReferenceFactoryBean;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.ParserContext;
+import org.springframework.util.StringUtils;
 import org.w3c.dom.Element;
 
 /**
@@ -34,7 +35,7 @@ public class ReferenceDefinitionParser extends AbstractContractDefinitionParser 
                                    BeanDefinitionBuilder builder) {
         String jvmFirstString = element.getAttribute(JVM_FIRST);
 
-        if (jvmFirstString != null && jvmFirstString.length() > 0) {
+        if (StringUtils.hasText(jvmFirstString)) {
             if ("true".equalsIgnoreCase(jvmFirstString)) {
                 builder.addPropertyValue(PROPERTY_JVM_FIRST, true);
             } else if ("false".equalsIgnoreCase(jvmFirstString)) {
@@ -46,7 +47,7 @@ public class ReferenceDefinitionParser extends AbstractContractDefinitionParser 
         }
 
         String loadBalance = element.getAttribute(PROPERTY_LOAD_BALANCE);
-        if (loadBalance != null && loadBalance.length() > 0) {
+        if (StringUtils.hasText(loadBalance)) {
             builder.addPropertyValue(PROPERTY_LOAD_BALANCE, loadBalance);
         }
     }

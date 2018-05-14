@@ -18,6 +18,7 @@ package com.alipay.sofa.runtime.spi.service;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
+import org.springframework.util.StringUtils;
 
 /**
  * @author xuanbei 18/2/28
@@ -59,7 +60,7 @@ public abstract class ServiceProxy implements MethodInterceptor {
                                             long startTime) {
         String appStart = "";
 
-        if (appStart != null && appStart.length() > 0) {
+        if (StringUtils.hasText(appStart)) {
             appStart = "-" + start;
         }
 
