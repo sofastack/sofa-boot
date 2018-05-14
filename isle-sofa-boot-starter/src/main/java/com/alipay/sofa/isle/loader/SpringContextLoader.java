@@ -21,16 +21,14 @@ import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
 
 /**
  *
- * @author linfengqi
- * @mail fengqi.lin@alipay.com
- * @date 2011-7-26
+ * @author linfengqi  2011-7-26
  */
 public interface SpringContextLoader {
     /**
      *
-     * @param deployment
-     * @param application
-     * @throws Exception
+     * @param deployment deployment
+     * @param application application
+     * @throws Exception exception
      */
     void loadSpringContext(DeploymentDescriptor deployment, ApplicationRuntimeModel application)
                                                                                                 throws Exception;

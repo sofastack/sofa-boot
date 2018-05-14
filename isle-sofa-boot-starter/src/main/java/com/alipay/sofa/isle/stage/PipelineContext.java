@@ -24,11 +24,15 @@ package com.alipay.sofa.isle.stage;
 public interface PipelineContext {
     /**
      * execute
+     *
+     * @throws Exception excaption occur
      */
     void process() throws Exception;
 
     /**
      * appendStage
+     *
+     * @param stage pipeline stage
      */
     PipelineContext appendStage(PipelineStage stage);
 }

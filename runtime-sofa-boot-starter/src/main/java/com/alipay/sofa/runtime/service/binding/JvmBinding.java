@@ -22,7 +22,7 @@ import com.alipay.sofa.runtime.spi.health.HealthResult;
 import org.w3c.dom.Element;
 
 /**
- * JVM Service & Reference Binding
+ * JVM Service and Reference Binding
  *
  * @author xi.hux@alipay.com
  * @version $Id: JVMBinding.java,v 0.1 2009-9-8 22:03:49 xi.hux Exp $

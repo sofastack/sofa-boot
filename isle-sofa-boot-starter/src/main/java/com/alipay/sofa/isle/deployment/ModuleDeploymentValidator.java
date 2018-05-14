@@ -25,7 +25,7 @@ public interface ModuleDeploymentValidator {
     /**
      * determine whether a module is sofa module
      *
-     * @param deploymentDescriptor
+     * @param deploymentDescriptor deployment descriptor
      * @return true or false
      */
     boolean isModuleDeployment(DeploymentDescriptor deploymentDescriptor);

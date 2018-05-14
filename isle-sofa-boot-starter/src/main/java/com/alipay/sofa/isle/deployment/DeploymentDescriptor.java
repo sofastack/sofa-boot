@@ -96,7 +96,7 @@ public interface DeploymentDescriptor extends Comparable<DeploymentDescriptor> {
     /**
      * get all installed spring xml files of this SOFABoot module.
      *
-     * @return
+     * @return installed Spring xml
      */
     List<String> getInstalledSpringXml();
 
@@ -120,21 +120,21 @@ public interface DeploymentDescriptor extends Comparable<DeploymentDescriptor> {
     /**
      * get Spring resources of this SOFABoot module.
      *
-     * @return
+     * @return spring resources
      */
     Map<String, Resource> getSpringResources();
 
     /**
      * get deploy elapsed time of this SOFABoot module.
      *
-     * @return
+     * @return elapsed time
      */
     long getElapsedTime();
 
     /**
      * get start deploy time of this SOFABoot module.
      *
-     * @return
+     * @return start time
      */
     long getStartTime();
 }

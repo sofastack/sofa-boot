@@ -43,9 +43,7 @@ import java.util.Map;
 
 /**
  *
- * @author linfengqi
- * @mail fengqi.lin@alipay.com
- * @date 2011-7-26
+ * @author linfengqi  2011-7-26
  */
 public class DynamicSpringContextLoader implements SpringContextLoader {
     private final ConfigurableApplicationContext rootApplicationContext;

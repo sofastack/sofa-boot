@@ -26,14 +26,14 @@ public interface SofaModuleProfileEnvironment {
     /***
      * init method
      *
-     * @param applicationContext
+     * @param applicationContext spring application context
      */
     void initEnvironment(ApplicationContext applicationContext);
 
     /***
      * determine whether the module should be activate
      *
-     * @param sofaModuleProfiles
+     * @param sofaModuleProfiles sofa module profiles
      * @return true or false
      */
     boolean acceptsProfiles(String[] sofaModuleProfiles);

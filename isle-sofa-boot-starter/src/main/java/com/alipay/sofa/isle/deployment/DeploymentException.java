@@ -18,15 +18,10 @@ package com.alipay.sofa.isle.deployment;
 
 /**
  * Signals a checked exception to the caller of the deploy subsystem.
- * <p/>
- *
- * <strong>Concurrent Semantics</strong><br/>
  *
  * This class is thread safe.
  *
- * @author linfengqi
- * @mail fengqi.lin@alipay.com
- * @date 2011-3-26
+ * @author linfengqi  2011-3-26
  */
 public class DeploymentException extends Exception {
     private static final long serialVersionUID = -6809659761040724153L;

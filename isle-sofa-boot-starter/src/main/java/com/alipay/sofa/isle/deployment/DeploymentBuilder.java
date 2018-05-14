@@ -33,8 +33,9 @@ public class DeploymentBuilder {
      * build a SOFABoot Module deployment descriptor
      *
      * @param url SOFABoot module file url
-     * @param deploymentDescriptorConfiguration
-     * @return
+     * @param props properties
+     * @param deploymentDescriptorConfiguration deployment descriptor configuration
+     * @return deployment descriptor
      */
     public static DeploymentDescriptor build(URL url,
                                              Properties props,
