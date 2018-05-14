@@ -25,7 +25,7 @@ public interface PipelineContext {
     /**
      * execute
      *
-     * @throws Exception excaption occur
+     * @throws Exception throws when exception occur
      */
     void process() throws Exception;
 

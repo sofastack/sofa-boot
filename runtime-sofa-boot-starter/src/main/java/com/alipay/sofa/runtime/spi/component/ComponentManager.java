@@ -49,7 +49,7 @@ public interface ComponentManager {
      * remove component in this manager
      *
      * @param componentInfo component that should unregister
-     * @throws ServiceRuntimeException exception occur
+     * @throws ServiceRuntimeException throws when exception occur
      */
     void unregister(ComponentInfo componentInfo) throws ServiceRuntimeException;
 

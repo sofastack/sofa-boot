@@ -26,9 +26,9 @@ import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
 public interface SpringContextLoader {
     /**
      *
-     * @param deployment deployment
-     * @param application application
-     * @throws Exception exception
+     * @param deployment deployment descriptor
+     * @param application application runtime model
+     * @throws Exception throws when exception occur
      */
     void loadSpringContext(DeploymentDescriptor deployment, ApplicationRuntimeModel application)
                                                                                                 throws Exception;
