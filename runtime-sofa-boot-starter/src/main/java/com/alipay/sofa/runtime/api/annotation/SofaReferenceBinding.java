@@ -21,72 +21,72 @@ package com.alipay.sofa.runtime.api.annotation;
  */
 public @interface SofaReferenceBinding {
     /**
-     * protocol info, maybe jvm/bolt/rest
+     * binding type, maybe jvm/bolt/rest
      *
-     * @return
+     * @return binding type
      */
     String bindingType() default "jvm";
 
     /**
      * timeout
      *
-     * @return
+     * @return timeout
      */
     int timeout() default 3000;
 
     /**
      * retry times
      *
-     * @return
+     * @return retry times
      */
     int retries() default 0;
 
     /**
      * address time out
      *
-     * @return
+     * @return address time out
      */
     int addressWaitTime() default 0;
 
     /**
      * invoke type
      *
-     * @return
+     * @return invoke type
      */
     String invokeType() default "sync";
 
     /**
      * filter beans
      *
-     * @return
+     * @return filter beans
      */
     String[] filters() default {};
 
     /**
      * direct url
      *
-     * @return
+     * @return direct url
      */
     String directUrl() default "";
 
     /**
-     * call back handler,when invoke type is callback,it
+     * callback handler
      *
-     * @return
+     * @return callback handler
      */
-    String callBackHandler() default "";
+    String callbackHandler() default "";
 
     /**
      * registry for this consumer
      *
-     * @return
+     * @return registry for this consumer
      */
     String registry() default "";
 
     /**
      * service version
      *
-     * @return
+     * @return service version
      */
     String version() default "1.0";
 }

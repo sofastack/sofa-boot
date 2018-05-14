@@ -56,14 +56,14 @@ public @interface SofaReference {
     /**
      * invoke jvm service first
      *
-     * @return
+     * @return is jvm first or not
      */
     boolean jvmFirst() default true;
 
     /**
+     * binding of reference
      *
-     *
-     * @return
+     * @return binding of reference
      */
     SofaReferenceBinding binding() default @SofaReferenceBinding;
 }

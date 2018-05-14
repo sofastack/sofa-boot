@@ -21,64 +21,65 @@ package com.alipay.sofa.runtime.api.annotation;
  */
 public @interface SofaServiceBinding {
     /**
-     * protocol info, maybe jvm/bolt/rest
+     * binding type, maybe jvm/bolt/rest
      *
-     * @return
+     * @return binding type
      */
     String bindingType() default "jvm";
 
     /**
      * service version
      *
-     * @return
+     * @return service version
      */
     String version() default "1.0";
 
     /**
-     * normal weight,when default,will use rpc default value, 100
+     * normal weight, default is 100
+     *
+     * @return normal weight
      */
-
     int weight() default 0;
 
     /**
-     * when warmup,the weight.
+     * when warmup, the weight.
      *
-     * @return
+     * @return warmup weight
      */
     int warmUpWeight() default 0;
 
     /**
      * warmup time, default is 0
      *
-     * @return
+     * @return warmup time
      */
     int warmUpTime() default 0;
 
     /**
      * filter beans
      *
-     * @return
+     * @return filter beans
      */
     String[] filters() default {};
 
     /**
      * custorm thread pool for current service
      *
-     * @return
+     * @return custorm thread pool
      */
     String userThreadPool() default "";
 
     /**
-     * registry for this provider
+     * registry for this service
      *
-     * @return
+     * @return registry for this service
      */
     String registry() default "";
 
     /**
      * timeout
      *
-     * @return
+     * @return timeout
      */
     int timeout() default 3000;
 }

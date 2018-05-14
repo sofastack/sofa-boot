@@ -60,9 +60,9 @@ public @interface SofaService {
     String uniqueId() default "";
 
     /**
+     * bindings of service
      *
-     *
-     * @return
+     * @return bindings of service
      */
     SofaServiceBinding[] bindings() default { @SofaServiceBinding };
 }
