@@ -107,10 +107,10 @@ public class ServiceAnnotationBeanPostProcessorTest {
     }
 
     @Test
-    public void testHandleSofaServiceBindding() throws Exception {
+    public void testHandleSofaServiceBinding() throws Exception {
         Class clazz = Class
             .forName("com.alipay.sofa.runtime.spring.ServiceAnnotationBeanPostProcessor");
-        Method createReferenceProxy = clazz.getDeclaredMethod("handleSofaServiceBindding",
+        Method createReferenceProxy = clazz.getDeclaredMethod("handleSofaServiceBinding",
             Service.class, SofaService.class, SofaServiceBinding.class);
         createReferenceProxy.setAccessible(true);
 

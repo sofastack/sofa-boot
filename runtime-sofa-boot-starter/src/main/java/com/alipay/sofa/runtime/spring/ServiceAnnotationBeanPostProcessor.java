@@ -116,7 +116,7 @@ public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, Pr
             InterfaceMode.annotation, bean);
 
         for (SofaServiceBinding sofaServiceBinding : sofaServiceAnnotation.bindings()) {
-            handleSofaServiceBindding(service, sofaServiceAnnotation, sofaServiceBinding);
+            handleSofaServiceBinding(service, sofaServiceAnnotation, sofaServiceBinding);
         }
 
         ComponentInfo componentInfo = new ServiceComponent(implementation, service,
@@ -183,8 +183,8 @@ public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, Pr
         });
     }
 
-    private void handleSofaServiceBindding(Service service, SofaService sofaServiceAnnotation,
-                                           SofaServiceBinding sofaServiceBinding) {
+    private void handleSofaServiceBinding(Service service, SofaService sofaServiceAnnotation,
+                                          SofaServiceBinding sofaServiceBinding) {
         if (JvmBinding.JVM_BINDING_TYPE.getType().equals(sofaServiceBinding.bindingType())) {
             service.addBinding(new JvmBinding());
         } else {
