@@ -35,6 +35,7 @@ import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.DefaultImplementation;
 import com.alipay.sofa.runtime.spi.component.Implementation;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
+import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
 import com.alipay.sofa.runtime.spring.config.SofaRuntimeProperties;
@@ -115,19 +116,7 @@ public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, Pr
             InterfaceMode.annotation, bean);
 
         for (SofaServiceBinding sofaServiceBinding : sofaServiceAnnotation.bindings()) {
-            if (JvmBinding.JVM_BINDING_TYPE.getType().equals(sofaServiceBinding.bindingType())) {
-                service.addBinding(new JvmBinding());
-            } else {
-                BindingConverterContext bindingConverterContext = new BindingConverterContext();
-                bindingConverterContext.setInBinding(false);
-                bindingConverterContext.setApplicationContext(applicationContext);
-                bindingConverterContext.setAppName(sofaRuntimeContext.getAppName());
-                bindingConverterContext.setAppClassLoader(sofaRuntimeContext.getAppClassLoader());
-                Binding binding = bindingConverterFactory.getBindingConverter(
-                    new BindingType(sofaServiceBinding.bindingType())).convert(
-                    sofaServiceAnnotation, sofaServiceBinding, bindingConverterContext);
-                service.addBinding(binding);
-            }
+            handleSofaServiceBindding(service, sofaServiceAnnotation, sofaServiceBinding);
         }
 
         ComponentInfo componentInfo = new ServiceComponent(implementation, service,
@@ -194,6 +183,30 @@ public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, Pr
         });
     }
 
+    private void handleSofaServiceBindding(Service service, SofaService sofaServiceAnnotation,
+                                           SofaServiceBinding sofaServiceBinding) {
+        if (JvmBinding.JVM_BINDING_TYPE.getType().equals(sofaServiceBinding.bindingType())) {
+            service.addBinding(new JvmBinding());
+        } else {
+            BindingConverter bindingConverter = bindingConverterFactory
+                .getBindingConverter(new BindingType(sofaServiceBinding.bindingType()));
+            if (bindingConverter == null) {
+                throw new ServiceRuntimeException(
+                    "Can not found binding converter for binding type "
+                            + sofaServiceBinding.bindingType());
+            }
+
+            BindingConverterContext bindingConverterContext = new BindingConverterContext();
+            bindingConverterContext.setInBinding(false);
+            bindingConverterContext.setApplicationContext(applicationContext);
+            bindingConverterContext.setAppName(sofaRuntimeContext.getAppName());
+            bindingConverterContext.setAppClassLoader(sofaRuntimeContext.getAppClassLoader());
+            Binding binding = bindingConverter.convert(sofaServiceAnnotation, sofaServiceBinding,
+                bindingConverterContext);
+            service.addBinding(binding);
+        }
+    }
+
     private Object createReferenceProxy(SofaReference sofaReferenceAnnotation,
                                         Class<?> interfaceType) {
         Reference reference = new ReferenceImpl(sofaReferenceAnnotation.uniqueId(), interfaceType,
@@ -202,15 +215,22 @@ public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, Pr
             sofaReferenceAnnotation.binding().bindingType())) {
             reference.addBinding(new JvmBinding());
         } else {
+            BindingConverter bindingConverter = bindingConverterFactory
+                .getBindingConverter(new BindingType(sofaReferenceAnnotation.binding()
+                    .bindingType()));
+            if (bindingConverter == null) {
+                throw new ServiceRuntimeException(
+                    "Can not found binding converter for binding type "
+                            + sofaReferenceAnnotation.binding().bindingType());
+            }
+
             BindingConverterContext bindingConverterContext = new BindingConverterContext();
             bindingConverterContext.setInBinding(true);
             bindingConverterContext.setApplicationContext(applicationContext);
             bindingConverterContext.setAppName(sofaRuntimeContext.getAppName());
             bindingConverterContext.setAppClassLoader(sofaRuntimeContext.getAppClassLoader());
-            Binding binding = bindingConverterFactory.getBindingConverter(
-                new BindingType(sofaReferenceAnnotation.binding().bindingType()))
-                .convert(sofaReferenceAnnotation, sofaReferenceAnnotation.binding(),
-                    bindingConverterContext);
+            Binding binding = bindingConverter.convert(sofaReferenceAnnotation,
+                sofaReferenceAnnotation.binding(), bindingConverterContext);
             reference.addBinding(binding);
         }
         return ReferenceRegisterHelper.registerReference(reference, bindingAdapterFactory,
