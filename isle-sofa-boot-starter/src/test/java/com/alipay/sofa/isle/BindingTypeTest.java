@@ -19,7 +19,6 @@ package com.alipay.sofa.isle;
 import com.alipay.sofa.runtime.api.binding.BindingType;
 import org.junit.Assert;
 import org.junit.Test;
-
 import java.util.HashMap;
 
 /**
@@ -28,6 +27,11 @@ import java.util.HashMap;
 public class BindingTypeTest {
     @Test
     public void doTest() {
+        Assert.assertTrue(new BindingType("jvm").equals(new BindingType("jvm")));
+        Assert.assertFalse(new BindingType("jvm").equals(new BindingType("bolt")));
+        Assert.assertFalse(new BindingType("jvm").equals(null));
+        Assert.assertFalse(new BindingType("jvm").equals("jvm"));
+
         HashMap<BindingType, String> map = new HashMap<>();
         map.put(new BindingType("jvm"), "jvm");
         map.put(new BindingType("bolt"), "bolt");
