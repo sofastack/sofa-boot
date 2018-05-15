@@ -36,5 +36,7 @@ public class BindingTypeTest {
         Assert.assertEquals(map.get(new BindingType("jvm")), "jvm");
         Assert.assertEquals(map.get(new BindingType("bolt")), "bolt");
         Assert.assertEquals(map.get(new BindingType("rest")), "rest");
+        Assert.assertEquals(map.get("jvm"), null);
+        Assert.assertEquals(map.get(null), null);
     }
 }

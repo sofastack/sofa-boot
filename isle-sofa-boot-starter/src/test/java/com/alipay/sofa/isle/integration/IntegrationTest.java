@@ -63,7 +63,7 @@ public class IntegrationTest implements ApplicationContextAware {
         assertEquals(sofaModuleProperties.isModuleStartUpParallel(), true);
         assertEquals(sofaModuleProperties.isPublishEventToParent(), false);
         assertEquals(sofaModuleProperties.isAllowBeanDefinitionOverriding(), true);
-        assertEquals(sofaModuleProperties.getBeanLoadCost(), 10);
+        assertEquals(sofaModuleProperties.getBeanLoadCost(), 0);
 
         ApplicationRuntimeModel applicationRuntimeModel = (ApplicationRuntimeModel) applicationContext
             .getBean(SofaModuleFrameworkConstants.APPLICATION);
