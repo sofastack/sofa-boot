@@ -29,7 +29,7 @@
 
     <artifactId>runtime-sofa-boot-starter</artifactId>
     <properties>
-        <ark.plugin.name>sofaruntime-ark-plugin</ark.plugin.name>
+        <ark.plugin.name>sofa-runtime-ark-plugin</ark.plugin.name>
     </properties>
 
     <dependencies>
@@ -85,7 +85,7 @@
             <plugin>
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>sofa-ark-plugin-maven-plugin</artifactId>
-                <version>0.1.0</version>
+                <version>0.3.0</version>
                 <executions>
                     <execution>
                         <id>default-cli</id>
@@ -100,7 +100,7 @@
                             </imported>
                             <exported>
                                 <packages>
-                                    <package>com.alipay.sofa.runtime.api</package>
+                                    <package>com.alipay.sofa.runtime.api.*</package>
                                     <package>com.alipay.sofa.runtime.model</package>
                                     <package>com.alipay.sofa.runtime.spi.client</package>
                                     <package>com.alipay.sofa.runtime.spi.component</package>
