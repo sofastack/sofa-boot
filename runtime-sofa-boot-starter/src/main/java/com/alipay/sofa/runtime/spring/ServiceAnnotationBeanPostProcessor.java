@@ -41,6 +41,8 @@ import com.alipay.sofa.runtime.spring.config.SofaRuntimeProperties;
 import org.springframework.aop.framework.AopProxyUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.Ordered;
 import org.springframework.core.PriorityOrdered;
 import org.springframework.util.Assert;
@@ -53,11 +55,13 @@ import java.lang.reflect.Modifier;
 /**
  * @author xuanbei 18/5/9
  */
-public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, PriorityOrdered {
+public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, PriorityOrdered,
+                                               ApplicationContextAware {
     private SofaRuntimeContext      sofaRuntimeContext;
     private SofaRuntimeProperties   sofaRuntimeProperties;
     private BindingAdapterFactory   bindingAdapterFactory;
     private BindingConverterFactory bindingConverterFactory;
+    private ApplicationContext      applicationContext;
 
     public ServiceAnnotationBeanPostProcessor(SofaRuntimeContext sofaRuntimeContext,
                                               SofaRuntimeProperties sofaRuntimeProperties,
@@ -116,6 +120,7 @@ public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, Pr
             } else {
                 BindingConverterContext bindingConverterContext = new BindingConverterContext();
                 bindingConverterContext.setInBinding(false);
+                bindingConverterContext.setApplicationContext(applicationContext);
                 bindingConverterContext.setAppName(sofaRuntimeContext.getAppName());
                 bindingConverterContext.setAppClassLoader(sofaRuntimeContext.getAppClassLoader());
                 Binding binding = bindingConverterFactory.getBindingConverter(
@@ -199,6 +204,7 @@ public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, Pr
         } else {
             BindingConverterContext bindingConverterContext = new BindingConverterContext();
             bindingConverterContext.setInBinding(true);
+            bindingConverterContext.setApplicationContext(applicationContext);
             bindingConverterContext.setAppName(sofaRuntimeContext.getAppName());
             bindingConverterContext.setAppClassLoader(sofaRuntimeContext.getAppClassLoader());
             Binding binding = bindingConverterFactory.getBindingConverter(
@@ -216,4 +222,8 @@ public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, Pr
         return Ordered.LOWEST_PRECEDENCE;
     }
 
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
 }
