@@ -419,11 +419,12 @@
         <xsd:complexContent>
             <xsd:extension base="beans:identifiedType">
                 <xsd:all minOccurs="0" maxOccurs="1">
+                    <xsd:element name="binding.jvm" minOccurs="0"/>
                     <xsd:element name="binding.bolt" type="BBindingTRReference" minOccurs="0"/>
                     <xsd:element name="binding.rest" type="RestBindingTRReference" minOccurs="0"/>
                     <xsd:element name="binding.dubbo" type="DubboBindingTRReference" minOccurs="0"/>
                 </xsd:all>
-                <xsd:attribute name="jvm-service" use="optional" type="xsd:boolean" default="false"/>
+                <xsd:attribute name="jvm-first" use="optional" type="xsd:boolean" default="true"/>
                 <xsd:attribute name="interface" type="xsd:string" use="required"/>
                 <xsd:attribute name="abstract" type="xsd:boolean" use="optional"/>
                 <xsd:attribute name="parent" type="xsd:string" use="optional"/>
@@ -440,6 +441,7 @@
         <xsd:complexContent>
             <xsd:extension base="beans:identifiedType">
                 <xsd:all minOccurs="0" maxOccurs="1">
+                    <xsd:element name="binding.jvm" minOccurs="0"/>
                     <xsd:element name="binding.bolt" type="BBindingTRService" minOccurs="0"/>
                     <xsd:element name="binding.rest" type="RestBindingTRService" minOccurs="0"/>
                     <xsd:element name="binding.dubbo" type="DubboBindingTRService" minOccurs="0"/>

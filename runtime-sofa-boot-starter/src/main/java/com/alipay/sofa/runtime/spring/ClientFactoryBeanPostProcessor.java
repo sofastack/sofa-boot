@@ -34,7 +34,6 @@ import java.lang.reflect.Modifier;
  * @author xuanbei 18/3/2
  */
 public class ClientFactoryBeanPostProcessor implements BeanPostProcessor {
-
     private ClientFactory clientFactory;
 
     public ClientFactoryBeanPostProcessor(ClientFactory clientFactory) {

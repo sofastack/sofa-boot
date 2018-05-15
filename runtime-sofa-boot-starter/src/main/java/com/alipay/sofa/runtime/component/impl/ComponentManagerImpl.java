@@ -28,22 +28,17 @@ import com.alipay.sofa.runtime.spi.log.SofaLogger;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author xuanbei 18/3/9
  */
 public class ComponentManagerImpl implements ComponentManager {
-
     /** container for all components */
     protected ConcurrentMap<ComponentName, ComponentInfo>                     registry;
     /** container for resolved components */
     protected ConcurrentMap<ComponentType, Map<ComponentName, ComponentInfo>> resolvedRegistry;
     /** client factory */
-    protected ClientFactoryInternal                                           clientFactoryInternal;
-    /** allow publish or not */
-    private AtomicBoolean                                                     allowPublish = new AtomicBoolean(
-                                                                                               false);
+    private ClientFactoryInternal                                             clientFactoryInternal;
 
     public ComponentManagerImpl(ClientFactoryInternal clientFactoryInternal) {
         this.registry = new ConcurrentHashMap(16);
@@ -90,7 +85,7 @@ public class ComponentManagerImpl implements ComponentManager {
         for (ComponentInfo ri : elems) {
             try {
                 unregister(ri);
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 SofaLogger.error(e, "failed to shutdown component manager");
             }
         }
@@ -101,7 +96,7 @@ public class ComponentManagerImpl implements ComponentManager {
             resolvedRegistry.clear();
             resolvedRegistry = null;
             clientFactoryInternal = null;
-        } catch (Exception e) {
+        } catch (Throwable e) {
             SofaLogger.error(e, "Failed to shutdown registry manager");
         }
     }
@@ -113,11 +108,11 @@ public class ComponentManagerImpl implements ComponentManager {
 
     @Override
     public void register(ComponentInfo componentInfo) {
-        _register(componentInfo);
+        doRegister(componentInfo);
     }
 
     public ComponentInfo registerAndGet(ComponentInfo componentInfo) {
-        return _register(componentInfo);
+        return doRegister(componentInfo);
     }
 
     @Override
@@ -125,7 +120,7 @@ public class ComponentManagerImpl implements ComponentManager {
         clientFactoryInternal.registerClient(clientType, client);
     }
 
-    private ComponentInfo _register(ComponentInfo ci) {
+    private ComponentInfo doRegister(ComponentInfo ci) {
         ComponentName name = ci.getName();
         if (isRegistered(name)) {
             SofaLogger.error("Component was already registered: {0}", name);
@@ -134,7 +129,7 @@ public class ComponentManagerImpl implements ComponentManager {
 
         try {
             ci.register();
-        } catch (Exception e) {
+        } catch (Throwable e) {
             SofaLogger.error(e, "Failed to register component: {0}", ci.getName());
             return null;
         }
@@ -148,11 +143,11 @@ public class ComponentManagerImpl implements ComponentManager {
                 return old;
             }
             if (ci.resolve()) {
-                _typeRegistry(ci);
+                typeRegistry(ci);
                 ci.activate();
             }
-        } catch (Exception e) {
-            ci.exception(e);
+        } catch (Throwable e) {
+            ci.exception(new Exception(e));
             SofaLogger.error(e, "Failed to create the component {0}", ci.getName());
         }
 
@@ -185,7 +180,7 @@ public class ComponentManagerImpl implements ComponentManager {
         return componentInfos;
     }
 
-    protected void _typeRegistry(ComponentInfo componentInfo) {
+    private void typeRegistry(ComponentInfo componentInfo) {
         ComponentName name = componentInfo.getName();
         if (name != null) {
             ComponentType type = name.getType();

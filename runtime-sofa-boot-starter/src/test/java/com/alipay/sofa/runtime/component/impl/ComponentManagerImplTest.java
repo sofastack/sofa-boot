@@ -29,9 +29,8 @@ import org.junit.Test;
  * @author xuanbei 18/4/3
  */
 public class ComponentManagerImplTest {
-    private ComponentManagerImpl componentManager;
-    private ComponentType        type = new ComponentType("testType");
-    private ComponentName        name = new ComponentName(type, "object");
+    private ComponentType type = new ComponentType("testType");
+    private ComponentName name = new ComponentName(type, "object");
 
     @Test
     public void testRegister(@Mocked final ClientFactoryInternal mockClientFactoryInternal,
@@ -52,7 +51,7 @@ public class ComponentManagerImplTest {
                 mockComponentInfo.activate();
             }
         };
-        componentManager = new ComponentManagerImpl(mockClientFactoryInternal);
+        ComponentManagerImpl componentManager = new ComponentManagerImpl(mockClientFactoryInternal);
         componentManager.register(mockComponentInfo);
         Assert.assertTrue(componentManager.registry.containsKey(name));
         Assert.assertTrue(componentManager.resolvedRegistry.get(type).containsValue(

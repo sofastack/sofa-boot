@@ -19,20 +19,35 @@ package com.alipay.sofa.runtime.spring.parser;
 import com.alipay.sofa.runtime.spring.factory.ReferenceFactoryBean;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.ParserContext;
+import org.springframework.util.StringUtils;
 import org.w3c.dom.Element;
 
 /**
  * @author xuanbei 18/3/1
  */
 public class ReferenceDefinitionParser extends AbstractContractDefinitionParser {
-
+    private static final String JVM_FIRST             = "jvm-first";
+    private static final String PROPERTY_JVM_FIRST    = "jvmFirst";
     private static final String PROPERTY_LOAD_BALANCE = "loadBalance";
 
     @Override
     protected void doParseInternal(Element element, ParserContext parserContext,
                                    BeanDefinitionBuilder builder) {
+        String jvmFirstString = element.getAttribute(JVM_FIRST);
+
+        if (StringUtils.hasText(jvmFirstString)) {
+            if ("true".equalsIgnoreCase(jvmFirstString)) {
+                builder.addPropertyValue(PROPERTY_JVM_FIRST, true);
+            } else if ("false".equalsIgnoreCase(jvmFirstString)) {
+                builder.addPropertyValue(PROPERTY_JVM_FIRST, false);
+            } else {
+                throw new RuntimeException(
+                    "Invalid value of property jvm-first, can only be true or false.");
+            }
+        }
+
         String loadBalance = element.getAttribute(PROPERTY_LOAD_BALANCE);
-        if (loadBalance != null && loadBalance.length() > 0) {
+        if (StringUtils.hasText(loadBalance)) {
             builder.addPropertyValue(PROPERTY_LOAD_BALANCE, loadBalance);
         }
     }

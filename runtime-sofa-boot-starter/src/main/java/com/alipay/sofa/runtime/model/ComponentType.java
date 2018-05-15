@@ -46,10 +46,7 @@ public class ComponentType {
 
         ComponentType that = (ComponentType) o;
 
-        if (!typeName.equals(that.typeName))
-            return false;
-
-        return true;
+        return typeName.equals(that.typeName);
     }
 
     @Override

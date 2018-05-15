@@ -18,6 +18,7 @@ package com.alipay.sofa.runtime.spi.service;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
+import org.springframework.util.StringUtils;
 
 /**
  * @author xuanbei 18/2/28
@@ -37,10 +38,10 @@ public abstract class ServiceProxy implements MethodInterceptor {
             Thread.currentThread().setContextClassLoader(serviceClassLoader);
             return doInvoke(invocation);
         } catch (Throwable e) {
-            do_catch(invocation, e, startTime);
+            doCatch(invocation, e, startTime);
             throw e;
         } finally {
-            do_finally(invocation, startTime);
+            doFinally(invocation, startTime);
             Thread.currentThread().setContextClassLoader(oldClassLoader);
         }
     }
@@ -59,22 +60,20 @@ public abstract class ServiceProxy implements MethodInterceptor {
                                             long startTime) {
         String appStart = "";
 
-        if (appStart != null && appStart.length() > 0) {
+        if (StringUtils.hasText(appStart)) {
             appStart = "-" + start;
         }
 
         long endTime = System.currentTimeMillis();
 
-        StringBuffer sb = new StringBuffer("SOFA-Reference" + appStart + "(");
+        StringBuilder sb = new StringBuilder("SOFA-Reference" + appStart + "(");
 
-        sb.append(invocation.getMethod().getName());
-        sb.append(",");
+        sb.append(invocation.getMethod().getName()).append(",");
         for (Object o : invocation.getArguments()) {
             sb.append(o);
             sb.append(",");
         }
-        sb.append((endTime - startTime) + "ms");
-        sb.append(")");
+        sb.append((endTime - startTime)).append("ms").append(")");
 
         return sb.toString();
     }
@@ -85,7 +84,7 @@ public abstract class ServiceProxy implements MethodInterceptor {
 
     protected abstract Object doInvoke(MethodInvocation invocation) throws Throwable;
 
-    protected abstract void do_catch(MethodInvocation invocation, Throwable e, long startTime);
+    protected abstract void doCatch(MethodInvocation invocation, Throwable e, long startTime);
 
-    protected abstract void do_finally(MethodInvocation invocation, long startTime);
+    protected abstract void doFinally(MethodInvocation invocation, long startTime);
 }
