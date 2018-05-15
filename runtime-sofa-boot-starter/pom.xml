@@ -29,7 +29,7 @@
 
     <artifactId>runtime-sofa-boot-starter</artifactId>
     <properties>
-        <ark.plugin.name>sofaruntime-ark-plugin</ark.plugin.name>
+        <ark.plugin.name>sofa-runtime-ark-plugin</ark.plugin.name>
     </properties>
 
     <dependencies>
