@@ -28,13 +28,7 @@ import java.util.Set;
  * @author xuanbei 18/2/28
  */
 public class BindingAdapterFactoryImpl implements BindingAdapterFactory {
-
     private Map<BindingType, BindingAdapter> bindingTypeBindingAdapterMap = new HashMap<>();
-
-    @Override
-    public boolean hasBindingAdapter(BindingType bindingType) {
-        return bindingTypeBindingAdapterMap.containsKey(bindingType);
-    }
 
     @Override
     public BindingAdapter getBindingAdapter(BindingType bindingType) {

@@ -28,7 +28,6 @@ import java.util.Map;
  * @author xuanbei 18/3/1
  */
 public class ServiceImpl extends AbstractContract implements Service {
-
     private Object target;
 
     public ServiceImpl(String uniqueId, Class<?> interfaceType, Object target) {

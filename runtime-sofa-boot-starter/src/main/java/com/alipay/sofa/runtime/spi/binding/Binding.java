@@ -76,14 +76,14 @@ public interface Binding {
     /**
      * set binding healthy
      *
-     * @param healthy
+     * @param healthy health or not
      */
     void setHealthy(boolean healthy);
 
     /**
      * set binding destroyed state
      *
-     * @param destroyed
+     * @param destroyed destroyed or not
      */
     void setDestroyed(boolean destroyed);
 

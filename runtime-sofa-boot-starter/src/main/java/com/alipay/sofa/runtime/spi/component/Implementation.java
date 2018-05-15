@@ -24,7 +24,6 @@ import com.alipay.sofa.runtime.api.ServiceValidationException;
  * @author xuanbei 18/2/28
  */
 public interface Implementation {
-
     /**
      * get name
      *
@@ -38,11 +37,6 @@ public interface Implementation {
      * @return target object
      */
     Object getTarget();
-
-    /**
-     * set target object
-     */
-    void setTarget(Object target);
 
     /**
      * get target object class type
@@ -66,6 +60,11 @@ public interface Implementation {
     boolean isLazyInit();
 
     /**
+     * set target object
+     */
+    void setTarget(Object target);
+
+    /**
      * is Factory or not
      *
      * @return true or false。
@@ -78,5 +77,4 @@ public interface Implementation {
      * @throws ServiceValidationException
      */
     void validate() throws ServiceValidationException;
-
 }

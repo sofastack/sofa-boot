@@ -49,6 +49,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
 
         <!-- test -->
         <dependency>
@@ -99,20 +104,14 @@
                                     <package>com.alipay.sofa.runtime.model</package>
                                     <package>com.alipay.sofa.runtime.spi.client</package>
                                     <package>com.alipay.sofa.runtime.spi.component</package>
-                                    <package>com.alipay.sofa.runtime.spi.constants</package>
                                     <package>com.alipay.sofa.runtime.spi.health</package>
                                     <package>com.alipay.sofa.runtime.spi.log</package>
                                     <package>com.alipay.sofa.runtime.spi.util</package>
                                     <package>com.alipay.sofa.runtime.client.impl</package>
                                     <package>com.alipay.sofa.runtime.component.impl</package>
-                                    <package>com.alipay.sofa.runtime.impl</package>
                                 </packages>
 
                                 <classes>
-                                    <class>com.alipay.sofa.runtime.spi.SofaFramework</class>
-                                    <class>com.alipay.sofa.runtime.spi.SofaFrameworkHolder</class>
-                                    <class>com.alipay.sofa.runtime.SofaFrameworkImpl</class>
-                                    <class>com.alipay.sofa.runtime.SofaFrameworkInternal</class>
                                     <class>com.alipay.sofa.runtime.service.component.AbstractContract</class>
                                     <class>com.alipay.sofa.runtime.service.component.Reference</class>
                                     <class>com.alipay.sofa.runtime.service.component.Service</class>

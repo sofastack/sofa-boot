@@ -33,6 +33,10 @@ public class DefaultImplementation implements Implementation {
         this.name = name;
     }
 
+    public DefaultImplementation(Object target) {
+        this.target = target;
+    }
+
     @Override
     public String getName() {
         return name;
@@ -49,6 +53,11 @@ public class DefaultImplementation implements Implementation {
     }
 
     @Override
+    public boolean isFactory() {
+        return false;
+    }
+
+    @Override
     public Class<?> getTargetClass() {
         return target.getClass();
     }
@@ -60,11 +69,6 @@ public class DefaultImplementation implements Implementation {
 
     @Override
     public boolean isLazyInit() {
-        return false;
-    }
-
-    @Override
-    public boolean isFactory() {
         return false;
     }
 

@@ -40,6 +40,7 @@
         <module>healthcheck-sofa-boot-starter</module>
         <module>runtime-sofa-boot-starter</module>
         <module>test-sofa-boot-starter</module>
+        <module>isle-sofa-boot-starter</module>
     </modules>
 
     <properties>
