@@ -58,9 +58,8 @@ public interface BindingConverter<L extends BindingParam, R extends Binding> ext
      * @param bindingConverterContext binding converter context
      * @return Binding Object
      */
-    Binding convert(SofaService sofaServiceAnnotation,
-                    SofaServiceBinding sofaServiceBindingAnnotation,
-                    BindingConverterContext bindingConverterContext);
+    R convert(SofaService sofaServiceAnnotation, SofaServiceBinding sofaServiceBindingAnnotation,
+              BindingConverterContext bindingConverterContext);
 
     /**
      * convert annotation Element to concrete {@link Binding}
@@ -70,9 +69,9 @@ public interface BindingConverter<L extends BindingParam, R extends Binding> ext
      * @param bindingConverterContext binding converter context
      * @return Binding Object
      */
-    Binding convert(SofaReference sofaReferenceAnnotation,
-                    SofaReferenceBinding sofaReferenceBindingAnnotation,
-                    BindingConverterContext bindingConverterContext);
+    R convert(SofaReference sofaReferenceAnnotation,
+              SofaReferenceBinding sofaReferenceBindingAnnotation,
+              BindingConverterContext bindingConverterContext);
 
     /**
      * get supported binding type

@@ -2,7 +2,7 @@
 
 本文档将演示如何在 SOFABoot 环境下进行模块化开发，本项目一共包括四个模块：
 
-```java
+```text
 .
 │
 ├── service-facade 
@@ -21,9 +21,9 @@
 - service-consumer: 演示 XML 方式、Annotation 方式、API 方式引用 JVM 服务；
 - sofa-boot-run: 启动包含 SOFABoot 模块的 SOFA Boot 应用。
 
-## service-facade
+## 定义服务 API
 
-service-facade 包含用于演示 JVM 服务发布与引用的 API :
+service-facade 模块包含用于演示 JVM 服务发布与引用的 API :
 
 ```java
 public interface SampleJvmService {
@@ -31,15 +31,15 @@ public interface SampleJvmService {
 }
 ```
 
-## service-provider
+## 发布 JVM 服务
 
 service-provider 是一个 SOFABoot 模块，用于演示 XML 方式、Annotation 方式、API 方式发布 JVM 服务。
 
-### 定义SOFABoot模块
+### 定义 SOFABoot 模块
 
 为 service-provider 模块增加 sofa-module.properties 文件，将其定义为 SOFABoot 模块:
 
-```java
+```properties
 Module-Name=com.alipay.sofa.service-provider
 ```
 
@@ -62,7 +62,7 @@ public class SampleJvmServiceImpl implements SampleJvmService {
 
 增加 META-INF/spring/service-provide.xml 文件，将 SampleJvmServiceImpl 发布为 JVM 服务:
 
-```java
+```xml
 <bean id="sampleJvmService" class="com.alipay.sofa.isle.sample.SampleJvmServiceImpl">
     <property name="message" value="Hello, jvm service xml implementation."/>
 </bean>
@@ -74,7 +74,7 @@ public class SampleJvmServiceImpl implements SampleJvmService {
 
 ### Annotation 方式发布服务
 
-实现 SampleJvmService 接口并增加 `@SofaService` 注解:
+实现 SampleJvmService 接口并增加 @SofaService 注解:
 
 ```java
 @SofaService(uniqueId = "annotationImpl")
@@ -88,9 +88,9 @@ public class SampleJvmServiceAnnotationImpl implements SampleJvmService {
 
 为了区分 XML 方式发布的 JVM 服务，注解上需要增加 uniqueId 属性。
 
-在 META-INF/spring/service-provide.xml 文件配置 Spring Bean :
+将 SampleJvmServiceAnnotationImpl 配置成一个 Spring Bean，保证 @SofaService 注解生效:
 
-```java
+```xml
 <bean id="sampleJvmServiceAnnotation" class="com.alipay.sofa.isle.sample.SampleJvmServiceAnnotationImpl"/>
 ```
 
@@ -121,11 +121,11 @@ public class PublishServiceWithClient implements ClientFactoryAware {
 
 将 PublishServiceWithClient 配置为 Spring Bean，并设置 init-method ，使PublishServiceWithClient 在 Spring 刷新时发布服务:
 
-```java
+```xml
 <bean id="publishServiceWithClient" class="com.alipay.sofa.isle.sample.PublishServiceWithClient" init-method="init"/>
 ```
 
-## service-consumer
+## 引用 JVM 服务
 
 service-consumer 是一个 SOFABoot 模块，用于演示 XML 方式、Annotation 方式、API 方式引用 JVM 服务。
 
@@ -133,24 +133,24 @@ service-consumer 是一个 SOFABoot 模块，用于演示 XML 方式、Annotatio
 
 为 service-consumer 模块增加 sofa-module.properties 文件，将其定义为 SOFABoot 模块:
 
-```java
+```properties
 Module-Name=com.alipay.sofa.service-consumer
 Require-Module=com.alipay.sofa.service-provider
 ```
 
 在 sofa-module.properties 文件中需要指定 Require-Module，保证 service-provider 模块在 service-consumer 模块之前刷新。
 
-### XML方式引用服务
+### XML 方式引用服务
 
 增加 META-INF/spring/service-consumer.xml 文件，引用 service-provider 模块发布的服务:
 
-```java
+```xml
 <sofa:reference id="sampleJvmService" interface="com.alipay.sofa.isle.sample.SampleJvmService">
     <sofa:binding.jvm/>
 </sofa:service>
 ```
 
-### Annotation方式引用服务
+### Annotation 方式引用服务
 
 定义 JvmServiceConsumer 类，并在其 sampleJvmServiceAnnotationImpl 属性上增加 @SofaReference 注解: 
 
@@ -161,13 +161,13 @@ public class JvmServiceConsumer implements ClientFactoryAware {
 }
 ```
 
-将 JvmServiceConsumer 配置成一个 Spring Bean，保证 `@SofaReference` 注解生效:
+将 JvmServiceConsumer 配置成一个 Spring Bean，保证 @SofaReference 注解生效:
 
-```java
+```xml
 <bean id="consumer" class="com.alipay.sofa.isle.sample.JvmServiceConsumer" init-method="init" />
 ```
 
-### API方式引用服务
+### API 方式引用服务
 
 JvmServiceConsumer 实现 ClientFactoryAware 接口，并在其 init 方法中引用 JVM 服务:
 
@@ -191,11 +191,11 @@ public class JvmServiceConsumer implements ClientFactoryAware {
 }
 ```
 
-## sofa-boot-run
+## 启动 SOFABoot 应用
 
 将模块 parent 配置为 SOFABoot:
 
-```java
+```xml
 <parent>
     <groupId>com.alipay.sofa</groupId>
     <artifactId>sofaboot-dependencies</artifactId>
@@ -205,7 +205,7 @@ public class JvmServiceConsumer implements ClientFactoryAware {
 
 为模块增加 isle-sofa-boot-starter 及 service-provider 、 service-consumer 依赖:
 
-```java
+```xml
 <dependency>
     <groupId>com.alipay.sofa</groupId>
     <artifactId>isle-sofa-boot-starter</artifactId>
@@ -222,7 +222,7 @@ public class JvmServiceConsumer implements ClientFactoryAware {
 
 启动 ApplicationRun 类，控制台将看到以下输出:
 
-```java
+```text
 Hello, jvm service xml implementation.
 Hello, jvm service annotation implementation.
 Hello, jvm service service client implementation.
