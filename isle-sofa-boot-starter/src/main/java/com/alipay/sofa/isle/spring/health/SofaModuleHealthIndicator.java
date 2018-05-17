@@ -16,37 +16,18 @@
  */
 package com.alipay.sofa.isle.spring.health;
 
-import com.alipay.sofa.healthcheck.core.HealthChecker;
 import org.springframework.boot.actuate.health.Health;
+import org.springframework.boot.actuate.health.HealthIndicator;
 
 /**
- * module health checker which implements ${@link com.alipay.sofa.healthcheck.core.HealthChecker}
+ * module health checker which implements ${@link org.springframework.boot.actuate.health.HealthIndicator}
  *
- * @author xuanbei 18/5/6
+ * @author xuanbei 18/5/16
  */
-public class SofaModuleHealthChecker extends AbstractModuleHealthChecker implements HealthChecker {
+public class SofaModuleHealthIndicator extends AbstractModuleHealthChecker implements
+                                                                          HealthIndicator {
     @Override
-    public Health isHealthy() {
+    public Health health() {
         return doHealthCheck();
-    }
-
-    @Override
-    public String getComponentName() {
-        return "SOFABoot Modules";
-    }
-
-    @Override
-    public int getRetryCount() {
-        return 0;
-    }
-
-    @Override
-    public long getRetryTimeInterval() {
-        return 0;
-    }
-
-    @Override
-    public boolean isStrictCheck() {
-        return true;
     }
 }
