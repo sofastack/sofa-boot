@@ -30,8 +30,9 @@ public class SampleJvmServiceImpl implements SampleJvmService {
     }
 
     @Override
-    public void message() {
+    public String message() {
         System.out.println(message);
+        return message;
     }
 
     public String getMessage() {

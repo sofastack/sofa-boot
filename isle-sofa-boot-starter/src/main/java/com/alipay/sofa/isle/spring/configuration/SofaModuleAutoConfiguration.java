@@ -16,10 +16,15 @@
  */
 package com.alipay.sofa.isle.spring.configuration;
 
+import com.alipay.sofa.healthcheck.core.HealthChecker;
 import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
 import com.alipay.sofa.isle.spring.health.SofaModuleHealthChecker;
+import com.alipay.sofa.isle.spring.health.SofaModuleHealthIndicator;
 import com.alipay.sofa.isle.spring.listener.SofaModuleBeanFactoryPostProcessor;
 import com.alipay.sofa.isle.spring.listener.SofaModuleContextRefreshedListener;
+import org.springframework.boot.actuate.health.HealthIndicator;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -34,11 +39,6 @@ public class SofaModuleAutoConfiguration {
     }
 
     @Bean
-    public SofaModuleHealthChecker sofaModuleHealthChecker() {
-        return new SofaModuleHealthChecker();
-    }
-
-    @Bean
     public SofaModuleBeanFactoryPostProcessor sofaModuleBeanFactoryPostProcessor() {
         return new SofaModuleBeanFactoryPostProcessor();
     }
@@ -46,5 +46,24 @@ public class SofaModuleAutoConfiguration {
     @Bean
     public SofaModuleContextRefreshedListener sofaModuleContextRefreshedListener() {
         return new SofaModuleContextRefreshedListener();
+    }
+
+    @Configuration
+    @ConditionalOnClass({ HealthIndicator.class })
+    @ConditionalOnMissingClass({ "com.alipay.sofa.healthcheck.core.HealthChecker" })
+    public static class SofaModuleHealthIndicatorConfiguration {
+        @Bean
+        public SofaModuleHealthIndicator sofaModuleHealthIndicator() {
+            return new SofaModuleHealthIndicator();
+        }
+    }
+
+    @Configuration
+    @ConditionalOnClass({ HealthChecker.class })
+    public static class SofaModuleHealthCheckerConfiguration {
+        @Bean
+        public SofaModuleHealthChecker sofaModuleHealthChecker() {
+            return new SofaModuleHealthChecker();
+        }
     }
 }

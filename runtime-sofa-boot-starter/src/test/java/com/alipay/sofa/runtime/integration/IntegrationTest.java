@@ -61,10 +61,14 @@ public class IntegrationTest extends AbstractTestBase {
         Assert.assertNotNull(awareTest.getApplicationContext());
 
         ApplicationContext context = awareTest.getApplicationContext();
-        Assert.assertNotNull(context.getBean("componentHealthChecker"));
+        Assert.assertNotNull(context.getBean("sofaComponentHealthChecker"));
 
-        HealthChecker healthChecker = (HealthChecker) context.getBean("componentHealthChecker");
+        HealthChecker healthChecker = (HealthChecker) context.getBean("sofaComponentHealthChecker");
         Assert.assertTrue(healthChecker.isHealthy().getStatus().equals(Status.UP));
+        Assert.assertEquals("RUNTIME-COMPONENT", healthChecker.getComponentName());
+        Assert.assertEquals(0, healthChecker.getRetryCount());
+        Assert.assertEquals(0, healthChecker.getRetryTimeInterval());
+        Assert.assertEquals(true, healthChecker.isStrictCheck());
     }
 
     @Test

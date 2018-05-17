@@ -16,15 +16,18 @@
  */
 package com.alipay.sofa.isle.integration;
 
+import com.alipay.sofa.healthcheck.core.HealthChecker;
 import com.alipay.sofa.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.isle.constants.SofaModuleFrameworkConstants;
 import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
 import com.alipay.sofa.isle.util.ClassPathUtil;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.health.Status;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -81,6 +84,19 @@ public class IntegrationTest implements ApplicationContextAware {
             applicationRuntimeModel.getInstalled().get(1).getModuleName()));
         assertEquals("com.alipay.sofa.test", applicationRuntimeModel.getAllInactiveDeployments()
             .get(0).getModuleName());
+    }
+
+    @Test
+    public void testHealthChecker() {
+        Assert.assertNotNull(applicationContext.getBean("sofaModuleHealthChecker"));
+
+        HealthChecker healthChecker = (HealthChecker) applicationContext
+            .getBean("sofaModuleHealthChecker");
+        Assert.assertTrue(healthChecker.isHealthy().getStatus().equals(Status.UP));
+        Assert.assertEquals("SOFABoot Modules", healthChecker.getComponentName());
+        Assert.assertEquals(0, healthChecker.getRetryCount());
+        Assert.assertEquals(0, healthChecker.getRetryTimeInterval());
+        Assert.assertEquals(true, healthChecker.isStrictCheck());
     }
 
     @Override

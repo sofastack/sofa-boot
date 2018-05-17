@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.runtime.spring.configuration;
 
+import com.alipay.sofa.healthcheck.core.HealthChecker;
 import com.alipay.sofa.infra.constants.CommonMiddlewareConstants;
 import com.alipay.sofa.runtime.api.client.ReferenceClient;
 import com.alipay.sofa.runtime.api.client.ServiceClient;
@@ -36,8 +37,12 @@ import com.alipay.sofa.runtime.spring.ClientFactoryBeanPostProcessor;
 import com.alipay.sofa.runtime.spring.ServiceAnnotationBeanPostProcessor;
 import com.alipay.sofa.runtime.spring.SofaRuntimeContextAwareProcessor;
 import com.alipay.sofa.runtime.spring.config.SofaRuntimeProperties;
-import com.alipay.sofa.runtime.spring.health.ComponentHealthChecker;
+import com.alipay.sofa.runtime.spring.health.SofaComponentHealthChecker;
+import com.alipay.sofa.runtime.spring.health.SofaComponentHealthIndicator;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.actuate.health.HealthIndicator;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -112,11 +117,6 @@ public class SofaRuntimeAutoConfiguration {
         return new SofaRuntimeContextAwareProcessor(sofaRuntimeContext);
     }
 
-    @Bean
-    public ComponentHealthChecker componentHealthChecker(SofaRuntimeContext sofaRuntimeContext) {
-        return new ComponentHealthChecker(sofaRuntimeContext);
-    }
-
     private static <T> Set<T> getClassesByServiceLoader(Class<T> clazz) {
         ServiceLoader<T> serviceLoader = ServiceLoader.load(clazz);
 
@@ -125,5 +125,24 @@ public class SofaRuntimeAutoConfiguration {
             result.add(t);
         }
         return result;
+    }
+
+    @Configuration
+    @ConditionalOnClass({ HealthIndicator.class })
+    @ConditionalOnMissingClass({ "com.alipay.sofa.healthcheck.core.HealthChecker" })
+    public static class SofaRuntimeHealthIndicatorConfiguration {
+        @Bean
+        public SofaComponentHealthIndicator sofaComponentHealthIndicator(SofaRuntimeContext sofaRuntimeContext) {
+            return new SofaComponentHealthIndicator(sofaRuntimeContext);
+        }
+    }
+
+    @Configuration
+    @ConditionalOnClass({ HealthChecker.class })
+    public static class SofaModuleHealthCheckerConfiguration {
+        @Bean
+        public SofaComponentHealthChecker sofaComponentHealthChecker(SofaRuntimeContext sofaRuntimeContext) {
+            return new SofaComponentHealthChecker(sofaRuntimeContext);
+        }
     }
 }

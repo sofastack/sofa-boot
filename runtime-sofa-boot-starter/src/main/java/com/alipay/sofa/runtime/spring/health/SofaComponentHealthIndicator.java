@@ -14,19 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.isle.sample;
+package com.alipay.sofa.runtime.spring.health;
 
-import com.alipay.sofa.runtime.api.annotation.SofaService;
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
+import org.springframework.boot.actuate.health.Health;
+import org.springframework.boot.actuate.health.HealthIndicator;
 
 /**
- * @author xuanbei 18/5/5
+ * component health checker which implements ${@link org.springframework.boot.actuate.health.HealthIndicator}
+ *
+ * @author xuanbei 18/5/15
  */
-@SofaService(uniqueId = "annotationImpl")
-public class SampleJvmServiceAnnotationImpl implements SampleJvmService {
+public class SofaComponentHealthIndicator extends AbstractComponentHealthChecker implements
+                                                                                HealthIndicator {
+    public SofaComponentHealthIndicator(SofaRuntimeContext sofaRuntimeContext) {
+        super(sofaRuntimeContext);
+    }
+
     @Override
-    public String message() {
-        String message = "Hello, jvm service annotation implementation.";
-        System.out.println(message);
-        return message;
+    public Health health() {
+        return doHealthCheck();
     }
 }

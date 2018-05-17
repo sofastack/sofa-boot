@@ -14,17 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.isle.spring.health;
+package com.alipay.sofa.runtime.spring.health;
 
 import com.alipay.sofa.healthcheck.core.HealthChecker;
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import org.springframework.boot.actuate.health.Health;
 
 /**
- * module health checker which implements ${@link com.alipay.sofa.healthcheck.core.HealthChecker}
+ * component health checker which implements ${@link com.alipay.sofa.healthcheck.core.HealthChecker}
  *
- * @author xuanbei 18/5/6
+ * @author xuanbei 18/3/17
  */
-public class SofaModuleHealthChecker extends AbstractModuleHealthChecker implements HealthChecker {
+public class SofaComponentHealthChecker extends AbstractComponentHealthChecker implements
+                                                                              HealthChecker {
+    public SofaComponentHealthChecker(SofaRuntimeContext sofaRuntimeContext) {
+        super(sofaRuntimeContext);
+    }
+
     @Override
     public Health isHealthy() {
         return doHealthCheck();
@@ -32,7 +38,7 @@ public class SofaModuleHealthChecker extends AbstractModuleHealthChecker impleme
 
     @Override
     public String getComponentName() {
-        return "SOFABoot Modules";
+        return "RUNTIME-COMPONENT";
     }
 
     @Override

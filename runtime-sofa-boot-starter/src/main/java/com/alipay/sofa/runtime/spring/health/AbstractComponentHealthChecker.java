@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.runtime.spring.health;
 
-import com.alipay.sofa.healthcheck.core.DefaultHealthChecker;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.health.HealthResult;
@@ -24,17 +23,18 @@ import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.Status;
 
 /**
- * @author xuanbei 18/3/17
+ * Abstract Component Health Checker
+ *
+ * @author xuanbei 18/5/15
  */
-public class ComponentHealthChecker extends DefaultHealthChecker {
+public abstract class AbstractComponentHealthChecker {
     private SofaRuntimeContext sofaRuntimeContext;
 
-    public ComponentHealthChecker(SofaRuntimeContext sofaRuntimeContext) {
+    public AbstractComponentHealthChecker(SofaRuntimeContext sofaRuntimeContext) {
         this.sofaRuntimeContext = sofaRuntimeContext;
     }
 
-    @Override
-    public Health isHealthy() {
+    public Health doHealthCheck() {
         boolean allPassed = true;
         Health.Builder builder = new Health.Builder();
         for (ComponentInfo componentInfo : sofaRuntimeContext.getComponentManager().getComponents()) {
@@ -52,10 +52,5 @@ public class ComponentHealthChecker extends DefaultHealthChecker {
         } else {
             return builder.status(Status.DOWN).build();
         }
-    }
-
-    @Override
-    public String getComponentName() {
-        return "RUNTIME-COMPONENT";
     }
 }
