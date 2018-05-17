@@ -24,7 +24,9 @@ import com.alipay.sofa.runtime.api.annotation.SofaService;
 @SofaService(uniqueId = "annotationImpl")
 public class SampleJvmServiceAnnotationImpl implements SampleJvmService {
     @Override
-    public void message() {
-        System.out.println("Hello, jvm service annotation implementation.");
+    public String message() {
+        String message = "Hello, jvm service annotation implementation.";
+        System.out.println(message);
+        return message;
     }
 }

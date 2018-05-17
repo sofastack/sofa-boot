@@ -27,7 +27,7 @@ service-facade 模块包含用于演示 JVM 服务发布与引用的 API :
 
 ```java
 public interface SampleJvmService {
-    void message();
+    String message();
 }
 ```
 
@@ -52,8 +52,9 @@ public class SampleJvmServiceImpl implements SampleJvmService {
     private String message;
 
     @Override
-    public void message() {
+    public String message() {
         System.out.println(message);
+        return message;
     }
 
     // getters and setters
@@ -80,8 +81,10 @@ public class SampleJvmServiceImpl implements SampleJvmService {
 @SofaService(uniqueId = "annotationImpl")
 public class SampleJvmServiceAnnotationImpl implements SampleJvmService {
     @Override
-    public void message() {
-        System.out.println("Hello, jvm service annotation implementation.");
+    public String message() {
+        String message = "Hello, jvm service annotation implementation.";
+        System.out.println(message);
+        return message;
     }
 }
 ```
@@ -226,4 +229,32 @@ public class JvmServiceConsumer implements ClientFactoryAware {
 Hello, jvm service xml implementation.
 Hello, jvm service annotation implementation.
 Hello, jvm service service client implementation.
+```
+
+## 编写测试用例
+
+SOFABoot 模块化测试方法与 Spring Boot 测试方法一致，只需在测试用例上增加 @SpringBootTest 注解及 @RunWith(SpringRunner.class) 注解即可。在测试用例中，还可以使用 @SofaReference 注解，对 SOFABoot 模块发布的服务进行测试：
+
+```java
+@SpringBootTest
+@RunWith(SpringRunner.class)
+public class SofaBootWithModulesTest {
+    @SofaReference
+    private SampleJvmService sampleJvmService;
+
+    @SofaReference(uniqueId = "annotationImpl")
+    private SampleJvmService sampleJvmServiceAnnotationImpl;
+
+    @SofaReference(uniqueId = "serviceClientImpl")
+    private SampleJvmService sampleJvmServiceClientImpl;
+
+    @Test
+    public void test() {
+        Assert.assertEquals("Hello, jvm service xml implementation.", sampleJvmService.message());
+        Assert.assertEquals("Hello, jvm service annotation implementation.",
+            sampleJvmServiceAnnotationImpl.message());
+        Assert.assertEquals("Hello, jvm service service client implementation.",
+            sampleJvmServiceClientImpl.message());
+    }
+}
 ```
