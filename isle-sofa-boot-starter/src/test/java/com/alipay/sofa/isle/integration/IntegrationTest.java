@@ -93,10 +93,10 @@ public class IntegrationTest implements ApplicationContextAware {
         HealthChecker healthChecker = (HealthChecker) applicationContext
             .getBean("sofaModuleHealthChecker");
         Assert.assertTrue(healthChecker.isHealthy().getStatus().equals(Status.UP));
-        Assert.assertEquals(healthChecker.getComponentName(), "SOFABoot Modules");
-        Assert.assertEquals(healthChecker.getRetryCount(), 0);
-        Assert.assertEquals(healthChecker.getRetryTimeInterval(), 0);
-        Assert.assertEquals(healthChecker.isStrictCheck(), true);
+        Assert.assertEquals("SOFABoot Modules", healthChecker.getComponentName());
+        Assert.assertEquals(0, healthChecker.getRetryCount());
+        Assert.assertEquals(0, healthChecker.getRetryTimeInterval());
+        Assert.assertEquals(true, healthChecker.isStrictCheck());
     }
 
     @Override
