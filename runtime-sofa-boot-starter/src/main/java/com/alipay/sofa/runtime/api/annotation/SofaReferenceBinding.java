@@ -82,4 +82,10 @@ public @interface SofaReferenceBinding {
      * @return registry for this consumer
      */
     String registry() default "";
+
+    /**
+     * dalay init connection
+     * @return
+     */
+    boolean lazy() default false;
 }
