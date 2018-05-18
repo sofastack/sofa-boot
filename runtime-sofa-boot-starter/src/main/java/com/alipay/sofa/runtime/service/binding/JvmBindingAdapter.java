@@ -22,9 +22,9 @@ import com.alipay.sofa.runtime.service.component.ServiceComponent;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapter;
 import com.alipay.sofa.runtime.spi.binding.Contract;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
-import com.alipay.sofa.runtime.spi.service.ServiceProxy;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.log.SofaLogger;
+import com.alipay.sofa.runtime.spi.service.ServiceProxy;
 import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.aop.framework.ProxyFactory;
@@ -35,10 +35,10 @@ import java.lang.reflect.Proxy;
 /**
  * JVM Binding Adapter, used to handle JvmBinding
  *
- * @author xuanbei 18/2/28
+ * @author xi.hux@alipay.com
+ * @version $Id: DefaultBindingAdapter.java,v 0.1 2009-10-12 17:14:41 xi.hux Exp $
  */
 public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
-
     public JvmBindingAdapter() {
     }
 
@@ -92,9 +92,8 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
      *
      * @return proxy object
      */
-    protected Object createServiceProxy(Contract contract, JvmBinding binding,
-                                        SofaRuntimeContext sofaRuntimeContext) {
-
+    private Object createServiceProxy(Contract contract, JvmBinding binding,
+                                      SofaRuntimeContext sofaRuntimeContext) {
         ClassLoader newClassLoader;
         ClassLoader appClassLoader = sofaRuntimeContext.getAppClassLoader();
         Class<?> javaClass = contract.getInterfaceType();
@@ -134,7 +133,6 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
      * JVM Service Invoker
      */
     static class JvmServiceInvoker extends ServiceProxy {
-
         private Contract           contract;
         private JvmBinding         binding;
         private Object             target;
@@ -182,8 +180,7 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
             ClassLoader tcl = Thread.currentThread().getContextClassLoader();
             try {
                 pushThreadContextClassLoader(sofaRuntimeContext.getAppClassLoader());
-                final Object finalTargetObj = targetObj;
-                retVal = invocation.getMethod().invoke(finalTargetObj, invocation.getArguments());
+                retVal = invocation.getMethod().invoke(targetObj, invocation.getArguments());
             } catch (InvocationTargetException ex) {
                 throw ex.getTargetException();
             } finally {
@@ -198,14 +195,14 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
         }
 
         @Override
-        protected void do_catch(MethodInvocation invocation, Throwable e, long startTime) {
+        protected void doCatch(MethodInvocation invocation, Throwable e, long startTime) {
             if (SofaLogger.isDebugEnabled()) {
                 SofaLogger.debug(getCommonInvocationLog("Exception", invocation, startTime));
             }
         }
 
         @Override
-        protected void do_finally(MethodInvocation invocation, long startTime) {
+        protected void doFinally(MethodInvocation invocation, long startTime) {
             if (SofaLogger.isDebugEnabled()) {
                 SofaLogger.debug(getCommonInvocationLog("Finally", invocation, startTime));
             }

@@ -16,9 +16,9 @@
  */
 package com.alipay.sofa.infra.initializer;
 
-import com.alipay.sofa.infra.log.InfraHealthCheckLoggerFactory;
 import com.alipay.sofa.common.log.Constants;
 import com.alipay.sofa.common.log.ReportUtil;
+import com.alipay.sofa.infra.log.InfraHealthCheckLoggerFactory;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.PriorityOrdered;
@@ -27,9 +27,7 @@ import org.springframework.util.StringUtils;
 
 /**
  * SOFABoot Infrastructure 启动初始化器
- * <p/>
- * 参考:org.springframework.core.io.support.SpringFactoriesLoader
- * <p/>
+ * <p> 参考:org.springframework.core.io.support.SpringFactoriesLoader </p>
  * Created by yangguanchao on 18/01/04.
  */
 public class SOFABootInfrastructureSpringContextInitializer
@@ -67,8 +65,8 @@ public class SOFABootInfrastructureSpringContextInitializer
         return HIGHEST_PRECEDENCE;
     }
 
-    public static void initLoggingPath(String middlewareLoggingPath) {
-        if (StringUtils.isEmpty((String) System.getProperty(Constants.LOG_PATH))
+    private static void initLoggingPath(String middlewareLoggingPath) {
+        if (StringUtils.isEmpty(System.getProperty(Constants.LOG_PATH))
             && !StringUtils.isEmpty(middlewareLoggingPath)) {
             System.setProperty(Constants.LOG_PATH, middlewareLoggingPath);
             ReportUtil.report("Actual " + Constants.LOG_PATH + " is [ " + middlewareLoggingPath

@@ -22,14 +22,14 @@
     <parent>
         <groupId>com.alipay.sofa</groupId>
         <artifactId>sofa-boot-runtime</artifactId>
-        <version>2.3.0</version>
+        <version>2.4.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>runtime-sofa-boot-starter</artifactId>
     <properties>
-        <ark.plugin.name>sofaruntime-ark-plugin</ark.plugin.name>
+        <ark.plugin.name>sofa-runtime-ark-plugin</ark.plugin.name>
     </properties>
 
     <dependencies>
@@ -40,6 +40,12 @@
         <dependency>
             <groupId>com.alipay.sofa</groupId>
             <artifactId>healthcheck-sofa-boot-starter</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -49,7 +55,23 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
 
+        <!-- test -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.jmockit</groupId>
             <artifactId>jmockit</artifactId>
@@ -69,7 +91,7 @@
             <plugin>
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>sofa-ark-plugin-maven-plugin</artifactId>
-                <version>0.1.0</version>
+                <version>0.3.0</version>
                 <executions>
                     <execution>
                         <id>default-cli</id>
@@ -84,24 +106,18 @@
                             </imported>
                             <exported>
                                 <packages>
-                                    <package>com.alipay.sofa.runtime.api</package>
+                                    <package>com.alipay.sofa.runtime.api.*</package>
                                     <package>com.alipay.sofa.runtime.model</package>
                                     <package>com.alipay.sofa.runtime.spi.client</package>
                                     <package>com.alipay.sofa.runtime.spi.component</package>
-                                    <package>com.alipay.sofa.runtime.spi.constants</package>
                                     <package>com.alipay.sofa.runtime.spi.health</package>
                                     <package>com.alipay.sofa.runtime.spi.log</package>
                                     <package>com.alipay.sofa.runtime.spi.util</package>
                                     <package>com.alipay.sofa.runtime.client.impl</package>
                                     <package>com.alipay.sofa.runtime.component.impl</package>
-                                    <package>com.alipay.sofa.runtime.impl</package>
                                 </packages>
 
                                 <classes>
-                                    <class>com.alipay.sofa.runtime.spi.SofaFramework</class>
-                                    <class>com.alipay.sofa.runtime.spi.SofaFrameworkHolder</class>
-                                    <class>com.alipay.sofa.runtime.SofaFrameworkImpl</class>
-                                    <class>com.alipay.sofa.runtime.SofaFrameworkInternal</class>
                                     <class>com.alipay.sofa.runtime.service.component.AbstractContract</class>
                                     <class>com.alipay.sofa.runtime.service.component.Reference</class>
                                     <class>com.alipay.sofa.runtime.service.component.Service</class>

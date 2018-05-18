@@ -21,20 +21,16 @@ import com.alipay.sofa.runtime.api.client.ServiceClient;
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.api.component.Property;
 import com.alipay.sofa.runtime.model.ComponentType;
-import com.alipay.sofa.runtime.model.InterfaceMode;
 import com.alipay.sofa.runtime.service.binding.JvmBinding;
-import com.alipay.sofa.runtime.service.component.impl.ServiceImpl;
 import com.alipay.sofa.runtime.service.helper.ReferenceRegisterHelper;
-import com.alipay.sofa.runtime.service.impl.BindingFactoryContainer;
 import com.alipay.sofa.runtime.spi.binding.Binding;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapter;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
 import com.alipay.sofa.runtime.spi.component.*;
-import com.alipay.sofa.runtime.spi.constants.SofaConfigurationConstants;
 import com.alipay.sofa.runtime.spi.health.HealthResult;
 import com.alipay.sofa.runtime.spi.log.SofaLogger;
 import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
-import org.springframework.util.StringUtils;
+import com.alipay.sofa.runtime.spring.config.SofaRuntimeProperties;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,14 +44,16 @@ import java.util.concurrent.CountDownLatch;
  * @author xuanbei 18/3/1
  */
 public class ReferenceComponent extends AbstractComponent {
-
     public static final ComponentType REFERENCE_COMPONENT_TYPE = new ComponentType("reference");
 
     private BindingAdapterFactory     bindingAdapterFactory;
     private Reference                 reference;
+    private SofaRuntimeProperties     sofaRuntimeProperties;
     private CountDownLatch            latch                    = new CountDownLatch(1);
 
     public ReferenceComponent(Reference reference, Implementation implementation,
+                              BindingAdapterFactory bindingAdapterFactory,
+                              SofaRuntimeProperties sofaRuntimeProperties,
                               SofaRuntimeContext sofaRuntimeContext) {
         this.componentName = ComponentNameFactory.createComponentName(
             REFERENCE_COMPONENT_TYPE,
@@ -64,8 +62,9 @@ public class ReferenceComponent extends AbstractComponent {
                     + ReferenceRegisterHelper.generateBindingHashCode(reference));
         this.reference = reference;
         this.implementation = implementation;
+        this.sofaRuntimeProperties = sofaRuntimeProperties;
         this.sofaRuntimeContext = sofaRuntimeContext;
-        bindingAdapterFactory = BindingFactoryContainer.getBindingAdapterFactory();
+        this.bindingAdapterFactory = bindingAdapterFactory;
     }
 
     @Override
@@ -76,38 +75,6 @@ public class ReferenceComponent extends AbstractComponent {
     @Override
     public Map<String, Property> getProperties() {
         return null;
-    }
-
-    /**
-     * skip reference check or not
-     *
-     * @return true or false
-     */
-    private boolean skipJVMReferenceHealth() {
-        String skipJVMReferenceHealth = sofaRuntimeContext.getAppConfiguration().getPropertyValue(
-            SofaConfigurationConstants.SOFA_RUNTIME_SKIP_JVM_REFERENCE_HEALTH_CHECK, "true");
-
-        return StringUtils.hasText(skipJVMReferenceHealth)
-               && "true".equalsIgnoreCase(skipJVMReferenceHealth);
-    }
-
-    /**
-     * get service target
-     *
-     * @return service target
-     */
-    private Object getServiceTarget() {
-        Object serviceTarget = null;
-        ComponentName componentName = ComponentNameFactory.createComponentName(
-            ServiceComponent.SERVICE_COMPONENT_TYPE, reference.getInterfaceType(),
-            reference.getUniqueId());
-        ComponentInfo componentInfo = sofaRuntimeContext.getComponentManager().getComponentInfo(
-            componentName);
-
-        if (componentInfo != null) {
-            serviceTarget = componentInfo.getImplementation().getTarget();
-        }
-        return serviceTarget;
     }
 
     @Override
@@ -121,7 +88,6 @@ public class ReferenceComponent extends AbstractComponent {
 
         JvmBinding jvmBinding = null;
         HealthResult jvmBindingHealthResult = null;
-
         if (reference.hasBinding()) {
             for (Binding binding : reference.getBindings()) {
                 bindingHealth.add(binding.healthCheck());
@@ -133,7 +99,7 @@ public class ReferenceComponent extends AbstractComponent {
         }
 
         // check reference has a corresponding service
-        if (!skipJVMReferenceHealth() && jvmBinding != null) {
+        if (!sofaRuntimeProperties.isSkipJvmReferenceHealthCheck() && jvmBinding != null) {
             Object serviceTarget = getServiceTarget();
             if (serviceTarget == null && !jvmBinding.hasBackupProxy()) {
                 jvmBindingHealthResult.setHealthy(false);
@@ -174,7 +140,7 @@ public class ReferenceComponent extends AbstractComponent {
             } else if (bindings.size() > 1) {
                 Object backupProxy = null;
                 for (Binding binding : bindings) {
-                    if ("jvm".equals(binding.getName())) {
+                    if (JvmBinding.JVM_BINDING_TYPE.getType().equals(binding.getName())) {
                         candidate = binding;
                     } else {
                         backupProxy = createProxy(reference, binding);
@@ -193,8 +159,6 @@ public class ReferenceComponent extends AbstractComponent {
             this.implementation = new DefaultImplementation();
             implementation.setTarget(proxy);
         }
-
-        publishAsService(reference, implementation.getTarget());
 
         super.activate();
         latch.countDown();
@@ -261,7 +225,7 @@ public class ReferenceComponent extends AbstractComponent {
                                               + reference + ".");
         }
         SofaLogger.info(" >>In Binding [{0}] Begins - {1}.", binding.getBindingType(), reference);
-        Object proxy = null;
+        Object proxy;
         try {
             proxy = bindingAdapter.inBinding(reference, binding, sofaRuntimeContext);
         } finally {
@@ -270,27 +234,27 @@ public class ReferenceComponent extends AbstractComponent {
         return proxy;
     }
 
-    private void publishAsService(Reference reference, Object target) {
-        if (!reference.jvmService()) {
-            return;
-        }
-
-        Implementation serviceImplementation = new DefaultImplementation();
-        serviceImplementation.setTarget(target);
-        Service service = new ServiceImpl("", reference.getInterfaceType(), InterfaceMode.api,
-            target);
-        service.addBinding(new JvmBinding());
-        ComponentInfo serviceComponent = new ServiceComponent(implementation, service,
-            sofaRuntimeContext);
-        sofaRuntimeContext.getComponentManager().register(serviceComponent);
-    }
-
     private void removeService() {
-        if (!reference.jvmService()) {
-            return;
-        }
         sofaRuntimeContext.getClientFactory().getClient(ServiceClient.class)
             .removeService(reference.getInterfaceType(), 0);
+    }
 
+    /**
+     * get service target
+     *
+     * @return service target
+     */
+    private Object getServiceTarget() {
+        Object serviceTarget = null;
+        ComponentName componentName = ComponentNameFactory.createComponentName(
+            ServiceComponent.SERVICE_COMPONENT_TYPE, reference.getInterfaceType(),
+            reference.getUniqueId());
+        ComponentInfo componentInfo = sofaRuntimeContext.getComponentManager().getComponentInfo(
+            componentName);
+
+        if (componentInfo != null) {
+            serviceTarget = componentInfo.getImplementation().getTarget();
+        }
+        return serviceTarget;
     }
 }

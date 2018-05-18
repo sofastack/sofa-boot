@@ -16,9 +16,9 @@
  */
 package com.alipay.sofa.runtime.spi.binding;
 
+import com.alipay.sofa.runtime.api.binding.BindingType;
 import com.alipay.sofa.runtime.spi.health.HealthResult;
 import org.w3c.dom.Element;
-import com.alipay.sofa.runtime.api.binding.BindingType;
 
 /**
  * @author xuanbei 18/2/28
@@ -76,14 +76,14 @@ public interface Binding {
     /**
      * set binding healthy
      *
-     * @param healthy
+     * @param healthy health or not
      */
     void setHealthy(boolean healthy);
 
     /**
      * set binding destroyed state
      *
-     * @param destroyed
+     * @param destroyed destroyed or not
      */
     void setDestroyed(boolean destroyed);
 

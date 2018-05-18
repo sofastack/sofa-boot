@@ -9,7 +9,7 @@ SOFABoot 提供了类隔离框架 SOFAArk，弥补了 Spring Boot 在类隔离�
 ### 配置 Maven 打包插件
 SOFABoot 官方提供了 `Maven` 插件 - `sofa-ark-maven-plugin` ，只需要简单的配置项，即可将 Spring Boot 工程打包成标准格式规范的可执行 Ark 包，插件坐标为：
 
-```java
+```xml
 <plugin>
     <groupId>com.alipay.sofa</groupId>
     <artifactId>sofa-ark-maven-plugin</artifactId>
@@ -19,7 +19,7 @@ SOFABoot 官方提供了 `Maven` 插件 - `sofa-ark-maven-plugin` ，只需要�
 配置模板如下：
 
 ```xml
-build>
+<build>
     <plugins>
         <plugin>
             <groupId>com.alipay.sofa</groupId>

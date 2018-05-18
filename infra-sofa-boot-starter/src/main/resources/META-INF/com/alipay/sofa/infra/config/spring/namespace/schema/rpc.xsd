@@ -98,6 +98,11 @@
         <xsd:attribute name="idle.timeout.read" type="xsd:int" use="optional"/>
         <xsd:attribute name="generic-interface" type="xsd:string" use="optional"/>
         <xsd:attribute name="filter" type="xsd:string" use="optional"/>
+        <xsd:attribute name="retries" type="xsd:int" use="optional"/>
+        <xsd:attribute name="loadBalancer" type="xsd:string" use="optional"/>
+        <xsd:attribute name="lazy" type="xsd:boolean" use="optional"/>
+        <xsd:attribute name="check" type="xsd:boolean" use="optional"/>
+        <xsd:attribute name="registry" type="xsd:string" use="optional"/>
     </xsd:complexType>
 
     <!-- method in service binding.bolt -->
@@ -108,10 +113,12 @@
     <!-- global-attrs in service binding.bolt -->
     <xsd:complexType name="BBindingTRSerAttr">
         <xsd:attribute name="timeout" type="xsd:int" use="optional"/>
-        <xsd:attribute name="filter" type="xsd:string" use="optional"/>
         <xsd:attribute name="weight" type="xsd:int" use="optional" />
         <xsd:attribute name="warm-up-weight" type="xsd:int" use="optional" />
         <xsd:attribute name="warm-up-time" type="xsd:int" use="optional" />
+        <xsd:attribute name="thread-pool-ref" type="xsd:string" use="optional" />
+        <xsd:attribute name="filter" type="xsd:string" use="optional"/>
+        <xsd:attribute name="registry" type="xsd:string" use="optional"/>
     </xsd:complexType>
     <!-- binding.bolt in reference -->
     <xsd:complexType name="BBindingTRReference">
@@ -335,6 +342,9 @@
         <xsd:attribute name="connect.num" type="xsd:int" use="optional"/>
         <xsd:attribute name="idle.timeout" type="xsd:int" use="optional"/>
         <xsd:attribute name="idle.timeout.read" type="xsd:int" use="optional"/>
+        <xsd:attribute name="retries" type="xsd:int" use="optional"/>
+        <xsd:attribute name="lazy" type="xsd:boolean" use="optional"/>
+        <xsd:attribute name="check" type="xsd:boolean" use="optional"/>
     </xsd:complexType>
 
     <!-- method in service binding.dubbo -->
@@ -409,18 +419,16 @@
         <xsd:complexContent>
             <xsd:extension base="beans:identifiedType">
                 <xsd:all minOccurs="0" maxOccurs="1">
+                    <xsd:element name="binding.jvm" minOccurs="0"/>
                     <xsd:element name="binding.bolt" type="BBindingTRReference" minOccurs="0"/>
                     <xsd:element name="binding.rest" type="RestBindingTRReference" minOccurs="0"/>
                     <xsd:element name="binding.dubbo" type="DubboBindingTRReference" minOccurs="0"/>
                 </xsd:all>
-                <xsd:attribute name="jvm-service" use="optional" type="xsd:boolean" default="false"/>
+                <xsd:attribute name="jvm-first" use="optional" type="xsd:boolean" default="true"/>
                 <xsd:attribute name="interface" type="xsd:string" use="required"/>
                 <xsd:attribute name="abstract" type="xsd:boolean" use="optional"/>
                 <xsd:attribute name="parent" type="xsd:string" use="optional"/>
                 <xsd:attribute name="unique-id" type="xsd:string" use="optional"/>
-
-                <!--<xsd:attribute name="filter" type="xsd:string" use="optional"/>-->
-                <!--<xsd:attribute name="registry" type="xsd:string" use="optional"/>-->
                 <xsd:attribute name="loadBalance" type="xsd:string" use="optional"/>
                 <xsd:attribute name="repeatReferLimit" type="xsd:int" use="optional"/>
             </xsd:extension>
@@ -433,6 +441,7 @@
         <xsd:complexContent>
             <xsd:extension base="beans:identifiedType">
                 <xsd:all minOccurs="0" maxOccurs="1">
+                    <xsd:element name="binding.jvm" minOccurs="0"/>
                     <xsd:element name="binding.bolt" type="BBindingTRService" minOccurs="0"/>
                     <xsd:element name="binding.rest" type="RestBindingTRService" minOccurs="0"/>
                     <xsd:element name="binding.dubbo" type="DubboBindingTRService" minOccurs="0"/>

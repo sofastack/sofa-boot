@@ -16,6 +16,10 @@
  */
 package com.alipay.sofa.runtime.spi.service;
 
+import com.alipay.sofa.runtime.api.annotation.SofaReference;
+import com.alipay.sofa.runtime.api.annotation.SofaReferenceBinding;
+import com.alipay.sofa.runtime.api.annotation.SofaService;
+import com.alipay.sofa.runtime.api.annotation.SofaServiceBinding;
 import com.alipay.sofa.runtime.api.binding.BindingType;
 import com.alipay.sofa.runtime.api.client.param.BindingParam;
 import com.alipay.sofa.runtime.spi.binding.Binding;
@@ -31,7 +35,7 @@ public interface BindingConverter<L extends BindingParam, R extends Binding> ext
     /**
      * convert {@link BindingParam} to concrete {@link Binding}
      *
-     * @param bindingParam binding paramter
+     * @param bindingParam binding parameter
      * @param bindingConverterContext binding converter context
      * @return Binding Object
      */
@@ -45,6 +49,29 @@ public interface BindingConverter<L extends BindingParam, R extends Binding> ext
      * @return Binding Object
      */
     R convert(Element element, BindingConverterContext bindingConverterContext);
+
+    /**
+     * convert annotation Element to concrete {@link Binding}
+     *
+     * @param sofaServiceAnnotation {@link SofaService} Annotation
+     * @param sofaServiceBindingAnnotation {@link SofaServiceBinding} Annotation
+     * @param bindingConverterContext binding converter context
+     * @return Binding Object
+     */
+    R convert(SofaService sofaServiceAnnotation, SofaServiceBinding sofaServiceBindingAnnotation,
+              BindingConverterContext bindingConverterContext);
+
+    /**
+     * convert annotation Element to concrete {@link Binding}
+     *
+     * @param sofaReferenceAnnotation {@link SofaReference} Annotation
+     * @param sofaReferenceBindingAnnotation {@link SofaReferenceBinding} Annotation
+     * @param bindingConverterContext binding converter context
+     * @return Binding Object
+     */
+    R convert(SofaReference sofaReferenceAnnotation,
+              SofaReferenceBinding sofaReferenceBindingAnnotation,
+              BindingConverterContext bindingConverterContext);
 
     /**
      * get supported binding type

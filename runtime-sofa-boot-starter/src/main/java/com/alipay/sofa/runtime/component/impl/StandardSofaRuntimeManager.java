@@ -17,9 +17,10 @@
 package com.alipay.sofa.runtime.component.impl;
 
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
-import com.alipay.sofa.runtime.api.component.AppConfiguration;
 import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
-import com.alipay.sofa.runtime.spi.component.*;
+import com.alipay.sofa.runtime.spi.component.ComponentManager;
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 
 /**
  * Default Sofa Runtime Manager
@@ -36,13 +37,12 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager {
     private boolean               isStartupHealthCheckPassed = false;
 
     public StandardSofaRuntimeManager(String appName, ClassLoader appClassLoader,
-                                      AppConfiguration appConfiguration,
                                       ClientFactoryInternal clientFactoryInternal) {
         componentManager = new ComponentManagerImpl(clientFactoryInternal);
         this.appName = appName;
         this.appClassLoader = appClassLoader;
         this.sofaRuntimeContext = new SofaRuntimeContext(this, componentManager,
-            clientFactoryInternal, appConfiguration);
+            clientFactoryInternal);
         this.clientFactoryInternal = clientFactoryInternal;
     }
 
@@ -84,7 +84,7 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager {
     /**
      * shutdown sofa runtime manager
      *
-     * @throws Exception
+     * @throws ServiceRuntimeException exception occur
      */
     public void shutdown() throws ServiceRuntimeException {
         if (componentManager != null) {

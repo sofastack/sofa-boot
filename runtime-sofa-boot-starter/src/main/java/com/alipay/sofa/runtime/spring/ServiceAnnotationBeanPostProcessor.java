@@ -19,6 +19,8 @@ package com.alipay.sofa.runtime.spring;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.annotation.SofaReference;
 import com.alipay.sofa.runtime.api.annotation.SofaService;
+import com.alipay.sofa.runtime.api.annotation.SofaServiceBinding;
+import com.alipay.sofa.runtime.api.binding.BindingType;
 import com.alipay.sofa.runtime.model.InterfaceMode;
 import com.alipay.sofa.runtime.service.binding.JvmBinding;
 import com.alipay.sofa.runtime.service.component.Reference;
@@ -27,32 +29,49 @@ import com.alipay.sofa.runtime.service.component.ServiceComponent;
 import com.alipay.sofa.runtime.service.component.impl.ReferenceImpl;
 import com.alipay.sofa.runtime.service.component.impl.ServiceImpl;
 import com.alipay.sofa.runtime.service.helper.ReferenceRegisterHelper;
+import com.alipay.sofa.runtime.spi.binding.Binding;
+import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
+import com.alipay.sofa.runtime.spi.component.DefaultImplementation;
 import com.alipay.sofa.runtime.spi.component.Implementation;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
-import com.alipay.sofa.runtime.spi.spring.SpringImplementationImpl;
+import com.alipay.sofa.runtime.spi.service.BindingConverter;
+import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
+import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
+import com.alipay.sofa.runtime.spring.config.SofaRuntimeProperties;
 import org.springframework.aop.framework.AopProxyUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.Ordered;
 import org.springframework.core.PriorityOrdered;
+import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 /**
- * @author xuanbei 18/3/2
+ * @author xuanbei 18/5/9
  */
-public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, PriorityOrdered {
-    private SofaRuntimeContext sofaRuntimeContext;
-    private ApplicationContext applicationContext;
+public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, PriorityOrdered,
+                                               ApplicationContextAware {
+    private SofaRuntimeContext      sofaRuntimeContext;
+    private SofaRuntimeProperties   sofaRuntimeProperties;
+    private BindingAdapterFactory   bindingAdapterFactory;
+    private BindingConverterFactory bindingConverterFactory;
+    private ApplicationContext      applicationContext;
 
     public ServiceAnnotationBeanPostProcessor(SofaRuntimeContext sofaRuntimeContext,
-                                              ApplicationContext applicationContext) {
+                                              SofaRuntimeProperties sofaRuntimeProperties,
+                                              BindingAdapterFactory bindingAdapterFactory,
+                                              BindingConverterFactory bindingConverterFactory) {
         this.sofaRuntimeContext = sofaRuntimeContext;
-        this.applicationContext = applicationContext;
+        this.sofaRuntimeProperties = sofaRuntimeProperties;
+        this.bindingAdapterFactory = bindingAdapterFactory;
+        this.bindingConverterFactory = bindingConverterFactory;
     }
 
     @Override
@@ -92,13 +111,16 @@ public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, Pr
             interfaceType = interfaces[0];
         }
 
-        Implementation implementation = new SpringImplementationImpl(beanName, applicationContext);
-        implementation.setTarget(bean);
+        Implementation implementation = new DefaultImplementation(bean);
         Service service = new ServiceImpl(sofaServiceAnnotation.uniqueId(), interfaceType,
             InterfaceMode.annotation, bean);
-        service.addBinding(new JvmBinding());
+
+        for (SofaServiceBinding sofaServiceBinding : sofaServiceAnnotation.bindings()) {
+            handleSofaServiceBinding(service, sofaServiceAnnotation, sofaServiceBinding);
+        }
+
         ComponentInfo componentInfo = new ServiceComponent(implementation, service,
-            sofaRuntimeContext);
+            bindingAdapterFactory, sofaRuntimeContext);
         sofaRuntimeContext.getComponentManager().register(componentInfo);
     }
 
@@ -110,22 +132,16 @@ public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, Pr
             @Override
             public void doWith(Field field) throws IllegalArgumentException, IllegalAccessException {
                 SofaReference sofaReferenceAnnotation = field.getAnnotation(SofaReference.class);
-
                 if (sofaReferenceAnnotation == null) {
                     return;
                 }
 
                 Class<?> interfaceType = sofaReferenceAnnotation.interfaceType();
-
                 if (interfaceType.equals(void.class)) {
                     interfaceType = field.getType();
                 }
 
-                Reference reference = new ReferenceImpl(sofaReferenceAnnotation.uniqueId(),
-                    interfaceType, InterfaceMode.annotation, false, false);
-                reference.addBinding(new JvmBinding());
-                Object proxy = ReferenceRegisterHelper.registerReference(reference,
-                    sofaRuntimeContext);
+                Object proxy = createReferenceProxy(sofaReferenceAnnotation, interfaceType);
                 ReflectionUtils.makeAccessible(field);
                 ReflectionUtils.setField(field, bean, proxy);
             }
@@ -137,10 +153,97 @@ public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, Pr
                        && field.isAnnotationPresent(SofaReference.class);
             }
         });
+
+        ReflectionUtils.doWithMethods(beanClass, new ReflectionUtils.MethodCallback() {
+            @Override
+            public void doWith(Method method) throws IllegalArgumentException,
+                                             IllegalAccessException {
+                Class[] parameterTypes = method.getParameterTypes();
+                Assert.isTrue(parameterTypes.length == 1,
+                    "method should have one and only one parameter.");
+
+                SofaReference sofaReferenceAnnotation = method.getAnnotation(SofaReference.class);
+                if (sofaReferenceAnnotation == null) {
+                    return;
+                }
+
+                Class<?> interfaceType = sofaReferenceAnnotation.interfaceType();
+                if (interfaceType.equals(void.class)) {
+                    interfaceType = parameterTypes[0];
+                }
+
+                Object proxy = createReferenceProxy(sofaReferenceAnnotation, interfaceType);
+                ReflectionUtils.invokeMethod(method, bean, proxy);
+            }
+        }, new ReflectionUtils.MethodFilter() {
+            @Override
+            public boolean matches(Method method) {
+                return method.isAnnotationPresent(SofaReference.class);
+            }
+        });
+    }
+
+    private void handleSofaServiceBinding(Service service, SofaService sofaServiceAnnotation,
+                                          SofaServiceBinding sofaServiceBinding) {
+        if (JvmBinding.JVM_BINDING_TYPE.getType().equals(sofaServiceBinding.bindingType())) {
+            service.addBinding(new JvmBinding());
+        } else {
+            BindingConverter bindingConverter = bindingConverterFactory
+                .getBindingConverter(new BindingType(sofaServiceBinding.bindingType()));
+            if (bindingConverter == null) {
+                throw new ServiceRuntimeException(
+                    "Can not found binding converter for binding type "
+                            + sofaServiceBinding.bindingType());
+            }
+
+            BindingConverterContext bindingConverterContext = new BindingConverterContext();
+            bindingConverterContext.setInBinding(false);
+            bindingConverterContext.setApplicationContext(applicationContext);
+            bindingConverterContext.setAppName(sofaRuntimeContext.getAppName());
+            bindingConverterContext.setAppClassLoader(sofaRuntimeContext.getAppClassLoader());
+            Binding binding = bindingConverter.convert(sofaServiceAnnotation, sofaServiceBinding,
+                bindingConverterContext);
+            service.addBinding(binding);
+        }
+    }
+
+    private Object createReferenceProxy(SofaReference sofaReferenceAnnotation,
+                                        Class<?> interfaceType) {
+        Reference reference = new ReferenceImpl(sofaReferenceAnnotation.uniqueId(), interfaceType,
+            InterfaceMode.annotation, sofaReferenceAnnotation.jvmFirst());
+        if (JvmBinding.JVM_BINDING_TYPE.getType().equals(
+            sofaReferenceAnnotation.binding().bindingType())) {
+            reference.addBinding(new JvmBinding());
+        } else {
+            BindingConverter bindingConverter = bindingConverterFactory
+                .getBindingConverter(new BindingType(sofaReferenceAnnotation.binding()
+                    .bindingType()));
+            if (bindingConverter == null) {
+                throw new ServiceRuntimeException(
+                    "Can not found binding converter for binding type "
+                            + sofaReferenceAnnotation.binding().bindingType());
+            }
+
+            BindingConverterContext bindingConverterContext = new BindingConverterContext();
+            bindingConverterContext.setInBinding(true);
+            bindingConverterContext.setApplicationContext(applicationContext);
+            bindingConverterContext.setAppName(sofaRuntimeContext.getAppName());
+            bindingConverterContext.setAppClassLoader(sofaRuntimeContext.getAppClassLoader());
+            Binding binding = bindingConverter.convert(sofaReferenceAnnotation,
+                sofaReferenceAnnotation.binding(), bindingConverterContext);
+            reference.addBinding(binding);
+        }
+        return ReferenceRegisterHelper.registerReference(reference, bindingAdapterFactory,
+            sofaRuntimeProperties, sofaRuntimeContext);
     }
 
     @Override
     public int getOrder() {
         return Ordered.LOWEST_PRECEDENCE;
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
     }
 }

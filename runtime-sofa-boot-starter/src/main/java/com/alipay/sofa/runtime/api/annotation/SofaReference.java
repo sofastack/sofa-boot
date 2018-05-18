@@ -36,16 +36,34 @@ import java.lang.annotation.Target;
  * @author xuanbei 18/3/2
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
+@Target({ ElementType.FIELD, ElementType.METHOD })
 public @interface SofaReference {
 
     /**
      * The type of the SOFA reference to be created. Default to the type of field annotated when not specified.
+     *
+     * @return return interface type
      */
     Class<?> interfaceType() default void.class;
 
     /**
      * The unique id of the SOFA reference to be created. Default to an empty string when not specified.
+     *
+     * @return return reference unique-id
      */
     String uniqueId() default "";
+
+    /**
+     * invoke jvm service first
+     *
+     * @return is jvm first or not
+     */
+    boolean jvmFirst() default true;
+
+    /**
+     * binding of reference
+     *
+     * @return binding of reference
+     */
+    SofaReferenceBinding binding() default @SofaReferenceBinding;
 }

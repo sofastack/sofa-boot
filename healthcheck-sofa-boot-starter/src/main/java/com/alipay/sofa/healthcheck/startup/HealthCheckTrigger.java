@@ -25,10 +25,14 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
-
+import org.springframework.core.PriorityOrdered;
+import org.springframework.core.Ordered;
 import java.util.List;
 
 /**
+ * HealthCheckTrigger listens to ContextRefreshedEvent, SofaModuleContextRefreshedListener of isle-sofa-boot-starter should execute before this class.
+ * In order to ensure this class execute at last, please don't implement ${@link PriorityOrdered} or ${@link Ordered} interface.
+ *
  * Created by liangen on 17/8/4.
  */
 @Component
@@ -37,15 +41,13 @@ public class HealthCheckTrigger implements ApplicationListener<ContextRefreshedE
                                      .getLogger(HealthCheckTrigger.class.getCanonicalName());
 
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-
         ApplicationContext applicationContext = contextRefreshedEvent.getApplicationContext();
         HealthCheckManager.init(applicationContext);
 
         logPrintCheckers();
 
-        HealthCheckStartupProcessor healthCheckStartupProcessor = new HealthCheckStartupProcessor();
+        ReadinessCheckProcessor healthCheckStartupProcessor = new ReadinessCheckProcessor();
         healthCheckStartupProcessor.checkHealth();
-
     }
 
     private void logPrintCheckers() {

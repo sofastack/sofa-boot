@@ -16,11 +16,11 @@
  */
 package com.alipay.sofa.healthcheck.initializer;
 
+import com.alipay.sofa.common.log.Constants;
 import com.alipay.sofa.healthcheck.configuration.HealthCheckConfiguration;
 import com.alipay.sofa.healthcheck.configuration.HealthCheckConfigurationConstants;
 import com.alipay.sofa.healthcheck.service.SofaBootComponentHealthCheckInfo;
 import com.alipay.sofa.healthcheck.startup.HealthCheckTrigger;
-import com.alipay.sofa.common.log.Constants;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;

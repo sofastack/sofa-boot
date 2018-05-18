@@ -17,7 +17,7 @@
 package com.alipay.sofa.boot.test;
 
 import com.alipay.sofa.boot.examples.demo.isolation.SofaBootClassIsolationDemoApplication;
-import com.alipay.sofa.boot.examples.demo.service.SampleService;
+import com.alipay.sofa.boot.examples.demo.service.facade.SampleService;
 import com.alipay.sofa.test.annotation.DelegateToRunner;
 import com.alipay.sofa.test.runner.SofaBootRunner;
 import org.junit.runner.RunWith;

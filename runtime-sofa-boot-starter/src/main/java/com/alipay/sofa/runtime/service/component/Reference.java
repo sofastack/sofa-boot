@@ -25,16 +25,9 @@ import com.alipay.sofa.runtime.spi.binding.Contract;
  */
 public interface Reference extends Contract {
     /**
-     * local first or not
+     * jvm first or not
      *
      * @return true or false
      */
-    boolean isLocalFirst();
-
-    /**
-     * need publish jvm service or not
-     *
-     * @return true or false
-     */
-    boolean jvmService();
+    boolean isJvmFirst();
 }

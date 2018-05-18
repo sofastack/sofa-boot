@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <bean id="sampleService" class="com.alipay.sofa.boot.examples.demo.service.SampleServiceImpl"/>
+
+    <bean id = "publishService" class="com.alipay.sofa.boot.examples.demo.service.PublishServiceImpl" init-method="publish"/>
+
+    <bean id = "ReferenceService" class="com.alipay.sofa.boot.examples.demo.service.ReferenceServiceImpl" init-method="reference" depends-on="publishService"/>
+
+</beans>

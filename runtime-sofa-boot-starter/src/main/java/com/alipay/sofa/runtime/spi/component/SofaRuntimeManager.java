@@ -26,14 +26,14 @@ public interface SofaRuntimeManager {
     /**
      * get sofa runtime context
      *
-     * @return
+     * @return sofa runtime context
      */
     SofaRuntimeContext getSofaRuntimeContext();
 
     /**
      * get app name
      *
-     * @return
+     * @return app name
      */
     String getAppName();
 
@@ -47,7 +47,7 @@ public interface SofaRuntimeManager {
     /**
      * get component manager
      *
-     * @return
+     * @return component manager
      */
     ComponentManager getComponentManager();
 
@@ -73,7 +73,7 @@ public interface SofaRuntimeManager {
     /**
      * shutdown manager
      *
-     * @throws Exception
+     * @throws ServiceRuntimeException throws when exception occur
      */
     void shutdown() throws ServiceRuntimeException;
 }

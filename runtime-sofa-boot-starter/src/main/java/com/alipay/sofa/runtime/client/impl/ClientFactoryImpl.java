@@ -40,8 +40,8 @@ public class ClientFactoryImpl implements ClientFactoryInternal {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T getClient(Class<T> klass) {
-        return (T) clients.get(klass);
+    public <T> T getClient(Class<T> clazz) {
+        return (T) clients.get(clazz);
     }
 
     public Collection<Class<?>> getAllClientTypes() {

@@ -22,29 +22,15 @@
     <parent>
         <groupId>com.alipay.sofa</groupId>
         <artifactId>sofa-boot-runtime</artifactId>
-        <version>2.3.0</version>
-        <relativePath>../pom.xml</relativePath>
+        <version>2.4.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>sofaboot-samples</artifactId>
-    <version>2.3.0</version>
     <packaging>pom</packaging>
 
     <properties>
         <main.user.dir>${user.dir}/..</main.user.dir>
     </properties>
 
-    <build>
-        <plugins>
-            <!-- Don't upload to repo -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <configuration>
-                    <skip>true</skip>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 </project>

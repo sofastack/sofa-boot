@@ -17,7 +17,7 @@
 package com.alipay.sofa.runtime.api.client;
 
 /**
- * A SOFA programming API's client factory. There are two ways to get an instance of this class in a Spring bean:
+ * A SOFA programming API client factory. There are two ways to get an instance of this class in a Spring bean:
  * <ol>
  * <li>Annotate a field of the type {@link ClientFactory} with annotation
  * {@link com.alipay.sofa.runtime.api.annotation.SofaClientFactory}.</li>
@@ -32,9 +32,9 @@ public interface ClientFactory {
      * Get an instance of a specific SOFA programming API client such as {@link ReferenceClient} or
      * {@link ServiceClient}.
      *
-     * @param klass The type of the client to get.
+     * @param clazz The type of the client to get.
      * @param <T> The type of the client to get.
      * @return The instance of the client that matches the type specified.
      */
-    <T> T getClient(Class<T> klass);
+    <T> T getClient(Class<T> clazz);
 }

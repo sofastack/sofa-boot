@@ -26,7 +26,6 @@ import java.util.Set;
  * @author xuanbei 18/2/28
  */
 public interface BindingConverterFactory {
-
     /**
      * get binding converter by binding type
      *
@@ -46,7 +45,7 @@ public interface BindingConverterFactory {
     /***
      * add binding converters
      *
-     * @param bindingConverters Set<BindingConverter>
+     * @param bindingConverters
      */
     void addBindingConverters(Set<BindingConverter> bindingConverters);
 }

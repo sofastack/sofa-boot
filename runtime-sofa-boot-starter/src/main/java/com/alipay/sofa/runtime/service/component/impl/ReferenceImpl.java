@@ -28,33 +28,24 @@ import java.util.Map;
  * @author xuanbei 18/3/1
  */
 public class ReferenceImpl extends AbstractContract implements Reference {
-    /** local first or not */
-    private boolean localFirst = true;
-    /** publish jvm service or not */
-    private boolean jvmService = false;
+    /** jvm first or not */
+    private boolean jvmFirst = true;
 
     public ReferenceImpl(String uniqueId, Class<?> interfaceType, InterfaceMode interfaceMode,
-                         boolean localFirst, boolean jvmService) {
+                         boolean jvmFirst) {
         super(uniqueId, interfaceType, interfaceMode);
-        this.localFirst = localFirst;
-        this.jvmService = jvmService;
+        this.jvmFirst = jvmFirst;
     }
 
     public ReferenceImpl(String uniqueId, Class<?> interfaceType, InterfaceMode interfaceMode,
-                         boolean localFirst, boolean jvmService, Map<String, String> properties) {
+                         boolean jvmFirst, Map<String, String> properties) {
         super(uniqueId, interfaceType, interfaceMode, properties);
-        this.localFirst = localFirst;
-        this.jvmService = jvmService;
+        this.jvmFirst = jvmFirst;
     }
 
     @Override
-    public boolean isLocalFirst() {
-        return localFirst;
-    }
-
-    @Override
-    public boolean jvmService() {
-        return jvmService;
+    public boolean isJvmFirst() {
+        return jvmFirst;
     }
 
     @Override
