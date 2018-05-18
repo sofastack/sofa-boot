@@ -19,6 +19,7 @@ package com.alipay.sofa.runtime.service.component.impl;
 import com.alipay.sofa.runtime.model.InterfaceMode;
 import com.alipay.sofa.runtime.service.component.AbstractContract;
 import com.alipay.sofa.runtime.service.component.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.Map;
 
@@ -59,6 +60,7 @@ public class ServiceImpl extends AbstractContract implements Service {
 
     @Override
     public String toString() {
-        return this.getInterfaceType().getName();
+        return this.getInterfaceType().getName()
+               + (StringUtils.hasText(uniqueId) ? ":" + uniqueId : "");
     }
 }

@@ -19,6 +19,7 @@ package com.alipay.sofa.runtime.service.component.impl;
 import com.alipay.sofa.runtime.model.InterfaceMode;
 import com.alipay.sofa.runtime.service.component.AbstractContract;
 import com.alipay.sofa.runtime.service.component.Reference;
+import org.springframework.util.StringUtils;
 
 import java.util.Map;
 
@@ -50,6 +51,7 @@ public class ReferenceImpl extends AbstractContract implements Reference {
 
     @Override
     public String toString() {
-        return this.getInterfaceType().getName();
+        return this.getInterfaceType().getName()
+               + (StringUtils.hasText(uniqueId) ? ":" + uniqueId : "");
     }
 }

@@ -82,7 +82,7 @@ public interface Component {
     void deactivate() throws ServiceRuntimeException;
 
     /**
-     * create an exception to descript error
+     * create an exception to describe error
      *
      * @throws ServiceRuntimeException
      */
