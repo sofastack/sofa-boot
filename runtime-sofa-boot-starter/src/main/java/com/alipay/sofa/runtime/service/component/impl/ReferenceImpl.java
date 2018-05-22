@@ -19,6 +19,7 @@ package com.alipay.sofa.runtime.service.component.impl;
 import com.alipay.sofa.runtime.model.InterfaceMode;
 import com.alipay.sofa.runtime.service.component.AbstractContract;
 import com.alipay.sofa.runtime.service.component.Reference;
+import org.springframework.util.StringUtils;
 
 import java.util.Map;
 
@@ -28,17 +29,29 @@ import java.util.Map;
  * @author xuanbei 18/3/1
  */
 public class ReferenceImpl extends AbstractContract implements Reference {
-    public ReferenceImpl(String uniqueId, Class<?> interfaceType, InterfaceMode interfaceMode) {
+    /** jvm first or not */
+    private boolean jvmFirst = true;
+
+    public ReferenceImpl(String uniqueId, Class<?> interfaceType, InterfaceMode interfaceMode,
+                         boolean jvmFirst) {
         super(uniqueId, interfaceType, interfaceMode);
+        this.jvmFirst = jvmFirst;
     }
 
     public ReferenceImpl(String uniqueId, Class<?> interfaceType, InterfaceMode interfaceMode,
-                         Map<String, String> properties) {
+                         boolean jvmFirst, Map<String, String> properties) {
         super(uniqueId, interfaceType, interfaceMode, properties);
+        this.jvmFirst = jvmFirst;
+    }
+
+    @Override
+    public boolean isJvmFirst() {
+        return jvmFirst;
     }
 
     @Override
     public String toString() {
-        return this.getInterfaceType().getName();
+        return this.getInterfaceType().getName()
+               + (StringUtils.hasText(uniqueId) ? ":" + uniqueId : "");
     }
 }

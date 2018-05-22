@@ -26,15 +26,6 @@ import java.util.Set;
  * @author xuanbei 18/2/28
  */
 public interface BindingAdapterFactory {
-
-    /**
-     * whether exists binding adapter for given type
-     *
-     * @param bindingType binding type
-     * @return true or false
-     */
-    boolean hasBindingAdapter(BindingType bindingType);
-
     /**
      * get binding adapter by binding type
      *

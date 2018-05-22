@@ -41,16 +41,15 @@ public interface ComponentManager {
      * register and get component in this manager
      *
      * @param componentInfo component that should be registered
-     * @return
+     * @return component info
      */
-
     ComponentInfo registerAndGet(ComponentInfo componentInfo);
 
     /**
      * remove component in this manager
      *
-     * @param componentInfo
-     * @throws ServiceRuntimeException
+     * @param componentInfo component that should unregister
+     * @throws ServiceRuntimeException throws when exception occur
      */
     void unregister(ComponentInfo componentInfo) throws ServiceRuntimeException;
 
@@ -73,8 +72,8 @@ public interface ComponentManager {
     /**
      * whether the component is registered or not
      *
-     * @param name
-     * @return
+     * @param name name
+     * @return true or false
      */
     boolean isRegistered(ComponentName name);
 

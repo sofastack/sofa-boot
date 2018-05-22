@@ -45,7 +45,6 @@ import com.alipay.sofa.runtime.api.ServiceRuntimeException;
  * @author xuanbei 18/2/28
  */
 public interface Component {
-
     /**
      * register component
      */
@@ -83,7 +82,7 @@ public interface Component {
     void deactivate() throws ServiceRuntimeException;
 
     /**
-     * create an exception to descript error
+     * create an exception to describe error
      *
      * @throws ServiceRuntimeException
      */

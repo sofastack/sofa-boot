@@ -22,18 +22,19 @@ import com.alipay.sofa.runtime.api.client.param.BindingParam;
 import com.alipay.sofa.runtime.api.client.param.ServiceParam;
 import com.alipay.sofa.runtime.api.component.Property;
 import com.alipay.sofa.runtime.model.InterfaceMode;
+import com.alipay.sofa.runtime.service.binding.JvmBinding;
 import com.alipay.sofa.runtime.service.component.Service;
 import com.alipay.sofa.runtime.service.component.ServiceComponent;
 import com.alipay.sofa.runtime.service.component.impl.ServiceImpl;
-import com.alipay.sofa.runtime.service.impl.BindingFactoryContainer;
 import com.alipay.sofa.runtime.spi.binding.Binding;
+import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.DefaultImplementation;
 import com.alipay.sofa.runtime.spi.component.Implementation;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
-
+import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
 import java.util.Collection;
 import java.util.Map;
 
@@ -43,10 +44,16 @@ import java.util.Map;
  * @author xuanbei 18/3/1
  */
 public class ServiceClientImpl implements ServiceClient {
-    private SofaRuntimeContext sofaRuntimeContext;
+    private SofaRuntimeContext      sofaRuntimeContext;
+    private BindingConverterFactory bindingConverterFactory;
+    private BindingAdapterFactory   bindingAdapterFactory;
 
-    public ServiceClientImpl(SofaRuntimeContext sofaRuntimeContext) {
+    public ServiceClientImpl(SofaRuntimeContext sofaRuntimeContext,
+                             BindingConverterFactory bindingConverterFactory,
+                             BindingAdapterFactory bindingAdapterFactory) {
         this.sofaRuntimeContext = sofaRuntimeContext;
+        this.bindingConverterFactory = bindingConverterFactory;
+        this.bindingAdapterFactory = bindingAdapterFactory;
     }
 
     @SuppressWarnings("unchecked")
@@ -62,8 +69,8 @@ public class ServiceClientImpl implements ServiceClient {
             serviceParam.getInterfaceType(), InterfaceMode.api, serviceParam.getInstance(), null);
 
         for (BindingParam bindingParam : serviceParam.getBindingParams()) {
-            BindingConverter bindingConverter = BindingFactoryContainer
-                .getBindingConverterFactory().getBindingConverter(bindingParam.getBindingType());
+            BindingConverter bindingConverter = bindingConverterFactory
+                .getBindingConverter(bindingParam.getBindingType());
 
             if (bindingConverter == null) {
                 throw new ServiceRuntimeException(
@@ -78,8 +85,20 @@ public class ServiceClientImpl implements ServiceClient {
             service.addBinding(binding);
         }
 
+        boolean hasJvmBinding = false;
+        for (Binding binding : service.getBindings()) {
+            if (binding.getBindingType().equals(JvmBinding.JVM_BINDING_TYPE)) {
+                hasJvmBinding = true;
+                break;
+            }
+        }
+
+        if (!hasJvmBinding) {
+            service.addBinding(new JvmBinding());
+        }
+
         ComponentInfo componentInfo = new ServiceComponent(implementation, service,
-            sofaRuntimeContext);
+            bindingAdapterFactory, sofaRuntimeContext);
         sofaRuntimeContext.getComponentManager().register(componentInfo);
     }
 

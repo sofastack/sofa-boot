@@ -58,4 +58,11 @@ public @interface SofaService {
      * @return return service unique-id
      */
     String uniqueId() default "";
+
+    /**
+     * bindings of service
+     *
+     * @return bindings of service
+     */
+    SofaServiceBinding[] bindings() default { @SofaServiceBinding };
 }

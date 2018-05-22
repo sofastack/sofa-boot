@@ -39,6 +39,12 @@ public class SofaLogger {
         }
     }
 
+    public static void warn(String format, Object... args) {
+        if (DEFAULT_LOG.isWarnEnabled()) {
+            DEFAULT_LOG.warn(getMessage(format, args));
+        }
+    }
+
     public static void error(String format, Object... args) {
         DEFAULT_LOG.error(getMessage(format, args));
     }
@@ -47,7 +53,7 @@ public class SofaLogger {
         DEFAULT_LOG.error(getMessage(format, args), t);
     }
 
-    public static String getMessage(String format, Object... args) {
+    private static String getMessage(String format, Object... args) {
         return MessageFormat.format(format, args);
     }
 
