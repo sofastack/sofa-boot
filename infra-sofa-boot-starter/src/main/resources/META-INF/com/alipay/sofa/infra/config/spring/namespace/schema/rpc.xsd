@@ -103,6 +103,7 @@
         <xsd:attribute name="lazy" type="xsd:boolean" use="optional"/>
         <xsd:attribute name="check" type="xsd:boolean" use="optional"/>
         <xsd:attribute name="registry" type="xsd:string" use="optional"/>
+        <xsd:attribute name="serialize-type" type="xsd:string" use="optional"/>
     </xsd:complexType>
 
     <!-- method in service binding.bolt -->
@@ -119,6 +120,7 @@
         <xsd:attribute name="thread-pool-ref" type="xsd:string" use="optional" />
         <xsd:attribute name="filter" type="xsd:string" use="optional"/>
         <xsd:attribute name="registry" type="xsd:string" use="optional"/>
+        <xsd:attribute name="serialize-type" type="xsd:string" use="optional"/>
     </xsd:complexType>
     <!-- binding.bolt in reference -->
     <xsd:complexType name="BBindingTRReference">
