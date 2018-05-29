@@ -404,6 +404,138 @@
 
     <!-- Dubbo End -->
 
+
+    <!-- H2c Start -->
+
+    <xsd:simpleType name="H2cInvokeMode">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="sync"/>
+            <xsd:enumeration value="future"/>
+            <xsd:enumeration value="callback"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="H2cContent">
+        <xsd:sequence minOccurs="1" maxOccurs="1">
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="H2cInterface">
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="H2cCallback">
+        <xsd:sequence>
+            <xsd:element name="binding" type="xsd:string" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="H2cBinding">
+        <xsd:complexContent>
+            <xsd:extension base="beans:identifiedType">
+                <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+                </xsd:sequence>
+                <xsd:attribute name="name" type="xsd:string" use="optional"/>
+                <xsd:attribute name="url" type="xsd:string" use="optional"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <!-- method in reference binding.h2c -->
+    <xsd:complexType name="H2cBindingRefMethod">
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+        <xsd:attribute name="type" type="H2cInvokeMode" use="optional"/>
+        <xsd:attribute name="timeout" type="xsd:int" use="optional"/>
+        <xsd:attribute name="callback-class" type="xsd:string" use="optional"/>
+        <xsd:attribute name="callback-ref" type="xsd:string" use="optional"/>
+    </xsd:complexType>
+
+    <!-- route in reference binding.h2c-->
+    <xsd:complexType name="H2cBindingRefRoute">
+        <xsd:attribute name="target-url" type="xsd:string" use="optional"/>
+    </xsd:complexType>
+
+    <!-- global-attrs in reference binding.h2c -->
+    <xsd:complexType name="H2cBindingRefAttr">
+        <xsd:attribute name="timeout" type="xsd:int" use="optional"/>
+        <xsd:attribute name="type" type="BInvokeMode" use="optional"/>
+        <xsd:attribute name="address-wait-time" type="xsd:int" use="optional"/>
+        <xsd:attribute name="callback-class" type="xsd:string" use="optional"/>
+        <xsd:attribute name="callback-ref" type="xsd:string" use="optional"/>
+        <xsd:attribute name="connect.timeout" type="xsd:int" use="optional"/>
+        <xsd:attribute name="connect.num" type="xsd:int" use="optional"/>
+        <xsd:attribute name="generic-interface" type="xsd:string" use="optional"/>
+        <xsd:attribute name="filter" type="xsd:string" use="optional"/>
+        <xsd:attribute name="retries" type="xsd:int" use="optional"/>
+        <xsd:attribute name="loadBalancer" type="xsd:string" use="optional"/>
+        <xsd:attribute name="lazy" type="xsd:boolean" use="optional"/>
+        <xsd:attribute name="check" type="xsd:boolean" use="optional"/>
+        <xsd:attribute name="registry" type="xsd:string" use="optional"/>
+        <xsd:attribute name="serialize-type" type="xsd:string" use="optional"/>
+    </xsd:complexType>
+
+    <!-- method in service binding.h2c -->
+    <xsd:complexType name="H2cBindingSerMethod">
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+        <xsd:attribute name="timeout" type="xsd:int" use="optional"/>
+    </xsd:complexType>
+    <!-- global-attrs in service binding.h2c -->
+    <xsd:complexType name="H2cBindingSerAttr">
+        <xsd:attribute name="timeout" type="xsd:int" use="optional"/>
+        <xsd:attribute name="weight" type="xsd:int" use="optional" />
+        <xsd:attribute name="warm-up-weight" type="xsd:int" use="optional" />
+        <xsd:attribute name="warm-up-time" type="xsd:int" use="optional" />
+        <xsd:attribute name="thread-pool-ref" type="xsd:string" use="optional" />
+        <xsd:attribute name="filter" type="xsd:string" use="optional"/>
+        <xsd:attribute name="registry" type="xsd:string" use="optional"/>
+        <xsd:attribute name="serialize-type" type="xsd:string" use="optional"/>
+    </xsd:complexType>
+    <!-- binding.h2c in reference -->
+    <xsd:complexType name="H2cBindingReference">
+        <xsd:complexContent>
+            <xsd:extension base="H2cBinding">
+                <xsd:sequence minOccurs="0">
+                    <xsd:element name="global-attrs" type="H2cBindingRefAttr" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="route" type="H2cBindingRefRoute" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="method" type="H2cBindingRefMethod" minOccurs="0" maxOccurs="unbounded"/>
+                    <xsd:any minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+    <!-- binding.h2c in service -->
+    <xsd:complexType name="H2cBindingService">
+        <xsd:complexContent>
+            <xsd:extension base="H2cBinding">
+                <xsd:sequence minOccurs="0">
+                    <xsd:element name="global-attrs" type="H2cBindingSerAttr" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="method" type="H2cBindingSerMethod" minOccurs="0" maxOccurs="unbounded"/>
+                    <xsd:any minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+    <xsd:complexType name="H2cContract">
+        <xsd:complexContent>
+            <xsd:extension base="beans:identifiedType">
+                <xsd:sequence minOccurs="0" maxOccurs="1">
+                    <xsd:element name="interface" type="Binterface" minOccurs="0"/>
+                    <xsd:element name="description" type="Bcontent" minOccurs="0"/>
+                    <xsd:element name="binding" type="BBinding" minOccurs="0"/>
+                </xsd:sequence>
+                <xsd:attribute name="interface" type="xsd:string" use="optional"/>
+                <xsd:attribute name="version" type="xsd:string" use="optional" default="1.0"/>
+                <xsd:attribute name="group" type="xsd:string" use="optional"/>
+                <xsd:attribute name="policySet" type="xsd:string" use="optional"/>
+                <xsd:attribute name="abstract" type="xsd:boolean" use="optional"/>
+                <xsd:attribute name="parent" type="xsd:string" use="optional"/>
+                <xsd:attribute name="unique-id" type="xsd:string" use="optional"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <!-- H2c End -->
+
     <!-- filter -->
     <xsd:element name="rpc-global-filter" type="Tfilter"/>
     <xsd:complexType name="Tfilter">
@@ -425,6 +557,7 @@
                     <xsd:element name="binding.bolt" type="BBindingTRReference" minOccurs="0"/>
                     <xsd:element name="binding.rest" type="RestBindingTRReference" minOccurs="0"/>
                     <xsd:element name="binding.dubbo" type="DubboBindingTRReference" minOccurs="0"/>
+                    <xsd:element name="binding.h2c" type="H2cBindingReference" minOccurs="0"/>
                 </xsd:all>
                 <xsd:attribute name="jvm-first" use="optional" type="xsd:boolean" default="true"/>
                 <xsd:attribute name="interface" type="xsd:string" use="required"/>
@@ -447,6 +580,7 @@
                     <xsd:element name="binding.bolt" type="BBindingTRService" minOccurs="0"/>
                     <xsd:element name="binding.rest" type="RestBindingTRService" minOccurs="0"/>
                     <xsd:element name="binding.dubbo" type="DubboBindingTRService" minOccurs="0"/>
+                    <xsd:element name="binding.h2c" type="H2cBindingService" minOccurs="0"/>
                 </xsd:all>
                 <xsd:attribute name="ref" type="xsd:string" use="required"/>
                 <xsd:attribute name="interface" type="xsd:string" use="required"/>
