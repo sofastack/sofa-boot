@@ -5,6 +5,4 @@ ${AnsiColor.BRIGHT_GREEN}
 .-'    | '  '-'  ' |  |`    |  | |  |   |  '--' / ' '-' ' ' '-' '   |  |
 `-----'   `-----'  `--'     `--' `--'   `------'   `---'   `---'    `--'
 
-Ant Financial Services Group
-${AnsiColor.BRIGHT_RED}
-Spring Boot Version: ${spring-boot.version}${spring-boot.formatted-version}
+Powered By Ant Financial Services Group
