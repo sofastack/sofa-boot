@@ -410,7 +410,6 @@
     <xsd:simpleType name="H2cInvokeMode">
         <xsd:restriction base="xsd:string">
             <xsd:enumeration value="sync"/>
-            <xsd:enumeration value="oneway"/>
             <xsd:enumeration value="future"/>
             <xsd:enumeration value="callback"/>
         </xsd:restriction>
@@ -465,8 +464,6 @@
         <xsd:attribute name="callback-ref" type="xsd:string" use="optional"/>
         <xsd:attribute name="connect.timeout" type="xsd:int" use="optional"/>
         <xsd:attribute name="connect.num" type="xsd:int" use="optional"/>
-        <xsd:attribute name="idle.timeout" type="xsd:int" use="optional"/>
-        <xsd:attribute name="idle.timeout.read" type="xsd:int" use="optional"/>
         <xsd:attribute name="generic-interface" type="xsd:string" use="optional"/>
         <xsd:attribute name="filter" type="xsd:string" use="optional"/>
         <xsd:attribute name="retries" type="xsd:int" use="optional"/>
