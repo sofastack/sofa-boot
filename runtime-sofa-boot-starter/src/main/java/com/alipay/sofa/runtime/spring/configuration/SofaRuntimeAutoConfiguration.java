@@ -35,7 +35,6 @@ import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
 import com.alipay.sofa.runtime.spring.ClientFactoryBeanPostProcessor;
 import com.alipay.sofa.runtime.spring.ServiceAnnotationBeanPostProcessor;
-import com.alipay.sofa.runtime.spring.SofaRuntimeContextAwareProcessor;
 import com.alipay.sofa.runtime.spring.config.SofaRuntimeProperties;
 import com.alipay.sofa.runtime.spring.health.SofaComponentHealthChecker;
 import com.alipay.sofa.runtime.spring.health.SofaComponentHealthIndicator;
@@ -110,11 +109,6 @@ public class SofaRuntimeAutoConfiguration {
     @Bean
     public ClientFactoryBeanPostProcessor clientFactoryBeanPostProcessor(SofaRuntimeContext sofaRuntimeContext) {
         return new ClientFactoryBeanPostProcessor(sofaRuntimeContext.getClientFactory());
-    }
-
-    @Bean
-    public SofaRuntimeContextAwareProcessor sofaRuntimeContextAwareProcessor(SofaRuntimeContext sofaRuntimeContext) {
-        return new SofaRuntimeContextAwareProcessor(sofaRuntimeContext);
     }
 
     private static <T> Set<T> getClassesByServiceLoader(Class<T> clazz) {
