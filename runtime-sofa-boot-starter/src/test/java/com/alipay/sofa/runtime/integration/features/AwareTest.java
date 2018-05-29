@@ -40,7 +40,6 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class AwareTest implements ClientFactoryAware, ApplicationContextAware, InitializingBean {
-
     private ClientFactory      clientFactoryAware;
 
     private ApplicationContext applicationContext;
