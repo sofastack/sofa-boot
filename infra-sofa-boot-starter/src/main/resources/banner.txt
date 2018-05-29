@@ -1,0 +1,10 @@
+${AnsiColor.BRIGHT_GREEN}
+ ,---.    ,-----.  ,------.   ,---.     ,-----.                     ,--.
+'   .-'  '  .-.  ' |  .---'  /  O  \    |  |) /_   ,---.   ,---.  ,-'  '-.
+`.  `-.  |  | |  | |  `--,  |  .-.  |   |  .-.  \ | .-. | | .-. | '-.  .-'
+.-'    | '  '-'  ' |  |`    |  | |  |   |  '--' / ' '-' ' ' '-' '   |  |
+`-----'   `-----'  `--'     `--' `--'   `------'   `---'   `---'    `--'
+
+Ant Financial Services Group
+${AnsiColor.BRIGHT_RED}
+Spring Boot Version: ${spring-boot.version}${spring-boot.formatted-version}
