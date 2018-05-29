@@ -47,7 +47,6 @@ public class IntegrationTest extends AbstractTestBase {
     @Test
     public void testSofaRuntimeAwareTest() {
         Assert.assertNotNull(awareTest);
-        Assert.assertNotNull(awareTest.getSofaRuntimeContext());
 
         SofaRuntimeContext sofaRuntimeContext = awareTest.getSofaRuntimeContext();
         Assert.assertTrue(sofaRuntimeContext.getAppName().equals("runtime-test"));
