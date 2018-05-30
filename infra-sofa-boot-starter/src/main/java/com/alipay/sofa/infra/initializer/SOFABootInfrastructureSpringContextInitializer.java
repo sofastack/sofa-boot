@@ -17,7 +17,7 @@
 package com.alipay.sofa.infra.initializer;
 
 import com.alipay.sofa.common.log.Constants;
-import com.alipay.sofa.common.utils.ReportUtil;
+import com.alipay.sofa.common.log.ReportUtil;
 import com.alipay.sofa.infra.log.InfraHealthCheckLoggerFactory;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
