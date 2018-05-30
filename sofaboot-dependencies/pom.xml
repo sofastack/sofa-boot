@@ -40,7 +40,7 @@
         <spring.boot.version>1.4.2.RELEASE</spring.boot.version>
         <sofa.boot.version>2.4.0</sofa.boot.version>
         <sofa.ark.version>0.3.0</sofa.ark.version>
-        <rpc.starter.version>5.3.2</rpc.starter.version>
+        <rpc.starter.version>5.4.0</rpc.starter.version>
         <sofa.tracer.version>2.1.1</sofa.tracer.version>
         <sofa.lookout.version>1.4.0</sofa.lookout.version>
         <!-- sofa-common-tools for log -->
