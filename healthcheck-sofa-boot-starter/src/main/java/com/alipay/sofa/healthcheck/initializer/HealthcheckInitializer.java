@@ -19,6 +19,7 @@ package com.alipay.sofa.healthcheck.initializer;
 import com.alipay.sofa.common.log.Constants;
 import com.alipay.sofa.healthcheck.configuration.HealthCheckConfiguration;
 import com.alipay.sofa.healthcheck.configuration.HealthCheckConfigurationConstants;
+import com.alipay.sofa.healthcheck.log.SofaBootHealthCheckLoggerFactory;
 import com.alipay.sofa.healthcheck.service.SofaBootComponentHealthCheckInfo;
 import com.alipay.sofa.healthcheck.startup.HealthCheckTrigger;
 import com.alipay.sofa.infra.log.space.SofaBootLogSpaceIsolationInit;
@@ -51,6 +52,9 @@ public class HealthcheckInitializer implements
         if (HealthCheckConfiguration.getEnvironment() == null) {
             HealthCheckConfiguration.setEnvironment(applicationContext.getEnvironment());
         }
+
+        SofaBootHealthCheckLoggerFactory.getLogger(HealthcheckInitializer.class).info(
+            "SOFABoot HealthCheck Starting!");
     }
 
 }

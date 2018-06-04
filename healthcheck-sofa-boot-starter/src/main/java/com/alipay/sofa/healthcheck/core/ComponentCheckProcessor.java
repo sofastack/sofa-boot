@@ -45,20 +45,19 @@ public class ComponentCheckProcessor {
     public boolean livenessCheckComponent(Map<String, Health> healthMap) {
         boolean result = true;
 
-        logger.info("Begin SOFABoot component liveness check.");
+        logger.info("Begin SOFABoot component readiness check.");
 
         for (HealthChecker healthChecker : HealthCheckManager.getHealthCheckers()) {
-            boolean resultItem = doCheckComponentHealth(healthChecker, false, healthMap,
-                HealthCheckType.LivenessCheck);
+            boolean resultItem = doCheckComponentHealth(healthChecker, false, healthMap);
             if (!resultItem) {
                 result = false;
             }
         }
 
         if (result) {
-            logger.info("SOFABoot component liveness check result: success.");
+            logger.info("SOFABoot component readiness check result: success.");
         } else {
-            logger.error("SOFABoot component liveness check result: failed.");
+            logger.error("SOFABoot component readiness check result: failed.");
         }
 
         return result;
@@ -79,8 +78,7 @@ public class ComponentCheckProcessor {
         boolean result = true;
 
         for (HealthChecker healthChecker : HealthCheckManager.getHealthCheckers()) {
-            boolean resultItem = doCheckComponentHealth(healthChecker, true, null,
-                HealthCheckType.Readiness);
+            boolean resultItem = doCheckComponentHealth(healthChecker, true, null);
             if (!resultItem) {
                 result = false;
             }
@@ -109,14 +107,13 @@ public class ComponentCheckProcessor {
     }
 
     private boolean doCheckComponentHealth(HealthChecker healthChecker, boolean isRetry,
-                                           Map<String, Health> healthMap, HealthCheckType checkType) {
+                                           Map<String, Health> healthMap) {
         boolean result = true;
         Health health = healthChecker.isHealthy();
         String componentName = healthChecker.getComponentName();
         int retryCount = healthChecker.getRetryCount();
         long retryTimeInterval = healthChecker.getRetryTimeInterval();
         boolean isStrictCheck = healthChecker.isStrictCheck();
-        String logCheckTypeInfo = checkType.getCheckType();
 
         if (!isRetry) {
             retryCount = 0;
@@ -126,29 +123,28 @@ public class ComponentCheckProcessor {
                 try {
                     TimeUnit.MILLISECONDS.sleep(retryTimeInterval);
                 } catch (InterruptedException e) {
-                    logger.error("Exception occurred while sleeping of retry component "
-                                 + logCheckTypeInfo + " check.", e);
+                    logger.error(
+                        "Exception occurred while sleeping of retry component readiness check.", e);
                 }
                 health = healthChecker.isHealthy();
                 if (HealthCheckUtil.isHealth(health)) {
-                    logger.info("component " + logCheckTypeInfo + " check success. component name["
+                    logger.info("component readiness check success. component name["
                                 + componentName + "]; retry count[" + (i + 1) + "]");
                     break;
                 } else {
-                    logger.error("component " + logCheckTypeInfo + " check failed. component name["
+                    logger.error("component readiness check failed. component name["
                                  + componentName + "]; retry count[" + (i + 1)
                                  + "]; fail details:[" + health.getDetails() + "]");
                 }
             }
 
             if (retryCount == 0) {
-                logger.error("component " + logCheckTypeInfo + " check failed. component name["
-                             + componentName + "]; no retry; fail details:[" + health.getDetails()
-                             + "]");
+                logger.error("component readiness check failed. component name[" + componentName
+                             + "]; no retry; fail details:[" + health.getDetails() + "]");
             }
         } else {
-            logger.info("component " + logCheckTypeInfo + " check success. component name["
-                        + componentName + "]; no retry.");
+            logger.info("component readiness check success. component name[" + componentName
+                        + "]; no retry.");
         }
 
         StartUpHealthCheckStatus.putComponentDetail(componentName, health);
@@ -163,19 +159,5 @@ public class ComponentCheckProcessor {
         }
 
         return result;
-    }
-
-    public enum HealthCheckType {
-        LivenessCheck("liveness"), Readiness("readiness");
-
-        private String checkType;
-
-        HealthCheckType(String type) {
-            this.checkType = type;
-        }
-
-        public String getCheckType() {
-            return checkType;
-        }
     }
 }

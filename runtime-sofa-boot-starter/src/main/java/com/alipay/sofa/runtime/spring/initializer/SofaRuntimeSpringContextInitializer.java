@@ -38,6 +38,6 @@ public class SofaRuntimeSpringContextInitializer
                                     + SofaRuntimeLoggerFactory.SOFA_RUNTIME_LOG_SPACE;
         SofaBootLogSpaceIsolationInit.initSofaBootLogger(environment, runtimeLogLevelKey);
 
-        SofaLogger.info("SofaBoot Runtime Starting!");
+        SofaLogger.info("SOFABoot Runtime Starting!");
     }
 }
