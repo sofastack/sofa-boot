@@ -17,7 +17,9 @@
 package com.alipay.sofa.infra.log.space;
 
 import com.alipay.sofa.common.log.Constants;
+import com.alipay.sofa.common.log.ReportUtil;
 import org.springframework.core.env.Environment;
+import org.springframework.util.StringUtils;
 
 /**
  * SofaBootLogSpaceIsolationInit
@@ -34,8 +36,10 @@ public class SofaBootLogSpaceIsolationInit {
      */
     public static void initSofaBootLogger(Environment environment, String runtimeLogLevelKey) {
         // init logging.path argument
-        if (environment.containsProperty(Constants.LOG_PATH)) {
+        String loggingPath = environment.getProperty(Constants.LOG_PATH);
+        if (!StringUtils.isEmpty(loggingPath)) {
             System.setProperty(Constants.LOG_PATH, environment.getProperty(Constants.LOG_PATH));
+            ReportUtil.report("Actual " + Constants.LOG_PATH + " is [ " + loggingPath + " ]");
         }
 
         //for example : init logging.level.com.alipay.sofa.runtime argument
@@ -46,7 +50,7 @@ public class SofaBootLogSpaceIsolationInit {
 
         // init file.encoding
         String fileEncoding = environment.getProperty(Constants.LOG_ENCODING_PROP_KEY);
-        if (fileEncoding != null) {
+        if (!StringUtils.isEmpty(fileEncoding)) {
             System.setProperty(Constants.LOG_ENCODING_PROP_KEY, fileEncoding);
         }
     }

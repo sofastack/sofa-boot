@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.boot.actuate.endpoint.AbstractEndpoint;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.Resource;
@@ -41,6 +42,7 @@ import java.util.*;
  * @author yangguanchao
  * @since 2018/03/26
  */
+@ConfigurationProperties(prefix = "endpoints.sofaboot.versions")
 public class SofaBootVersionEndpoint extends AbstractEndpoint<Object> implements
                                                                      ApplicationContextAware {
     public static final String                  SOFA_BOOT_VERSION_PREFIX = "sofaboot_versions";
@@ -135,9 +137,8 @@ public class SofaBootVersionEndpoint extends AbstractEndpoint<Object> implements
     }
 
     private List<Resource> getSofaVersionsPropertiesResources() throws IOException {
-        List<String> paths = new ArrayList<>();
-        String path1 = "classpath*:META-INF/sofa.versions.properties";
-        paths.add(path1);
+        List<String> paths = Collections
+            .singletonList("classpath*:META-INF/sofa.versions.properties");
         return getResources(paths);
     }
 

@@ -19,6 +19,7 @@ package com.alipay.sofa.infra.initializer;
 import com.alipay.sofa.common.log.Constants;
 import com.alipay.sofa.common.log.ReportUtil;
 import com.alipay.sofa.infra.log.InfraHealthCheckLoggerFactory;
+import com.alipay.sofa.infra.log.space.SofaBootLogSpaceIsolationInit;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.PriorityOrdered;
@@ -38,25 +39,15 @@ public class SOFABootInfrastructureSpringContextInitializer
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
         //init log
-        this.logInit(applicationContext.getEnvironment());
+        Environment environment = applicationContext.getEnvironment();
+        String infraLogLevelKey = Constants.LOG_LEVEL_PREFIX
+                                  + InfraHealthCheckLoggerFactory.INFRASTRUCTURE_LOG_SPACE;
+        SofaBootLogSpaceIsolationInit.initSofaBootLogger(environment, infraLogLevelKey);
 
         InfraHealthCheckLoggerFactory.getLogger(
             SOFABootInfrastructureSpringContextInitializer.class).info(
             "SOFABoot Infrastructure Starting!");
 
-    }
-
-    private void logInit(Environment environment) {
-        String loggingPath = environment.getProperty(Constants.LOG_PATH);
-        if (!StringUtils.isEmpty(loggingPath)) {
-            initLoggingPath(loggingPath);
-        }
-        String infraLogLevelKey = Constants.LOG_LEVEL_PREFIX
-                                  + InfraHealthCheckLoggerFactory.INFRASTRUCTURE_LOG_SPACE;
-        String infraLogLevelValue = environment.getProperty(infraLogLevelKey);
-        if (!StringUtils.isEmpty(infraLogLevelValue)) {
-            System.setProperty(infraLogLevelKey, infraLogLevelValue);
-        }
     }
 
     @Override
@@ -65,12 +56,4 @@ public class SOFABootInfrastructureSpringContextInitializer
         return HIGHEST_PRECEDENCE;
     }
 
-    private static void initLoggingPath(String middlewareLoggingPath) {
-        if (StringUtils.isEmpty(System.getProperty(Constants.LOG_PATH))
-            && !StringUtils.isEmpty(middlewareLoggingPath)) {
-            System.setProperty(Constants.LOG_PATH, middlewareLoggingPath);
-            ReportUtil.report("Actual " + Constants.LOG_PATH + " is [ " + middlewareLoggingPath
-                              + " ]");
-        }
-    }
 }

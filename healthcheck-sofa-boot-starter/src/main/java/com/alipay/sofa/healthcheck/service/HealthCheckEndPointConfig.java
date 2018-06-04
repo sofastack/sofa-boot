@@ -18,6 +18,7 @@ package com.alipay.sofa.healthcheck.service;
 
 import org.springframework.boot.actuate.condition.ConditionalOnEnabledEndpoint;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -26,10 +27,11 @@ import org.springframework.context.annotation.Configuration;
  * @version $Id: EndConfig.java, v 0.1 2018年02月03日 上午12:30 liangen Exp $
  */
 @Configuration
-public class EndPointConfig {
-    static final String READINESS_CHECK_ENDPOINT_NAME = "health_readiness";
+public class HealthCheckEndPointConfig {
+    static final String READINESS_CHECK_ENDPOINT_NAME = "sofaboot_health_readiness";
 
     @Bean
+    @ConditionalOnMissingBean
     public SofaBootReadinessCheckEndpoint readinessCheck() {
         return new SofaBootReadinessCheckEndpoint(READINESS_CHECK_ENDPOINT_NAME, false);
     }

@@ -19,10 +19,12 @@ package com.alipay.sofa.infra.endpoint;
 import org.springframework.boot.actuate.endpoint.Endpoint;
 import org.springframework.boot.actuate.endpoint.mvc.AbstractEndpointMvcAdapter;
 import org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+@ConfigurationProperties(prefix = "endpoints.sofaboot.versions")
 public class SofaBootVersionEndpointMvcAdapter extends
                                               AbstractEndpointMvcAdapter<SofaBootVersionEndpoint> {
     public static final String SOFA_BOOT_VERSION_URL = SofaBootVersionEndpoint.SOFA_BOOT_VERSION_PREFIX
