@@ -42,7 +42,7 @@
         <sofa.ark.version>0.3.0</sofa.ark.version>
         <rpc.starter.version>5.4.0</rpc.starter.version>
         <sofa.tracer.version>2.1.1</sofa.tracer.version>
-        <sofa.lookout.version>1.4.0</sofa.lookout.version>
+        <sofa.lookout.version>1.4.1</sofa.lookout.version>
         <!-- sofa-common-tools for log -->
         <sofa.common.tools.version>1.0.12</sofa.common.tools.version>
         <bolt.version>1.4.1</bolt.version>
@@ -156,6 +156,21 @@
             <dependency>
                 <groupId>com.alipay.sofa.lookout</groupId>
                 <artifactId>lookout-sofa-boot-starter</artifactId>
+                <version>${sofa.lookout.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alipay.sofa.lookout</groupId>
+                <artifactId>lookout-reg-server</artifactId>
+                <version>${sofa.lookout.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alipay.sofa.lookout</groupId>
+                <artifactId>lookout-reg-dropwizard</artifactId>
+                <version>${sofa.lookout.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alipay.sofa.lookout</groupId>
+                <artifactId>lookout-reg-prometheus</artifactId>
                 <version>${sofa.lookout.version}</version>
             </dependency>
 
