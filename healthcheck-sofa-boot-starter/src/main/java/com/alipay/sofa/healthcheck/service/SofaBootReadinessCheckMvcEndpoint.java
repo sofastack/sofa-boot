@@ -37,7 +37,7 @@ import java.util.Map;
 /**
  * @author khotyn
  */
-@ConfigurationProperties(prefix = "endpoints.sofaboot.health.readiness")
+@ConfigurationProperties(prefix = "com.alipay.sofa.healthcheck.readiness")
 public class SofaBootReadinessCheckMvcEndpoint
                                               extends
                                               AbstractEndpointMvcAdapter<SofaBootReadinessCheckEndpoint> {
@@ -58,10 +58,6 @@ public class SofaBootReadinessCheckMvcEndpoint
     @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Object invoke(Principal principal) {
-        if (!getDelegate().isEnabled()) {
-            // Shouldn't happen because the request mapping should not be registered
-            return getDisabledResponse();
-        }
         Health health = getDelegate().invoke();
         HttpStatus status = getStatus(health);
         if (status != null) {

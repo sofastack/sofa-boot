@@ -24,7 +24,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-@ConfigurationProperties(prefix = "endpoints.sofaboot.versions")
+@ConfigurationProperties(prefix = "com.alipay.sofa.healthcheck.versions")
 public class SofaBootVersionEndpointMvcAdapter extends
                                               AbstractEndpointMvcAdapter<SofaBootVersionEndpoint> {
     public static final String SOFA_BOOT_VERSION_URL = SofaBootVersionEndpoint.SOFA_BOOT_VERSION_PREFIX

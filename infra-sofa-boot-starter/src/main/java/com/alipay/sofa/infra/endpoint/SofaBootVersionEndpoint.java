@@ -42,17 +42,18 @@ import java.util.*;
  * @author yangguanchao
  * @since 2018/03/26
  */
-@ConfigurationProperties(prefix = "endpoints.sofaboot.versions")
+@ConfigurationProperties(prefix = "com.alipay.sofa.healthcheck.versions")
 public class SofaBootVersionEndpoint extends AbstractEndpoint<Object> implements
                                                                      ApplicationContextAware {
-    public static final String                  SOFA_BOOT_VERSION_PREFIX = "sofaboot_versions";
+    public static final String                  SOFA_BOOT_VERSION_PREFIX     = "sofaboot_versions";
+    public static final String                  SOFA_BOOT_VERSION_PROPERTIES = "classpath*:META-INF/sofa.versions.properties";
 
-    private Logger                              logger                   = InfraHealthCheckLoggerFactory
-                                                                             .getLogger(SofaBootVersionEndpoint.class);
+    private Logger                              logger                       = InfraHealthCheckLoggerFactory
+                                                                                 .getLogger(SofaBootVersionEndpoint.class);
 
-    private List<Object>                        endpointResult           = null;
+    private List<Object>                        endpointResult               = null;
 
-    private PathMatchingResourcePatternResolver resourcePatternResolver  = new PathMatchingResourcePatternResolver();
+    private PathMatchingResourcePatternResolver resourcePatternResolver      = new PathMatchingResourcePatternResolver();
 
     private ApplicationContext                  applicationContext;
 
@@ -137,8 +138,7 @@ public class SofaBootVersionEndpoint extends AbstractEndpoint<Object> implements
     }
 
     private List<Resource> getSofaVersionsPropertiesResources() throws IOException {
-        List<String> paths = Collections
-            .singletonList("classpath*:META-INF/sofa.versions.properties");
+        List<String> paths = Collections.singletonList(SOFA_BOOT_VERSION_PROPERTIES);
         return getResources(paths);
     }
 
