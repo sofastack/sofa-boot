@@ -38,7 +38,6 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
-import com.alipay.sofa.runtime.spring.config.SofaRuntimeProperties;
 import org.springframework.aop.framework.AopProxyUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
@@ -59,17 +58,14 @@ import java.lang.reflect.Modifier;
 public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, PriorityOrdered,
                                                ApplicationContextAware {
     private SofaRuntimeContext      sofaRuntimeContext;
-    private SofaRuntimeProperties   sofaRuntimeProperties;
     private BindingAdapterFactory   bindingAdapterFactory;
     private BindingConverterFactory bindingConverterFactory;
     private ApplicationContext      applicationContext;
 
     public ServiceAnnotationBeanPostProcessor(SofaRuntimeContext sofaRuntimeContext,
-                                              SofaRuntimeProperties sofaRuntimeProperties,
                                               BindingAdapterFactory bindingAdapterFactory,
                                               BindingConverterFactory bindingConverterFactory) {
         this.sofaRuntimeContext = sofaRuntimeContext;
-        this.sofaRuntimeProperties = sofaRuntimeProperties;
         this.bindingAdapterFactory = bindingAdapterFactory;
         this.bindingConverterFactory = bindingConverterFactory;
     }
@@ -234,7 +230,7 @@ public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, Pr
             reference.addBinding(binding);
         }
         return ReferenceRegisterHelper.registerReference(reference, bindingAdapterFactory,
-            sofaRuntimeProperties, sofaRuntimeContext);
+            sofaRuntimeContext);
     }
 
     @Override

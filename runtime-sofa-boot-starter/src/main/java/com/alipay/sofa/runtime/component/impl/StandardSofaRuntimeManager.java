@@ -17,10 +17,14 @@
 package com.alipay.sofa.runtime.component.impl;
 
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
+import com.alipay.sofa.runtime.api.event.ApplicationUninstallCallback;
 import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
 import com.alipay.sofa.runtime.spi.component.ComponentManager;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
+
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Default Sofa Runtime Manager
@@ -29,12 +33,13 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
  */
 public class StandardSofaRuntimeManager implements SofaRuntimeManager {
 
-    private ComponentManager      componentManager;
-    private ClientFactoryInternal clientFactoryInternal;
-    private SofaRuntimeContext    sofaRuntimeContext;
-    private String                appName;
-    private ClassLoader           appClassLoader;
-    private boolean               isStartupHealthCheckPassed = false;
+    private ComponentManager                   componentManager;
+    private ClientFactoryInternal              clientFactoryInternal;
+    private SofaRuntimeContext                 sofaRuntimeContext;
+    private String                             appName;
+    private ClassLoader                        appClassLoader;
+    private boolean                            isStartupHealthCheckPassed    = false;
+    private List<ApplicationUninstallCallback> applicationUninstallCallbacks = new CopyOnWriteArrayList<ApplicationUninstallCallback>();
 
     public StandardSofaRuntimeManager(String appName, ClassLoader appClassLoader,
                                       ClientFactoryInternal clientFactoryInternal) {
@@ -87,8 +92,29 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager {
      * @throws ServiceRuntimeException exception occur
      */
     public void shutdown() throws ServiceRuntimeException {
-        if (componentManager != null) {
-            componentManager.shutdown();
+        try {
+            if (componentManager != null) {
+                componentManager.shutdown();
+            }
+            for (ApplicationUninstallCallback callback : applicationUninstallCallbacks) {
+                callback.shutdown();
+            }
+            clear();
+        } catch (Throwable throwable) {
+            throw new ServiceRuntimeException(throwable);
         }
+    }
+
+    @Override
+    public void registerUninstallCallback(ApplicationUninstallCallback callback) {
+        applicationUninstallCallbacks.add(callback);
+    }
+
+    protected void clear() {
+        componentManager = null;
+        sofaRuntimeContext = null;
+        clientFactoryInternal = null;
+        appClassLoader = null;
+        applicationUninstallCallbacks = null;
     }
 }

@@ -32,9 +32,23 @@ public class SofaRuntimeSpringContextInitializer
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
         Environment environment = applicationContext.getEnvironment();
-        // init logging.level.com.alipay.sofa.runtime argument
+        // init logging.path argument
+        if (environment.containsProperty(Constants.LOG_PATH)) {
+            System.setProperty(Constants.LOG_PATH, environment.getProperty(Constants.LOG_PATH));
+        }
+
+        //init logging.level.com.alipay.sofa.runtime argument
         String runtimeLogLevelKey = Constants.LOG_LEVEL_PREFIX
                                     + SofaRuntimeLoggerFactory.SOFA_RUNTIME_LOG_SPACE;
-        SofaBootLogSpaceIsolationInit.initSofaBootLogger(environment, runtimeLogLevelKey);
+        String runtimeLogLevelValue = environment.getProperty(runtimeLogLevelKey);
+        if (runtimeLogLevelValue != null) {
+            System.setProperty(runtimeLogLevelKey, runtimeLogLevelValue);
+        }
+
+        // init file.encoding
+        String fileEncoding = environment.getProperty(Constants.LOG_ENCODING_PROP_KEY);
+        if (fileEncoding != null) {
+            System.setProperty(Constants.LOG_ENCODING_PROP_KEY, fileEncoding);
+        }
     }
 }

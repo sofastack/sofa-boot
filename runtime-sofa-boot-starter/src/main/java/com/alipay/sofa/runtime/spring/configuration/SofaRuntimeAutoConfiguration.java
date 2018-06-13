@@ -22,10 +22,12 @@ import com.alipay.sofa.runtime.api.client.ReferenceClient;
 import com.alipay.sofa.runtime.api.client.ServiceClient;
 import com.alipay.sofa.runtime.client.impl.ClientFactoryImpl;
 import com.alipay.sofa.runtime.component.impl.StandardSofaRuntimeManager;
+import com.alipay.sofa.runtime.constants.SofaRuntimeFrameworkConstants;
 import com.alipay.sofa.runtime.service.client.ReferenceClientImpl;
 import com.alipay.sofa.runtime.service.client.ServiceClientImpl;
 import com.alipay.sofa.runtime.service.impl.BindingAdapterFactoryImpl;
 import com.alipay.sofa.runtime.service.impl.BindingConverterFactoryImpl;
+import com.alipay.sofa.runtime.SofaFramework;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapter;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
 import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
@@ -33,13 +35,16 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
+import com.alipay.sofa.runtime.spring.ApplicationUninstallCallbackPostProcessor;
 import com.alipay.sofa.runtime.spring.ClientFactoryBeanPostProcessor;
 import com.alipay.sofa.runtime.spring.ServiceAnnotationBeanPostProcessor;
-import com.alipay.sofa.runtime.spring.config.SofaRuntimeProperties;
+import com.alipay.sofa.runtime.spring.callback.CloseApplicationContextCallBack;
+import com.alipay.sofa.runtime.spring.config.SofaRuntimeConfigurationProperties;
 import com.alipay.sofa.runtime.spring.health.SofaComponentHealthChecker;
 import com.alipay.sofa.runtime.spring.health.SofaComponentHealthIndicator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.HealthIndicator;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.context.annotation.Bean;
@@ -55,8 +60,8 @@ import java.util.Set;
 @Configuration
 public class SofaRuntimeAutoConfiguration {
     @Bean
-    public SofaRuntimeProperties sofaRuntimeProperties() {
-        return new SofaRuntimeProperties();
+    public SofaRuntimeConfigurationProperties sofaRuntimeProperties() {
+        return new SofaRuntimeConfigurationProperties();
     }
 
     @Bean
@@ -75,40 +80,51 @@ public class SofaRuntimeAutoConfiguration {
     }
 
     @Bean
+    @ConditionalOnBean(name = SofaRuntimeFrameworkConstants.SOFA_RUNTIME_PROPERTIES_BEAN_ID)
     public SofaRuntimeContext sofaRuntimeContext(@Value("${"
                                                         + CommonMiddlewareConstants.APP_NAME_KEY
                                                         + "}") String appName,
                                                  BindingConverterFactory bindingConverterFactory,
-                                                 BindingAdapterFactory bindingAdapterFactory,
-                                                 SofaRuntimeProperties sofaRuntimeProperties) {
+                                                 BindingAdapterFactory bindingAdapterFactory) {
         ClientFactoryInternal clientFactoryInternal = new ClientFactoryImpl();
         SofaRuntimeManager sofaRuntimeManager = new StandardSofaRuntimeManager(appName,
             SofaRuntimeAutoConfiguration.class.getClassLoader(), clientFactoryInternal);
-        sofaRuntimeManager.getSofaRuntimeContext();
         sofaRuntimeManager.getComponentManager().registerComponentClient(
             ReferenceClient.class,
             new ReferenceClientImpl(sofaRuntimeManager.getSofaRuntimeContext(),
-                bindingConverterFactory, bindingAdapterFactory, sofaRuntimeProperties));
+                bindingConverterFactory, bindingAdapterFactory));
         sofaRuntimeManager.getComponentManager().registerComponentClient(
             ServiceClient.class,
             new ServiceClientImpl(sofaRuntimeManager.getSofaRuntimeContext(),
                 bindingConverterFactory, bindingAdapterFactory));
+        SofaFramework.registerSofaRuntimeManager(sofaRuntimeManager);
         return sofaRuntimeManager.getSofaRuntimeContext();
 
     }
 
     @Bean
+    @ConditionalOnBean(name = SofaRuntimeFrameworkConstants.SOFA_RUNTIME_PROPERTIES_BEAN_ID)
     public ServiceAnnotationBeanPostProcessor serviceAnnotationBeanPostProcessor(SofaRuntimeContext sofaRuntimeContext,
-                                                                                 SofaRuntimeProperties sofaRuntimeProperties,
                                                                                  BindingAdapterFactory bindingAdapterFactory,
                                                                                  BindingConverterFactory bindingConverterFactory) {
-        return new ServiceAnnotationBeanPostProcessor(sofaRuntimeContext, sofaRuntimeProperties,
-            bindingAdapterFactory, bindingConverterFactory);
+        return new ServiceAnnotationBeanPostProcessor(sofaRuntimeContext, bindingAdapterFactory,
+            bindingConverterFactory);
     }
 
     @Bean
     public ClientFactoryBeanPostProcessor clientFactoryBeanPostProcessor(SofaRuntimeContext sofaRuntimeContext) {
         return new ClientFactoryBeanPostProcessor(sofaRuntimeContext.getClientFactory());
+    }
+
+    @Bean
+    public ApplicationUninstallCallbackPostProcessor applicationUninstallCallbackPostProcessor(SofaRuntimeContext sofaRuntimeContext) {
+        return new ApplicationUninstallCallbackPostProcessor(
+            sofaRuntimeContext.getSofaRuntimeManager());
+    }
+
+    @Bean
+    public CloseApplicationContextCallBack closeApplicationContextCallBack() {
+        return new CloseApplicationContextCallBack();
     }
 
     private static <T> Set<T> getClassesByServiceLoader(Class<T> clazz) {

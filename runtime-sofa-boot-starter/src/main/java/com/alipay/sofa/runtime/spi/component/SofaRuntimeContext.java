@@ -52,4 +52,8 @@ public class SofaRuntimeContext {
     public ClientFactory getClientFactory() {
         return clientFactory;
     }
+
+    public SofaRuntimeManager getSofaRuntimeManager() {
+        return sofaRuntimeManager;
+    }
 }

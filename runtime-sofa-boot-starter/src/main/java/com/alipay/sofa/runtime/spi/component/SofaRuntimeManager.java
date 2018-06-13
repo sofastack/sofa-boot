@@ -17,6 +17,7 @@
 package com.alipay.sofa.runtime.spi.component;
 
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
+import com.alipay.sofa.runtime.api.event.ApplicationUninstallCallback;
 import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
 
 /**
@@ -76,4 +77,6 @@ public interface SofaRuntimeManager {
      * @throws ServiceRuntimeException throws when exception occur
      */
     void shutdown() throws ServiceRuntimeException;
+
+    void registerUninstallCallback(ApplicationUninstallCallback callback);
 }

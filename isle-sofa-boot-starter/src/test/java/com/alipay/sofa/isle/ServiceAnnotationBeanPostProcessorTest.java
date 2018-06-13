@@ -73,7 +73,7 @@ public class ServiceAnnotationBeanPostProcessorTest {
         boolean hasException = false;
         BindingConverterFactory bindingConverterFactory = new BindingConverterFactoryImpl();
         ServiceAnnotationBeanPostProcessor serviceAnnotationBeanPostProcessor = new ServiceAnnotationBeanPostProcessor(
-            sofaRuntimeContext, null, null, bindingConverterFactory);
+            sofaRuntimeContext, null, bindingConverterFactory);
         try {
             createReferenceProxy.invoke(serviceAnnotationBeanPostProcessor, sofaReference,
                 ServiceAnnotationBeanPostProcessorTest.class);
@@ -103,7 +103,7 @@ public class ServiceAnnotationBeanPostProcessorTest {
             ServiceAnnotationBeanPostProcessorTest.class);
 
         PowerMockito.verifyStatic();
-        ReferenceRegisterHelper.registerReference(referenceImpl, null, null, sofaRuntimeContext);
+        ReferenceRegisterHelper.registerReference(referenceImpl, null, sofaRuntimeContext);
     }
 
     @Test
@@ -128,7 +128,7 @@ public class ServiceAnnotationBeanPostProcessorTest {
         boolean hasException = false;
         BindingConverterFactory bindingConverterFactory = new BindingConverterFactoryImpl();
         ServiceAnnotationBeanPostProcessor serviceAnnotationBeanPostProcessor = new ServiceAnnotationBeanPostProcessor(
-            sofaRuntimeContext, null, null, bindingConverterFactory);
+            sofaRuntimeContext, null, bindingConverterFactory);
         try {
             createReferenceProxy.invoke(serviceAnnotationBeanPostProcessor, service, sofaService,
                 sofaServiceBinding);

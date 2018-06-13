@@ -14,33 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime.spring.config;
-
-import org.springframework.boot.context.properties.ConfigurationProperties;
+package com.alipay.sofa.runtime;
 
 /**
- * @author xuanbei 18/5/9
+ * @author qilong.zql
+ * @since 2.5.0
  */
-@ConfigurationProperties(SofaRuntimeProperties.PREFIX)
 public class SofaRuntimeProperties {
-    static final String PREFIX                      = "com.alipay.sofa.boot";
+    private static boolean skipJvmReferenceHealthCheck = false;
+    private static boolean disableJvmFirst             = false;
 
-    private boolean     skipJvmReferenceHealthCheck = false;
-    private boolean     disableJvmFirst             = false;
-
-    public boolean isSkipJvmReferenceHealthCheck() {
-        return skipJvmReferenceHealthCheck;
+    public static boolean isSkipJvmReferenceHealthCheck() {
+        return SofaRuntimeProperties.skipJvmReferenceHealthCheck;
     }
 
-    public void setSkipJvmReferenceHealthCheck(boolean skipJvmReferenceHealthCheck) {
-        this.skipJvmReferenceHealthCheck = skipJvmReferenceHealthCheck;
+    public static void setSkipJvmReferenceHealthCheck(boolean skipJvmReferenceHealthCheck) {
+        SofaRuntimeProperties.skipJvmReferenceHealthCheck = skipJvmReferenceHealthCheck;
     }
 
-    public boolean isDisableJvmFirst() {
-        return disableJvmFirst;
+    public static boolean isDisableJvmFirst() {
+        return SofaRuntimeProperties.disableJvmFirst;
     }
 
-    public void setDisableJvmFirst(boolean disableJvmFirst) {
-        this.disableJvmFirst = disableJvmFirst;
+    public static void setDisableJvmFirst(boolean disableJvmFirst) {
+        SofaRuntimeProperties.disableJvmFirst = disableJvmFirst;
     }
+
 }

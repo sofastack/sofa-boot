@@ -20,6 +20,7 @@ import com.alipay.sofa.infra.endpoint.SofaBootVersionEndpoint;
 import com.alipay.sofa.infra.endpoint.SofaBootVersionEndpointMvcAdapter;
 import org.springframework.boot.actuate.condition.ConditionalOnEnabledEndpoint;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -30,6 +31,9 @@ import org.springframework.context.annotation.Configuration;
 public class SofaBootInfraAutoConfiguration {
 
     @Bean
+    @ConditionalOnClass(name = {
+            "org.springframework.web.context.ConfigurableWebApplicationContext",
+            "javax.servlet.Servlet" })
     public SofaBootVersionEndpoint sofaBootVersionEndpoint() {
         return new SofaBootVersionEndpoint();
     }
