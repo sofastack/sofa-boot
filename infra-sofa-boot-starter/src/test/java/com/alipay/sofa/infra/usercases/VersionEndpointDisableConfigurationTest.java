@@ -30,14 +30,13 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @since 2.5.0
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = SofaBootWebSpringBootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, properties = { "com.alipay.sofa.healthcheck.versions.enabled=false" })
+@SpringBootTest(classes = SofaBootWebSpringBootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, properties = { "com.alipay.sofa.versions.enabled=false" })
 public class VersionEndpointDisableConfigurationTest extends AbstractTestBase {
 
     @Test
     public void test() {
-        SofaBootVersionEndpoint sofaBootVersionEndpoint = (SofaBootVersionEndpoint) ctx
-            .getBean("sofaBootVersionEndpoint");
-        Assert.assertFalse(sofaBootVersionEndpoint.isEnabled());
+        boolean sofaBootVersionEndpoint = ctx.containsBean("sofaBootVersionEndpoint");
+        Assert.assertFalse(sofaBootVersionEndpoint);
 
         boolean sofaBootVersionEndpointMvcAdapter = ctx
             .containsBean("sofaBootVersionEndpointMvcAdapter");

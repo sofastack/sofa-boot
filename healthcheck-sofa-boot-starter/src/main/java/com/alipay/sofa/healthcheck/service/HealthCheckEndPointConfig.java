@@ -16,10 +16,9 @@
  */
 package com.alipay.sofa.healthcheck.service;
 
-import org.springframework.boot.actuate.condition.ConditionalOnEnabledEndpoint;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -32,14 +31,14 @@ public class HealthCheckEndPointConfig {
     static final String READINESS_CHECK_ENDPOINT_NAME = "sofaboot_health_readiness";
 
     @Bean
-    @ConditionalOnMissingBean
+    @ConditionalOnWebApplication
+    @ConditionalOnProperty(prefix = "com.alipay.sofa.healthcheck.readiness", name = "enabled", matchIfMissing = true)
     public SofaBootReadinessCheckEndpoint readinessCheck() {
         return new SofaBootReadinessCheckEndpoint(READINESS_CHECK_ENDPOINT_NAME, false);
     }
 
     @Bean
     @ConditionalOnBean(SofaBootReadinessCheckEndpoint.class)
-    @ConditionalOnProperty(prefix = "com.alipay.sofa.healthcheck.readiness", name = "enabled", matchIfMissing = true)
     public SofaBootReadinessCheckMvcEndpoint sofaBootReadinessCheckMvcEndpoint(SofaBootReadinessCheckEndpoint delegate) {
         return new SofaBootReadinessCheckMvcEndpoint(delegate);
     }

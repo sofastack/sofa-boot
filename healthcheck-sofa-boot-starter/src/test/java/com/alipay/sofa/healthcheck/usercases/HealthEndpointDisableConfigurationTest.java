@@ -39,9 +39,8 @@ public class HealthEndpointDisableConfigurationTest {
 
     @Test
     public void test() {
-        SofaBootReadinessCheckEndpoint sofaBootReadinessCheckEndpoint = (SofaBootReadinessCheckEndpoint) ctx
-            .getBean("readinessCheck");
-        Assert.assertFalse(sofaBootReadinessCheckEndpoint.isEnabled());
+        boolean sofaBootReadinessCheckEndpoint = ctx.containsBean("readinessCheck");
+        Assert.assertFalse(sofaBootReadinessCheckEndpoint);
 
         boolean sofaBootVersionEndpointMvcAdapter = ctx
             .containsBean("sofaBootReadinessCheckMvcEndpoint");

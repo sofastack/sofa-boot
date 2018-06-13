@@ -42,7 +42,7 @@ import java.util.*;
  * @author yangguanchao
  * @since 2018/03/26
  */
-@ConfigurationProperties(prefix = "com.alipay.sofa.healthcheck.versions")
+@ConfigurationProperties(prefix = "com.alipay.sofa.versions")
 public class SofaBootVersionEndpoint extends AbstractEndpoint<Object> implements
                                                                      ApplicationContextAware {
     public static final String                  SOFA_BOOT_VERSION_PREFIX     = "sofaboot_versions";
