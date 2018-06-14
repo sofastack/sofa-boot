@@ -106,7 +106,7 @@ public class ComponentCheckProcessorTest extends BaseHealthCheckTest {
         initApplicationContext(4, true, 5);
 
         Map<String, Health> details = new HashMap<>();
-        boolean result = componentCheckProcessor.httpCheckComponent(details);
+        boolean result = componentCheckProcessor.livenessCheckComponent(details);
 
         Assert.assertFalse(result);
 

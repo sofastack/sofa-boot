@@ -42,25 +42,22 @@ public class ComponentCheckProcessor {
      * @param healthMap used to load the information of component process.
      * @return
      */
-    public boolean httpCheckComponent(Map<String, Health> healthMap) {
+    public boolean livenessCheckComponent(Map<String, Health> healthMap) {
         boolean result = true;
 
         logger.info("Begin SOFABoot component readiness check.");
 
         for (HealthChecker healthChecker : HealthCheckManager.getHealthCheckers()) {
-
             boolean resultItem = doCheckComponentHealth(healthChecker, false, healthMap);
             if (!resultItem) {
                 result = false;
             }
-
         }
 
         if (result) {
             logger.info("SOFABoot component readiness check result: success.");
         } else {
             logger.error("SOFABoot component readiness check result: failed.");
-
         }
 
         return result;
@@ -81,7 +78,6 @@ public class ComponentCheckProcessor {
         boolean result = true;
 
         for (HealthChecker healthChecker : HealthCheckManager.getHealthCheckers()) {
-
             boolean resultItem = doCheckComponentHealth(healthChecker, true, null);
             if (!resultItem) {
                 result = false;
@@ -112,9 +108,7 @@ public class ComponentCheckProcessor {
 
     private boolean doCheckComponentHealth(HealthChecker healthChecker, boolean isRetry,
                                            Map<String, Health> healthMap) {
-
         boolean result = true;
-
         Health health = healthChecker.isHealthy();
         String componentName = healthChecker.getComponentName();
         int retryCount = healthChecker.getRetryCount();
@@ -126,17 +120,14 @@ public class ComponentCheckProcessor {
         }
         if (!HealthCheckUtil.isHealth(health)) {
             for (int i = 0; i < retryCount; i++) {
-
                 try {
                     TimeUnit.MILLISECONDS.sleep(retryTimeInterval);
                 } catch (InterruptedException e) {
                     logger.error(
                         "Exception occurred while sleeping of retry component readiness check.", e);
                 }
-
                 health = healthChecker.isHealthy();
                 if (HealthCheckUtil.isHealth(health)) {
-
                     logger.info("component readiness check success. component name["
                                 + componentName + "]; retry count[" + (i + 1) + "]");
                     break;
@@ -144,20 +135,16 @@ public class ComponentCheckProcessor {
                     logger.error("component readiness check failed. component name["
                                  + componentName + "]; retry count[" + (i + 1)
                                  + "]; fail details:[" + health.getDetails() + "]");
-
                 }
-
             }
 
             if (retryCount == 0) {
                 logger.error("component readiness check failed. component name[" + componentName
                              + "]; no retry; fail details:[" + health.getDetails() + "]");
             }
-
         } else {
             logger.info("component readiness check success. component name[" + componentName
                         + "]; no retry.");
-
         }
 
         StartUpHealthCheckStatus.putComponentDetail(componentName, health);

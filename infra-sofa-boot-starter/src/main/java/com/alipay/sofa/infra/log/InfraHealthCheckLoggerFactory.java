@@ -45,7 +45,7 @@ public class InfraHealthCheckLoggerFactory {
      * @return 日志实现
      */
     public static org.slf4j.Logger getLogger(String name) {
-        //从"com/alipay/boot/healthcheck/log"中获取 health check 的日志配置并寻找对应logger对象,log 为默认添加的后缀
+        //从 "com/alipay/sofa/infra/log" 中获取 infra 的日志配置并寻找对应logger对象,log 为默认添加的后缀
         if (name == null || name.isEmpty()) {
             return null;
         }

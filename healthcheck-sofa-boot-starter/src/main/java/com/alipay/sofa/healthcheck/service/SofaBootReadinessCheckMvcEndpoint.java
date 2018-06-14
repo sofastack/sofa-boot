@@ -22,6 +22,7 @@ import org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.Status;
 import org.springframework.boot.bind.RelaxedNames;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -36,10 +37,12 @@ import java.util.Map;
 /**
  * @author khotyn
  */
+@ConfigurationProperties(prefix = "com.alipay.sofa.healthcheck.readiness")
 public class SofaBootReadinessCheckMvcEndpoint
                                               extends
                                               AbstractEndpointMvcAdapter<SofaBootReadinessCheckEndpoint> {
-    private Map<String, HttpStatus> statusMapping = new HashMap<>();
+    private Map<String, HttpStatus> statusMapping       = new HashMap<>();
+    private static final String     READINESS_CHECK_URL = "health/readiness";
 
     /**
      * Create a new {@link EndpointMvcAdapter}.
@@ -49,16 +52,12 @@ public class SofaBootReadinessCheckMvcEndpoint
     SofaBootReadinessCheckMvcEndpoint(SofaBootReadinessCheckEndpoint delegate) {
         super(delegate);
         setupDefaultStatusMapping();
-        setPath(EndPointConfig.READINESS_CHECK_ENDPOINT_NAME.replace("_", "/"));
+        setPath(READINESS_CHECK_URL);
     }
 
     @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Object invoke(Principal principal) {
-        if (!getDelegate().isEnabled()) {
-            // Shouldn't happen because the request mapping should not be registered
-            return getDisabledResponse();
-        }
         Health health = getDelegate().invoke();
         HttpStatus status = getStatus(health);
         if (status != null) {
