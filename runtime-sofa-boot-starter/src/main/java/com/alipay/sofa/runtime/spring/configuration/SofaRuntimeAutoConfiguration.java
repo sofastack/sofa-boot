@@ -22,7 +22,6 @@ import com.alipay.sofa.runtime.api.client.ReferenceClient;
 import com.alipay.sofa.runtime.api.client.ServiceClient;
 import com.alipay.sofa.runtime.client.impl.ClientFactoryImpl;
 import com.alipay.sofa.runtime.component.impl.StandardSofaRuntimeManager;
-import com.alipay.sofa.runtime.constants.SofaRuntimeFrameworkConstants;
 import com.alipay.sofa.runtime.service.client.ReferenceClientImpl;
 import com.alipay.sofa.runtime.service.client.ServiceClientImpl;
 import com.alipay.sofa.runtime.service.impl.BindingAdapterFactoryImpl;
@@ -44,7 +43,6 @@ import com.alipay.sofa.runtime.spring.health.SofaComponentHealthChecker;
 import com.alipay.sofa.runtime.spring.health.SofaComponentHealthIndicator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.HealthIndicator;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.context.annotation.Bean;
@@ -80,7 +78,6 @@ public class SofaRuntimeAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnBean(name = SofaRuntimeFrameworkConstants.SOFA_RUNTIME_PROPERTIES_BEAN_ID)
     public SofaRuntimeContext sofaRuntimeContext(@Value("${"
                                                         + CommonMiddlewareConstants.APP_NAME_KEY
                                                         + "}") String appName,
@@ -103,7 +100,6 @@ public class SofaRuntimeAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnBean(name = SofaRuntimeFrameworkConstants.SOFA_RUNTIME_PROPERTIES_BEAN_ID)
     public ServiceAnnotationBeanPostProcessor serviceAnnotationBeanPostProcessor(SofaRuntimeContext sofaRuntimeContext,
                                                                                  BindingAdapterFactory bindingAdapterFactory,
                                                                                  BindingConverterFactory bindingConverterFactory) {

@@ -32,7 +32,7 @@ public class SofaEventHandler implements EventHandler {
     @Override
     public void handleEvent(ArkEvent event) {
         if (Constants.BIZ_EVENT_TOPIC_UNINSTALL.equals(event.getTopic())) {
-            doUninstallBiz((BizEvent)event);
+            doUninstallBiz((BizEvent) event);
         }
     }
 
