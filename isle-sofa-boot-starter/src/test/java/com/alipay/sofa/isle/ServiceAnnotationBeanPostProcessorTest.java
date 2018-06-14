@@ -36,6 +36,7 @@ import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.springframework.context.ApplicationContext;
 
 import java.lang.reflect.Method;
 import java.util.HashSet;
@@ -99,6 +100,9 @@ public class ServiceAnnotationBeanPostProcessorTest {
             .whenNew(ReferenceImpl.class)
             .withArguments("uniqueId", ServiceAnnotationBeanPostProcessorTest.class,
                 InterfaceMode.annotation, true).thenReturn(referenceImpl);
+        // mock an applicationContext
+        ApplicationContext applicationContext = mock(ApplicationContext.class);
+        serviceAnnotationBeanPostProcessor.setApplicationContext(applicationContext);
         createReferenceProxy.invoke(serviceAnnotationBeanPostProcessor, sofaReference,
             ServiceAnnotationBeanPostProcessorTest.class);
 
