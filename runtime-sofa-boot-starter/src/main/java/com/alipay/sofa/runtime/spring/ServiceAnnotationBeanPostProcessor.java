@@ -21,6 +21,7 @@ import com.alipay.sofa.runtime.api.annotation.SofaReference;
 import com.alipay.sofa.runtime.api.annotation.SofaService;
 import com.alipay.sofa.runtime.api.annotation.SofaServiceBinding;
 import com.alipay.sofa.runtime.api.binding.BindingType;
+import com.alipay.sofa.runtime.constants.SofaRuntimeFrameworkConstants;
 import com.alipay.sofa.runtime.model.InterfaceMode;
 import com.alipay.sofa.runtime.service.binding.JvmBinding;
 import com.alipay.sofa.runtime.service.component.Reference;
@@ -241,14 +242,18 @@ public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, Pr
 
     private SofaRuntimeProperties getSofaRuntimeProperties() {
         if (sofaRuntimeProperties == null) {
-            sofaRuntimeProperties = applicationContext.getBean(SofaRuntimeProperties.class);
+            sofaRuntimeProperties = applicationContext.getBean(
+                SofaRuntimeFrameworkConstants.SOFA_RUNTIME_PROPERTIES_BEAN_ID,
+                SofaRuntimeProperties.class);
         }
         return sofaRuntimeProperties;
     }
 
     private SofaRuntimeContext getSofaRuntimeContext() {
         if (sofaRuntimeContext == null) {
-            sofaRuntimeContext = applicationContext.getBean(SofaRuntimeContext.class);
+            sofaRuntimeContext = applicationContext.getBean(
+                SofaRuntimeFrameworkConstants.SOFA_RUNTIME_CONTEXT_BEAN_ID,
+                SofaRuntimeContext.class);
         }
         return sofaRuntimeContext;
     }

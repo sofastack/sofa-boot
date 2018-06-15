@@ -21,6 +21,7 @@ import com.alipay.sofa.runtime.api.annotation.SofaReferenceBinding;
 import com.alipay.sofa.runtime.api.annotation.SofaService;
 import com.alipay.sofa.runtime.api.annotation.SofaServiceBinding;
 import com.alipay.sofa.runtime.api.binding.BindingType;
+import com.alipay.sofa.runtime.constants.SofaRuntimeFrameworkConstants;
 import com.alipay.sofa.runtime.model.InterfaceMode;
 import com.alipay.sofa.runtime.service.component.Service;
 import com.alipay.sofa.runtime.service.component.impl.ReferenceImpl;
@@ -73,8 +74,13 @@ public class ServiceAnnotationBeanPostProcessorTest {
             ServiceAnnotationBeanPostProcessorTest.class.getClassLoader());
 
         ApplicationContext applicationContext = mock(ApplicationContext.class);
-        when(applicationContext.getBean(SofaRuntimeContext.class)).thenReturn(sofaRuntimeContext);
-        when(applicationContext.getBean(SofaRuntimeProperties.class)).thenReturn(null);
+        when(
+            applicationContext.getBean(SofaRuntimeFrameworkConstants.SOFA_RUNTIME_CONTEXT_BEAN_ID,
+                SofaRuntimeContext.class)).thenReturn(sofaRuntimeContext);
+        when(
+            applicationContext.getBean(
+                SofaRuntimeFrameworkConstants.SOFA_RUNTIME_PROPERTIES_BEAN_ID,
+                SofaRuntimeProperties.class)).thenReturn(null);
 
         boolean hasException = false;
         BindingConverterFactory bindingConverterFactory = new BindingConverterFactoryImpl();
@@ -133,8 +139,13 @@ public class ServiceAnnotationBeanPostProcessorTest {
             ServiceAnnotationBeanPostProcessorTest.class.getClassLoader());
 
         ApplicationContext applicationContext = mock(ApplicationContext.class);
-        when(applicationContext.getBean(SofaRuntimeContext.class)).thenReturn(sofaRuntimeContext);
-        when(applicationContext.getBean(SofaRuntimeProperties.class)).thenReturn(null);
+        when(
+            applicationContext.getBean(SofaRuntimeFrameworkConstants.SOFA_RUNTIME_CONTEXT_BEAN_ID,
+                SofaRuntimeContext.class)).thenReturn(sofaRuntimeContext);
+        when(
+            applicationContext.getBean(
+                SofaRuntimeFrameworkConstants.SOFA_RUNTIME_PROPERTIES_BEAN_ID,
+                SofaRuntimeProperties.class)).thenReturn(null);
 
         boolean hasException = false;
         BindingConverterFactory bindingConverterFactory = new BindingConverterFactoryImpl();
