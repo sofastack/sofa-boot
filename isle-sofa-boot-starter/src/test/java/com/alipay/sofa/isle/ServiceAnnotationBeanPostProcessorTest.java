@@ -30,6 +30,7 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
 import com.alipay.sofa.runtime.spring.ServiceAnnotationBeanPostProcessor;
+import com.alipay.sofa.runtime.spring.config.SofaRuntimeProperties;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -71,10 +72,15 @@ public class ServiceAnnotationBeanPostProcessorTest {
         when(sofaRuntimeContext.getAppClassLoader()).thenReturn(
             ServiceAnnotationBeanPostProcessorTest.class.getClassLoader());
 
+        ApplicationContext applicationContext = mock(ApplicationContext.class);
+        when(applicationContext.getBean(SofaRuntimeContext.class)).thenReturn(sofaRuntimeContext);
+        when(applicationContext.getBean(SofaRuntimeProperties.class)).thenReturn(null);
+
         boolean hasException = false;
         BindingConverterFactory bindingConverterFactory = new BindingConverterFactoryImpl();
         ServiceAnnotationBeanPostProcessor serviceAnnotationBeanPostProcessor = new ServiceAnnotationBeanPostProcessor(
-            sofaRuntimeContext, null, null, bindingConverterFactory);
+            null, bindingConverterFactory);
+        serviceAnnotationBeanPostProcessor.setApplicationContext(applicationContext);
         try {
             createReferenceProxy.invoke(serviceAnnotationBeanPostProcessor, sofaReference,
                 ServiceAnnotationBeanPostProcessorTest.class);
@@ -100,9 +106,6 @@ public class ServiceAnnotationBeanPostProcessorTest {
             .whenNew(ReferenceImpl.class)
             .withArguments("uniqueId", ServiceAnnotationBeanPostProcessorTest.class,
                 InterfaceMode.annotation, true).thenReturn(referenceImpl);
-        // mock an applicationContext
-        ApplicationContext applicationContext = mock(ApplicationContext.class);
-        serviceAnnotationBeanPostProcessor.setApplicationContext(applicationContext);
         createReferenceProxy.invoke(serviceAnnotationBeanPostProcessor, sofaReference,
             ServiceAnnotationBeanPostProcessorTest.class);
 
@@ -129,10 +132,15 @@ public class ServiceAnnotationBeanPostProcessorTest {
         when(sofaRuntimeContext.getAppClassLoader()).thenReturn(
             ServiceAnnotationBeanPostProcessorTest.class.getClassLoader());
 
+        ApplicationContext applicationContext = mock(ApplicationContext.class);
+        when(applicationContext.getBean(SofaRuntimeContext.class)).thenReturn(sofaRuntimeContext);
+        when(applicationContext.getBean(SofaRuntimeProperties.class)).thenReturn(null);
+
         boolean hasException = false;
         BindingConverterFactory bindingConverterFactory = new BindingConverterFactoryImpl();
         ServiceAnnotationBeanPostProcessor serviceAnnotationBeanPostProcessor = new ServiceAnnotationBeanPostProcessor(
-            sofaRuntimeContext, null, null, bindingConverterFactory);
+            null, bindingConverterFactory);
+        serviceAnnotationBeanPostProcessor.setApplicationContext(applicationContext);
         try {
             createReferenceProxy.invoke(serviceAnnotationBeanPostProcessor, service, sofaService,
                 sofaServiceBinding);

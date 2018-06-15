@@ -76,23 +76,6 @@ public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, Pr
         this.bindingConverterFactory = bindingConverterFactory;
     }
 
-    /**
-     * To manually construct a ServiceAnnotationBeanPostProcessor
-     * @param sofaRuntimeContext
-     * @param sofaRuntimeProperties
-     * @param bindingAdapterFactory
-     * @param bindingConverterFactory
-     */
-    public ServiceAnnotationBeanPostProcessor(SofaRuntimeContext sofaRuntimeContext,
-                                              SofaRuntimeProperties sofaRuntimeProperties,
-                                              BindingAdapterFactory bindingAdapterFactory,
-                                              BindingConverterFactory bindingConverterFactory) {
-        this.sofaRuntimeContext = sofaRuntimeContext;
-        this.sofaRuntimeProperties = sofaRuntimeProperties;
-        this.bindingAdapterFactory = bindingAdapterFactory;
-        this.bindingConverterFactory = bindingConverterFactory;
-    }
-
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName)
                                                                                throws BeansException {
