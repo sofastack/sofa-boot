@@ -38,8 +38,4 @@ public class HealthCheckConfigurationConstants {
 
     //日志
     public static final String SOFABOOT_HEALTH_LOG_SPACE                        = "com.alipay.sofa.healthcheck";
-
-    public static final String SPRING_APPLICATION_NAME                          = "spring.application.name";
-
-    public static final int    DEFAULT_COMPONENT_HEALTH_CHECK_ROUND             = 20;
 }

@@ -14,50 +14,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.infra.base;
+package com.alipay.sofa.healthcheck.usercases;
 
-import org.junit.Before;
+import com.alipay.sofa.healthcheck.base.SofaBootTestApplication;
+import com.alipay.sofa.healthcheck.service.SofaBootReadinessCheckEndpoint;
+import com.alipay.sofa.healthcheck.service.SofaBootReadinessCheckMvcEndpoint;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.util.Assert;
 
 /**
- * 参考文档: http://docs.spring.io/spring-boot/docs/1.4.2.RELEASE/reference/htmlsingle/#boot-features-testing
- * <p>
- * mock : https://docs.spring.io/spring-boot/docs/1.4.2.RELEASE/reference/htmlsingle/#boot-features-testing-spring-boot-applications-mocking-beans
- * <p>
- * OutputCapture : https://docs.spring.io/spring-boot/docs/1.4.2.RELEASE/reference/htmlsingle/#boot-features-output-capture-test-utility
- * <p>
- * <p>
- * <p>
- * <p/>
- * Created by yangguanchao on 16/11/18.
+ * @author qilong.zql
+ * @since 2.5.0
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = SofaBootWebSpringBootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-public abstract class AbstractTestBase {
-
-    /**
-     * 8080
-     */
-    @LocalServerPort
-    private int               definedPort;
-
-    @Autowired
-    public TestRestTemplate   testRestTemplate;
+@SpringBootTest(classes = SofaBootTestApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+public class HealthEndpointDefaultConfigurationTest {
 
     @Autowired
     public ApplicationContext ctx;
 
-    protected String          urlHttpPrefix;
+    @Test
+    public void test() {
+        SofaBootReadinessCheckEndpoint sofaBootReadinessCheckEndpoint = (SofaBootReadinessCheckEndpoint) ctx
+            .getBean("readinessCheck");
+        Assert.isTrue(sofaBootReadinessCheckEndpoint.isEnabled());
 
-    @Before
-    public void setUp() {
-        urlHttpPrefix = "http://localhost:" + definedPort;
+        SofaBootReadinessCheckMvcEndpoint sofaBootVersionEndpointMvcAdapter = (SofaBootReadinessCheckMvcEndpoint) ctx
+            .getBean("sofaBootReadinessCheckMvcEndpoint");
+        Assert.notNull(sofaBootVersionEndpointMvcAdapter);
     }
 
 }
