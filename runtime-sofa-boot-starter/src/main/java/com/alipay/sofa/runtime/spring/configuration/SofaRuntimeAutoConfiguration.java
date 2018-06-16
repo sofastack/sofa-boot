@@ -98,12 +98,10 @@ public class SofaRuntimeAutoConfiguration {
     }
 
     @Bean
-    public ServiceAnnotationBeanPostProcessor serviceAnnotationBeanPostProcessor(SofaRuntimeContext sofaRuntimeContext,
-                                                                                 SofaRuntimeProperties sofaRuntimeProperties,
-                                                                                 BindingAdapterFactory bindingAdapterFactory,
+    public ServiceAnnotationBeanPostProcessor serviceAnnotationBeanPostProcessor(BindingAdapterFactory bindingAdapterFactory,
                                                                                  BindingConverterFactory bindingConverterFactory) {
-        return new ServiceAnnotationBeanPostProcessor(sofaRuntimeContext, sofaRuntimeProperties,
-            bindingAdapterFactory, bindingConverterFactory);
+        return new ServiceAnnotationBeanPostProcessor(bindingAdapterFactory,
+            bindingConverterFactory);
     }
 
     @Bean
