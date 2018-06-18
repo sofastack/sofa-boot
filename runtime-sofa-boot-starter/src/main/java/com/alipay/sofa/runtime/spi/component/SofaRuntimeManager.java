@@ -78,5 +78,10 @@ public interface SofaRuntimeManager {
      */
     void shutdown() throws ServiceRuntimeException;
 
+    /**
+     * register call back which would be executed after receive uninstall event
+     *
+     * @param callback
+     */
     void registerUninstallCallback(ApplicationUninstallCallback callback);
 }
