@@ -31,11 +31,12 @@ public class SofaRuntimeConfigurationProperties {
 
     public void setSkipJvmReferenceHealthCheck(boolean skipJvmReferenceHealthCheck) {
         this.skipJvmReferenceHealthCheck = skipJvmReferenceHealthCheck;
-        SofaRuntimeProperties.setSkipJvmReferenceHealthCheck(skipJvmReferenceHealthCheck);
+        SofaRuntimeProperties.setSkipJvmReferenceHealthCheck(this.getClass().getClassLoader(),
+            skipJvmReferenceHealthCheck);
     }
 
     public void setDisableJvmFirst(boolean disableJvmFirst) {
         this.disableJvmFirst = disableJvmFirst;
-        SofaRuntimeProperties.setDisableJvmFirst(disableJvmFirst);
+        SofaRuntimeProperties.setDisableJvmFirst(this.getClass().getClassLoader(), disableJvmFirst);
     }
 }

@@ -22,6 +22,7 @@ import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
 import com.alipay.sofa.runtime.spi.component.ComponentManager;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
+import com.alipay.sofa.runtime.spi.health.RuntimeHealthChecker;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -40,6 +41,7 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager {
     private ClassLoader                        appClassLoader;
     private boolean                            isStartupHealthCheckPassed    = false;
     private List<ApplicationUninstallCallback> applicationUninstallCallbacks = new CopyOnWriteArrayList<ApplicationUninstallCallback>();
+    private List<RuntimeHealthChecker>         runtimeHealthCheckers         = new CopyOnWriteArrayList<>();
 
     public StandardSofaRuntimeManager(String appName, ClassLoader appClassLoader,
                                       ClientFactoryInternal clientFactoryInternal) {
@@ -62,13 +64,23 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager {
     }
 
     @Override
-    public boolean isStartupHealthCheckPassed() {
-        return isStartupHealthCheckPassed;
+    public boolean isReadinessHealthCheckPassed() {
+        for (RuntimeHealthChecker runtimeHealthChecker : runtimeHealthCheckers) {
+            if (!runtimeHealthChecker.readinessHealth()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
-    public void startupHealthCheckPassed() {
-        isStartupHealthCheckPassed = true;
+    public boolean isLivenessHealthCheckPassed() {
+        for (RuntimeHealthChecker runtimeHealthChecker : runtimeHealthCheckers) {
+            if (!runtimeHealthChecker.livenessHealth()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
@@ -108,6 +120,11 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager {
     @Override
     public void registerUninstallCallback(ApplicationUninstallCallback callback) {
         applicationUninstallCallbacks.add(callback);
+    }
+
+    @Override
+    public void registerRuntimeHealthChecker(RuntimeHealthChecker runtimeHealthChecker) {
+        runtimeHealthCheckers.add(runtimeHealthChecker);
     }
 
     protected void clear() {

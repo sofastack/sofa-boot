@@ -40,7 +40,7 @@ public class SofaBootComponentHealthCheckInfo implements HealthIndicator {
     public Health health() {
 
         Map<String, Health> healths = new HashMap<>();
-        boolean checkSuccessful = componentCheckProcessor.httpCheckComponent(healths);
+        boolean checkSuccessful = componentCheckProcessor.livenessCheckComponent(healths);
 
         if (checkSuccessful) {
             return Health.up().withDetail(CHECK_RESULT_PREFIX, healths).build();

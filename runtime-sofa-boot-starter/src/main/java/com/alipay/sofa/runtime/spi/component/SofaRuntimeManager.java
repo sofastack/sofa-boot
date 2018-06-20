@@ -19,6 +19,7 @@ package com.alipay.sofa.runtime.spi.component;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.event.ApplicationUninstallCallback;
 import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
+import com.alipay.sofa.runtime.spi.health.RuntimeHealthChecker;
 
 /**
  * @author xuanbei 18/2/28
@@ -60,16 +61,16 @@ public interface SofaRuntimeManager {
     ClientFactoryInternal getClientFactoryInternal();
 
     /**
-     * is health check passed or not
+     * is readiness health check passed or not
      *
      * @return true or false
      */
-    boolean isStartupHealthCheckPassed();
+    boolean isReadinessHealthCheckPassed();
 
     /**
-     * set health check passed
+     * is liveness health check passed or not
      */
-    void startupHealthCheckPassed();
+    boolean isLivenessHealthCheckPassed();
 
     /**
      * shutdown manager
@@ -84,4 +85,11 @@ public interface SofaRuntimeManager {
      * @param callback
      */
     void registerUninstallCallback(ApplicationUninstallCallback callback);
+
+    /**
+     * register runtime health checker
+     *
+     * @param runtimeHealthChecker
+     */
+    void registerRuntimeHealthChecker(RuntimeHealthChecker runtimeHealthChecker);
 }

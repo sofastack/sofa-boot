@@ -38,8 +38,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 /**
  * @author qilong.zql
@@ -109,8 +107,8 @@ public class DynamicJvmServiceProxyFinder {
      * @param sofaRuntimeManager
      * @return
      */
-    private Biz getBiz(SofaRuntimeManager sofaRuntimeManager) {
-        for (Biz biz : bizManagerService.getBizInOrder()) {
+    public static Biz getBiz(SofaRuntimeManager sofaRuntimeManager) {
+        for (Biz biz : getDynamicJvmServiceProxyFinder().bizManagerService.getBizInOrder()) {
             if (sofaRuntimeManager.getAppClassLoader().equals(biz.getBizClassLoader())) {
                 return biz;
             }
@@ -120,15 +118,14 @@ public class DynamicJvmServiceProxyFinder {
 
     static class DynamicJvmServiceInvoker extends ServiceProxy {
 
-        private Contract                      contract;
-        private Object                        targetService;
-        private String                        bizIdentity;
-        private ThreadLocal<ClassLoader>      clientClassloader = new ThreadLocal<ClassLoader>();
-        private ConcurrentMap<String, Method> methodCache       = new ConcurrentHashMap<String, Method>();
+        private Contract                 contract;
+        private Object                   targetService;
+        private String                   bizIdentity;
+        private ThreadLocal<ClassLoader> clientClassloader = new ThreadLocal<ClassLoader>();
 
-        static protected final String         TOSTRING_METHOD   = "toString";
-        static protected final String         EQUALS_METHOD     = "equals";
-        static protected final String         HASHCODE_METHOD   = "hashCode";
+        static protected final String    TOSTRING_METHOD   = "toString";
+        static protected final String    EQUALS_METHOD     = "equals";
+        static protected final String    HASHCODE_METHOD   = "hashCode";
 
         public DynamicJvmServiceInvoker(ClassLoader clientClassloader,
                                         ClassLoader serviceClassLoader, Object targetService,
@@ -203,18 +200,14 @@ public class DynamicJvmServiceProxyFinder {
         }
 
         private Method getTargetMethod(Method method, Class[] argumentTypes) {
-            Method targetMethod = methodCache.get(method.toGenericString());
-            if (targetMethod == null) {
-                try {
-                    targetMethod = targetService.getClass().getMethod(method.getName(),
-                        argumentTypes);
-                } catch (NoSuchMethodException ex) {
-                    throw new IllegalStateException(targetService + " in " + bizIdentity
-                                                    + " don't have the method " + method);
-                }
-                methodCache.put(method.toGenericString(), targetMethod);
+            try {
+                Method targetMethod = targetService.getClass().getMethod(method.getName(),
+                    argumentTypes);
+                return targetMethod;
+            } catch (NoSuchMethodException ex) {
+                throw new IllegalStateException(targetService + " in " + bizIdentity
+                                                + " don't have the method " + method);
             }
-            return targetMethod;
         }
 
         private static Object hessianTransport(Object source, ClassLoader contextClassLoader) {

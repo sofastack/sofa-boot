@@ -21,6 +21,7 @@ import com.alipay.sofa.runtime.api.annotation.SofaReference;
 import com.alipay.sofa.runtime.api.annotation.SofaService;
 import com.alipay.sofa.runtime.api.annotation.SofaServiceBinding;
 import com.alipay.sofa.runtime.api.binding.BindingType;
+import com.alipay.sofa.runtime.constants.SofaRuntimeFrameworkConstants;
 import com.alipay.sofa.runtime.model.InterfaceMode;
 import com.alipay.sofa.runtime.service.binding.JvmBinding;
 import com.alipay.sofa.runtime.service.component.Reference;
@@ -62,10 +63,14 @@ public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, Pr
     private BindingConverterFactory bindingConverterFactory;
     private ApplicationContext      applicationContext;
 
-    public ServiceAnnotationBeanPostProcessor(SofaRuntimeContext sofaRuntimeContext,
-                                              BindingAdapterFactory bindingAdapterFactory,
+    /**
+     * To construct a ServiceAnnotationBeanPostProcessor via a Spring Bean
+     * sofaRuntimeContext and sofaRuntimeProperties will be obtained from applicationContext
+     * @param bindingAdapterFactory
+     * @param bindingConverterFactory
+     */
+    public ServiceAnnotationBeanPostProcessor(BindingAdapterFactory bindingAdapterFactory,
                                               BindingConverterFactory bindingConverterFactory) {
-        this.sofaRuntimeContext = sofaRuntimeContext;
         this.bindingAdapterFactory = bindingAdapterFactory;
         this.bindingConverterFactory = bindingConverterFactory;
     }
@@ -116,8 +121,8 @@ public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, Pr
         }
 
         ComponentInfo componentInfo = new ServiceComponent(implementation, service,
-            bindingAdapterFactory, sofaRuntimeContext);
-        sofaRuntimeContext.getComponentManager().register(componentInfo);
+            bindingAdapterFactory, getSofaRuntimeContext());
+        getSofaRuntimeContext().getComponentManager().register(componentInfo);
     }
 
     private void processSofaReference(final Object bean) {
@@ -195,8 +200,8 @@ public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, Pr
             BindingConverterContext bindingConverterContext = new BindingConverterContext();
             bindingConverterContext.setInBinding(false);
             bindingConverterContext.setApplicationContext(applicationContext);
-            bindingConverterContext.setAppName(sofaRuntimeContext.getAppName());
-            bindingConverterContext.setAppClassLoader(sofaRuntimeContext.getAppClassLoader());
+            bindingConverterContext.setAppName(getSofaRuntimeContext().getAppName());
+            bindingConverterContext.setAppClassLoader(getSofaRuntimeContext().getAppClassLoader());
             Binding binding = bindingConverter.convert(sofaServiceAnnotation, sofaServiceBinding,
                 bindingConverterContext);
             service.addBinding(binding);
@@ -223,14 +228,23 @@ public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, Pr
             BindingConverterContext bindingConverterContext = new BindingConverterContext();
             bindingConverterContext.setInBinding(true);
             bindingConverterContext.setApplicationContext(applicationContext);
-            bindingConverterContext.setAppName(sofaRuntimeContext.getAppName());
-            bindingConverterContext.setAppClassLoader(sofaRuntimeContext.getAppClassLoader());
+            bindingConverterContext.setAppName(getSofaRuntimeContext().getAppName());
+            bindingConverterContext.setAppClassLoader(getSofaRuntimeContext().getAppClassLoader());
             Binding binding = bindingConverter.convert(sofaReferenceAnnotation,
                 sofaReferenceAnnotation.binding(), bindingConverterContext);
             reference.addBinding(binding);
         }
         return ReferenceRegisterHelper.registerReference(reference, bindingAdapterFactory,
-            sofaRuntimeContext);
+            getSofaRuntimeContext());
+    }
+
+    private SofaRuntimeContext getSofaRuntimeContext() {
+        if (sofaRuntimeContext == null) {
+            sofaRuntimeContext = applicationContext.getBean(
+                SofaRuntimeFrameworkConstants.SOFA_RUNTIME_CONTEXT_BEAN_ID,
+                SofaRuntimeContext.class);
+        }
+        return sofaRuntimeContext;
     }
 
     @Override

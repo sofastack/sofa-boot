@@ -16,28 +16,65 @@
  */
 package com.alipay.sofa.runtime;
 
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
+
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * @author qilong.zql
  * @since 2.5.0
  */
 public class SofaRuntimeProperties {
-    private static boolean skipJvmReferenceHealthCheck = false;
-    private static boolean disableJvmFirst             = false;
 
-    public static boolean isSkipJvmReferenceHealthCheck() {
-        return SofaRuntimeProperties.skipJvmReferenceHealthCheck;
+    private static ConcurrentHashMap<ClassLoader, Boolean> skipJvmReferenceHealthCheckMap = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<ClassLoader, Boolean> disableJvmFirstMap             = new ConcurrentHashMap<>();
+
+    public static boolean isSkipJvmReferenceHealthCheck(SofaRuntimeContext sofaRuntimeContext) {
+        return isSkipJvmReferenceHealthCheck(sofaRuntimeContext.getAppClassLoader());
     }
 
-    public static void setSkipJvmReferenceHealthCheck(boolean skipJvmReferenceHealthCheck) {
-        SofaRuntimeProperties.skipJvmReferenceHealthCheck = skipJvmReferenceHealthCheck;
+    public static boolean isSkipJvmReferenceHealthCheck(ClassLoader classLoader) {
+        if (skipJvmReferenceHealthCheckMap.get(classLoader) != null
+            && skipJvmReferenceHealthCheckMap.get(classLoader)) {
+            return true;
+        }
+        return false;
     }
 
-    public static boolean isDisableJvmFirst() {
-        return SofaRuntimeProperties.disableJvmFirst;
+    public static void setSkipJvmReferenceHealthCheck(SofaRuntimeContext sofaRuntimeContext,
+                                                      boolean skipJvmReferenceHealthCheck) {
+        setSkipJvmReferenceHealthCheck(sofaRuntimeContext.getAppClassLoader(),
+            skipJvmReferenceHealthCheck);
     }
 
-    public static void setDisableJvmFirst(boolean disableJvmFirst) {
-        SofaRuntimeProperties.disableJvmFirst = disableJvmFirst;
+    public static void setSkipJvmReferenceHealthCheck(ClassLoader classLoader,
+                                                      boolean skipJvmReferenceHealthCheck) {
+        skipJvmReferenceHealthCheckMap.putIfAbsent(classLoader, skipJvmReferenceHealthCheck);
+    }
+
+    public static boolean isDisableJvmFirst(SofaRuntimeContext sofaRuntimeContext) {
+        return isDisableJvmFirst(sofaRuntimeContext.getAppClassLoader());
+    }
+
+    public static boolean isDisableJvmFirst(ClassLoader classLoader) {
+        if (disableJvmFirstMap.get(classLoader) != null && disableJvmFirstMap.get(classLoader)) {
+            return true;
+        }
+        return false;
+    }
+
+    public static void setDisableJvmFirst(SofaRuntimeContext sofaRuntimeContext,
+                                          boolean disableJvmFirst) {
+        setDisableJvmFirst(sofaRuntimeContext.getAppClassLoader(), disableJvmFirst);
+    }
+
+    public static void setDisableJvmFirst(ClassLoader classLoader, boolean disableJvmFirst) {
+        disableJvmFirstMap.putIfAbsent(classLoader, disableJvmFirst);
+    }
+
+    public static void unRegisterProperties(ClassLoader classLoader) {
+        skipJvmReferenceHealthCheckMap.remove(classLoader);
+        disableJvmFirstMap.remove(classLoader);
     }
 
 }

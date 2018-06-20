@@ -22,6 +22,7 @@ import com.alipay.sofa.ark.spi.event.BizEvent;
 import com.alipay.sofa.ark.spi.model.Biz;
 import com.alipay.sofa.ark.spi.service.event.EventHandler;
 import com.alipay.sofa.runtime.SofaFramework;
+import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 
 /**
@@ -33,17 +34,32 @@ public class SofaEventHandler implements EventHandler {
     public void handleEvent(ArkEvent event) {
         if (Constants.BIZ_EVENT_TOPIC_UNINSTALL.equals(event.getTopic())) {
             doUninstallBiz((BizEvent) event);
+        } else if (Constants.BIZ_EVENT_TOPIC_HEALTH_CHECK.equals(event.getTopic())) {
+            doHealthCheck((BizEvent) event);
         }
     }
 
     private void doUninstallBiz(BizEvent event) {
-        Biz biz = event.getBiz();
+        SofaRuntimeProperties.unRegisterProperties(event.getBiz().getBizClassLoader());
+        SofaRuntimeManager sofaRuntimeManager = getSofaRuntimeManager(event.getBiz());
+        SofaFramework.unRegisterSofaRuntimeManager(sofaRuntimeManager);
+        sofaRuntimeManager.shutdown();
+    }
+
+    private void doHealthCheck(BizEvent event) {
+        SofaRuntimeManager sofaRuntimeManager = getSofaRuntimeManager(event.getBiz());
+        if (!sofaRuntimeManager.isReadinessHealthCheckPassed()) {
+            throw new RuntimeException("Readiness health check failed.");
+        }
+    }
+
+    private SofaRuntimeManager getSofaRuntimeManager(Biz biz) {
         for (SofaRuntimeManager sofaRuntimeManager : SofaFramework.getRuntimeSet()) {
             if (sofaRuntimeManager.getAppClassLoader().equals(biz.getBizClassLoader())) {
-                SofaFramework.unRegisterSofaRuntimeManager(sofaRuntimeManager);
-                sofaRuntimeManager.shutdown();
+                return sofaRuntimeManager;
             }
         }
+        return null;
     }
 
     @Override

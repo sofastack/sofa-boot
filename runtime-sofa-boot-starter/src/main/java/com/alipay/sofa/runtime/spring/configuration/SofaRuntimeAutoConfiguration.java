@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.runtime.spring.configuration;
 
+import com.alipay.sofa.ark.spi.model.Biz;
 import com.alipay.sofa.healthcheck.core.HealthChecker;
 import com.alipay.sofa.infra.constants.CommonMiddlewareConstants;
 import com.alipay.sofa.runtime.api.client.ReferenceClient;
@@ -39,6 +40,8 @@ import com.alipay.sofa.runtime.spring.ClientFactoryBeanPostProcessor;
 import com.alipay.sofa.runtime.spring.ServiceAnnotationBeanPostProcessor;
 import com.alipay.sofa.runtime.spring.callback.CloseApplicationContextCallBack;
 import com.alipay.sofa.runtime.spring.config.SofaRuntimeConfigurationProperties;
+import com.alipay.sofa.runtime.spring.health.DefaultRuntimeHealthChecker;
+import com.alipay.sofa.runtime.spring.health.MultiApplicationHealthChecker;
 import com.alipay.sofa.runtime.spring.health.SofaComponentHealthChecker;
 import com.alipay.sofa.runtime.spring.health.SofaComponentHealthIndicator;
 import org.springframework.beans.factory.annotation.Value;
@@ -100,10 +103,9 @@ public class SofaRuntimeAutoConfiguration {
     }
 
     @Bean
-    public ServiceAnnotationBeanPostProcessor serviceAnnotationBeanPostProcessor(SofaRuntimeContext sofaRuntimeContext,
-                                                                                 BindingAdapterFactory bindingAdapterFactory,
+    public ServiceAnnotationBeanPostProcessor serviceAnnotationBeanPostProcessor(BindingAdapterFactory bindingAdapterFactory,
                                                                                  BindingConverterFactory bindingConverterFactory) {
-        return new ServiceAnnotationBeanPostProcessor(sofaRuntimeContext, bindingAdapterFactory,
+        return new ServiceAnnotationBeanPostProcessor(bindingAdapterFactory,
             bindingConverterFactory);
     }
 
@@ -131,6 +133,24 @@ public class SofaRuntimeAutoConfiguration {
             result.add(t);
         }
         return result;
+    }
+
+    @Configuration
+    @ConditionalOnClass({ HealthChecker.class })
+    public static class DefaultRuntimeHealthCheckerConfiguration {
+        @Bean
+        public DefaultRuntimeHealthChecker defaultRuntimeHealthChecker(SofaRuntimeContext sofaRuntimeContext) {
+            return new DefaultRuntimeHealthChecker(sofaRuntimeContext);
+        }
+    }
+
+    @Configuration
+    @ConditionalOnClass({ HealthChecker.class, Biz.class })
+    public static class MultiApplicationHealthCheckerConfiguration {
+        @Bean
+        public MultiApplicationHealthChecker multiApplicationHealthChecker() {
+            return new MultiApplicationHealthChecker();
+        }
     }
 
     @Configuration

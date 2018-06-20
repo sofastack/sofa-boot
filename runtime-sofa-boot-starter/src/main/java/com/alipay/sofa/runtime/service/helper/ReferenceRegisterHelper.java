@@ -41,7 +41,8 @@ public class ReferenceRegisterHelper {
         Binding binding = (Binding) reference.getBindings().toArray()[0];
 
         if (!binding.getBindingType().equals(JvmBinding.JVM_BINDING_TYPE)
-            && !SofaRuntimeProperties.isDisableJvmFirst() && reference.isJvmFirst()) {
+            && !SofaRuntimeProperties.isDisableJvmFirst(sofaRuntimeContext)
+            && reference.isJvmFirst()) {
             reference.addBinding(new JvmBinding());
         }
 

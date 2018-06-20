@@ -19,14 +19,16 @@ package com.alipay.sofa.healthcheck.initializer;
 import com.alipay.sofa.common.log.Constants;
 import com.alipay.sofa.healthcheck.configuration.HealthCheckConfiguration;
 import com.alipay.sofa.healthcheck.configuration.HealthCheckConfigurationConstants;
+import com.alipay.sofa.healthcheck.log.SofaBootHealthCheckLoggerFactory;
 import com.alipay.sofa.healthcheck.service.SofaBootComponentHealthCheckInfo;
 import com.alipay.sofa.healthcheck.startup.HealthCheckTrigger;
+import com.alipay.sofa.infra.log.space.SofaBootLogSpaceIsolationInit;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 /**
  * Created by liangen on 17/8/7.
@@ -40,40 +42,19 @@ public class HealthcheckInitializer implements
 
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
-
-        initializeLog();
-
-        initializeConfiguration(applicationContext);
-
-    }
-
-    private void initializeLog() {
-        if (StringUtils.isEmpty(System.getProperty(Constants.LOG_PATH))
-            && StringUtils.hasText(HealthCheckConfiguration.getProperty(Constants.LOG_PATH))) {
-            System.setProperty(Constants.LOG_PATH,
-                HealthCheckConfiguration.getProperty(Constants.LOG_PATH));
-        }
-
+        // init logging.level.com.alipay.sofa.runtime argument
+        Environment environment = applicationContext.getEnvironment();
         String healthCheckLogLevelKey = Constants.LOG_LEVEL_PREFIX
                                         + HealthCheckConfigurationConstants.SOFABOOT_HEALTH_LOG_SPACE;
-        if (StringUtils.isEmpty(System.getProperty(healthCheckLogLevelKey))
-            && StringUtils.hasText(HealthCheckConfiguration.getProperty(healthCheckLogLevelKey))) {
-            System.setProperty(healthCheckLogLevelKey,
-                HealthCheckConfiguration.getProperty(healthCheckLogLevelKey));
-        }
+        SofaBootLogSpaceIsolationInit.initSofaBootLogger(environment, healthCheckLogLevelKey);
 
-        if (StringUtils.isEmpty(System.getProperty(Constants.LOG_ENCODING_PROP_KEY))
-            && StringUtils.hasText(HealthCheckConfiguration
-                .getProperty(Constants.LOG_ENCODING_PROP_KEY))) {
-            System.setProperty(Constants.LOG_ENCODING_PROP_KEY,
-                HealthCheckConfiguration.getProperty(Constants.LOG_ENCODING_PROP_KEY));
-        }
-
-    }
-
-    private void initializeConfiguration(ConfigurableApplicationContext applicationContext) {
+        // init HealthCheckConfiguration
         if (HealthCheckConfiguration.getEnvironment() == null) {
             HealthCheckConfiguration.setEnvironment(applicationContext.getEnvironment());
         }
+
+        SofaBootHealthCheckLoggerFactory.getLogger(HealthcheckInitializer.class).info(
+            "SOFABoot HealthCheck Starting!");
     }
+
 }

@@ -23,6 +23,7 @@ import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.Health.Builder;
 import org.springframework.boot.actuate.health.HealthAggregator;
 import org.springframework.boot.actuate.health.OrderedHealthAggregator;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.util.CollectionUtils;
 
 import java.util.HashMap;
@@ -35,7 +36,7 @@ import java.util.Map;
  * @author liangen
  * @version $Id: StartUpHealthCheckStatusCheckInfo.java, v 0.1 2018年02月02日 下午11:34 liangen Exp $
  */
-
+@ConfigurationProperties(prefix = "com.alipay.sofa.healthcheck.readiness")
 public class SofaBootReadinessCheckEndpoint extends AbstractEndpoint<Health> {
 
     private final HealthAggregator healthAggregator = new OrderedHealthAggregator();

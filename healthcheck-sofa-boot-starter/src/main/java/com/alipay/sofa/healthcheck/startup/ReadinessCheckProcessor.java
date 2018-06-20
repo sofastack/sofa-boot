@@ -48,9 +48,7 @@ public class ReadinessCheckProcessor {
 
         boolean result = false;
         try {
-
             StartUpHealthCheckStatus.openStartStatus();
-
             //run the startup check
             if (startHealthCheckProcess()) {
                 //run the runtime check
@@ -62,13 +60,11 @@ public class ReadinessCheckProcessor {
             } else {
                 logger.error("Readiness check result: fail");
             }
-
             StartUpHealthCheckStatus.closeStartStatus();
         }
     }
 
     private boolean startHealthCheckProcess() {
-
         boolean result = true;
         try {
             //是否跳过所有健康检查
@@ -80,17 +76,14 @@ public class ReadinessCheckProcessor {
             logger.info("Begin first phase of the readiness check");
 
             if (!springContextCheckProcessor.springContextCheck()) {
-
                 result = false;
             }
 
             if (!componentCheckProcessor.startupCheckComponent()) {
-
                 result = false;
             }
 
             if (!healthIndicatorCheckProcessor.checkIndicator()) {
-
                 result = false;
             }
 
@@ -100,9 +93,7 @@ public class ReadinessCheckProcessor {
                 logger.error("first phase of the readiness check result: fail");
             }
             return result;
-
         } catch (Throwable e) {
-
             logger
                 .error("Unknown error occurred while doing first phase of the readiness check", e);
             return false;
@@ -110,7 +101,6 @@ public class ReadinessCheckProcessor {
     }
 
     private boolean skipAllCheck() {
-
         String skipAllCheck = HealthCheckConfiguration
             .getPropertyAllCircumstances(HealthCheckConfigurationConstants.SOFABOOT_SKIP_ALL_HEALTH_CHECK);
 
@@ -132,9 +122,7 @@ public class ReadinessCheckProcessor {
             logger.info("Begin second phase of the readiness check");
 
             if (!afterHealthCheckCallbackProcessor.checkAfterHealthCheckCallback()) {
-
                 checkResult = false;
-
             }
 
             if (checkResult) {
@@ -152,7 +140,6 @@ public class ReadinessCheckProcessor {
     }
 
     private void publishBeforeHealthCheckEvent() {
-
         HealthCheckManager.publishEvent(new SofaBootBeforeReadinessCheckEvent(HealthCheckManager
             .getApplicationContext()));
 
