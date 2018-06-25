@@ -90,7 +90,7 @@
         </dependency>
         <dependency>
             <groupId>com.alipay.sofa</groupId>
-            <artifactId>sofa-ark-springboot-starter</artifactId>
+            <artifactId>sofa-ark-spi</artifactId>
             <scope>provided</scope>
         </dependency>
 

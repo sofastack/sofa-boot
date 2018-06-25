@@ -49,6 +49,7 @@ import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.*;
 
 import java.util.HashSet;
@@ -59,12 +60,8 @@ import java.util.Set;
  * @author xuanbei 18/3/17
  */
 @Configuration
+@EnableConfigurationProperties(SofaRuntimeConfigurationProperties.class)
 public class SofaRuntimeAutoConfiguration {
-    @Bean
-    public SofaRuntimeConfigurationProperties sofaRuntimeConfigurationProperties() {
-        return new SofaRuntimeConfigurationProperties();
-    }
-
     @Bean
     public BindingConverterFactory bindingConverterFactory() {
         BindingConverterFactory bindingConverterFactory = new BindingConverterFactoryImpl();

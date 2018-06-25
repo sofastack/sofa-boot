@@ -34,7 +34,6 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.util.EnvironmentTestUtils;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -74,8 +73,7 @@ public class SofaEventHandlerTest {
         EnvironmentTestUtils.addEnvironment(this.applicationContext,
             "com.alipay.sofa.boot.skipJvmReferenceHealthCheck=true");
         this.applicationContext.register(SofaRuntimeAutoConfiguration.class,
-            HealthcheckInitializer.class,
-            SofaEventHandlerTest.EnableConfigurationPropertiesConfiguration.class);
+            HealthcheckInitializer.class);
         this.applicationContext.refresh();
     }
 
@@ -110,9 +108,4 @@ public class SofaEventHandlerTest {
     public void closeContext() {
         this.applicationContext.close();
     }
-
-    @EnableConfigurationProperties
-    static class EnableConfigurationPropertiesConfiguration {
-    }
-
 }
