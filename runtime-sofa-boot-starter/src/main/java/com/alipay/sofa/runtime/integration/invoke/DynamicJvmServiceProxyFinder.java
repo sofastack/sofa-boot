@@ -158,10 +158,9 @@ public class DynamicJvmServiceProxyFinder {
                     return targetService.hashCode();
                 }
 
-                Object[] oldArguments = targetArguments;
                 Class[] oldArgumentTypes = targetMethod.getParameterTypes();
 
-                final Object[] arguments = (Object[]) hessianTransport(oldArguments, null);
+                final Object[] arguments = (Object[]) hessianTransport(targetArguments, null);
                 final Class[] argumentTypes = (Class[]) hessianTransport(oldArgumentTypes, null);
 
                 Method transformMethod = getTargetMethod(targetMethod, argumentTypes);
@@ -201,9 +200,7 @@ public class DynamicJvmServiceProxyFinder {
 
         private Method getTargetMethod(Method method, Class[] argumentTypes) {
             try {
-                Method targetMethod = targetService.getClass().getMethod(method.getName(),
-                    argumentTypes);
-                return targetMethod;
+                return targetService.getClass().getMethod(method.getName(), argumentTypes);
             } catch (NoSuchMethodException ex) {
                 throw new IllegalStateException(targetService + " in " + bizIdentity
                                                 + " don't have the method " + method);

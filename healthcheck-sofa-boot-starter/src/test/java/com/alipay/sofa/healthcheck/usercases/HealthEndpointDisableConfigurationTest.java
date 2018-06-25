@@ -17,7 +17,6 @@
 package com.alipay.sofa.healthcheck.usercases;
 
 import com.alipay.sofa.healthcheck.base.SofaBootTestApplication;
-import com.alipay.sofa.healthcheck.service.SofaBootReadinessCheckEndpoint;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

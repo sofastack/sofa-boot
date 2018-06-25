@@ -40,6 +40,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @author xuanbei 18/3/9
  */
+@SuppressWarnings("unchecked")
 public class ServiceComponent extends AbstractComponent {
     public static final String        UNREGISTER_DELAY_MILLISECONDS = "UNREGISTER_DELAY_MILLISECONDS";
     public static final ComponentType SERVICE_COMPONENT_TYPE        = new ComponentType("service");

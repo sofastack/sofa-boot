@@ -99,17 +99,17 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager {
     }
 
     /**
-     * shutdown sofa runtime manager
+     * uninstall sofa runtime manager
      *
      * @throws ServiceRuntimeException exception occur
      */
     public void shutdown() throws ServiceRuntimeException {
         try {
+            for (ApplicationUninstallCallback callback : applicationUninstallCallbacks) {
+                callback.uninstall();
+            }
             if (componentManager != null) {
                 componentManager.shutdown();
-            }
-            for (ApplicationUninstallCallback callback : applicationUninstallCallbacks) {
-                callback.shutdown();
             }
             clear();
         } catch (Throwable throwable) {

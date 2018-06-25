@@ -32,7 +32,7 @@ public class CloseApplicationContextCallBack implements ApplicationUninstallCall
     private ApplicationContext cxt;
 
     @Override
-    public void shutdown() throws Throwable {
+    public void uninstall() {
         if (cxt instanceof AbstractApplicationContext) {
             ((AbstractApplicationContext) cxt).close();
         } else {

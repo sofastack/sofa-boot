@@ -56,6 +56,7 @@ public class ReferenceClientImpl implements ReferenceClient {
         this.bindingAdapterFactory = bindingAdapterFactory;
     }
 
+    @SuppressWarnings("unchecked")
     private <T> Reference getReferenceFromReferenceParam(ReferenceParam<T> referenceParam) {
         BindingParam bindingParam = referenceParam.getBindingParam();
         Reference reference = new ReferenceImpl(referenceParam.getUniqueId(),

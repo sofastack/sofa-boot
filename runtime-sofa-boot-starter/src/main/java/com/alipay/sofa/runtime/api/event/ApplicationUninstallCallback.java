@@ -27,5 +27,5 @@ public interface ApplicationUninstallCallback {
      *
      * @throws Exception
      */
-    void shutdown() throws Throwable;
+    void uninstall() throws Throwable;
 }

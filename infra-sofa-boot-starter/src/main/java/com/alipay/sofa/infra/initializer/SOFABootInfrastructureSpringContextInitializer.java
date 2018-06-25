@@ -17,14 +17,12 @@
 package com.alipay.sofa.infra.initializer;
 
 import com.alipay.sofa.common.log.Constants;
-import com.alipay.sofa.common.log.ReportUtil;
 import com.alipay.sofa.infra.log.InfraHealthCheckLoggerFactory;
 import com.alipay.sofa.infra.log.space.SofaBootLogSpaceIsolationInit;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.PriorityOrdered;
 import org.springframework.core.env.Environment;
-import org.springframework.util.StringUtils;
 
 /**
  * SOFABoot Infrastructure 启动初始化器

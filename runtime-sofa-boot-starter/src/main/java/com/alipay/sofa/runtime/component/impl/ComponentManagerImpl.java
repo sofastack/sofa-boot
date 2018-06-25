@@ -32,6 +32,7 @@ import java.util.concurrent.ConcurrentMap;
 /**
  * @author xuanbei 18/3/9
  */
+@SuppressWarnings("unchecked")
 public class ComponentManagerImpl implements ComponentManager {
     /** container for all components */
     protected ConcurrentMap<ComponentName, ComponentInfo>                     registry;
@@ -86,7 +87,7 @@ public class ComponentManagerImpl implements ComponentManager {
             try {
                 unregister(ri);
             } catch (Throwable e) {
-                SofaLogger.error(e, "failed to shutdown component manager");
+                SofaLogger.error(e, "failed to uninstall component manager");
             }
         }
 
@@ -97,7 +98,7 @@ public class ComponentManagerImpl implements ComponentManager {
             resolvedRegistry = null;
             clientFactoryInternal = null;
         } catch (Throwable e) {
-            SofaLogger.error(e, "Failed to shutdown registry manager");
+            SofaLogger.error(e, "Failed to uninstall registry manager");
         }
     }
 

@@ -46,10 +46,10 @@ import com.alipay.sofa.runtime.spring.health.SofaComponentHealthChecker;
 import com.alipay.sofa.runtime.spring.health.SofaComponentHealthIndicator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.HealthIndicator;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.*;
 
 import java.util.HashSet;
 import java.util.ServiceLoader;
@@ -61,7 +61,7 @@ import java.util.Set;
 @Configuration
 public class SofaRuntimeAutoConfiguration {
     @Bean
-    public SofaRuntimeConfigurationProperties sofaRuntimeProperties() {
+    public SofaRuntimeConfigurationProperties sofaRuntimeConfigurationProperties() {
         return new SofaRuntimeConfigurationProperties();
     }
 
@@ -137,7 +137,9 @@ public class SofaRuntimeAutoConfiguration {
 
     @Configuration
     @ConditionalOnClass({ HealthChecker.class })
+    @AutoConfigureAfter(SofaRuntimeAutoConfiguration.class)
     public static class DefaultRuntimeHealthCheckerConfiguration {
+        @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
         @Bean
         public DefaultRuntimeHealthChecker defaultRuntimeHealthChecker(SofaRuntimeContext sofaRuntimeContext) {
             return new DefaultRuntimeHealthChecker(sofaRuntimeContext);
@@ -156,7 +158,9 @@ public class SofaRuntimeAutoConfiguration {
     @Configuration
     @ConditionalOnClass({ HealthIndicator.class })
     @ConditionalOnMissingClass({ "com.alipay.sofa.healthcheck.core.HealthChecker" })
+    @AutoConfigureAfter(SofaRuntimeAutoConfiguration.class)
     public static class SofaRuntimeHealthIndicatorConfiguration {
+        @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
         @Bean
         public SofaComponentHealthIndicator sofaComponentHealthIndicator(SofaRuntimeContext sofaRuntimeContext) {
             return new SofaComponentHealthIndicator(sofaRuntimeContext);
@@ -165,7 +169,9 @@ public class SofaRuntimeAutoConfiguration {
 
     @Configuration
     @ConditionalOnClass({ HealthChecker.class })
+    @AutoConfigureAfter(SofaRuntimeAutoConfiguration.class)
     public static class SofaModuleHealthCheckerConfiguration {
+        @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
         @Bean
         public SofaComponentHealthChecker sofaComponentHealthChecker(SofaRuntimeContext sofaRuntimeContext) {
             return new SofaComponentHealthChecker(sofaRuntimeContext);

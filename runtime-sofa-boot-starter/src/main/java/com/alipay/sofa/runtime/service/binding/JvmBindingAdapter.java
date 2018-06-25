@@ -169,8 +169,6 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
                 if (serviceProxy != null) {
                     try {
                         return serviceProxy.invoke(invocation);
-                    } catch (Throwable throwable) {
-                        throw throwable;
                     } finally {
                         SofaLogger.debug(
                             "<< Finish Cross App JVM service invoke, the service is  - {0}]",

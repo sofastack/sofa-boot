@@ -43,6 +43,7 @@ import java.util.concurrent.CountDownLatch;
  *
  * @author xuanbei 18/3/1
  */
+@SuppressWarnings("unchecked")
 public class ReferenceComponent extends AbstractComponent {
     public static final ComponentType REFERENCE_COMPONENT_TYPE = new ComponentType("reference");
 
@@ -116,10 +117,10 @@ public class ReferenceComponent extends AbstractComponent {
         if (failedBindingHealth.size() == 0) {
             result.setHealthy(true);
         } else {
-            String healthReport = "|";
+            StringBuilder healthReport = new StringBuilder("|");
             for (HealthResult healthResult : failedBindingHealth) {
-                healthReport = healthReport + healthResult.getHealthName() + "#"
-                               + healthResult.getHealthReport();
+                healthReport.append(healthResult.getHealthName()).append("#")
+                    .append(healthResult.getHealthReport());
             }
             result.setHealthReport(healthReport.substring(1, healthReport.length()));
             result.setHealthy(false);

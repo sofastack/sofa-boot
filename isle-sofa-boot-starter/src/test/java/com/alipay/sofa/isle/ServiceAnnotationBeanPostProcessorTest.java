@@ -48,6 +48,7 @@ import static org.mockito.Mockito.when;
 /**
  * @author xuanbei 18/5/15
  */
+@SuppressWarnings("unchecked")
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ ReferenceRegisterHelper.class, ServiceAnnotationBeanPostProcessor.class })
 public class ServiceAnnotationBeanPostProcessorTest {

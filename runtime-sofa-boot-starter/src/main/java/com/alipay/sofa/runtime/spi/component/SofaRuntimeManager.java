@@ -73,7 +73,7 @@ public interface SofaRuntimeManager {
     boolean isLivenessHealthCheckPassed();
 
     /**
-     * shutdown manager
+     * uninstall manager
      *
      * @throws ServiceRuntimeException throws when exception occur
      */

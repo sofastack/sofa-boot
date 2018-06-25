@@ -17,8 +17,6 @@
 package com.alipay.sofa.runtime.spring.initializer;
 
 import com.alipay.sofa.common.log.Constants;
-import com.alipay.sofa.infra.log.space.SofaBootLogSpaceIsolationInit;
-import com.alipay.sofa.runtime.spi.log.SofaLogger;
 import com.alipay.sofa.runtime.spi.log.SofaRuntimeLoggerFactory;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;

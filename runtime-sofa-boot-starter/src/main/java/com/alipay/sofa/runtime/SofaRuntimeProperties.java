@@ -34,17 +34,8 @@ public class SofaRuntimeProperties {
     }
 
     public static boolean isSkipJvmReferenceHealthCheck(ClassLoader classLoader) {
-        if (skipJvmReferenceHealthCheckMap.get(classLoader) != null
-            && skipJvmReferenceHealthCheckMap.get(classLoader)) {
-            return true;
-        }
-        return false;
-    }
-
-    public static void setSkipJvmReferenceHealthCheck(SofaRuntimeContext sofaRuntimeContext,
-                                                      boolean skipJvmReferenceHealthCheck) {
-        setSkipJvmReferenceHealthCheck(sofaRuntimeContext.getAppClassLoader(),
-            skipJvmReferenceHealthCheck);
+        return skipJvmReferenceHealthCheckMap.get(classLoader) != null
+               && skipJvmReferenceHealthCheckMap.get(classLoader);
     }
 
     public static void setSkipJvmReferenceHealthCheck(ClassLoader classLoader,
@@ -57,15 +48,7 @@ public class SofaRuntimeProperties {
     }
 
     public static boolean isDisableJvmFirst(ClassLoader classLoader) {
-        if (disableJvmFirstMap.get(classLoader) != null && disableJvmFirstMap.get(classLoader)) {
-            return true;
-        }
-        return false;
-    }
-
-    public static void setDisableJvmFirst(SofaRuntimeContext sofaRuntimeContext,
-                                          boolean disableJvmFirst) {
-        setDisableJvmFirst(sofaRuntimeContext.getAppClassLoader(), disableJvmFirst);
+        return disableJvmFirstMap.get(classLoader) != null && disableJvmFirstMap.get(classLoader);
     }
 
     public static void setDisableJvmFirst(ClassLoader classLoader, boolean disableJvmFirst) {

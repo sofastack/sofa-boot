@@ -17,21 +17,11 @@
 package com.alipay.sofa.healthcheck.core;
 
 import com.alipay.sofa.healthcheck.bean.ErrorBean;
-import com.alipay.sofa.healthcheck.bean.ReferenceA;
-import com.alipay.sofa.healthcheck.bean.ReferenceB;
-import com.alipay.sofa.healthcheck.startup.StartUpHealthCheckStatus;
 import com.alipay.sofa.healthcheck.util.BaseHealthCheckTest;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
