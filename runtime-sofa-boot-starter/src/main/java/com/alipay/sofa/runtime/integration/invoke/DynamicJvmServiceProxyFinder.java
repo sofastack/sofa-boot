@@ -121,7 +121,7 @@ public class DynamicJvmServiceProxyFinder {
         private Contract                 contract;
         private Object                   targetService;
         private String                   bizIdentity;
-        private ThreadLocal<ClassLoader> clientClassloader = new ThreadLocal<ClassLoader>();
+        private ThreadLocal<ClassLoader> clientClassloader = new ThreadLocal<>();
 
         static protected final String    TOSTRING_METHOD   = "toString";
         static protected final String    EQUALS_METHOD     = "equals";
@@ -174,16 +174,12 @@ public class DynamicJvmServiceProxyFinder {
 
         @Override
         protected void doCatch(MethodInvocation invocation, Throwable e, long startTime) {
-            if (SofaLogger.isDebugEnabled()) {
-                SofaLogger.debug(getCommonInvocationLog("Exception", invocation, startTime));
-            }
+            SofaLogger.debug(getCommonInvocationLog("Exception", invocation, startTime));
         }
 
         @Override
         protected void doFinally(MethodInvocation invocation, long startTime) {
-            if (SofaLogger.isDebugEnabled()) {
-                SofaLogger.debug(getCommonInvocationLog("Finally", invocation, startTime));
-            }
+            SofaLogger.debug(getCommonInvocationLog("Finally", invocation, startTime));
         }
 
         private Class getInterfaceType() {
@@ -208,13 +204,14 @@ public class DynamicJvmServiceProxyFinder {
         }
 
         private static Object hessianTransport(Object source, ClassLoader contextClassLoader) {
-            Object target = null;
+            Object target;
             ClassLoader currentContextClassloader = Thread.currentThread().getContextClassLoader();
             try {
                 if (contextClassLoader != null) {
                     Thread.currentThread().setContextClassLoader(contextClassLoader);
                 }
                 SerializerFactory serializerFactory = new SerializerFactory();
+                serializerFactory.setAllowNonSerializable(true);
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 Hessian2Output h2o = new Hessian2Output(bos);
                 h2o.setSerializerFactory(serializerFactory);
