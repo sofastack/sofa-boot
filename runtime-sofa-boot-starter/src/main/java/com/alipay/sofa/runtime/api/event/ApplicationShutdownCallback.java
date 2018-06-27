@@ -21,11 +21,11 @@ package com.alipay.sofa.runtime.api.event;
  * @author xuanbei
  * @since 2.5.0
  */
-public interface ApplicationUninstallCallback {
+public interface ApplicationShutdownCallback {
     /**
-     * Invoked when the application uninstall
+     * Invoked when the application shutdown
      *
      * @throws Exception
      */
-    void uninstall() throws Throwable;
+    void shutdown() throws Throwable;
 }

@@ -87,7 +87,7 @@ public class ComponentManagerImpl implements ComponentManager {
             try {
                 unregister(ri);
             } catch (Throwable e) {
-                SofaLogger.error(e, "failed to uninstall component manager");
+                SofaLogger.error(e, "failed to shutdown component manager");
             }
         }
 
@@ -98,7 +98,7 @@ public class ComponentManagerImpl implements ComponentManager {
             resolvedRegistry = null;
             clientFactoryInternal = null;
         } catch (Throwable e) {
-            SofaLogger.error(e, "Failed to uninstall registry manager");
+            SofaLogger.error(e, "Failed to shutdown registry manager");
         }
     }
 

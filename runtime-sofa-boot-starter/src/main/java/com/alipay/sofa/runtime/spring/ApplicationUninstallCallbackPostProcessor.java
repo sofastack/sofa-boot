@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.runtime.spring;
 
-import com.alipay.sofa.runtime.api.event.ApplicationUninstallCallback;
+import com.alipay.sofa.runtime.api.event.ApplicationShutdownCallback;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
@@ -43,8 +43,8 @@ public class ApplicationUninstallCallbackPostProcessor implements BeanPostProces
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName)
                                                                               throws BeansException {
-        if (bean instanceof ApplicationUninstallCallback) {
-            sofaRuntimeManager.registerUninstallCallback((ApplicationUninstallCallback) bean);
+        if (bean instanceof ApplicationShutdownCallback) {
+            sofaRuntimeManager.registerShutdownCallback((ApplicationShutdownCallback) bean);
         }
         return bean;
     }

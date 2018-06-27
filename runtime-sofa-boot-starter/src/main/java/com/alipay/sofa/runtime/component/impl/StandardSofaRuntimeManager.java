@@ -17,7 +17,7 @@
 package com.alipay.sofa.runtime.component.impl;
 
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
-import com.alipay.sofa.runtime.api.event.ApplicationUninstallCallback;
+import com.alipay.sofa.runtime.api.event.ApplicationShutdownCallback;
 import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
 import com.alipay.sofa.runtime.spi.component.ComponentManager;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
@@ -34,14 +34,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class StandardSofaRuntimeManager implements SofaRuntimeManager {
 
-    private ComponentManager                   componentManager;
-    private ClientFactoryInternal              clientFactoryInternal;
-    private SofaRuntimeContext                 sofaRuntimeContext;
-    private String                             appName;
-    private ClassLoader                        appClassLoader;
-    private boolean                            isStartupHealthCheckPassed    = false;
-    private List<ApplicationUninstallCallback> applicationUninstallCallbacks = new CopyOnWriteArrayList<ApplicationUninstallCallback>();
-    private List<RuntimeHealthChecker>         runtimeHealthCheckers         = new CopyOnWriteArrayList<>();
+    private ComponentManager                  componentManager;
+    private ClientFactoryInternal             clientFactoryInternal;
+    private SofaRuntimeContext                sofaRuntimeContext;
+    private String                            appName;
+    private ClassLoader                       appClassLoader;
+    private List<ApplicationShutdownCallback> applicationUninstallCallbacks = new CopyOnWriteArrayList<ApplicationShutdownCallback>();
+    private List<RuntimeHealthChecker>        runtimeHealthCheckers         = new CopyOnWriteArrayList<>();
 
     public StandardSofaRuntimeManager(String appName, ClassLoader appClassLoader,
                                       ClientFactoryInternal clientFactoryInternal) {
@@ -99,14 +98,14 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager {
     }
 
     /**
-     * uninstall sofa runtime manager
+     * shutdown sofa runtime manager
      *
      * @throws ServiceRuntimeException exception occur
      */
     public void shutdown() throws ServiceRuntimeException {
         try {
-            for (ApplicationUninstallCallback callback : applicationUninstallCallbacks) {
-                callback.uninstall();
+            for (ApplicationShutdownCallback callback : applicationUninstallCallbacks) {
+                callback.shutdown();
             }
             if (componentManager != null) {
                 componentManager.shutdown();
@@ -118,7 +117,7 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager {
     }
 
     @Override
-    public void registerUninstallCallback(ApplicationUninstallCallback callback) {
+    public void registerShutdownCallback(ApplicationShutdownCallback callback) {
         applicationUninstallCallbacks.add(callback);
     }
 

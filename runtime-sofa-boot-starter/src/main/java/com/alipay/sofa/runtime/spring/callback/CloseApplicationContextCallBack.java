@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.runtime.spring.callback;
 
-import com.alipay.sofa.runtime.api.event.ApplicationUninstallCallback;
+import com.alipay.sofa.runtime.api.event.ApplicationShutdownCallback;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -26,13 +26,13 @@ import org.springframework.context.support.AbstractApplicationContext;
  * @author qilong.zql
  * @since 2.5.0
  */
-public class CloseApplicationContextCallBack implements ApplicationUninstallCallback,
+public class CloseApplicationContextCallBack implements ApplicationShutdownCallback,
                                             ApplicationContextAware {
 
     private ApplicationContext cxt;
 
     @Override
-    public void uninstall() {
+    public void shutdown() {
         if (cxt instanceof AbstractApplicationContext) {
             ((AbstractApplicationContext) cxt).close();
         } else {
