@@ -50,6 +50,10 @@ public class ReferenceDefinitionParser extends AbstractContractDefinitionParser 
         if (StringUtils.hasText(loadBalance)) {
             builder.addPropertyValue(PROPERTY_LOAD_BALANCE, loadBalance);
         }
+
+        String interfaceType = element.getAttribute(INTERFACE_ELEMENT);
+        builder.getBeanDefinition().getConstructorArgumentValues()
+            .addIndexedArgumentValue(0, interfaceType);
     }
 
     @Override

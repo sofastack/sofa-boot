@@ -8,6 +8,7 @@
             http://sofastack.io/schema/sofaboot   http://sofastack.io/schema/sofaboot.xsd"
        default-autowire="byName">
 
+    <bean id="processor" class="com.alipay.sofa.runtime.beans.FactoryBeanPostProcessor"/>
     <bean id="xmlSampleService" class="com.alipay.sofa.runtime.beans.impl.XmlSampleService"/>
     <bean id="xmlSampleServiceWithUniqueId" class="com.alipay.sofa.runtime.beans.impl.XmlSampleServiceWithUniqueId"/>
 
