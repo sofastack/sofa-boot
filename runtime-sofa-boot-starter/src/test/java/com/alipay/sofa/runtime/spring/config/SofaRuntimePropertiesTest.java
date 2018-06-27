@@ -40,8 +40,6 @@ public class SofaRuntimePropertiesTest {
             "com.alipay.sofa.boot.disableJvmFirst=true");
         this.applicationContext.register(SofaRuntimeAutoConfiguration.class);
         this.applicationContext.refresh();
-        SofaRuntimeConfigurationProperties properties = applicationContext
-            .getBean(SofaRuntimeConfigurationProperties.class);
         assertTrue(SofaRuntimeProperties.isDisableJvmFirst(applicationContext.getClassLoader()));
     }
 

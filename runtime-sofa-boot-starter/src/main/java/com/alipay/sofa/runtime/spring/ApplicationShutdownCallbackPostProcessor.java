@@ -26,11 +26,11 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
  * @author qilong.zql
  * @since 2.5.0
  */
-public class ApplicationUninstallCallbackPostProcessor implements BeanPostProcessor {
+public class ApplicationShutdownCallbackPostProcessor implements BeanPostProcessor {
 
     private SofaRuntimeManager sofaRuntimeManager;
 
-    public ApplicationUninstallCallbackPostProcessor(SofaRuntimeManager sofaRuntimeManager) {
+    public ApplicationShutdownCallbackPostProcessor(SofaRuntimeManager sofaRuntimeManager) {
         this.sofaRuntimeManager = sofaRuntimeManager;
     }
 

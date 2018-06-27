@@ -39,8 +39,8 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager {
     private SofaRuntimeContext                sofaRuntimeContext;
     private String                            appName;
     private ClassLoader                       appClassLoader;
-    private List<ApplicationShutdownCallback> applicationUninstallCallbacks = new CopyOnWriteArrayList<ApplicationShutdownCallback>();
-    private List<RuntimeHealthChecker>        runtimeHealthCheckers         = new CopyOnWriteArrayList<>();
+    private List<ApplicationShutdownCallback> applicationShutdownCallbacks = new CopyOnWriteArrayList<ApplicationShutdownCallback>();
+    private List<RuntimeHealthChecker>        runtimeHealthCheckers        = new CopyOnWriteArrayList<>();
 
     public StandardSofaRuntimeManager(String appName, ClassLoader appClassLoader,
                                       ClientFactoryInternal clientFactoryInternal) {
@@ -94,7 +94,7 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager {
      */
     public void shutdown() throws ServiceRuntimeException {
         try {
-            for (ApplicationShutdownCallback callback : applicationUninstallCallbacks) {
+            for (ApplicationShutdownCallback callback : applicationShutdownCallbacks) {
                 callback.shutdown();
             }
             if (componentManager != null) {
@@ -108,7 +108,7 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager {
 
     @Override
     public void registerShutdownCallback(ApplicationShutdownCallback callback) {
-        applicationUninstallCallbacks.add(callback);
+        applicationShutdownCallbacks.add(callback);
     }
 
     @Override
@@ -121,6 +121,6 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager {
         sofaRuntimeContext = null;
         clientFactoryInternal = null;
         appClassLoader = null;
-        applicationUninstallCallbacks = null;
+        applicationShutdownCallbacks = null;
     }
 }

@@ -35,7 +35,7 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
-import com.alipay.sofa.runtime.spring.ApplicationUninstallCallbackPostProcessor;
+import com.alipay.sofa.runtime.spring.ApplicationShutdownCallbackPostProcessor;
 import com.alipay.sofa.runtime.spring.ClientFactoryBeanPostProcessor;
 import com.alipay.sofa.runtime.spring.ServiceAnnotationBeanPostProcessor;
 import com.alipay.sofa.runtime.spring.callback.CloseApplicationContextCallBack;
@@ -112,8 +112,8 @@ public class SofaRuntimeAutoConfiguration {
     }
 
     @Bean
-    public ApplicationUninstallCallbackPostProcessor applicationUninstallCallbackPostProcessor(SofaRuntimeContext sofaRuntimeContext) {
-        return new ApplicationUninstallCallbackPostProcessor(
+    public ApplicationShutdownCallbackPostProcessor applicationShutdownCallbackPostProcessor(SofaRuntimeContext sofaRuntimeContext) {
+        return new ApplicationShutdownCallbackPostProcessor(
             sofaRuntimeContext.getSofaRuntimeManager());
     }
 
