@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.runtime.spring.health;
 
-import com.alipay.sofa.healthcheck.startup.StartUpHealthCheckStatus;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.health.RuntimeHealthChecker;
 import org.springframework.beans.BeansException;
@@ -42,21 +41,7 @@ public class DefaultRuntimeHealthChecker implements RuntimeHealthChecker, Applic
     }
 
     @Override
-    public boolean readinessHealth() {
-        // Spring
-        boolean springContextStatus = StartUpHealthCheckStatus.getSpringContextStatus();
-
-        //component
-        boolean componentStatus = StartUpHealthCheckStatus.getComponentStatus();
-
-        //HealthIndicator
-        boolean healthIndicatorStatus = StartUpHealthCheckStatus.getHealthIndicatorStatus();
-
-        return springContextStatus && componentStatus && healthIndicatorStatus;
-    }
-
-    @Override
-    public boolean livenessHealth() {
+    public boolean isHealth() {
         if (indicatorMap == null) {
             indicatorMap = cxt.getBeansOfType(HealthIndicator.class);
         }

@@ -61,16 +61,9 @@ public interface SofaRuntimeManager {
     ClientFactoryInternal getClientFactoryInternal();
 
     /**
-     * is readiness health check passed or not
-     *
-     * @return true or false
+     * is health check passed or not
      */
-    boolean isReadinessHealthCheckPassed();
-
-    /**
-     * is liveness health check passed or not
-     */
-    boolean isLivenessHealthCheckPassed();
+    boolean isHealthCheckPassed();
 
     /**
      * shutdown manager

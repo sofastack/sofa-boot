@@ -33,7 +33,7 @@ public class MultiApplicationHealthChecker implements HealthIndicator {
         boolean allPassed = true;
         Health.Builder builder = new Health.Builder();
         for (SofaRuntimeManager sofaRuntimeManager : SofaFramework.getRuntimeSet()) {
-            if (!sofaRuntimeManager.isLivenessHealthCheckPassed()) {
+            if (!sofaRuntimeManager.isHealthCheckPassed()) {
                 allPassed = false;
                 builder.withDetail(
                     String.format("Biz: %s health check",

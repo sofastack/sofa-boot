@@ -48,8 +48,8 @@ public class SofaEventHandler implements EventHandler {
 
     private void doHealthCheck(BizEvent event) {
         SofaRuntimeManager sofaRuntimeManager = getSofaRuntimeManager(event.getBiz());
-        if (!sofaRuntimeManager.isReadinessHealthCheckPassed()) {
-            throw new RuntimeException("Readiness health check failed.");
+        if (!sofaRuntimeManager.isHealthCheckPassed()) {
+            throw new RuntimeException("Health check failed.");
         }
     }
 
@@ -59,7 +59,7 @@ public class SofaEventHandler implements EventHandler {
                 return sofaRuntimeManager;
             }
         }
-        return null;
+        throw new RuntimeException("No SofaRuntimeManager Found!");
     }
 
     @Override

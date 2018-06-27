@@ -23,7 +23,5 @@ package com.alipay.sofa.runtime.spi.health;
  * @since 2.5.0
  */
 public interface RuntimeHealthChecker {
-    boolean readinessHealth();
-
-    boolean livenessHealth();
+    boolean isHealth();
 }

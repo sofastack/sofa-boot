@@ -63,19 +63,9 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager {
     }
 
     @Override
-    public boolean isReadinessHealthCheckPassed() {
+    public boolean isHealthCheckPassed() {
         for (RuntimeHealthChecker runtimeHealthChecker : runtimeHealthCheckers) {
-            if (!runtimeHealthChecker.readinessHealth()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    @Override
-    public boolean isLivenessHealthCheckPassed() {
-        for (RuntimeHealthChecker runtimeHealthChecker : runtimeHealthCheckers) {
-            if (!runtimeHealthChecker.livenessHealth()) {
+            if (!runtimeHealthChecker.isHealth()) {
                 return false;
             }
         }
