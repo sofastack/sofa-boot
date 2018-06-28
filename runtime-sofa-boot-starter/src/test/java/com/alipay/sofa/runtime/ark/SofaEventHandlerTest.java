@@ -148,7 +148,7 @@ public class SofaEventHandlerTest {
         ServiceProxy serviceProxy = DynamicJvmServiceProxyFinder.getDynamicJvmServiceProxyFinder()
             .findServiceProxy(applicationContext.getClassLoader(), contract);
         try {
-            Assert.assertTrue("XmlSampleService".equals(serviceProxy.invoke(invocation)));
+            Assert.assertTrue("AnnotationSampleService".equals(serviceProxy.invoke(invocation)));
         } catch (Throwable throwable) {
             throw new RuntimeException("testDynamicProxyFinder case failed.", throwable);
         }
