@@ -19,23 +19,30 @@ package com.alipay.sofa.runtime.ark;
 import com.alipay.sofa.ark.spi.constant.Constants;
 import com.alipay.sofa.ark.spi.event.BizEvent;
 import com.alipay.sofa.ark.spi.model.Biz;
+import com.alipay.sofa.ark.spi.model.BizState;
 import com.alipay.sofa.healthcheck.initializer.HealthcheckInitializer;
 import com.alipay.sofa.runtime.SofaFramework;
 import com.alipay.sofa.runtime.SofaRuntimeProperties;
+import com.alipay.sofa.runtime.api.annotation.SofaService;
+import com.alipay.sofa.runtime.beans.impl.XmlSampleService;
+import com.alipay.sofa.runtime.beans.service.SampleService;
 import com.alipay.sofa.runtime.integration.invoke.DynamicJvmServiceProxyFinder;
 import com.alipay.sofa.runtime.integration.service.SofaEventHandler;
+import com.alipay.sofa.runtime.spi.binding.Contract;
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
+import com.alipay.sofa.runtime.spi.service.ServiceProxy;
 import com.alipay.sofa.runtime.spring.configuration.SofaRuntimeAutoConfiguration;
-import mockit.Mock;
-import mockit.MockUp;
-import mockit.Mocked;
-import mockit.NonStrictExpectations;
+import mockit.*;
+import org.aopalliance.intercept.MethodInvocation;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.boot.test.util.EnvironmentTestUtils;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.*;
+
+import java.util.Collections;
 
 /**
  * @author qilong.zql
@@ -58,6 +65,8 @@ public class SofaEventHandlerTest {
                 biz.getIdentity();
                 result = "MockName:MockVersion";
 
+                biz.getBizState();
+                result = BizState.ACTIVATED;
             }
         };
 
@@ -73,7 +82,7 @@ public class SofaEventHandlerTest {
         EnvironmentTestUtils.addEnvironment(this.applicationContext,
             "com.alipay.sofa.boot.skipJvmReferenceHealthCheck=true");
         this.applicationContext.register(SofaRuntimeAutoConfiguration.class,
-            HealthcheckInitializer.class);
+            HealthcheckInitializer.class, XmlConfiguration.class);
         this.applicationContext.refresh();
     }
 
@@ -104,8 +113,54 @@ public class SofaEventHandlerTest {
         sofaEventHandler.handleEvent(new BizEvent(biz, Constants.BIZ_EVENT_TOPIC_HEALTH_CHECK));
     }
 
+    @Test
+    public void testDynamicProxyFinder(@Mocked final SofaFramework sofaFramework,
+                                       @Mocked final SofaRuntimeManager sofaRuntimeManager,
+                                       @Mocked final Contract contract,
+                                       @Mocked final MethodInvocation invocation) throws Exception {
+        new Expectations() {
+            {
+                sofaFramework.getRuntimeSet();
+                result = Collections.singleton(sofaRuntimeManager);
+                sofaRuntimeManager.getAppClassLoader();
+                result = applicationContext.getClassLoader().getParent();
+                sofaRuntimeManager.getAppClassLoader();
+                result = applicationContext.getClassLoader();
+            }
+        };
+
+        new NonStrictExpectations() {
+            {
+                sofaRuntimeManager.getComponentManager();
+                result = ((SofaRuntimeContext) applicationContext.getBean("sofaRuntimeContext"))
+                    .getComponentManager();
+                contract.getInterfaceType();
+                result = SampleService.class;
+                contract.getUniqueId();
+                result = "";
+
+                invocation.getArguments();
+                result = new Object[] {};
+                invocation.getMethod();
+                result = SampleService.class.getMethod("service");
+            };
+        };
+        ServiceProxy serviceProxy = DynamicJvmServiceProxyFinder.getDynamicJvmServiceProxyFinder()
+            .findServiceProxy(applicationContext.getClassLoader(), contract);
+        try {
+            Assert.assertTrue("XmlSampleService".equals(serviceProxy.invoke(invocation)));
+        } catch (Throwable throwable) {
+            throw new RuntimeException("testDynamicProxyFinder case failed.", throwable);
+        }
+    }
+
     @After
     public void closeContext() {
         this.applicationContext.close();
+    }
+
+    @Configuration
+    @ComponentScan("com.alipay.sofa.runtime.beans.impl")
+    public static class XmlConfiguration {
     }
 }

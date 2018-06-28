@@ -16,12 +16,16 @@
  */
 package com.alipay.sofa.runtime.beans.impl;
 
+import com.alipay.sofa.runtime.api.annotation.SofaService;
 import com.alipay.sofa.runtime.beans.service.SampleService;
+import org.springframework.stereotype.Component;
 
 /**
  * @author qilong.zql
  * @since 2.3.1
  */
+@SofaService
+@Component
 public class XmlSampleService implements SampleService {
     @Override
     public String service() {
