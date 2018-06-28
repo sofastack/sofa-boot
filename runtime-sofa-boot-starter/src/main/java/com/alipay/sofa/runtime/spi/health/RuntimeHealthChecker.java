@@ -14,16 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime.constants;
+package com.alipay.sofa.runtime.spi.health;
 
 /**
- * Framework Constants
+ * Check whether runtime is healthy.
  *
- * @author xuanbei 18/5/12
+ * @author qilong.zql
+ * @since 2.5.0
  */
-public interface SofaRuntimeFrameworkConstants {
-    String SOFA_RUNTIME_CONTEXT_BEAN_ID      = "sofaRuntimeContext";
-    String BINDING_CONVERTER_FACTORY_BEAN_ID = "bindingConverterFactory";
-    String BINDING_ADAPTER_FACTORY_BEAN_ID   = "bindingAdapterFactory";
-    String BINDING_PREFIX                    = "binding.";
+public interface RuntimeHealthChecker {
+    boolean isHealth();
 }

@@ -16,10 +16,10 @@
  */
 package com.alipay.sofa.runtime.spring.config;
 
+import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import com.alipay.sofa.runtime.spring.configuration.SofaRuntimeAutoConfiguration;
 import org.junit.After;
 import org.junit.Test;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.util.EnvironmentTestUtils;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -38,16 +38,9 @@ public class SofaRuntimePropertiesTest {
     public void testProperties() {
         EnvironmentTestUtils.addEnvironment(this.applicationContext,
             "com.alipay.sofa.boot.disableJvmFirst=true");
-        this.applicationContext.register(SofaRuntimeAutoConfiguration.class,
-            EnableConfigurationPropertiesConfiguration.class);
+        this.applicationContext.register(SofaRuntimeAutoConfiguration.class);
         this.applicationContext.refresh();
-        SofaRuntimeProperties properties = applicationContext.getBean(SofaRuntimeProperties.class);
-        assertTrue(properties.isDisableJvmFirst());
+        assertTrue(SofaRuntimeProperties.isDisableJvmFirst(applicationContext.getClassLoader()));
     }
 
-    // It is recommended to use @EnableConfigurationProperties(SofaRuntimeProperties.class) in the SofaRuntimeAutoConfiguration,
-    // but the bean name change will break the current tests
-    @EnableConfigurationProperties
-    static class EnableConfigurationPropertiesConfiguration {
-    }
 }

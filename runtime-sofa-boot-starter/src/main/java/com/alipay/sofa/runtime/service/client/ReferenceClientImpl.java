@@ -35,7 +35,6 @@ import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
 import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
-import com.alipay.sofa.runtime.spring.config.SofaRuntimeProperties;
 
 import java.util.Collection;
 
@@ -48,18 +47,16 @@ public class ReferenceClientImpl implements ReferenceClient {
     private SofaRuntimeContext      sofaRuntimeContext;
     private BindingConverterFactory bindingConverterFactory;
     private BindingAdapterFactory   bindingAdapterFactory;
-    private SofaRuntimeProperties   sofaRuntimeProperties;
 
     public ReferenceClientImpl(SofaRuntimeContext sofaRuntimeContext,
                                BindingConverterFactory bindingConverterFactory,
-                               BindingAdapterFactory bindingAdapterFactory,
-                               SofaRuntimeProperties sofaRuntimeProperties) {
+                               BindingAdapterFactory bindingAdapterFactory) {
         this.sofaRuntimeContext = sofaRuntimeContext;
         this.bindingConverterFactory = bindingConverterFactory;
         this.bindingAdapterFactory = bindingAdapterFactory;
-        this.sofaRuntimeProperties = sofaRuntimeProperties;
     }
 
+    @SuppressWarnings("unchecked")
     private <T> Reference getReferenceFromReferenceParam(ReferenceParam<T> referenceParam) {
         BindingParam bindingParam = referenceParam.getBindingParam();
         Reference reference = new ReferenceImpl(referenceParam.getUniqueId(),
@@ -92,7 +89,7 @@ public class ReferenceClientImpl implements ReferenceClient {
 
         return (T) ReferenceRegisterHelper.registerReference(
             getReferenceFromReferenceParam(referenceParam), bindingAdapterFactory,
-            sofaRuntimeProperties, sofaRuntimeContext);
+            sofaRuntimeContext);
     }
 
     @Override

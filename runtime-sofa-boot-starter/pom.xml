@@ -34,31 +34,64 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.alipay.sofa</groupId>
-            <artifactId>infra-sofa-boot-starter</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>hessian</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alipay.sofa.common</groupId>
+            <artifactId>sofa-common-tools</artifactId>
+        </dependency>
+
+        <!-- optional -->
+        <dependency>
+            <groupId>aopalliance</groupId>
+            <artifactId>aopalliance</artifactId>
+            <optional>true</optional>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- provided -->
         <dependency>
             <groupId>com.alipay.sofa</groupId>
             <artifactId>healthcheck-sofa-boot-starter</artifactId>
-            <optional>true</optional>
+            <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-autoconfigure</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>sofa-ark-spi</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <!-- test -->
@@ -108,28 +141,34 @@
                         <configuration>
                             <priority>1500</priority>
                             <pluginName>${ark.plugin.name}</pluginName>
+                            <activator>com.alipay.sofa.runtime.integration.activator.SofaRuntimeActivator</activator>
                             <imported>
                             </imported>
                             <exported>
                                 <packages>
                                     <package>com.alipay.sofa.runtime.api.*</package>
-                                    <package>com.alipay.sofa.runtime.model</package>
+                                    <package>com.alipay.sofa.runtime.client.*</package>
+                                    <package>com.alipay.sofa.runtime.component.*</package>
+                                    <package>com.alipay.sofa.runtime.constants.*</package>
+                                    <package>com.alipay.sofa.runtime.integration.*</package>
+                                    <package>com.alipay.sofa.runtime.model.*</package>
+                                    <package>com.alipay.sofa.runtime.service.component</package>
+                                    <package>com.alipay.sofa.runtime.service.helper</package>
                                     <package>com.alipay.sofa.runtime.spi.client</package>
                                     <package>com.alipay.sofa.runtime.spi.component</package>
                                     <package>com.alipay.sofa.runtime.spi.health</package>
                                     <package>com.alipay.sofa.runtime.spi.log</package>
+                                    <package>com.alipay.sofa.runtime.spi.binding</package>
+                                    <package>com.alipay.sofa.runtime.spi.service</package>
                                     <package>com.alipay.sofa.runtime.spi.util</package>
-                                    <package>com.alipay.sofa.runtime.client.impl</package>
-                                    <package>com.alipay.sofa.runtime.component.impl</package>
+                                    <package>org.aopalliance.aop</package>
+                                    <package>org.aopalliance.intercept</package>
                                 </packages>
 
                                 <classes>
-                                    <class>com.alipay.sofa.runtime.service.component.AbstractContract</class>
-                                    <class>com.alipay.sofa.runtime.service.component.Reference</class>
-                                    <class>com.alipay.sofa.runtime.service.component.Service</class>
-                                    <class>com.alipay.sofa.runtime.spi.binding.AbstractBinding</class>
-                                    <class>com.alipay.sofa.runtime.spi.binding.Binding</class>
-                                    <class>com.alipay.sofa.runtime.spi.binding.Contract</class>
+                                    <class>com.alipay.sofa.runtime.service.binding.JvmBinding</class>
+                                    <class>com.alipay.sofa.runtime.SofaFramework</class>
+                                    <class>com.alipay.sofa.runtime.SofaRuntimeProperties</class>
                                 </classes>
                             </exported>
 
@@ -138,6 +177,22 @@
                                 <excludeGroupId>org.springframework.boot</excludeGroupId>
                                 <excludeGroupId>org.apache.tomcat.embed</excludeGroupId>
                             </excludeGroupIds>
+
+                            <excludeArtifactIds>
+                                <excludeArtifactId>hibernate-validator</excludeArtifactId>
+                                <excludeArtifactId>classmate</excludeArtifactId>
+                                <excludeArtifactId>jboss-logging</excludeArtifactId>
+                                <excludeArtifactId>jackson-annotations</excludeArtifactId>
+                                <excludeArtifactId>jackson-core</excludeArtifactId>
+                                <excludeArtifactId>jackson-databind</excludeArtifactId>
+                                <excludeArtifactId>jcl-over-slf4j</excludeArtifactId>
+                                <excludeArtifactId>jul-to-slf4j</excludeArtifactId>
+                                <excludeArtifactId>log4j-over-slf4j</excludeArtifactId>
+                                <excludeArtifactId>logback-core</excludeArtifactId>
+                                <excludeArtifactId>logback-classic</excludeArtifactId>
+                                <excludeArtifactId>snakeyaml</excludeArtifactId>
+                                <excludeArtifactId>validation-api</excludeArtifactId>
+                            </excludeArtifactIds>
                         </configuration>
                     </execution>
                 </executions>

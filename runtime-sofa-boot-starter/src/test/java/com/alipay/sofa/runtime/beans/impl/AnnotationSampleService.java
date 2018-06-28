@@ -14,16 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime.constants;
+package com.alipay.sofa.runtime.beans.impl;
+
+import com.alipay.sofa.runtime.api.annotation.SofaService;
+import com.alipay.sofa.runtime.beans.service.SampleService;
+import org.springframework.stereotype.Component;
 
 /**
- * Framework Constants
- *
- * @author xuanbei 18/5/12
+ * @author qilong.zql 18/6/28-上午10:08
  */
-public interface SofaRuntimeFrameworkConstants {
-    String SOFA_RUNTIME_CONTEXT_BEAN_ID      = "sofaRuntimeContext";
-    String BINDING_CONVERTER_FACTORY_BEAN_ID = "bindingConverterFactory";
-    String BINDING_ADAPTER_FACTORY_BEAN_ID   = "bindingAdapterFactory";
-    String BINDING_PREFIX                    = "binding.";
+@SofaService
+@Component
+public class AnnotationSampleService implements SampleService {
+    @Override
+    public String service() {
+        return "AnnotationSampleService";
+    }
 }

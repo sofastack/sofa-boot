@@ -60,6 +60,7 @@ public abstract class AbstractSofaBootMiddlewareVersionFacade {
      * Get the SOFABoot Middleware Runtime Info. Middleware Extension Info
      * @return Middleware Runtime Info
      */
+    @SuppressWarnings("unchecked")
     public Map<String, Object> getRuntimeInfo() {
         return Collections.EMPTY_MAP;
     }

@@ -53,8 +53,9 @@ public class ModelCreatingStage extends AbstractPipelineStage {
     private void getAllDeployments(ApplicationRuntimeModel application) throws IOException {
         Enumeration<URL> urls = appClassLoader
             .getResources(SofaModuleFrameworkConstants.SOFA_MODULE_FILE);
-        if (urls == null || !urls.hasMoreElements())
+        if (urls == null || !urls.hasMoreElements()) {
             return;
+        }
 
         while (urls.hasMoreElements()) {
             URL url = urls.nextElement();

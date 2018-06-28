@@ -17,10 +17,15 @@
 package com.alipay.sofa.runtime.component.impl;
 
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
+import com.alipay.sofa.runtime.api.event.ApplicationShutdownCallback;
 import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
 import com.alipay.sofa.runtime.spi.component.ComponentManager;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
+import com.alipay.sofa.runtime.spi.health.RuntimeHealthChecker;
+
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Default Sofa Runtime Manager
@@ -29,12 +34,13 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
  */
 public class StandardSofaRuntimeManager implements SofaRuntimeManager {
 
-    private ComponentManager      componentManager;
-    private ClientFactoryInternal clientFactoryInternal;
-    private SofaRuntimeContext    sofaRuntimeContext;
-    private String                appName;
-    private ClassLoader           appClassLoader;
-    private boolean               isStartupHealthCheckPassed = false;
+    private ComponentManager                  componentManager;
+    private ClientFactoryInternal             clientFactoryInternal;
+    private SofaRuntimeContext                sofaRuntimeContext;
+    private String                            appName;
+    private ClassLoader                       appClassLoader;
+    private List<ApplicationShutdownCallback> applicationShutdownCallbacks = new CopyOnWriteArrayList<ApplicationShutdownCallback>();
+    private List<RuntimeHealthChecker>        runtimeHealthCheckers        = new CopyOnWriteArrayList<>();
 
     public StandardSofaRuntimeManager(String appName, ClassLoader appClassLoader,
                                       ClientFactoryInternal clientFactoryInternal) {
@@ -57,13 +63,13 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager {
     }
 
     @Override
-    public boolean isStartupHealthCheckPassed() {
-        return isStartupHealthCheckPassed;
-    }
-
-    @Override
-    public void startupHealthCheckPassed() {
-        isStartupHealthCheckPassed = true;
+    public boolean isHealthCheckPassed() {
+        for (RuntimeHealthChecker runtimeHealthChecker : runtimeHealthCheckers) {
+            if (!runtimeHealthChecker.isHealth()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
@@ -87,8 +93,34 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager {
      * @throws ServiceRuntimeException exception occur
      */
     public void shutdown() throws ServiceRuntimeException {
-        if (componentManager != null) {
-            componentManager.shutdown();
+        try {
+            for (ApplicationShutdownCallback callback : applicationShutdownCallbacks) {
+                callback.shutdown();
+            }
+            if (componentManager != null) {
+                componentManager.shutdown();
+            }
+            clear();
+        } catch (Throwable throwable) {
+            throw new ServiceRuntimeException(throwable);
         }
+    }
+
+    @Override
+    public void registerShutdownCallback(ApplicationShutdownCallback callback) {
+        applicationShutdownCallbacks.add(callback);
+    }
+
+    @Override
+    public void registerRuntimeHealthChecker(RuntimeHealthChecker runtimeHealthChecker) {
+        runtimeHealthCheckers.add(runtimeHealthChecker);
+    }
+
+    protected void clear() {
+        componentManager = null;
+        sofaRuntimeContext = null;
+        clientFactoryInternal = null;
+        appClassLoader = null;
+        applicationShutdownCallbacks = null;
     }
 }

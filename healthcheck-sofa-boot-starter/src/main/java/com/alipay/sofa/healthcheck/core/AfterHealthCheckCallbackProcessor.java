@@ -156,10 +156,7 @@ public class AfterHealthCheckCallbackProcessor {
     }
 
     private String getKey(String className) {
-
         String[] fullName = className.split("\\.");
-        String name = fullName[fullName.length - 1];
-
-        return name;
+        return fullName[fullName.length - 1];
     }
 }
