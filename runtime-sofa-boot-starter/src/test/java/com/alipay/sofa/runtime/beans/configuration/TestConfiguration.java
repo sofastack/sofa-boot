@@ -14,25 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime.integration.base;
+package com.alipay.sofa.runtime.beans.configuration;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.ImportResource;
+import com.alipay.sofa.runtime.beans.impl.SampleBeanFactoryProcessor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * @author qilong.zql
- * @since 2.3.1
+ * @since 2.4.1
  */
-@ImportResource({ "classpath*:META-INF/spring/*.xml" })
-@org.springframework.boot.autoconfigure.SpringBootApplication
-@ComponentScan(basePackages = { "com.alipay.sofa.runtime.beans.configuration",
-                               "com.alipay.sofa.runtime.integration.base" })
-public class SofaBootTestApplication {
-
-    public static void main(String[] args) {
-        SpringApplication springApplication = new SpringApplication(SofaBootTestApplication.class);
-        springApplication.run(args);
+@Configuration
+public class TestConfiguration {
+    @Bean
+    public SampleBeanFactoryProcessor sampleBeanFactoryProcessor() {
+        return new SampleBeanFactoryProcessor();
     }
-
 }

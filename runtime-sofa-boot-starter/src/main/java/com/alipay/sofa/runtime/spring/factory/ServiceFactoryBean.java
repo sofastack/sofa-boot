@@ -88,7 +88,7 @@ public class ServiceFactoryBean extends AbstractContractFactoryBean {
 
     @Override
     public Object getObject() throws Exception {
-        return ref;
+        return service;
     }
 
     @Override

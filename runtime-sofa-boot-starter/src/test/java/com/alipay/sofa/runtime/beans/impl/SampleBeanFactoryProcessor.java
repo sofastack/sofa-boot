@@ -14,31 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime.beans;
+package com.alipay.sofa.runtime.beans.impl;
 
-import com.alipay.sofa.runtime.spring.factory.ReferenceFactoryBean;
-import com.alipay.sofa.runtime.util.StateMessage;
-import org.springframework.aop.TargetSource;
-import org.springframework.aop.framework.autoproxy.AbstractAutoProxyCreator;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 
 /**
  * @author qilong.zql
  * @since 2.4.1
  */
-public class FactoryBeanPostProcessor extends AbstractAutoProxyCreator {
+public class SampleBeanFactoryProcessor implements BeanFactoryPostProcessor {
     @Override
-    protected Object[] getAdvicesAndAdvisorsForBean(Class<?> beanClass, String beanName,
-                                                    TargetSource customTargetSource)
-                                                                                    throws BeansException {
-        return new Object[0];
-    }
+    public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory)
+                                                                                   throws BeansException {
 
-    @Override
-    protected Object wrapIfNecessary(final Object bean, String beanName, Object cacheKey) {
-        if (bean instanceof ReferenceFactoryBean) {
-            StateMessage.setMessage("aop");
-        }
-        return bean;
     }
 }

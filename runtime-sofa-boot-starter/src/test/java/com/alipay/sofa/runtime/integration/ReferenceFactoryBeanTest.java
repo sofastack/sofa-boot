@@ -23,7 +23,7 @@ import org.springframework.util.Assert;
 
 /**
  * @author qilong.zql
- * @since 2.5.0
+ * @since 2.4.1
  */
 public class ReferenceFactoryBeanTest extends AbstractTestBase {
     @Test

@@ -18,7 +18,7 @@ package com.alipay.sofa.runtime.util;
 
 /**
  * @author qilong.zql
- * @since 2.5.0
+ * @since 2.4.1
  */
 public class StateMessage {
     private static String message = "UNDO";
