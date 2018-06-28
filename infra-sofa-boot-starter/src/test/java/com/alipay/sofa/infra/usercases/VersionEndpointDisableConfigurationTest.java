@@ -18,7 +18,6 @@ package com.alipay.sofa.infra.usercases;
 
 import com.alipay.sofa.infra.base.AbstractTestBase;
 import com.alipay.sofa.infra.base.SofaBootWebSpringBootApplication;
-import com.alipay.sofa.infra.endpoint.SofaBootVersionEndpoint;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

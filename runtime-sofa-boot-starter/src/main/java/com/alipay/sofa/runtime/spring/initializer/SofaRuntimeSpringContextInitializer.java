@@ -17,8 +17,6 @@
 package com.alipay.sofa.runtime.spring.initializer;
 
 import com.alipay.sofa.common.log.Constants;
-import com.alipay.sofa.infra.log.space.SofaBootLogSpaceIsolationInit;
-import com.alipay.sofa.runtime.spi.log.SofaLogger;
 import com.alipay.sofa.runtime.spi.log.SofaRuntimeLoggerFactory;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -32,12 +30,24 @@ public class SofaRuntimeSpringContextInitializer
                                                 ApplicationContextInitializer<ConfigurableApplicationContext> {
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
-        // init logging.level.com.alipay.sofa.runtime argument
         Environment environment = applicationContext.getEnvironment();
+        // init logging.path argument
+        if (environment.containsProperty(Constants.LOG_PATH)) {
+            System.setProperty(Constants.LOG_PATH, environment.getProperty(Constants.LOG_PATH));
+        }
+
+        //init logging.level.com.alipay.sofa.runtime argument
         String runtimeLogLevelKey = Constants.LOG_LEVEL_PREFIX
                                     + SofaRuntimeLoggerFactory.SOFA_RUNTIME_LOG_SPACE;
-        SofaBootLogSpaceIsolationInit.initSofaBootLogger(environment, runtimeLogLevelKey);
+        String runtimeLogLevelValue = environment.getProperty(runtimeLogLevelKey);
+        if (runtimeLogLevelValue != null) {
+            System.setProperty(runtimeLogLevelKey, runtimeLogLevelValue);
+        }
 
-        SofaLogger.info("SOFABoot Runtime Starting!");
+        // init file.encoding
+        String fileEncoding = environment.getProperty(Constants.LOG_ENCODING_PROP_KEY);
+        if (fileEncoding != null) {
+            System.setProperty(Constants.LOG_ENCODING_PROP_KEY, fileEncoding);
+        }
     }
 }

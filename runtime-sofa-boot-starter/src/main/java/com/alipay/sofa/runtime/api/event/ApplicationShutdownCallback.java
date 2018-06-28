@@ -14,16 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime.constants;
+package com.alipay.sofa.runtime.api.event;
 
 /**
- * Framework Constants
- *
- * @author xuanbei 18/5/12
+ * @author qilong.zql
+ * @author xuanbei
+ * @since 2.5.0
  */
-public interface SofaRuntimeFrameworkConstants {
-    String SOFA_RUNTIME_CONTEXT_BEAN_ID      = "sofaRuntimeContext";
-    String BINDING_CONVERTER_FACTORY_BEAN_ID = "bindingConverterFactory";
-    String BINDING_ADAPTER_FACTORY_BEAN_ID   = "bindingAdapterFactory";
-    String BINDING_PREFIX                    = "binding.";
+public interface ApplicationShutdownCallback {
+    /**
+     * Invoked when the application shutdown
+     *
+     * @throws Exception
+     */
+    void shutdown() throws Throwable;
 }

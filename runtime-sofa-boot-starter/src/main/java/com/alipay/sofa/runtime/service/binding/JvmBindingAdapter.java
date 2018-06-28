@@ -18,6 +18,7 @@ package com.alipay.sofa.runtime.service.binding;
 
 import com.alipay.sofa.runtime.api.binding.BindingType;
 import com.alipay.sofa.runtime.api.component.ComponentName;
+import com.alipay.sofa.runtime.integration.invoke.DynamicJvmServiceProxyFinder;
 import com.alipay.sofa.runtime.service.component.ServiceComponent;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapter;
 import com.alipay.sofa.runtime.spi.binding.Contract;
@@ -160,6 +161,22 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
             Object retVal;
             Object targetObj = this.getTarget();
 
+            // invoke internal dynamic-biz jvm service
+            if (targetObj == null) {
+                ServiceProxy serviceProxy = DynamicJvmServiceProxyFinder
+                    .getDynamicJvmServiceProxyFinder().findServiceProxy(
+                        sofaRuntimeContext.getAppClassLoader(), contract);
+                if (serviceProxy != null) {
+                    try {
+                        return serviceProxy.invoke(invocation);
+                    } finally {
+                        SofaLogger.debug(
+                            "<< Finish Cross App JVM service invoke, the service is  - {0}]",
+                            (getInterfaceName() + "#" + getUniqueId()));
+                    }
+                }
+            }
+
             if ((targetObj == null || ((targetObj instanceof Proxy) && binding.hasBackupProxy()))) {
                 targetObj = binding.getBackupProxy();
                 SofaLogger.debug("<<{0}.{1} backup proxy invoke.", getInterfaceName().getName(),
@@ -232,4 +249,5 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
             return contract.getUniqueId();
         }
     }
+
 }

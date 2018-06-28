@@ -19,7 +19,7 @@ package com.alipay.sofa.runtime.service.component.impl;
 import com.alipay.sofa.runtime.model.InterfaceMode;
 import com.alipay.sofa.runtime.service.component.AbstractContract;
 import com.alipay.sofa.runtime.service.component.Reference;
-import org.springframework.util.StringUtils;
+import com.alipay.sofa.runtime.util.StringUtils;
 
 import java.util.Map;
 

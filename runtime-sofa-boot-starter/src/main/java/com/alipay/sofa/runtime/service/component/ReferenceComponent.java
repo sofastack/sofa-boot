@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.runtime.service.component;
 
+import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.client.ServiceClient;
 import com.alipay.sofa.runtime.api.component.ComponentName;
@@ -30,7 +31,6 @@ import com.alipay.sofa.runtime.spi.component.*;
 import com.alipay.sofa.runtime.spi.health.HealthResult;
 import com.alipay.sofa.runtime.spi.log.SofaLogger;
 import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
-import com.alipay.sofa.runtime.spring.config.SofaRuntimeProperties;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,17 +43,16 @@ import java.util.concurrent.CountDownLatch;
  *
  * @author xuanbei 18/3/1
  */
+@SuppressWarnings("unchecked")
 public class ReferenceComponent extends AbstractComponent {
     public static final ComponentType REFERENCE_COMPONENT_TYPE = new ComponentType("reference");
 
     private BindingAdapterFactory     bindingAdapterFactory;
     private Reference                 reference;
-    private SofaRuntimeProperties     sofaRuntimeProperties;
     private CountDownLatch            latch                    = new CountDownLatch(1);
 
     public ReferenceComponent(Reference reference, Implementation implementation,
                               BindingAdapterFactory bindingAdapterFactory,
-                              SofaRuntimeProperties sofaRuntimeProperties,
                               SofaRuntimeContext sofaRuntimeContext) {
         this.componentName = ComponentNameFactory.createComponentName(
             REFERENCE_COMPONENT_TYPE,
@@ -62,7 +61,6 @@ public class ReferenceComponent extends AbstractComponent {
                     + ReferenceRegisterHelper.generateBindingHashCode(reference));
         this.reference = reference;
         this.implementation = implementation;
-        this.sofaRuntimeProperties = sofaRuntimeProperties;
         this.sofaRuntimeContext = sofaRuntimeContext;
         this.bindingAdapterFactory = bindingAdapterFactory;
     }
@@ -99,7 +97,8 @@ public class ReferenceComponent extends AbstractComponent {
         }
 
         // check reference has a corresponding service
-        if (!sofaRuntimeProperties.isSkipJvmReferenceHealthCheck() && jvmBinding != null) {
+        if (!SofaRuntimeProperties.isSkipJvmReferenceHealthCheck(sofaRuntimeContext)
+            && jvmBinding != null) {
             Object serviceTarget = getServiceTarget();
             if (serviceTarget == null && !jvmBinding.hasBackupProxy()) {
                 jvmBindingHealthResult.setHealthy(false);
@@ -118,10 +117,10 @@ public class ReferenceComponent extends AbstractComponent {
         if (failedBindingHealth.size() == 0) {
             result.setHealthy(true);
         } else {
-            String healthReport = "|";
+            StringBuilder healthReport = new StringBuilder("|");
             for (HealthResult healthResult : failedBindingHealth) {
-                healthReport = healthReport + healthResult.getHealthName() + "#"
-                               + healthResult.getHealthReport();
+                healthReport.append(healthResult.getHealthName()).append("#")
+                    .append(healthResult.getHealthReport());
             }
             result.setHealthReport(healthReport.substring(1, healthReport.length()));
             result.setHealthy(false);

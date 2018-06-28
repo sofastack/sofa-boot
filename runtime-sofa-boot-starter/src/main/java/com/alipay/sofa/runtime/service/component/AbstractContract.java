@@ -80,6 +80,7 @@ public abstract class AbstractContract implements Contract {
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     public Set<Binding> getBindings() {
         return this.bindings;
     }

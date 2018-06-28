@@ -14,19 +14,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime.beans.impl;
+package com.alipay.sofa.runtime;
 
-import com.alipay.sofa.runtime.api.annotation.SofaService;
-import com.alipay.sofa.runtime.beans.service.SampleService;
-import org.springframework.stereotype.Component;
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
+
+import java.util.Collections;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
+ * SofaFramework Manager Interface
+ *
  * @author qilong.zql
- * @since 2.3.1
+ * @since 2.5.0
  */
-public class XmlSampleService implements SampleService {
-    @Override
-    public String service() {
-        return "XmlSampleService";
+public class SofaFramework {
+
+    private static CopyOnWriteArraySet<SofaRuntimeManager> runtimeSet = new CopyOnWriteArraySet<>();
+
+    public static void registerSofaRuntimeManager(SofaRuntimeManager sofaRuntimeManager) {
+        runtimeSet.add(sofaRuntimeManager);
     }
+
+    public static void unRegisterSofaRuntimeManager(SofaRuntimeManager sofaRuntimeManager) {
+        runtimeSet.remove(sofaRuntimeManager);
+    }
+
+    public static Set<SofaRuntimeManager> getRuntimeSet() {
+        return Collections.unmodifiableSet(runtimeSet);
+    }
+
 }
