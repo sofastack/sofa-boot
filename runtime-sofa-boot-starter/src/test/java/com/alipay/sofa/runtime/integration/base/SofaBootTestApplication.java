@@ -26,8 +26,7 @@ import org.springframework.context.annotation.ImportResource;
  */
 @ImportResource({ "classpath*:META-INF/spring/*.xml" })
 @org.springframework.boot.autoconfigure.SpringBootApplication
-@ComponentScan(basePackages = { "com.alipay.sofa.runtime.beans.configuration",
-                               "com.alipay.sofa.runtime.integration.base" })
+@ComponentScan(basePackages = { "com.alipay.sofa.runtime.integration.base" })
 public class SofaBootTestApplication {
 
     public static void main(String[] args) {
