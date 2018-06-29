@@ -36,6 +36,13 @@ public class ReferenceFactoryBean extends AbstractContractFactoryBean {
     /** load balance **/
     private String  loadBalance;
 
+    public ReferenceFactoryBean() {
+    }
+
+    public ReferenceFactoryBean(String interfaceType) {
+        this.interfaceType = interfaceType;
+    }
+
     @Override
     protected void doAfterPropertiesSet() throws Exception {
         Reference reference = buildReference();
