@@ -58,6 +58,8 @@ public abstract class AbstractContractDefinitionParser extends AbstractSingleBea
 
         String interfaceType = element.getAttribute(INTERFACE_ELEMENT);
         builder.addPropertyValue(INTERFACE_PROPERTY, interfaceType);
+        builder.getBeanDefinition().getConstructorArgumentValues()
+            .addIndexedArgumentValue(0, interfaceType);
 
         String uniqueId = element.getAttribute(UNIQUE_ID_ELEMENT);
         builder.addPropertyValue(UNIQUE_ID_PROPERTY, uniqueId);

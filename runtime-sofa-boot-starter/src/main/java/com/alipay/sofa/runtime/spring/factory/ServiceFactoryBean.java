@@ -36,6 +36,13 @@ public class ServiceFactoryBean extends AbstractContractFactoryBean {
     private Object  ref;
     private Service service;
 
+    public ServiceFactoryBean() {
+    }
+
+    public ServiceFactoryBean(String interfaceType) {
+        this.interfaceType = interfaceType;
+    }
+
     @Override
     protected void doAfterPropertiesSet() {
         if (hasSofaServiceAnnotation()) {
