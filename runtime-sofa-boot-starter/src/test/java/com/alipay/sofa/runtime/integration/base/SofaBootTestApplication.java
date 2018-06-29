@@ -17,7 +17,6 @@
 package com.alipay.sofa.runtime.integration.base;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ImportResource;
 
 /**
