@@ -40,7 +40,7 @@
         <spring.boot.version>1.4.2.RELEASE</spring.boot.version>
         <sofa.boot.version>2.5.0-SNAPSHOT</sofa.boot.version>
         <sofa.ark.version>0.4.0-SNAPSHOT</sofa.ark.version>
-        <rpc.starter.version>5.4.0</rpc.starter.version>
+        <rpc.starter.version>5.4.2</rpc.starter.version>
         <sofa.tracer.version>2.1.1</sofa.tracer.version>
         <sofa.lookout.version>1.4.1</sofa.lookout.version>
         <!-- sofa-common-tools for log -->
@@ -49,6 +49,9 @@
         <hessian.version>3.3.0</hessian.version>
         <!-- 3rd lib dependency -->
         <fastjson.version>1.2.47</fastjson.version>
+        <!--plugin version-->
+        <maven.staging.plugin>1.6.7</maven.staging.plugin>
+        <maven.gpg.pluign>1.5</maven.gpg.pluign>
     </properties>
 
     <licenses>
@@ -228,7 +231,7 @@
                     <plugin>
                         <groupId>org.sonatype.plugins</groupId>
                         <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.7</version>
+                        <version>${maven.staging.plugin}</version>
                         <extensions>true</extensions>
                         <configuration>
                             <serverId>ossrh</serverId>
@@ -239,7 +242,46 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.5</version>
+                        <version>${maven.gpg.pluign}</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <distributionManagement>
+                <repository>
+                    <id>ossrh</id>
+                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+
+        <profile>
+            <id>snapshot</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>${maven.staging.plugin}</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>false</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>${maven.gpg.pluign}</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
@@ -257,10 +299,6 @@
                     <id>ossrh</id>
                     <url>https://oss.sonatype.org/content/repositories/snapshots</url>
                 </snapshotRepository>
-                <repository>
-                    <id>ossrh</id>
-                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-                </repository>
             </distributionManagement>
         </profile>
     </profiles>
