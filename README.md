@@ -46,7 +46,7 @@ SOFABoot 从 2.4.0 版本开始支持基于 Spring 上下文隔离的模块化�
 
 ## 三、快速开始
 
-请查看文档中的[快速开始](https://github.com/alipay/sofa-boot/wiki/QuickStart)来了解如何快速上手使用 SOFABoot。
+请查看文档中的[快速开始](http://www.sofastack.tech/sofa-boot/docs/QuickStart)来了解如何快速上手使用 SOFABoot。
 
 ## 四、如何贡献
 
@@ -69,7 +69,4 @@ SOFA 的第一个版本是阿玺创造的，感谢阿玺给 SOFA 打下了坚实
  
 ## 七、文档
 
-请参考 [WIKI 中的 SOFABoot 的文档](https://github.com/alipay/sofa-boot/wiki)。
-
-
-
+请参考 [SOFABoot 官方文档](http://www.sofastack.tech/sofa-boot/docs/Home)。
