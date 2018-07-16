@@ -33,7 +33,15 @@ import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
  * @author xuanbei 18/3/1
  */
 public class ServiceFactoryBean extends AbstractContractFactoryBean {
-    private Object ref;
+    private Object  ref;
+    private Service service;
+
+    public ServiceFactoryBean() {
+    }
+
+    public ServiceFactoryBean(String interfaceType) {
+        this.interfaceType = interfaceType;
+    }
 
     @Override
     protected void doAfterPropertiesSet() {
@@ -46,7 +54,7 @@ public class ServiceFactoryBean extends AbstractContractFactoryBean {
 
         Implementation implementation = new DefaultImplementation();
         implementation.setTarget(ref);
-        Service service = buildService();
+        service = buildService();
 
         if (bindings.size() == 0) {
             bindings.add(new JvmBinding());
@@ -87,12 +95,12 @@ public class ServiceFactoryBean extends AbstractContractFactoryBean {
 
     @Override
     public Object getObject() throws Exception {
-        return ref;
+        return service;
     }
 
     @Override
     public Class<?> getObjectType() {
-        return ref != null ? ref.getClass() : Service.class;
+        return service != null ? service.getClass() : Service.class;
     }
 
     @Override

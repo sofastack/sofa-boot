@@ -36,6 +36,7 @@ import java.util.Map;
  * @author liangen
  * @version $Id: HealthCheckManager.java, v 0.1 2017年10月16日 上午10:40 liangen Exp $
  */
+@SuppressWarnings("unchecked")
 public class HealthCheckManager {
     private static ApplicationContext applicationContext;
 
@@ -53,9 +54,7 @@ public class HealthCheckManager {
         Map<String, HealthChecker> stringToHealthChecker = applicationContext
             .getBeansOfType(HealthChecker.class);
         if (!CollectionUtils.isEmpty(stringToHealthChecker)) {
-            for (HealthChecker healthChecker : stringToHealthChecker.values()) {
-                healthCheckers.add(healthChecker);
-            }
+            healthCheckers.addAll(stringToHealthChecker.values());
         }
 
         return healthCheckers;

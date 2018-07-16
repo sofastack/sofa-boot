@@ -24,10 +24,10 @@ import com.alipay.sofa.runtime.api.client.ReferenceClient;
 import com.alipay.sofa.runtime.api.client.ServiceClient;
 import com.alipay.sofa.runtime.api.client.param.ReferenceParam;
 import com.alipay.sofa.runtime.api.client.param.ServiceParam;
-import com.alipay.sofa.runtime.beans.service.SampleService;
 import com.alipay.sofa.runtime.beans.impl.SampleServiceImpl;
+import com.alipay.sofa.runtime.beans.service.SampleService;
+import com.alipay.sofa.runtime.constants.SofaRuntimeFrameworkConstants;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
-import com.alipay.sofa.runtime.spi.spring.SofaRuntimeContextAware;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
@@ -39,12 +39,8 @@ import org.springframework.stereotype.Component;
  * @since 2.3.1
  */
 @Component
-public class AwareTest implements ClientFactoryAware, SofaRuntimeContextAware,
-                      ApplicationContextAware, InitializingBean {
-
+public class AwareTest implements ClientFactoryAware, ApplicationContextAware, InitializingBean {
     private ClientFactory      clientFactoryAware;
-
-    private SofaRuntimeContext sofaRuntimeContext;
 
     private ApplicationContext applicationContext;
 
@@ -85,21 +81,12 @@ public class AwareTest implements ClientFactoryAware, SofaRuntimeContextAware,
     }
 
     @Override
-    public void setSofaRuntimeContext(SofaRuntimeContext sofaRuntimeContext) {
-        this.sofaRuntimeContext = sofaRuntimeContext;
-    }
-
-    @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }
 
     public ClientFactory getClientFactoryAware() {
         return clientFactoryAware;
-    }
-
-    public SofaRuntimeContext getSofaRuntimeContext() {
-        return sofaRuntimeContext;
     }
 
     public ApplicationContext getApplicationContext() {
@@ -133,5 +120,10 @@ public class AwareTest implements ClientFactoryAware, SofaRuntimeContextAware,
     @SofaReference(uniqueId = "method")
     public void setSampleServiceAnnotationImplWithMethod(SampleService sampleServiceAnnotationImplWithMethod) {
         this.sampleServiceAnnotationImplWithMethod = sampleServiceAnnotationImplWithMethod;
+    }
+
+    public SofaRuntimeContext getSofaRuntimeContext() {
+        return applicationContext.getBean(
+            SofaRuntimeFrameworkConstants.SOFA_RUNTIME_CONTEXT_BEAN_ID, SofaRuntimeContext.class);
     }
 }

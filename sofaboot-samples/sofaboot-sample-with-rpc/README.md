@@ -9,7 +9,7 @@ SOFABoot 提供了如健康检查，上下文隔离等基础能力，同时提�
 <parent>
     <groupId>com.alipay.sofa</groupId>
     <artifactId>sofaboot-dependencies</artifactId>
-    <version>2.4.0</version>
+    <version>2.5.0-SNAPSHOT</version>
 </parent>
 ```
 
@@ -91,7 +91,7 @@ System.out.println(personRest.sayName("rest"));
 1.全局生效方式。通过 rpc-global-filter 元素配置一个对所有服务都会生效的 Filter 。
 ```xml
 <bean id="personFilter" class="com.alipay.sofa.boot.examples.demo.rpc.bean.PersonServiceFilter"/>
-<sofa:rpc-global-filter ref="com.alipay.sofa.boot.examples.demo.rpc.bean.PersonFilter"/>
+<sofa:rpc-global-filter ref="personFilter"/>
 ```  
 2.服务生效方式。只对指定的服务生效。
 ```xml

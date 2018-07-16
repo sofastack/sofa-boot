@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
@@ -44,12 +45,15 @@ public abstract class AbstractTestBase {
      * 8080
      */
     @LocalServerPort
-    private int             definedPort;
+    private int               definedPort;
 
     @Autowired
-    public TestRestTemplate testRestTemplate;
+    public TestRestTemplate   testRestTemplate;
 
-    protected String        urlHttpPrefix;
+    @Autowired
+    public ApplicationContext ctx;
+
+    protected String          urlHttpPrefix;
 
     @Before
     public void setUp() {

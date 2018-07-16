@@ -38,6 +38,7 @@ public class SofaJUnit4Runner extends Runner implements Filterable, Sortable {
 
     protected Runner            runner;
 
+    @SuppressWarnings("unchecked")
     public SofaJUnit4Runner(Class<?> klazz) {
 
         String testRunner = null;

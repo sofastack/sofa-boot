@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.runtime.spring.configuration;
 
+import com.alipay.sofa.ark.spi.model.Biz;
 import com.alipay.sofa.healthcheck.core.HealthChecker;
 import com.alipay.sofa.infra.constants.CommonMiddlewareConstants;
 import com.alipay.sofa.runtime.api.client.ReferenceClient;
@@ -26,6 +27,7 @@ import com.alipay.sofa.runtime.service.client.ReferenceClientImpl;
 import com.alipay.sofa.runtime.service.client.ServiceClientImpl;
 import com.alipay.sofa.runtime.service.impl.BindingAdapterFactoryImpl;
 import com.alipay.sofa.runtime.service.impl.BindingConverterFactoryImpl;
+import com.alipay.sofa.runtime.SofaFramework;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapter;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
 import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
@@ -33,18 +35,22 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
+import com.alipay.sofa.runtime.spring.ApplicationShutdownCallbackPostProcessor;
 import com.alipay.sofa.runtime.spring.ClientFactoryBeanPostProcessor;
 import com.alipay.sofa.runtime.spring.ServiceAnnotationBeanPostProcessor;
-import com.alipay.sofa.runtime.spring.SofaRuntimeContextAwareProcessor;
-import com.alipay.sofa.runtime.spring.config.SofaRuntimeProperties;
+import com.alipay.sofa.runtime.spring.callback.CloseApplicationContextCallBack;
+import com.alipay.sofa.runtime.spring.config.SofaRuntimeConfigurationProperties;
+import com.alipay.sofa.runtime.spring.health.DefaultRuntimeHealthChecker;
+import com.alipay.sofa.runtime.spring.health.MultiApplicationHealthChecker;
 import com.alipay.sofa.runtime.spring.health.SofaComponentHealthChecker;
 import com.alipay.sofa.runtime.spring.health.SofaComponentHealthIndicator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.HealthIndicator;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.*;
 
 import java.util.HashSet;
 import java.util.ServiceLoader;
@@ -54,12 +60,8 @@ import java.util.Set;
  * @author xuanbei 18/3/17
  */
 @Configuration
+@EnableConfigurationProperties(SofaRuntimeConfigurationProperties.class)
 public class SofaRuntimeAutoConfiguration {
-    @Bean
-    public SofaRuntimeProperties sofaRuntimeProperties() {
-        return new SofaRuntimeProperties();
-    }
-
     @Bean
     public BindingConverterFactory bindingConverterFactory() {
         BindingConverterFactory bindingConverterFactory = new BindingConverterFactoryImpl();
@@ -80,31 +82,28 @@ public class SofaRuntimeAutoConfiguration {
                                                         + CommonMiddlewareConstants.APP_NAME_KEY
                                                         + "}") String appName,
                                                  BindingConverterFactory bindingConverterFactory,
-                                                 BindingAdapterFactory bindingAdapterFactory,
-                                                 SofaRuntimeProperties sofaRuntimeProperties) {
+                                                 BindingAdapterFactory bindingAdapterFactory) {
         ClientFactoryInternal clientFactoryInternal = new ClientFactoryImpl();
         SofaRuntimeManager sofaRuntimeManager = new StandardSofaRuntimeManager(appName,
             SofaRuntimeAutoConfiguration.class.getClassLoader(), clientFactoryInternal);
-        sofaRuntimeManager.getSofaRuntimeContext();
         sofaRuntimeManager.getComponentManager().registerComponentClient(
             ReferenceClient.class,
             new ReferenceClientImpl(sofaRuntimeManager.getSofaRuntimeContext(),
-                bindingConverterFactory, bindingAdapterFactory, sofaRuntimeProperties));
+                bindingConverterFactory, bindingAdapterFactory));
         sofaRuntimeManager.getComponentManager().registerComponentClient(
             ServiceClient.class,
             new ServiceClientImpl(sofaRuntimeManager.getSofaRuntimeContext(),
                 bindingConverterFactory, bindingAdapterFactory));
+        SofaFramework.registerSofaRuntimeManager(sofaRuntimeManager);
         return sofaRuntimeManager.getSofaRuntimeContext();
 
     }
 
     @Bean
-    public ServiceAnnotationBeanPostProcessor serviceAnnotationBeanPostProcessor(SofaRuntimeContext sofaRuntimeContext,
-                                                                                 SofaRuntimeProperties sofaRuntimeProperties,
-                                                                                 BindingAdapterFactory bindingAdapterFactory,
+    public ServiceAnnotationBeanPostProcessor serviceAnnotationBeanPostProcessor(BindingAdapterFactory bindingAdapterFactory,
                                                                                  BindingConverterFactory bindingConverterFactory) {
-        return new ServiceAnnotationBeanPostProcessor(sofaRuntimeContext, sofaRuntimeProperties,
-            bindingAdapterFactory, bindingConverterFactory);
+        return new ServiceAnnotationBeanPostProcessor(bindingAdapterFactory,
+            bindingConverterFactory);
     }
 
     @Bean
@@ -113,8 +112,14 @@ public class SofaRuntimeAutoConfiguration {
     }
 
     @Bean
-    public SofaRuntimeContextAwareProcessor sofaRuntimeContextAwareProcessor(SofaRuntimeContext sofaRuntimeContext) {
-        return new SofaRuntimeContextAwareProcessor(sofaRuntimeContext);
+    public ApplicationShutdownCallbackPostProcessor applicationShutdownCallbackPostProcessor(SofaRuntimeContext sofaRuntimeContext) {
+        return new ApplicationShutdownCallbackPostProcessor(
+            sofaRuntimeContext.getSofaRuntimeManager());
+    }
+
+    @Bean
+    public CloseApplicationContextCallBack closeApplicationContextCallBack() {
+        return new CloseApplicationContextCallBack();
     }
 
     private static <T> Set<T> getClassesByServiceLoader(Class<T> clazz) {
@@ -128,9 +133,31 @@ public class SofaRuntimeAutoConfiguration {
     }
 
     @Configuration
+    @ConditionalOnClass({ HealthChecker.class })
+    @AutoConfigureAfter(SofaRuntimeAutoConfiguration.class)
+    public static class DefaultRuntimeHealthCheckerConfiguration {
+        @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
+        @Bean
+        public DefaultRuntimeHealthChecker defaultRuntimeHealthChecker(SofaRuntimeContext sofaRuntimeContext) {
+            return new DefaultRuntimeHealthChecker(sofaRuntimeContext);
+        }
+    }
+
+    @Configuration
+    @ConditionalOnClass({ HealthChecker.class, Biz.class })
+    public static class MultiApplicationHealthCheckerConfiguration {
+        @Bean
+        public MultiApplicationHealthChecker multiApplicationHealthChecker() {
+            return new MultiApplicationHealthChecker();
+        }
+    }
+
+    @Configuration
     @ConditionalOnClass({ HealthIndicator.class })
     @ConditionalOnMissingClass({ "com.alipay.sofa.healthcheck.core.HealthChecker" })
+    @AutoConfigureAfter(SofaRuntimeAutoConfiguration.class)
     public static class SofaRuntimeHealthIndicatorConfiguration {
+        @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
         @Bean
         public SofaComponentHealthIndicator sofaComponentHealthIndicator(SofaRuntimeContext sofaRuntimeContext) {
             return new SofaComponentHealthIndicator(sofaRuntimeContext);
@@ -139,7 +166,9 @@ public class SofaRuntimeAutoConfiguration {
 
     @Configuration
     @ConditionalOnClass({ HealthChecker.class })
+    @AutoConfigureAfter(SofaRuntimeAutoConfiguration.class)
     public static class SofaModuleHealthCheckerConfiguration {
+        @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
         @Bean
         public SofaComponentHealthChecker sofaComponentHealthChecker(SofaRuntimeContext sofaRuntimeContext) {
             return new SofaComponentHealthChecker(sofaRuntimeContext);

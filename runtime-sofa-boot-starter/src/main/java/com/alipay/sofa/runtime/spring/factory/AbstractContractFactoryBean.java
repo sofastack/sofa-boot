@@ -25,7 +25,6 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
-import com.alipay.sofa.runtime.spi.spring.SofaRuntimeContextAware;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
@@ -45,8 +44,7 @@ import java.util.List;
  *
  * @author xuanbei 18/3/1
  */
-public abstract class AbstractContractFactoryBean implements InitializingBean,
-                                                 SofaRuntimeContextAware, FactoryBean,
+public abstract class AbstractContractFactoryBean implements InitializingBean, FactoryBean,
                                                  ApplicationContextAware {
     /** bean id */
     protected String                  beanId;
@@ -86,6 +84,8 @@ public abstract class AbstractContractFactoryBean implements InitializingBean,
                 .getDocumentElement();
             tempElements.add(node);
         }
+        sofaRuntimeContext = applicationContext.getBean(
+            SofaRuntimeFrameworkConstants.SOFA_RUNTIME_CONTEXT_BEAN_ID, SofaRuntimeContext.class);
         bindingConverterFactory = applicationContext.getBean(
             SofaRuntimeFrameworkConstants.BINDING_CONVERTER_FACTORY_BEAN_ID,
             BindingConverterFactory.class);
@@ -139,7 +139,7 @@ public abstract class AbstractContractFactoryBean implements InitializingBean,
     }
 
     public Class<?> getInterfaceClass() {
-        if (interfaceClass == null && this.applicationContext != null) {
+        if (interfaceClass == null) {
             try {
                 interfaceClass = this.getClass().getClassLoader().loadClass(interfaceType);
             } catch (ClassNotFoundException e) {
@@ -197,9 +197,4 @@ public abstract class AbstractContractFactoryBean implements InitializingBean,
     protected abstract void doAfterPropertiesSet() throws Exception;
 
     protected abstract void setProperties(BindingConverterContext bindingConverterContext);
-
-    @Override
-    public void setSofaRuntimeContext(SofaRuntimeContext sofaRuntimeContext) {
-        this.sofaRuntimeContext = sofaRuntimeContext;
-    }
 }

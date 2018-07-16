@@ -16,34 +16,36 @@
  */
 package com.alipay.sofa.runtime.spring;
 
-import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
-import com.alipay.sofa.runtime.spi.spring.SofaRuntimeContextAware;
+import com.alipay.sofa.runtime.api.event.ApplicationShutdownCallback;
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 
 /**
- * @author xuanbei 18/3/9
+ * @author xuanbei
+ * @author qilong.zql
+ * @since 2.5.0
  */
-public class SofaRuntimeContextAwareProcessor implements BeanPostProcessor {
-    private SofaRuntimeContext sofaRuntimeContext;
+public class ApplicationShutdownCallbackPostProcessor implements BeanPostProcessor {
 
-    public SofaRuntimeContextAwareProcessor(SofaRuntimeContext sofaRuntimeContext) {
-        this.sofaRuntimeContext = sofaRuntimeContext;
+    private SofaRuntimeManager sofaRuntimeManager;
+
+    public ApplicationShutdownCallbackPostProcessor(SofaRuntimeManager sofaRuntimeManager) {
+        this.sofaRuntimeManager = sofaRuntimeManager;
     }
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName)
                                                                                throws BeansException {
-        if (bean instanceof SofaRuntimeContextAware) {
-            ((SofaRuntimeContextAware) bean).setSofaRuntimeContext(sofaRuntimeContext);
-        }
-
         return bean;
     }
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName)
                                                                               throws BeansException {
+        if (bean instanceof ApplicationShutdownCallback) {
+            sofaRuntimeManager.registerShutdownCallback((ApplicationShutdownCallback) bean);
+        }
         return bean;
     }
 }

@@ -89,11 +89,7 @@ public class ApplicationRuntimeModel {
             return resolvedDeployments;
         }
 
-        List<DeploymentDescriptor> list = new ArrayList<>();
         resolvedDeployments = deployRegistry.getResolvedObjects();
-        list.addAll(resolvedDeployments);
-
-        resolvedDeployments = list;
         return resolvedDeployments;
     }
 

@@ -21,6 +21,7 @@ import com.alipay.sofa.runtime.api.annotation.SofaReferenceBinding;
 import com.alipay.sofa.runtime.api.annotation.SofaService;
 import com.alipay.sofa.runtime.api.annotation.SofaServiceBinding;
 import com.alipay.sofa.runtime.api.binding.BindingType;
+import com.alipay.sofa.runtime.constants.SofaRuntimeFrameworkConstants;
 import com.alipay.sofa.runtime.model.InterfaceMode;
 import com.alipay.sofa.runtime.service.component.Service;
 import com.alipay.sofa.runtime.service.component.impl.ReferenceImpl;
@@ -36,6 +37,7 @@ import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.springframework.context.ApplicationContext;
 
 import java.lang.reflect.Method;
 import java.util.HashSet;
@@ -46,6 +48,7 @@ import static org.mockito.Mockito.when;
 /**
  * @author xuanbei 18/5/15
  */
+@SuppressWarnings("unchecked")
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ ReferenceRegisterHelper.class, ServiceAnnotationBeanPostProcessor.class })
 public class ServiceAnnotationBeanPostProcessorTest {
@@ -70,10 +73,16 @@ public class ServiceAnnotationBeanPostProcessorTest {
         when(sofaRuntimeContext.getAppClassLoader()).thenReturn(
             ServiceAnnotationBeanPostProcessorTest.class.getClassLoader());
 
+        ApplicationContext applicationContext = mock(ApplicationContext.class);
+        when(
+            applicationContext.getBean(SofaRuntimeFrameworkConstants.SOFA_RUNTIME_CONTEXT_BEAN_ID,
+                SofaRuntimeContext.class)).thenReturn(sofaRuntimeContext);
+
         boolean hasException = false;
         BindingConverterFactory bindingConverterFactory = new BindingConverterFactoryImpl();
         ServiceAnnotationBeanPostProcessor serviceAnnotationBeanPostProcessor = new ServiceAnnotationBeanPostProcessor(
-            sofaRuntimeContext, null, null, bindingConverterFactory);
+            null, bindingConverterFactory);
+        serviceAnnotationBeanPostProcessor.setApplicationContext(applicationContext);
         try {
             createReferenceProxy.invoke(serviceAnnotationBeanPostProcessor, sofaReference,
                 ServiceAnnotationBeanPostProcessorTest.class);
@@ -103,7 +112,7 @@ public class ServiceAnnotationBeanPostProcessorTest {
             ServiceAnnotationBeanPostProcessorTest.class);
 
         PowerMockito.verifyStatic();
-        ReferenceRegisterHelper.registerReference(referenceImpl, null, null, sofaRuntimeContext);
+        ReferenceRegisterHelper.registerReference(referenceImpl, null, sofaRuntimeContext);
     }
 
     @Test
@@ -125,10 +134,16 @@ public class ServiceAnnotationBeanPostProcessorTest {
         when(sofaRuntimeContext.getAppClassLoader()).thenReturn(
             ServiceAnnotationBeanPostProcessorTest.class.getClassLoader());
 
+        ApplicationContext applicationContext = mock(ApplicationContext.class);
+        when(
+            applicationContext.getBean(SofaRuntimeFrameworkConstants.SOFA_RUNTIME_CONTEXT_BEAN_ID,
+                SofaRuntimeContext.class)).thenReturn(sofaRuntimeContext);
+
         boolean hasException = false;
         BindingConverterFactory bindingConverterFactory = new BindingConverterFactoryImpl();
         ServiceAnnotationBeanPostProcessor serviceAnnotationBeanPostProcessor = new ServiceAnnotationBeanPostProcessor(
-            sofaRuntimeContext, null, null, bindingConverterFactory);
+            null, bindingConverterFactory);
+        serviceAnnotationBeanPostProcessor.setApplicationContext(applicationContext);
         try {
             createReferenceProxy.invoke(serviceAnnotationBeanPostProcessor, service, sofaService,
                 sofaServiceBinding);

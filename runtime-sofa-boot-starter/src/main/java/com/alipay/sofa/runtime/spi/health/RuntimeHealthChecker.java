@@ -14,15 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime.spi.spring;
-
-import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
+package com.alipay.sofa.runtime.spi.health;
 
 /**
- * Interface used to implemented by a Spring bean who want to get an instance of {@link SofaRuntimeContext}.
+ * Check whether runtime is healthy.
  *
- * @author xuanbei 18/3/1
+ * @author qilong.zql
+ * @since 2.5.0
  */
-public interface SofaRuntimeContextAware {
-    void setSofaRuntimeContext(SofaRuntimeContext sofaRuntimeContext);
+public interface RuntimeHealthChecker {
+    boolean isHealth();
 }

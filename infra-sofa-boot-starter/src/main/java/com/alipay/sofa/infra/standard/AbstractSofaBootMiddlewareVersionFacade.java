@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.infra.standard;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -59,7 +60,8 @@ public abstract class AbstractSofaBootMiddlewareVersionFacade {
      * Get the SOFABoot Middleware Runtime Info. Middleware Extension Info
      * @return Middleware Runtime Info
      */
+    @SuppressWarnings("unchecked")
     public Map<String, Object> getRuntimeInfo() {
-        return null;
+        return Collections.EMPTY_MAP;
     }
 }

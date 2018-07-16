@@ -24,7 +24,6 @@ import com.alipay.sofa.runtime.service.component.impl.ReferenceImpl;
 import com.alipay.sofa.runtime.service.helper.ReferenceRegisterHelper;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
 import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
-import com.alipay.sofa.runtime.spring.config.SofaRuntimeProperties;
 import org.springframework.util.Assert;
 
 /**
@@ -36,6 +35,13 @@ public class ReferenceFactoryBean extends AbstractContractFactoryBean {
     private boolean jvmFirst = true;
     /** load balance **/
     private String  loadBalance;
+
+    public ReferenceFactoryBean() {
+    }
+
+    public ReferenceFactoryBean(String interfaceType) {
+        this.interfaceType = interfaceType;
+    }
 
     @Override
     protected void doAfterPropertiesSet() throws Exception {
@@ -51,9 +57,7 @@ public class ReferenceFactoryBean extends AbstractContractFactoryBean {
         reference.addBinding(bindings.get(0));
         proxy = ReferenceRegisterHelper.registerReference(reference, applicationContext.getBean(
             SofaRuntimeFrameworkConstants.BINDING_ADAPTER_FACTORY_BEAN_ID,
-            BindingAdapterFactory.class), applicationContext.getBean(
-            SofaRuntimeFrameworkConstants.SOFA_RUNTIME_PROPERTIES_BEAN_ID,
-            SofaRuntimeProperties.class), sofaRuntimeContext);
+            BindingAdapterFactory.class), sofaRuntimeContext);
     }
 
     @Override
