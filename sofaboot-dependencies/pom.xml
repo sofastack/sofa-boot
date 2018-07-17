@@ -39,7 +39,8 @@
 
         <spring.boot.version>1.4.2.RELEASE</spring.boot.version>
         <sofa.boot.version>2.5.0-SNAPSHOT</sofa.boot.version>
-        <sofa.ark.version>0.4.0-SNAPSHOT</sofa.ark.version>
+        <sofa.ark.version>0.4.0</sofa.ark.version>
+        <sofa.jarslink.version>2.0.0</sofa.jarslink.version>
         <rpc.starter.version>5.4.2</rpc.starter.version>
         <sofa.tracer.version>2.1.1</sofa.tracer.version>
         <sofa.lookout.version>1.4.1</sofa.lookout.version>
@@ -151,6 +152,13 @@
                 <artifactId>rpc-sofa-boot-starter</artifactId>
                 <classifier>ark-plugin</classifier>
                 <version>${rpc.starter.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>sofa-jarslink-ark-starter</artifactId>
+                <classifier>ark-plugin</classifier>
+                <version>${sofa.jarslink.version}</version>
             </dependency>
             <!-- Ark Plugin Management end -->
 
