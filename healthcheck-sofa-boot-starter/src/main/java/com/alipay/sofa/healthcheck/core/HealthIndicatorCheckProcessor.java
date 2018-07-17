@@ -16,12 +16,12 @@
  */
 package com.alipay.sofa.healthcheck.core;
 
-import com.alibaba.fastjson.JSON;
 import com.alipay.sofa.healthcheck.configuration.HealthCheckConfiguration;
 import com.alipay.sofa.healthcheck.configuration.HealthCheckConfigurationConstants;
 import com.alipay.sofa.healthcheck.log.SofaBootHealthCheckLoggerFactory;
 import com.alipay.sofa.healthcheck.startup.StartUpHealthCheckStatus;
 import com.alipay.sofa.healthcheck.startup.StartUpHealthCheckStatus.HealthIndicatorDetail;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
@@ -62,7 +62,8 @@ public class HealthIndicatorCheckProcessor {
                     result = false;
                     logger.error("HealthIndicator (" + healthIndicator.getClass()
                                  + ")check fail. And the status is[" + status
-                                 + "]; the detail is: " + JSON.toJSONString(health.getDetails()));
+                                 + "]; the detail is: "
+                                 + new ObjectMapper().writeValueAsString(health.getDetails()));
                 } else {
                     logger.info("HealthIndicator (" + healthIndicator.getClass()
                                 + ")check success.");

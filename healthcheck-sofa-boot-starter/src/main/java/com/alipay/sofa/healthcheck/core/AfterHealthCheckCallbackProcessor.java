@@ -16,11 +16,11 @@
  */
 package com.alipay.sofa.healthcheck.core;
 
-import com.alibaba.fastjson.JSON;
 import com.alipay.sofa.healthcheck.log.SofaBootHealthCheckLoggerFactory;
 import com.alipay.sofa.healthcheck.startup.SofaBootAfterReadinessCheckCallback;
 import com.alipay.sofa.healthcheck.startup.SofaBootMiddlewareAfterReadinessCheckCallback;
 import com.alipay.sofa.healthcheck.startup.StartUpHealthCheckStatus;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.Status;
@@ -77,7 +77,7 @@ public class AfterHealthCheckCallbackProcessor {
                     logger.error("SOFABoot middleware after readiness check callback("
                                  + middlewareAfterReadinessCheckCallback.getClass()
                                  + ") failed, the details is: "
-                                 + JSON.toJSONString(health.getDetails()));
+                                 + new ObjectMapper().writeValueAsString(health.getDetails()));
                 } else {
                     logger.info("SOFABoot middleware after readiness check callback("
                                 + middlewareAfterReadinessCheckCallback.getClass() + ") ]success.");
@@ -128,7 +128,7 @@ public class AfterHealthCheckCallbackProcessor {
                     logger.error("SOFABoot application after readiness check callback("
                                  + afterReadinessCheckCallback.getClass()
                                  + ") failed, the details is: "
-                                 + JSON.toJSONString(health.getDetails()));
+                                 + new ObjectMapper().writeValueAsString(health.getDetails()));
                 } else {
                     logger.info("SOFABoot application after readiness check callback("
                                 + afterReadinessCheckCallback.getClass() + ") ]success.");
