@@ -36,7 +36,8 @@ import java.util.List;
  * @version $Id: HealthIndicatorCheckProcessor.java, v 0.1 2017年10月20日 上午10:55 liangen Exp $
  */
 public class HealthIndicatorCheckProcessor {
-    private static Logger             logger       = SofaBootHealthCheckLoggerFactory.getLogger(HealthIndicatorCheckProcessor.class);
+    private static Logger             logger       = SofaBootHealthCheckLoggerFactory
+                                                       .getLogger(HealthIndicatorCheckProcessor.class);
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 

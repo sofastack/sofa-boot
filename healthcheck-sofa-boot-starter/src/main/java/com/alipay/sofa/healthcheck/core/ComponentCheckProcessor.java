@@ -34,7 +34,8 @@ import java.util.concurrent.TimeUnit;
  * @version $Id: ComponentCheckProcessor.java, v 0.1 2017年10月20日 上午10:52 liangen Exp $
  */
 public class ComponentCheckProcessor {
-    private static Logger logger = SofaBootHealthCheckLoggerFactory.getLogger(ComponentCheckProcessor.class);
+    private static Logger logger = SofaBootHealthCheckLoggerFactory
+                                     .getLogger(ComponentCheckProcessor.class);
 
     /**
      * Provides for HTTP checking. The method does not retry the reference component.

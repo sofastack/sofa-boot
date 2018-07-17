@@ -27,7 +27,8 @@ import org.slf4j.Logger;
  */
 public class SpringContextCheckProcessor {
 
-    private static Logger logger = SofaBootHealthCheckLoggerFactory.getLogger(SpringContextCheckProcessor.class);
+    private static Logger logger = SofaBootHealthCheckLoggerFactory
+                                     .getLogger(SpringContextCheckProcessor.class);
 
     public boolean springContextCheck() {
         logger.info("Begin SpringContext readiness check.");
