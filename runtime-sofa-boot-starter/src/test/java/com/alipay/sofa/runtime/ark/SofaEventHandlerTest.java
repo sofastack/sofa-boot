@@ -20,11 +20,9 @@ import com.alipay.sofa.ark.spi.constant.Constants;
 import com.alipay.sofa.ark.spi.event.BizEvent;
 import com.alipay.sofa.ark.spi.model.Biz;
 import com.alipay.sofa.ark.spi.model.BizState;
-import com.alipay.sofa.healthcheck.initializer.HealthcheckInitializer;
+import com.alipay.sofa.healthcheck.initializer.HealthCheckInitializer;
 import com.alipay.sofa.runtime.SofaFramework;
 import com.alipay.sofa.runtime.SofaRuntimeProperties;
-import com.alipay.sofa.runtime.api.annotation.SofaService;
-import com.alipay.sofa.runtime.beans.impl.XmlSampleService;
 import com.alipay.sofa.runtime.beans.service.SampleService;
 import com.alipay.sofa.runtime.integration.invoke.DynamicJvmServiceProxyFinder;
 import com.alipay.sofa.runtime.integration.service.SofaEventHandler;
@@ -82,7 +80,7 @@ public class SofaEventHandlerTest {
         EnvironmentTestUtils.addEnvironment(this.applicationContext,
             "com.alipay.sofa.boot.skipJvmReferenceHealthCheck=true");
         this.applicationContext.register(SofaRuntimeAutoConfiguration.class,
-            HealthcheckInitializer.class, XmlConfiguration.class);
+            HealthCheckInitializer.class, XmlConfiguration.class);
         this.applicationContext.refresh();
     }
 
