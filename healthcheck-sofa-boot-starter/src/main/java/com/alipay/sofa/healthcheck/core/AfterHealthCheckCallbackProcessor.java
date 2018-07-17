@@ -34,8 +34,7 @@ import java.util.List;
  */
 public class AfterHealthCheckCallbackProcessor {
     private static Logger             logger       = SofaBootHealthCheckLoggerFactory
-                                                       .getLogger(AfterHealthCheckCallbackProcessor.class
-                                                           .getCanonicalName());
+                                                       .getLogger(AfterHealthCheckCallbackProcessor.class);
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
