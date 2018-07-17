@@ -37,13 +37,13 @@ import org.springframework.stereotype.Component;
 @Configuration
 @ComponentScan(basePackageClasses = { HealthCheckTrigger.class,
                                      SofaBootComponentHealthCheckInfo.class })
-public class HealthcheckInitializer implements
+public class HealthCheckInitializer implements
                                    ApplicationContextInitializer<ConfigurableApplicationContext> {
 
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
-        // init logging.level.com.alipay.sofa.runtime argument
         Environment environment = applicationContext.getEnvironment();
+        // init logging.level.com.alipay.sofa.runtime argument
         String healthCheckLogLevelKey = Constants.LOG_LEVEL_PREFIX
                                         + HealthCheckConfigurationConstants.SOFABOOT_HEALTH_LOG_SPACE;
         SofaBootLogSpaceIsolationInit.initSofaBootLogger(environment, healthCheckLogLevelKey);
@@ -53,7 +53,7 @@ public class HealthcheckInitializer implements
             HealthCheckConfiguration.setEnvironment(applicationContext.getEnvironment());
         }
 
-        SofaBootHealthCheckLoggerFactory.getLogger(HealthcheckInitializer.class).info(
+        SofaBootHealthCheckLoggerFactory.getLogger(HealthCheckInitializer.class).info(
             "SOFABoot HealthCheck Starting!");
     }
 

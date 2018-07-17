@@ -1,6 +1,6 @@
 org.springframework.context.ApplicationContextInitializer=\
-com.alipay.sofa.healthcheck.initializer.HealthcheckInitializer
+com.alipay.sofa.healthcheck.initializer.HealthCheckInitializer
 
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.alipay.sofa.healthcheck.initializer.HealthcheckInitializer
+com.alipay.sofa.healthcheck.initializer.HealthCheckInitializer
 

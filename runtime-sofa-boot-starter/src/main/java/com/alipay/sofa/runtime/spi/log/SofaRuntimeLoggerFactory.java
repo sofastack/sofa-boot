@@ -40,4 +40,16 @@ public class SofaRuntimeLoggerFactory {
         }
         return LoggerSpaceManager.getLoggerBySpace(name, SOFA_RUNTIME_LOG_SPACE);
     }
+
+    /**
+     * get Logger Object
+     * @param klazz
+     * @return Logger Object
+     */
+    public static Logger getLogger(Class klazz) {
+        if (klazz == null) {
+            return null;
+        }
+        return getLogger(klazz.getCanonicalName());
+    }
 }
