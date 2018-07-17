@@ -21,6 +21,8 @@ import com.alipay.sofa.infra.constants.CommonMiddlewareConstants;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.env.EnvironmentPostProcessor;
 import org.springframework.core.env.*;
+import org.springframework.util.StringUtils;
+
 import java.util.Properties;
 
 /**
@@ -45,10 +47,9 @@ public class EnvironmentCustomizer implements EnvironmentPostProcessor {
         String sofaBootVersion = SofaBootInfraAutoConfiguration.class.getPackage()
             .getImplementationVersion();
         // generally, it would not be null and just for test.
-        if (sofaBootVersion == null) {
-            return properties;
-        }
-        String sofaBootFormattedVersion = String.format(" (v%s)", sofaBootVersion);
+        sofaBootVersion = StringUtils.isEmpty(sofaBootVersion) ? "" : sofaBootVersion;
+        String sofaBootFormattedVersion = sofaBootVersion.isEmpty() ? "" : String.format(" (v%s)",
+            sofaBootVersion);
         properties.setProperty(CommonMiddlewareConstants.SOFA_BOOT_VERSION, sofaBootVersion);
         properties.setProperty(CommonMiddlewareConstants.SOFA_BOOT_FORMATTED_VERSION,
             sofaBootFormattedVersion);
