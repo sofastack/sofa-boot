@@ -38,7 +38,7 @@ import java.util.List;
 @Component
 public class HealthCheckTrigger implements ApplicationListener<ContextRefreshedEvent> {
     private static Logger logger = SofaBootHealthCheckLoggerFactory
-                                     .getLogger(HealthCheckTrigger.class.getCanonicalName());
+                                     .getLogger(HealthCheckTrigger.class);
 
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         ApplicationContext applicationContext = contextRefreshedEvent.getApplicationContext();

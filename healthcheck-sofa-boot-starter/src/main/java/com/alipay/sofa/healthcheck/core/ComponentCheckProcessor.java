@@ -35,7 +35,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class ComponentCheckProcessor {
     private static Logger logger = SofaBootHealthCheckLoggerFactory
-                                     .getLogger(ComponentCheckProcessor.class.getCanonicalName());
+                                     .getLogger(ComponentCheckProcessor.class);
 
     /**
      * Provides for HTTP checking. The method does not retry the reference component.

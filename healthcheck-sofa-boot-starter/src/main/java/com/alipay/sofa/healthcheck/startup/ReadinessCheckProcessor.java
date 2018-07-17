@@ -30,8 +30,7 @@ import org.springframework.util.StringUtils;
  */
 public class ReadinessCheckProcessor {
     private static Logger                           logger                            = SofaBootHealthCheckLoggerFactory
-                                                                                          .getLogger(ReadinessCheckProcessor.class
-                                                                                              .getCanonicalName());
+                                                                                          .getLogger(ReadinessCheckProcessor.class);
 
     private final SpringContextCheckProcessor       springContextCheckProcessor       = new SpringContextCheckProcessor();
 

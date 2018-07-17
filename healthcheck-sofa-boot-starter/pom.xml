@@ -86,12 +86,6 @@
         </dependency>
         <!--log end-->
 
-        <!--fastjson-->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-        </dependency>
-
         <!--test-->
         <dependency>
             <groupId>junit</groupId>
