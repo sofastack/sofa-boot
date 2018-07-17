@@ -33,9 +33,11 @@ import java.util.List;
  * @version $Id: AfterHealthCheckCallback.java, v 0.1 2018年03月09日 上午11:10 liangen Exp $
  */
 public class AfterHealthCheckCallbackProcessor {
-    private static Logger logger = SofaBootHealthCheckLoggerFactory
-                                     .getLogger(AfterHealthCheckCallbackProcessor.class
-                                         .getCanonicalName());
+    private static Logger             logger       = SofaBootHealthCheckLoggerFactory
+                                                       .getLogger(AfterHealthCheckCallbackProcessor.class
+                                                           .getCanonicalName());
+
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public boolean checkAfterHealthCheckCallback() {
 
@@ -77,7 +79,7 @@ public class AfterHealthCheckCallbackProcessor {
                     logger.error("SOFABoot middleware after readiness check callback("
                                  + middlewareAfterReadinessCheckCallback.getClass()
                                  + ") failed, the details is: "
-                                 + new ObjectMapper().writeValueAsString(health.getDetails()));
+                                 + objectMapper.writeValueAsString(health.getDetails()));
                 } else {
                     logger.info("SOFABoot middleware after readiness check callback("
                                 + middlewareAfterReadinessCheckCallback.getClass() + ") ]success.");
@@ -128,7 +130,7 @@ public class AfterHealthCheckCallbackProcessor {
                     logger.error("SOFABoot application after readiness check callback("
                                  + afterReadinessCheckCallback.getClass()
                                  + ") failed, the details is: "
-                                 + new ObjectMapper().writeValueAsString(health.getDetails()));
+                                 + objectMapper.writeValueAsString(health.getDetails()));
                 } else {
                     logger.info("SOFABoot application after readiness check callback("
                                 + afterReadinessCheckCallback.getClass() + ") ]success.");

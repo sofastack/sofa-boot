@@ -36,9 +36,11 @@ import java.util.List;
  * @version $Id: HealthIndicatorCheckProcessor.java, v 0.1 2017年10月20日 上午10:55 liangen Exp $
  */
 public class HealthIndicatorCheckProcessor {
-    private static Logger logger = SofaBootHealthCheckLoggerFactory
-                                     .getLogger(HealthIndicatorCheckProcessor.class
-                                         .getCanonicalName());
+    private static Logger             logger       = SofaBootHealthCheckLoggerFactory
+                                                       .getLogger(HealthIndicatorCheckProcessor.class
+                                                           .getCanonicalName());
+
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public boolean checkIndicator() {
         if (skipHealthIndicator()) {
@@ -63,7 +65,7 @@ public class HealthIndicatorCheckProcessor {
                     logger.error("HealthIndicator (" + healthIndicator.getClass()
                                  + ")check fail. And the status is[" + status
                                  + "]; the detail is: "
-                                 + new ObjectMapper().writeValueAsString(health.getDetails()));
+                                 + objectMapper.writeValueAsString(health.getDetails()));
                 } else {
                     logger.info("HealthIndicator (" + healthIndicator.getClass()
                                 + ")check success.");
