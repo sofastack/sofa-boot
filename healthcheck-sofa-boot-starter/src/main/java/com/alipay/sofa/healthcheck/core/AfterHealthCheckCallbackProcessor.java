@@ -33,8 +33,7 @@ import java.util.List;
  * @version $Id: AfterHealthCheckCallback.java, v 0.1 2018年03月09日 上午11:10 liangen Exp $
  */
 public class AfterHealthCheckCallbackProcessor {
-    private static Logger             logger       = SofaBootHealthCheckLoggerFactory
-                                                       .getLogger(AfterHealthCheckCallbackProcessor.class);
+    private static Logger             logger       = SofaBootHealthCheckLoggerFactory.getLogger(AfterHealthCheckCallbackProcessor.class);
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 

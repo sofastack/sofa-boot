@@ -30,9 +30,7 @@ import java.util.Properties;
  * Created by liangen on 17/8/6.
  */
 public class HealthCheckConfiguration {
-    private static final Logger logger      = SofaBootHealthCheckLoggerFactory
-                                                .getLogger(HealthCheckConfiguration.class
-                                                    .getCanonicalName());
+    private static final Logger logger      = SofaBootHealthCheckLoggerFactory.getLogger(HealthCheckConfiguration.class);
 
     //Used to store the read properties in a configuration file.
     private static Properties   properties  = new Properties();

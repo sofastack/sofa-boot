@@ -29,9 +29,7 @@ import org.springframework.util.StringUtils;
  * Created by liangen on 17/8/5.
  */
 public class ReadinessCheckProcessor {
-    private static Logger                           logger                            = SofaBootHealthCheckLoggerFactory
-                                                                                          .getLogger(ReadinessCheckProcessor.class
-                                                                                              .getCanonicalName());
+    private static Logger                           logger                            = SofaBootHealthCheckLoggerFactory.getLogger(ReadinessCheckProcessor.class);
 
     private final SpringContextCheckProcessor       springContextCheckProcessor       = new SpringContextCheckProcessor();
 
