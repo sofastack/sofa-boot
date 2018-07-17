@@ -5,4 +5,8 @@ ${AnsiColor.BRIGHT_GREEN}
 .-'    | '  '-'  ' |  |`    |  | |  |   |  '--' / ' '-' ' ' '-' '   |  |
 `-----'   `-----'  `--'     `--' `--'   `------'   `---'   `---'    `--'
 
+${AnsiColor.BRIGHT_RED}
+Spring Boot Version: ${spring-boot.version}${spring-boot.formatted-version}
+SOFABoot Version: ${sofa-boot.version}${sofa-boot.formatted-version}
 Powered By Ant Financial Services Group
+${AnsiColor.BLACK}
