@@ -17,6 +17,8 @@
 package com.alipay.sofa.infra.usercases;
 
 import com.alipay.sofa.infra.endpoint.SofaBootVersionEndpoint;
+import mockit.Mock;
+import mockit.MockUp;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -34,7 +36,13 @@ public class SofaBootVersionEndpointTest {
     public void test() {
         SofaBootVersionEndpoint sofaBootVersionEndpoint = new SofaBootVersionEndpoint();
         List<Object> result = (List<Object>) sofaBootVersionEndpoint.invoke();
-        Properties versionInfo = (Properties) result.get(0);
+        List<Object> cacheResult = (List<Object>) sofaBootVersionEndpoint.invoke();
+
+        Assert.assertNotNull(result);
+        Assert.assertNotNull(cacheResult);
+        Assert.assertTrue(result.equals(cacheResult));
+
+        Properties versionInfo = (Properties) cacheResult.get(0);
 
         Assert.assertTrue("com.alipay.sofa".equals(versionInfo.getProperty("GroupId")));
         Assert.assertTrue("infra-sofa-boot-starter".equals(versionInfo.getProperty("ArtifactId")));
