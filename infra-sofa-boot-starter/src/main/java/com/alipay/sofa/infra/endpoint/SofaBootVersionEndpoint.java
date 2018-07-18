@@ -17,7 +17,6 @@
 package com.alipay.sofa.infra.endpoint;
 
 import com.alipay.sofa.infra.log.InfraHealthCheckLoggerFactory;
-import com.alipay.sofa.infra.standard.AbstractSofaBootMiddlewareVersionFacade;
 import org.slf4j.Logger;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactoryUtils;
@@ -43,8 +42,7 @@ import java.util.*;
  * @since 2018/03/26
  */
 @ConfigurationProperties(prefix = "com.alipay.sofa.versions")
-public class SofaBootVersionEndpoint extends AbstractEndpoint<Object> implements
-                                                                     ApplicationContextAware {
+public class SofaBootVersionEndpoint extends AbstractEndpoint<Object> {
     public static final String                  SOFA_BOOT_VERSION_PREFIX     = "sofaboot_versions";
     public static final String                  SOFA_BOOT_VERSION_PROPERTIES = "classpath*:META-INF/sofa.versions.properties";
 
@@ -54,8 +52,6 @@ public class SofaBootVersionEndpoint extends AbstractEndpoint<Object> implements
     private List<Object>                        endpointResult               = null;
 
     private PathMatchingResourcePatternResolver resourcePatternResolver      = new PathMatchingResourcePatternResolver();
-
-    private ApplicationContext                  applicationContext;
 
     public SofaBootVersionEndpoint() {
         super(SOFA_BOOT_VERSION_PREFIX, false);
@@ -68,7 +64,7 @@ public class SofaBootVersionEndpoint extends AbstractEndpoint<Object> implements
             return this.endpointResult;
         }
         List<Object> result = new ArrayList<>();
-        //first https://stackoverflow.com/questions/9259819/how-to-read-values-from-properties-file
+        //https://stackoverflow.com/questions/9259819/how-to-read-values-from-properties-file
         try {
             List<Properties> gavResult = new LinkedList<>();
             this.generateGavResult(gavResult);
@@ -77,21 +73,6 @@ public class SofaBootVersionEndpoint extends AbstractEndpoint<Object> implements
             }
         } catch (Exception ex) {
             logger.warn("Load properties failed " + " : " + ex.getMessage());
-        }
-        //second Interface
-        @SuppressWarnings("rawtypes")
-        Collection<AbstractSofaBootMiddlewareVersionFacade> sofaBootMiddlewares = BeanFactoryUtils
-            .beansOfTypeIncludingAncestors(this.applicationContext,
-                AbstractSofaBootMiddlewareVersionFacade.class).values();
-
-        for (AbstractSofaBootMiddlewareVersionFacade sofaBootMiddleware : sofaBootMiddlewares) {
-            if (sofaBootMiddleware == null) {
-                continue;
-            }
-            Map<String, Object> info = this.getVersionInfo(sofaBootMiddleware);
-            if (info != null && info.size() > 0) {
-                result.add(info);
-            }
         }
         //cache
         this.endpointResult = result;
@@ -155,19 +136,4 @@ public class SofaBootVersionEndpoint extends AbstractEndpoint<Object> implements
         return resultList;
     }
 
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
-
-    private Map<String, Object> getVersionInfo(AbstractSofaBootMiddlewareVersionFacade sofaBootMiddleware) {
-        Map<String, Object> result = new HashMap<>();
-        result.put("name", sofaBootMiddleware.getName());
-        result.put("version", sofaBootMiddleware.getVersion());
-        result.put("authors", sofaBootMiddleware.getAuthors());
-        result.put("docs", sofaBootMiddleware.getDocs());
-        Map<String, Object> runtimeInfo = sofaBootMiddleware.getRuntimeInfo();
-        result.put("runtimeInfo", runtimeInfo);
-        return result;
-    }
 }
