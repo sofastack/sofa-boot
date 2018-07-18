@@ -18,11 +18,8 @@ package com.alipay.sofa.infra.endpoint;
 
 import com.alipay.sofa.infra.log.InfraHealthCheckLoggerFactory;
 import org.slf4j.Logger;
-import org.springframework.beans.BeansException;
 import org.springframework.boot.actuate.endpoint.AbstractEndpoint;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.EncodedResource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -80,10 +77,6 @@ public class SofaBootVersionEndpoint extends AbstractEndpoint<Object> {
 
     private void generateGavResult(List<Properties> gavResult) throws IOException {
         //read sofa.versions.properties
-        this.generateSofaVersionProperties(gavResult);
-    }
-
-    private void generateSofaVersionProperties(List<Properties> gavResult) throws IOException {
         List<Resource> pomResourceLocations = getSofaVersionsPropertiesResources();
         if (pomResourceLocations == null || pomResourceLocations.size() <= 0) {
             return;
@@ -134,5 +127,4 @@ public class SofaBootVersionEndpoint extends AbstractEndpoint<Object> {
         }
         return resultList;
     }
-
 }
