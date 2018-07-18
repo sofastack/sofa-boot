@@ -16,13 +16,13 @@
  */
 package com.alipay.sofa.runtime.spring;
 
-import com.alipay.sofa.ark.spi.service.PriorityOrdered;
 import com.alipay.sofa.runtime.api.annotation.SofaClientFactory;
 import com.alipay.sofa.runtime.api.aware.ClientFactoryAware;
 import com.alipay.sofa.runtime.api.client.ClientFactory;
 import com.alipay.sofa.runtime.client.impl.ClientFactoryImpl;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.core.PriorityOrdered;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
@@ -87,7 +87,7 @@ public class ClientFactoryBeanPostProcessor implements BeanPostProcessor, Priori
     }
 
     @Override
-    public int getPriority() {
+    public int getOrder() {
         return LOWEST_PRECEDENCE;
     }
 }
