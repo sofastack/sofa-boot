@@ -21,7 +21,12 @@ import mockit.Mock;
 import mockit.MockUp;
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 
+import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
@@ -46,14 +51,26 @@ public class SofaBootVersionEndpointTest {
 
         Assert.assertTrue("com.alipay.sofa".equals(versionInfo.getProperty("GroupId")));
         Assert.assertTrue("infra-sofa-boot-starter".equals(versionInfo.getProperty("ArtifactId")));
-        Assert.assertTrue("mock-version".equals(versionInfo.getProperty("Version")));
         Assert.assertTrue("https://github.com/alipay/sofa-boot".equals(versionInfo
             .getProperty("Doc-Url")));
-        Assert.assertTrue("1f79d79565d0eab9dae499a19331718b92fdcb5f".equals(versionInfo
-            .getProperty("Commit-Id")));
-        Assert
-            .assertTrue("2018-06-29T20:08:06+0800".equals(versionInfo.getProperty("Commit-Time")));
-        Assert.assertTrue("2018-06-29T21:25:45+0800".equals(versionInfo.getProperty("Built-Time")));
     }
 
+    @Test
+    public void testException() {
+        new MockUp<SofaBootVersionEndpoint>() {
+            @Mock
+            private List<Resource> getSofaVersionsPropertiesResources() throws IOException {
+                return Collections.singletonList((Resource) new ByteArrayResource(new byte[] {}));
+            }
+        };
+        new SofaBootVersionEndpoint().invoke();
+
+        new MockUp<SofaBootVersionEndpoint>() {
+            @Mock
+            private void generateGavResult(List<Properties> gavResult) throws IOException {
+                throw new RuntimeException("mock");
+            }
+        };
+        new SofaBootVersionEndpoint().invoke();
+    }
 }
