@@ -18,11 +18,8 @@ package com.alipay.sofa.infra.endpoint;
 
 import com.alipay.sofa.infra.log.InfraHealthCheckLoggerFactory;
 import org.slf4j.Logger;
-import org.springframework.beans.BeansException;
 import org.springframework.boot.actuate.endpoint.AbstractEndpoint;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.EncodedResource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -41,8 +38,7 @@ import java.util.*;
  * @since 2018/03/26
  */
 @ConfigurationProperties(prefix = "com.alipay.sofa.versions")
-public class SofaBootVersionEndpoint extends AbstractEndpoint<Object> implements
-                                                                     ApplicationContextAware {
+public class SofaBootVersionEndpoint extends AbstractEndpoint<Object> {
     public static final String                  SOFA_BOOT_VERSION_PREFIX     = "sofaboot_versions";
     public static final String                  SOFA_BOOT_VERSION_PROPERTIES = "classpath*:META-INF/sofa.versions.properties";
 
@@ -52,8 +48,6 @@ public class SofaBootVersionEndpoint extends AbstractEndpoint<Object> implements
     private List<Object>                        endpointResult               = null;
 
     private PathMatchingResourcePatternResolver resourcePatternResolver      = new PathMatchingResourcePatternResolver();
-
-    private ApplicationContext                  applicationContext;
 
     public SofaBootVersionEndpoint() {
         super(SOFA_BOOT_VERSION_PREFIX, false);
@@ -83,10 +77,6 @@ public class SofaBootVersionEndpoint extends AbstractEndpoint<Object> implements
 
     private void generateGavResult(List<Properties> gavResult) throws IOException {
         //read sofa.versions.properties
-        this.generateSofaVersionProperties(gavResult);
-    }
-
-    private void generateSofaVersionProperties(List<Properties> gavResult) throws IOException {
         List<Resource> pomResourceLocations = getSofaVersionsPropertiesResources();
         if (pomResourceLocations == null || pomResourceLocations.size() <= 0) {
             return;
@@ -136,10 +126,5 @@ public class SofaBootVersionEndpoint extends AbstractEndpoint<Object> implements
             resultList.addAll(resourceList);
         }
         return resultList;
-    }
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
     }
 }
