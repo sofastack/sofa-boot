@@ -22,6 +22,7 @@ import com.alipay.sofa.runtime.api.client.ClientFactory;
 import com.alipay.sofa.runtime.client.impl.ClientFactoryImpl;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.core.PriorityOrdered;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
@@ -33,7 +34,7 @@ import java.lang.reflect.Modifier;
  *
  * @author xuanbei 18/3/2
  */
-public class ClientFactoryBeanPostProcessor implements BeanPostProcessor {
+public class ClientFactoryBeanPostProcessor implements BeanPostProcessor, PriorityOrdered {
     private ClientFactory clientFactory;
 
     public ClientFactoryBeanPostProcessor(ClientFactory clientFactory) {
@@ -83,5 +84,10 @@ public class ClientFactoryBeanPostProcessor implements BeanPostProcessor {
     public Object postProcessAfterInitialization(Object bean, String beanName)
                                                                               throws BeansException {
         return bean;
+    }
+
+    @Override
+    public int getOrder() {
+        return LOWEST_PRECEDENCE;
     }
 }
