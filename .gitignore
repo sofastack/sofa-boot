@@ -19,3 +19,4 @@ tmp/
 velocity.log
 .DS_Store
 logs
+.m2
