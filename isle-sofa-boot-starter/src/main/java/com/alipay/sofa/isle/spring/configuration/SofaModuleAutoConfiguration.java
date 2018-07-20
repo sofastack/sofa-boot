@@ -25,6 +25,7 @@ import com.alipay.sofa.isle.spring.listener.SofaModuleContextRefreshedListener;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -44,8 +45,8 @@ public class SofaModuleAutoConfiguration {
     }
 
     @Bean
-    public SofaModuleContextRefreshedListener sofaModuleContextRefreshedListener() {
-        return new SofaModuleContextRefreshedListener();
+    public SofaModuleContextRefreshedListener sofaModuleContextRefreshedListener(ApplicationContext applicationContext) {
+        return new SofaModuleContextRefreshedListener(applicationContext);
     }
 
     @Configuration

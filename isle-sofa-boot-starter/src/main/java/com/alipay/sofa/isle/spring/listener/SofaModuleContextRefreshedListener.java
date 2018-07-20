@@ -22,13 +22,12 @@ import com.alipay.sofa.isle.stage.ModelCreatingStage;
 import com.alipay.sofa.isle.stage.ModuleLogOutputStage;
 import com.alipay.sofa.isle.stage.SpringContextInstallStage;
 import com.alipay.sofa.runtime.spi.log.SofaLogger;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.core.Ordered;
 import org.springframework.core.PriorityOrdered;
-
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * SofaModuleContextRefreshedListener listens to ContextRefreshedEvent, this class should execute before ${@link HealthCheckTrigger}.
@@ -38,11 +37,15 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class SofaModuleContextRefreshedListener implements PriorityOrdered,
                                                ApplicationListener<ContextRefreshedEvent> {
-    private static final AtomicBoolean INIT = new AtomicBoolean(false);
+    private final ApplicationContext applicationContext;
+
+    public SofaModuleContextRefreshedListener(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
+    }
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        if (INIT.compareAndSet(false, true)) {
+        if (applicationContext.equals(event.getApplicationContext())) {
             DefaultPipelineContext pipelineContext = new DefaultPipelineContext();
             pipelineContext.appendStage(new ModelCreatingStage((AbstractApplicationContext) event
                 .getApplicationContext()));
