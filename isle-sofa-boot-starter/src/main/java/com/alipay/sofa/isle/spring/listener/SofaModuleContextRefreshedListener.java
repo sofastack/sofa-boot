@@ -22,7 +22,9 @@ import com.alipay.sofa.isle.stage.ModelCreatingStage;
 import com.alipay.sofa.isle.stage.ModuleLogOutputStage;
 import com.alipay.sofa.isle.stage.SpringContextInstallStage;
 import com.alipay.sofa.runtime.spi.log.SofaLogger;
+import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.support.AbstractApplicationContext;
@@ -36,12 +38,9 @@ import org.springframework.core.PriorityOrdered;
  * @author xuanbei 18/3/12
  */
 public class SofaModuleContextRefreshedListener implements PriorityOrdered,
-                                               ApplicationListener<ContextRefreshedEvent> {
-    private final ApplicationContext applicationContext;
-
-    public SofaModuleContextRefreshedListener(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
-    }
+                                               ApplicationListener<ContextRefreshedEvent>,
+                                               ApplicationContextAware {
+    private ApplicationContext applicationContext;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -65,5 +64,10 @@ public class SofaModuleContextRefreshedListener implements PriorityOrdered,
     @Override
     public int getOrder() {
         return Ordered.HIGHEST_PRECEDENCE;
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
     }
 }
