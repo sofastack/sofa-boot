@@ -45,7 +45,7 @@
         <sofa.lookout.version>1.4.0</sofa.lookout.version>
         <!-- sofa-common-tools for log -->
         <sofa.common.tools.version>1.0.12</sofa.common.tools.version>
-        <bolt.version>1.4.1</bolt.version>
+        <bolt.version>1.4.2</bolt.version>
         <hessian.version>3.3.0</hessian.version>
         <!-- 3rd lib dependency -->
         <fastjson.version>1.2.47</fastjson.version>
@@ -140,7 +140,7 @@
                 <classifier>ark-plugin</classifier>
                 <version>${sofa.boot.version}</version>
             </dependency>
-          
+
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>rpc-sofa-boot-starter</artifactId>
