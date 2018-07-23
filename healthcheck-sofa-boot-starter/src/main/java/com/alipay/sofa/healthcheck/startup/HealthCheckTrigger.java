@@ -20,8 +20,10 @@ import com.alipay.sofa.healthcheck.core.HealthCheckManager;
 import com.alipay.sofa.healthcheck.core.HealthChecker;
 import com.alipay.sofa.healthcheck.log.SofaBootHealthCheckLoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.beans.BeansException;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -36,18 +38,19 @@ import java.util.List;
  * Created by liangen on 17/8/4.
  */
 @Component
-public class HealthCheckTrigger implements ApplicationListener<ContextRefreshedEvent> {
-    private static Logger logger = SofaBootHealthCheckLoggerFactory
-                                     .getLogger(HealthCheckTrigger.class.getCanonicalName());
+public class HealthCheckTrigger implements ApplicationListener<ContextRefreshedEvent>,
+                               ApplicationContextAware {
+    private static Logger      logger = SofaBootHealthCheckLoggerFactory
+                                          .getLogger(HealthCheckTrigger.class.getCanonicalName());
+    private ApplicationContext applicationContext;
 
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-        ApplicationContext applicationContext = contextRefreshedEvent.getApplicationContext();
-        HealthCheckManager.init(applicationContext);
-
-        logPrintCheckers();
-
-        ReadinessCheckProcessor healthCheckStartupProcessor = new ReadinessCheckProcessor();
-        healthCheckStartupProcessor.checkHealth();
+        if (applicationContext.equals(contextRefreshedEvent.getApplicationContext())) {
+            HealthCheckManager.init(applicationContext);
+            logPrintCheckers();
+            ReadinessCheckProcessor healthCheckStartupProcessor = new ReadinessCheckProcessor();
+            healthCheckStartupProcessor.checkHealth();
+        }
     }
 
     private void logPrintCheckers() {
@@ -69,5 +72,10 @@ public class HealthCheckTrigger implements ApplicationListener<ContextRefreshedE
         }
 
         logger.info(hcInfo.toString());
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
     }
 }
