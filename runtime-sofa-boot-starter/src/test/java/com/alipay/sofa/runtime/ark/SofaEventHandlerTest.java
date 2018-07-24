@@ -20,7 +20,7 @@ import com.alipay.sofa.ark.spi.constant.Constants;
 import com.alipay.sofa.ark.spi.event.BizEvent;
 import com.alipay.sofa.ark.spi.model.Biz;
 import com.alipay.sofa.ark.spi.model.BizState;
-import com.alipay.sofa.healthcheck.initializer.HealthCheckInitializer;
+import com.alipay.sofa.healthcheck.initializer.SofaBootHealthCheckInitializer;
 import com.alipay.sofa.runtime.SofaFramework;
 import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import com.alipay.sofa.runtime.beans.service.SampleService;
@@ -41,6 +41,7 @@ import org.springframework.boot.test.util.EnvironmentTestUtils;
 import org.springframework.context.annotation.*;
 
 import java.util.Collections;
+import java.util.Set;
 
 /**
  * @author qilong.zql
@@ -48,10 +49,10 @@ import java.util.Collections;
  */
 public class SofaEventHandlerTest {
 
-    private final AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
+    private AnnotationConfigApplicationContext applicationContext;
 
     @Mocked
-    private Biz                                      biz;
+    private Biz                                biz;
 
     @Before
     public void before() {
@@ -75,12 +76,13 @@ public class SofaEventHandlerTest {
             }
         };
 
+        applicationContext = new AnnotationConfigApplicationContext();
         EnvironmentTestUtils.addEnvironment(this.applicationContext,
             "com.alipay.sofa.boot.disableJvmFirst=true");
         EnvironmentTestUtils.addEnvironment(this.applicationContext,
             "com.alipay.sofa.boot.skipJvmReferenceHealthCheck=true");
         this.applicationContext.register(SofaRuntimeAutoConfiguration.class,
-            HealthCheckInitializer.class, XmlConfiguration.class);
+            SofaBootHealthCheckInitializer.class, XmlConfiguration.class);
         this.applicationContext.refresh();
     }
 
@@ -155,6 +157,10 @@ public class SofaEventHandlerTest {
     @After
     public void closeContext() {
         this.applicationContext.close();
+        Set<SofaRuntimeManager> runtimeManagers = SofaFramework.getRuntimeSet();
+        for (SofaRuntimeManager runtimeManager : runtimeManagers) {
+            SofaFramework.unRegisterSofaRuntimeManager(runtimeManager);
+        }
     }
 
     @Configuration

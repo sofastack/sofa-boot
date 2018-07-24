@@ -14,17 +14,49 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.healthcheck.startup;
+package com.alipay.sofa.healthcheck.bean;
 
+import com.alipay.sofa.healthcheck.core.HealthChecker;
 import org.springframework.boot.actuate.health.Health;
-import org.springframework.context.ApplicationContext;
 
 /**
- *
  * @author liangen
- * @version $Id: SofaBootAfterHealthCheckCallback.java, v 0.1 2018年03月07日 上午10:30 liangen Exp $
+ * @author qilong.zql
+ * @version 2.3.0
  */
-public interface SofaBootAfterReadinessCheckCallback {
+public class NetworkHealthChecker implements HealthChecker {
 
-    Health onHealthy(ApplicationContext applicationContext);
+    private boolean isStrict;
+
+    private int     retryCount;
+
+    public NetworkHealthChecker(boolean isStrict, int retryCount) {
+        this.isStrict = isStrict;
+        this.retryCount = retryCount;
+    }
+
+    @Override
+    public Health isHealthy() {
+        return Health.up().withDetail("network", "network is ok").build();
+    }
+
+    @Override
+    public String getName() {
+        return "networkHealthChecker";
+    }
+
+    @Override
+    public int getRetryCount() {
+        return retryCount;
+    }
+
+    @Override
+    public long getRetryTimeInterval() {
+        return 200;
+    }
+
+    @Override
+    public boolean isStrictCheck() {
+        return isStrict;
+    }
 }

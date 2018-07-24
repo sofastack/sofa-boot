@@ -32,9 +32,6 @@ import org.springframework.context.ApplicationContext;
  * @since 2.3.1
  */
 public class IntegrationTest extends AbstractTestBase {
-    @Autowired
-    private AwareTest awareTest;
-
     @Test
     public void testSofaClientFactoryAnnotationTest() {
         Assert.assertNotNull(awareTest);
@@ -65,7 +62,7 @@ public class IntegrationTest extends AbstractTestBase {
 
         HealthChecker healthChecker = (HealthChecker) context.getBean("sofaComponentHealthChecker");
         Assert.assertTrue(healthChecker.isHealthy().getStatus().equals(Status.UP));
-        Assert.assertEquals("RUNTIME-COMPONENT", healthChecker.getComponentName());
+        Assert.assertEquals("SOFABoot-Components", healthChecker.getName());
         Assert.assertEquals(0, healthChecker.getRetryCount());
         Assert.assertEquals(0, healthChecker.getRetryTimeInterval());
         Assert.assertEquals(true, healthChecker.isStrictCheck());

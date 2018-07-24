@@ -17,13 +17,11 @@
   -->
 
 <configuration>
-    <!--  logback appenders -->
-
     <!-- 按照每天生成日志文件 -->
     <appender name="ERROR-APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <append>true</append>
         <!-- 过滤器，只记录 error 级别的日志 -->
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>error</level>
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
@@ -46,7 +44,7 @@
 
     <appender name="ROOT-APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <append>true</append>
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>${logging.level.com.alipay.sofa.healthcheck}</level>
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
@@ -70,36 +68,4 @@
         <appender-ref ref="ROOT-APPENDER"/>
         <appender-ref ref="ERROR-APPENDER"/>
     </root>
-
-
-    <!--<appender name="HEALTH-CHECK-APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
-        <!--<append>true</append>-->
-        <!--<filter class="ch.qos.logback.classic.filter.LevelFilter">-->
-            <!--<level>info</level>-->
-            <!--<onMatch>ACCEPT</onMatch>-->
-            <!--<onMismatch>DENY</onMismatch>-->
-        <!--</filter>-->
-        <!--<file>${logging.path}/health-check/health-check.log</file>-->
-        <!--&lt;!&ndash; 每天生成一个日志文件，保存30天的日志文件 &ndash;&gt;-->
-        <!--<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
-            <!--&lt;!&ndash;日志文件输出的文件名:按天回滚 daily &ndash;&gt;-->
-            <!--<FileNamePattern>${logging.path}/health-check/health-check.log.%d{yyyy-MM-dd}</FileNamePattern>-->
-            <!--&lt;!&ndash;日志文件保留天数&ndash;&gt;-->
-            <!--<MaxHistory>30</MaxHistory>-->
-        <!--</rollingPolicy>-->
-        <!--<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">-->
-            <!--<pattern>%d %-5p %-32t %c{2} - %m%n</pattern>-->
-            <!--&lt;!&ndash; 编码 &ndash;&gt;-->
-            <!--<charset>${file.encoding}</charset>-->
-        <!--</encoder>-->
-    <!--</appender>-->
-
-    <!--&lt;!&ndash;  logback loggers &ndash;&gt;-->
-
-    <!--<logger name="HEALTH-CHECK-LOG" level="${logging.level.com.alipay.boot.healthcheck}" additivity="false">-->
-        <!--<appender-ref ref="HEALTH-CHECK-APPENDER"/>-->
-        <!--<appender-ref ref="ERROR-APPENDER"/>-->
-    <!--</logger>-->
-
-
 </configuration>

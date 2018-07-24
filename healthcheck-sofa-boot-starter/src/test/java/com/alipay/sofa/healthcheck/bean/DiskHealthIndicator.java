@@ -20,13 +20,23 @@ import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 
 /**
- *
  * @author liangen
- * @version $Id: HealthIndicatorA.java, v 0.1 2018年03月11日 下午1:44 liangen Exp $
+ * @version 2.3.0
  */
-public class HealthIndicatorA implements HealthIndicator {
+public class DiskHealthIndicator implements HealthIndicator {
+
+    private boolean health;
+
+    public DiskHealthIndicator(boolean health) {
+        this.health = health;
+    }
+
     @Override
     public Health health() {
-        return Health.up().withDetail("cpu", "cpu is ok").build();
+        if (health) {
+            return Health.up().withDetail("disk", "hard disk is ok").build();
+        } else {
+            return Health.down().withDetail("disk", "hard disk is bad").build();
+        }
     }
 }

@@ -19,7 +19,6 @@
 <!DOCTYPE log4j:configuration SYSTEM "http://toolkit.alibaba-inc.com/dtd/log4j/log4j.dtd">
 
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
-
     <appender name="ERROR-APPENDER" class="org.apache.log4j.DailyRollingFileAppender">
         <param name="file" value="${logging.path}/health-check/common-error.log"/>
         <param name="append" value="true"/>
@@ -40,12 +39,9 @@
         </layout>
     </appender>
 
-
-
     <root>
         <level value="${logging.level.com.alipay.sofa.healthcheck}"/>
         <appender-ref ref="ROOT-APPENDER"/>
         <appender-ref ref="ERROR-APPENDER"/>
     </root>
-
 </log4j:configuration>

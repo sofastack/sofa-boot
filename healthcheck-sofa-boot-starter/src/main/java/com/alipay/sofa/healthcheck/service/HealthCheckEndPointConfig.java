@@ -24,23 +24,9 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * @author liangen
- * @version $Id: EndConfig.java, v 0.1 2018年02月03日 上午12:30 liangen Exp $
+ * @version 2.3.0
  */
 @Configuration
 public class HealthCheckEndPointConfig {
-    static final String READINESS_CHECK_ENDPOINT_NAME = "sofaboot_health_readiness";
-
-    @Bean
-    @ConditionalOnWebApplication
-    @ConditionalOnProperty(prefix = "com.alipay.sofa.healthcheck.readiness", name = "enabled", matchIfMissing = true)
-    public SofaBootReadinessCheckEndpoint readinessCheck() {
-        return new SofaBootReadinessCheckEndpoint(READINESS_CHECK_ENDPOINT_NAME, false);
-    }
-
-    @Bean
-    @ConditionalOnBean(SofaBootReadinessCheckEndpoint.class)
-    public SofaBootReadinessCheckMvcEndpoint sofaBootReadinessCheckMvcEndpoint(SofaBootReadinessCheckEndpoint delegate) {
-        return new SofaBootReadinessCheckMvcEndpoint(delegate);
-    }
 
 }

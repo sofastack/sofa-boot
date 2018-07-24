@@ -26,7 +26,7 @@ import org.springframework.boot.actuate.health.HealthIndicator;
  * @author qilong.zql
  * @since 2.5.0
  */
-public class MultiApplicationHealthChecker implements HealthIndicator {
+public class MultiApplicationHealthIndicator implements HealthIndicator {
 
     @Override
     public Health health() {

@@ -16,131 +16,155 @@
  */
 package com.alipay.sofa.healthcheck.startup;
 
-import com.alipay.sofa.healthcheck.configuration.HealthCheckConfiguration;
-import com.alipay.sofa.healthcheck.configuration.HealthCheckConfigurationConstants;
+import com.alipay.sofa.healthcheck.configuration.HealthCheckConstants;
 import com.alipay.sofa.healthcheck.core.*;
 import com.alipay.sofa.healthcheck.log.SofaBootHealthCheckLoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.health.Health;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.EnvironmentAware;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.core.env.Environment;
 import org.springframework.util.StringUtils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- *
  * Health check start checker.
- * Created by liangen on 17/8/5.
+ * @author liangen
+ * @author qilong.zql
  */
-public class ReadinessCheckProcessor {
-    private static Logger                           logger                            = SofaBootHealthCheckLoggerFactory
-                                                                                          .getLogger(ReadinessCheckProcessor.class);
+public class ReadinessCheckProcessor implements ApplicationContextAware, EnvironmentAware,
+                                    ApplicationListener<ContextRefreshedEvent> {
 
-    private final SpringContextCheckProcessor       springContextCheckProcessor       = new SpringContextCheckProcessor();
+    private static Logger                     logger                 = SofaBootHealthCheckLoggerFactory
+                                                                         .getLogger(ReadinessCheckProcessor.class);
 
-    private final ComponentCheckProcessor           componentCheckProcessor           = new ComponentCheckProcessor();
+    private ApplicationContext                applicationContext;
 
-    private final HealthIndicatorCheckProcessor     healthIndicatorCheckProcessor     = new HealthIndicatorCheckProcessor();
+    private Environment                       environment;
 
-    private final AfterHealthCheckCallbackProcessor afterHealthCheckCallbackProcessor = new AfterHealthCheckCallbackProcessor();
+    @Autowired
+    private HealthCheckerProcessor            healthCheckerProcessor;
 
-    public void checkHealth() {
+    @Autowired
+    private HealthIndicatorProcessor          healthIndicatorProcessor;
 
-        //publish SofaBootBeforeReadinessCheckEvent before the health check.
+    @Autowired
+    private AfterHealthCheckCallbackProcessor afterHealthCheckCallbackProcessor;
+
+    private boolean                           healthCheckerStatus    = true;
+
+    private Map<String, Health>               healthCheckerDetails   = new HashMap<>();
+
+    private boolean                           healthIndicatorStatus  = true;
+
+    private Map<String, Health>               healthIndicatorDetails = new HashMap<>();
+
+    private boolean                           healthCallbackStatus   = true;
+
+    private Map<String, Health>               healthCallbackDetails  = new HashMap<>();
+
+    @Override
+    public void setApplicationContext(ApplicationContext cxt) throws BeansException {
+        applicationContext = cxt;
+    }
+
+    @Override
+    public void setEnvironment(Environment env) {
+        environment = env;
+    }
+
+    @Override
+    public void onApplicationEvent(ContextRefreshedEvent event) {
+        healthCheckerProcessor.init();
+        healthIndicatorProcessor.init();
+        afterHealthCheckCallbackProcessor.init();
         publishBeforeHealthCheckEvent();
-
-        boolean result = false;
-        try {
-            StartUpHealthCheckStatus.openStartStatus();
-            //run the startup check
-            if (startHealthCheckProcess()) {
-                //run the runtime check
-                result = operationHealthCheckProcess();
-            }
-        } finally {
-            if (result) {
-                logger.info("Readiness check result: success");
-            } else {
-                logger.error("Readiness check result: fail");
-            }
-            StartUpHealthCheckStatus.closeStartStatus();
-        }
-    }
-
-    private boolean startHealthCheckProcess() {
-        boolean result = true;
-        try {
-            //是否跳过所有健康检查
-            if (skipAllCheck()) {
-                logger.info("Skip the first phase of the readiness check");
-                return true;
-            }
-
-            logger.info("Begin first phase of the readiness check");
-
-            if (!springContextCheckProcessor.springContextCheck()) {
-                result = false;
-            }
-
-            if (!componentCheckProcessor.startupCheckComponent()) {
-                result = false;
-            }
-
-            if (!healthIndicatorCheckProcessor.checkIndicator()) {
-                result = false;
-            }
-
-            if (result) {
-                logger.info("first phase of the readiness check result: success");
-            } else {
-                logger.error("first phase of the readiness check result: fail");
-            }
-            return result;
-        } catch (Throwable e) {
-            logger
-                .error("Unknown error occurred while doing first phase of the readiness check", e);
-            return false;
-        }
-    }
-
-    private boolean skipAllCheck() {
-        String skipAllCheck = HealthCheckConfiguration
-            .getPropertyAllCircumstances(HealthCheckConfigurationConstants.SOFABOOT_SKIP_ALL_HEALTH_CHECK);
-
-        if (!StringUtils.hasText(skipAllCheck)) {
-            return false;
-        }
-
-        return "true".equalsIgnoreCase(skipAllCheck);
+        readinessHealthCheck();
     }
 
     /**
-     * run the runtime check
-     * @return
+     * Publish Spring Boot Event before readiness health check.
      */
-    private boolean operationHealthCheckProcess() {
-        boolean checkResult = true;
-
-        try {
-            logger.info("Begin second phase of the readiness check");
-
-            if (!afterHealthCheckCallbackProcessor.checkAfterHealthCheckCallback()) {
-                checkResult = false;
-            }
-
-            if (checkResult) {
-                logger.info("second phase of the readiness check result: success");
-            } else {
-                logger.error("second phase of the readiness check result: fail");
-            }
-        } catch (Throwable e) {
-            logger.error("Unknown error occurred while doing second phase of the readiness check",
-                e);
-            return false;
-        }
-
-        return checkResult;
+    public void publishBeforeHealthCheckEvent() {
+        logger.info("Start to publish SofaBootBeforeReadinessCheckEvent.");
+        applicationContext.publishEvent(new SofaBootBeforeReadinessCheckEvent(applicationContext));
     }
 
-    private void publishBeforeHealthCheckEvent() {
-        HealthCheckManager.publishEvent(new SofaBootBeforeReadinessCheckEvent(HealthCheckManager
-            .getApplicationContext()));
+    /**
+     * Do readiness health check.
+     */
+    public void readinessHealthCheck() {
+        if (skipAllCheck()) {
+            logger.warn("Skip all readiness health check.");
+        } else {
+            if (skipComponent()) {
+                logger.warn("Skip HealthChecker health check.");
+            } else {
+                healthCheckerStatus = healthCheckerProcessor
+                    .readinessHealthCheck(healthCheckerDetails);
+            }
+            if (skipIndicator()) {
+                logger.warn("Skip HealthIndicator health check.");
+            } else {
+                healthIndicatorStatus = healthIndicatorProcessor
+                    .readinessHealthCheck(healthIndicatorDetails);
+            }
+        }
+        healthCallbackStatus = afterHealthCheckCallbackProcessor
+            .afterReadinessCheckCallback(healthCallbackDetails);
+        if (healthCheckerStatus && healthIndicatorStatus && healthCallbackStatus) {
+            logger.info("Readiness check result: success");
+        } else {
+            logger.error("Readiness check result: fail");
+        }
+    }
 
+    public boolean skipAllCheck() {
+        String skipAllCheck = environment
+            .getProperty(HealthCheckConstants.SOFABOOT_SKIP_ALL_HEALTH_CHECK);
+        return StringUtils.hasText(skipAllCheck) && "true".equalsIgnoreCase(skipAllCheck);
+    }
+
+    public boolean skipComponent() {
+        String skipComponent = environment
+            .getProperty(HealthCheckConstants.SOFABOOT_SKIP_COMPONENT_HEALTH_CHECK);
+        return StringUtils.hasText(skipComponent) && "true".equalsIgnoreCase(skipComponent);
+    }
+
+    public boolean skipIndicator() {
+        String skipIndicator = environment
+            .getProperty(HealthCheckConstants.SOFABOOT_SKIP_HEALTH_INDICATOR_CHECK);
+        return StringUtils.hasText(skipIndicator) && "true".equalsIgnoreCase(skipIndicator);
+    }
+
+    public boolean getHealthCheckerStatus() {
+        return healthCheckerStatus;
+    }
+
+    public Map<String, Health> getHealthCheckerDetails() {
+        return healthCheckerDetails;
+    }
+
+    public boolean getHealthIndicatorStatus() {
+        return healthIndicatorStatus;
+    }
+
+    public Map<String, Health> getHealthIndicatorDetails() {
+        return healthIndicatorDetails;
+    }
+
+    public boolean getHealthCallbackStatus() {
+        return healthCallbackStatus;
+    }
+
+    public Map<String, Health> getHealthCallbackDetails() {
+        return healthCallbackDetails;
     }
 }

@@ -14,34 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.healthcheck.service;
+package com.alipay.sofa.healthcheck.bean;
 
-import com.alipay.sofa.healthcheck.core.SpringContextCheckProcessor;
+import com.alipay.sofa.healthcheck.startup.SofaBootAfterReadinessReadinessCheckCallback;
 import org.springframework.boot.actuate.health.Health;
-import org.springframework.boot.actuate.health.HealthIndicator;
-import org.springframework.stereotype.Component;
+import org.springframework.context.ApplicationContext;
 
 /**
- * The health check HTTP checker for spring context.
  * @author liangen
- * @version $Id: SpringContextHealthCheckInfo.java, v 0.1 2018年02月01日 下午9:38 liangen Exp $
+ * @version 2.3.0
  */
-@Component
-public class SpringContextHealthCheckInfo implements HealthIndicator {
+public class ApplicationHealthCheckCallback implements SofaBootAfterReadinessReadinessCheckCallback {
 
-    private final SpringContextCheckProcessor springContextCheckProcessor = new SpringContextCheckProcessor();
+    private boolean mark;
 
-    @Override
-    public Health health() {
-
-        boolean checkSuccessful = springContextCheckProcessor.springContextCheck();
-
-        if (checkSuccessful) {
-            return Health.up().build();
-        } else {
-            return Health.down().build();
-        }
-
+    public ApplicationHealthCheckCallback(boolean mark) {
+        this.mark = mark;
     }
 
+    @Override
+    public Health onHealthy(ApplicationContext applicationContext) {
+        mark = true;
+        return Health.up().withDetail("port", "port is ok").build();
+    }
+
+    public boolean isMark() {
+        return mark;
+    }
 }

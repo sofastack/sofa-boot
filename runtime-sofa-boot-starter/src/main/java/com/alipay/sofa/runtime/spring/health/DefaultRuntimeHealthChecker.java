@@ -47,7 +47,7 @@ public class DefaultRuntimeHealthChecker implements RuntimeHealthChecker, Applic
         }
 
         for (HealthIndicator healthIndicator : indicatorMap.values()) {
-            if (healthIndicator instanceof MultiApplicationHealthChecker) {
+            if (healthIndicator instanceof MultiApplicationHealthIndicator) {
                 continue;
             }
 

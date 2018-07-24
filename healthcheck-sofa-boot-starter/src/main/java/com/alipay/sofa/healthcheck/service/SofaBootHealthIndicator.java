@@ -16,38 +16,37 @@
  */
 package com.alipay.sofa.healthcheck.service;
 
-import com.alipay.sofa.healthcheck.core.ComponentCheckProcessor;
+import com.alipay.sofa.healthcheck.core.HealthCheckerProcessor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
-import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * The health check HTTP checker for component.
+ * The liveness health check.
+ *
  * @author liangen
- * @version $Id: HttpCheckService.java, v 0.1 2017年09月02日 下午1:29 liangen Exp $
+ * @author qilong.zql
+ * @since 2.3.0
  */
-@Component
-public class SofaBootComponentHealthCheckInfo implements HealthIndicator {
+public class SofaBootHealthIndicator implements HealthIndicator {
 
-    private static final String           CHECK_RESULT_PREFIX     = "Middleware";
+    private static final String    CHECK_RESULT_PREFIX = "Middleware";
 
-    private final ComponentCheckProcessor componentCheckProcessor = new ComponentCheckProcessor();
+    @Autowired
+    private HealthCheckerProcessor healthCheckerProcessor;
 
     @Override
     public Health health() {
-
         Map<String, Health> healths = new HashMap<>();
-        boolean checkSuccessful = componentCheckProcessor.livenessCheckComponent(healths);
+        boolean checkSuccessful = healthCheckerProcessor.livenessHealthCheck(healths);
 
         if (checkSuccessful) {
             return Health.up().withDetail(CHECK_RESULT_PREFIX, healths).build();
         } else {
             return Health.down().withDetail(CHECK_RESULT_PREFIX, healths).build();
         }
-
     }
-
 }

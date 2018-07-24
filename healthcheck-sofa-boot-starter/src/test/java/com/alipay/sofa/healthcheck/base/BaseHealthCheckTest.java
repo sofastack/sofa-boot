@@ -14,12 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.healthcheck.util;
+package com.alipay.sofa.healthcheck.base;
 
-import com.alipay.sofa.healthcheck.core.HealthCheckManager;
-import com.alipay.sofa.healthcheck.startup.StartUpHealthCheckStatus;
-import org.junit.After;
-import org.junit.Before;
 import org.springframework.boot.test.util.EnvironmentTestUtils;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -31,18 +27,6 @@ import java.util.Map;
  */
 public class BaseHealthCheckTest {
     protected final AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
-
-    @Before
-    public void init() {
-        HealthCheckManager.init(this.applicationContext);
-    }
-
-    @After
-    public void closeContext() {
-        HealthCheckManager.init(null);
-        StartUpHealthCheckStatus.clean();
-        this.applicationContext.close();
-    }
 
     protected void initApplicationContext(Map<String, Object> properties,
                                           Class<?>... annotatedClasses) {

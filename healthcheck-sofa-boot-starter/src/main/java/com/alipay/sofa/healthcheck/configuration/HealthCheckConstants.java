@@ -14,47 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.healthcheck.core;
-
-import org.springframework.boot.actuate.health.Health;
+package com.alipay.sofa.healthcheck.configuration;
 
 /**
  * @author liangen
  * @author qilong.zql
- * @since 2.3.0
+ * @version 2.3.0
  */
-public interface HealthChecker {
+public class HealthCheckConstants {
 
     /**
-     * HealthCheck information.
-     * @return
+     * skip all readiness check
      */
-    Health isHealthy();
+    public static final String SOFABOOT_SKIP_ALL_HEALTH_CHECK       = "com.alipay.sofa.healthcheck.skip.all";
 
     /**
-     * HealthChecker name
-     * @return
+     * skip all {@link com.alipay.sofa.healthcheck.core.HealthChecker} readiness check
      */
-    @Deprecated
-    String getName();
+    public static final String SOFABOOT_SKIP_COMPONENT_HEALTH_CHECK = "com.alipay.sofa.healthcheck.skip.component";
 
     /**
-     * The number of retries after failure.
-     * @return
+     * skip all {@link org.springframework.boot.actuate.health.HealthIndicator} readiness check
      */
-    int getRetryCount();
+    public static final String SOFABOOT_SKIP_HEALTH_INDICATOR_CHECK = "com.alipay.sofa.healthcheck.skip.indicator";
 
     /**
-     * The time interval for each retry after failure.
-     * @return
+     * health check logging space
      */
-    long getRetryTimeInterval();
-
-    /**
-     * Is it strictly checked?
-     * If true, the final check result of isHealthy() is used as the result of the component's check.
-     * If false, the final result of the component is considered to be healthy, but the exception log is printed.
-     * @return
-     */
-    boolean isStrictCheck();
+    public static final String SOFABOOT_HEALTH_LOG_SPACE            = "com.alipay.sofa.healthcheck";
 }
