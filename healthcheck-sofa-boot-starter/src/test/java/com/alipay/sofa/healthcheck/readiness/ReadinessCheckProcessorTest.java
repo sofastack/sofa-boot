@@ -20,7 +20,6 @@ import com.alipay.sofa.healthcheck.bean.AfterReadinessCheckCallbackA;
 import com.alipay.sofa.healthcheck.bean.HealthIndicatorB;
 import com.alipay.sofa.healthcheck.bean.ReferenceA;
 import com.alipay.sofa.healthcheck.configuration.HealthCheckConfigurationConstants;
-import com.alipay.sofa.healthcheck.initializer.HealthcheckInitializer;
 import com.alipay.sofa.healthcheck.startup.ReadinessCheckProcessor;
 import com.alipay.sofa.healthcheck.startup.StartUpHealthCheckStatus;
 import com.alipay.sofa.healthcheck.startup.StartUpHealthCheckStatus.HealthIndicatorDetail;
