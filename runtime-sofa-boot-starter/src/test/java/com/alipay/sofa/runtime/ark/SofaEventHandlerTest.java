@@ -143,7 +143,7 @@ public class SofaEventHandlerTest {
                 result = new Object[] {};
                 invocation.getMethod();
                 result = SampleService.class.getMethod("service");
-            };
+            }
         };
         ServiceProxy serviceProxy = DynamicJvmServiceProxyFinder.getDynamicJvmServiceProxyFinder()
             .findServiceProxy(applicationContext.getClassLoader(), contract);
