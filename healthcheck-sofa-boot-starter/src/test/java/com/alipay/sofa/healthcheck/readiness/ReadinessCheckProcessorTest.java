@@ -19,6 +19,7 @@ package com.alipay.sofa.healthcheck.readiness;
 import com.alipay.sofa.healthcheck.bean.AfterReadinessCheckCallbackA;
 import com.alipay.sofa.healthcheck.bean.HealthIndicatorB;
 import com.alipay.sofa.healthcheck.bean.ReferenceA;
+import com.alipay.sofa.healthcheck.configuration.HealthCheckConfigurationConstants;
 import com.alipay.sofa.healthcheck.startup.ReadinessCheckProcessor;
 import com.alipay.sofa.healthcheck.startup.StartUpHealthCheckStatus;
 import com.alipay.sofa.healthcheck.startup.StartUpHealthCheckStatus.HealthIndicatorDetail;
@@ -61,6 +62,36 @@ public class ReadinessCheckProcessorTest extends BaseHealthCheckTest {
         public AfterReadinessCheckCallbackA afterReadinessCheckCallbackA(@Value("${after-readiness-check-callback-a.health:false}") boolean health) {
             return new AfterReadinessCheckCallbackA(health);
         }
+    }
+
+    @Test
+    public void testSkipConfiguration() {
+        Map<String, Object> properties = new LinkedHashMap<>();
+        properties.put("reference-a.count", 5);
+        properties.put("health-indicator-b.health", true);
+        properties.put("after-readiness-check-callback-a.health", true);
+        System
+            .setProperty(HealthCheckConfigurationConstants.SOFABOOT_SKIP_ALL_HEALTH_CHECK, "true");
+        System.setProperty(HealthCheckConfigurationConstants.SOFABOOT_SKIP_COMPONENT_HEALTH_CHECK,
+            "true");
+        System.setProperty(HealthCheckConfigurationConstants.SOFABOOT_SKIP_HEALTH_INDICATOR_CHECK,
+            "true");
+        initApplicationContext(properties, HealthCheckConfiguration.class);
+
+        readinessCheckProcessor.checkHealth();
+
+        boolean springStatus = StartUpHealthCheckStatus.getSpringContextStatus();
+        boolean componentStatus = StartUpHealthCheckStatus.getComponentStatus();
+        boolean healthIndicatorStatus = StartUpHealthCheckStatus.getHealthIndicatorStatus();
+        boolean afterStatus = StartUpHealthCheckStatus.getAfterHealthCheckCallbackStatus();
+        Assert.assertTrue(springStatus && componentStatus && healthIndicatorStatus && afterStatus);
+        StartUpHealthCheckStatus.clean();
+        System.setProperty(HealthCheckConfigurationConstants.SOFABOOT_SKIP_ALL_HEALTH_CHECK,
+            "false");
+        System.setProperty(HealthCheckConfigurationConstants.SOFABOOT_SKIP_COMPONENT_HEALTH_CHECK,
+            "false");
+        System.setProperty(HealthCheckConfigurationConstants.SOFABOOT_SKIP_HEALTH_INDICATOR_CHECK,
+            "false");
     }
 
     @Test

@@ -32,13 +32,13 @@ public class StartUpHealthCheckStatus {
 
     private static boolean                     isOpen                          = false;
 
-    private static boolean                     springContextStatus;
+    private static boolean                     springContextStatus             = true;
 
-    private static boolean                     componentStatus;
+    private static boolean                     componentStatus                 = true;
 
     private static Map<String, Health>         componentDetail                 = new HashMap<>();
 
-    private static boolean                     healthIndicatorStatus           = false;
+    private static boolean                     healthIndicatorStatus           = true;
 
     private static List<HealthIndicatorDetail> healthIndicatorDetails          = new ArrayList<>();
 
@@ -140,9 +140,9 @@ public class StartUpHealthCheckStatus {
 
     public static void clean() {
         isOpen = false;
-        springContextStatus = false;
-        componentStatus = false;
-        healthIndicatorStatus = false;
+        springContextStatus = true;
+        componentStatus = true;
+        healthIndicatorStatus = true;
         afterHealthCheckCallbackStatus = false;
         componentDetail.clear();
         healthIndicatorDetails.clear();
