@@ -39,7 +39,7 @@ import static com.alipay.sofa.healthcheck.configuration.HealthCheckConstants.REA
 public class SofaBootHealthCheckAutoConfiguration {
 
     @Bean
-    public ReadinessCheckListener readinessCheckProcessor() {
+    public ReadinessCheckListener readinessCheckListener() {
         return new ReadinessCheckListener();
     }
 
