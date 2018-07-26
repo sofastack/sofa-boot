@@ -17,7 +17,6 @@
   -->
 
 <configuration status="OFF">
-
     <Properties>
         <!-- 将系统属性进行一次本地转换 -->
         <Property name="HEALTH_CHECK_LOG_LEVEL">${sys:logging.level.com.alipay.sofa.healthcheck}</Property>
@@ -26,7 +25,6 @@
     </Properties>
 
     <appenders>
-
         <RollingFile name="ERROR-APPENDER" fileName="${HEALTH_CHECK_LOG_PATH}/health-check/common-error.log" append="true"
                      filePattern="${HEALTH_CHECK_LOG_PATH}/health-check/common-error.log.%d{yyyy-MM-dd}">
             <!-- only print error log -->
@@ -51,35 +49,12 @@
                 <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
             </Policies>
         </RollingFile>
-
-
-
-
-        <!--<RollingFile name="HEALTH-CHECK-LOG-FILE" fileName="${HEALTH_CHECK_LOG_PATH}/health-check/health-check.log" append="true"-->
-                     <!--filePattern="${HEALTH_CHECK_LOG_PATH}/health-check/health-check.log.%d{yyyy-MM-dd}">-->
-            <!--<ThresholdFilter level="${HEALTH_CHECK_LOG_LEVEL}" onMatch="ACCEPT" onMismatch="DENY"/>-->
-            <!--<PatternLayout charset="${HEALTH_CHECK_FILE_ENCODING}">-->
-                <!--<pattern>%d %-5p %-32t %c{2} - %m%n</pattern>-->
-            <!--</PatternLayout>-->
-            <!--<Policies>-->
-                <!--&lt;!&ndash; 按天分日志文件:重要的是 filePattern 配置到按照天 &ndash;&gt;-->
-                <!--<TimeBasedTriggeringPolicy interval="1" modulate="true"/>-->
-            <!--</Policies>-->
-        <!--</RollingFile>-->
     </appenders>
 
     <loggers>
-
-        <!--<logger name="HEALTH-CHECK-LOGGER" level="${HEALTH_CHECK_LOG_LEVEL}" additivity="false">-->
-            <!--<appender-ref ref="HEALTH-CHECK-LOG-FILE"/>-->
-            <!--<appender-ref ref="ERROR-APPENDER"/>-->
-        <!--</logger>-->
-
         <root level="${HEALTH_CHECK_LOG_LEVEL}">
             <appender-ref ref="ROOT-APPENDER"/>
             <appender-ref ref="ERROR-APPENDER"/>
         </root>
-
     </loggers>
-
 </configuration>

@@ -14,34 +14,49 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.healthcheck.service;
+package com.alipay.sofa.healthcheck.bean;
 
-import com.alipay.sofa.healthcheck.core.SpringContextCheckProcessor;
+import com.alipay.sofa.healthcheck.core.HealthChecker;
 import org.springframework.boot.actuate.health.Health;
-import org.springframework.boot.actuate.health.HealthIndicator;
-import org.springframework.stereotype.Component;
 
 /**
- * The health check HTTP checker for spring context.
  * @author liangen
- * @version $Id: SpringContextHealthCheckInfo.java, v 0.1 2018年02月01日 下午9:38 liangen Exp $
+ * @author qilong.zql
+ * @version 2.3.0
  */
-@Component
-public class SpringContextHealthCheckInfo implements HealthIndicator {
+public class NetworkHealthChecker implements HealthChecker {
 
-    private final SpringContextCheckProcessor springContextCheckProcessor = new SpringContextCheckProcessor();
+    private boolean isStrict;
 
-    @Override
-    public Health health() {
+    private int     retryCount;
 
-        boolean checkSuccessful = springContextCheckProcessor.springContextCheck();
-
-        if (checkSuccessful) {
-            return Health.up().build();
-        } else {
-            return Health.down().build();
-        }
-
+    public NetworkHealthChecker(boolean isStrict, int retryCount) {
+        this.isStrict = isStrict;
+        this.retryCount = retryCount;
     }
 
+    @Override
+    public Health isHealthy() {
+        return Health.up().withDetail("network", "network is ok").build();
+    }
+
+    @Override
+    public String getComponentName() {
+        return "networkHealthChecker";
+    }
+
+    @Override
+    public int getRetryCount() {
+        return retryCount;
+    }
+
+    @Override
+    public long getRetryTimeInterval() {
+        return 200;
+    }
+
+    @Override
+    public boolean isStrictCheck() {
+        return isStrict;
+    }
 }

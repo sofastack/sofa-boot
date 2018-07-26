@@ -17,6 +17,7 @@
 package com.alipay.sofa.infra.log;
 
 import com.alipay.sofa.common.log.LoggerSpaceManager;
+import org.slf4j.Logger;
 
 /**
  * Created by yangguanchao on 18/01/04.
@@ -31,7 +32,7 @@ public class InfraHealthCheckLoggerFactory {
      * @param clazz 日志的名字
      * @return 日志实现
      */
-    public static org.slf4j.Logger getLogger(Class<?> clazz) {
+    public static Logger getLogger(Class<?> clazz) {
         if (clazz == null) {
             return null;
         }
@@ -44,7 +45,7 @@ public class InfraHealthCheckLoggerFactory {
      * @param name 日志的名字
      * @return 日志实现
      */
-    public static org.slf4j.Logger getLogger(String name) {
+    public static Logger getLogger(String name) {
         //从 "com/alipay/sofa/infra/log" 中获取 infra 的日志配置并寻找对应logger对象,log 为默认添加的后缀
         if (name == null || name.isEmpty()) {
             return null;

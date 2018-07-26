@@ -17,43 +17,31 @@
 package com.alipay.sofa.healthcheck.initializer;
 
 import com.alipay.sofa.common.log.Constants;
-import com.alipay.sofa.healthcheck.configuration.HealthCheckConfiguration;
-import com.alipay.sofa.healthcheck.configuration.HealthCheckConfigurationConstants;
+import com.alipay.sofa.healthcheck.configuration.HealthCheckConstants;
 import com.alipay.sofa.healthcheck.log.SofaBootHealthCheckLoggerFactory;
-import com.alipay.sofa.healthcheck.service.SofaBootComponentHealthCheckInfo;
-import com.alipay.sofa.healthcheck.startup.HealthCheckTrigger;
 import com.alipay.sofa.infra.log.space.SofaBootLogSpaceIsolationInit;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Component;
 
 /**
- * Created by liangen on 17/8/7.
+ * @author liangen
+ * @author qilong.zql
+ * @since 2.3.0
  */
-@Component
-@Configuration
-@ComponentScan(basePackageClasses = { HealthCheckTrigger.class,
-                                     SofaBootComponentHealthCheckInfo.class })
-public class HealthCheckInitializer implements
-                                   ApplicationContextInitializer<ConfigurableApplicationContext> {
+public class SofaBootHealthCheckInitializer
+                                           implements
+                                           ApplicationContextInitializer<ConfigurableApplicationContext> {
 
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
         Environment environment = applicationContext.getEnvironment();
         // init logging.level.com.alipay.sofa.runtime argument
         String healthCheckLogLevelKey = Constants.LOG_LEVEL_PREFIX
-                                        + HealthCheckConfigurationConstants.SOFABOOT_HEALTH_LOG_SPACE;
+                                        + HealthCheckConstants.SOFABOOT_HEALTH_LOG_SPACE;
         SofaBootLogSpaceIsolationInit.initSofaBootLogger(environment, healthCheckLogLevelKey);
 
-        // init HealthCheckConfiguration
-        if (HealthCheckConfiguration.getEnvironment() == null) {
-            HealthCheckConfiguration.setEnvironment(applicationContext.getEnvironment());
-        }
-
-        SofaBootHealthCheckLoggerFactory.getLogger(HealthCheckInitializer.class).info(
+        SofaBootHealthCheckLoggerFactory.getLogger(SofaBootHealthCheckInitializer.class).info(
             "SOFABoot HealthCheck Starting!");
     }
 

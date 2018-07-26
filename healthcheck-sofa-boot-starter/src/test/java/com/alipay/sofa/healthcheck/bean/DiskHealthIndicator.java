@@ -16,30 +16,27 @@
  */
 package com.alipay.sofa.healthcheck.bean;
 
-import com.alipay.sofa.healthcheck.startup.SofaBootAfterReadinessCheckCallback;
 import org.springframework.boot.actuate.health.Health;
-import org.springframework.context.ApplicationContext;
+import org.springframework.boot.actuate.health.HealthIndicator;
 
 /**
- *
  * @author liangen
- * @version $Id: AfterReadinessCheckCallbackA.java, v 0.1 2018年03月11日 下午2:40 liangen Exp $
+ * @version 2.3.0
  */
-public class AfterReadinessCheckCallbackB implements SofaBootAfterReadinessCheckCallback {
+public class DiskHealthIndicator implements HealthIndicator {
 
-    private boolean mark;
+    private boolean health;
 
-    public AfterReadinessCheckCallbackB(boolean mark) {
-        this.mark = mark;
+    public DiskHealthIndicator(boolean health) {
+        this.health = health;
     }
 
     @Override
-    public Health onHealthy(ApplicationContext applicationContext) {
-        mark = true;
-        return Health.up().withDetail("port", "port is ok").build();
-    }
-
-    public boolean isMark() {
-        return mark;
+    public Health health() {
+        if (health) {
+            return Health.up().withDetail("disk", "hard disk is ok").build();
+        } else {
+            return Health.down().withDetail("disk", "hard disk is bad").build();
+        }
     }
 }

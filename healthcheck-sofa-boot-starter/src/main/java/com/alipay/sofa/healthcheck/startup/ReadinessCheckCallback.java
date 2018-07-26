@@ -14,30 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.healthcheck.bean;
+package com.alipay.sofa.healthcheck.startup;
 
 import org.springframework.boot.actuate.health.Health;
-import org.springframework.boot.actuate.health.HealthIndicator;
+import org.springframework.context.ApplicationContext;
 
 /**
- *
- * @author liangen
- * @version $Id: HealthIndicatorB.java, v 0.1 2018年03月11日 下午1:44 liangen Exp $
+ * @author qilong.zql
+ * @since 2.5.0
  */
-public class HealthIndicatorB implements HealthIndicator {
-
-    private boolean health;
-
-    public HealthIndicatorB(boolean health) {
-        this.health = health;
-    }
-
-    @Override
-    public Health health() {
-        if (health) {
-            return Health.up().withDetail("hard disk", "hard disk is ok").build();
-        } else {
-            return Health.down().withDetail("hard disk", "hard disk is bad").build();
-        }
-    }
+public interface ReadinessCheckCallback {
+    Health onHealthy(ApplicationContext applicationContext);
 }

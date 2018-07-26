@@ -16,17 +16,29 @@
  */
 package com.alipay.sofa.healthcheck.bean;
 
+import com.alipay.sofa.healthcheck.startup.SofaBootAfterReadinessCheckCallback;
 import org.springframework.boot.actuate.health.Health;
-import org.springframework.boot.actuate.health.HealthIndicator;
+import org.springframework.context.ApplicationContext;
 
 /**
- *
  * @author liangen
- * @version $Id: HealthIndicatorA.java, v 0.1 2018年03月11日 下午1:44 liangen Exp $
+ * @version 2.3.0
  */
-public class HealthIndicatorA implements HealthIndicator {
+public class ApplicationHealthCheckCallback implements SofaBootAfterReadinessCheckCallback {
+
+    private boolean mark;
+
+    public ApplicationHealthCheckCallback(boolean mark) {
+        this.mark = mark;
+    }
+
     @Override
-    public Health health() {
-        return Health.up().withDetail("cpu", "cpu is ok").build();
+    public Health onHealthy(ApplicationContext applicationContext) {
+        mark = true;
+        return Health.up().withDetail("port", "port is ok").build();
+    }
+
+    public boolean isMark() {
+        return mark;
     }
 }

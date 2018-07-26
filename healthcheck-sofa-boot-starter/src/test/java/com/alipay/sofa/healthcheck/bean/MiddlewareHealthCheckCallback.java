@@ -16,47 +16,29 @@
  */
 package com.alipay.sofa.healthcheck.bean;
 
-import com.alipay.sofa.healthcheck.core.HealthChecker;
+import com.alipay.sofa.healthcheck.startup.SofaBootMiddlewareAfterReadinessCheckCallback;
 import org.springframework.boot.actuate.health.Health;
+import org.springframework.context.ApplicationContext;
 
 /**
- *
  * @author liangen
- * @version $Id: ReferenceABean.java, v 0.1 2018年03月10日 下午10:24 liangen Exp $
+ * @author qilong.zql
+ * @version 2.3.0
  */
-public class ReferenceB implements HealthChecker {
+public class MiddlewareHealthCheckCallback implements SofaBootMiddlewareAfterReadinessCheckCallback {
 
-    private boolean isStrict;
+    private boolean health;
 
-    private int     retryCount;
-
-    public ReferenceB(boolean isStrict, int retryCount) {
-        this.isStrict = isStrict;
-        this.retryCount = retryCount;
+    public MiddlewareHealthCheckCallback(boolean health) {
+        this.health = health;
     }
 
     @Override
-    public Health isHealthy() {
-        return Health.up().withDetail("network", "network is ok").build();
-    }
-
-    @Override
-    public String getComponentName() {
-        return "BBB";
-    }
-
-    @Override
-    public int getRetryCount() {
-        return retryCount;
-    }
-
-    @Override
-    public long getRetryTimeInterval() {
-        return 200;
-    }
-
-    @Override
-    public boolean isStrictCheck() {
-        return isStrict;
+    public Health onHealthy(ApplicationContext applicationContext) {
+        if (health) {
+            return Health.up().withDetail("server", "server is ok").build();
+        } else {
+            return Health.down().withDetail("server", "server is bad").build();
+        }
     }
 }

@@ -32,7 +32,7 @@ public class SofaModuleHealthChecker extends AbstractModuleHealthChecker impleme
 
     @Override
     public String getComponentName() {
-        return "SOFABoot Modules";
+        return "SOFABoot-Modules";
     }
 
     @Override

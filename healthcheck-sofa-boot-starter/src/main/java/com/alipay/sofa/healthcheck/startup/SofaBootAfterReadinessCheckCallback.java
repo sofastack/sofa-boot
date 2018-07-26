@@ -16,15 +16,13 @@
  */
 package com.alipay.sofa.healthcheck.startup;
 
-import org.springframework.boot.actuate.health.Health;
-import org.springframework.context.ApplicationContext;
-
 /**
- *
  * @author liangen
- * @version $Id: SofaBootAfterHealthCheckCallback.java, v 0.1 2018年03月07日 上午10:30 liangen Exp $
+ * @version 2.3.0
+ * @deprecated this class is not intended for use and will be removed the next major version.
+ * {@link ReadinessCheckCallback} combined with {@link org.springframework.core.PriorityOrdered}
+ * or {@link org.springframework.core.Ordered} are recommended to use instead.
  */
-public interface SofaBootAfterReadinessCheckCallback {
-
-    Health onHealthy(ApplicationContext applicationContext);
+@Deprecated
+public interface SofaBootAfterReadinessCheckCallback extends ReadinessCheckCallback {
 }

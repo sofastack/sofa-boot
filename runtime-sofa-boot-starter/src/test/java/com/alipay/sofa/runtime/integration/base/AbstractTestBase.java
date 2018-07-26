@@ -16,15 +16,79 @@
  */
 package com.alipay.sofa.runtime.integration.base;
 
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import com.alipay.sofa.ark.spi.model.Biz;
+import com.alipay.sofa.runtime.integration.features.AwareTest;
+import com.alipay.sofa.runtime.integration.invoke.DynamicJvmServiceProxyFinder;
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
+import mockit.Mock;
+import mockit.MockUp;
+import mockit.Mocked;
+import mockit.NonStrictExpectations;
+import org.junit.Before;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.test.util.EnvironmentTestUtils;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportResource;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author qilong.zql
  * @since 2.3.1
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = SofaBootTestApplication.class)
 public abstract class AbstractTestBase {
+
+    public AwareTest                          awareTest;
+
+    public AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
+
+    @Mocked
+    public Biz                                biz;
+
+    @Before
+    public void before() {
+        new MockUp<DynamicJvmServiceProxyFinder>() {
+            @Mock
+            public Biz getBiz(SofaRuntimeManager sofaRuntimeManager) {
+                return biz;
+            }
+        };
+
+        new NonStrictExpectations() {
+            {
+                biz.getIdentity();
+                result = "MockName:MockVersion";
+            }
+        };
+
+        Map<String, Object> properties = new HashMap<>();
+        properties.put("spring.application.name", "runtime-test");
+        initApplicationContext(properties, IntegrationTestConfiguration.class);
+        awareTest = applicationContext.getBean(AwareTest.class);
+    }
+
+    protected void initApplicationContext(Map<String, Object> properties,
+                                          Class<?>... annotatedClasses) {
+        for (Map.Entry<String, Object> property : properties.entrySet()) {
+            EnvironmentTestUtils.addEnvironment(this.applicationContext,
+                buildProperty(property.getKey(), property.getValue()));
+        }
+
+        this.applicationContext.register(annotatedClasses);
+        this.applicationContext.refresh();
+    }
+
+    private String buildProperty(String key, Object value) {
+        return key + ":" + value;
+    }
+
+    @Configuration
+    @EnableAutoConfiguration
+    @ImportResource({ "classpath*:META-INF/spring/*.xml" })
+    @ComponentScan({ "com.alipay.sofa.runtime.integration.features" })
+    static class IntegrationTestConfiguration {
+    }
 }

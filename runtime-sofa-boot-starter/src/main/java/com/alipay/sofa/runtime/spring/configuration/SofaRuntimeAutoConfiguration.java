@@ -41,7 +41,7 @@ import com.alipay.sofa.runtime.spring.ServiceAnnotationBeanPostProcessor;
 import com.alipay.sofa.runtime.spring.callback.CloseApplicationContextCallBack;
 import com.alipay.sofa.runtime.spring.config.SofaRuntimeConfigurationProperties;
 import com.alipay.sofa.runtime.spring.health.DefaultRuntimeHealthChecker;
-import com.alipay.sofa.runtime.spring.health.MultiApplicationHealthChecker;
+import com.alipay.sofa.runtime.spring.health.MultiApplicationHealthIndicator;
 import com.alipay.sofa.runtime.spring.health.SofaComponentHealthChecker;
 import com.alipay.sofa.runtime.spring.health.SofaComponentHealthIndicator;
 import org.springframework.beans.factory.annotation.Value;
@@ -145,10 +145,10 @@ public class SofaRuntimeAutoConfiguration {
 
     @Configuration
     @ConditionalOnClass({ HealthChecker.class, Biz.class })
-    public static class MultiApplicationHealthCheckerConfiguration {
+    public static class MultiApplicationHealthIndicatorConfiguration {
         @Bean
-        public MultiApplicationHealthChecker multiApplicationHealthChecker() {
-            return new MultiApplicationHealthChecker();
+        public MultiApplicationHealthIndicator multiApplicationHealthIndicator() {
+            return new MultiApplicationHealthIndicator();
         }
     }
 

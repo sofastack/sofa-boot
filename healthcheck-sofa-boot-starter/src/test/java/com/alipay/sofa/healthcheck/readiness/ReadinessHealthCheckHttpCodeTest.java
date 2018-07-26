@@ -31,10 +31,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
+/**
+ * @author liangen
+ * @author qilong.zql
+ * @version 2.3.0
+ */
 @SpringBootApplication
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ReadinessCheckHttpCodeTest {
+public class ReadinessHealthCheckHttpCodeTest {
 
     @Autowired
     private TestRestTemplate restTemplate;

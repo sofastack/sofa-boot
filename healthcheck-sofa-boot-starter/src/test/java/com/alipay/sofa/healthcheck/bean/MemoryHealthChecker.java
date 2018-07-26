@@ -20,11 +20,10 @@ import com.alipay.sofa.healthcheck.core.HealthChecker;
 import org.springframework.boot.actuate.health.Health;
 
 /**
- *
  * @author liangen
- * @version $Id: ReferenceABean.java, v 0.1 2018年03月10日 下午10:24 liangen Exp $
+ * @version 2.3.0
  */
-public class ReferenceA implements HealthChecker {
+public class MemoryHealthChecker implements HealthChecker {
 
     private int     count;
 
@@ -32,7 +31,7 @@ public class ReferenceA implements HealthChecker {
 
     private int     retryCount;
 
-    public ReferenceA(int count, boolean isStrict, int retryCount) {
+    public MemoryHealthChecker(int count, boolean isStrict, int retryCount) {
         this.count = count;
         this.isStrict = isStrict;
         this.retryCount = retryCount;
@@ -41,19 +40,17 @@ public class ReferenceA implements HealthChecker {
     @Override
     public Health isHealthy() {
         count++;
-
         if (count <= 5) {
-            return Health.down().withDetail("memory", "memory is deficiency").build();
+            return Health.down().withDetail("memory", "memory is bad").build();
 
         } else {
             return Health.up().withDetail("memory", "memory is ok").build();
         }
-
     }
 
     @Override
     public String getComponentName() {
-        return "AAA";
+        return "memoryHealthChecker";
     }
 
     @Override
@@ -63,7 +60,7 @@ public class ReferenceA implements HealthChecker {
 
     @Override
     public long getRetryTimeInterval() {
-        return 500;
+        return 100;
     }
 
     @Override

@@ -14,24 +14,56 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.healthcheck.service;
+package com.alipay.sofa.healthcheck.configuration;
 
+import com.alipay.sofa.healthcheck.core.AfterHealthCheckCallbackProcessor;
+import com.alipay.sofa.healthcheck.core.HealthCheckerProcessor;
+import com.alipay.sofa.healthcheck.core.HealthIndicatorProcessor;
+import com.alipay.sofa.healthcheck.service.SofaBootHealthIndicator;
+import com.alipay.sofa.healthcheck.service.SofaBootReadinessCheckEndpoint;
+import com.alipay.sofa.healthcheck.service.SofaBootReadinessCheckMvcEndpoint;
+import com.alipay.sofa.healthcheck.startup.ReadinessCheckListener;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import static com.alipay.sofa.healthcheck.configuration.HealthCheckConstants.READINESS_CHECK_ENDPOINT_NAME;
+
 /**
- * @author liangen
- * @version $Id: EndConfig.java, v 0.1 2018年02月03日 上午12:30 liangen Exp $
+ * @author qilong.zql
+ * @since 2.5.0
  */
 @Configuration
-public class HealthCheckEndPointConfig {
-    static final String READINESS_CHECK_ENDPOINT_NAME = "sofaboot_health_readiness";
+public class SofaBootHealthCheckAutoConfiguration {
 
     @Bean
-    @ConditionalOnWebApplication
+    public ReadinessCheckListener readinessCheckListener() {
+        return new ReadinessCheckListener();
+    }
+
+    @Bean
+    public HealthCheckerProcessor healthCheckerProcessor() {
+        return new HealthCheckerProcessor();
+    }
+
+    @Bean
+    public HealthIndicatorProcessor healthIndicatorProcessor() {
+        return new HealthIndicatorProcessor();
+    }
+
+    @Bean
+    public AfterHealthCheckCallbackProcessor afterHealthCheckCallbackProcessor() {
+        return new AfterHealthCheckCallbackProcessor();
+    }
+
+    @Bean
+    public SofaBootHealthIndicator sofaBootHealthIndicator() {
+        return new SofaBootHealthIndicator();
+    }
+
+    @Bean
     @ConditionalOnProperty(prefix = "com.alipay.sofa.healthcheck.readiness", name = "enabled", matchIfMissing = true)
     public SofaBootReadinessCheckEndpoint readinessCheck() {
         return new SofaBootReadinessCheckEndpoint(READINESS_CHECK_ENDPOINT_NAME, false);
@@ -39,8 +71,8 @@ public class HealthCheckEndPointConfig {
 
     @Bean
     @ConditionalOnBean(SofaBootReadinessCheckEndpoint.class)
+    @ConditionalOnWebApplication
     public SofaBootReadinessCheckMvcEndpoint sofaBootReadinessCheckMvcEndpoint(SofaBootReadinessCheckEndpoint delegate) {
         return new SofaBootReadinessCheckMvcEndpoint(delegate);
     }
-
 }

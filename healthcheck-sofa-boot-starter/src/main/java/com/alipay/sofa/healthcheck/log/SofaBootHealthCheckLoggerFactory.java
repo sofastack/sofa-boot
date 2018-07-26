@@ -20,7 +20,8 @@ import com.alipay.sofa.common.log.LoggerSpaceManager;
 import org.slf4j.Logger;
 
 /**
- * Created by liangen on 17/8/5.
+ * @author liangen
+ * @version 2.3.0
  */
 public class SofaBootHealthCheckLoggerFactory {
 
@@ -46,7 +47,6 @@ public class SofaBootHealthCheckLoggerFactory {
      * @return
      */
     public static Logger getLogger(String name) {
-        //从"com/alipay/sofa/healthcheck/log"中获取 health check 的日志配置并寻找对应logger对象,log 为默认添加的后缀
         if (name == null || name.isEmpty()) {
             return null;
         }
