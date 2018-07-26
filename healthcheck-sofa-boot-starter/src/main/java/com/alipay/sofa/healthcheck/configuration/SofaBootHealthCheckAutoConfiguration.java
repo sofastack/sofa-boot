@@ -22,12 +22,14 @@ import com.alipay.sofa.healthcheck.core.HealthIndicatorProcessor;
 import com.alipay.sofa.healthcheck.service.SofaBootHealthIndicator;
 import com.alipay.sofa.healthcheck.service.SofaBootReadinessCheckEndpoint;
 import com.alipay.sofa.healthcheck.service.SofaBootReadinessCheckMvcEndpoint;
-import com.alipay.sofa.healthcheck.startup.ReadinessCheckProcessor;
+import com.alipay.sofa.healthcheck.startup.ReadinessCheckListener;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import static com.alipay.sofa.healthcheck.configuration.HealthCheckConstants.READINESS_CHECK_ENDPOINT_NAME;
 
 /**
  * @author qilong.zql
@@ -37,8 +39,8 @@ import org.springframework.context.annotation.Configuration;
 public class SofaBootHealthCheckAutoConfiguration {
 
     @Bean
-    public ReadinessCheckProcessor readinessCheckProcessor() {
-        return new ReadinessCheckProcessor();
+    public ReadinessCheckListener readinessCheckProcessor() {
+        return new ReadinessCheckListener();
     }
 
     @Bean
@@ -60,8 +62,6 @@ public class SofaBootHealthCheckAutoConfiguration {
     public SofaBootHealthIndicator sofaBootHealthIndicator() {
         return new SofaBootHealthIndicator();
     }
-
-    static final String READINESS_CHECK_ENDPOINT_NAME = "sofaboot_health_readiness";
 
     @Bean
     @ConditionalOnProperty(prefix = "com.alipay.sofa.healthcheck.readiness", name = "enabled", matchIfMissing = true)

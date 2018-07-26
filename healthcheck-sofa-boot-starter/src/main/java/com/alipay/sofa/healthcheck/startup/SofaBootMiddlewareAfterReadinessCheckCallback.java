@@ -19,6 +19,11 @@ package com.alipay.sofa.healthcheck.startup;
 /**
  * @author liangen
  * @version 2.3.0
+ *
+ * @deprecated this class is not intended for use and will be removed the next major version.
+ * {@link org.springframework.core.PriorityOrdered} and {@link org.springframework.core.Ordered}
+ * are recommended to use instead.
  */
+@Deprecated
 public interface SofaBootMiddlewareAfterReadinessCheckCallback extends ReadinessCheckCallback {
 }

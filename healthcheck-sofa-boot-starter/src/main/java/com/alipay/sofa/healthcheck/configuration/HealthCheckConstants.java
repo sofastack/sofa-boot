@@ -42,4 +42,9 @@ public class HealthCheckConstants {
      * health check logging space
      */
     public static final String SOFABOOT_HEALTH_LOG_SPACE            = "com.alipay.sofa.healthcheck";
+
+    /**
+     * readiness health check endpoint name
+     */
+    public static final String READINESS_CHECK_ENDPOINT_NAME        = "sofaboot_health_readiness";
 }

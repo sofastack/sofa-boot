@@ -41,7 +41,7 @@ public class NetworkHealthChecker implements HealthChecker {
     }
 
     @Override
-    public String getName() {
+    public String getComponentName() {
         return "networkHealthChecker";
     }
 

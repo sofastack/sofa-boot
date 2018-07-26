@@ -19,6 +19,8 @@ package com.alipay.sofa.healthcheck.core;
 /**
  * @author liangen
  * @version 2.3.0
+ * @deprecated this class is not intended for use and will be removed the next major version.
+ * {@link org.springframework.boot.actuate.health.HealthIndicator} is recommended.
  */
 @Deprecated
 public abstract class DefaultHealthChecker implements HealthChecker {

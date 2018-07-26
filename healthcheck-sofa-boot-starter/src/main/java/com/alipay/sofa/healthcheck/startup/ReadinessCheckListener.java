@@ -28,6 +28,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.core.PriorityOrdered;
 import org.springframework.core.env.Environment;
 import org.springframework.util.StringUtils;
 
@@ -39,11 +40,11 @@ import java.util.Map;
  * @author liangen
  * @author qilong.zql
  */
-public class ReadinessCheckProcessor implements ApplicationContextAware, EnvironmentAware,
-                                    ApplicationListener<ContextRefreshedEvent> {
+public class ReadinessCheckListener implements ApplicationContextAware, EnvironmentAware,
+                                   PriorityOrdered, ApplicationListener<ContextRefreshedEvent> {
 
     private static Logger                     logger                 = SofaBootHealthCheckLoggerFactory
-                                                                         .getLogger(ReadinessCheckProcessor.class);
+                                                                         .getLogger(ReadinessCheckListener.class);
 
     private ApplicationContext                applicationContext;
 
@@ -78,6 +79,11 @@ public class ReadinessCheckProcessor implements ApplicationContextAware, Environ
     @Override
     public void setEnvironment(Environment env) {
         environment = env;
+    }
+
+    @Override
+    public int getOrder() {
+        return LOWEST_PRECEDENCE;
     }
 
     @Override

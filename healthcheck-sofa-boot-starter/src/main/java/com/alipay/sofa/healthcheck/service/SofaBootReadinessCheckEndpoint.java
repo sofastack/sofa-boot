@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.healthcheck.service;
 
-import com.alipay.sofa.healthcheck.startup.ReadinessCheckProcessor;
+import com.alipay.sofa.healthcheck.startup.ReadinessCheckListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.endpoint.AbstractEndpoint;
 import org.springframework.boot.actuate.health.Health;
@@ -39,10 +39,10 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "com.alipay.sofa.healthcheck.readiness")
 public class SofaBootReadinessCheckEndpoint extends AbstractEndpoint<Health> {
 
-    private final HealthAggregator  healthAggregator = new OrderedHealthAggregator();
+    private final HealthAggregator healthAggregator = new OrderedHealthAggregator();
 
     @Autowired
-    private ReadinessCheckProcessor readinessCheckProcessor;
+    private ReadinessCheckListener readinessCheckListener;
 
     public SofaBootReadinessCheckEndpoint(String id, boolean sensitive) {
         super(id, sensitive);
@@ -50,16 +50,15 @@ public class SofaBootReadinessCheckEndpoint extends AbstractEndpoint<Health> {
 
     @Override
     public Health invoke() {
-        boolean healthCheckerStatus = readinessCheckProcessor.getHealthCheckerStatus();
-        Map<String, Health> healthCheckerDetails = readinessCheckProcessor
-            .getHealthCheckerDetails();
+        boolean healthCheckerStatus = readinessCheckListener.getHealthCheckerStatus();
+        Map<String, Health> healthCheckerDetails = readinessCheckListener.getHealthCheckerDetails();
 
-        boolean healthIndicatorStatus = readinessCheckProcessor.getHealthIndicatorStatus();
-        Map<String, Health> healthIndicatorDetails = readinessCheckProcessor
+        boolean healthIndicatorStatus = readinessCheckListener.getHealthIndicatorStatus();
+        Map<String, Health> healthIndicatorDetails = readinessCheckListener
             .getHealthIndicatorDetails();
 
-        boolean afterHealthCheckCallbackStatus = readinessCheckProcessor.getHealthCallbackStatus();
-        Map<String, Health> afterHealthCheckCallbackDetails = readinessCheckProcessor
+        boolean afterHealthCheckCallbackStatus = readinessCheckListener.getHealthCallbackStatus();
+        Map<String, Health> afterHealthCheckCallbackDetails = readinessCheckListener
             .getHealthCallbackDetails();
 
         Builder builder;

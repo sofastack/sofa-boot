@@ -22,6 +22,7 @@ import org.springframework.context.event.ApplicationContextEvent;
 /**
  * @author linagen
  * @since 2.3.0
+ * @deprecated this class is not intended for use and will be removed the next major version.
  */
 @Deprecated
 public class SofaBootBeforeReadinessCheckEvent extends ApplicationContextEvent {

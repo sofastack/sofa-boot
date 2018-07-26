@@ -37,7 +37,7 @@ public class SofaComponentHealthChecker extends AbstractComponentHealthChecker i
     }
 
     @Override
-    public String getName() {
+    public String getComponentName() {
         return "SOFABoot-Components";
     }
 

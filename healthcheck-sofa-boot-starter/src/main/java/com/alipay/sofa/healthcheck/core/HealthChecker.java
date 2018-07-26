@@ -22,7 +22,10 @@ import org.springframework.boot.actuate.health.Health;
  * @author liangen
  * @author qilong.zql
  * @since 2.3.0
+ * @deprecated this class is not intended for use and will be removed the next major version.
+ * {@link org.springframework.boot.actuate.health.HealthIndicator} is recommended to use instead.
  */
+@Deprecated
 public interface HealthChecker {
 
     /**
@@ -35,8 +38,7 @@ public interface HealthChecker {
      * HealthChecker name
      * @return
      */
-    @Deprecated
-    String getName();
+    String getComponentName();
 
     /**
      * The number of retries after failure.

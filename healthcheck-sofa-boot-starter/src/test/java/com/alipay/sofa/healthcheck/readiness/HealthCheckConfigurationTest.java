@@ -22,7 +22,7 @@ import com.alipay.sofa.healthcheck.configuration.SofaBootHealthCheckAutoConfigur
 import com.alipay.sofa.healthcheck.core.AfterHealthCheckCallbackProcessor;
 import com.alipay.sofa.healthcheck.core.HealthCheckerProcessor;
 import com.alipay.sofa.healthcheck.core.HealthIndicatorProcessor;
-import com.alipay.sofa.healthcheck.startup.ReadinessCheckProcessor;
+import com.alipay.sofa.healthcheck.startup.ReadinessCheckListener;
 import org.junit.Test;
 import org.springframework.util.Assert;
 
@@ -37,16 +37,16 @@ public class HealthCheckConfigurationTest extends BaseHealthCheckTest {
     public void testInject() {
         initApplicationContext(new HashMap<String, Object>(),
             SofaBootHealthCheckAutoConfiguration.class);
-        Assert.notNull(applicationContext.getBean(ReadinessCheckProcessor.class));
+        Assert.notNull(applicationContext.getBean(ReadinessCheckListener.class));
         Assert.notNull(applicationContext.getBean(HealthCheckerProcessor.class));
         Assert.notNull(applicationContext.getBean(HealthIndicatorProcessor.class));
         Assert.notNull(applicationContext.getBean(AfterHealthCheckCallbackProcessor.class));
 
-        ReadinessCheckProcessor readinessCheckProcessor = applicationContext
-            .getBean(ReadinessCheckProcessor.class);
-        Assert.isTrue(!readinessCheckProcessor.skipIndicator());
-        Assert.isTrue(!readinessCheckProcessor.skipComponent());
-        Assert.isTrue(!readinessCheckProcessor.skipAllCheck());
+        ReadinessCheckListener readinessCheckListener = applicationContext
+            .getBean(ReadinessCheckListener.class);
+        Assert.isTrue(!readinessCheckListener.skipIndicator());
+        Assert.isTrue(!readinessCheckListener.skipComponent());
+        Assert.isTrue(!readinessCheckListener.skipAllCheck());
     }
 
     @Test
@@ -59,10 +59,10 @@ public class HealthCheckConfigurationTest extends BaseHealthCheckTest {
             true);
         initApplicationContext(healthCheckConfiguration, SofaBootHealthCheckAutoConfiguration.class);
 
-        ReadinessCheckProcessor readinessCheckProcessor = applicationContext
-            .getBean(ReadinessCheckProcessor.class);
-        Assert.isTrue(readinessCheckProcessor.skipIndicator());
-        Assert.isTrue(readinessCheckProcessor.skipComponent());
-        Assert.isTrue(readinessCheckProcessor.skipAllCheck());
+        ReadinessCheckListener readinessCheckListener = applicationContext
+            .getBean(ReadinessCheckListener.class);
+        Assert.isTrue(readinessCheckListener.skipIndicator());
+        Assert.isTrue(readinessCheckListener.skipComponent());
+        Assert.isTrue(readinessCheckListener.skipAllCheck());
     }
 }

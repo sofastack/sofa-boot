@@ -20,7 +20,7 @@ import com.alipay.sofa.healthcheck.bean.MiddlewareHealthCheckCallback;
 import com.alipay.sofa.healthcheck.bean.DiskHealthIndicator;
 import com.alipay.sofa.healthcheck.bean.MemoryHealthChecker;
 import com.alipay.sofa.healthcheck.configuration.SofaBootHealthCheckAutoConfiguration;
-import com.alipay.sofa.healthcheck.startup.ReadinessCheckProcessor;
+import com.alipay.sofa.healthcheck.startup.ReadinessCheckListener;
 import com.alipay.sofa.healthcheck.base.BaseHealthCheckTest;
 import org.junit.Assert;
 import org.junit.Test;
@@ -36,7 +36,7 @@ import java.util.HashMap;
  * @author liangen
  * @version 2.3.0
  */
-public class ReadinessCheckProcessorTest extends BaseHealthCheckTest {
+public class ReadinessCheckListenerTest extends BaseHealthCheckTest {
 
     @Configuration
     static class HealthCheckConfiguration {
@@ -63,24 +63,23 @@ public class ReadinessCheckProcessorTest extends BaseHealthCheckTest {
     public void testReadinessCheck() throws BeansException {
         initApplicationContext(new HashMap<String, Object>(), HealthCheckConfiguration.class,
             SofaBootHealthCheckAutoConfiguration.class);
-        ReadinessCheckProcessor readinessCheckProcessor = applicationContext
-            .getBean(ReadinessCheckProcessor.class);
-        Assert.assertNotNull(readinessCheckProcessor);
-        Assert.assertFalse(readinessCheckProcessor.skipAllCheck());
-        Assert.assertFalse(readinessCheckProcessor.skipComponent());
-        Assert.assertFalse(readinessCheckProcessor.skipIndicator());
-        Assert.assertTrue(readinessCheckProcessor.getHealthCheckerStatus());
-        Assert.assertTrue(readinessCheckProcessor.getHealthIndicatorStatus());
-        Assert.assertTrue(readinessCheckProcessor.getHealthCallbackStatus());
-        Assert.assertTrue(readinessCheckProcessor.getHealthCheckerDetails().size() == 1);
+        ReadinessCheckListener readinessCheckListener = applicationContext
+            .getBean(ReadinessCheckListener.class);
+        Assert.assertNotNull(readinessCheckListener);
+        Assert.assertFalse(readinessCheckListener.skipAllCheck());
+        Assert.assertFalse(readinessCheckListener.skipComponent());
+        Assert.assertFalse(readinessCheckListener.skipIndicator());
+        Assert.assertTrue(readinessCheckListener.getHealthCheckerStatus());
+        Assert.assertTrue(readinessCheckListener.getHealthIndicatorStatus());
+        Assert.assertTrue(readinessCheckListener.getHealthCallbackStatus());
+        Assert.assertTrue(readinessCheckListener.getHealthCheckerDetails().size() == 1);
 
-        Health health = readinessCheckProcessor.getHealthCheckerDetails()
-            .get("memoryHealthChecker");
+        Health health = readinessCheckListener.getHealthCheckerDetails().get("memoryHealthChecker");
         Assert.assertTrue("memory is bad".equals(health.getDetails().get("memory")));
-        health = readinessCheckProcessor.getHealthCallbackDetails().get(
+        health = readinessCheckListener.getHealthCallbackDetails().get(
             "middlewareHealthCheckCallback");
         Assert.assertTrue("server is ok".equals(health.getDetails().get("server")));
-        health = readinessCheckProcessor.getHealthIndicatorDetails().get("disk");
+        health = readinessCheckListener.getHealthIndicatorDetails().get("disk");
         Assert.assertTrue("hard disk is ok".equals(health.getDetails().get("disk")));
     }
 }

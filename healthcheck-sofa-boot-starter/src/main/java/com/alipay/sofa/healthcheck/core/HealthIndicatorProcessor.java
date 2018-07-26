@@ -58,9 +58,9 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
             healthIndicators = applicationContext.getBeansOfType(HealthIndicator.class);
             StringBuilder healthIndicatorInfo = new StringBuilder();
             healthIndicatorInfo.append("Found ").append(healthIndicators.size())
-                .append(" HealthIndicator implementation:\n");
+                .append(" HealthIndicator implementation:");
             for (String beanId : healthIndicators.keySet()) {
-                healthIndicatorInfo.append(beanId).append("\n");
+                healthIndicatorInfo.append(beanId).append(",");
             }
             logger.info(healthIndicatorInfo.deleteCharAt(healthIndicatorInfo.length() - 1)
                 .toString());

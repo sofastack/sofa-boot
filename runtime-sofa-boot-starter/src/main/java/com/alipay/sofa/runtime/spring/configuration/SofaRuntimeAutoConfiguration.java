@@ -145,9 +145,9 @@ public class SofaRuntimeAutoConfiguration {
 
     @Configuration
     @ConditionalOnClass({ HealthChecker.class, Biz.class })
-    public static class MultiApplicationHealthCheckerConfiguration {
+    public static class MultiApplicationHealthIndicatorConfiguration {
         @Bean
-        public MultiApplicationHealthIndicator multiApplicationHealthChecker() {
+        public MultiApplicationHealthIndicator multiApplicationHealthIndicator() {
             return new MultiApplicationHealthIndicator();
         }
     }

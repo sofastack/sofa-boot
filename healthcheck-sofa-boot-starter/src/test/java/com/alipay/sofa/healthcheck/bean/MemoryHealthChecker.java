@@ -49,7 +49,7 @@ public class MemoryHealthChecker implements HealthChecker {
     }
 
     @Override
-    public String getName() {
+    public String getComponentName() {
         return "memoryHealthChecker";
     }
 

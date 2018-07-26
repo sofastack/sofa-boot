@@ -19,11 +19,9 @@ package com.alipay.sofa.runtime.integration;
 import com.alipay.sofa.healthcheck.core.HealthChecker;
 import com.alipay.sofa.runtime.beans.service.SampleService;
 import com.alipay.sofa.runtime.integration.base.AbstractTestBase;
-import com.alipay.sofa.runtime.integration.features.AwareTest;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import org.junit.Assert;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.Status;
 import org.springframework.context.ApplicationContext;
 
@@ -62,7 +60,7 @@ public class IntegrationTest extends AbstractTestBase {
 
         HealthChecker healthChecker = (HealthChecker) context.getBean("sofaComponentHealthChecker");
         Assert.assertTrue(healthChecker.isHealthy().getStatus().equals(Status.UP));
-        Assert.assertEquals("SOFABoot-Components", healthChecker.getName());
+        Assert.assertEquals("SOFABoot-Components", healthChecker.getComponentName());
         Assert.assertEquals(0, healthChecker.getRetryCount());
         Assert.assertEquals(0, healthChecker.getRetryTimeInterval());
         Assert.assertEquals(true, healthChecker.isStrictCheck());

@@ -58,9 +58,9 @@ public class HealthCheckerProcessor implements ApplicationContextAware {
             healthCheckers = applicationContext.getBeansOfType(HealthChecker.class);
             StringBuilder healthCheckInfo = new StringBuilder();
             healthCheckInfo.append("Found ").append(healthCheckers.size())
-                .append(" HealthChecker implementation:\n");
+                .append(" HealthChecker implementation:");
             for (String beanId : healthCheckers.keySet()) {
-                healthCheckInfo.append(beanId).append("\n");
+                healthCheckInfo.append(beanId).append(",");
             }
             logger.info(healthCheckInfo.deleteCharAt(healthCheckInfo.length() - 1).toString());
         }
