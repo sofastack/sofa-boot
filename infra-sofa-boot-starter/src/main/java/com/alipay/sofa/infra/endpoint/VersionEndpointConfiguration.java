@@ -14,15 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.healthcheck.startup;
+package com.alipay.sofa.infra.endpoint;
+
+import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnEnabledEndpoint;
+import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
- * @author liangen
- * @version 2.3.0
- * @deprecated this class is not intended for use and will be removed the next major versions.
- * {@link ReadinessCheckCallback} combined with {@link org.springframework.core.PriorityOrdered}
- * or {@link org.springframework.core.Ordered} are recommended to use instead.
+ * @author qilong.zql
+ * @since 3.0.0
  */
-@Deprecated
-public interface SofaBootMiddlewareAfterReadinessCheckCallback extends ReadinessCheckCallback {
+@Configuration
+public class VersionEndpointConfiguration {
+
+    @ConditionalOnClass(Endpoint.class)
+    public static class ConditionVersionEndpointConfiguration {
+        @Bean
+        @ConditionalOnEnabledEndpoint
+        public SofaBootVersionEndpoint sofaBootVersionEndpoint() {
+            return new SofaBootVersionEndpoint();
+        }
+    }
+
 }

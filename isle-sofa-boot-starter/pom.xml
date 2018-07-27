@@ -13,7 +13,7 @@
     <artifactId>isle-sofa-boot-starter</artifactId>
 
     <properties>
-        <powermock.version>1.6.4</powermock.version>
+        <powermock.version>1.7.1</powermock.version>
     </properties>
 
     <dependencies>
@@ -57,7 +57,7 @@
         </dependency>
         <dependency>
             <groupId>org.powermock</groupId>
-            <artifactId>powermock-api-mockito</artifactId>
+            <artifactId>powermock-api-mockito2</artifactId>
             <version>${powermock.version}</version>
             <scope>test</scope>
         </dependency>

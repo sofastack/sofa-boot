@@ -16,39 +16,17 @@
  */
 package com.alipay.sofa.infra.autoconfigure;
 
-import com.alipay.sofa.infra.endpoint.SofaBootVersionEndpoint;
-import com.alipay.sofa.infra.endpoint.SofaBootVersionEndpointMvcAdapter;
-import org.springframework.boot.actuate.endpoint.Endpoint;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
-import org.springframework.context.annotation.Bean;
+import com.alipay.sofa.infra.endpoint.VersionEndpointConfiguration;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 /***
  * @author yangguanchao
+ * @author qilong.zql
+ *
+ * @since 2.3.0
  */
 @Configuration
+@Import({ VersionEndpointConfiguration.class })
 public class SofaBootInfraAutoConfiguration {
-
-    @Configuration
-    @ConditionalOnClass(Endpoint.class)
-    public static class SofaBootVersionEndpointConfiguration {
-        @Bean
-        @ConditionalOnProperty(prefix = "com.alipay.sofa.versions", name = "enabled", matchIfMissing = true)
-        public SofaBootVersionEndpoint sofaBootVersionEndpoint() {
-            return new SofaBootVersionEndpoint();
-        }
-    }
-
-    @Configuration
-    @ConditionalOnWebApplication
-    public static class SofaBootVersionEndpointMvcAdapterConfiguration {
-        @Bean
-        @ConditionalOnProperty(prefix = "com.alipay.sofa.versions", name = "enabled", matchIfMissing = true)
-        @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
-        public SofaBootVersionEndpointMvcAdapter sofaBootVersionEndpointMvcAdapter(SofaBootVersionEndpoint sofaBootVersionEndpoint) {
-            return new SofaBootVersionEndpointMvcAdapter(sofaBootVersionEndpoint);
-        }
-    }
 }

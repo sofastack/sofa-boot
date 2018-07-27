@@ -22,7 +22,7 @@ import org.springframework.boot.actuate.health.Health;
  * @author liangen
  * @author qilong.zql
  * @since 2.3.0
- * @deprecated this class is not intended for use and will be removed the next major version.
+ * @deprecated this class is not intended for use and will be removed the next major versions.
  * {@link org.springframework.boot.actuate.health.HealthIndicator} is recommended to use instead.
  */
 @Deprecated

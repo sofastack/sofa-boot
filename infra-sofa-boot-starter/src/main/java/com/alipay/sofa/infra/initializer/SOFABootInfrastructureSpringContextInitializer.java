@@ -26,8 +26,9 @@ import org.springframework.core.env.Environment;
 
 /**
  * SOFABoot Infrastructure 启动初始化器
- * <p> 参考:org.springframework.core.io.support.SpringFactoriesLoader </p>
- * Created by yangguanchao on 18/01/04.
+ *
+ * @author yangguanchao
+ * @since 2.3.0
  */
 public class SOFABootInfrastructureSpringContextInitializer
                                                            implements

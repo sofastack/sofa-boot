@@ -19,9 +19,9 @@ package com.alipay.sofa.infra.base;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -35,10 +35,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * <p>
  * <p>
  * <p/>
- * Created by yangguanchao on 16/11/18.
+ * @author guanchaoyang
+ * @since 2.3.0
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = SofaBootWebSpringBootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(classes = SofaBootWebSpringBootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, properties = { "management.endpoints.web.exposure.include=*" })
 public abstract class AbstractTestBase {
 
     /**

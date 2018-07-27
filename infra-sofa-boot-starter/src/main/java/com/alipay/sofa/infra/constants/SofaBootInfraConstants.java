@@ -17,21 +17,26 @@
 package com.alipay.sofa.infra.constants;
 
 /**
- * CommonMiddlewareConstants
+ * SofaBootInfraConstants
  *
  * @author yangguanchao
  * @since 2017/09/07
  */
-public class CommonMiddlewareConstants {
+public class SofaBootInfraConstants {
 
     /***
      * 获取应用名: 备注 @Value("${spring.application.name:@null}")
      */
-    public static final String APP_NAME_KEY                = "spring.application.name";
+    public static final String APP_NAME_KEY                 = "spring.application.name";
 
     /**
      * {@link org.springframework.boot.ResourceBanner#getVersionsMap}
      */
-    public static final String SOFA_BOOT_VERSION           = "sofa-boot.version";
-    public static final String SOFA_BOOT_FORMATTED_VERSION = "sofa-boot.formatted-version";
+    public static final String SOFA_BOOT_VERSION            = "sofa-boot.version";
+    public static final String SOFA_BOOT_FORMATTED_VERSION  = "sofa-boot.formatted-version";
+
+    /**
+     * resource pattern of properties file which is used to save some information of starters.
+     */
+    public static final String SOFA_BOOT_VERSION_PROPERTIES = "classpath*:META-INF/sofa.versions.properties";
 }

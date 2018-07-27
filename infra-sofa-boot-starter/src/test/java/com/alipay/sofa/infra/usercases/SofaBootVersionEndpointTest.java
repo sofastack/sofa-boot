@@ -17,16 +17,8 @@
 package com.alipay.sofa.infra.usercases;
 
 import com.alipay.sofa.infra.endpoint.SofaBootVersionEndpoint;
-import mockit.Mock;
-import mockit.MockUp;
 import org.junit.Assert;
 import org.junit.Test;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
-
-import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
@@ -40,8 +32,8 @@ public class SofaBootVersionEndpointTest {
     @SuppressWarnings("unchecked")
     public void test() {
         SofaBootVersionEndpoint sofaBootVersionEndpoint = new SofaBootVersionEndpoint();
-        List<Object> result = (List<Object>) sofaBootVersionEndpoint.invoke();
-        List<Object> cacheResult = (List<Object>) sofaBootVersionEndpoint.invoke();
+        List<Object> result = sofaBootVersionEndpoint.versions();
+        List<Object> cacheResult = sofaBootVersionEndpoint.versions();
 
         Assert.assertNotNull(result);
         Assert.assertNotNull(cacheResult);
@@ -53,24 +45,5 @@ public class SofaBootVersionEndpointTest {
         Assert.assertTrue("infra-sofa-boot-starter".equals(versionInfo.getProperty("ArtifactId")));
         Assert.assertTrue("https://github.com/alipay/sofa-boot".equals(versionInfo
             .getProperty("Doc-Url")));
-    }
-
-    @Test
-    public void testException() {
-        new MockUp<SofaBootVersionEndpoint>() {
-            @Mock
-            private List<Resource> getSofaVersionsPropertiesResources() throws IOException {
-                return Collections.singletonList((Resource) new ByteArrayResource(new byte[] {}));
-            }
-        };
-        new SofaBootVersionEndpoint().invoke();
-
-        new MockUp<SofaBootVersionEndpoint>() {
-            @Mock
-            private void generateGavResult(List<Properties> gavResult) throws IOException {
-                throw new RuntimeException("mock");
-            }
-        };
-        new SofaBootVersionEndpoint().invoke();
     }
 }

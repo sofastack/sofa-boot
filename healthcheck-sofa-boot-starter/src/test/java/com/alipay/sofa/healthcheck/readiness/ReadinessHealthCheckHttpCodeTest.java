@@ -38,7 +38,7 @@ import org.springframework.test.context.junit4.SpringRunner;
  */
 @SpringBootApplication
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = { "management.endpoints.web.exposure.include=*" })
 public class ReadinessHealthCheckHttpCodeTest {
 
     @Autowired
@@ -46,9 +46,9 @@ public class ReadinessHealthCheckHttpCodeTest {
 
     @Test
     public void testReadinessCheckFailedHttpCode() {
-        ResponseEntity<String> response = restTemplate.getForEntity("/health/readiness",
+        ResponseEntity<String> response = restTemplate.getForEntity("/actuator/readiness",
             String.class);
-        Assert.assertEquals(HttpStatus.SERVICE_UNAVAILABLE, response.getStatusCode());
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     @Configuration

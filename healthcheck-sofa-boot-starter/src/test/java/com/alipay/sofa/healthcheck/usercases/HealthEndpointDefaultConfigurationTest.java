@@ -18,7 +18,6 @@ package com.alipay.sofa.healthcheck.usercases;
 
 import com.alipay.sofa.healthcheck.base.SofaBootTestApplication;
 import com.alipay.sofa.healthcheck.service.SofaBootReadinessCheckEndpoint;
-import com.alipay.sofa.healthcheck.service.SofaBootReadinessCheckMvcEndpoint;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,13 +39,9 @@ public class HealthEndpointDefaultConfigurationTest {
 
     @Test
     public void test() {
-        SofaBootReadinessCheckEndpoint sofaBootReadinessCheckEndpoint = (SofaBootReadinessCheckEndpoint) ctx
-            .getBean("readinessCheck");
-        Assert.isTrue(sofaBootReadinessCheckEndpoint.isEnabled());
-
-        SofaBootReadinessCheckMvcEndpoint sofaBootVersionEndpointMvcAdapter = (SofaBootReadinessCheckMvcEndpoint) ctx
-            .getBean("sofaBootReadinessCheckMvcEndpoint");
-        Assert.notNull(sofaBootVersionEndpointMvcAdapter);
+        SofaBootReadinessCheckEndpoint sofaBootReadinessCheckEndpoint = ctx
+            .getBean(SofaBootReadinessCheckEndpoint.class);
+        Assert.notNull(sofaBootReadinessCheckEndpoint);
     }
 
 }

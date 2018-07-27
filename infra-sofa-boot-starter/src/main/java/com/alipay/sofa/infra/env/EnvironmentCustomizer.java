@@ -17,7 +17,7 @@
 package com.alipay.sofa.infra.env;
 
 import com.alipay.sofa.infra.autoconfigure.SofaBootInfraAutoConfiguration;
-import com.alipay.sofa.infra.constants.CommonMiddlewareConstants;
+import com.alipay.sofa.infra.constants.SofaBootInfraConstants;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.env.EnvironmentPostProcessor;
 import org.springframework.core.env.*;
@@ -50,8 +50,8 @@ public class EnvironmentCustomizer implements EnvironmentPostProcessor {
         sofaBootVersion = StringUtils.isEmpty(sofaBootVersion) ? "" : sofaBootVersion;
         String sofaBootFormattedVersion = sofaBootVersion.isEmpty() ? "" : String.format(" (v%s)",
             sofaBootVersion);
-        properties.setProperty(CommonMiddlewareConstants.SOFA_BOOT_VERSION, sofaBootVersion);
-        properties.setProperty(CommonMiddlewareConstants.SOFA_BOOT_FORMATTED_VERSION,
+        properties.setProperty(SofaBootInfraConstants.SOFA_BOOT_VERSION, sofaBootVersion);
+        properties.setProperty(SofaBootInfraConstants.SOFA_BOOT_FORMATTED_VERSION,
             sofaBootFormattedVersion);
         return properties;
     }

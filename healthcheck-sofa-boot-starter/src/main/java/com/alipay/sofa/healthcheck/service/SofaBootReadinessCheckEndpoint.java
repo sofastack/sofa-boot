@@ -18,12 +18,12 @@ package com.alipay.sofa.healthcheck.service;
 
 import com.alipay.sofa.healthcheck.startup.ReadinessCheckListener;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.endpoint.AbstractEndpoint;
+import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
+import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.Health.Builder;
 import org.springframework.boot.actuate.health.HealthAggregator;
 import org.springframework.boot.actuate.health.OrderedHealthAggregator;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.util.CollectionUtils;
 
 import java.util.HashMap;
@@ -36,20 +36,16 @@ import java.util.Map;
  * @author qilong.zql
  * @version 2.3.0
  */
-@ConfigurationProperties(prefix = "com.alipay.sofa.healthcheck.readiness")
-public class SofaBootReadinessCheckEndpoint extends AbstractEndpoint<Health> {
+@Endpoint(id = "readiness")
+public class SofaBootReadinessCheckEndpoint {
 
     private final HealthAggregator healthAggregator = new OrderedHealthAggregator();
 
     @Autowired
     private ReadinessCheckListener readinessCheckListener;
 
-    public SofaBootReadinessCheckEndpoint(String id, boolean sensitive) {
-        super(id, sensitive);
-    }
-
-    @Override
-    public Health invoke() {
+    @ReadOperation
+    public Health health() {
         boolean healthCheckerStatus = readinessCheckListener.getHealthCheckerStatus();
         Map<String, Health> healthCheckerDetails = readinessCheckListener.getHealthCheckerDetails();
 
