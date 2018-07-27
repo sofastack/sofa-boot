@@ -32,6 +32,7 @@ import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
 import com.alipay.sofa.runtime.spring.ServiceAnnotationBeanPostProcessor;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;

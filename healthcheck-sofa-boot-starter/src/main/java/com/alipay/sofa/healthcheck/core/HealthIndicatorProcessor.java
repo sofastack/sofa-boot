@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.BeansException;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
+import org.springframework.boot.actuate.health.HealthIndicatorNameFactory;
 import org.springframework.boot.actuate.health.Status;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -126,7 +127,7 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
     }
 
     /**
-     * refer to {@link org.springframework.boot.actuate.endpoint.HealthEndpoint#getKey}
+     * refer to {@link HealthIndicatorNameFactory#apply(String)}
      */
     public String getKey(String name) {
         int index = name.toLowerCase().indexOf("healthindicator");

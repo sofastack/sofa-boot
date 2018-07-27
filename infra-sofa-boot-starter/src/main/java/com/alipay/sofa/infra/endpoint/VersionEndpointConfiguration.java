@@ -14,31 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.infra.usercases;
+package com.alipay.sofa.infra.endpoint;
 
-import com.alipay.sofa.infra.base.AbstractTestBase;
-import org.junit.Test;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnEnabledEndpoint;
+import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
- * ServiceTest
- *
- * @author yangguanchao
- * @since 2018/01/04
+ * @author qilong.zql
+ * @since 3.0.0
  */
-public class ServiceTest extends AbstractTestBase {
+@Configuration
+public class VersionEndpointConfiguration {
 
-    @Test
-    public void testServiceGet() {
-        assertNotNull(urlHttpPrefix);
-        String sofaBootVersionUrl = urlHttpPrefix + "/actuator/versions";
-        ResponseEntity<String> result = testRestTemplate.getForEntity(sofaBootVersionUrl,
-            String.class);
-        assertEquals(HttpStatus.OK.value(), result.getStatusCode().value());
-        assertNotNull(result);
+    @ConditionalOnClass(Endpoint.class)
+    public static class ConditionVersionEndpointConfiguration {
+        @Bean
+        @ConditionalOnEnabledEndpoint
+        public SofaBootVersionEndpoint sofaBootVersionEndpoint() {
+            return new SofaBootVersionEndpoint();
+        }
     }
+
 }

@@ -29,7 +29,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @since 2.5.0
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = SofaBootWebSpringBootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, properties = { "com.alipay.sofa.versions.enabled=false" })
+@SpringBootTest(classes = SofaBootWebSpringBootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, properties = { "management.endpoint.versions.enabled=false" })
 public class VersionEndpointDisableConfigurationTest extends AbstractTestBase {
 
     @Test

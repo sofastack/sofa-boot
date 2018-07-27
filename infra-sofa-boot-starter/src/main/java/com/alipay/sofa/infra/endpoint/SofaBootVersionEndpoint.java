@@ -18,15 +18,18 @@ package com.alipay.sofa.infra.endpoint;
 
 import com.alipay.sofa.infra.log.InfraHealthCheckLoggerFactory;
 import org.slf4j.Logger;
-import org.springframework.boot.actuate.endpoint.AbstractEndpoint;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
+import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.EncodedResource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
+import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.util.*;
+
+import static com.alipay.sofa.infra.constants.SofaBootInfraConstants.SOFA_BOOT_VERSION_PROPERTIES;
 
 /**
  * SOFABootVersionEndpoint
@@ -35,96 +38,54 @@ import java.util.*;
 
  *
  * @author yangguanchao
+ * @author qilong.zql
  * @since 2018/03/26
  */
-@ConfigurationProperties(prefix = "com.alipay.sofa.versions")
-public class SofaBootVersionEndpoint extends AbstractEndpoint<Object> {
-    public static final String                  SOFA_BOOT_VERSION_PREFIX     = "sofaboot_versions";
-    public static final String                  SOFA_BOOT_VERSION_PROPERTIES = "classpath*:META-INF/sofa.versions.properties";
+@Endpoint(id = "versions")
+public class SofaBootVersionEndpoint {
 
-    private Logger                              logger                       = InfraHealthCheckLoggerFactory
-                                                                                 .getLogger(SofaBootVersionEndpoint.class);
+    private Logger                              logger                  = InfraHealthCheckLoggerFactory
+                                                                            .getLogger(SofaBootVersionEndpoint.class);
 
-    private List<Object>                        endpointResult               = null;
+    private List<Object>                        endpointResult          = new ArrayList<>();
 
-    private PathMatchingResourcePatternResolver resourcePatternResolver      = new PathMatchingResourcePatternResolver();
+    private PathMatchingResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
 
-    public SofaBootVersionEndpoint() {
-        super(SOFA_BOOT_VERSION_PREFIX, false);
-    }
-
-    @Override
-    public Object invoke() {
-        if (this.endpointResult != null) {
-            //cache
-            return this.endpointResult;
-        }
-        List<Object> result = new ArrayList<>();
-        //https://stackoverflow.com/questions/9259819/how-to-read-values-from-properties-file
-        try {
-            List<Properties> gavResult = new LinkedList<>();
-            this.generateGavResult(gavResult);
-            if (gavResult.size() > 0) {
-                result.addAll(gavResult);
+    @ReadOperation
+    public List<Object> versions() {
+        if (endpointResult.isEmpty()) {
+            try {
+                List<Object> result = new ArrayList<>();
+                Resource[] versionResource = resourcePatternResolver
+                    .getResources(SOFA_BOOT_VERSION_PROPERTIES);
+                for (Resource resource : versionResource) {
+                    Properties versionProperties = loadProperties(resource);
+                    result.add(versionProperties);
+                }
+                endpointResult = result;
+            } catch (Exception ex) {
+                logger.warn("Load properties failed: {}", ex.getMessage());
             }
-        } catch (Exception ex) {
-            logger.warn("Load properties failed " + " : " + ex.getMessage());
         }
-        //cache
-        this.endpointResult = result;
-        return this.endpointResult;
-    }
-
-    private void generateGavResult(List<Properties> gavResult) throws IOException {
-        //read sofa.versions.properties
-        List<Resource> pomResourceLocations = getSofaVersionsPropertiesResources();
-        if (pomResourceLocations == null || pomResourceLocations.size() <= 0) {
-            return;
-        }
-        for (Resource sofaVersionsResource : pomResourceLocations) {
-            Properties sofaVersionsProperties = loadProperties(sofaVersionsResource);
-            gavResult.add(sofaVersionsProperties);
-        }
+        return endpointResult;
     }
 
     /**
-     * Load properties into the given instance.
+     * Load properties into the given sofa.versions.properties resource.
      *
-     * @param resourceLocation the Resource locations to load
+     * @param resourceLocation the resource locations to load
      */
     private Properties loadProperties(Resource resourceLocation) {
+        Assert.notNull(resourceLocation, "Properties resource location must not be null.");
+
+        logger.info("Loading properties file from {}", resourceLocation);
         Properties result = new Properties();
-        if (resourceLocation != null) {
-            if (logger.isInfoEnabled()) {
-                logger.info("Loading properties file from " + resourceLocation);
-            }
-            try {
-                PropertiesLoaderUtils.fillProperties(result, new EncodedResource(resourceLocation));
-            } catch (IOException ex) {
-                if (logger.isWarnEnabled()) {
-                    logger.warn("Could not load properties from " + resourceLocation + ": "
-                                + ex.getMessage());
-                }
-            }
+        try {
+            PropertiesLoaderUtils.fillProperties(result, new EncodedResource(resourceLocation));
+        } catch (IOException ex) {
+            logger.warn("Error occurred when loading properties from {}: {}", resourceLocation,
+                ex.getMessage());
         }
         return result;
-    }
-
-    private List<Resource> getSofaVersionsPropertiesResources() throws IOException {
-        List<String> paths = Collections.singletonList(SOFA_BOOT_VERSION_PROPERTIES);
-        return getResources(paths);
-    }
-
-    private List<Resource> getResources(List<String> paths) throws IOException {
-        if (paths == null || paths.size() == 0) {
-            return null;
-        }
-        List<Resource> resultList = new ArrayList<>();
-        for (String path : paths) {
-            Resource[] resources = resourcePatternResolver.getResources(path);
-            List<Resource> resourceList = Arrays.asList(resources);
-            resultList.addAll(resourceList);
-        }
-        return resultList;
     }
 }
