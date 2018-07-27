@@ -53,7 +53,6 @@ import static org.mockito.Mockito.when;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ ReferenceRegisterHelper.class, ServiceAnnotationBeanPostProcessor.class })
 public class ServiceAnnotationBeanPostProcessorTest {
-    @Ignore
     @Test
     public void testCreateReferenceProxy() throws Exception {
         Class clazz = Class
