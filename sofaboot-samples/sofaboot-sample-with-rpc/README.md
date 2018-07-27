@@ -9,7 +9,7 @@ SOFABoot 提供了如健康检查，上下文隔离等基础能力，同时提�
 <parent>
     <groupId>com.alipay.sofa</groupId>
     <artifactId>sofaboot-dependencies</artifactId>
-    <version>3.0.0-SNAPSHOT</version>
+    <version>2.5.0-SNAPSHOT</version>
 </parent>
 ```
 
