@@ -24,7 +24,6 @@
         <groupId>com.alipay.sofa</groupId>
         <artifactId>sofaboot-dependencies</artifactId>
         <version>2.5.0-SNAPSHOT</version>
-        <relativePath>./sofaboot-dependencies/pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -35,7 +34,6 @@
     <description>SOFABoot Runtime</description>
 
     <modules>
-        <module>sofaboot-dependencies</module>
         <module>infra-sofa-boot-starter</module>
         <module>healthcheck-sofa-boot-starter</module>
         <module>runtime-sofa-boot-starter</module>
@@ -58,7 +56,6 @@
         <coveralls.maven.plugin>3.1.0</coveralls.maven.plugin>
         <main.user.dir>${user.dir}</main.user.dir>
     </properties>
-
 
     <build>
         <plugins>
