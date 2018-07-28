@@ -141,10 +141,8 @@
                 <artifactId>sofa-version-maven-plugin</artifactId>
                 <version>1.0.1</version>
                 <configuration>
-                    <!-- 指向工程的 .git 目录,默认值 ${project.basedir}/.git,不满足要求的需要自己指向 .git 文件 -->
                     <dotGitDirectory>../.git</dotGitDirectory>
                     <defaultPropertiesFileEntries>
-                        <!-- 可以自定义 key 和 value-->
                         <Doc-Url>http://www.sofastack.tech/sofa-boot/docs/Home</Doc-Url>
                     </defaultPropertiesFileEntries>
                 </configuration>
