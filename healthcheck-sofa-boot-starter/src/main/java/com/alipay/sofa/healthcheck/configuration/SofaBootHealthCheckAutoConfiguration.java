@@ -64,7 +64,7 @@ public class SofaBootHealthCheckAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnProperty(prefix = "com.alipay.sofa.healthcheck.readiness", name = "enabled", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = "com.alipay.sofa.healthcheck", name = "enabled", matchIfMissing = true)
     public SofaBootReadinessCheckEndpoint readinessCheck() {
         return new SofaBootReadinessCheckEndpoint(READINESS_CHECK_ENDPOINT_NAME, false);
     }

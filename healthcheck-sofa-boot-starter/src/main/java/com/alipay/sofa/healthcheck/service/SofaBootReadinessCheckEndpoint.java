@@ -36,7 +36,7 @@ import java.util.Map;
  * @author qilong.zql
  * @version 2.3.0
  */
-@ConfigurationProperties(prefix = "com.alipay.sofa.healthcheck.readiness")
+@ConfigurationProperties(prefix = "com.alipay.sofa.healthcheck")
 public class SofaBootReadinessCheckEndpoint extends AbstractEndpoint<Health> {
 
     private final HealthAggregator healthAggregator = new OrderedHealthAggregator();

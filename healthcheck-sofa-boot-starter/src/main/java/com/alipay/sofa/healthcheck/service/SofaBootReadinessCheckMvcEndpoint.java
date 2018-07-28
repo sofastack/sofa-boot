@@ -38,7 +38,7 @@ import java.util.Map;
  * @author khotyn
  * @version 2.3.0
  */
-@ConfigurationProperties(prefix = "com.alipay.sofa.healthcheck.readiness")
+@ConfigurationProperties(prefix = "com.alipay.sofa.healthcheck")
 public class SofaBootReadinessCheckMvcEndpoint
                                               extends
                                               AbstractEndpointMvcAdapter<SofaBootReadinessCheckEndpoint> {
