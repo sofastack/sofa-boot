@@ -29,6 +29,10 @@
 
     <artifactId>infra-sofa-boot-starter</artifactId>
 
+    <properties>
+        <main.user.dir>../</main.user.dir>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -154,29 +158,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>sofa-version-maven-plugin</artifactId>
-                <version>1.0.1</version>
-                <configuration>
-                    <dotGitDirectory>../.git</dotGitDirectory>
-                    <defaultPropertiesFileEntries>
-                        <Doc-Url>http://www.sofastack.tech/sofa-boot/docs/Home</Doc-Url>
-                    </defaultPropertiesFileEntries>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>gen</goal>
-                            <goal>write</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>
