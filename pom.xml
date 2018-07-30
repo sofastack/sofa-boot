@@ -54,6 +54,7 @@
         <maven.gpg.pluign>1.5</maven.gpg.pluign>
         <cobertura.maven.plugin>2.6</cobertura.maven.plugin>
         <coveralls.maven.plugin>3.1.0</coveralls.maven.plugin>
+        <sofa.version.maven.plugin>1.0.1</sofa.version.maven.plugin>
         <main.user.dir>${user.dir}</main.user.dir>
     </properties>
 
@@ -101,6 +102,26 @@
                     <configFile>${main.user.dir}/Formatter.xml</configFile>
                     <encoding>${project.encoding}</encoding>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>sofa-version-maven-plugin</artifactId>
+                <version>${sofa.version.maven.plugin}</version>
+                <configuration>
+                    <dotGitDirectory>${main.user.dir}/.git</dotGitDirectory>
+                    <defaultPropertiesFileEntries>
+                        <Doc-Url>http://www.sofastack.tech/sofa-boot/docs/Home</Doc-Url>
+                    </defaultPropertiesFileEntries>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>gen</goal>
+                            <goal>write</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>
@@ -176,5 +197,84 @@
         </plugins>
     </build>
 
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>${maven.staging.plugin}</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>false</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>${maven.gpg.pluign}</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <distributionManagement>
+                <repository>
+                    <id>ossrh</id>
+                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+
+        <profile>
+            <id>snapshot</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>${maven.staging.plugin}</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>false</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>${maven.gpg.pluign}</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>ossrh</id>
+                    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+                </snapshotRepository>
+            </distributionManagement>
+        </profile>
+    </profiles>
 
 </project>
