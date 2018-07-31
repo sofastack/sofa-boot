@@ -30,6 +30,10 @@
 
     <artifactId>healthcheck-sofa-boot-starter</artifactId>
 
+    <properties>
+        <main.user.dir>../</main.user.dir>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.alipay.sofa</groupId>
