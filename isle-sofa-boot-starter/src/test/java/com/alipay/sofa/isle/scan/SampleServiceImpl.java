@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.isle.integration;
+package com.alipay.sofa.isle.scan;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import com.alipay.sofa.runtime.api.annotation.SofaService;
+import org.springframework.stereotype.Component;
 
 /**
- * @author xuanbei 18/5/8
+ * @author xuanbei 18/8/1
  */
-@SpringBootApplication
-public class SofaBootTestApplication {
-    public static void main(String[] args) {
-        SpringApplication springApplication = new SpringApplication(SofaBootTestApplication.class);
-        springApplication.run(args);
+@Component
+@SofaService(uniqueId = "componentScanTest")
+public class SampleServiceImpl implements SampleService {
+    @Override
+    public String message() {
+        return "Hello from com.alipay.sofa.isle.scan.SampleServiceImpl.";
     }
-
 }

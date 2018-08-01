@@ -14,19 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.isle.integration;
-
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+package com.alipay.sofa.isle.scan;
 
 /**
- * @author xuanbei 18/5/8
+ * @author xuanbei 18/8/1
  */
-@SpringBootApplication
-public class SofaBootTestApplication {
-    public static void main(String[] args) {
-        SpringApplication springApplication = new SpringApplication(SofaBootTestApplication.class);
-        springApplication.run(args);
-    }
-
+public interface SampleService {
+    String message();
 }

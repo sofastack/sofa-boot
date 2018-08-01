@@ -145,7 +145,9 @@ public class DynamicSpringContextLoader implements SpringContextLoader {
         Map<String, BeanDefinition> processors = (Map<String, BeanDefinition>) rootApplicationContext
             .getBean(SofaModuleFrameworkConstants.PROCESSORS_OF_ROOT_APPLICATION_CONTEXT);
         for (Map.Entry<String, BeanDefinition> entry : processors.entrySet()) {
-            beanFactory.registerBeanDefinition(entry.getKey(), entry.getValue());
+            if (!beanFactory.containsBeanDefinition(entry.getKey())) {
+                beanFactory.registerBeanDefinition(entry.getKey(), entry.getValue());
+            }
         }
     }
 }

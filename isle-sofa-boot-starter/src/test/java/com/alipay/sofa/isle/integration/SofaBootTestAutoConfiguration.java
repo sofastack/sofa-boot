@@ -16,17 +16,23 @@
  */
 package com.alipay.sofa.isle.integration;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import com.alipay.sofa.isle.processor.SampleBeanPostProcessor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
- * @author xuanbei 18/5/8
+ * @author xuanbei 18/8/1
  */
-@SpringBootApplication
-public class SofaBootTestApplication {
-    public static void main(String[] args) {
-        SpringApplication springApplication = new SpringApplication(SofaBootTestApplication.class);
-        springApplication.run(args);
-    }
+@Configuration
+public class SofaBootTestAutoConfiguration {
 
+    /**
+     * define SampleBeanPostProcessor in Root Application Context.
+     *
+     * @return SampleBeanPostProcessor
+     */
+    @Bean
+    public SampleBeanPostProcessor sampleBeanPostProcessor() {
+        return new SampleBeanPostProcessor();
+    }
 }
