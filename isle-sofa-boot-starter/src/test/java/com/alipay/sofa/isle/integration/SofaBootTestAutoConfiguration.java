@@ -21,7 +21,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @author xuanbei 18/8/1
+ * @author xuanbei
+ * @since 2.4.4
  */
 @Configuration
 public class SofaBootTestAutoConfiguration {

@@ -17,7 +17,8 @@
 package com.alipay.sofa.isle.scan;
 
 /**
- * @author xuanbei 18/8/1
+ * @author xuanbei
+ * @since 2.4.4
  */
 public interface SampleService {
     String message();

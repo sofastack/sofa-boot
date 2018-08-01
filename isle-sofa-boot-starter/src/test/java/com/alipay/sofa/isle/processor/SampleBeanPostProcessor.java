@@ -20,7 +20,8 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 
 /**
- * @author xuanbei 18/8/1
+ * @author xuanbei
+ * @since 2.4.4
  */
 public class SampleBeanPostProcessor implements BeanPostProcessor {
     @Override

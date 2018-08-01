@@ -20,7 +20,8 @@ import com.alipay.sofa.runtime.api.annotation.SofaService;
 import org.springframework.stereotype.Component;
 
 /**
- * @author xuanbei 18/8/1
+ * @author xuanbei
+ * @since 2.4.4
  */
 @Component
 @SofaService(uniqueId = "componentScanTest")
