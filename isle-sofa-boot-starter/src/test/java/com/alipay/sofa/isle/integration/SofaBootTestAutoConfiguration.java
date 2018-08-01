@@ -25,7 +25,6 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class SofaBootTestAutoConfiguration {
-
     /**
      * define SampleBeanPostProcessor in Root Application Context.
      *

@@ -28,5 +28,4 @@ public class SofaBootTestApplication {
         SpringApplication springApplication = new SpringApplication(SofaBootTestApplication.class);
         springApplication.run(args);
     }
-
 }
