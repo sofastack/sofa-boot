@@ -30,6 +30,7 @@
     <artifactId>runtime-sofa-boot-starter</artifactId>
     <properties>
         <ark.plugin.name>sofa-runtime-ark-plugin</ark.plugin.name>
+        <main.user.dir>../</main.user.dir>
     </properties>
 
     <dependencies>
