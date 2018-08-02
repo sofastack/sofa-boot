@@ -36,8 +36,9 @@ import java.util.Map;
 
 /**
  * @author khotyn
+ * @version 2.3.0
  */
-@ConfigurationProperties(prefix = "com.alipay.sofa.healthcheck.readiness")
+@ConfigurationProperties(prefix = "com.alipay.sofa.healthcheck")
 public class SofaBootReadinessCheckMvcEndpoint
                                               extends
                                               AbstractEndpointMvcAdapter<SofaBootReadinessCheckEndpoint> {
@@ -49,7 +50,7 @@ public class SofaBootReadinessCheckMvcEndpoint
      *
      * @param delegate the underlying {@link Endpoint} to adapt.
      */
-    SofaBootReadinessCheckMvcEndpoint(SofaBootReadinessCheckEndpoint delegate) {
+    public SofaBootReadinessCheckMvcEndpoint(SofaBootReadinessCheckEndpoint delegate) {
         super(delegate);
         setupDefaultStatusMapping();
         setPath(READINESS_CHECK_URL);

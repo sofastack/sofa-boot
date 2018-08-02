@@ -30,6 +30,10 @@
 
     <artifactId>healthcheck-sofa-boot-starter</artifactId>
 
+    <properties>
+        <main.user.dir>../</main.user.dir>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.alipay.sofa</groupId>
@@ -67,6 +71,12 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <!--spring-boot-end-->
 
         <!--log begin-->
@@ -80,12 +90,6 @@
             <artifactId>sofa-common-tools</artifactId>
         </dependency>
         <!--log end-->
-
-        <!--fastjson-->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-        </dependency>
 
         <!--test-->
         <dependency>

@@ -19,8 +19,10 @@ package com.alipay.sofa.isle.integration;
 import com.alipay.sofa.healthcheck.core.HealthChecker;
 import com.alipay.sofa.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.isle.constants.SofaModuleFrameworkConstants;
+import com.alipay.sofa.isle.scan.SampleService;
 import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
 import com.alipay.sofa.isle.util.ClassPathUtil;
+import com.alipay.sofa.runtime.api.annotation.SofaReference;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -49,6 +51,9 @@ public class IntegrationTest implements ApplicationContextAware {
     @Autowired
     private SofaModuleProperties sofaModuleProperties;
 
+    @SofaReference(uniqueId = "componentScanTest")
+    private SampleService        sampleService;
+
     @BeforeClass
     public static void before() throws Exception {
         // test JarDeploymentDescriptor, add jar file at runtime
@@ -65,7 +70,7 @@ public class IntegrationTest implements ApplicationContextAware {
         assertEquals(sofaModuleProperties.getActiveProfiles(), "dev");
         assertEquals(sofaModuleProperties.isModuleStartUpParallel(), true);
         assertEquals(sofaModuleProperties.isPublishEventToParent(), false);
-        assertEquals(sofaModuleProperties.isAllowBeanDefinitionOverriding(), true);
+        assertEquals(sofaModuleProperties.isAllowBeanDefinitionOverriding(), false);
         assertEquals(sofaModuleProperties.getBeanLoadCost(), 0);
 
         ApplicationRuntimeModel applicationRuntimeModel = (ApplicationRuntimeModel) applicationContext
@@ -93,10 +98,16 @@ public class IntegrationTest implements ApplicationContextAware {
         HealthChecker healthChecker = (HealthChecker) applicationContext
             .getBean("sofaModuleHealthChecker");
         Assert.assertTrue(healthChecker.isHealthy().getStatus().equals(Status.UP));
-        Assert.assertEquals("SOFABoot Modules", healthChecker.getComponentName());
+        Assert.assertEquals("SOFABoot-Modules", healthChecker.getComponentName());
         Assert.assertEquals(0, healthChecker.getRetryCount());
         Assert.assertEquals(0, healthChecker.getRetryTimeInterval());
         Assert.assertEquals(true, healthChecker.isStrictCheck());
+    }
+
+    @Test
+    public void testComponentScan() {
+        Assert.assertNotNull(sampleService);
+        "Hello from com.alipay.sofa.isle.scan.SampleServiceImpl.".equals(sampleService.message());
     }
 
     @Override

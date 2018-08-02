@@ -16,8 +16,8 @@
  */
 package com.alipay.sofa.healthcheck.service;
 
-import com.alipay.sofa.healthcheck.startup.StartUpHealthCheckStatus;
-import com.alipay.sofa.healthcheck.startup.StartUpHealthCheckStatus.HealthIndicatorDetail;
+import com.alipay.sofa.healthcheck.startup.ReadinessCheckListener;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.endpoint.AbstractEndpoint;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.Health.Builder;
@@ -27,19 +27,22 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.util.CollectionUtils;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
  * The health check HTTP checker for start status.
  *
  * @author liangen
- * @version $Id: StartUpHealthCheckStatusCheckInfo.java, v 0.1 2018年02月02日 下午11:34 liangen Exp $
+ * @author qilong.zql
+ * @version 2.3.0
  */
-@ConfigurationProperties(prefix = "com.alipay.sofa.healthcheck.readiness")
+@ConfigurationProperties(prefix = "com.alipay.sofa.healthcheck")
 public class SofaBootReadinessCheckEndpoint extends AbstractEndpoint<Health> {
 
     private final HealthAggregator healthAggregator = new OrderedHealthAggregator();
+
+    @Autowired
+    private ReadinessCheckListener readinessCheckListener;
 
     public SofaBootReadinessCheckEndpoint(String id, boolean sensitive) {
         super(id, sensitive);
@@ -47,61 +50,32 @@ public class SofaBootReadinessCheckEndpoint extends AbstractEndpoint<Health> {
 
     @Override
     public Health invoke() {
-        //spring
-        boolean springContextStatus = StartUpHealthCheckStatus.getSpringContextStatus();
+        boolean healthCheckerStatus = readinessCheckListener.getHealthCheckerStatus();
+        Map<String, Health> healthCheckerDetails = readinessCheckListener.getHealthCheckerDetails();
 
-        //component
-        boolean componentStatus = StartUpHealthCheckStatus.getComponentStatus();
-        Map<String, Health> componentDetail = StartUpHealthCheckStatus.getComponentDetail();
-
-        //HealthIndicator
-        boolean healthIndicatorStatus = StartUpHealthCheckStatus.getHealthIndicatorStatus();
-        List<HealthIndicatorDetail> healthIndicatorDetails = StartUpHealthCheckStatus
+        boolean healthIndicatorStatus = readinessCheckListener.getHealthIndicatorStatus();
+        Map<String, Health> healthIndicatorDetails = readinessCheckListener
             .getHealthIndicatorDetails();
 
-        //AfterHealthCheckCallback
-        boolean afterHealthCheckCallbackStatus = StartUpHealthCheckStatus
-            .getAfterHealthCheckCallbackStatus();
-        Map<String, Health> afterHealthCheckCallbackDetails = StartUpHealthCheckStatus
-            .getAfterHealthCheckCallbackDetails();
+        boolean afterHealthCheckCallbackStatus = readinessCheckListener.getHealthCallbackStatus();
+        Map<String, Health> afterHealthCheckCallbackDetails = readinessCheckListener
+            .getHealthCallbackDetails();
 
-        Map<String, Health> healths = new HashMap<>();
-
-        //spring
-        if (springContextStatus) {
-            healths.put("springContextHealthCheckInfo", Health.up().build());
-        } else {
-            healths.put("springContextHealthCheckInfo", Health.down().build());
-
-        }
-
-        //component and callback
         Builder builder;
-        if (componentStatus && healthIndicatorStatus && afterHealthCheckCallbackStatus) {
+        Map<String, Health> healths = new HashMap<>();
+        if (healthCheckerStatus && healthIndicatorStatus && afterHealthCheckCallbackStatus) {
             builder = Health.up();
         } else {
             builder = Health.down();
         }
-
-        if (!CollectionUtils.isEmpty(componentDetail)) {
-            builder = builder.withDetail("Middleware-start-period", componentDetail);
+        if (!CollectionUtils.isEmpty(healthCheckerDetails)) {
+            builder = builder.withDetail("HealthChecker", healthCheckerDetails);
         }
         if (!CollectionUtils.isEmpty(afterHealthCheckCallbackDetails)) {
-            builder = builder.withDetail("Middleware-operation-period",
-                afterHealthCheckCallbackDetails);
+            builder = builder.withDetail("ReadinessCheckCallback", afterHealthCheckCallbackDetails);
         }
-
-        healths.put("sofaBootComponentHealthCheckInfo", builder.build());
-
-        //HealthIndicator
-        for (HealthIndicatorDetail healthIndicatorDetail : healthIndicatorDetails) {
-            String name = healthIndicatorDetail.getName();
-            Health health = healthIndicatorDetail.getHealth();
-
-            healths.put(name, health);
-
-        }
-
+        healths.put("SOFABootReadinessHealthCheckInfo", builder.build());
+        healths.putAll(healthIndicatorDetails);
         return this.healthAggregator.aggregate(healths);
     }
 

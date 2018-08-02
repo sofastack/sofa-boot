@@ -17,8 +17,6 @@
   -->
 
 <configuration>
-    <!--  logback appenders -->
-
     <!-- 按照每天生成日志文件 -->
     <appender name="ERROR-APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <append>true</append>

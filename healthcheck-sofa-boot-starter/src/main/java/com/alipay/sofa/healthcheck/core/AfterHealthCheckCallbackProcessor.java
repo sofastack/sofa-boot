@@ -16,92 +16,114 @@
  */
 package com.alipay.sofa.healthcheck.core;
 
-import com.alibaba.fastjson.JSON;
 import com.alipay.sofa.healthcheck.log.SofaBootHealthCheckLoggerFactory;
+import com.alipay.sofa.healthcheck.startup.ReadinessCheckCallback;
 import com.alipay.sofa.healthcheck.startup.SofaBootAfterReadinessCheckCallback;
 import com.alipay.sofa.healthcheck.startup.SofaBootMiddlewareAfterReadinessCheckCallback;
-import com.alipay.sofa.healthcheck.startup.StartUpHealthCheckStatus;
-import org.slf4j.Logger;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.BeansException;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.Status;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.util.Assert;
+import org.slf4j.Logger;
 
-import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Used to check AfterHealthCheckCallback
+ *
  * @author liangen
- * @version $Id: AfterHealthCheckCallback.java, v 0.1 2018年03月09日 上午11:10 liangen Exp $
+ * @author qiong.zql
+ * @version 2.3.0
  */
-public class AfterHealthCheckCallbackProcessor {
-    private static Logger logger = SofaBootHealthCheckLoggerFactory
-                                     .getLogger(AfterHealthCheckCallbackProcessor.class
-                                         .getCanonicalName());
+public class AfterHealthCheckCallbackProcessor implements ApplicationContextAware {
 
-    public boolean checkAfterHealthCheckCallback() {
+    private static Logger                                              logger                                 = SofaBootHealthCheckLoggerFactory
+                                                                                                                  .getLogger(AfterHealthCheckCallbackProcessor.class);
 
-        boolean result = false;
+    private ObjectMapper                                               objectMapper                           = new ObjectMapper();
 
-        if (doMiddlewareAfterHealthCheckCallback()) {
-            result = doApplicationAfterHealthCheckCallback();
+    private AtomicBoolean                                              isInitiated                            = new AtomicBoolean(
+                                                                                                                  false);
+
+    private ApplicationContext                                         applicationContext                     = null;
+
+    private Map<String, SofaBootMiddlewareAfterReadinessCheckCallback> middlewareAfterReadinessCheckCallbacks = null;
+
+    private Map<String, SofaBootAfterReadinessCheckCallback>           afterReadinessCheckCallbacks           = null;
+
+    public void init() {
+        if (isInitiated.compareAndSet(false, true)) {
+            Assert.notNull(applicationContext, "Application must not be null");
+
+            middlewareAfterReadinessCheckCallbacks = applicationContext
+                .getBeansOfType(SofaBootMiddlewareAfterReadinessCheckCallback.class);
+            afterReadinessCheckCallbacks = applicationContext
+                .getBeansOfType(SofaBootAfterReadinessCheckCallback.class);
+
+            StringBuilder middlewareCallbackInfo = new StringBuilder();
+            middlewareCallbackInfo.append("Found ")
+                .append(middlewareAfterReadinessCheckCallbacks.size())
+                .append(" SofaBootMiddlewareAfterReadinessCheckCallback implementation:");
+            for (String beanId : middlewareAfterReadinessCheckCallbacks.keySet()) {
+                middlewareCallbackInfo.append(beanId).append(",");
+            }
+            logger.info(middlewareCallbackInfo.deleteCharAt(middlewareCallbackInfo.length() - 1)
+                .toString());
+
+            StringBuilder applicationCallbackInfo = new StringBuilder();
+            applicationCallbackInfo.append("Found ").append(afterReadinessCheckCallbacks.size())
+                .append(" SofaBootAfterReadinessCheckCallback implementation:");
+            for (String beanId : afterReadinessCheckCallbacks.keySet()) {
+                applicationCallbackInfo.append(beanId).append(",");
+            }
+            logger.info(applicationCallbackInfo.deleteCharAt(applicationCallbackInfo.length() - 1)
+                .toString());
         }
+    }
 
-        StartUpHealthCheckStatus.setAfterHealthCheckCallbackStatus(result);
+    @Override
+    public void setApplicationContext(ApplicationContext cxt) throws BeansException {
+        this.applicationContext = cxt;
+    }
 
+    public boolean afterReadinessCheckCallback(Map<String, Health> healthMap) {
+        logger.info("Begin SOFABoot ReadinessCheckCallback check.");
+        boolean result = true;
+        result = middlewareAfterHealthCheckCallback(healthMap) && result;
+        result = applicationAfterHealthCheckCallback(healthMap) && result;
         if (result) {
-            logger.info("SOFABoot readiness check callback : success.");
+            logger.info("SOFABoot ReadinessCheckCallback check: success.");
         } else {
-            logger.error("SOFABoot readiness check callback : failed.");
+            logger.error("SOFABoot ReadinessCheckCallback check: failed.");
         }
         return result;
-
     }
 
     /**
      * process middleware afterHealthCheckCallback
-     * @return
+     *
+     * @param healthMap Used to save information of healthcheck.
+     * @return Callback check result.
      */
-    private boolean doMiddlewareAfterHealthCheckCallback() {
+    private boolean middlewareAfterHealthCheckCallback(Map<String, Health> healthMap) {
+        Assert.notNull(middlewareAfterReadinessCheckCallbacks,
+            "SofaBootMiddlewareAfterReadinessCheckCallback must not be null.");
+
+        logger.info("Begin SofaBootMiddlewareAfterReadinessCheckCallback check");
         boolean result = true;
-        logger.info("Begin SofaBootMiddlewareAfterReadinessCheckCallback readiness check");
-
-        List<SofaBootMiddlewareAfterReadinessCheckCallback> middlewareAfterReadinessCheckCallbacks = HealthCheckManager
-            .getMiddlewareAfterHealthCheckCallbacks();
-        for (SofaBootMiddlewareAfterReadinessCheckCallback middlewareAfterReadinessCheckCallback : middlewareAfterReadinessCheckCallbacks) {
-            try {
-                Health health = middlewareAfterReadinessCheckCallback.onHealthy(HealthCheckManager
-                    .getApplicationContext());
-                Status status = health.getStatus();
-                if (!status.equals(Status.UP)) {
-                    result = false;
-
-                    logger.error("SOFABoot middleware after readiness check callback("
-                                 + middlewareAfterReadinessCheckCallback.getClass()
-                                 + ") failed, the details is: "
-                                 + JSON.toJSONString(health.getDetails()));
-                } else {
-                    logger.info("SOFABoot middleware after readiness check callback("
-                                + middlewareAfterReadinessCheckCallback.getClass() + ") ]success.");
-                }
-
-                StartUpHealthCheckStatus.putAfterHealthCheckCallbackDetail(
-                    getKey(middlewareAfterReadinessCheckCallback.getClass().getName()), health);
-
-            } catch (Throwable t) {
-                result = false;
-
-                logger.error("Invoking SofaBootMiddlewareAfterReadinessCheckCallback "
-                             + middlewareAfterReadinessCheckCallback.getClass().getName()
-                             + " got an exception.", t);
-            }
+        for (String beanId : middlewareAfterReadinessCheckCallbacks.keySet()) {
+            result = doHealthCheckCallback(beanId,
+                middlewareAfterReadinessCheckCallbacks.get(beanId), healthMap)
+                     && result;
         }
-
         if (result) {
-            logger
-                .info("SofaBootMiddlewareAfterReadinessCheckCallback readiness check result: success.");
+            logger.info("SofaBootMiddlewareAfterReadinessCheckCallback check result: success.");
         } else {
-            logger
-                .error("SofaBootMiddlewareAfterReadinessCheckCallback readiness check result: failed.");
-
+            logger.error("SofaBootMiddlewareAfterReadinessCheckCallback check result: failed.");
         }
         return result;
     }
@@ -110,53 +132,50 @@ public class AfterHealthCheckCallbackProcessor {
      * process application afterHealthCheckCallback
      * @return
      */
-    private boolean doApplicationAfterHealthCheckCallback() {
-        boolean result = true;
+    private boolean applicationAfterHealthCheckCallback(Map<String, Health> healthMap) {
+        Assert.notNull(afterReadinessCheckCallbacks,
+            "SofaBootAfterReadinessCheckCallback must not be null.");
 
         logger.info("Begin SofaBootAfterReadinessCheckCallback readiness check");
-
-        List<SofaBootAfterReadinessCheckCallback> afterReadinessCheckCallbacks = HealthCheckManager
-            .getApplicationAfterHealthCheckCallbacks();
-        for (SofaBootAfterReadinessCheckCallback afterReadinessCheckCallback : afterReadinessCheckCallbacks) {
-            try {
-                Health health = afterReadinessCheckCallback.onHealthy(HealthCheckManager
-                    .getApplicationContext());
-                Status status = health.getStatus();
-                if (!status.equals(Status.UP)) {
-                    result = false;
-
-                    logger.error("SOFABoot application after readiness check callback("
-                                 + afterReadinessCheckCallback.getClass()
-                                 + ") failed, the details is: "
-                                 + JSON.toJSONString(health.getDetails()));
-                } else {
-                    logger.info("SOFABoot application after readiness check callback("
-                                + afterReadinessCheckCallback.getClass() + ") ]success.");
-                }
-
-                StartUpHealthCheckStatus.putAfterHealthCheckCallbackDetail(
-                    getKey(afterReadinessCheckCallback.getClass().getName()), health);
-
-            } catch (Throwable t) {
-                result = false;
-
-                logger.error("Invoking  SofaBootAfterReadinessCheckCallback "
-                             + afterReadinessCheckCallback.getClass().getName()
-                             + " got an exception.", t);
-            }
+        boolean result = true;
+        for (String beanId : afterReadinessCheckCallbacks.keySet()) {
+            result = doHealthCheckCallback(beanId, afterReadinessCheckCallbacks.get(beanId),
+                healthMap) && result;
         }
-
         if (result) {
             logger.info("SofaBootAfterReadinessCheckCallback readiness check result: success.");
         } else {
             logger.error("SofaBootAfterReadinessCheckCallback readiness check result: failed.");
-
         }
         return result;
     }
 
-    private String getKey(String className) {
-        String[] fullName = className.split("\\.");
-        return fullName[fullName.length - 1];
+    private boolean doHealthCheckCallback(String beanId,
+                                          ReadinessCheckCallback readinessCheckCallback,
+                                          Map<String, Health> healthMap) {
+        Assert.notNull(healthMap, "HealthMap must not be null");
+
+        boolean result = false;
+        Health health = null;
+        try {
+            health = readinessCheckCallback.onHealthy(applicationContext);
+            if (health.getStatus().equals(Status.UP)) {
+                result = true;
+                logger.info("SOFABoot ReadinessCheckCallback[{}] check success.", beanId);
+            } else {
+                logger.error(
+                    "SOFABoot ReadinessCheckCallback[{}] check failed, the details is: {}.",
+                    beanId, objectMapper.writeValueAsString(health.getDetails()));
+            }
+        } catch (Throwable t) {
+            if (health == null) {
+                health = new Health.Builder().down(new RuntimeException(t)).build();
+            }
+            logger.error(String.format(
+                "Error occurred while doing ReadinessCheckCallback[%s] check.", beanId), t);
+        } finally {
+            healthMap.put(beanId, health);
+        }
+        return result;
     }
 }

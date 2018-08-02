@@ -30,9 +30,11 @@
     <artifactId>runtime-sofa-boot-starter</artifactId>
     <properties>
         <ark.plugin.name>sofa-runtime-ark-plugin</ark.plugin.name>
+        <main.user.dir>../</main.user.dir>
     </properties>
 
     <dependencies>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
@@ -66,6 +68,11 @@
         <dependency>
             <groupId>com.alipay.sofa.common</groupId>
             <artifactId>sofa-common-tools</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>infra-sofa-boot-starter</artifactId>
         </dependency>
 
         <!-- optional -->

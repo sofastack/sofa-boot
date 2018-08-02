@@ -17,7 +17,6 @@
   -->
 
 <configuration status="OFF">
-
     <Properties>
         <!-- 将系统属性进行一次本地转换 -->
         <Property name="INFRASTRUCTURE_LOG_LEVEL">${sys:logging.level.com.alipay.sofa.infra}</Property>
@@ -26,7 +25,6 @@
     </Properties>
 
     <appenders>
-
         <RollingFile name="ERROR-APPENDER" fileName="${INFRASTRUCTURE_LOG_PATH}/infra/common-error.log" append="true"
                      filePattern="${INFRASTRUCTURE_LOG_PATH}/infra/common-error.log.%d{yyyy-MM-dd}">
             <!-- only print error log -->
@@ -51,16 +49,12 @@
                 <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
             </Policies>
         </RollingFile>
-
     </appenders>
 
     <loggers>
-
         <root level="${INFRASTRUCTURE_LOG_LEVEL}">
             <appender-ref ref="ROOT-APPENDER"/>
             <appender-ref ref="ERROR-APPENDER"/>
         </root>
-
     </loggers>
-
 </configuration>

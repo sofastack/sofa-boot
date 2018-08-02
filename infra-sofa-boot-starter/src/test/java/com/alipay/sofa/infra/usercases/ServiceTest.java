@@ -40,7 +40,7 @@ public class ServiceTest extends AbstractTestBase {
                                     + SofaBootVersionEndpointMvcAdapter.SOFA_BOOT_VERSION_URL;
         ResponseEntity<String> result = testRestTemplate.getForEntity(sofaBootVersionUrl,
             String.class);
-        assertEquals(result.getStatusCode().value(), (HttpStatus.OK.value()));
+        assertEquals(HttpStatus.OK.value(), result.getStatusCode().value());
         assertNotNull(result);
     }
 }

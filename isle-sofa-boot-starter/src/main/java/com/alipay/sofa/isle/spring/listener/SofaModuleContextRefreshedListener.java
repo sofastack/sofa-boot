@@ -16,33 +16,35 @@
  */
 package com.alipay.sofa.isle.spring.listener;
 
-import com.alipay.sofa.healthcheck.startup.HealthCheckTrigger;
 import com.alipay.sofa.isle.stage.DefaultPipelineContext;
 import com.alipay.sofa.isle.stage.ModelCreatingStage;
 import com.alipay.sofa.isle.stage.ModuleLogOutputStage;
 import com.alipay.sofa.isle.stage.SpringContextInstallStage;
 import com.alipay.sofa.runtime.spi.log.SofaLogger;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.core.Ordered;
 import org.springframework.core.PriorityOrdered;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 /**
- * SofaModuleContextRefreshedListener listens to ContextRefreshedEvent, this class should execute before ${@link HealthCheckTrigger}.
- * In order to ensure this class execute at first, this class implement ${@link PriorityOrdered} interface and return ${@link Ordered#HIGHEST_PRECEDENCE}.
+ * SofaModuleContextRefreshedListener listens to ContextRefreshedEvent;
+ * In order to ensure this class execute at first, this class implement
+ * ${@link PriorityOrdered} interface and return ${@link Ordered#HIGHEST_PRECEDENCE}.
  *
  * @author xuanbei 18/3/12
  */
 public class SofaModuleContextRefreshedListener implements PriorityOrdered,
-                                               ApplicationListener<ContextRefreshedEvent> {
-    private static final AtomicBoolean INIT = new AtomicBoolean(false);
+                                               ApplicationListener<ContextRefreshedEvent>,
+                                               ApplicationContextAware {
+    private ApplicationContext applicationContext;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        if (INIT.compareAndSet(false, true)) {
+        if (applicationContext.equals(event.getApplicationContext())) {
             DefaultPipelineContext pipelineContext = new DefaultPipelineContext();
             pipelineContext.appendStage(new ModelCreatingStage((AbstractApplicationContext) event
                 .getApplicationContext()));
@@ -62,5 +64,10 @@ public class SofaModuleContextRefreshedListener implements PriorityOrdered,
     @Override
     public int getOrder() {
         return Ordered.HIGHEST_PRECEDENCE;
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
     }
 }
