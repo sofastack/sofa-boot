@@ -85,5 +85,7 @@ public class IntegrationTest extends AbstractTestBase {
         Assert.assertEquals(
             ((SampleService) awareTest.getApplicationContext().getBean("xmlReferenceWithUniqueId"))
                 .service(), "XmlSampleServiceWithUniqueId");
+        Assert.assertEquals(awareTest.getServiceWithoutInterface().service(),
+            "ServiceWithoutInterface");
     }
 }
