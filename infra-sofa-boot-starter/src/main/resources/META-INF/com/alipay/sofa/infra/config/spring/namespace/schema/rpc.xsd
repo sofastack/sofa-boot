@@ -347,6 +347,7 @@
         <xsd:attribute name="retries" type="xsd:int" use="optional"/>
         <xsd:attribute name="lazy" type="xsd:boolean" use="optional"/>
         <xsd:attribute name="check" type="xsd:boolean" use="optional"/>
+        <xsd:attribute name="generic-interface" type="xsd:string" use="optional"/>
     </xsd:complexType>
 
     <!-- method in service binding.dubbo -->
