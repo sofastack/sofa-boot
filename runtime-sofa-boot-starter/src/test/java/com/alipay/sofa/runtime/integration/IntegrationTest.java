@@ -95,5 +95,9 @@ public class IntegrationTest extends AbstractTestBase {
             ((SampleService) awareTest.getApplicationContext().getBean("xmlReferenceWithUniqueId"))
                 .service(), "XmlSampleServiceWithUniqueId");
         Assert.assertTrue(SampleServiceAspect.isAspectInvoked());
+
+        Assert.assertEquals(awareTest.getServiceWithoutInterface().service(),
+            "ServiceWithoutInterface");
+        Assert.assertTrue(SampleServiceAspect.isAspectInvoked());
     }
 }
