@@ -105,13 +105,14 @@ public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, Pr
         if (interfaceType.equals(void.class)) {
             Class<?> interfaces[] = beanClass.getInterfaces();
 
-            if (interfaces == null || interfaces.length == 0 || interfaces.length > 1) {
-                throw new ServiceRuntimeException(
-                    "Bean " + beanName
-                            + " does not has any interface or has more than one interface.");
+            if (interfaces == null || interfaces.length == 0) {
+                interfaceType = beanClass;
+            } else if (interfaces.length == 1) {
+                interfaceType = interfaces[0];
+            } else {
+                throw new ServiceRuntimeException("Bean " + beanName
+                                                  + " has more than one interface.");
             }
-
-            interfaceType = interfaces[0];
         }
 
         Implementation implementation = new DefaultImplementation(bean);

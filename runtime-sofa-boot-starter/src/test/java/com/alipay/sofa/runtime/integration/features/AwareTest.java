@@ -40,25 +40,28 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class AwareTest implements ClientFactoryAware, ApplicationContextAware, InitializingBean {
-    private ClientFactory      clientFactoryAware;
+    private ClientFactory           clientFactoryAware;
 
-    private ApplicationContext applicationContext;
-
-    @SofaClientFactory
-    private ClientFactory      clientFactory;
+    private ApplicationContext      applicationContext;
 
     @SofaClientFactory
-    private ServiceClient      serviceClient;
+    private ClientFactory           clientFactory;
 
     @SofaClientFactory
-    private ReferenceClient    referenceClient;
+    private ServiceClient           serviceClient;
+
+    @SofaClientFactory
+    private ReferenceClient         referenceClient;
 
     @SofaReference(uniqueId = "annotation")
-    private SampleService      sampleServiceAnnotationWithUniqueId;
+    private SampleService           sampleServiceAnnotationWithUniqueId;
 
-    private SampleService      sampleServicePublishedByServiceClient;
+    @SofaReference(uniqueId = "annotation")
+    private ServiceWithoutInterface serviceWithoutInterface;
 
-    private SampleService      sampleServiceAnnotationImplWithMethod;
+    private SampleService           sampleServicePublishedByServiceClient;
+
+    private SampleService           sampleServiceAnnotationImplWithMethod;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -115,6 +118,10 @@ public class AwareTest implements ClientFactoryAware, ApplicationContextAware, I
 
     public SampleService getSampleServiceAnnotationImplWithMethod() {
         return sampleServiceAnnotationImplWithMethod;
+    }
+
+    public ServiceWithoutInterface getServiceWithoutInterface() {
+        return serviceWithoutInterface;
     }
 
     @SofaReference(uniqueId = "method")
