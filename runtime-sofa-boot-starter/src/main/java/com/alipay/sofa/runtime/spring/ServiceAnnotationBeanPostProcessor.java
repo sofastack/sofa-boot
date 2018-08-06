@@ -45,7 +45,6 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.Ordered;
-import org.springframework.core.PriorityOrdered;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
 
@@ -56,7 +55,7 @@ import java.lang.reflect.Modifier;
 /**
  * @author xuanbei 18/5/9
  */
-public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, PriorityOrdered,
+public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, Ordered,
                                                ApplicationContextAware {
     private SofaRuntimeContext      sofaRuntimeContext;
     private BindingAdapterFactory   bindingAdapterFactory;

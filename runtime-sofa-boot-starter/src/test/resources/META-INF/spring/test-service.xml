@@ -3,9 +3,11 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:sofa="http://sofastack.io/schema/sofaboot"
+       xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-            http://sofastack.io/schema/sofaboot   http://sofastack.io/schema/sofaboot.xsd"
+            http://sofastack.io/schema/sofaboot   http://sofastack.io/schema/sofaboot.xsd
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd"
        default-autowire="byName">
 
     <bean id="processor" class="com.alipay.sofa.runtime.beans.FactoryBeanPostProcessor"/>
@@ -17,4 +19,15 @@
 
     <sofa:reference id="xmlReference" interface="com.alipay.sofa.runtime.beans.service.SampleService"/>
     <sofa:reference id="xmlReferenceWithUniqueId" interface="com.alipay.sofa.runtime.beans.service.SampleService" unique-id="xml"/>
+
+    <bean id="serviceAspect"
+          class="com.alipay.sofa.runtime.integration.aop.SampleServiceAspect"/>
+
+    <aop:config proxy-target-class="true">
+        <aop:aspect id="dsServiceAspect" ref="serviceAspect">
+            <aop:pointcut id="serviceAround"
+                          expression="execution(* com.alipay.sofa.runtime..*Service*.*(..))"/>
+            <aop:around method="doAround" pointcut-ref="serviceAround"/>
+        </aop:aspect>
+    </aop:config>
 </beans>
