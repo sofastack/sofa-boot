@@ -39,8 +39,8 @@
 
         <spring.boot.version>1.4.2.RELEASE</spring.boot.version>
         <sofa.boot.version>2.4.5-SNAPSHOT</sofa.boot.version>
-        <sofa.ark.version>0.3.0</sofa.ark.version>
-        <rpc.starter.version>5.4.3</rpc.starter.version>
+        <sofa.ark.version>0.4.1-SNAPSHOT</sofa.ark.version>
+        <rpc.starter.version>5.4.4-SNAPSHOT</rpc.starter.version>
         <sofa.tracer.version>2.1.1</sofa.tracer.version>
         <sofa.lookout.version>1.4.0</sofa.lookout.version>
         <!-- sofa-common-tools for log -->
@@ -136,15 +136,13 @@
             <!-- Ark Plugin Management begin -->
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
-                <artifactId>runtime-sofa-boot-starter</artifactId>
-                <classifier>ark-plugin</classifier>
+                <artifactId>runtime-sofa-boot-plugin</artifactId>
                 <version>${sofa.boot.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
-                <artifactId>rpc-sofa-boot-starter</artifactId>
-                <classifier>ark-plugin</classifier>
+                <artifactId>rpc-sofa-boot-plugin</artifactId>
                 <version>${rpc.starter.version}</version>
             </dependency>
             <!-- Ark Plugin Management end -->
@@ -197,6 +195,11 @@
                 <plugin>
                     <groupId>com.alipay.sofa</groupId>
                     <artifactId>sofa-ark-maven-plugin</artifactId>
+                    <version>${sofa.ark.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>com.alipay.sofa</groupId>
+                    <artifactId>sofa-ark-plugin-maven-plugin</artifactId>
                     <version>${sofa.ark.version}</version>
                 </plugin>
             </plugins>
