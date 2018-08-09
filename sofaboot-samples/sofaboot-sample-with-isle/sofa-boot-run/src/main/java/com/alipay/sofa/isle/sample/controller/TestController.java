@@ -24,7 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 
 /**
- * @author xuanbei 18/8/9
+ * @author xuanbei
+ * @since 2.4.5
  */
 @RestController
 public class TestController {

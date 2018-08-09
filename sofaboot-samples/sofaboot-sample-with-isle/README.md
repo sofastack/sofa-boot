@@ -254,6 +254,8 @@ public class TestController {
 }
 ```
 
+启动应用，访问[http://localhost:8080/serviceWithoutUniqueId](http://localhost:8080/serviceWithoutUniqueId)、[http://localhost:8080/annotationImplService](http://localhost:8080/annotationImplService)、[http://localhost:8080/serviceClientImplService](http://localhost:8080/serviceClientImplService) 等 URL，可以看到 TestController 成功调用到了 SOFABoot 模块发布的服务。
+
 ## 编写测试用例
 
 SOFABoot 模块化测试方法与 Spring Boot 测试方法一致，只需在测试用例上增加 @SpringBootTest 注解及 @RunWith(SpringRunner.class) 注解即可。在测试用例中，还可以使用 @SofaReference 注解，对 SOFABoot 模块发布的服务进行测试：
