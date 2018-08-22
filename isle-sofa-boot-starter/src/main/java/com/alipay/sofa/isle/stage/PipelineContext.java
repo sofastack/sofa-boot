@@ -16,6 +16,8 @@
  */
 package com.alipay.sofa.isle.stage;
 
+import java.util.List;
+
 /**
  * A {@link PipelineContext} contains all {@link PipelineStage}s.
  *
@@ -35,4 +37,11 @@ public interface PipelineContext {
      * @param stage pipeline stage
      */
     PipelineContext appendStage(PipelineStage stage);
+
+    /**
+     * appendStages
+     *
+     * @param stages pipeline stage list
+     */
+    PipelineContext appendStages(List<PipelineStage> stages);
 }
