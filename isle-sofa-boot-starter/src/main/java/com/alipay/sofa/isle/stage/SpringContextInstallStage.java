@@ -300,4 +300,14 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
             sb.append(treeSymbol).append(dd.getName()).append("\n");
         }
     }
+
+    @Override
+    public String getName() {
+        return "SpringContextInstallStage";
+    }
+
+    @Override
+    public int getOrder() {
+        return 20000;
+    }
 }
