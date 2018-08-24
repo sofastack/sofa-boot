@@ -128,3 +128,27 @@ public class SofaBootVersionEndpoint extends AbstractEndpoint<Object> {
         return resultList;
     }
 }
+
+/**
+     * Load properties into the given instance.
+     *
+     * @param resourceLocation the Resource locations to load
+     */
+    private Properties loadPropertiesA(Resource resourceLocation) {
+        Properties result = new Properties();
+        if (resourceLocation != null) {
+            if (logger.isInfoEnabled()) {
+                logger.info("Loading properties file from " + resourceLocation);
+            }
+            try {
+                PropertiesLoaderUtils.fillProperties(result, new EncodedResource(resourceLocation));
+            } catch (IOException ex) {
+                if (logger.isWarnEnabled()) {
+                    logger.warn("Could not load properties from " + resourceLocation + ": "
+                                + ex.getMessage());
+                }
+            }
+        }
+        return result;
+    }
+

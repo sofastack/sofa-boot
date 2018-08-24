@@ -32,7 +32,7 @@ import static org.junit.Assert.*;
  * @since <pre>九月 20, 2016</pre>
  */
 public class Log4jInfraLoggerFactoryTest extends AbstractTestBase {
-
+    //TODO:ddd
     @Before
     public void before() throws Exception {
         super.before();
