@@ -27,9 +27,10 @@ import org.springframework.core.Ordered;
  * @author xuanbei 18/3/1
  */
 public abstract class AbstractPipelineStage implements PipelineStage, Ordered {
-    final ClassLoader                appClassLoader = AbstractPipelineStage.class.getClassLoader();
-    final AbstractApplicationContext applicationContext;
-    final String                     appName;
+    protected final ClassLoader                appClassLoader = AbstractPipelineStage.class
+                                                                  .getClassLoader();
+    protected final AbstractApplicationContext applicationContext;
+    protected final String                     appName;
 
     public AbstractPipelineStage(AbstractApplicationContext applicationContext) {
         this.applicationContext = applicationContext;

@@ -66,7 +66,7 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
 
     private void doProcess(ApplicationRuntimeModel application) throws Exception {
         outputModulesMessage(application);
-        SpringContextLoader springContextLoader = new DynamicSpringContextLoader(applicationContext);
+        SpringContextLoader springContextLoader = createSpringContextLoader();
         installSpringContext(application, springContextLoader);
 
         if (applicationContext.getBean(SofaModuleFrameworkConstants.SOFA_MODULE_PROPERTIES_BEAN_ID,
@@ -75,6 +75,10 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
         } else {
             refreshSpringContext(application);
         }
+    }
+
+    protected SpringContextLoader createSpringContextLoader() {
+        return new DynamicSpringContextLoader(applicationContext);
     }
 
     private void installSpringContext(ApplicationRuntimeModel application,
