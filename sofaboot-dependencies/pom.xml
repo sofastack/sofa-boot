@@ -38,15 +38,15 @@
         <project.build.encoding>UTF-8</project.build.encoding>
 
         <spring.boot.version>1.4.2.RELEASE</spring.boot.version>
-        <sofa.boot.version>2.4.6-SNAPSHOT</sofa.boot.version>
-        <sofa.ark.version>0.4.1</sofa.ark.version>
-        <rpc.starter.version>5.4.5-SNAPSHOT</rpc.starter.version>
-        <sofa.tracer.version>2.1.1</sofa.tracer.version>
+        <sofa.boot.version>2.4.6</sofa.boot.version>
+        <sofa.ark.version>0.5.0</sofa.ark.version>
+        <rpc.starter.version>5.4.5</rpc.starter.version>
+        <sofa.tracer.version>2.1.3</sofa.tracer.version>
         <sofa.lookout.version>1.4.0</sofa.lookout.version>
         <!-- sofa-common-tools for log -->
-        <sofa.common.tools.version>1.0.12</sofa.common.tools.version>
-        <bolt.version>1.4.2</bolt.version>
-        <hessian.version>3.3.0</hessian.version>
+        <sofa.common.tools.version>1.0.14</sofa.common.tools.version>
+        <bolt.version>1.5.0</bolt.version>
+        <hessian.version>3.3.1</hessian.version>
         <!-- 3rd lib dependency -->
         <fastjson.version>1.2.47</fastjson.version>
         <!--plugin version-->
@@ -144,6 +144,12 @@
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>rpc-sofa-boot-plugin</artifactId>
                 <version>${rpc.starter.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>tracer-sofa-boot-plugin</artifactId>
+                <version>${sofa.tracer.version}</version>
             </dependency>
             <!-- Ark Plugin Management end -->
 
