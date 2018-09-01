@@ -77,7 +77,7 @@ public class SofaBootReadinessCheckEndpoint extends AbstractEndpoint<Health> {
 
         //component and callback
         Builder builder;
-        if (componentStatus && healthIndicatorStatus && afterHealthCheckCallbackStatus) {
+        if (componentStatus && afterHealthCheckCallbackStatus) {
             builder = Health.up();
         } else {
             builder = Health.down();
