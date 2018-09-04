@@ -16,26 +16,23 @@
  */
 package com.alipay.sofa.runtime.spring.factory;
 
-import com.alipay.sofa.runtime.constants.SofaRuntimeFrameworkConstants;
 import com.alipay.sofa.runtime.model.InterfaceMode;
 import com.alipay.sofa.runtime.service.binding.JvmBinding;
 import com.alipay.sofa.runtime.service.component.Reference;
 import com.alipay.sofa.runtime.service.component.impl.ReferenceImpl;
 import com.alipay.sofa.runtime.service.helper.ReferenceRegisterHelper;
-import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
 import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
-import com.alipay.sofa.runtime.spring.config.SofaRuntimeProperties;
 import org.springframework.util.Assert;
 
 /**
  * @author xuanbei 18/3/1
  */
 public class ReferenceFactoryBean extends AbstractContractFactoryBean {
-    private Object  proxy;
+    protected Object  proxy;
     /** jvm first or not */
-    private boolean jvmFirst = true;
+    protected boolean jvmFirst = true;
     /** load balance **/
-    private String  loadBalance;
+    protected String  loadBalance;
 
     public ReferenceFactoryBean() {
     }
@@ -56,20 +53,16 @@ public class ReferenceFactoryBean extends AbstractContractFactoryBean {
         }
 
         reference.addBinding(bindings.get(0));
-        proxy = ReferenceRegisterHelper.registerReference(reference, applicationContext.getBean(
-            SofaRuntimeFrameworkConstants.BINDING_ADAPTER_FACTORY_BEAN_ID,
-            BindingAdapterFactory.class), applicationContext.getBean(
-            SofaRuntimeFrameworkConstants.SOFA_RUNTIME_PROPERTIES_BEAN_ID,
-            SofaRuntimeProperties.class), sofaRuntimeContext);
+        proxy = ReferenceRegisterHelper.registerReference(reference, bindingAdapterFactory,
+            sofaRuntimeProperties, sofaRuntimeContext);
     }
 
     @Override
     protected void setProperties(BindingConverterContext bindingConverterContext) {
         bindingConverterContext.setLoadBalance(loadBalance);
-        bindingConverterContext.setBeanId(beanId);
     }
 
-    private Reference buildReference() {
+    protected Reference buildReference() {
         return new ReferenceImpl(uniqueId, getInterfaceClass(), InterfaceMode.spring, jvmFirst);
     }
 

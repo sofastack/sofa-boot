@@ -25,6 +25,7 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
+import com.alipay.sofa.runtime.spring.config.SofaRuntimeProperties;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
@@ -70,6 +71,8 @@ public abstract class AbstractContractFactoryBean implements InitializingBean, F
     protected BindingConverterFactory bindingConverterFactory;
     /** binding adapter factory */
     protected BindingAdapterFactory   bindingAdapterFactory;
+    /** sofa runtime properties */
+    protected SofaRuntimeProperties   sofaRuntimeProperties;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -84,16 +87,35 @@ public abstract class AbstractContractFactoryBean implements InitializingBean, F
                 .getDocumentElement();
             tempElements.add(node);
         }
-        sofaRuntimeContext = applicationContext.getBean(
-            SofaRuntimeFrameworkConstants.SOFA_RUNTIME_CONTEXT_BEAN_ID, SofaRuntimeContext.class);
-        bindingConverterFactory = applicationContext.getBean(
-            SofaRuntimeFrameworkConstants.BINDING_CONVERTER_FACTORY_BEAN_ID,
-            BindingConverterFactory.class);
-        bindingAdapterFactory = applicationContext.getBean(
-            SofaRuntimeFrameworkConstants.BINDING_ADAPTER_FACTORY_BEAN_ID,
-            BindingAdapterFactory.class);
+        sofaRuntimeContext = getSofaRuntimeContext();
+        bindingConverterFactory = getBindingConverterFactory();
+        bindingAdapterFactory = getBindingAdapterFactory();
+        sofaRuntimeProperties = getSofaRuntimeProperties();
         this.bindings = parseBindings(tempElements, applicationContext, isInBinding());
         doAfterPropertiesSet();
+    }
+
+    protected SofaRuntimeContext getSofaRuntimeContext() {
+        return applicationContext.getBean(
+            SofaRuntimeFrameworkConstants.SOFA_RUNTIME_CONTEXT_BEAN_ID, SofaRuntimeContext.class);
+    }
+
+    protected BindingConverterFactory getBindingConverterFactory() {
+        return applicationContext.getBean(
+            SofaRuntimeFrameworkConstants.BINDING_CONVERTER_FACTORY_BEAN_ID,
+            BindingConverterFactory.class);
+    }
+
+    protected BindingAdapterFactory getBindingAdapterFactory() {
+        return applicationContext.getBean(
+            SofaRuntimeFrameworkConstants.BINDING_ADAPTER_FACTORY_BEAN_ID,
+            BindingAdapterFactory.class);
+    }
+
+    protected SofaRuntimeProperties getSofaRuntimeProperties() {
+        return applicationContext.getBean(
+            SofaRuntimeFrameworkConstants.SOFA_RUNTIME_PROPERTIES_BEAN_ID,
+            SofaRuntimeProperties.class);
     }
 
     protected List<Binding> parseBindings(List<Element> parseElements,
@@ -121,6 +143,7 @@ public abstract class AbstractContractFactoryBean implements InitializingBean, F
                 bindingConverterContext.setAppName(sofaRuntimeContext.getAppName());
                 bindingConverterContext.setAppClassLoader(sofaRuntimeContext.getAppClassLoader());
                 bindingConverterContext.setRepeatReferLimit(repeatReferLimit);
+                bindingConverterContext.setBeanId(beanId);
 
                 setProperties(bindingConverterContext);
 

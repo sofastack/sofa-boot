@@ -24,25 +24,29 @@ import com.alipay.sofa.runtime.api.client.ClientFactory;
  * @author xuanbei 18/2/28
  */
 public class SofaRuntimeContext {
+    /** app name */
+    private String           appName;
+    /** app classloader */
+    private ClassLoader      appClassLoader;
     /** component manager */
-    private ComponentManager   componentManager;
+    private ComponentManager componentManager;
     /** client factory */
-    private ClientFactory      clientFactory;
-    private SofaRuntimeManager sofaRuntimeManager;
+    private ClientFactory    clientFactory;
 
-    public SofaRuntimeContext(SofaRuntimeManager sofaRuntimeManager,
+    public SofaRuntimeContext(String appName, ClassLoader appClassLoader,
                               ComponentManager componentManager, ClientFactory clientFactory) {
-        this.sofaRuntimeManager = sofaRuntimeManager;
+        this.appName = appName;
+        this.appClassLoader = appClassLoader;
         this.componentManager = componentManager;
         this.clientFactory = clientFactory;
     }
 
     public String getAppName() {
-        return sofaRuntimeManager.getAppName();
+        return appName;
     }
 
     public ClassLoader getAppClassLoader() {
-        return sofaRuntimeManager.getAppClassLoader();
+        return appClassLoader;
     }
 
     public ComponentManager getComponentManager() {
