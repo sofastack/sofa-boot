@@ -36,6 +36,7 @@ import org.aopalliance.intercept.MethodInvocation;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
@@ -167,6 +168,8 @@ public class DynamicJvmServiceProxyFinder {
                 Object retVal = transformMethod.invoke(targetService, arguments);
 
                 return hessianTransport(retVal, getClientClassloader());
+            } catch (InvocationTargetException ex) {
+                throw ex.getTargetException();
             } finally {
                 setClientClassloader(null);
             }
