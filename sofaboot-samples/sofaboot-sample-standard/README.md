@@ -24,7 +24,7 @@ app
 - shared (模块): 实现了 `NewReadService` 服务接口，使用 JVM 服务的方式引用了 `INewManageDao`
 
 在这里不详述如何发布引用 JVM 服务，可以参见其他演示工程。这里演示如何运行该 Demo. 在该工程中暴露了4个 Rest 服务：
-- `localhost:8080/create`：在 h2database 创建一张新闻表，为了简单演示，新闻只包含作者和标题信息。需要注意一点，启动应用之后，首次需要访问这个服务。可以通过 `http://localhost:8080/h2-console` 查看 h2database 当前状态。
+- `localhost:8080/create`：在 h2database 创建一张新闻表，为了简单演示，新闻只包含作者和标题信息。需要注意一点，启动应用之后，首次需要访问这个服务。可以通过 `http://localhost:8080/h2-console` 查看 h2database 当前状态。(登入名：sofa, 密码：123456)
 - `localhost:8080/insert/{author}/{title}`: 插入新闻纪录，例如 `localhost:8080/insert/zhangsan/如何先挣一个亿`
 - `localhost:8080/delete/{author}`: 删除指定作者的所有新闻纪录，例如 `localhost:8080/delete/zhangsan`
-- `localhost:8080/query/123`: 查询指定作者的所有新闻纪录，例如 `localhost:8080/query/zhangsan`
+- `localhost:8080/query/{author}`: 查询指定作者的所有新闻纪录，例如 `localhost:8080/query/zhangsan`
