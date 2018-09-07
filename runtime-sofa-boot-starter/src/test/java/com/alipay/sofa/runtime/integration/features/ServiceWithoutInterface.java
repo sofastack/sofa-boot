@@ -14,34 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.isle.stage;
+package com.alipay.sofa.runtime.integration.features;
 
-import java.util.List;
+import com.alipay.sofa.runtime.api.annotation.SofaService;
+import org.springframework.stereotype.Component;
 
 /**
- * A {@link PipelineContext} contains all {@link PipelineStage}s.
- *
- * @author xuanbei 18/3/1
+ * @author xuanbei
+ * @since 2.4.5
  */
-public interface PipelineContext {
-    /**
-     * execute
-     *
-     * @throws Exception throws when exception occur
-     */
-    void process() throws Exception;
-
-    /**
-     * appendStage
-     *
-     * @param stage pipeline stage
-     */
-    PipelineContext appendStage(PipelineStage stage);
-
-    /**
-     * appendStages
-     *
-     * @param stages pipeline stage list
-     */
-    PipelineContext appendStages(List<PipelineStage> stages);
+@Component
+@SofaService(uniqueId = "annotation")
+public class ServiceWithoutInterface {
+    public String service() {
+        return "ServiceWithoutInterface";
+    }
 }
