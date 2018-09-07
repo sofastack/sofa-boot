@@ -14,34 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.isle.stage;
+package com.alipay.sofa.runtime.integration.aop;
 
-import java.util.List;
+import org.aspectj.lang.ProceedingJoinPoint;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * A {@link PipelineContext} contains all {@link PipelineStage}s.
- *
- * @author xuanbei 18/3/1
+ * @author xuanbei
+ * @since 2.4.5
  */
-public interface PipelineContext {
-    /**
-     * execute
-     *
-     * @throws Exception throws when exception occur
-     */
-    void process() throws Exception;
+public class SampleServiceAspect {
+    private static AtomicBoolean aspectInvoked = new AtomicBoolean(false);
 
-    /**
-     * appendStage
-     *
-     * @param stage pipeline stage
-     */
-    PipelineContext appendStage(PipelineStage stage);
+    public Object doAround(ProceedingJoinPoint point) throws Throwable {
+        aspectInvoked.set(true);
+        return point.proceed();
+    }
 
-    /**
-     * appendStages
-     *
-     * @param stages pipeline stage list
-     */
-    PipelineContext appendStages(List<PipelineStage> stages);
+    public static boolean isAspectInvoked() {
+        return aspectInvoked.getAndSet(false);
+    }
 }
