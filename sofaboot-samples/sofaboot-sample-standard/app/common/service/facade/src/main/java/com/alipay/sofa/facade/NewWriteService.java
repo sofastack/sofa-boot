@@ -24,15 +24,18 @@ import java.sql.SQLException;
  */
 public interface NewWriteService {
     /**
-     * add new
+     * add a new
+     * @param author
      * @param title
      * @return
+     * @throws SQLException
      */
     int addNew(String author, String title) throws SQLException;
 
     /**
-     * delete new
+     * delete a new
      * @param author
+     * @throws SQLException
      */
-    void deleteNew(String author)throws SQLException;
+    void deleteNew(String author) throws SQLException;
 }

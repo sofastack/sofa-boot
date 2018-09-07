@@ -25,6 +25,10 @@
             <groupId>com.alipay.sofa</groupId>
             <artifactId>sofaboot-sample-standard-common-dal</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>sofaboot-sample-standard-common-service-facade</artifactId>
+        </dependency>
 
         <!-- spring web dependency -->
         <dependency>

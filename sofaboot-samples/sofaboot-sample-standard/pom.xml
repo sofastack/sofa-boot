@@ -13,6 +13,10 @@
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
+    <properties>
+        <main.user.dir>${user.dir}/../..</main.user.dir>
+    </properties>
+
     <modules>
         <module>app/biz/service-impl</module>
         <module>app/common/service/facade</module>
@@ -66,6 +70,10 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
     </dependencies>
 

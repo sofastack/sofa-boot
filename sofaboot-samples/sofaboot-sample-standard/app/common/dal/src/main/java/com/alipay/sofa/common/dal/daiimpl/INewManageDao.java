@@ -46,7 +46,9 @@ public class INewManageDao implements NewManageDao {
         Assert.notNull(newDO);
         Connection connection = dataSource.getConnection();
         Statement statement = connection.createStatement();
-        return statement.executeUpdate(String.format("INSERT INTO NewsTable (AUTHOR, TITLE) VALUES('%s', '%s');", newDO.getAuthor(), newDO.getTitle()));
+        return statement.executeUpdate(String.format(
+            "INSERT INTO NewsTable (AUTHOR, TITLE) VALUES('%s', '%s');", newDO.getAuthor(),
+            newDO.getTitle()));
     }
 
     @Override
@@ -54,9 +56,10 @@ public class INewManageDao implements NewManageDao {
         Assert.isTrue(!StringUtils.isEmpty(author));
         Connection connection = dataSource.getConnection();
         Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery(String.format("SELECT * FROM NewsTable WHERE AUTHOR='%s';", author));
+        ResultSet resultSet = statement.executeQuery(String.format(
+            "SELECT * FROM NewsTable WHERE AUTHOR='%s';", author));
         List<NewDO> answer = new LinkedList<>();
-        while(resultSet.next()) {
+        while (resultSet.next()) {
             NewDO newDO = new NewDO();
             newDO.setAuthor(resultSet.getString(2));
             newDO.setTitle(resultSet.getString(3));
@@ -66,7 +69,7 @@ public class INewManageDao implements NewManageDao {
     }
 
     @Override
-    public void delete(String author) throws SQLException{
+    public void delete(String author) throws SQLException {
         Assert.isTrue(!StringUtils.isEmpty(author));
         Connection connection = dataSource.getConnection();
         Statement statement = connection.createStatement();

@@ -33,7 +33,7 @@ public class NewReadServiceImpl implements NewReadService<NewDO> {
     @SofaReference
     private NewManageDao newManageDao;
 
-    public List<NewDO> read(String author) throws SQLException{
+    public List<NewDO> read(String author) throws SQLException {
         try {
             return newManageDao.query(author);
         } catch (SQLException ex) {

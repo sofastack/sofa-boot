@@ -25,7 +25,7 @@ import java.sql.SQLException;
 
 /**
  * @author qilong.zql
- * @sicne 2.5.0
+ * @since 2.5.0
  */
 public class NewWriteServiceImpl implements NewWriteService {
 
@@ -33,7 +33,7 @@ public class NewWriteServiceImpl implements NewWriteService {
     private NewManageDao newManageDao;
 
     @Override
-    public int addNew(String author, String title) throws SQLException{
+    public int addNew(String author, String title) throws SQLException {
         try {
             NewDO newDO = new NewDO();
             newDO.setAuthor(author);
@@ -46,7 +46,7 @@ public class NewWriteServiceImpl implements NewWriteService {
     }
 
     @Override
-    public void deleteNew(String author) throws SQLException{
+    public void deleteNew(String author) throws SQLException {
         try {
             newManageDao.delete(author);
         } catch (SQLException ex) {

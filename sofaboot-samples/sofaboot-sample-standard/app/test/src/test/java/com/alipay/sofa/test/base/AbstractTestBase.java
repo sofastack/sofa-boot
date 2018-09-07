@@ -43,13 +43,13 @@ public abstract class AbstractTestBase {
     @Autowired
     protected TestRestTemplate testRestTemplate;
 
-    protected String urlHttpPrefix;
+    protected String           urlHttpPrefix;
 
     /**
      * 8080
      */
     @LocalServerPort
-    public int definedPort;
+    public int                 definedPort;
 
     @Before
     public void setUp() {

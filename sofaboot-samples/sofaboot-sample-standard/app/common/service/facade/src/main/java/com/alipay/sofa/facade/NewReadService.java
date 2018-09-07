@@ -28,6 +28,7 @@ public interface NewReadService<T> {
      * read new
      * @param author
      * @return
+     * @throws SQLException
      */
     List<T> read(String author) throws SQLException;
 }

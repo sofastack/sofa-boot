@@ -30,7 +30,9 @@ public class JsonSampleControllerTest extends AbstractTestBase {
 
     @Test
     public void testRequestJson() {
-        ResponseEntity<String> responseEntity = testRestTemplate.getForEntity(urlHttpPrefix + "/json", String.class);
+        ResponseEntity<String> responseEntity = testRestTemplate.getForEntity(urlHttpPrefix
+                                                                              + "/json",
+            String.class);
         Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         String responseBody = responseEntity.getBody();
         LOGGER.info(responseBody);

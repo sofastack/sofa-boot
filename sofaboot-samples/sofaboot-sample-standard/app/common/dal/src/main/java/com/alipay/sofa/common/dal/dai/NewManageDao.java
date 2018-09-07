@@ -26,25 +26,27 @@ import java.util.List;
  * @since 2.5.0
  */
 public interface NewManageDao {
+
     /**
      * insert a new
      * @param newDO
      * @return
+     * @throws SQLException
      */
     int insert(NewDO newDO) throws SQLException;
 
-
     /**
-     * query a new
+     * query new according to author
      * @param author
      * @return
+     * @throws SQLException
      */
     List<NewDO> query(String author) throws SQLException;
 
     /**
-     * delete a new
+     * delete new according to author
      * @param author
-     * @return
+     * @throws SQLException
      */
     void delete(String author) throws SQLException;
 }

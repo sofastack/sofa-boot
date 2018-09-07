@@ -39,10 +39,10 @@ import java.util.Map;
 public class SampleRestController {
 
     @SofaReference
-    private DataSource dataSource;
+    private DataSource      dataSource;
 
     @SofaReference
-    private NewReadService newReadService;
+    private NewReadService  newReadService;
 
     @SofaReference
     private NewWriteService newWriteService;
@@ -58,9 +58,12 @@ public class SampleRestController {
             Connection cn = dataSource.getConnection();
             Statement st = cn.createStatement();
             st.execute("DROP TABLE IF EXISTS NewsTable;"
-                    + "CREATE TABLE NewsTable(ID INT AUTO_INCREMENT, PRIMARY KEY (ID), AUTHOR VARCHAR(50),TITLE VARCHAR(255));");
+                       + "CREATE TABLE NewsTable(ID INT AUTO_INCREMENT, PRIMARY KEY (ID), AUTHOR VARCHAR(50),TITLE VARCHAR(255));");
             resultMap.put("success", true);
-            resultMap.put("result", "CREATE TABLE NewsTable(ID INT AUTO_INCREMENT, PRIMARY KEY (ID), AUTHOR VARCHAR(50), TITLE VARCHAR(255))");
+            resultMap
+                .put(
+                    "result",
+                    "CREATE TABLE NewsTable(ID INT AUTO_INCREMENT, PRIMARY KEY (ID), AUTHOR VARCHAR(50), TITLE VARCHAR(255))");
         } catch (Throwable throwable) {
             resultMap.put("success", false);
             resultMap.put("error", throwable.getMessage());
@@ -69,7 +72,8 @@ public class SampleRestController {
     }
 
     @RequestMapping("/insert/{author}/{title}")
-    public Map<String, Object> insert(@PathVariable("author") String author, @PathVariable("title") String title) {
+    public Map<String, Object> insert(@PathVariable("author") String author,
+                                      @PathVariable("title") String title) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         try {
             newWriteService.addNew(author, title);
