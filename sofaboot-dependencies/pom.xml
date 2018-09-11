@@ -208,6 +208,46 @@
                 <artifactId>lookout-api</artifactId>
                 <version>${sofa.lookout.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.alipay.sofa.lookout</groupId>
+                <artifactId>lookout-client</artifactId>
+                <version>${sofa.lookout.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alipay.sofa.lookout</groupId>
+                <artifactId>lookout-common</artifactId>
+                <version>${sofa.lookout.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alipay.sofa.lookout</groupId>
+                <artifactId>lookout-core</artifactId>
+                <version>${sofa.lookout.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alipay.sofa.lookout</groupId>
+                <artifactId>lookout-ext-jvm</artifactId>
+                <version>${sofa.lookout.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alipay.sofa.lookout</groupId>
+                <artifactId>lookout-ext-os</artifactId>
+                <version>${sofa.lookout.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alipay.sofa.lookout</groupId>
+                <artifactId>lookout-reg-dropwizard</artifactId>
+                <version>${sofa.lookout.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alipay.sofa.lookout</groupId>
+                <artifactId>lookout-reg-prometheus</artifactId>
+                <version>${sofa.lookout.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alipay.sofa.lookout</groupId>
+                <artifactId>lookout-reg-server</artifactId>
+                <version>${sofa.lookout.version}</version>
+            </dependency>
             <!-- 2nd dependency end -->
 
             <!-- 3rd lib dependency begin -->
