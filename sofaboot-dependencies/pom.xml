@@ -23,7 +23,7 @@
         <!-- Spring B oot Reference Doc : https://docs.spring.io/spring-boot/docs/1.4.2.RELEASE/reference/htmlsingle/ -->
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.15.RELEASE</version>
+        <version>1.4.2.RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -42,7 +42,7 @@
         <sofa.ark.version>0.5.0</sofa.ark.version>
         <rpc.starter.version>5.4.5</rpc.starter.version>
         <sofa.tracer.version>2.1.4</sofa.tracer.version>
-        <sofa.lookout.version>1.4.0</sofa.lookout.version>
+        <sofa.lookout.version>1.4.4</sofa.lookout.version>
         <!-- sofa-common-tools for log -->
         <sofa.common.tools.version>1.0.14</sofa.common.tools.version>
         <bolt.version>1.4.4</bolt.version>
