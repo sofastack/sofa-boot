@@ -118,8 +118,8 @@ public abstract class AbstractContractFactoryBean implements InitializingBean, F
             SofaRuntimeProperties.class);
     }
 
-    protected List<Binding> parseBindings(List<Element> parseElements,
-                                          ApplicationContext appContext, boolean isInBinding) {
+    private List<Binding> parseBindings(List<Element> parseElements, ApplicationContext appContext,
+                                        boolean isInBinding) {
         List<Binding> result = new ArrayList<>();
 
         if (parseElements != null) {
@@ -129,11 +129,7 @@ public abstract class AbstractContractFactoryBean implements InitializingBean, F
                     .getBindingConverterByTagName(tagName);
 
                 if (bindingConverter == null) {
-                    if (!tagName.equals(SofaRuntimeFrameworkConstants.BINDING_PREFIX
-                                        + JvmBinding.JVM_BINDING_TYPE.toString())) {
-                        throw new ServiceRuntimeException("Can't find BindingConverter of type "
-                                                          + tagName);
-                    }
+                    dealWithbindingConverterNotExist(tagName);
                     continue;
                 }
 
@@ -154,6 +150,13 @@ public abstract class AbstractContractFactoryBean implements InitializingBean, F
         }
 
         return result;
+    }
+
+    protected void dealWithbindingConverterNotExist(String tagName) {
+        if (!tagName.equals(SofaRuntimeFrameworkConstants.BINDING_PREFIX
+                            + JvmBinding.JVM_BINDING_TYPE.toString())) {
+            throw new ServiceRuntimeException("Can't find BindingConverter of type " + tagName);
+        }
     }
 
     @Override
