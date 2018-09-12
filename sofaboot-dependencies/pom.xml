@@ -49,7 +49,6 @@
         <hessian.version>3.3.1</hessian.version>
         <!-- 3rd lib dependency -->
         <fastjson.version>1.2.47</fastjson.version>
-        <slf4j.api.version>1.7.21</slf4j.api.version>
         <grpc-all.version>1.0.3</grpc-all.version>
         <javassist.version>3.19.0-GA</javassist.version>
         <protobuf-java.version>2.6.1</protobuf-java.version>
@@ -255,16 +254,6 @@
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
                 <version>${fastjson.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>${slf4j.api.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>log4j-over-slf4j</artifactId>
-                <version>${slf4j.api.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.google.inject</groupId>
