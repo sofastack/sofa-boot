@@ -21,7 +21,7 @@ import com.alipay.sofa.infra.constants.CommonMiddlewareConstants;
 import com.alipay.sofa.runtime.api.client.ReferenceClient;
 import com.alipay.sofa.runtime.api.client.ServiceClient;
 import com.alipay.sofa.runtime.client.impl.ClientFactoryImpl;
-import com.alipay.sofa.runtime.component.impl.StandardSofaRuntimeManager;
+import com.alipay.sofa.runtime.component.impl.ComponentManagerImpl;
 import com.alipay.sofa.runtime.service.client.ReferenceClientImpl;
 import com.alipay.sofa.runtime.service.client.ServiceClientImpl;
 import com.alipay.sofa.runtime.service.impl.BindingAdapterFactoryImpl;
@@ -29,8 +29,8 @@ import com.alipay.sofa.runtime.service.impl.BindingConverterFactoryImpl;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapter;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
 import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
+import com.alipay.sofa.runtime.spi.component.ComponentManager;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
-import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
 import com.alipay.sofa.runtime.spring.ClientFactoryBeanPostProcessor;
@@ -82,19 +82,16 @@ public class SofaRuntimeAutoConfiguration {
                                                  BindingAdapterFactory bindingAdapterFactory,
                                                  SofaRuntimeProperties sofaRuntimeProperties) {
         ClientFactoryInternal clientFactoryInternal = new ClientFactoryImpl();
-        SofaRuntimeManager sofaRuntimeManager = new StandardSofaRuntimeManager(appName,
-            SofaRuntimeAutoConfiguration.class.getClassLoader(), clientFactoryInternal);
-        sofaRuntimeManager.getSofaRuntimeContext();
-        sofaRuntimeManager.getComponentManager().registerComponentClient(
-            ReferenceClient.class,
-            new ReferenceClientImpl(sofaRuntimeManager.getSofaRuntimeContext(),
-                bindingConverterFactory, bindingAdapterFactory, sofaRuntimeProperties));
-        sofaRuntimeManager.getComponentManager().registerComponentClient(
-            ServiceClient.class,
-            new ServiceClientImpl(sofaRuntimeManager.getSofaRuntimeContext(),
-                bindingConverterFactory, bindingAdapterFactory));
-        return sofaRuntimeManager.getSofaRuntimeContext();
-
+        ComponentManager componentManager = new ComponentManagerImpl(clientFactoryInternal);
+        SofaRuntimeContext sofaRuntimeContext = new SofaRuntimeContext(appName,
+            SofaRuntimeAutoConfiguration.class.getClassLoader(), componentManager,
+            clientFactoryInternal);
+        componentManager.registerComponentClient(ReferenceClient.class, new ReferenceClientImpl(
+            sofaRuntimeContext, bindingConverterFactory, bindingAdapterFactory,
+            sofaRuntimeProperties));
+        componentManager.registerComponentClient(ServiceClient.class, new ServiceClientImpl(
+            sofaRuntimeContext, bindingConverterFactory, bindingAdapterFactory));
+        return sofaRuntimeContext;
     }
 
     @Bean

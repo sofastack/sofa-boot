@@ -59,7 +59,7 @@ public class DynamicSpringContextLoader implements SpringContextLoader {
             .getBean(SofaModuleFrameworkConstants.SOFA_MODULE_PROPERTIES_BEAN_ID,
                 SofaModuleProperties.class);
         BeanLoadCostBeanFactory beanFactory = new BeanLoadCostBeanFactory(
-            sofaModuleProperties.getBeanLoadCost());
+            sofaModuleProperties.getBeanLoadCost(), deployment.getModuleName());
         beanFactory.setParameterNameDiscoverer(new LocalVariableTableParameterNameDiscoverer());
         beanFactory
             .setAutowireCandidateResolver(new QualifierAnnotationAutowireCandidateResolver());
