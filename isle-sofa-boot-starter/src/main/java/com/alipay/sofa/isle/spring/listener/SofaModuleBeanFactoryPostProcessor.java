@@ -24,7 +24,9 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.annotation.ConfigurationClassPostProcessor;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -54,8 +56,9 @@ public class SofaModuleBeanFactoryPostProcessor implements BeanFactoryPostProces
         Map<String, BeanDefinition> map = new HashMap<>();
         for (Class type : types) {
             String[] beanNamesForType = beanFactory.getBeanNamesForType(type);
+            List<String> beanDefinitionNames = Arrays.asList(beanFactory.getBeanDefinitionNames());
             for (String beanName : beanNamesForType) {
-                if (notInWhiteNameList(beanName)) {
+                if (notInWhiteNameList(beanName) && beanDefinitionNames.contains(beanName)) {
                     map.put(beanName, beanFactory.getBeanDefinition(beanName));
                 }
             }
