@@ -39,7 +39,7 @@
 
         <spring.boot.version>1.4.2.RELEASE</spring.boot.version>
         <sofa.boot.version>2.4.8</sofa.boot.version>
-        <sofa.ark.version>0.5.0</sofa.ark.version>
+        <sofa.ark.version>0.5.2</sofa.ark.version>
         <rpc.starter.version>5.4.5</rpc.starter.version>
         <sofa.tracer.version>2.1.4</sofa.tracer.version>
         <sofa.lookout.version>1.4.4</sofa.lookout.version>
