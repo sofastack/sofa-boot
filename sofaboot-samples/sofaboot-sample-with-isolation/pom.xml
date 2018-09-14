@@ -54,8 +54,12 @@
         <!-- SOFABoot Class Isolation  Plugin -->
         <dependency>
             <groupId>com.alipay.sofa</groupId>
+            <artifactId>rpc-sofa-boot-plugin</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
             <artifactId>rpc-sofa-boot-starter</artifactId>
-            <classifier>ark-plugin</classifier>
         </dependency>
 
         <dependency>
