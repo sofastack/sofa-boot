@@ -25,12 +25,14 @@ import com.alipay.sofa.isle.spring.listener.SofaModuleContextRefreshedListener;
 import com.alipay.sofa.isle.stage.ModelCreatingStage;
 import com.alipay.sofa.isle.stage.ModuleLogOutputStage;
 import com.alipay.sofa.isle.stage.SpringContextInstallStage;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Role;
 import org.springframework.context.support.AbstractApplicationContext;
 
 /**
@@ -44,7 +46,8 @@ public class SofaModuleAutoConfiguration {
     }
 
     @Bean
-    public SofaModuleBeanFactoryPostProcessor sofaModuleBeanFactoryPostProcessor() {
+    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
+    public static SofaModuleBeanFactoryPostProcessor sofaModuleBeanFactoryPostProcessor() {
         return new SofaModuleBeanFactoryPostProcessor();
     }
 
