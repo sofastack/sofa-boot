@@ -52,8 +52,6 @@ public class SofaBootReadinessCheckEndpoint extends AbstractEndpoint<Health> {
     public Health invoke() {
         boolean healthCheckerStatus = readinessCheckListener.getHealthCheckerStatus();
         Map<String, Health> healthCheckerDetails = readinessCheckListener.getHealthCheckerDetails();
-
-        boolean healthIndicatorStatus = readinessCheckListener.getHealthIndicatorStatus();
         Map<String, Health> healthIndicatorDetails = readinessCheckListener
             .getHealthIndicatorDetails();
 
@@ -77,9 +75,7 @@ public class SofaBootReadinessCheckEndpoint extends AbstractEndpoint<Health> {
         healths.put("SOFABootReadinessHealthCheckInfo", builder.build());
 
         // HealthIndicator
-        for (Map.Entry<String, Health> entry : healthIndicatorDetails.entrySet()) {
-            healths.put(entry.getKey(), entry.getValue());
-        }
+        healths.putAll(healthIndicatorDetails);
         return this.healthAggregator.aggregate(healths);
     }
 
