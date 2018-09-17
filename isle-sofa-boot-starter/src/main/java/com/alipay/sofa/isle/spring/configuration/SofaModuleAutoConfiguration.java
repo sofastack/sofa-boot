@@ -31,7 +31,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClas
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Role;
 import org.springframework.context.support.AbstractApplicationContext;
 
 /**
