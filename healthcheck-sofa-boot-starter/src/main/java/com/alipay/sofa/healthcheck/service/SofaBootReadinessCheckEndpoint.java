@@ -63,7 +63,7 @@ public class SofaBootReadinessCheckEndpoint extends AbstractEndpoint<Health> {
 
         Builder builder;
         Map<String, Health> healths = new HashMap<>();
-        if (healthCheckerStatus && healthIndicatorStatus && afterHealthCheckCallbackStatus) {
+        if (healthCheckerStatus && afterHealthCheckCallbackStatus) {
             builder = Health.up();
         } else {
             builder = Health.down();
@@ -75,7 +75,11 @@ public class SofaBootReadinessCheckEndpoint extends AbstractEndpoint<Health> {
             builder = builder.withDetail("ReadinessCheckCallback", afterHealthCheckCallbackDetails);
         }
         healths.put("SOFABootReadinessHealthCheckInfo", builder.build());
-        healths.putAll(healthIndicatorDetails);
+
+        // HealthIndicator
+        for (Map.Entry<String, Health> entry : healthIndicatorDetails.entrySet()) {
+            healths.put(entry.getKey(), entry.getValue());
+        }
         return this.healthAggregator.aggregate(healths);
     }
 
