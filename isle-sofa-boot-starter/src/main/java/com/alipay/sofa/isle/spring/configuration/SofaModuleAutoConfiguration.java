@@ -25,7 +25,6 @@ import com.alipay.sofa.isle.spring.listener.SofaModuleContextRefreshedListener;
 import com.alipay.sofa.isle.stage.ModelCreatingStage;
 import com.alipay.sofa.isle.stage.ModuleLogOutputStage;
 import com.alipay.sofa.isle.stage.SpringContextInstallStage;
-import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
