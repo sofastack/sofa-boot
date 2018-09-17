@@ -105,7 +105,6 @@ public class SofaRuntimeAutoConfiguration {
     }
 
     @Bean
-    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
     public static ServiceAnnotationBeanPostProcessor serviceAnnotationBeanPostProcessor(BindingAdapterFactory bindingAdapterFactory,
                                                                                         BindingConverterFactory bindingConverterFactory) {
         return new ServiceAnnotationBeanPostProcessor(bindingAdapterFactory,
@@ -113,20 +112,17 @@ public class SofaRuntimeAutoConfiguration {
     }
 
     @Bean
-    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
     public static ClientFactoryBeanPostProcessor clientFactoryBeanPostProcessor(SofaRuntimeContext sofaRuntimeContext) {
         return new ClientFactoryBeanPostProcessor(sofaRuntimeContext.getClientFactory());
     }
 
     @Bean
-    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
     public static ApplicationShutdownCallbackPostProcessor applicationShutdownCallbackPostProcessor(SofaRuntimeContext sofaRuntimeContext) {
         return new ApplicationShutdownCallbackPostProcessor(
             sofaRuntimeContext.getSofaRuntimeManager());
     }
 
     @Bean
-    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
     public static SofaRuntimeContextAwareProcessor sofaRuntimeContextAwareProcessor(SofaRuntimeContext sofaRuntimeContext) {
         return new SofaRuntimeContextAwareProcessor(sofaRuntimeContext);
     }
