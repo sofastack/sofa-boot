@@ -121,13 +121,12 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
         }
 
         if (application.getDeployRegistry().getPendingEntries().size() > 0) {
-            throw new DeploymentException(
-                "Some SOFABoot module could not be install because of module dependency problem.");
+            throw new DeploymentException(errorMessage.trim());
         }
     }
 
     private String getErrorMessageByApplicationModule(ApplicationRuntimeModel application) {
-        StringBuilder sbError = new StringBuilder();
+        StringBuilder sbError = new StringBuilder(512);
         if (application.getDeployRegistry().getPendingEntries().size() > 0) {
             sbError
                 .append(
@@ -139,7 +138,8 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
         for (DependencyTree.Entry<String, DeploymentDescriptor> entry : application
             .getDeployRegistry().getPendingEntries()) {
             if (application.getAllDeployments().contains(entry.get())) {
-                sbError.append(entry.getKey()).append(" : ").append(entry.getWaitsFor())
+                sbError.append("[").append(entry.getKey()).append("]").append(" depends on ")
+                    .append(entry.getWaitsFor()).append(", but the latter can not be resolved.")
                     .append("\n");
             }
         }
