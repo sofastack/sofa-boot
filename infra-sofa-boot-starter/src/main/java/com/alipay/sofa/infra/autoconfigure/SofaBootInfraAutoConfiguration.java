@@ -43,6 +43,7 @@ public class SofaBootInfraAutoConfiguration {
 
     @Configuration
     @ConditionalOnWebApplication
+    @ConditionalOnClass(Endpoint.class)
     public static class SofaBootVersionEndpointMvcAdapterConfiguration {
         @Bean
         @ConditionalOnProperty(prefix = "com.alipay.sofa.versions", name = "enabled", matchIfMissing = true)
