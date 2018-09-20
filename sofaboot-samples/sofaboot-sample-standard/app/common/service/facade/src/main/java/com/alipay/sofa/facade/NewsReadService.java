@@ -14,9 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.common.dal.dai;
-
-import com.alipay.sofa.common.dal.dao.NewDO;
+package com.alipay.sofa.facade;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -25,28 +23,12 @@ import java.util.List;
  * @author qilong.zql
  * @since 2.5.0
  */
-public interface NewManageDao {
-
+public interface NewsReadService<T> {
     /**
-     * insert a new
-     * @param newDO
-     * @return
-     * @throws SQLException
-     */
-    int insert(NewDO newDO) throws SQLException;
-
-    /**
-     * query new according to author
+     * read new
      * @param author
      * @return
      * @throws SQLException
      */
-    List<NewDO> query(String author) throws SQLException;
-
-    /**
-     * delete new according to author
-     * @param author
-     * @throws SQLException
-     */
-    void delete(String author) throws SQLException;
+    List<T> read(String author) throws SQLException;
 }
