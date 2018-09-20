@@ -73,8 +73,24 @@ public @interface SofaReferenceBinding {
      * callback handler
      *
      * @return callback handler
+     * @Deprecated this attribute is not intended for use and will be removed the next major version.
      */
+    @Deprecated
     String callbackHandler() default "";
+
+    /**
+     * callback implementation class name
+     *
+     * @return callback implementation class name
+     */
+    String callbackClass() default "";
+
+    /**
+     * callback spring beanName ref
+     *
+     * @return callback spring beanName ref
+     */
+    String callbackRef() default "";
 
     /**
      * registry for this consumer
