@@ -22,7 +22,7 @@ import java.sql.SQLException;
  * @author qilong.zql
  * @since 2.5.0
  */
-public interface NewWriteService {
+public interface NewsWriteService {
     /**
      * add a new
      * @param author
@@ -30,12 +30,12 @@ public interface NewWriteService {
      * @return
      * @throws SQLException
      */
-    int addNew(String author, String title) throws SQLException;
+    int addNews(String author, String title) throws SQLException;
 
     /**
      * delete a new
      * @param author
      * @throws SQLException
      */
-    void deleteNew(String author) throws SQLException;
+    void deleteNews(String author) throws SQLException;
 }

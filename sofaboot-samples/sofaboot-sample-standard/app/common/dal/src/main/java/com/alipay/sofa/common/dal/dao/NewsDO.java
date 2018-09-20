@@ -14,31 +14,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.service.shared;
-
-import com.alipay.sofa.common.dal.dai.NewManageDao;
-import com.alipay.sofa.common.dal.dao.NewDO;
-import com.alipay.sofa.facade.NewReadService;
-import com.alipay.sofa.runtime.api.annotation.SofaReference;
-
-import java.sql.SQLException;
-import java.util.List;
+package com.alipay.sofa.common.dal.dao;
 
 /**
  * @author qilong.zql
  * @since 2.5.0
  */
-public class NewReadServiceImpl implements NewReadService<NewDO> {
+public class NewsDO {
+    /**
+     * News title
+     */
+    private String title;
 
-    @SofaReference
-    private NewManageDao newManageDao;
+    /**
+     * News id
+     */
+    private String author;
 
-    public List<NewDO> read(String author) throws SQLException {
-        try {
-            return newManageDao.query(author);
-        } catch (SQLException ex) {
-            System.err.println(ex.getMessage());
-            throw ex;
-        }
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
     }
 }

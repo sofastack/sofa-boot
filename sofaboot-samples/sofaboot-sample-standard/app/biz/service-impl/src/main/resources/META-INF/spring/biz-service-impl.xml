@@ -7,8 +7,8 @@
             http://sofastack.io/schema/sofaboot http://sofastack.io/schema/sofaboot.xsd"
        default-autowire="byName">
 
-    <bean class="com.alipay.sofa.service.impl.NewWriteServiceImpl" id="newWriteService"/>
-    <sofa:service ref="newWriteService" interface="com.alipay.sofa.facade.NewWriteService">
+    <bean class="com.alipay.sofa.service.impl.NewsWriteServiceImpl" id="newWriteService"/>
+    <sofa:service ref="newWriteService" interface="com.alipay.sofa.facade.NewsWriteService">
         <sofa:binding.jvm/>
     </sofa:service>
 

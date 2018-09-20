@@ -19,9 +19,9 @@
         <sofa:binding.jvm/>
     </sofa:service>
 
-    <bean id="iNewManageDao" class="com.alipay.sofa.common.dal.daiimpl.INewManageDao"/>
+    <bean id="iNewsManageDao" class="com.alipay.sofa.common.dal.daiimpl.INewsManageDao"/>
 
-    <sofa:service ref="iNewManageDao" interface="com.alipay.sofa.common.dal.dai.NewManageDao">
+    <sofa:service ref="iNewsManageDao" interface="com.alipay.sofa.common.dal.dai.NewsManageDao">
         <sofa:binding.jvm/>
     </sofa:service>
 </beans>
