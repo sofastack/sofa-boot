@@ -38,6 +38,7 @@ import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
 import com.alipay.sofa.runtime.spring.ApplicationShutdownCallbackPostProcessor;
 import com.alipay.sofa.runtime.spring.ClientFactoryBeanPostProcessor;
 import com.alipay.sofa.runtime.spring.ServiceAnnotationBeanPostProcessor;
+import com.alipay.sofa.runtime.spring.SofaRuntimeContextAwareProcessor;
 import com.alipay.sofa.runtime.spring.callback.CloseApplicationContextCallBack;
 import com.alipay.sofa.runtime.spring.config.SofaRuntimeConfigurationProperties;
 import com.alipay.sofa.runtime.spring.health.DefaultRuntimeHealthChecker;
@@ -45,6 +46,7 @@ import com.alipay.sofa.runtime.spring.health.MultiApplicationHealthIndicator;
 import com.alipay.sofa.runtime.spring.health.SofaComponentHealthChecker;
 import com.alipay.sofa.runtime.spring.health.SofaComponentHealthIndicator;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -63,7 +65,8 @@ import java.util.Set;
 @EnableConfigurationProperties(SofaRuntimeConfigurationProperties.class)
 public class SofaRuntimeAutoConfiguration {
     @Bean
-    public BindingConverterFactory bindingConverterFactory() {
+    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
+    public static BindingConverterFactory bindingConverterFactory() {
         BindingConverterFactory bindingConverterFactory = new BindingConverterFactoryImpl();
         bindingConverterFactory
             .addBindingConverters(getClassesByServiceLoader(BindingConverter.class));
@@ -71,18 +74,20 @@ public class SofaRuntimeAutoConfiguration {
     }
 
     @Bean
-    public BindingAdapterFactory bindingAdapterFactory() {
+    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
+    public static BindingAdapterFactory bindingAdapterFactory() {
         BindingAdapterFactory bindingAdapterFactory = new BindingAdapterFactoryImpl();
         bindingAdapterFactory.addBindingAdapters(getClassesByServiceLoader(BindingAdapter.class));
         return bindingAdapterFactory;
     }
 
     @Bean
-    public SofaRuntimeContext sofaRuntimeContext(@Value("${"
-                                                        + CommonMiddlewareConstants.APP_NAME_KEY
-                                                        + "}") String appName,
-                                                 BindingConverterFactory bindingConverterFactory,
-                                                 BindingAdapterFactory bindingAdapterFactory) {
+    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
+    public static SofaRuntimeContext sofaRuntimeContext(@Value("${"
+                                                               + CommonMiddlewareConstants.APP_NAME_KEY
+                                                               + "}") String appName,
+                                                        BindingConverterFactory bindingConverterFactory,
+                                                        BindingAdapterFactory bindingAdapterFactory) {
         ClientFactoryInternal clientFactoryInternal = new ClientFactoryImpl();
         SofaRuntimeManager sofaRuntimeManager = new StandardSofaRuntimeManager(appName,
             SofaRuntimeAutoConfiguration.class.getClassLoader(), clientFactoryInternal);
@@ -100,21 +105,26 @@ public class SofaRuntimeAutoConfiguration {
     }
 
     @Bean
-    public ServiceAnnotationBeanPostProcessor serviceAnnotationBeanPostProcessor(BindingAdapterFactory bindingAdapterFactory,
-                                                                                 BindingConverterFactory bindingConverterFactory) {
+    public static ServiceAnnotationBeanPostProcessor serviceAnnotationBeanPostProcessor(BindingAdapterFactory bindingAdapterFactory,
+                                                                                        BindingConverterFactory bindingConverterFactory) {
         return new ServiceAnnotationBeanPostProcessor(bindingAdapterFactory,
             bindingConverterFactory);
     }
 
     @Bean
-    public ClientFactoryBeanPostProcessor clientFactoryBeanPostProcessor(SofaRuntimeContext sofaRuntimeContext) {
+    public static ClientFactoryBeanPostProcessor clientFactoryBeanPostProcessor(SofaRuntimeContext sofaRuntimeContext) {
         return new ClientFactoryBeanPostProcessor(sofaRuntimeContext.getClientFactory());
     }
 
     @Bean
-    public ApplicationShutdownCallbackPostProcessor applicationShutdownCallbackPostProcessor(SofaRuntimeContext sofaRuntimeContext) {
+    public static ApplicationShutdownCallbackPostProcessor applicationShutdownCallbackPostProcessor(SofaRuntimeContext sofaRuntimeContext) {
         return new ApplicationShutdownCallbackPostProcessor(
             sofaRuntimeContext.getSofaRuntimeManager());
+    }
+
+    @Bean
+    public static SofaRuntimeContextAwareProcessor sofaRuntimeContextAwareProcessor(SofaRuntimeContext sofaRuntimeContext) {
+        return new SofaRuntimeContextAwareProcessor(sofaRuntimeContext);
     }
 
     @Bean
