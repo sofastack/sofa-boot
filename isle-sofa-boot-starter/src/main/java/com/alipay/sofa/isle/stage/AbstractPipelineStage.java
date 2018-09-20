@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.isle.stage;
 
-import com.alipay.sofa.isle.constants.SofaModuleFrameworkConstants;
+import com.alipay.sofa.infra.constants.CommonMiddlewareConstants;
 import com.alipay.sofa.runtime.spi.log.SofaLogger;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.core.Ordered;
@@ -35,7 +35,7 @@ public abstract class AbstractPipelineStage implements PipelineStage, Ordered {
     public AbstractPipelineStage(AbstractApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
         appName = applicationContext.getEnvironment().getProperty(
-            SofaModuleFrameworkConstants.APPLICATION_NAME);
+            CommonMiddlewareConstants.APP_NAME_KEY);
     }
 
     @Override
