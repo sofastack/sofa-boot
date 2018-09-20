@@ -33,15 +33,15 @@ import java.util.*;
  *          yangyanzhao Exp $
  */
 public abstract class AbstractDeploymentDescriptor implements DeploymentDescriptor {
-    private final Properties                        properties;
-    private final DeploymentDescriptorConfiguration deploymentDescriptorConfiguration;
-    private final ClassLoader                       classLoader;
-    private final List<String>                      installedSpringXml = new ArrayList<>();
-    private ApplicationContext                      applicationContext;
-    private long                                    startTime;
-    private long                                    elapsedTime;
-    final URL                                       url;
-    Map<String, Resource>                           springResources;
+    final Properties                        properties;
+    final DeploymentDescriptorConfiguration deploymentDescriptorConfiguration;
+    private final ClassLoader               classLoader;
+    private final List<String>              installedSpringXml = new ArrayList<>();
+    private ApplicationContext              applicationContext;
+    private long                            startTime;
+    private long                            elapsedTime;
+    final URL                               url;
+    Map<String, Resource>                   springResources;
 
     public AbstractDeploymentDescriptor(URL url,
                                         Properties properties,
