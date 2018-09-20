@@ -16,8 +16,8 @@
  */
 package com.alipay.sofa.common.dal.daiimpl;
 
-import com.alipay.sofa.common.dal.dai.NewManageDao;
-import com.alipay.sofa.common.dal.dao.NewDO;
+import com.alipay.sofa.common.dal.dai.NewsManageDao;
+import com.alipay.sofa.common.dal.dao.NewsDO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -36,13 +36,13 @@ import java.util.List;
  * @author qilong.zql
  * @since 2.5.0
  */
-public class INewManageDao implements NewManageDao {
+public class INewsManageDao implements NewsManageDao {
 
     @Autowired
     private DataSource dataSource;
 
     @Override
-    public int insert(NewDO newDO) throws SQLException {
+    public int insert(NewsDO newDO) throws SQLException {
         Assert.notNull(newDO);
         Connection connection = dataSource.getConnection();
         Statement statement = connection.createStatement();
@@ -52,15 +52,15 @@ public class INewManageDao implements NewManageDao {
     }
 
     @Override
-    public List<NewDO> query(String author) throws SQLException {
+    public List<NewsDO> query(String author) throws SQLException {
         Assert.isTrue(!StringUtils.isEmpty(author));
         Connection connection = dataSource.getConnection();
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(String.format(
             "SELECT * FROM NewsTable WHERE AUTHOR='%s';", author));
-        List<NewDO> answer = new LinkedList<>();
+        List<NewsDO> answer = new LinkedList<>();
         while (resultSet.next()) {
-            NewDO newDO = new NewDO();
+            NewsDO newDO = new NewsDO();
             newDO.setAuthor(resultSet.getString(2));
             newDO.setTitle(resultSet.getString(3));
             answer.add(newDO);

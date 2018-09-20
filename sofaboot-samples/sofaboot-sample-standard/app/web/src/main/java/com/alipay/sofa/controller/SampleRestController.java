@@ -16,9 +16,9 @@
  */
 package com.alipay.sofa.controller;
 
-import com.alipay.sofa.common.dal.dao.NewDO;
-import com.alipay.sofa.facade.NewReadService;
-import com.alipay.sofa.facade.NewWriteService;
+import com.alipay.sofa.common.dal.dao.NewsDO;
+import com.alipay.sofa.facade.NewsReadService;
+import com.alipay.sofa.facade.NewsWriteService;
 import com.alipay.sofa.runtime.api.annotation.SofaReference;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,13 +39,13 @@ import java.util.Map;
 public class SampleRestController {
 
     @SofaReference
-    private DataSource      dataSource;
+    private DataSource       dataSource;
 
     @SofaReference
-    private NewReadService  newReadService;
+    private NewsReadService  newReadService;
 
     @SofaReference
-    private NewWriteService newWriteService;
+    private NewsWriteService newWriteService;
 
     /**
      * Create a news table
@@ -76,7 +76,7 @@ public class SampleRestController {
                                       @PathVariable("title") String title) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         try {
-            newWriteService.addNew(author, title);
+            newWriteService.addNews(author, title);
             resultMap.put("success", true);
         } catch (Throwable throwable) {
             resultMap.put("success", false);
@@ -89,7 +89,7 @@ public class SampleRestController {
     public Map<String, Object> delete(@PathVariable("author") String author) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         try {
-            newWriteService.deleteNew(author);
+            newWriteService.deleteNews(author);
             resultMap.put("success", true);
         } catch (Throwable throwable) {
             resultMap.put("success", false);
@@ -102,11 +102,11 @@ public class SampleRestController {
     public Map<String, Object> query(@PathVariable("author") String author) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         try {
-            List<NewDO> ret = newReadService.read(author);
+            List<NewsDO> ret = newReadService.read(author);
             resultMap.put("success", true);
             resultMap.put("count", ret.size());
             int i = 0;
-            for (NewDO newDO : ret) {
+            for (NewsDO newDO : ret) {
                 resultMap.put(String.valueOf(++i), newDO.getAuthor() + "-" + newDO.getTitle());
             }
         } catch (Throwable throwable) {
