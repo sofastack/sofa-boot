@@ -27,7 +27,7 @@ service-facade 模块包含用于演示 JVM 服务发布与引用的 API :
 
 ```java
 public interface SampleJvmService {
-    String factoryMessage();
+    String message();
 }
 ```
 
@@ -49,12 +49,12 @@ Module-Name=com.alipay.sofa.service-provider
 
 ```java
 public class SampleJvmServiceImpl implements SampleJvmService {
-    private String factoryMessage;
+    private String message;
 
     @Override
-    public String factoryMessage() {
-        System.out.println(factoryMessage);
-        return factoryMessage;
+    public String message() {
+        System.out.println(message);
+        return message;
     }
 
     // getters and setters
@@ -65,7 +65,7 @@ public class SampleJvmServiceImpl implements SampleJvmService {
 
 ```xml
 <bean id="sampleJvmService" class="com.alipay.sofa.isle.sample.SampleJvmServiceImpl">
-    <property name="factoryMessage" value="Hello, jvm service xml implementation."/>
+    <property name="message" value="Hello, jvm service xml implementation."/>
 </bean>
 
 <sofa:service ref="sampleJvmService" interface="com.alipay.sofa.isle.sample.SampleJvmService">
@@ -81,10 +81,10 @@ public class SampleJvmServiceImpl implements SampleJvmService {
 @SofaService(uniqueId = "annotationImpl")
 public class SampleJvmServiceAnnotationImpl implements SampleJvmService {
     @Override
-    public String factoryMessage() {
-        String factoryMessage = "Hello, jvm service annotation implementation.";
-        System.out.println(factoryMessage);
-        return factoryMessage;
+    public String message() {
+        String message = "Hello, jvm service annotation implementation.";
+        System.out.println(message);
+        return message;
     }
 }
 ```
@@ -184,7 +184,7 @@ public class JvmServiceConsumer implements ClientFactoryAware {
         referenceParam.setInterfaceType(SampleJvmService.class);
         referenceParam.setUniqueId("serviceClientImpl");
         SampleJvmService sampleJvmServiceClientImpl = referenceClient.reference(referenceParam);
-        sampleJvmServiceClientImpl.factoryMessage();
+        sampleJvmServiceClientImpl.message();
     }
 
     @Override
@@ -239,17 +239,17 @@ public class TestController {
 
     @RequestMapping("/serviceWithoutUniqueId")
     public String serviceWithoutUniqueId() throws IOException {
-        return sampleJvmService.factoryMessage();
+        return sampleJvmService.message();
     }
 
     @RequestMapping("/annotationImplService")
     public String annotationImplService() throws IOException {
-        return sampleJvmServiceAnnotationImpl.factoryMessage();
+        return sampleJvmServiceAnnotationImpl.message();
     }
 
     @RequestMapping("/serviceClientImplService")
     public String serviceClientImplService() throws IOException {
-        return sampleJvmServiceClientImpl.factoryMessage();
+        return sampleJvmServiceClientImpl.message();
     }
 }
 ```
@@ -275,11 +275,11 @@ public class SofaBootWithModulesTest {
 
     @Test
     public void test() {
-        Assert.assertEquals("Hello, jvm service xml implementation.", sampleJvmService.factoryMessage());
+        Assert.assertEquals("Hello, jvm service xml implementation.", sampleJvmService.message());
         Assert.assertEquals("Hello, jvm service annotation implementation.",
-            sampleJvmServiceAnnotationImpl.factoryMessage());
+            sampleJvmServiceAnnotationImpl.message());
         Assert.assertEquals("Hello, jvm service service client implementation.",
-            sampleJvmServiceClientImpl.factoryMessage());
+            sampleJvmServiceClientImpl.message());
     }
 }
 ```

@@ -31,6 +31,6 @@ paragraph on what the class is for.
 
 6. A few unit tests would help a lot as well — someone has to do it.
 
-7. When writing a commit factoryMessage please follow [these conventions](https://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html), if
+7. When writing a commit message please follow [these conventions](https://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html), if
 you are fixing an existing issue please add Fixes gh-XXXX at the end
 of the commit factoryMessage (where XXXX is the issue number).
