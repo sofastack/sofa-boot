@@ -55,6 +55,8 @@
         <guice.version>3.0</guice.version>
         <guava.version>18.0</guava.version>
         <netty-all.version>4.1.6.Final</netty-all.version>
+        <zipkin.version>1.19.2</zipkin.version>
+        <zipkin.reporter.version>0.6.12</zipkin.reporter.version>
         <!--plugin version-->
         <maven.staging.plugin>1.6.7</maven.staging.plugin>
         <maven.gpg.pluign>1.5</maven.gpg.pluign>
@@ -289,6 +291,16 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.zipkin.java</groupId>
+                <artifactId>zipkin</artifactId>
+                <version>${zipkin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.zipkin.reporter</groupId>
+                <artifactId>zipkin-reporter</artifactId>
+                <version>${zipkin.reporter.version}</version>
             </dependency>
             <!-- 3rd lib dependency end -->
 
