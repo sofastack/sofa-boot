@@ -6,7 +6,7 @@
             http://sofastack.io/schema/sofaboot http://sofastack.io/schema/sofaboot.xsd"
        default-autowire="byName">
     <bean id="sampleJvmService" class="com.alipay.sofa.isle.sample.SampleJvmServiceImpl">
-        <property name="message" value="Hello, jvm service xml implementation."/>
+        <property name="factoryMessage" value="Hello, jvm service xml implementation."/>
     </bean>
 
     <sofa:service ref="sampleJvmService" interface="com.alipay.sofa.isle.sample.SampleJvmService">
