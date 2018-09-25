@@ -39,13 +39,13 @@ import org.springframework.context.support.AbstractApplicationContext;
 @Configuration
 public class SofaModuleAutoConfiguration {
     @Bean
-    public SofaModuleProperties sofaModuleProperties() {
-        return new SofaModuleProperties();
+    public static SofaModuleBeanFactoryPostProcessor sofaModuleBeanFactoryPostProcessor() {
+        return new SofaModuleBeanFactoryPostProcessor();
     }
 
     @Bean
-    public SofaModuleBeanFactoryPostProcessor sofaModuleBeanFactoryPostProcessor() {
-        return new SofaModuleBeanFactoryPostProcessor();
+    public SofaModuleProperties sofaModuleProperties() {
+        return new SofaModuleProperties();
     }
 
     @Bean

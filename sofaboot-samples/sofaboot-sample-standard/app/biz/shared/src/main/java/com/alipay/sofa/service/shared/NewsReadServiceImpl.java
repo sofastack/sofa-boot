@@ -14,41 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.service.impl;
+package com.alipay.sofa.service.shared;
 
-import com.alipay.sofa.common.dal.dai.NewManageDao;
-import com.alipay.sofa.common.dal.dao.NewDO;
-import com.alipay.sofa.facade.NewWriteService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.alipay.sofa.common.dal.dai.NewsManageDao;
+import com.alipay.sofa.common.dal.dao.NewsDO;
+import com.alipay.sofa.facade.NewsReadService;
+import com.alipay.sofa.runtime.api.annotation.SofaReference;
 
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * @author qilong.zql
  * @since 2.5.0
  */
-public class NewWriteServiceImpl implements NewWriteService {
+public class NewsReadServiceImpl implements NewsReadService<NewsDO> {
 
-    @Autowired
-    private NewManageDao newManageDao;
+    @SofaReference
+    private NewsManageDao newManageDao;
 
-    @Override
-    public int addNew(String author, String title) throws SQLException {
+    public List<NewsDO> read(String author) throws SQLException {
         try {
-            NewDO newDO = new NewDO();
-            newDO.setAuthor(author);
-            newDO.setTitle(title);
-            return newManageDao.insert(newDO);
-        } catch (SQLException ex) {
-            System.err.println(ex.getMessage());
-            throw ex;
-        }
-    }
-
-    @Override
-    public void deleteNew(String author) throws SQLException {
-        try {
-            newManageDao.delete(author);
+            return newManageDao.query(author);
         } catch (SQLException ex) {
             System.err.println(ex.getMessage());
             throw ex;

@@ -71,6 +71,5 @@ public class AllInfraLoggerFactoryTest extends AbstractTestBase {
         logger2.info("test2 info ok");
 
         assertTrue(logger.isInfoEnabled());
-        assertTrue(logger.isDebugEnabled());
     }
 }

@@ -14,36 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.common.dal.dao;
+package com.alipay.sofa.facade;
+
+import java.sql.SQLException;
 
 /**
  * @author qilong.zql
  * @since 2.5.0
  */
-public class NewDO {
+public interface NewsWriteService {
     /**
-     * News title
+     * add a new
+     * @param author
+     * @param title
+     * @return
+     * @throws SQLException
      */
-    private String title;
+    int addNews(String author, String title) throws SQLException;
 
     /**
-     * New id
+     * delete a new
+     * @param author
+     * @throws SQLException
      */
-    private String author;
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
+    void deleteNews(String author) throws SQLException;
 }

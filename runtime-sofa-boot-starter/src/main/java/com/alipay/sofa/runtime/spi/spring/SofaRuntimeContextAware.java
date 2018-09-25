@@ -14,39 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.common.dal.dai;
+package com.alipay.sofa.runtime.spi.spring;
 
-import com.alipay.sofa.common.dal.dao.NewDO;
-
-import java.sql.SQLException;
-import java.util.List;
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 
 /**
+ * Interface to be implemented by any object that wishes to be notified
+ * of the {@link com.alipay.sofa.runtime.spi.component.SofaRuntimeContext} that it runs in.
+ *
  * @author qilong.zql
+ * @author khotyn
  * @since 2.5.0
  */
-public interface NewManageDao {
-
-    /**
-     * insert a new
-     * @param newDO
-     * @return
-     * @throws SQLException
-     */
-    int insert(NewDO newDO) throws SQLException;
-
-    /**
-     * query new according to author
-     * @param author
-     * @return
-     * @throws SQLException
-     */
-    List<NewDO> query(String author) throws SQLException;
-
-    /**
-     * delete new according to author
-     * @param author
-     * @throws SQLException
-     */
-    void delete(String author) throws SQLException;
+public interface SofaRuntimeContextAware {
+    void setSofaRuntimeContext(SofaRuntimeContext sofaRuntimeContext);
 }
