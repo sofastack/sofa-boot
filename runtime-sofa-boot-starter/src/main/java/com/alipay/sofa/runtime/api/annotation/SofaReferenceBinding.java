@@ -82,6 +82,7 @@ public @interface SofaReferenceBinding {
      * callback implementation class name
      *
      * @return callback implementation class name
+     * @since 2.5.0
      */
     String callbackClass() default "";
 
@@ -89,6 +90,7 @@ public @interface SofaReferenceBinding {
      * callback spring beanName ref
      *
      * @return callback spring beanName ref
+     * @since 2.5.0
      */
     String callbackRef() default "";
 
