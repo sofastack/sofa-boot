@@ -25,9 +25,10 @@ import org.springframework.util.Assert;
  * @author qilong.zql
  * @since 2.4.1
  */
-public class ReferenceFactoryBeanTest extends AbstractTestBase {
+public class BeanPostProcessorTest extends AbstractTestBase {
     @Test
     public void test() {
-        Assert.isTrue("aop".equals(StateMessage.getMessage()));
+        Assert.isTrue("aop".equals(StateMessage.getFactoryMessage()));
+        Assert.isTrue("config".equals(StateMessage.getConfigMessage()));
     }
 }
