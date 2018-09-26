@@ -46,7 +46,7 @@
         <!-- sofa-common-tools for log -->
         <sofa.common.tools.version>1.0.14</sofa.common.tools.version>
         <bolt.version>1.4.4</bolt.version>
-        <hessian.version>3.3.1</hessian.version>
+        <hessian.version>3.3.3</hessian.version>
         <!-- 3rd lib dependency -->
         <fastjson.version>1.2.47</fastjson.version>
         <grpc-all.version>1.0.3</grpc-all.version>
