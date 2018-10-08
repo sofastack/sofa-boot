@@ -18,9 +18,9 @@ package com.alipay.sofa.infra.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.Environment;
-import org.springframework.core.env.PropertySource;
 
 /**
  * SOFABootEnvUtils
@@ -40,17 +40,21 @@ public class SOFABootEnvUtils {
 
     /**
      * Determine whether the {@link org.springframework.core.env.Environment} is Spring Cloud bootstrap environment.
+     *
      * Reference doc is https://cloud.spring.io/spring-cloud-static/spring-cloud.html#_application_context_hierarchies and
-     * issue https://github.com/spring-cloud/spring-cloud-config/issues/1151
+     * issue https://github.com/spring-cloud/spring-cloud-config/issues/1151.
+     *
+     * Pay attention only can be used in one implementation which implements {@link ApplicationContextInitializer} because the bootstrap
+     * properties will be removed after initialized.
+     *
      * @param environment the environment get from spring context
      * @return true indicates Spring Cloud environment
      */
     public static boolean isSpringCloudBootstrapEnvironment(Environment environment) {
         if (environment instanceof ConfigurableEnvironment) {
             ConfigurableEnvironment configurableEnvironment = (ConfigurableEnvironment) environment;
-            PropertySource propertySource = configurableEnvironment.getPropertySources().get(
-                BOOTSTRAP_PROPERTY_SOURCE_NAME);
-            if (propertySource != null) {
+            if (configurableEnvironment.getPropertySources().contains(
+                BOOTSTRAP_PROPERTY_SOURCE_NAME)) {
                 //use app logger
                 LOGGER.debug("Current application context environment is bootstrap");
                 return true;
