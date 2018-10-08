@@ -14,20 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime.integration;
+package com.alipay.sofa;
 
-import com.alipay.sofa.runtime.integration.base.AbstractTestBase;
-import com.alipay.sofa.runtime.util.StateMessage;
-import org.junit.Test;
-import org.springframework.util.Assert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.SpringApplication;
 
 /**
- * @author qilong.zql
- * @since 2.4.1
+ * SOFABootWebApplication
+ * <p>
+ * <p>
+ * Created by yangguanchao on 16/12/9.
  */
-public class ReferenceFactoryBeanTest extends AbstractTestBase {
-    @Test
-    public void test() {
-        Assert.isTrue("aop".equals(StateMessage.getMessage()));
+@org.springframework.boot.autoconfigure.SpringBootApplication
+public class SOFABootWebApplication {
+
+    // init the logger
+    private static final Logger LOGGER = LoggerFactory.getLogger(SOFABootWebApplication.class);
+
+    public static void main(String[] args) throws Exception {
+        SpringApplication.run(SOFABootWebApplication.class, args);
     }
 }

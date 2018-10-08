@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:sofa="http://sofastack.io/schema/sofaboot"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://sofastack.io/schema/sofaboot http://sofastack.io/schema/sofaboot.xsd"
+       default-autowire="byName">
+
+    <!-- dataSource pool -->
+    <bean id="simpleDataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close" primary="true">
+        <property name="driverClassName" value="org.h2.Driver"/>
+        <property name="jdbcUrl" value="jdbc:h2:~/test"/>
+        <property name="username" value="sofa"/>
+        <property name="password" value="123456"/>
+    </bean>
+
+    <sofa:service ref="simpleDataSource" interface="javax.sql.DataSource">
+        <sofa:binding.jvm/>
+    </sofa:service>
+
+    <bean id="iNewsManageDao" class="com.alipay.sofa.common.dal.daiimpl.INewsManageDao"/>
+
+    <sofa:service ref="iNewsManageDao" interface="com.alipay.sofa.common.dal.dai.NewsManageDao">
+        <sofa:binding.jvm/>
+    </sofa:service>
+</beans>

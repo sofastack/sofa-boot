@@ -223,13 +223,38 @@ public class JvmServiceConsumer implements ClientFactoryAware {
 </dependency>
 ```
 
-启动 ApplicationRun 类，控制台将看到以下输出:
+为了演示在展示层引用 JVM 服务，我们在演示工程增加了一个 Rest 接口，在 Rest 接口中将引用上文 SOFABoot 模块发布的 JVM 服务。SOFABoot 模块一般用于封装对外发布服务接口的具体实现，属于业务层，Controller 属于展现层内容，我们建议将 Controller 定义放在 Root Application Context 中，然后通过 @SofaReference 引用 SOFABoot 模块发布的服务：
 
-```text
-Hello, jvm service xml implementation.
-Hello, jvm service annotation implementation.
-Hello, jvm service service client implementation.
+```java
+@RestController
+public class TestController {
+    @SofaReference
+    private SampleJvmService sampleJvmService;
+
+    @SofaReference(uniqueId = "annotationImpl")
+    private SampleJvmService sampleJvmServiceAnnotationImpl;
+
+    @SofaReference(uniqueId = "serviceClientImpl")
+    private SampleJvmService sampleJvmServiceClientImpl;
+
+    @RequestMapping("/serviceWithoutUniqueId")
+    public String serviceWithoutUniqueId() throws IOException {
+        return sampleJvmService.message();
+    }
+
+    @RequestMapping("/annotationImplService")
+    public String annotationImplService() throws IOException {
+        return sampleJvmServiceAnnotationImpl.message();
+    }
+
+    @RequestMapping("/serviceClientImplService")
+    public String serviceClientImplService() throws IOException {
+        return sampleJvmServiceClientImpl.message();
+    }
+}
 ```
+
+启动应用，访问[http://localhost:8080/serviceWithoutUniqueId](http://localhost:8080/serviceWithoutUniqueId)、[http://localhost:8080/annotationImplService](http://localhost:8080/annotationImplService)、[http://localhost:8080/serviceClientImplService](http://localhost:8080/serviceClientImplService) 等 URL，可以看到 TestController 成功调用到了 SOFABoot 模块发布的服务。
 
 ## 编写测试用例
 

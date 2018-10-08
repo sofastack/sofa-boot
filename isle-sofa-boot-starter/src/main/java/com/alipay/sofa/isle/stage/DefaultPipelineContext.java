@@ -37,4 +37,12 @@ public class DefaultPipelineContext implements PipelineContext {
         this.stageList.add(stage);
         return this;
     }
+
+    @Override
+    public PipelineContext appendStages(List<PipelineStage> stages) {
+        for (PipelineStage pipelineStage : stages) {
+            appendStage(pipelineStage);
+        }
+        return this;
+    }
 }

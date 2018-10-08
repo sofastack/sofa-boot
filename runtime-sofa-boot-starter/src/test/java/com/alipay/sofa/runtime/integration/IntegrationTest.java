@@ -18,6 +18,7 @@ package com.alipay.sofa.runtime.integration;
 
 import com.alipay.sofa.healthcheck.core.HealthChecker;
 import com.alipay.sofa.runtime.beans.service.SampleService;
+import com.alipay.sofa.runtime.integration.aop.SampleServiceAspect;
 import com.alipay.sofa.runtime.integration.base.AbstractTestBase;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import org.junit.Assert;
@@ -70,15 +71,28 @@ public class IntegrationTest extends AbstractTestBase {
     public void testServiceAndReference() {
         Assert.assertEquals(awareTest.getSampleServiceAnnotationWithUniqueId().service(),
             "SampleServiceAnnotationImplWithUniqueId");
+        Assert.assertTrue(SampleServiceAspect.isAspectInvoked());
+
         Assert.assertEquals(awareTest.getSampleServiceAnnotationImplWithMethod().service(),
             "SampleServiceAnnotationImplWithMethod");
+        Assert.assertTrue(SampleServiceAspect.isAspectInvoked());
+
+        // service published by serviceClient, not create spring bean, aop won't take effect.
         Assert.assertEquals(awareTest.getSampleServicePublishedByServiceClient().service(),
             "SampleServiceImpl published by service client.");
+
         Assert.assertEquals(
             ((SampleService) awareTest.getApplicationContext().getBean("xmlReference")).service(),
             "XmlSampleService");
+        Assert.assertTrue(SampleServiceAspect.isAspectInvoked());
+
         Assert.assertEquals(
             ((SampleService) awareTest.getApplicationContext().getBean("xmlReferenceWithUniqueId"))
                 .service(), "XmlSampleServiceWithUniqueId");
+        Assert.assertTrue(SampleServiceAspect.isAspectInvoked());
+
+        Assert.assertEquals(awareTest.getServiceWithoutInterface().service(),
+            "ServiceWithoutInterface");
+        Assert.assertTrue(SampleServiceAspect.isAspectInvoked());
     }
 }

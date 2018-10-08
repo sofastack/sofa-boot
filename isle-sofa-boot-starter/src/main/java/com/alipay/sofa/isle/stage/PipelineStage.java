@@ -28,4 +28,19 @@ public interface PipelineStage {
      * @throws Exception if a failure occurred
      */
     void process() throws Exception;
+
+    /**
+     * get name of pipeline stage
+     *
+     * @return stage name
+     */
+    String getName();
+
+    /**
+     * get priority of pipeline stage.
+     * when stages have same stage name, high priority will override low priority.
+     *
+     * @return priority of pipeline stage
+     */
+    int getPriority();
 }
