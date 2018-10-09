@@ -51,6 +51,7 @@ public class SOFABootEnvUtilsTest extends AbstractTestBase
         assertFalse(SOFABootEnvUtils.isSpringCloudBootstrapEnvironment(environment));
         assertEquals(1L, bootstrapContext.get());
         assertEquals(1L, applicatioinContext.get());
+        assertFalse(SOFABootEnvUtils.isSpringCloudBootstrapEnvironment(null));
     }
 
     @Override
