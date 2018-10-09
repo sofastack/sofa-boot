@@ -26,7 +26,7 @@ import org.springframework.core.env.Environment;
  * SOFABootEnvUtils
  *
  * @author yangguanchao
- * @since 2018/10/08
+ * @since 2.5.0
  */
 public class SOFABootEnvUtils {
 

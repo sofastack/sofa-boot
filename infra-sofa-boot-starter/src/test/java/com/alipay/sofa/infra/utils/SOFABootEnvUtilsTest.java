@@ -32,7 +32,7 @@ import static org.junit.Assert.assertFalse;
  *
  * @author <guanchao.ygc>
  * @version 1.0
- * @since <pre>10/08/2018</pre>
+ * @since <pre>2.5.0</pre>
  */
 public class SOFABootEnvUtilsTest extends AbstractTestBase
                                                           implements
