@@ -16,7 +16,9 @@
  */
 package com.alipay.sofa.isle.spring.health;
 
+import com.alipay.sofa.healthcheck.configuration.HealthCheckConfigurationConstants;
 import com.alipay.sofa.healthcheck.core.HealthChecker;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.Health;
 
 /**
@@ -25,6 +27,15 @@ import org.springframework.boot.actuate.health.Health;
  * @author xuanbei 18/5/6
  */
 public class SofaModuleHealthChecker extends AbstractModuleHealthChecker implements HealthChecker {
+
+    @Value("${" + HealthCheckConfigurationConstants.SOFABOOT_MODULE_CHECK_RETRY_COUNT + ":"
+           + HealthCheckConfigurationConstants.SOFABOOT_MODULE_CHECK_RETRY_DEFAULT_COUNT + "}")
+    private int  retryCount;
+
+    @Value("${" + HealthCheckConfigurationConstants.SOFABOOT_MODULE_CHECK_RETRY_INTERVAL + ":"
+           + HealthCheckConfigurationConstants.SOFABOOT_MODULE_CHECK_RETRY_DEFAULT_INTERVAL + "}")
+    private long retryInterval;
+
     @Override
     public Health isHealthy() {
         return doHealthCheck();
@@ -37,12 +48,12 @@ public class SofaModuleHealthChecker extends AbstractModuleHealthChecker impleme
 
     @Override
     public int getRetryCount() {
-        return 0;
+        return retryCount;
     }
 
     @Override
     public long getRetryTimeInterval() {
-        return 0;
+        return retryInterval;
     }
 
     @Override
