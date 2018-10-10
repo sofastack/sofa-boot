@@ -36,6 +36,24 @@ public class HealthCheckConfigurationConstants {
     public static final String SOFABOOT_STRICT_COMPONENT_HEALTH_CHECK           = "com.alipay.sofa.healthcheck.strict.component.check";
     public static final String SOFABOOT_STRICT_COMPONENT_HEALTH_CHECK_UNDERLINE = "com_alipay_sofa_healthcheck_strict_component_check";
 
+    // 组件健康检查次数配置项
+    public static final String SOFABOOT_COMPONENT_CHECK_RETRY_COUNT             = "com.alipay.sofa.healthcheck.component.check.retry.count";
+    // 组件健康检查默认次数
+    public static final int    SOFABOOT_COMPONENT_CHECK_RETRY_DEFAULT_COUNT     = 20;
+    // 组件健康检查间隔配置项
+    public static final String SOFABOOT_COMPONENT_CHECK_RETRY_INTERVAL          = "com.alipay.sofa.healthcheck.component.check.retry.interval";
+    // 组件健康检查默认间隔
+    public static final long   SOFABOOT_COMPONENT_CHECK_RETRY_DEFAULT_INTERVAL  = 1000;
+
+    // 模块健康检查次数配置项
+    public static final String SOFABOOT_MODULE_CHECK_RETRY_COUNT                = "com.alipay.sofa.healthcheck.module.check.retry.count";
+    // 模块健康检查默认次数
+    public static final int    SOFABOOT_MODULE_CHECK_RETRY_DEFAULT_COUNT        = 0;
+    // 模块健康检查间隔配置项
+    public static final String SOFABOOT_MODULE_CHECK_RETRY_INTERVAL             = "com.alipay.sofa.healthcheck.module.check.retry.interval";
+    // 模块健康检查默认间隔
+    public static final long   SOFABOOT_MODULE_CHECK_RETRY_DEFAULT_INTERVAL     = 1000;
+
     //日志
     public static final String SOFABOOT_HEALTH_LOG_SPACE                        = "com.alipay.sofa.healthcheck";
 
