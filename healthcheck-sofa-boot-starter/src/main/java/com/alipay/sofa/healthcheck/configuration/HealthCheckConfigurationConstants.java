@@ -52,7 +52,7 @@ public class HealthCheckConfigurationConstants {
     // 模块健康检查间隔配置项
     public static final String SOFABOOT_MODULE_CHECK_RETRY_INTERVAL             = "com.alipay.sofa.healthcheck.module.check.retry.interval";
     // 模块健康检查默认间隔
-    public static final long   SOFABOOT_MODULE_CHECK_RETRY_DEFAULT_INTERVAL     = 0;
+    public static final long   SOFABOOT_MODULE_CHECK_RETRY_DEFAULT_INTERVAL     = 1000;
 
     //日志
     public static final String SOFABOOT_HEALTH_LOG_SPACE                        = "com.alipay.sofa.healthcheck";
