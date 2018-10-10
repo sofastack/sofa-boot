@@ -26,9 +26,9 @@ import org.w3c.dom.Element;
  * @author xuanbei 18/3/1
  */
 public class ReferenceDefinitionParser extends AbstractContractDefinitionParser {
-    private static final String   JVM_FIRST             = "jvm-first";
-    protected static final String PROPERTY_JVM_FIRST    = "jvmFirst";
-    private static final String   PROPERTY_LOAD_BALANCE = "loadBalance";
+    private static final String JVM_FIRST             = "jvm-first";
+    private static final String PROPERTY_JVM_FIRST    = "jvmFirst";
+    private static final String PROPERTY_LOAD_BALANCE = "loadBalance";
 
     @Override
     protected void doParseInternal(Element element, ParserContext parserContext,
