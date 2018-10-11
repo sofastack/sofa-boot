@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.isle.spring.health;
 
-import com.alipay.sofa.healthcheck.configuration.HealthCheckConfigurationConstants;
+import com.alipay.sofa.healthcheck.configuration.HealthCheckConstants;
 import com.alipay.sofa.isle.spring.configuration.SofaModuleAutoConfiguration;
 import com.alipay.sofa.runtime.spring.configuration.SofaRuntimeAutoConfiguration;
 import org.junit.After;
@@ -44,11 +44,9 @@ public class SofaModuleHealthCheckerTest {
         this.applicationContext.refresh();
         SofaModuleHealthChecker sofaModuleHealthChecker = applicationContext
             .getBean(SofaModuleHealthChecker.class);
-        Assert.assertEquals(
-            HealthCheckConfigurationConstants.SOFABOOT_MODULE_CHECK_RETRY_DEFAULT_COUNT,
+        Assert.assertEquals(HealthCheckConstants.SOFABOOT_MODULE_CHECK_RETRY_DEFAULT_COUNT,
             sofaModuleHealthChecker.getRetryCount());
-        Assert.assertEquals(
-            HealthCheckConfigurationConstants.SOFABOOT_MODULE_CHECK_RETRY_DEFAULT_INTERVAL,
+        Assert.assertEquals(HealthCheckConstants.SOFABOOT_MODULE_CHECK_RETRY_DEFAULT_INTERVAL,
             sofaModuleHealthChecker.getRetryTimeInterval());
     }
 
@@ -58,11 +56,9 @@ public class SofaModuleHealthCheckerTest {
         int customRetryInterval = 30;
         this.applicationContext.register(SofaModuleAutoConfiguration.class);
         EnvironmentTestUtils.addEnvironment(this.applicationContext,
-            HealthCheckConfigurationConstants.SOFABOOT_MODULE_CHECK_RETRY_COUNT + "="
-                    + customRetryCount);
+            HealthCheckConstants.SOFABOOT_MODULE_CHECK_RETRY_COUNT + "=" + customRetryCount);
         EnvironmentTestUtils.addEnvironment(this.applicationContext,
-            HealthCheckConfigurationConstants.SOFABOOT_MODULE_CHECK_RETRY_INTERVAL + "="
-                    + customRetryInterval);
+            HealthCheckConstants.SOFABOOT_MODULE_CHECK_RETRY_INTERVAL + "=" + customRetryInterval);
         this.applicationContext.register(SofaRuntimeAutoConfiguration.class);
         this.applicationContext.refresh();
         SofaModuleHealthChecker sofaModuleHealthChecker = applicationContext

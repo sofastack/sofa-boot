@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.isle.integration;
 
-import com.alipay.sofa.healthcheck.configuration.HealthCheckConfigurationConstants;
+import com.alipay.sofa.healthcheck.configuration.HealthCheckConstants;
 import com.alipay.sofa.healthcheck.core.HealthChecker;
 import com.alipay.sofa.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.isle.constants.SofaModuleFrameworkConstants;
@@ -100,11 +100,9 @@ public class IntegrationTest implements ApplicationContextAware {
             .getBean("sofaModuleHealthChecker");
         Assert.assertTrue(healthChecker.isHealthy().getStatus().equals(Status.UP));
         Assert.assertEquals("SOFABoot-Modules", healthChecker.getComponentName());
-        Assert.assertEquals(
-            HealthCheckConfigurationConstants.SOFABOOT_MODULE_CHECK_RETRY_DEFAULT_COUNT,
+        Assert.assertEquals(HealthCheckConstants.SOFABOOT_MODULE_CHECK_RETRY_DEFAULT_COUNT,
             healthChecker.getRetryCount());
-        Assert.assertEquals(
-            HealthCheckConfigurationConstants.SOFABOOT_MODULE_CHECK_RETRY_DEFAULT_INTERVAL,
+        Assert.assertEquals(HealthCheckConstants.SOFABOOT_MODULE_CHECK_RETRY_DEFAULT_INTERVAL,
             healthChecker.getRetryTimeInterval());
         Assert.assertEquals(true, healthChecker.isStrictCheck());
     }

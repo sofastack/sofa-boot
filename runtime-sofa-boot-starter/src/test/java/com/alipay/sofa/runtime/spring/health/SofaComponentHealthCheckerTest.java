@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.runtime.spring.health;
 
-import com.alipay.sofa.healthcheck.configuration.HealthCheckConfigurationConstants;
+import com.alipay.sofa.healthcheck.configuration.HealthCheckConstants;
 import com.alipay.sofa.runtime.spring.configuration.SofaRuntimeAutoConfiguration;
 import org.junit.After;
 import org.junit.Assert;
@@ -43,11 +43,9 @@ public class SofaComponentHealthCheckerTest {
         this.applicationContext.refresh();
         SofaComponentHealthChecker sofaComponentHealthChecker = applicationContext
             .getBean(SofaComponentHealthChecker.class);
-        Assert.assertEquals(
-            HealthCheckConfigurationConstants.SOFABOOT_COMPONENT_CHECK_RETRY_DEFAULT_COUNT,
+        Assert.assertEquals(HealthCheckConstants.SOFABOOT_COMPONENT_CHECK_RETRY_DEFAULT_COUNT,
             sofaComponentHealthChecker.getRetryCount());
-        Assert.assertEquals(
-            HealthCheckConfigurationConstants.SOFABOOT_COMPONENT_CHECK_RETRY_DEFAULT_INTERVAL,
+        Assert.assertEquals(HealthCheckConstants.SOFABOOT_COMPONENT_CHECK_RETRY_DEFAULT_INTERVAL,
             sofaComponentHealthChecker.getRetryTimeInterval());
     }
 
@@ -57,10 +55,9 @@ public class SofaComponentHealthCheckerTest {
         int customRetryInterval = 30;
         this.applicationContext.register(SofaRuntimeAutoConfiguration.class);
         EnvironmentTestUtils.addEnvironment(this.applicationContext,
-            HealthCheckConfigurationConstants.SOFABOOT_COMPONENT_CHECK_RETRY_COUNT + "="
-                    + customRetryCount);
+            HealthCheckConstants.SOFABOOT_COMPONENT_CHECK_RETRY_COUNT + "=" + customRetryCount);
         EnvironmentTestUtils.addEnvironment(this.applicationContext,
-            HealthCheckConfigurationConstants.SOFABOOT_COMPONENT_CHECK_RETRY_INTERVAL + "="
+            HealthCheckConstants.SOFABOOT_COMPONENT_CHECK_RETRY_INTERVAL + "="
                     + customRetryInterval);
         this.applicationContext.register(SofaRuntimeAutoConfiguration.class);
         this.applicationContext.refresh();
