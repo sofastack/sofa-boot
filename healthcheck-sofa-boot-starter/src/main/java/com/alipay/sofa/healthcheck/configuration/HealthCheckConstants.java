@@ -73,7 +73,6 @@ public class HealthCheckConstants {
      */
     public static final String SOFABOOT_MODULE_CHECK_RETRY_COUNT               = "com.alipay.sofa.healthcheck.module.check.retry.count";
 
-    // 模块健康检查默认次数
     /**
      * default {@see com.alipay.sofa.isle.spring.health.SofaModuleHealthChecker} retry count value.
      */
