@@ -83,10 +83,11 @@ public class SofaRuntimeAutoConfiguration {
 
     @Bean
     @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
-    public SofaRuntimeContext sofaRuntimeContext(@Value("${" + SofaBootInfraConstants.APP_NAME_KEY
-                                                        + "}") String appName,
-                                                 BindingConverterFactory bindingConverterFactory,
-                                                 BindingAdapterFactory bindingAdapterFactory) {
+    public static SofaRuntimeContext sofaRuntimeContext(@Value("${"
+                                                               + SofaBootInfraConstants.APP_NAME_KEY
+                                                               + "}") String appName,
+                                                        BindingConverterFactory bindingConverterFactory,
+                                                        BindingAdapterFactory bindingAdapterFactory) {
         ClientFactoryInternal clientFactoryInternal = new ClientFactoryImpl();
         SofaRuntimeManager sofaRuntimeManager = new StandardSofaRuntimeManager(appName,
             SofaRuntimeAutoConfiguration.class.getClassLoader(), clientFactoryInternal);
