@@ -10,11 +10,6 @@ install:
 
 script:
 - sh ./check_format.sh
-- cd ./sofaboot-samples/sofaboot-sample && mvn clean test
-- cd ../sofaboot-sample-with-isle && mvn clean test
-- cd ../sofaboot-sample-with-isolation && mvn clean test
-- cd ../sofaboot-sample-with-rpc && mvn clean test
-- cd ../..
 
 after_success:
 - mvn clean test cobertura:cobertura org.eluder.coveralls:coveralls-maven-plugin:report
