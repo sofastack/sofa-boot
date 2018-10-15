@@ -41,6 +41,7 @@
         <module>runtime-sofa-boot-starter</module>
         <module>test-sofa-boot-starter</module>
         <module>isle-sofa-boot-starter</module>
+        <module>runtime-sofa-boot-plugin</module>
     </modules>
 
     <properties>
@@ -56,9 +57,9 @@
         <maven.gpg.pluign>1.5</maven.gpg.pluign>
         <cobertura.maven.plugin>2.6</cobertura.maven.plugin>
         <coveralls.maven.plugin>3.1.0</coveralls.maven.plugin>
+        <sofa.version.maven.plugin>1.0.1</sofa.version.maven.plugin>
         <main.user.dir>${user.dir}</main.user.dir>
     </properties>
-
 
     <build>
         <plugins>
@@ -104,6 +105,26 @@
                     <configFile>${main.user.dir}/Formatter.xml</configFile>
                     <encoding>${project.encoding}</encoding>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>sofa-version-maven-plugin</artifactId>
+                <version>${sofa.version.maven.plugin}</version>
+                <configuration>
+                    <dotGitDirectory>${main.user.dir}/.git</dotGitDirectory>
+                    <defaultPropertiesFileEntries>
+                        <Doc-Url>http://www.sofastack.tech/sofa-boot/docs/Home</Doc-Url>
+                    </defaultPropertiesFileEntries>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>gen</goal>
+                            <goal>write</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>

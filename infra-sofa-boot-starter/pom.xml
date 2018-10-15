@@ -29,6 +29,10 @@
 
     <artifactId>infra-sofa-boot-starter</artifactId>
 
+    <properties>
+        <main.user.dir>../</main.user.dir>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -172,33 +176,12 @@
             <version>2.3</version>
             <scope>test</scope>
         </dependency>
-        <!-- 日志测试模块使用 end -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-context</artifactId>
+            <version>2.0.1.RELEASE</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>sofa-version-maven-plugin</artifactId>
-                <version>1.0.0</version>
-                <configuration>
-                    <!-- 指向工程的 .git 目录,默认值 ${project.basedir}/.git,不满足要求的需要自己指向 .git 文件 -->
-                    <dotGitDirectory>../.git</dotGitDirectory>
-                    <defaultPropertiesFileEntries>
-                        <!-- 可以自定义 key 和 value-->
-                        <Doc-Url>https://github.com/alipay/sofa-boot</Doc-Url>
-                    </defaultPropertiesFileEntries>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>gen</goal>
-                            <goal>write</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

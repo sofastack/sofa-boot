@@ -36,6 +36,10 @@ public class EnvironmentCustomizer implements EnvironmentPostProcessor {
         PropertySource propertySource = new PropertiesPropertySource("version",
             getSofaBootVersionProperties());
         environment.getPropertySources().addLast(propertySource);
+        /**
+         * set required properties, {@link MissingRequiredPropertiesException}
+         **/
+        environment.setRequiredProperties(SofaBootInfraConstants.APP_NAME_KEY);
     }
 
     /**

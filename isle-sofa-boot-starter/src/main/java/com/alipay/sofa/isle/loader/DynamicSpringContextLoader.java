@@ -46,7 +46,7 @@ import java.util.Map;
  * @author linfengqi  2011-7-26
  */
 public class DynamicSpringContextLoader implements SpringContextLoader {
-    private final ConfigurableApplicationContext rootApplicationContext;
+    protected final ConfigurableApplicationContext rootApplicationContext;
 
     public DynamicSpringContextLoader(ApplicationContext applicationContext) {
         this.rootApplicationContext = (ConfigurableApplicationContext) applicationContext;
@@ -98,13 +98,17 @@ public class DynamicSpringContextLoader implements SpringContextLoader {
         beanDefinitionReader
             .setBeanClassLoader(deployment.getApplicationContext().getClassLoader());
         beanDefinitionReader.setResourceLoader(ctx);
+        loadBeanDefinitions(deployment, beanDefinitionReader);
+        addPostProcessors(beanFactory);
+    }
 
+    protected void loadBeanDefinitions(DeploymentDescriptor deployment,
+                                       XmlBeanDefinitionReader beanDefinitionReader) {
         for (Map.Entry<String, Resource> entry : deployment.getSpringResources().entrySet()) {
             String fileName = entry.getKey();
             beanDefinitionReader.loadBeanDefinitions(entry.getValue());
             deployment.addInstalledSpringXml(fileName);
         }
-        addPostProcessors(beanFactory);
     }
 
     private void setUpParentSpringContext(GenericApplicationContext applicationContext,
@@ -145,7 +149,9 @@ public class DynamicSpringContextLoader implements SpringContextLoader {
         Map<String, BeanDefinition> processors = (Map<String, BeanDefinition>) rootApplicationContext
             .getBean(SofaModuleFrameworkConstants.PROCESSORS_OF_ROOT_APPLICATION_CONTEXT);
         for (Map.Entry<String, BeanDefinition> entry : processors.entrySet()) {
-            beanFactory.registerBeanDefinition(entry.getKey(), entry.getValue());
+            if (!beanFactory.containsBeanDefinition(entry.getKey())) {
+                beanFactory.registerBeanDefinition(entry.getKey(), entry.getValue());
+            }
         }
     }
 }

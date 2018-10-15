@@ -17,17 +17,21 @@
 package com.alipay.sofa.isle.spring.listener;
 
 import com.alipay.sofa.isle.stage.DefaultPipelineContext;
-import com.alipay.sofa.isle.stage.ModelCreatingStage;
-import com.alipay.sofa.isle.stage.ModuleLogOutputStage;
-import com.alipay.sofa.isle.stage.SpringContextInstallStage;
+import com.alipay.sofa.isle.stage.PipelineStage;
 import com.alipay.sofa.runtime.spi.log.SofaLogger;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.core.OrderComparator;
 import org.springframework.core.Ordered;
 import org.springframework.core.PriorityOrdered;
 
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * SofaModuleContextRefreshedListener listens to ContextRefreshedEvent;
@@ -37,18 +41,15 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author xuanbei 18/3/12
  */
 public class SofaModuleContextRefreshedListener implements PriorityOrdered,
-                                               ApplicationListener<ContextRefreshedEvent> {
-    private static final AtomicBoolean INIT = new AtomicBoolean(false);
+                                               ApplicationListener<ContextRefreshedEvent>,
+                                               ApplicationContextAware {
+    private ApplicationContext applicationContext;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        if (INIT.compareAndSet(false, true)) {
+        if (applicationContext.equals(event.getApplicationContext())) {
             DefaultPipelineContext pipelineContext = new DefaultPipelineContext();
-            pipelineContext.appendStage(new ModelCreatingStage((AbstractApplicationContext) event
-                .getApplicationContext()));
-            pipelineContext.appendStage(new SpringContextInstallStage(
-                (AbstractApplicationContext) event.getApplicationContext()));
-            pipelineContext.appendStage(new ModuleLogOutputStage((AbstractApplicationContext) event
+            pipelineContext.appendStages(getPipelineStagesInApplicationContext(event
                 .getApplicationContext()));
             try {
                 pipelineContext.process();
@@ -59,8 +60,34 @@ public class SofaModuleContextRefreshedListener implements PriorityOrdered,
         }
     }
 
+    private List<PipelineStage> getPipelineStagesInApplicationContext(ApplicationContext applicationContext) {
+        Map<String, PipelineStage> beanName2PipelineStage = applicationContext
+            .getBeansOfType(PipelineStage.class);
+        Map<String, PipelineStage> pipelineName2PipelineStage = new HashMap<>();
+
+        for (Map.Entry<String, PipelineStage> beanName2PipelineStageEntry : beanName2PipelineStage
+            .entrySet()) {
+            String pipelineName = beanName2PipelineStageEntry.getValue().getName();
+            PipelineStage oldValue = pipelineName2PipelineStage.get(pipelineName);
+            if (oldValue == null
+                || oldValue.getPriority() < beanName2PipelineStageEntry.getValue().getPriority()) {
+                pipelineName2PipelineStage
+                    .put(pipelineName, beanName2PipelineStageEntry.getValue());
+            }
+        }
+
+        List<PipelineStage> pipelineStages = new ArrayList<>(pipelineName2PipelineStage.values());
+        OrderComparator.sort(pipelineStages);
+        return pipelineStages;
+    }
+
     @Override
     public int getOrder() {
         return Ordered.HIGHEST_PRECEDENCE;
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
     }
 }

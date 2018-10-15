@@ -16,14 +16,19 @@
  */
 package com.alipay.sofa.runtime.component.impl;
 
+import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.component.ComponentName;
+import com.alipay.sofa.runtime.api.component.Property;
 import com.alipay.sofa.runtime.model.ComponentType;
 import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
+import com.alipay.sofa.runtime.spi.component.AbstractComponent;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import mockit.Expectations;
 import mockit.Mocked;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.Map;
 
 /**
  * @author xuanbei 18/4/3
@@ -56,6 +61,44 @@ public class ComponentManagerImplTest {
         Assert.assertTrue(componentManager.registry.containsKey(name));
         Assert.assertTrue(componentManager.resolvedRegistry.get(type).containsValue(
             mockComponentInfo));
+    }
+
+    @Test(expected = ServiceRuntimeException.class)
+    public void testRegisterDuplicated(@Mocked final ClientFactoryInternal mockClientFactoryInternal) {
+
+        ComponentManagerImpl componentManager = new ComponentManagerImpl(mockClientFactoryInternal);
+        ComponentInfo testComponentInfo = new AbstractComponent() {
+            @Override
+            public ComponentName getName() {
+                return name;
+            }
+
+            @Override
+            public ComponentType getType() {
+                return type;
+            }
+
+            @Override
+            public Map<String, Property> getProperties() {
+                return null;
+            }
+
+            @Override
+            public boolean canBeDuplicate() {
+                return false;
+            }
+        };
+
+        componentManager.register(testComponentInfo);
+
+        try {
+            componentManager.register(testComponentInfo);
+        } catch (ServiceRuntimeException e) {
+            Assert
+                .assertTrue(e.getMessage().contains("Component can not be registered duplicated"));
+            throw e;
+        }
+
     }
 
 }

@@ -21,13 +21,23 @@ package com.alipay.sofa.runtime.util;
  * @since 2.4.1
  */
 public class StateMessage {
-    private static String message = "UNDO";
+    private static String factoryMessage = "UNDO";
 
-    public static void setMessage(String message) {
-        StateMessage.message = message;
+    private static String configMessage  = "UNDO";
+
+    public static void setFactoryMessage(String factoryMessage) {
+        StateMessage.factoryMessage = factoryMessage;
     }
 
-    public static String getMessage() {
-        return StateMessage.message;
+    public static String getFactoryMessage() {
+        return StateMessage.factoryMessage;
+    }
+
+    public static String getConfigMessage() {
+        return configMessage;
+    }
+
+    public static void setConfigMessage(String configMessage) {
+        StateMessage.configMessage = configMessage;
     }
 }

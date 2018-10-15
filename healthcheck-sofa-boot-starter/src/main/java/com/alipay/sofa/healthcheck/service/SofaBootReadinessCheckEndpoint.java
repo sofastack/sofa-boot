@@ -48,8 +48,6 @@ public class SofaBootReadinessCheckEndpoint {
     public Health health() {
         boolean healthCheckerStatus = readinessCheckListener.getHealthCheckerStatus();
         Map<String, Health> healthCheckerDetails = readinessCheckListener.getHealthCheckerDetails();
-
-        boolean healthIndicatorStatus = readinessCheckListener.getHealthIndicatorStatus();
         Map<String, Health> healthIndicatorDetails = readinessCheckListener
             .getHealthIndicatorDetails();
 
@@ -59,7 +57,7 @@ public class SofaBootReadinessCheckEndpoint {
 
         Builder builder;
         Map<String, Health> healths = new HashMap<>();
-        if (healthCheckerStatus && healthIndicatorStatus && afterHealthCheckCallbackStatus) {
+        if (healthCheckerStatus && afterHealthCheckCallbackStatus) {
             builder = Health.up();
         } else {
             builder = Health.down();
@@ -71,6 +69,8 @@ public class SofaBootReadinessCheckEndpoint {
             builder = builder.withDetail("ReadinessCheckCallback", afterHealthCheckCallbackDetails);
         }
         healths.put("SOFABootReadinessHealthCheckInfo", builder.build());
+
+        // HealthIndicator
         healths.putAll(healthIndicatorDetails);
         return this.healthAggregator.aggregate(healths);
     }

@@ -14,20 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime.integration;
+package com.alipay.sofa.isle.scan;
 
-import com.alipay.sofa.runtime.integration.base.AbstractTestBase;
-import com.alipay.sofa.runtime.util.StateMessage;
-import org.junit.Test;
-import org.springframework.util.Assert;
+import com.alipay.sofa.runtime.api.annotation.SofaService;
+import org.springframework.stereotype.Component;
 
 /**
- * @author qilong.zql
- * @since 2.4.1
+ * @author xuanbei
+ * @since 2.4.4
  */
-public class ReferenceFactoryBeanTest extends AbstractTestBase {
-    @Test
-    public void test() {
-        Assert.isTrue("aop".equals(StateMessage.getMessage()));
+@Component
+@SofaService(uniqueId = "componentScanTest")
+public class SampleServiceImpl implements SampleService {
+    @Override
+    public String message() {
+        return "Hello from com.alipay.sofa.isle.scan.SampleServiceImpl.";
     }
 }

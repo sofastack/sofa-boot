@@ -16,8 +16,10 @@
  */
 package com.alipay.sofa.runtime.spring.health;
 
+import com.alipay.sofa.healthcheck.configuration.HealthCheckConstants;
 import com.alipay.sofa.healthcheck.core.HealthChecker;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.Health;
 
 /**
@@ -27,6 +29,15 @@ import org.springframework.boot.actuate.health.Health;
  */
 public class SofaComponentHealthChecker extends AbstractComponentHealthChecker implements
                                                                               HealthChecker {
+
+    @Value("${" + HealthCheckConstants.SOFABOOT_COMPONENT_CHECK_RETRY_COUNT + ":"
+           + HealthCheckConstants.SOFABOOT_COMPONENT_CHECK_RETRY_DEFAULT_COUNT + "}")
+    private int retryCount;
+
+    @Value("${" + HealthCheckConstants.SOFABOOT_COMPONENT_CHECK_RETRY_INTERVAL + ":"
+           + HealthCheckConstants.SOFABOOT_COMPONENT_CHECK_RETRY_DEFAULT_INTERVAL + "}")
+    private int retryInterval;
+
     public SofaComponentHealthChecker(SofaRuntimeContext sofaRuntimeContext) {
         super(sofaRuntimeContext);
     }
@@ -43,12 +54,12 @@ public class SofaComponentHealthChecker extends AbstractComponentHealthChecker i
 
     @Override
     public int getRetryCount() {
-        return 0;
+        return retryCount;
     }
 
     @Override
     public long getRetryTimeInterval() {
-        return 0;
+        return retryInterval;
     }
 
     @Override

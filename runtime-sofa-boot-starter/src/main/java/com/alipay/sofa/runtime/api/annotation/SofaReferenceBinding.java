@@ -70,11 +70,29 @@ public @interface SofaReferenceBinding {
     String directUrl() default "";
 
     /**
+     * @deprecated this attribute is not intended for use and will be removed the next major version.
      * callback handler
      *
      * @return callback handler
      */
+    @Deprecated
     String callbackHandler() default "";
+
+    /**
+     * callback implementation class name
+     *
+     * @return callback implementation class name
+     * @since 2.5.0
+     */
+    String callbackClass() default "";
+
+    /**
+     * callback spring beanName ref
+     *
+     * @return callback spring beanName ref
+     * @since 2.5.0
+     */
+    String callbackRef() default "";
 
     /**
      * registry for this consumer
