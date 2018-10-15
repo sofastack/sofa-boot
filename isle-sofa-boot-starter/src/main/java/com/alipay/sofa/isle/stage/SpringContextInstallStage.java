@@ -66,7 +66,7 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
 
     private void doProcess(ApplicationRuntimeModel application) throws Exception {
         outputModulesMessage(application);
-        SpringContextLoader springContextLoader = new DynamicSpringContextLoader(applicationContext);
+        SpringContextLoader springContextLoader = createSpringContextLoader();
         installSpringContext(application, springContextLoader);
 
         if (applicationContext.getBean(SofaModuleFrameworkConstants.SOFA_MODULE_PROPERTIES_BEAN_ID,
@@ -75,6 +75,10 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
         } else {
             refreshSpringContext(application);
         }
+    }
+
+    protected SpringContextLoader createSpringContextLoader() {
+        return new DynamicSpringContextLoader(applicationContext);
     }
 
     private void installSpringContext(ApplicationRuntimeModel application,
@@ -117,13 +121,12 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
         }
 
         if (application.getDeployRegistry().getPendingEntries().size() > 0) {
-            throw new DeploymentException(
-                "Some SOFABoot module could not be install because of module dependency problem.");
+            throw new DeploymentException(errorMessage.trim());
         }
     }
 
     private String getErrorMessageByApplicationModule(ApplicationRuntimeModel application) {
-        StringBuilder sbError = new StringBuilder();
+        StringBuilder sbError = new StringBuilder(512);
         if (application.getDeployRegistry().getPendingEntries().size() > 0) {
             sbError
                 .append(
@@ -135,7 +138,8 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
         for (DependencyTree.Entry<String, DeploymentDescriptor> entry : application
             .getDeployRegistry().getPendingEntries()) {
             if (application.getAllDeployments().contains(entry.get())) {
-                sbError.append(entry.getKey()).append(" : ").append(entry.getWaitsFor())
+                sbError.append("[").append(entry.getKey()).append("]").append(" depends on ")
+                    .append(entry.getWaitsFor()).append(", but the latter can not be resolved.")
                     .append("\n");
             }
         }
@@ -299,5 +303,15 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
             }
             sb.append(treeSymbol).append(dd.getName()).append("\n");
         }
+    }
+
+    @Override
+    public String getName() {
+        return "SpringContextInstallStage";
+    }
+
+    @Override
+    public int getOrder() {
+        return 20000;
     }
 }

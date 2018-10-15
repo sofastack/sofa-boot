@@ -124,7 +124,7 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
                 factory.setProxyTargetClass(true);
             }
             factory.addAdvice(handler);
-            return factory.getProxy();
+            return factory.getProxy(newClassLoader);
         } finally {
             Thread.currentThread().setContextClassLoader(oldClassLoader);
         }

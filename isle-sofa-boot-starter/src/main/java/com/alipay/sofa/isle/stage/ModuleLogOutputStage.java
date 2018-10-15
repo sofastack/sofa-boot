@@ -188,4 +188,14 @@ public class ModuleLogOutputStage extends AbstractPipelineStage {
             }
         }
     }
+
+    @Override
+    public String getName() {
+        return "ModuleLogOutputStage";
+    }
+
+    @Override
+    public int getOrder() {
+        return 30000;
+    }
 }

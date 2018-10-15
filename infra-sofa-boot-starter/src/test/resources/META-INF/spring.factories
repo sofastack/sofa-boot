@@ -1,0 +1,3 @@
+# Initializers
+org.springframework.context.ApplicationContextInitializer=\
+com.alipay.sofa.infra.utils.SOFABootEnvUtilsTest

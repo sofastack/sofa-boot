@@ -77,4 +77,14 @@ public class ModelCreatingStage extends AbstractPipelineStage {
             }
         }
     }
+
+    @Override
+    public String getName() {
+        return "ModelCreatingStage";
+    }
+
+    @Override
+    public int getOrder() {
+        return 10000;
+    }
 }

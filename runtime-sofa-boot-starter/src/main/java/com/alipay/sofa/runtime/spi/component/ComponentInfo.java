@@ -99,4 +99,11 @@ public interface ComponentInfo extends Component {
      * @return health result
      */
     HealthResult isHealthy();
+
+    /**
+     * whether component can be duplicated defined, default is true
+     *
+     * @return
+     */
+    boolean canBeDuplicate();
 }

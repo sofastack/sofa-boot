@@ -154,4 +154,9 @@ public abstract class AbstractComponent implements ComponentInfo {
 
         return healthResult;
     }
+
+    @Override
+    public boolean canBeDuplicate() {
+        return true;
+    }
 }
