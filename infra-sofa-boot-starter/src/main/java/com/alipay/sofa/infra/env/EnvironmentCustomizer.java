@@ -20,6 +20,7 @@ import com.alipay.sofa.infra.autoconfigure.SofaBootInfraAutoConfiguration;
 import com.alipay.sofa.infra.constants.SofaBootInfraConstants;
 import com.alipay.sofa.infra.utils.SOFABootEnvUtils;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.context.config.ConfigFileApplicationListener;
 import org.springframework.boot.env.EnvironmentPostProcessor;
 import org.springframework.core.env.*;
 import org.springframework.util.StringUtils;
@@ -34,9 +35,21 @@ public class EnvironmentCustomizer implements EnvironmentPostProcessor {
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment,
                                        SpringApplication application) {
-        PropertySource propertySource = new PropertiesPropertySource("version",
-            getSofaBootVersionProperties());
+        /**
+         * Get SOFABoot version properties
+         */
+        Properties defaultConfiguration = getSofaBootVersionProperties();
+
+        /**
+         * Config default value of {@literal management.endpoints.web.exposure.include}
+         */
+        defaultConfiguration.put(SofaBootInfraConstants.ENDPOINTS_WEB_EXPOSURE_INCLUDE_CONFIG,
+            SofaBootInfraConstants.SOFA_DEFAULT_ENDPOINTS_WEB_EXPOSURE_VALUE);
+
+        PropertiesPropertySource propertySource = new PropertiesPropertySource(
+            SofaBootInfraConstants.SOFA_DEFAULT_PROPERTY_SOURCE, defaultConfiguration);
         environment.getPropertySources().addLast(propertySource);
+
         /**
          * set required properties, {@link MissingRequiredPropertiesException}
          **/

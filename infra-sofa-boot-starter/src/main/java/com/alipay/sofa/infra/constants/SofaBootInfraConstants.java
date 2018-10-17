@@ -27,16 +27,24 @@ public class SofaBootInfraConstants {
     /***
      * 获取应用名: 备注 @Value("${spring.application.name:@null}")
      */
-    public static final String APP_NAME_KEY                 = "spring.application.name";
+    public static final String APP_NAME_KEY                              = "spring.application.name";
+
+    public static final String SOFA_DEFAULT_PROPERTY_SOURCE              = "sofaConfigurationProperties";
 
     /**
      * {@link org.springframework.boot.ResourceBanner#getVersionsMap}
      */
-    public static final String SOFA_BOOT_VERSION            = "sofa-boot.version";
-    public static final String SOFA_BOOT_FORMATTED_VERSION  = "sofa-boot.formatted-version";
+    public static final String SOFA_BOOT_VERSION                         = "sofa-boot.version";
+    public static final String SOFA_BOOT_FORMATTED_VERSION               = "sofa-boot.formatted-version";
 
     /**
      * resource pattern of properties file which is used to save some information of starters.
      */
-    public static final String SOFA_BOOT_VERSION_PROPERTIES = "classpath*:META-INF/sofa.versions.properties";
+    public static final String SOFA_BOOT_VERSION_PROPERTIES              = "classpath*:META-INF/sofa.versions.properties";
+
+    /**
+     * Default {@literal management.endpoints.web.exposure.include} value
+     */
+    public static final String ENDPOINTS_WEB_EXPOSURE_INCLUDE_CONFIG     = "management.endpoints.web.exposure.include";
+    public static final String SOFA_DEFAULT_ENDPOINTS_WEB_EXPOSURE_VALUE = "info, health, versions, readiness";
 }
