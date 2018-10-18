@@ -16,12 +16,15 @@
  */
 package com.alipay.sofa.healthcheck.readiness;
 
+import com.alipay.sofa.healthcheck.bean.DiskHealthChecker;
 import com.alipay.sofa.healthcheck.bean.MemoryHealthChecker;
 import com.alipay.sofa.healthcheck.bean.NetworkHealthChecker;
 import com.alipay.sofa.healthcheck.base.BaseHealthCheckTest;
 import com.alipay.sofa.healthcheck.configuration.HealthCheckConstants;
 import com.alipay.sofa.healthcheck.configuration.SofaBootHealthCheckAutoConfiguration;
+import com.alipay.sofa.healthcheck.core.HealthChecker;
 import com.alipay.sofa.healthcheck.core.HealthCheckerProcessor;
+import com.alipay.sofa.healthcheck.utils.HealthCheckUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,9 +33,7 @@ import org.springframework.boot.actuate.health.Status;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author liangen
@@ -44,10 +45,8 @@ public class HealthCheckerProcessorTest extends BaseHealthCheckTest {
     @Configuration
     static class HealthCheckerConfiguration {
         @Bean
-        public MemoryHealthChecker memoryHealthChecker(@Value("${memory-health-checker.count:0}") int count,
-                                                       @Value("${memory-health-checker.strict:false}") boolean strict,
-                                                       @Value("${memory-health-checker.retry-count:0}") int retryCount) {
-            return new MemoryHealthChecker(count, strict, retryCount);
+        public DiskHealthChecker diskHealthChecker() {
+            return new DiskHealthChecker();
         }
 
         @Bean
@@ -55,6 +54,27 @@ public class HealthCheckerProcessorTest extends BaseHealthCheckTest {
                                                          @Value("${network-health-checker.retry-count:0}") int retryCount) {
             return new NetworkHealthChecker(strict, retryCount);
         }
+
+        @Bean
+        public MemoryHealthChecker memoryHealthChecker(@Value("${memory-health-checker.count:0}") int count,
+                                                       @Value("${memory-health-checker.strict:false}") boolean strict,
+                                                       @Value("${memory-health-checker.retry-count:0}") int retryCount) {
+            return new MemoryHealthChecker(count, strict, retryCount);
+        }
+    }
+
+    @Test
+    public void testInterfaceOrder() {
+        initApplicationContext(new HashMap<>(), HealthCheckerConfiguration.class,
+            SofaBootHealthCheckAutoConfiguration.class);
+        Map<String, HealthChecker> beansOfType = applicationContext
+            .getBeansOfType(HealthChecker.class);
+        Map<String, HealthChecker> orderedResult = HealthCheckUtils.sortMapAccordingToValue(
+            beansOfType, applicationContext.getAutowireCapableBeanFactory());
+        List<String> healthCheckerId = new ArrayList<>(orderedResult.keySet());
+        Assert.assertEquals("memoryHealthChecker", healthCheckerId.get(0));
+        Assert.assertEquals("networkHealthChecker", healthCheckerId.get(1));
+        Assert.assertEquals("diskHealthChecker", healthCheckerId.get(2));
     }
 
     @Test
@@ -70,7 +90,7 @@ public class HealthCheckerProcessorTest extends BaseHealthCheckTest {
         Health networkHealth = hashMap.get("networkHealthChecker");
         Assert.assertTrue(result);
         Assert.assertTrue(memoryHealthChecker.getCount() == 6);
-        Assert.assertTrue(hashMap.size() == 2);
+        Assert.assertTrue(hashMap.size() == 3);
         Assert.assertNotNull(memoryHealth);
         Assert.assertNotNull(networkHealth);
         Assert.assertTrue(memoryHealth.getStatus().equals(Status.UP));
@@ -92,7 +112,7 @@ public class HealthCheckerProcessorTest extends BaseHealthCheckTest {
         Health networkHealth = hashMap.get("networkHealthChecker");
         Assert.assertFalse(result);
         Assert.assertTrue(memoryHealthChecker.getCount() == 4);
-        Assert.assertTrue(hashMap.size() == 2);
+        Assert.assertTrue(hashMap.size() == 3);
         Assert.assertNotNull(memoryHealth);
         Assert.assertNotNull(networkHealth);
         Assert.assertTrue(memoryHealth.getStatus().equals(Status.DOWN));
@@ -114,7 +134,7 @@ public class HealthCheckerProcessorTest extends BaseHealthCheckTest {
         Health networkHealth = hashMap.get("networkHealthChecker");
         Assert.assertTrue(result);
         Assert.assertTrue(memoryHealthChecker.getCount() == 4);
-        Assert.assertTrue(hashMap.size() == 2);
+        Assert.assertTrue(hashMap.size() == 3);
         Assert.assertNotNull(memoryHealth);
         Assert.assertNotNull(networkHealth);
         Assert.assertTrue(memoryHealth.getStatus().equals(Status.DOWN));
@@ -137,7 +157,7 @@ public class HealthCheckerProcessorTest extends BaseHealthCheckTest {
         Health networkHealth = hashMap.get("networkHealthChecker");
         Assert.assertTrue(true);
         Assert.assertTrue(memoryHealthChecker.getCount() == 5);
-        Assert.assertTrue(hashMap.size() == 2);
+        Assert.assertTrue(hashMap.size() == 3);
         Assert.assertNotNull(memoryHealth);
         Assert.assertNotNull(networkHealth);
         Assert.assertTrue(memoryHealth.getStatus().equals(Status.DOWN));

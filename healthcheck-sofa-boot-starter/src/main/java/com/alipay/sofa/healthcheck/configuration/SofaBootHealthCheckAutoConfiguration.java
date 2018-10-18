@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.healthcheck.configuration;
 
-import com.alipay.sofa.healthcheck.core.AfterHealthCheckCallbackProcessor;
+import com.alipay.sofa.healthcheck.core.AfterReadinessCheckCallbackProcessor;
 import com.alipay.sofa.healthcheck.core.HealthCheckerProcessor;
 import com.alipay.sofa.healthcheck.core.HealthIndicatorProcessor;
 import com.alipay.sofa.healthcheck.service.SofaBootHealthIndicator;
@@ -51,8 +51,8 @@ public class SofaBootHealthCheckAutoConfiguration {
     }
 
     @Bean
-    public AfterHealthCheckCallbackProcessor afterHealthCheckCallbackProcessor() {
-        return new AfterHealthCheckCallbackProcessor();
+    public AfterReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor() {
+        return new AfterReadinessCheckCallbackProcessor();
     }
 
     @Bean

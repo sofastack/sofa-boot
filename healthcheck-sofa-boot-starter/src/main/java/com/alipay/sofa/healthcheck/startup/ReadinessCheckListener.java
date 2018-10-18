@@ -20,13 +20,9 @@ import com.alipay.sofa.healthcheck.configuration.HealthCheckConstants;
 import com.alipay.sofa.healthcheck.core.*;
 import com.alipay.sofa.healthcheck.log.SofaBootHealthCheckLoggerFactory;
 import org.slf4j.Logger;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.Health;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.EnvironmentAware;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.PriorityOrdered;
 import org.springframework.core.env.Environment;
@@ -40,67 +36,47 @@ import java.util.Map;
  * @author liangen
  * @author qilong.zql
  */
-public class ReadinessCheckListener implements ApplicationContextAware, EnvironmentAware,
-                                   PriorityOrdered, ApplicationListener<ContextRefreshedEvent> {
+public class ReadinessCheckListener implements PriorityOrdered,
+                                   ApplicationListener<ContextRefreshedEvent> {
 
-    private static Logger                     logger                 = SofaBootHealthCheckLoggerFactory
-                                                                         .getLogger(ReadinessCheckListener.class);
-
-    private ApplicationContext                applicationContext;
-
-    private Environment                       environment;
+    private static Logger                        logger                 = SofaBootHealthCheckLoggerFactory
+                                                                            .getLogger(ReadinessCheckListener.class);
 
     @Autowired
-    private HealthCheckerProcessor            healthCheckerProcessor;
+    private Environment                          environment;
 
     @Autowired
-    private HealthIndicatorProcessor          healthIndicatorProcessor;
+    private HealthCheckerProcessor               healthCheckerProcessor;
 
     @Autowired
-    private AfterHealthCheckCallbackProcessor afterHealthCheckCallbackProcessor;
+    private HealthIndicatorProcessor             healthIndicatorProcessor;
 
-    private boolean                           healthCheckerStatus    = true;
+    @Autowired
+    private AfterReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor;
 
-    private Map<String, Health>               healthCheckerDetails   = new HashMap<>();
+    private boolean                              healthCheckerStatus    = true;
 
-    private boolean                           healthIndicatorStatus  = true;
+    private Map<String, Health>                  healthCheckerDetails   = new HashMap<>();
 
-    private Map<String, Health>               healthIndicatorDetails = new HashMap<>();
+    private boolean                              healthIndicatorStatus  = true;
 
-    private boolean                           healthCallbackStatus   = true;
+    private Map<String, Health>                  healthIndicatorDetails = new HashMap<>();
 
-    private Map<String, Health>               healthCallbackDetails  = new HashMap<>();
+    private boolean                              healthCallbackStatus   = true;
 
-    @Override
-    public void setApplicationContext(ApplicationContext cxt) throws BeansException {
-        applicationContext = cxt;
-    }
-
-    @Override
-    public void setEnvironment(Environment env) {
-        environment = env;
-    }
+    private Map<String, Health>                  healthCallbackDetails  = new HashMap<>();
 
     @Override
     public int getOrder() {
-        return LOWEST_PRECEDENCE;
+        return LOWEST_PRECEDENCE - 10;
     }
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         healthCheckerProcessor.init();
         healthIndicatorProcessor.init();
-        afterHealthCheckCallbackProcessor.init();
-        publishBeforeHealthCheckEvent();
+        afterReadinessCheckCallbackProcessor.init();
         readinessHealthCheck();
-    }
-
-    /**
-     * Publish Spring Boot Event before readiness health check.
-     */
-    public void publishBeforeHealthCheckEvent() {
-        logger.info("Start to publish SofaBootBeforeReadinessCheckEvent.");
-        applicationContext.publishEvent(new SofaBootBeforeReadinessCheckEvent(applicationContext));
     }
 
     /**
@@ -123,7 +99,7 @@ public class ReadinessCheckListener implements ApplicationContextAware, Environm
                     .readinessHealthCheck(healthIndicatorDetails);
             }
         }
-        healthCallbackStatus = afterHealthCheckCallbackProcessor
+        healthCallbackStatus = afterReadinessCheckCallbackProcessor
             .afterReadinessCheckCallback(healthCallbackDetails);
         if (healthCheckerStatus && healthIndicatorStatus && healthCallbackStatus) {
             logger.info("Readiness check result: success");

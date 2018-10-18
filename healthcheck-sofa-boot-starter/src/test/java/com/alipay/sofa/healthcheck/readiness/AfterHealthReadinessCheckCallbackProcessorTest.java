@@ -20,7 +20,7 @@ import com.alipay.sofa.healthcheck.bean.MiddlewareHealthCheckCallback;
 import com.alipay.sofa.healthcheck.bean.ApplicationHealthCheckCallback;
 import com.alipay.sofa.healthcheck.base.BaseHealthCheckTest;
 import com.alipay.sofa.healthcheck.configuration.SofaBootHealthCheckAutoConfiguration;
-import com.alipay.sofa.healthcheck.core.AfterHealthCheckCallbackProcessor;
+import com.alipay.sofa.healthcheck.core.AfterReadinessCheckCallbackProcessor;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Value;
@@ -55,14 +55,14 @@ public class AfterHealthReadinessCheckCallbackProcessorTest extends BaseHealthCh
     }
 
     @Test
-    public void testAfterHealthCheckCallbackMarked() {
+    public void testAfterReadinessCheckCallbackMarked() {
         initApplicationContext(true, false);
-        AfterHealthCheckCallbackProcessor afterHealthCheckCallbackProcessor = applicationContext
-            .getBean(AfterHealthCheckCallbackProcessor.class);
+        AfterReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor = applicationContext
+            .getBean(AfterReadinessCheckCallbackProcessor.class);
         ApplicationHealthCheckCallback applicationHealthCheckCallback = applicationContext
             .getBean(ApplicationHealthCheckCallback.class);
         HashMap<String, Health> hashMap = new HashMap<>();
-        boolean result = afterHealthCheckCallbackProcessor.afterReadinessCheckCallback(hashMap);
+        boolean result = afterReadinessCheckCallbackProcessor.afterReadinessCheckCallback(hashMap);
         Assert.assertTrue(result);
         Assert.assertTrue(applicationHealthCheckCallback.isMark());
         Assert.assertTrue(hashMap.size() == 2);
@@ -79,14 +79,14 @@ public class AfterHealthReadinessCheckCallbackProcessorTest extends BaseHealthCh
     }
 
     @Test
-    public void testAfterHealthCheckCallbackUnMarked() {
+    public void testAfterReadinessCheckCallbackUnMarked() {
         initApplicationContext(false, false);
-        AfterHealthCheckCallbackProcessor afterHealthCheckCallbackProcessor = applicationContext
-            .getBean(AfterHealthCheckCallbackProcessor.class);
+        AfterReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor = applicationContext
+            .getBean(AfterReadinessCheckCallbackProcessor.class);
         ApplicationHealthCheckCallback applicationHealthCheckCallback = applicationContext
             .getBean(ApplicationHealthCheckCallback.class);
         HashMap<String, Health> hashMap = new HashMap<>();
-        boolean result = afterHealthCheckCallbackProcessor.afterReadinessCheckCallback(hashMap);
+        boolean result = afterReadinessCheckCallbackProcessor.afterReadinessCheckCallback(hashMap);
         Assert.assertFalse(result);
         Assert.assertTrue(applicationHealthCheckCallback.isMark());
         Assert.assertTrue(hashMap.size() == 2);

@@ -14,16 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.healthcheck.core;
+package com.alipay.sofa.healthcheck.bean;
+
+import com.alipay.sofa.healthcheck.core.HealthChecker;
+import org.springframework.boot.actuate.health.Health;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 
 /**
- * @author liangen
- * @version 2.3.0
- * @deprecated this class is not intended for use and will be removed the next major version.
- * {@link org.springframework.boot.actuate.health.HealthIndicator} is recommended.
+ * @author qilong.zql
+ * @since 3.0.0
  */
-@Deprecated
-public abstract class DefaultHealthChecker implements HealthChecker {
+@Order(Ordered.LOWEST_PRECEDENCE - 9)
+public class DiskHealthChecker implements HealthChecker {
+    @Override
+    public Health isHealthy() {
+        return Health.up().withDetail("disk", "disk is ok").build();
+    }
+
+    @Override
+    public String getComponentName() {
+        return "diskHealthChecker";
+    }
 
     @Override
     public int getRetryCount() {
@@ -37,6 +49,6 @@ public abstract class DefaultHealthChecker implements HealthChecker {
 
     @Override
     public boolean isStrictCheck() {
-        return true;
+        return false;
     }
 }
