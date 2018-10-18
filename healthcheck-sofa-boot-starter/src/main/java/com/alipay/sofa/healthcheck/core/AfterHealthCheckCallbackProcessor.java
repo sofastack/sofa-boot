@@ -168,9 +168,7 @@ public class AfterHealthCheckCallbackProcessor implements ApplicationContextAwar
                     beanId, objectMapper.writeValueAsString(health.getDetails()));
             }
         } catch (Throwable t) {
-            if (health == null) {
-                health = new Health.Builder().down(new RuntimeException(t)).build();
-            }
+            health = new Health.Builder().down(new RuntimeException(t)).build();
             logger.error(String.format(
                 "Error occurred while doing ReadinessCheckCallback[%s] check.", beanId), t);
         } finally {
