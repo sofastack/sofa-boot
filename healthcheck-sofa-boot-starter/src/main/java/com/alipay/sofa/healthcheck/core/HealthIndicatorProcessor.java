@@ -101,25 +101,26 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
                                  Map<String, Health> healthMap) {
         Assert.notNull(healthMap, "HealthMap must not be null");
 
-        boolean result = true;
+        boolean result = false;
+        Health health = null;
         try {
-            Health health = healthIndicator.health();
+            health = healthIndicator.health();
             Status status = health.getStatus();
-            if (!status.equals(Status.UP)) {
-                result = false;
+            if (status.equals(Status.UP)) {
+                result = true;
+                logger.info("HealthIndicator[{}] readiness check success.", beanId);
+            } else {
                 logger
                     .error(
                         "HealthIndicator[{}] readiness check fail; the status is: {}; the detail is: {}.",
                         beanId, status, objectMapper.writeValueAsString(health.getDetails()));
-            } else {
-                logger.info("HealthIndicator[{}] readiness check success.", beanId);
             }
+        } catch (Throwable t) {
+            health = new Health.Builder().down(new RuntimeException(t)).build();
+            logger.error("Error occurred while doing HealthIndicator{} readiness check.",
+                healthIndicator.getClass(), t);
+        } finally {
             healthMap.put(getKey(beanId), health);
-        } catch (Exception e) {
-            result = false;
-            logger.error(String.format(
-                "Error occurred while doing HealthIndicator[%s] readiness check.",
-                healthIndicator.getClass()), e);
         }
 
         return result;
