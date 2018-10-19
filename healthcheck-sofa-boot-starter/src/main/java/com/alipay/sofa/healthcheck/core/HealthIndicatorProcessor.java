@@ -117,9 +117,8 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
             }
         } catch (Throwable t) {
             health = new Health.Builder().down(new RuntimeException(t)).build();
-            logger.error(String.format(
-                "Error occurred while doing HealthIndicator[%s] readiness check.",
-                healthIndicator.getClass()), t);
+            logger.error("Error occurred while doing HealthIndicator{} readiness check.",
+                healthIndicator.getClass(), t);
         } finally {
             healthMap.put(getKey(beanId), health);
         }
