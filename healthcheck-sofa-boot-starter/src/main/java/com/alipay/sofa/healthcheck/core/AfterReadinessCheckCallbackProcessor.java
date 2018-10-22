@@ -80,9 +80,9 @@ public class AfterReadinessCheckCallbackProcessor {
         }
 
         if (result) {
-            logger.info("SofaBootAfterReadinessCheckCallback readiness check result: success.");
+            logger.info("ReadinessCheckCallback readiness check result: success.");
         } else {
-            logger.error("SofaBootAfterReadinessCheckCallback readiness check result: failed.");
+            logger.error("ReadinessCheckCallback readiness check result: failed.");
         }
         return result;
     }
