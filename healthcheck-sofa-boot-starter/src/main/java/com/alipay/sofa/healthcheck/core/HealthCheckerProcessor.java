@@ -17,13 +17,13 @@
 package com.alipay.sofa.healthcheck.core;
 
 import com.alipay.sofa.healthcheck.log.SofaBootHealthCheckLoggerFactory;
+import com.alipay.sofa.healthcheck.utils.HealthCheckUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.Status;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.util.Assert;
 import org.slf4j.Logger;
 
@@ -38,24 +38,28 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author qilong.zql
  * @since 2.3.0
  */
-public class HealthCheckerProcessor implements ApplicationContextAware {
+public class HealthCheckerProcessor {
 
-    private static Logger              logger             = SofaBootHealthCheckLoggerFactory
-                                                              .getLogger(HealthCheckerProcessor.class);
+    private static Logger                        logger         = SofaBootHealthCheckLoggerFactory
+                                                                    .getLogger(HealthCheckerProcessor.class);
 
-    private ObjectMapper               objectMapper       = new ObjectMapper();
+    private ObjectMapper                         objectMapper   = new ObjectMapper();
 
-    private AtomicBoolean              isInitiated        = new AtomicBoolean(false);
+    private AtomicBoolean                        isInitiated    = new AtomicBoolean(false);
 
-    private ApplicationContext         applicationContext = null;
+    @Autowired
+    private ApplicationContext                   applicationContext;
 
-    private Map<String, HealthChecker> healthCheckers     = null;
+    private LinkedHashMap<String, HealthChecker> healthCheckers = null;
 
     public void init() {
         if (isInitiated.compareAndSet(false, true)) {
             Assert.notNull(applicationContext, "Application must not be null");
+            Map<String, HealthChecker> beansOfType = applicationContext
+                .getBeansOfType(HealthChecker.class);
+            healthCheckers = HealthCheckUtils.sortMapAccordingToValue(beansOfType,
+                applicationContext.getAutowireCapableBeanFactory());
 
-            healthCheckers = applicationContext.getBeansOfType(HealthChecker.class);
             StringBuilder healthCheckInfo = new StringBuilder();
             healthCheckInfo.append("Found ").append(healthCheckers.size())
                 .append(" HealthChecker implementation:");
@@ -64,11 +68,6 @@ public class HealthCheckerProcessor implements ApplicationContextAware {
             }
             logger.info(healthCheckInfo.deleteCharAt(healthCheckInfo.length() - 1).toString());
         }
-    }
-
-    @Override
-    public void setApplicationContext(ApplicationContext cxt) throws BeansException {
-        applicationContext = cxt;
     }
 
     /**

@@ -18,13 +18,14 @@ package com.alipay.sofa.healthcheck.bean;
 
 import com.alipay.sofa.healthcheck.core.HealthChecker;
 import org.springframework.boot.actuate.health.Health;
+import org.springframework.core.Ordered;
 
 /**
  * @author liangen
  * @author qilong.zql
  * @version 2.3.0
  */
-public class NetworkHealthChecker implements HealthChecker {
+public class NetworkHealthChecker implements HealthChecker, Ordered {
 
     private boolean isStrict;
 
@@ -58,5 +59,10 @@ public class NetworkHealthChecker implements HealthChecker {
     @Override
     public boolean isStrictCheck() {
         return isStrict;
+    }
+
+    @Override
+    public int getOrder() {
+        return LOWEST_PRECEDENCE - 10;
     }
 }

@@ -44,11 +44,6 @@ public class HealthCheckConstants {
     public static final String SOFABOOT_HEALTH_LOG_SPACE                       = "com.alipay.sofa.healthcheck";
 
     /**
-     * readiness health check endpoint name
-     */
-    public static final String READINESS_CHECK_ENDPOINT_NAME                   = "sofaboot_health_readiness";
-
-    /**
      * {@literal com.alipay.sofa.runtime.spring.health.SofaComponentHealthChecker} retry count config.
      */
     public static final String SOFABOOT_COMPONENT_CHECK_RETRY_COUNT            = "com.alipay.sofa.healthcheck.component.check.retry.count";

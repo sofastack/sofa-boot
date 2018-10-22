@@ -18,17 +18,18 @@ package com.alipay.sofa.healthcheck.core;
 
 import com.alipay.sofa.healthcheck.log.SofaBootHealthCheckLoggerFactory;
 import com.alipay.sofa.healthcheck.service.SofaBootHealthIndicator;
+import com.alipay.sofa.healthcheck.utils.HealthCheckUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.actuate.health.HealthIndicatorNameFactory;
 import org.springframework.boot.actuate.health.Status;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.util.Assert;
 import org.slf4j.Logger;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -39,24 +40,28 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author qilong.zql
  * @version 2.3.0
  */
-public class HealthIndicatorProcessor implements ApplicationContextAware {
+public class HealthIndicatorProcessor {
 
-    private static Logger                logger           = SofaBootHealthCheckLoggerFactory
-                                                              .getLogger(HealthIndicatorProcessor.class);
+    private static Logger                          logger           = SofaBootHealthCheckLoggerFactory
+                                                                        .getLogger(HealthIndicatorProcessor.class);
 
-    private ObjectMapper                 objectMapper     = new ObjectMapper();
+    private ObjectMapper                           objectMapper     = new ObjectMapper();
 
-    private AtomicBoolean                isInitiated      = new AtomicBoolean(false);
+    private AtomicBoolean                          isInitiated      = new AtomicBoolean(false);
 
-    private Map<String, HealthIndicator> healthIndicators = null;
+    private LinkedHashMap<String, HealthIndicator> healthIndicators = null;
 
-    private ApplicationContext           applicationContext;
+    @Autowired
+    private ApplicationContext                     applicationContext;
 
     public void init() {
         if (isInitiated.compareAndSet(false, true)) {
             Assert.notNull(applicationContext, "Application must not be null");
+            Map<String, HealthIndicator> beansOfType = applicationContext
+                .getBeansOfType(HealthIndicator.class);
+            healthIndicators = HealthCheckUtils.sortMapAccordingToValue(beansOfType,
+                applicationContext.getAutowireCapableBeanFactory());
 
-            healthIndicators = applicationContext.getBeansOfType(HealthIndicator.class);
             StringBuilder healthIndicatorInfo = new StringBuilder();
             healthIndicatorInfo.append("Found ").append(healthIndicators.size())
                 .append(" HealthIndicator implementation:");
@@ -66,11 +71,6 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
             logger.info(healthIndicatorInfo.deleteCharAt(healthIndicatorInfo.length() - 1)
                 .toString());
         }
-    }
-
-    @Override
-    public void setApplicationContext(ApplicationContext cxt) throws BeansException {
-        applicationContext = cxt;
     }
 
     /**
