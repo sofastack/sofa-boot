@@ -20,7 +20,6 @@ import com.alipay.sofa.infra.autoconfigure.SofaBootInfraAutoConfiguration;
 import com.alipay.sofa.infra.constants.SofaBootInfraConstants;
 import com.alipay.sofa.infra.utils.SOFABootEnvUtils;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.context.config.ConfigFileApplicationListener;
 import org.springframework.boot.env.EnvironmentPostProcessor;
 import org.springframework.core.env.*;
 import org.springframework.util.StringUtils;
