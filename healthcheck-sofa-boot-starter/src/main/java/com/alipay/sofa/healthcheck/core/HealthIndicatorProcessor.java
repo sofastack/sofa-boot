@@ -21,13 +21,11 @@ import com.alipay.sofa.healthcheck.service.SofaBootHealthIndicator;
 import com.alipay.sofa.healthcheck.utils.HealthCheckUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.health.Health;
-import org.springframework.boot.actuate.health.HealthIndicator;
-import org.springframework.boot.actuate.health.HealthIndicatorNameFactory;
-import org.springframework.boot.actuate.health.Status;
+import org.springframework.boot.actuate.health.*;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.Assert;
 import org.slf4j.Logger;
+import org.springframework.util.ClassUtils;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -54,11 +52,16 @@ public class HealthIndicatorProcessor {
     @Autowired
     private ApplicationContext                     applicationContext;
 
+    private final static String                    REACTOR_CLASS    = "reactor.core.publisher.Mono";
+
     public void init() {
         if (isInitiated.compareAndSet(false, true)) {
             Assert.notNull(applicationContext, "Application must not be null");
             Map<String, HealthIndicator> beansOfType = applicationContext
                 .getBeansOfType(HealthIndicator.class);
+            if (ClassUtils.isPresent(REACTOR_CLASS, null)) {
+                applicationContext.getBeansOfType(ReactiveHealthIndicator.class).forEach((name, indicator)->beansOfType.put(name, ()->indicator.health().block()));
+            }
             healthIndicators = HealthCheckUtils.sortMapAccordingToValue(beansOfType,
                 applicationContext.getAutowireCapableBeanFactory());
 
