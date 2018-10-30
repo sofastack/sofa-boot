@@ -20,6 +20,8 @@ import com.alipay.sofa.healthcheck.configuration.HealthCheckConstants;
 import com.alipay.sofa.healthcheck.core.HealthChecker;
 import com.alipay.sofa.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.isle.constants.SofaModuleFrameworkConstants;
+import com.alipay.sofa.isle.deployment.DeploymentDescriptorConfiguration;
+import com.alipay.sofa.isle.deployment.impl.FileDeploymentDescriptor;
 import com.alipay.sofa.isle.scan.SampleService;
 import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
 import com.alipay.sofa.isle.util.ClassPathUtil;
@@ -37,6 +39,8 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Properties;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -90,6 +94,13 @@ public class IntegrationTest implements ApplicationContextAware {
             applicationRuntimeModel.getInstalled().get(1).getModuleName()));
         assertEquals("com.alipay.sofa.test", applicationRuntimeModel.getAllInactiveDeployments()
             .get(0).getModuleName());
+
+        FileDeploymentDescriptor descriptorA = new FileDeploymentDescriptor(null, new Properties(),
+            new DeploymentDescriptorConfiguration(null, null), null);
+        assertEquals(null, descriptorA.getModuleName());
+        FileDeploymentDescriptor descriptorB = new FileDeploymentDescriptor(null, new Properties(),
+            new DeploymentDescriptorConfiguration(Collections.emptyList(), null), null);
+        assertEquals(null, descriptorB.getModuleName());
     }
 
     @Test

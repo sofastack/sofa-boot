@@ -14,21 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.infra.config.spring.namespace.spi;
+package com.alipay.sofa.healthcheck.utils;
+
+import java.util.function.BinaryOperator;
 
 /**
- * SofaBootTagNameSupport
- *
- * @author yangguanchao
- * @since 2018/04/05
+ * @author qilong.zql
+ * @since 3.0.0
  */
-@FunctionalInterface
-public interface SofaBootTagNameSupport {
-
-    /**
-     * 获取支持的 TagName
-     *
-     * @return 支持的 TagName
-     */
-    String supportTagName();
+public class BinaryOperators {
+    public static BinaryOperator<Boolean> andBoolean(){
+        return (a, b) -> a && b;
+    }
 }

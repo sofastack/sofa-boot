@@ -23,6 +23,7 @@ import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 
 import java.util.ServiceLoader;
+import java.util.stream.StreamSupport;
 
 /**
  * SofaBootNamespaceHandler
@@ -38,18 +39,16 @@ public class SofaBootNamespaceHandler extends NamespaceHandlerSupport {
     @Override
     public void init() {
         ServiceLoader<SofaBootTagNameSupport> serviceLoaderSofaBoot = ServiceLoader
-            .load(SofaBootTagNameSupport.class);
-        //SOFABoot
-        for (SofaBootTagNameSupport tagNameSupport : serviceLoaderSofaBoot) {
-            this.registerTagParser(tagNameSupport);
-        }
+                .load(SofaBootTagNameSupport.class);
+        StreamSupport.stream(serviceLoaderSofaBoot.spliterator(), false)
+                .forEach(this::registerTagParser);
     }
 
     private void registerTagParser(SofaBootTagNameSupport tagNameSupport) {
         if (!(tagNameSupport instanceof BeanDefinitionParser)) {
-            logger.error(tagNameSupport.getClass() + " tag name supported ["
-                         + tagNameSupport.supportTagName() + "] parser are not instance of "
-                         + BeanDefinitionParser.class);
+            logger.error("{} tag name supported [{}] parser are not instance of {}.",
+                tagNameSupport.getClass(), tagNameSupport.supportTagName(),
+                BeanDefinitionParser.class);
             return;
         }
         String tagName = tagNameSupport.supportTagName();
