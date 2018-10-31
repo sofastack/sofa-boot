@@ -40,8 +40,7 @@ public class SofaBootNamespaceHandler extends NamespaceHandlerSupport {
     public void init() {
         ServiceLoader<SofaBootTagNameSupport> serviceLoaderSofaBoot = ServiceLoader
                 .load(SofaBootTagNameSupport.class);
-        StreamSupport.stream(serviceLoaderSofaBoot.spliterator(), false)
-                .forEach(this::registerTagParser);
+        serviceLoaderSofaBoot.forEach(this::registerTagParser);
     }
 
     private void registerTagParser(SofaBootTagNameSupport tagNameSupport) {
