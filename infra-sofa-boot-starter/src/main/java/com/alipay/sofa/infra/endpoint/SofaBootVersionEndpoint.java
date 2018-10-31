@@ -28,6 +28,8 @@ import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.alipay.sofa.infra.constants.SofaBootInfraConstants.SOFA_BOOT_VERSION_PROPERTIES;
 
@@ -55,14 +57,9 @@ public class SofaBootVersionEndpoint {
     public List<Object> versions() {
         if (endpointResult.isEmpty()) {
             try {
-                List<Object> result = new ArrayList<>();
-                Resource[] versionResource = resourcePatternResolver
-                    .getResources(SOFA_BOOT_VERSION_PROPERTIES);
-                for (Resource resource : versionResource) {
-                    Properties versionProperties = loadProperties(resource);
-                    result.add(versionProperties);
-                }
-                endpointResult = result;
+                endpointResult = Stream
+                        .of(resourcePatternResolver.getResources(SOFA_BOOT_VERSION_PROPERTIES))
+                        .map(this::loadProperties).collect(Collectors.toList());
             } catch (Exception ex) {
                 logger.warn("Load properties failed: {}", ex.getMessage());
             }
