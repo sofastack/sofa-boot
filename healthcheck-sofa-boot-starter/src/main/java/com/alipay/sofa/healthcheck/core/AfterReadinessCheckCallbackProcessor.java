@@ -18,6 +18,7 @@ package com.alipay.sofa.healthcheck.core;
 
 import com.alipay.sofa.healthcheck.log.SofaBootHealthCheckLoggerFactory;
 import com.alipay.sofa.healthcheck.startup.ReadinessCheckCallback;
+import com.alipay.sofa.healthcheck.utils.BinaryOperators;
 import com.alipay.sofa.healthcheck.utils.HealthCheckUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,20 +54,17 @@ public class AfterReadinessCheckCallbackProcessor {
 
     public void init() {
         if (isInitiated.compareAndSet(false, true)) {
-            Assert.notNull(applicationContext, "Application must not be null");
+            Assert.notNull(applicationContext, () -> "Application must not be null");
             Map<String, ReadinessCheckCallback> beansOfType = applicationContext
-                .getBeansOfType(ReadinessCheckCallback.class);
+                    .getBeansOfType(ReadinessCheckCallback.class);
             readinessCheckCallbacks = HealthCheckUtils.sortMapAccordingToValue(beansOfType,
-                applicationContext.getAutowireCapableBeanFactory());
+                    applicationContext.getAutowireCapableBeanFactory());
 
-            StringBuilder applicationCallbackInfo = new StringBuilder();
-            applicationCallbackInfo.append("Found ").append(readinessCheckCallbacks.size())
-                .append(" ReadinessCheckCallback implementation:");
-            for (String beanId : beansOfType.keySet()) {
-                applicationCallbackInfo.append(beanId).append(",");
-            }
-            logger.info(applicationCallbackInfo.deleteCharAt(applicationCallbackInfo.length() - 1)
-                .toString());
+            StringBuilder applicationCallbackInfo = new StringBuilder(512).append("Found ")
+                    .append(readinessCheckCallbacks.size())
+                    .append(" ReadinessCheckCallback implementation: ")
+                    .append(String.join(",", beansOfType.keySet()));
+            logger.info(applicationCallbackInfo.toString());
         }
     }
 
@@ -74,10 +72,9 @@ public class AfterReadinessCheckCallbackProcessor {
         logger.info("Begin ReadinessCheckCallback readiness check");
         Assert.notNull(readinessCheckCallbacks, "ReadinessCheckCallbacks must not be null.");
 
-        boolean result = true;
-        for (Map.Entry<String, ReadinessCheckCallback> entry : readinessCheckCallbacks.entrySet()) {
-            result = doHealthCheckCallback(entry.getKey(), entry.getValue(), healthMap) && result;
-        }
+        boolean result = readinessCheckCallbacks.entrySet().stream()
+                .map(entry -> doHealthCheckCallback(entry.getKey(), entry.getValue(), healthMap))
+                .reduce(true, BinaryOperators.andBoolean());
 
         if (result) {
             logger.info("ReadinessCheckCallback readiness check result: success.");
@@ -90,26 +87,26 @@ public class AfterReadinessCheckCallbackProcessor {
     private boolean doHealthCheckCallback(String beanId,
                                           ReadinessCheckCallback readinessCheckCallback,
                                           Map<String, Health> healthMap) {
-        Assert.notNull(healthMap, "HealthMap must not be null");
+        Assert.notNull(healthMap, () -> "HealthMap must not be null");
 
         boolean result = false;
         Health health = null;
         try {
             health = readinessCheckCallback.onHealthy(applicationContext);
-            if (health.getStatus().equals(Status.UP)) {
-                result = true;
+            result = health.getStatus().equals(Status.UP);
+            if (result) {
                 logger.info("SOFABoot ReadinessCheckCallback[{}] check success.", beanId);
             } else {
                 logger.error(
-                    "SOFABoot ReadinessCheckCallback[{}] check failed, the details is: {}.",
-                    beanId, objectMapper.writeValueAsString(health.getDetails()));
+                        "SOFABoot ReadinessCheckCallback[{}] check failed, the details is: {}.", beanId,
+                        objectMapper.writeValueAsString(health.getDetails()));
             }
         } catch (Throwable t) {
             if (health == null) {
                 health = new Health.Builder().down(new RuntimeException(t)).build();
             }
-            logger.error(String.format(
-                "Error occurred while doing ReadinessCheckCallback[%s] check.", beanId), t);
+            logger.error(String
+                    .format("Error occurred while doing ReadinessCheckCallback[%s] check.", beanId), t);
         } finally {
             healthMap.put(beanId, health);
         }

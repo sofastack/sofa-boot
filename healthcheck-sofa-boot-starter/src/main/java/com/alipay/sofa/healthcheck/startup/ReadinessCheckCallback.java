@@ -23,6 +23,7 @@ import org.springframework.context.ApplicationContext;
  * @author qilong.zql
  * @since 2.5.0
  */
+@FunctionalInterface
 public interface ReadinessCheckCallback {
     Health onHealthy(ApplicationContext applicationContext);
 }

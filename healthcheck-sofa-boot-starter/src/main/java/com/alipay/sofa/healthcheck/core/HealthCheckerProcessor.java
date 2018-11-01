@@ -17,6 +17,7 @@
 package com.alipay.sofa.healthcheck.core;
 
 import com.alipay.sofa.healthcheck.log.SofaBootHealthCheckLoggerFactory;
+import com.alipay.sofa.healthcheck.utils.BinaryOperators;
 import com.alipay.sofa.healthcheck.utils.HealthCheckUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -54,19 +55,16 @@ public class HealthCheckerProcessor {
 
     public void init() {
         if (isInitiated.compareAndSet(false, true)) {
-            Assert.notNull(applicationContext, "Application must not be null");
+            Assert.notNull(applicationContext, () -> "Application must not be null");
             Map<String, HealthChecker> beansOfType = applicationContext
-                .getBeansOfType(HealthChecker.class);
+                    .getBeansOfType(HealthChecker.class);
             healthCheckers = HealthCheckUtils.sortMapAccordingToValue(beansOfType,
-                applicationContext.getAutowireCapableBeanFactory());
+                    applicationContext.getAutowireCapableBeanFactory());
 
-            StringBuilder healthCheckInfo = new StringBuilder();
-            healthCheckInfo.append("Found ").append(healthCheckers.size())
-                .append(" HealthChecker implementation:");
-            for (String beanId : healthCheckers.keySet()) {
-                healthCheckInfo.append(beanId).append(",");
-            }
-            logger.info(healthCheckInfo.deleteCharAt(healthCheckInfo.length() - 1).toString());
+            StringBuilder healthCheckInfo = new StringBuilder(512).append("Found ")
+                    .append(healthCheckers.size()).append(" HealthChecker implementation:")
+                    .append(String.join(",", healthCheckers.keySet()));
+            logger.info(healthCheckInfo.toString());
         }
     }
 
@@ -77,14 +75,12 @@ public class HealthCheckerProcessor {
      * @return
      */
     public boolean livenessHealthCheck(Map<String, Health> healthMap) {
-        Assert.notNull(healthCheckers, "HealthCheckers must not be null");
+        Assert.notNull(healthCheckers, () -> "HealthCheckers must not be null");
 
         logger.info("Begin SOFABoot HealthChecker liveness check.");
-        boolean result = true;
-        for (String beanId : healthCheckers.keySet()) {
-            result = doHealthCheck(beanId, healthCheckers.get(beanId), false, healthMap, false)
-                     && result;
-        }
+        boolean result = healthCheckers.entrySet().stream()
+                .map(entry -> doHealthCheck(entry.getKey(), entry.getValue(), false, healthMap, false))
+                .reduce(true, BinaryOperators.andBoolean());
         if (result) {
             logger.info("SOFABoot HealthChecker liveness check result: success.");
         } else {
@@ -103,11 +99,9 @@ public class HealthCheckerProcessor {
         Assert.notNull(healthCheckers, "HealthCheckers must not be null.");
 
         logger.info("Begin SOFABoot HealthChecker readiness check.");
-        boolean result = true;
-        for (String beanId : healthCheckers.keySet()) {
-            result = doHealthCheck(beanId, healthCheckers.get(beanId), true, healthMap, true)
-                     && result;
-        }
+        boolean result = healthCheckers.entrySet().stream()
+                .map(entry -> doHealthCheck(entry.getKey(), entry.getValue(), true, healthMap, true))
+                .reduce(true, BinaryOperators.andBoolean());
         if (result) {
             logger.info("SOFABoot HealthChecker readiness check result: success.");
         } else {
@@ -130,13 +124,13 @@ public class HealthCheckerProcessor {
         Assert.notNull(healthMap, "HealthMap must not be null");
 
         Health health;
-        boolean result = false;
+        boolean result;
         int retryCount = 0;
         String checkType = isReadiness ? "readiness" : "liveness";
         do {
             health = healthChecker.isHealthy();
-            if (health.getStatus().equals(Status.UP)) {
-                result = true;
+            result = health.getStatus().equals(Status.UP);
+            if (result) {
                 logger.info("HealthChecker[{}] {} check success with {} retry.", beanId, checkType,
                     retryCount);
                 break;
@@ -161,7 +155,7 @@ public class HealthCheckerProcessor {
 
         healthMap.put(beanId, health);
         try {
-            if (!health.getStatus().equals(Status.UP)) {
+            if (!result) {
                 logger
                     .error(
                         "HealthChecker[{}] {} check fail with {} retry; fail details:{}; strict mode:{}",

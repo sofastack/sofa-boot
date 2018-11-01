@@ -1,7 +1,7 @@
 ## SOFABoot
 
 [![Build Status](https://travis-ci.org/alipay/sofa-boot.svg?branch=master)](https://travis-ci.org/alipay/sofa-boot)
-[![Coverage Status](https://coveralls.io/repos/github/alipay/sofa-boot/badge.svg?branch=master)](https://coveralls.io/github/alipay/sofa-boot?branch=master)
+[![Coverage Status](https://codecov.io/gh/alipay/sofa-boot/branch/3.0.x/graph/badge.svg)](https://codecov.io/gh/alipay/sofa-boot/branch/3.0.x/graph/badge.svg)
 ![license](https://img.shields.io/badge/license-Apache--2.0-green.svg)
 ![maven](https://img.shields.io/github/release/alipay/sofa-boot.svg)
 
