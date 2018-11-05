@@ -45,8 +45,10 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.Ordered;
+import org.springframework.core.env.Environment;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -57,6 +59,7 @@ import java.lang.reflect.Modifier;
  */
 public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, Ordered,
                                                ApplicationContextAware {
+
     private SofaRuntimeContext      sofaRuntimeContext;
     private BindingAdapterFactory   bindingAdapterFactory;
     private BindingConverterFactory bindingConverterFactory;
@@ -212,17 +215,17 @@ public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, Or
                                         Class<?> interfaceType) {
         Reference reference = new ReferenceImpl(sofaReferenceAnnotation.uniqueId(), interfaceType,
             InterfaceMode.annotation, sofaReferenceAnnotation.jvmFirst());
-        if (JvmBinding.JVM_BINDING_TYPE.getType().equals(
-            sofaReferenceAnnotation.binding().bindingType())) {
+        Environment env = applicationContext.getEnvironment();
+        String bindingType = resolve(env, sofaReferenceAnnotation.binding().bindingType());
+
+        if (JvmBinding.JVM_BINDING_TYPE.getType().equals(bindingType)) {
             reference.addBinding(new JvmBinding());
         } else {
             BindingConverter bindingConverter = bindingConverterFactory
-                .getBindingConverter(new BindingType(sofaReferenceAnnotation.binding()
-                    .bindingType()));
+                .getBindingConverter(new BindingType(bindingType));
             if (bindingConverter == null) {
                 throw new ServiceRuntimeException(
-                    "Can not found binding converter for binding type "
-                            + sofaReferenceAnnotation.binding().bindingType());
+                    "Can not found binding converter for binding type " + bindingType);
             }
 
             BindingConverterContext bindingConverterContext = new BindingConverterContext();
@@ -236,6 +239,21 @@ public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, Or
         }
         return ReferenceRegisterHelper.registerReference(reference, bindingAdapterFactory,
             getSofaRuntimeContext());
+    }
+
+    /**
+     * Get real value of content, since original raw may be a placeholder formula
+     *
+     * @param env    environment
+     * @param origin origin content
+     * @return value content
+     */
+    private String resolve(Environment env, String origin) {
+        if (StringUtils.hasText(origin)) {
+            return env.resolvePlaceholders(origin);
+        } else {
+            return origin;
+        }
     }
 
     private SofaRuntimeContext getSofaRuntimeContext() {
