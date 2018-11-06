@@ -103,8 +103,8 @@ public class AnnotationSampleTest {
 
         SofaReference sofaReference = AnnotationSample.class.getField("sampleService")
             .getAnnotation(SofaReference.class);
-        AnnotationWrapperBuilder<SofaReference> builder = AnnotationWrapperBuilder
-            .wrap(sofaReference).withBinder(binder);
+        AnnotationWrapperBuilder<SofaReference> builder = AnnotationWrapperBuilder.wrap(
+            sofaReference).withBinder(binder);
         SofaReference delegate = builder.build();
 
         Assert.assertEquals("${annotation.sample.ref.uniqueId}", sofaReference.uniqueId());
