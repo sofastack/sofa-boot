@@ -19,12 +19,16 @@ package com.alipay.sofa.healthcheck.configuration;
 import com.alipay.sofa.healthcheck.core.AfterReadinessCheckCallbackProcessor;
 import com.alipay.sofa.healthcheck.core.HealthCheckerProcessor;
 import com.alipay.sofa.healthcheck.core.HealthIndicatorProcessor;
+import com.alipay.sofa.healthcheck.service.ReadinessEndpointWebExtension;
 import com.alipay.sofa.healthcheck.service.SofaBootHealthIndicator;
 import com.alipay.sofa.healthcheck.service.SofaBootReadinessCheckEndpoint;
 import com.alipay.sofa.healthcheck.startup.ReadinessCheckListener;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnEnabledEndpoint;
 import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication.Type;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -66,6 +70,16 @@ public class SofaBootHealthCheckAutoConfiguration {
         @ConditionalOnEnabledEndpoint
         public SofaBootReadinessCheckEndpoint sofaBootReadinessCheckEndpoint() {
             return new SofaBootReadinessCheckEndpoint();
+        }
+    }
+
+    @ConditionalOnClass(Endpoint.class)
+    public static class ReadinessCheckExtensionConfiguration {
+        @Bean
+        @ConditionalOnMissingBean
+        @ConditionalOnEnabledEndpoint
+        public ReadinessEndpointWebExtension readinessEndpointWebExtension() {
+            return new ReadinessEndpointWebExtension();
         }
     }
 }

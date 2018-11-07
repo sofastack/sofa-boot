@@ -22,7 +22,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.ApplicationContext;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.Assert;
 
@@ -36,6 +39,16 @@ public class HealthEndpointDefaultConfigurationTest {
 
     @Autowired
     public ApplicationContext ctx;
+
+    @Autowired
+    private TestRestTemplate  restTemplate;
+
+    @Test
+    public void testReadinessCheckSuccessHttpCode() {
+        ResponseEntity<String> response = restTemplate.getForEntity("/actuator/readiness",
+            String.class);
+        org.junit.Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
 
     @Test
     public void test() {

@@ -29,6 +29,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 
 /**
@@ -37,7 +38,7 @@ import org.springframework.test.context.junit4.SpringRunner;
  * @version 2.3.0
  */
 @SpringBootApplication
-@RunWith(SpringRunner.class)
+@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = { "management.endpoints.web.exposure.include=health,info,readiness" })
 public class ReadinessHealthCheckHttpCodeTest {
 
@@ -48,7 +49,7 @@ public class ReadinessHealthCheckHttpCodeTest {
     public void testReadinessCheckFailedHttpCode() {
         ResponseEntity<String> response = restTemplate.getForEntity("/actuator/readiness",
             String.class);
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(HttpStatus.SERVICE_UNAVAILABLE, response.getStatusCode());
     }
 
     @Test
