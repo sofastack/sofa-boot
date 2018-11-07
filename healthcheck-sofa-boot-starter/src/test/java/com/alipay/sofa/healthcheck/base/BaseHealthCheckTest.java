@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.healthcheck.base;
 
+import org.springframework.boot.actuate.autoconfigure.health.HealthEndpointAutoConfiguration;
 import org.springframework.boot.test.util.EnvironmentTestUtils;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -34,7 +35,7 @@ public class BaseHealthCheckTest {
             EnvironmentTestUtils.addEnvironment(this.applicationContext,
                 buildProperty(property.getKey(), property.getValue()));
         }
-
+        this.applicationContext.register(HealthEndpointAutoConfiguration.class);
         this.applicationContext.register(annotatedClasses);
         this.applicationContext.refresh();
     }
