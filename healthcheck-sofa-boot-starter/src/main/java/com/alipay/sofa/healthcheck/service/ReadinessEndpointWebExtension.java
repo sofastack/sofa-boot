@@ -23,6 +23,7 @@ import org.springframework.boot.actuate.endpoint.web.WebEndpointResponse;
 import org.springframework.boot.actuate.endpoint.web.annotation.EndpointWebExtension;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthWebEndpointResponseMapper;
+import org.springframework.boot.actuate.health.ShowDetails;
 
 /**
  * @author qilong.zql
@@ -39,7 +40,7 @@ public class ReadinessEndpointWebExtension {
 
     @ReadOperation
     public WebEndpointResponse<Health> getHealth(SecurityContext securityContext) {
-        return this.responseMapper.map(this.delegate.health(), securityContext);
+        return this.responseMapper.map(this.delegate.health(), securityContext, ShowDetails.ALWAYS);
     }
 
 }

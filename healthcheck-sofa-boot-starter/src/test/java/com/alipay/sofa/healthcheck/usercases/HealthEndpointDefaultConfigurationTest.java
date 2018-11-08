@@ -18,6 +18,7 @@ package com.alipay.sofa.healthcheck.usercases;
 
 import com.alipay.sofa.healthcheck.base.SofaBootTestApplication;
 import com.alipay.sofa.healthcheck.service.SofaBootReadinessCheckEndpoint;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.util.Assert;
 
 /**
  * @author qilong.zql
@@ -44,17 +44,20 @@ public class HealthEndpointDefaultConfigurationTest {
     private TestRestTemplate  restTemplate;
 
     @Test
-    public void testReadinessCheckSuccessHttpCode() {
+    public void testReadinessCheckSuccess() {
         ResponseEntity<String> response = restTemplate.getForEntity("/actuator/readiness",
             String.class);
-        org.junit.Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertNotNull(response.getBody());
+        Assert.assertTrue(response.getBody().contains("\"details\":{\"SOFABootReadinessHealthCheckInfo\":{\"status\":\"UP\"}"));
     }
+
 
     @Test
     public void test() {
         SofaBootReadinessCheckEndpoint sofaBootReadinessCheckEndpoint = ctx
             .getBean(SofaBootReadinessCheckEndpoint.class);
-        Assert.notNull(sofaBootReadinessCheckEndpoint);
+        Assert.assertNotNull(sofaBootReadinessCheckEndpoint);
     }
 
 }
