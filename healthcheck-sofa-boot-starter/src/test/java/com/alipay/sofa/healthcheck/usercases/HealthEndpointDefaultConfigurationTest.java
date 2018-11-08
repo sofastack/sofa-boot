@@ -49,9 +49,9 @@ public class HealthEndpointDefaultConfigurationTest {
             String.class);
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertNotNull(response.getBody());
-        Assert.assertTrue(response.getBody().contains("\"details\":{\"SOFABootReadinessHealthCheckInfo\":{\"status\":\"UP\"}"));
+        Assert.assertTrue(response.getBody().contains(
+            "\"details\":{\"SOFABootReadinessHealthCheckInfo\":{\"status\":\"UP\"}"));
     }
-
 
     @Test
     public void test() {
