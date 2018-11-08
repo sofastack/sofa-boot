@@ -17,10 +17,9 @@
 package com.alipay.sofa.infra.listener;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.StreamSupport;
 
-import com.alipay.sofa.infra.utils.SOFABootEnvUtils;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
@@ -37,6 +36,7 @@ import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
 import com.alipay.sofa.infra.constants.SofaBootInfraConstants;
+import com.alipay.sofa.infra.utils.SOFABootEnvUtils;
 
 /**
  * @author qilong.zql
@@ -48,7 +48,7 @@ public class SofaBootstrapRunListener implements
 
     private final static String  LOGGING_PATH  = "logging.path";
     private final static String  LOGGING_LEVEL = "logging.level";
-    private static AtomicInteger executed      = new AtomicInteger(0);
+    private static AtomicBoolean executed      = new AtomicBoolean(false);
 
     /**
      * config log settings
@@ -101,7 +101,7 @@ public class SofaBootstrapRunListener implements
     public void onApplicationEvent(ApplicationEnvironmentPreparedEvent event) {
         ConfigurableEnvironment environment = event.getEnvironment();
         SpringApplication application = event.getSpringApplication();
-        if (SOFABootEnvUtils.isSpringCloud() && executed.compareAndSet(0, 1)) {
+        if (SOFABootEnvUtils.isSpringCloud() && executed.compareAndSet(false, true)) {
             StandardEnvironment bootstrapEnvironment = new StandardEnvironment();
             for (PropertySource<?> source : event.getEnvironment().getPropertySources()) {
                 if (source instanceof PropertySource.StubPropertySource) {
@@ -133,10 +133,8 @@ public class SofaBootstrapRunListener implements
                 .forEach(listener -> ((ConfigFileApplicationListener) listener)
                     .onApplicationEvent(bootstrapEvent));
 
-            if (SOFABootEnvUtils.isSpringCloud()) {
-                assemblyLogSetting(bootstrapEnvironment);
-                assemblyRequireProperties(bootstrapEnvironment);
-            }
+            assemblyLogSetting(bootstrapEnvironment);
+            assemblyRequireProperties(bootstrapEnvironment);
             assemblyEnvironmentMark(environment);
         } else {
             unAssemblyEnvironmentMark(environment);
