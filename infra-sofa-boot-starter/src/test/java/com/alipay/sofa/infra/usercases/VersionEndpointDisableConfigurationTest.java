@@ -16,20 +16,23 @@
  */
 package com.alipay.sofa.infra.usercases;
 
-import com.alipay.sofa.infra.base.AbstractTestBase;
-import com.alipay.sofa.infra.base.SofaBootWebSpringBootApplication;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.alipay.sofa.infra.base.AbstractTestBase;
+import com.alipay.sofa.infra.base.SofaBootWebSpringBootApplication;
+
 /**
  * @author qilong.zql
  * @since 2.5.0
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = SofaBootWebSpringBootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, properties = { "management.endpoint.versions.enabled=false" })
+@SpringBootTest(classes = SofaBootWebSpringBootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, properties = {
+                                                                                                                                             "management.endpoint.versions.enabled=false",
+                                                                                                                                             "spring.application.name=demo" })
 public class VersionEndpointDisableConfigurationTest extends AbstractTestBase {
 
     @Test
