@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.healthcheck.utils;
+package com.alipay.sofa.infra.utils;
 
 import java.util.function.BinaryOperator;
 
@@ -23,7 +23,7 @@ import java.util.function.BinaryOperator;
  * @since 3.0.0
  */
 public class BinaryOperators {
-    public static BinaryOperator<Boolean> andBoolean(){
+    public static BinaryOperator<Boolean> andBoolean() {
         return (a, b) -> a && b;
     }
 }

@@ -18,7 +18,7 @@ package com.alipay.sofa.healthcheck.core;
 
 import com.alipay.sofa.healthcheck.log.SofaBootHealthCheckLoggerFactory;
 import com.alipay.sofa.healthcheck.startup.ReadinessCheckCallback;
-import com.alipay.sofa.healthcheck.utils.BinaryOperators;
+import com.alipay.sofa.infra.utils.BinaryOperators;
 import com.alipay.sofa.healthcheck.utils.HealthCheckUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
