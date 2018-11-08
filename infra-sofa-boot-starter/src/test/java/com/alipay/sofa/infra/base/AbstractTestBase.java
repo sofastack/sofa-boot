@@ -23,7 +23,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 
 /**
  * 参考文档: http://docs.spring.io/spring-boot/docs/1.4.2.RELEASE/reference/htmlsingle/#boot-features-testing
@@ -38,23 +41,20 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @author guanchaoyang
  * @since 2.3.0
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = SofaBootWebSpringBootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, properties = { "management.endpoints.web.exposure.include=*" })
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = SofaBootWebSpringBootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public abstract class AbstractTestBase {
 
+    @Autowired
+    public TestRestTemplate   testRestTemplate;
+    @Autowired
+    public ApplicationContext ctx;
+    protected String          urlHttpPrefix;
     /**
      * 8080
      */
     @LocalServerPort
     private int               definedPort;
-
-    @Autowired
-    public TestRestTemplate   testRestTemplate;
-
-    @Autowired
-    public ApplicationContext ctx;
-
-    protected String          urlHttpPrefix;
 
     @Before
     public void setUp() {

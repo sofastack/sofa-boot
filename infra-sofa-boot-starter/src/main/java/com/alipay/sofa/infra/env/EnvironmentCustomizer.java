@@ -18,7 +18,6 @@ package com.alipay.sofa.infra.env;
 
 import com.alipay.sofa.infra.autoconfigure.SofaBootInfraAutoConfiguration;
 import com.alipay.sofa.infra.constants.SofaBootInfraConstants;
-import com.alipay.sofa.infra.utils.SOFABootEnvUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.env.EnvironmentPostProcessor;
 import org.springframework.core.env.*;
@@ -52,9 +51,7 @@ public class EnvironmentCustomizer implements EnvironmentPostProcessor {
         /**
          * set required properties, {@link MissingRequiredPropertiesException}
          **/
-        if (!SOFABootEnvUtils.isSpringCloudBootstrapEnvironment(environment)) {
-            environment.setRequiredProperties(SofaBootInfraConstants.APP_NAME_KEY);
-        }
+        environment.setRequiredProperties(SofaBootInfraConstants.APP_NAME_KEY);
     }
 
     /**

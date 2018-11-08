@@ -30,6 +30,7 @@ public class SofaBootInfraConstants {
     public static final String APP_NAME_KEY                              = "spring.application.name";
 
     public static final String SOFA_DEFAULT_PROPERTY_SOURCE              = "sofaConfigurationProperties";
+    public static final String SOFA_BOOTSTRAP                            = "sofaBootstrap";
 
     /**
      * {@link org.springframework.boot.ResourceBanner#getVersionsMap}
