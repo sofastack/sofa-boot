@@ -3,14 +3,14 @@ sudo: false
 
 jdk:
 - oraclejdk8
-- openjdk7
 
 install:
 
-- mvn clean install -B -V
+- mvn clean install -DskipTests -B -V
 
 script:
 - sh ./check_format.sh
 
 after_success:
-- mvn clean test cobertura:cobertura org.eluder.coveralls:coveralls-maven-plugin:report
+- mvn clean test
+- bash <(curl -s https://codecov.io/bash)

@@ -22,12 +22,16 @@
     <parent>
         <groupId>com.alipay.sofa</groupId>
         <artifactId>sofa-boot-runtime</artifactId>
-        <version>2.5.0-SNAPSHOT</version>
+        <version>3.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>infra-sofa-boot-starter</artifactId>
+
+    <properties>
+        <main.user.dir>../</main.user.dir>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -37,11 +41,28 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>spring-jcl</artifactId>
+                    <groupId>org.springframework</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>log4j-over-slf4j</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -54,10 +75,11 @@
             <artifactId>sofa-common-tools</artifactId>
         </dependency>
 
-        <!--  Spring Boot Actuator -->
+        <!-- provided -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
+            <scope>provided</scope>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
@@ -69,6 +91,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <!-- test dependency -->
@@ -85,7 +108,7 @@
             <artifactId>jcl-over-slf4j</artifactId>
             <scope>test</scope>
         </dependency>
-        <!-- test -->
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -153,33 +176,12 @@
             <version>2.3</version>
             <scope>test</scope>
         </dependency>
-        <!-- 日志测试模块使用 end -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-context</artifactId>
+            <version>2.0.1.RELEASE</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>sofa-version-maven-plugin</artifactId>
-                <version>1.0.0</version>
-                <configuration>
-                    <!-- 指向工程的 .git 目录,默认值 ${project.basedir}/.git,不满足要求的需要自己指向 .git 文件 -->
-                    <dotGitDirectory>../.git</dotGitDirectory>
-                    <defaultPropertiesFileEntries>
-                        <!-- 可以自定义 key 和 value-->
-                        <Doc-Url>https://github.com/alipay/sofa-boot</Doc-Url>
-                    </defaultPropertiesFileEntries>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>gen</goal>
-                            <goal>write</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

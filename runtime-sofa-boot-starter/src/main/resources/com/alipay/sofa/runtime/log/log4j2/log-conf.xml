@@ -17,7 +17,6 @@
   -->
 
 <configuration status="OFF">
-
     <Properties>
         <Property name="RUNTIME_LOG_LEVEL">${sys:logging.level.com.alipay.sofa.runtime}</Property>
         <Property name="RUNTIME_LOG_PATH">${sys:logging.path}</Property>

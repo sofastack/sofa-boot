@@ -125,7 +125,10 @@ public class ComponentManagerImpl implements ComponentManager {
         ComponentName name = ci.getName();
         if (isRegistered(name)) {
             SofaLogger.error("Component was already registered: {0}", name);
-            return getComponentInfo(name);
+            if (ci.canBeDuplicate()) {
+                return getComponentInfo(name);
+            }
+            throw new ServiceRuntimeException("Component can not be registered duplicated: " + name);
         }
 
         try {
@@ -141,7 +144,12 @@ public class ComponentManagerImpl implements ComponentManager {
             ComponentInfo old = registry.putIfAbsent(ci.getName(), ci);
             if (old != null) {
                 SofaLogger.error("Component was already registered: {0}", name);
-                return old;
+                if (ci.canBeDuplicate()) {
+                    return old;
+                }
+                throw new ServiceRuntimeException("Component can not be registered duplicated: "
+                                                  + name);
+
             }
             if (ci.resolve()) {
                 typeRegistry(ci);

@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.runtime.beans;
 
+import com.alipay.sofa.runtime.spring.configuration.SofaRuntimeAutoConfiguration;
 import com.alipay.sofa.runtime.spring.factory.ReferenceFactoryBean;
 import com.alipay.sofa.runtime.util.StateMessage;
 import org.springframework.aop.TargetSource;
@@ -37,7 +38,10 @@ public class FactoryBeanPostProcessor extends AbstractAutoProxyCreator {
     @Override
     protected Object wrapIfNecessary(final Object bean, String beanName, Object cacheKey) {
         if (bean instanceof ReferenceFactoryBean) {
-            StateMessage.setMessage("aop");
+            StateMessage.setFactoryMessage("aop");
+        }
+        if (bean instanceof SofaRuntimeAutoConfiguration) {
+            StateMessage.setConfigMessage("config");
         }
         return bean;
     }

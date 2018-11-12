@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.isle;
 
+import com.alipay.sofa.infra.constants.SofaBootInfraConstants;
 import com.alipay.sofa.isle.constants.SofaModuleFrameworkConstants;
 import com.alipay.sofa.isle.deployment.DeploymentBuilder;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptorConfiguration;
@@ -63,8 +64,7 @@ public class DeploymentExceptionTest {
 
         ConfigurableEnvironment environment = mock(ConfigurableEnvironment.class);
         when(applicationContext.getEnvironment()).thenReturn(environment);
-        when(environment.getProperty(SofaModuleFrameworkConstants.APPLICATION_NAME)).thenReturn(
-            "testCase");
+        when(environment.getProperty(SofaBootInfraConstants.APP_NAME_KEY)).thenReturn("testCase");
 
         new SpringContextInstallStage(applicationContext).process();
     }

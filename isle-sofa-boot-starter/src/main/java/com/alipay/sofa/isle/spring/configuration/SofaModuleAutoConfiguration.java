@@ -22,11 +22,16 @@ import com.alipay.sofa.isle.spring.health.SofaModuleHealthChecker;
 import com.alipay.sofa.isle.spring.health.SofaModuleHealthIndicator;
 import com.alipay.sofa.isle.spring.listener.SofaModuleBeanFactoryPostProcessor;
 import com.alipay.sofa.isle.spring.listener.SofaModuleContextRefreshedListener;
+import com.alipay.sofa.isle.stage.ModelCreatingStage;
+import com.alipay.sofa.isle.stage.ModuleLogOutputStage;
+import com.alipay.sofa.isle.stage.SpringContextInstallStage;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.AbstractApplicationContext;
 
 /**
  * @author xuanbei 18/3/12
@@ -34,18 +39,33 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SofaModuleAutoConfiguration {
     @Bean
+    public static SofaModuleBeanFactoryPostProcessor sofaModuleBeanFactoryPostProcessor() {
+        return new SofaModuleBeanFactoryPostProcessor();
+    }
+
+    @Bean
     public SofaModuleProperties sofaModuleProperties() {
         return new SofaModuleProperties();
     }
 
     @Bean
-    public SofaModuleBeanFactoryPostProcessor sofaModuleBeanFactoryPostProcessor() {
-        return new SofaModuleBeanFactoryPostProcessor();
+    public SofaModuleContextRefreshedListener sofaModuleContextRefreshedListener() {
+        return new SofaModuleContextRefreshedListener();
     }
 
     @Bean
-    public SofaModuleContextRefreshedListener sofaModuleContextRefreshedListener() {
-        return new SofaModuleContextRefreshedListener();
+    public ModelCreatingStage modelCreatingStage(ApplicationContext applicationContext) {
+        return new ModelCreatingStage((AbstractApplicationContext) applicationContext);
+    }
+
+    @Bean
+    public SpringContextInstallStage springContextInstallStage(ApplicationContext applicationContext) {
+        return new SpringContextInstallStage((AbstractApplicationContext) applicationContext);
+    }
+
+    @Bean
+    public ModuleLogOutputStage moduleLogOutputStage(ApplicationContext applicationContext) {
+        return new ModuleLogOutputStage((AbstractApplicationContext) applicationContext);
     }
 
     @Configuration

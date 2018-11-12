@@ -19,7 +19,7 @@
 <configuration>
     <appender name="ERROR-APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <append>true</append>
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>error</level>
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
@@ -37,7 +37,7 @@
 
     <appender name="SOFA-APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <append>true</append>
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>${logging.level.com.alipay.sofa.runtime}</level>
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>

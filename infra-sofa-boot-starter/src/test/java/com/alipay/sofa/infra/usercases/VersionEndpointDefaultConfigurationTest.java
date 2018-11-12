@@ -18,7 +18,6 @@ package com.alipay.sofa.infra.usercases;
 
 import com.alipay.sofa.infra.base.AbstractTestBase;
 import com.alipay.sofa.infra.endpoint.SofaBootVersionEndpoint;
-import com.alipay.sofa.infra.endpoint.SofaBootVersionEndpointMvcAdapter;
 import org.junit.Test;
 import org.springframework.util.Assert;
 
@@ -30,13 +29,9 @@ public class VersionEndpointDefaultConfigurationTest extends AbstractTestBase {
 
     @Test
     public void test() {
-        SofaBootVersionEndpoint sofaBootVersionEndpoint = (SofaBootVersionEndpoint) ctx
-            .getBean("sofaBootVersionEndpoint");
-        Assert.isTrue(sofaBootVersionEndpoint.isEnabled());
-
-        SofaBootVersionEndpointMvcAdapter sofaBootVersionEndpointMvcAdapter = (SofaBootVersionEndpointMvcAdapter) ctx
-            .getBean("sofaBootVersionEndpointMvcAdapter");
-        Assert.notNull(sofaBootVersionEndpointMvcAdapter);
+        SofaBootVersionEndpoint sofaBootVersionEndpoint = ctx
+            .getBean(SofaBootVersionEndpoint.class);
+        Assert.notNull(sofaBootVersionEndpoint);
     }
 
 }

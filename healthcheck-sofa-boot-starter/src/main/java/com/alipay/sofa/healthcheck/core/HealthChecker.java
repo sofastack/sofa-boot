@@ -19,20 +19,20 @@ package com.alipay.sofa.healthcheck.core;
 import org.springframework.boot.actuate.health.Health;
 
 /**
- *
  * @author liangen
- * @version $Id: HealthIndicatorCheckProcessor.java, v 0.1 2017年08月04日 liangen Exp $
+ * @author qilong.zql
+ * @since 2.3.0
  */
 public interface HealthChecker {
 
     /**
-     * Health check information.
+     * HealthCheck information.
      * @return
      */
     Health isHealthy();
 
     /**
-     * Component name
+     * HealthChecker name
      * @return
      */
     String getComponentName();
@@ -41,13 +41,17 @@ public interface HealthChecker {
      * The number of retries after failure.
      * @return
      */
-    int getRetryCount();
+    default int getRetryCount() {
+        return 0;
+    }
 
     /**
      * The time interval for each retry after failure.
      * @return
      */
-    long getRetryTimeInterval();
+    default long getRetryTimeInterval(){
+        return 0;
+    }
 
     /**
      * Is it strictly checked?
@@ -55,5 +59,7 @@ public interface HealthChecker {
      * If false, the final result of the component is considered to be healthy, but the exception log is printed.
      * @return
      */
-    boolean isStrictCheck();
+    default boolean isStrictCheck() {
+        return true;
+    }
 }

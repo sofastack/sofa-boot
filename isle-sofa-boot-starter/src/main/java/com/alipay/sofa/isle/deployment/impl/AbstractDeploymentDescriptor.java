@@ -26,6 +26,7 @@ import org.springframework.util.StringUtils;
 
 import java.net.URL;
 import java.util.*;
+import java.util.stream.Stream;
 
 /**
  * @author yangyanzhao
@@ -33,15 +34,15 @@ import java.util.*;
  *          yangyanzhao Exp $
  */
 public abstract class AbstractDeploymentDescriptor implements DeploymentDescriptor {
-    private final Properties                        properties;
-    private final DeploymentDescriptorConfiguration deploymentDescriptorConfiguration;
-    private final ClassLoader                       classLoader;
-    private final List<String>                      installedSpringXml = new ArrayList<>();
-    private ApplicationContext                      applicationContext;
-    private long                                    startTime;
-    private long                                    elapsedTime;
-    final URL                                       url;
-    Map<String, Resource>                           springResources;
+    final Properties                        properties;
+    final DeploymentDescriptorConfiguration deploymentDescriptorConfiguration;
+    private final ClassLoader               classLoader;
+    private final List<String>              installedSpringXml = new ArrayList<>();
+    private ApplicationContext              applicationContext;
+    private long                            startTime;
+    private long                            elapsedTime;
+    final URL                               url;
+    Map<String, Resource>                   springResources;
 
     public AbstractDeploymentDescriptor(URL url,
                                         Properties properties,
@@ -58,18 +59,11 @@ public abstract class AbstractDeploymentDescriptor implements DeploymentDescript
         List<String> moduleNameIdentities = deploymentDescriptorConfiguration
             .getModuleNameIdentities();
 
-        if (moduleNameIdentities == null || moduleNameIdentities.size() == 0) {
-            return null;
-        }
 
-        for (String moduleNameIdentity : moduleNameIdentities) {
-            String name = (String) properties.get(moduleNameIdentity);
-            if (StringUtils.hasText(name)) {
-                return name;
-            }
-        }
-
-        return null;
+        return (String) Stream.of(moduleNameIdentities)
+                .filter(ele -> ele != null && ele.size() != 0).flatMap(Collection::stream)
+                .map(properties::get).filter(name -> StringUtils.hasText((String) name)).findFirst()
+                .orElse(null);
     }
 
     @Override

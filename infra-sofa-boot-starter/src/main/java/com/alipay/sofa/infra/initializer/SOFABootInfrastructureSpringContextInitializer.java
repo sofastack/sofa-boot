@@ -19,25 +19,30 @@ package com.alipay.sofa.infra.initializer;
 import com.alipay.sofa.common.log.Constants;
 import com.alipay.sofa.infra.log.InfraHealthCheckLoggerFactory;
 import com.alipay.sofa.infra.log.space.SofaBootLogSpaceIsolationInit;
+import com.alipay.sofa.infra.utils.SOFABootEnvUtils;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.core.PriorityOrdered;
+import org.springframework.core.Ordered;
 import org.springframework.core.env.Environment;
 
 /**
  * SOFABoot Infrastructure 启动初始化器
- * <p> 参考:org.springframework.core.io.support.SpringFactoriesLoader </p>
- * Created by yangguanchao on 18/01/04.
+ *
+ * @author yangguanchao
+ * @since 2.3.0
  */
 public class SOFABootInfrastructureSpringContextInitializer
                                                            implements
                                                            ApplicationContextInitializer<ConfigurableApplicationContext>,
-                                                           PriorityOrdered {
+                                                           Ordered {
 
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
         //init log
         Environment environment = applicationContext.getEnvironment();
+        if (SOFABootEnvUtils.isSpringCloudBootstrapEnvironment(environment)) {
+            return;
+        }
         String infraLogLevelKey = Constants.LOG_LEVEL_PREFIX
                                   + InfraHealthCheckLoggerFactory.INFRASTRUCTURE_LOG_SPACE;
         SofaBootLogSpaceIsolationInit.initSofaBootLogger(environment, infraLogLevelKey);

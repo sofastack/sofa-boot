@@ -22,6 +22,7 @@ package com.alipay.sofa.infra.config.spring.namespace.spi;
  * @author yangguanchao
  * @since 2018/04/05
  */
+@FunctionalInterface
 public interface SofaBootTagNameSupport {
 
     /**

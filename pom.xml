@@ -23,28 +23,29 @@
     <parent>
         <groupId>com.alipay.sofa</groupId>
         <artifactId>sofaboot-dependencies</artifactId>
-        <version>2.5.0-SNAPSHOT</version>
-        <relativePath>./sofaboot-dependencies/pom.xml</relativePath>
+        <version>3.0.0</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
+    <groupId>com.alipay.sofa</groupId>
     <artifactId>sofa-boot-runtime</artifactId>
+    <version>3.0.0</version>
     <packaging>pom</packaging>
 
     <name>SOFABoot Runtime</name>
     <description>SOFABoot Runtime</description>
 
     <modules>
-        <module>sofaboot-dependencies</module>
         <module>infra-sofa-boot-starter</module>
         <module>healthcheck-sofa-boot-starter</module>
         <module>runtime-sofa-boot-starter</module>
         <module>test-sofa-boot-starter</module>
         <module>isle-sofa-boot-starter</module>
+        <module>runtime-sofa-boot-plugin</module>
     </modules>
 
     <properties>
-        <java.version>1.7</java.version>
+        <java.version>1.8</java.version>
         <project.encoding>UTF-8</project.encoding>
         <project.build.encoding>UTF-8</project.build.encoding>
         <license.maven.plugin>3.0</license.maven.plugin>
@@ -54,11 +55,10 @@
         <maven.javadoc.plugin>2.9.1</maven.javadoc.plugin>
         <maven.staging.plugin>1.6.7</maven.staging.plugin>
         <maven.gpg.pluign>1.5</maven.gpg.pluign>
-        <cobertura.maven.plugin>2.6</cobertura.maven.plugin>
-        <coveralls.maven.plugin>3.1.0</coveralls.maven.plugin>
+        <sofa.version.maven.plugin>1.0.1</sofa.version.maven.plugin>
+        <jacoco.maven.plugin>0.7.9</jacoco.maven.plugin>
         <main.user.dir>${user.dir}</main.user.dir>
     </properties>
-
 
     <build>
         <plugins>
@@ -107,6 +107,26 @@
             </plugin>
 
             <plugin>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>sofa-version-maven-plugin</artifactId>
+                <version>${sofa.version.maven.plugin}</version>
+                <configuration>
+                    <dotGitDirectory>${main.user.dir}/.git</dotGitDirectory>
+                    <defaultPropertiesFileEntries>
+                        <Doc-Url>http://www.sofastack.tech/sofa-boot/docs/Home</Doc-Url>
+                    </defaultPropertiesFileEntries>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>gen</goal>
+                            <goal>write</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven.compiler.plugin}</version>
@@ -134,7 +154,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9.1</version>
+                <version>2.10.1</version>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
@@ -143,15 +163,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.eluder.coveralls</groupId>
-                <artifactId>coveralls-maven-plugin</artifactId>
-                <version>${coveralls.maven.plugin}</version>
-                <configuration>
-                    <sourceEncoding>${project.encoding}</sourceEncoding>
-                </configuration>
             </plugin>
 
             <plugin>
@@ -164,20 +175,57 @@
             </plugin>
 
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>cobertura-maven-plugin</artifactId>
-                <version>${cobertura.maven.plugin}</version>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.maven.plugin}</version>
                 <configuration>
-                    <encoding>${project.encoding}</encoding>
-                    <aggregate>true</aggregate>
-                    <formats>
-                        <format>xml</format>
-                        <format>html</format>
-                    </formats>
+                    <skip>false</skip>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>default-prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>default-report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report-aggregate</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
+
         </plugins>
     </build>
 
+    <profiles>
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <repositories>
+                <repository>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                    <id>maven-snapshot</id>
+                    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+                </repository>
+            </repositories>
+            <pluginRepositories>
+                <pluginRepository>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                    <id>maven-snapshot</id>
+                    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+                </pluginRepository>
+            </pluginRepositories>
+        </profile>
+    </profiles>
 
 </project>

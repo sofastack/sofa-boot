@@ -24,19 +24,23 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @ConfigurationProperties(SofaRuntimeConfigurationProperties.PREFIX)
 public class SofaRuntimeConfigurationProperties {
-    static final String PREFIX                      = "com.alipay.sofa.boot";
-
-    private boolean     skipJvmReferenceHealthCheck = false;
-    private boolean     disableJvmFirst             = false;
+    static final String PREFIX = "com.alipay.sofa.boot";
 
     public void setSkipJvmReferenceHealthCheck(boolean skipJvmReferenceHealthCheck) {
-        this.skipJvmReferenceHealthCheck = skipJvmReferenceHealthCheck;
         SofaRuntimeProperties.setSkipJvmReferenceHealthCheck(this.getClass().getClassLoader(),
             skipJvmReferenceHealthCheck);
     }
 
     public void setDisableJvmFirst(boolean disableJvmFirst) {
-        this.disableJvmFirst = disableJvmFirst;
         SofaRuntimeProperties.setDisableJvmFirst(this.getClass().getClassLoader(), disableJvmFirst);
+    }
+
+    public boolean isSkipJvmReferenceHealthCheck() {
+        return SofaRuntimeProperties
+            .isSkipJvmReferenceHealthCheck(this.getClass().getClassLoader());
+    }
+
+    public boolean isDisableJvmFirst() {
+        return SofaRuntimeProperties.isDisableJvmFirst(this.getClass().getClassLoader());
     }
 }

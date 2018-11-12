@@ -16,11 +16,16 @@
  */
 package com.alipay.sofa.isle.integration;
 
+import com.alipay.sofa.healthcheck.configuration.HealthCheckConstants;
 import com.alipay.sofa.healthcheck.core.HealthChecker;
 import com.alipay.sofa.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.isle.constants.SofaModuleFrameworkConstants;
+import com.alipay.sofa.isle.deployment.DeploymentDescriptorConfiguration;
+import com.alipay.sofa.isle.deployment.impl.FileDeploymentDescriptor;
+import com.alipay.sofa.isle.scan.SampleService;
 import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
 import com.alipay.sofa.isle.util.ClassPathUtil;
+import com.alipay.sofa.runtime.api.annotation.SofaReference;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -34,6 +39,8 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Properties;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -48,6 +55,9 @@ public class IntegrationTest implements ApplicationContextAware {
 
     @Autowired
     private SofaModuleProperties sofaModuleProperties;
+
+    @SofaReference(uniqueId = "componentScanTest")
+    private SampleService        sampleService;
 
     @BeforeClass
     public static void before() throws Exception {
@@ -65,7 +75,7 @@ public class IntegrationTest implements ApplicationContextAware {
         assertEquals(sofaModuleProperties.getActiveProfiles(), "dev");
         assertEquals(sofaModuleProperties.isModuleStartUpParallel(), true);
         assertEquals(sofaModuleProperties.isPublishEventToParent(), false);
-        assertEquals(sofaModuleProperties.isAllowBeanDefinitionOverriding(), true);
+        assertEquals(sofaModuleProperties.isAllowBeanDefinitionOverriding(), false);
         assertEquals(sofaModuleProperties.getBeanLoadCost(), 0);
 
         ApplicationRuntimeModel applicationRuntimeModel = (ApplicationRuntimeModel) applicationContext
@@ -84,6 +94,13 @@ public class IntegrationTest implements ApplicationContextAware {
             applicationRuntimeModel.getInstalled().get(1).getModuleName()));
         assertEquals("com.alipay.sofa.test", applicationRuntimeModel.getAllInactiveDeployments()
             .get(0).getModuleName());
+
+        FileDeploymentDescriptor descriptorA = new FileDeploymentDescriptor(null, new Properties(),
+            new DeploymentDescriptorConfiguration(null, null), null);
+        assertEquals(null, descriptorA.getModuleName());
+        FileDeploymentDescriptor descriptorB = new FileDeploymentDescriptor(null, new Properties(),
+            new DeploymentDescriptorConfiguration(Collections.emptyList(), null), null);
+        assertEquals(null, descriptorB.getModuleName());
     }
 
     @Test
@@ -93,10 +110,18 @@ public class IntegrationTest implements ApplicationContextAware {
         HealthChecker healthChecker = (HealthChecker) applicationContext
             .getBean("sofaModuleHealthChecker");
         Assert.assertTrue(healthChecker.isHealthy().getStatus().equals(Status.UP));
-        Assert.assertEquals("SOFABoot Modules", healthChecker.getComponentName());
-        Assert.assertEquals(0, healthChecker.getRetryCount());
-        Assert.assertEquals(0, healthChecker.getRetryTimeInterval());
+        Assert.assertEquals("SOFABoot-Modules", healthChecker.getComponentName());
+        Assert.assertEquals(HealthCheckConstants.SOFABOOT_MODULE_CHECK_RETRY_DEFAULT_COUNT,
+            healthChecker.getRetryCount());
+        Assert.assertEquals(HealthCheckConstants.SOFABOOT_MODULE_CHECK_RETRY_DEFAULT_INTERVAL,
+            healthChecker.getRetryTimeInterval());
         Assert.assertEquals(true, healthChecker.isStrictCheck());
+    }
+
+    @Test
+    public void testComponentScan() {
+        Assert.assertNotNull(sampleService);
+        "Hello from com.alipay.sofa.isle.scan.SampleServiceImpl.".equals(sampleService.message());
     }
 
     @Override
