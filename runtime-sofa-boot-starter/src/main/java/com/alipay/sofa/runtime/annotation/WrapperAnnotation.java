@@ -17,6 +17,8 @@
 package com.alipay.sofa.runtime.annotation;
 
 /**
+ * A marker interface
+ *
  * @author qilong.zql
  * @since 2.5.2
  */
