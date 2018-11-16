@@ -16,11 +16,11 @@
  */
 package com.alipay.sofa.infra.utils;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.alipay.sofa.infra.constants.CommonMiddlewareConstants;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.Environment;
+import org.springframework.util.ClassUtils;
 
 /**
  * SOFABootEnvUtils
@@ -30,13 +30,7 @@ import org.springframework.core.env.Environment;
  */
 public class SOFABootEnvUtils {
 
-    /**
-     * org.springframework.cloud.bootstrap.BootstrapApplicationListener#BOOTSTRAP_PROPERTY_SOURCE_NAME
-     */
-    private static final String BOOTSTRAP_PROPERTY_SOURCE_NAME = "bootstrap";
-
-    private static final Logger LOGGER                         = LoggerFactory
-                                                                   .getLogger(SOFABootEnvUtils.class);
+    private final static String SPRING_CLOUD_MARK_NAME = "org.springframework.cloud.bootstrap.BootstrapConfiguration";
 
     /**
      * Determine whether the {@link org.springframework.core.env.Environment} is Spring Cloud bootstrap environment.
@@ -52,14 +46,14 @@ public class SOFABootEnvUtils {
      */
     public static boolean isSpringCloudBootstrapEnvironment(Environment environment) {
         if (environment instanceof ConfigurableEnvironment) {
-            ConfigurableEnvironment configurableEnvironment = (ConfigurableEnvironment) environment;
-            if (configurableEnvironment.getPropertySources().contains(
-                BOOTSTRAP_PROPERTY_SOURCE_NAME)) {
-                //use app logger
-                LOGGER.debug("Current application context environment is bootstrap");
-                return true;
-            }
+            return !((ConfigurableEnvironment) environment).getPropertySources().contains(
+                CommonMiddlewareConstants.SOFA_BOOTSTRAP)
+                   && isSpringCloud();
         }
         return false;
+    }
+
+    public static boolean isSpringCloud() {
+        return ClassUtils.isPresent(SPRING_CLOUD_MARK_NAME, null);
     }
 }

@@ -8,3 +8,6 @@ com.alipay.sofa.infra.autoconfigure.SofaBootInfraAutoConfiguration
 
 # EnvironmentPostProcessor
 org.springframework.boot.env.EnvironmentPostProcessor=com.alipay.sofa.infra.env.EnvironmentCustomizer
+
+# SpringApplicationListener
+org.springframework.context.ApplicationListener=com.alipay.sofa.infra.listener.SofaBootstrapRunListener
