@@ -17,7 +17,7 @@
 package com.alipay.sofa.infra.env;
 
 import com.alipay.sofa.infra.autoconfigure.SofaBootInfraAutoConfiguration;
-import com.alipay.sofa.infra.constants.CommonMiddlewareConstants;
+import com.alipay.sofa.infra.constants.SofaBootInfraConstants;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.env.EnvironmentPostProcessor;
 import org.springframework.core.env.*;
@@ -33,13 +33,25 @@ public class EnvironmentCustomizer implements EnvironmentPostProcessor {
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment,
                                        SpringApplication application) {
-        PropertySource propertySource = new PropertiesPropertySource("version",
-            getSofaBootVersionProperties());
+        /**
+         * Get SOFABoot version properties
+         */
+        Properties defaultConfiguration = getSofaBootVersionProperties();
+
+        /**
+         * Config default value of {@literal management.endpoints.web.exposure.include}
+         */
+        defaultConfiguration.put(SofaBootInfraConstants.ENDPOINTS_WEB_EXPOSURE_INCLUDE_CONFIG,
+            SofaBootInfraConstants.SOFA_DEFAULT_ENDPOINTS_WEB_EXPOSURE_VALUE);
+
+        PropertiesPropertySource propertySource = new PropertiesPropertySource(
+            SofaBootInfraConstants.SOFA_DEFAULT_PROPERTY_SOURCE, defaultConfiguration);
         environment.getPropertySources().addLast(propertySource);
+
         /**
          * set required properties, {@link MissingRequiredPropertiesException}
          **/
-        environment.setRequiredProperties(CommonMiddlewareConstants.APP_NAME_KEY);
+        environment.setRequiredProperties(SofaBootInfraConstants.APP_NAME_KEY);
     }
 
     /**
@@ -54,8 +66,8 @@ public class EnvironmentCustomizer implements EnvironmentPostProcessor {
         sofaBootVersion = StringUtils.isEmpty(sofaBootVersion) ? "" : sofaBootVersion;
         String sofaBootFormattedVersion = sofaBootVersion.isEmpty() ? "" : String.format(" (v%s)",
             sofaBootVersion);
-        properties.setProperty(CommonMiddlewareConstants.SOFA_BOOT_VERSION, sofaBootVersion);
-        properties.setProperty(CommonMiddlewareConstants.SOFA_BOOT_FORMATTED_VERSION,
+        properties.setProperty(SofaBootInfraConstants.SOFA_BOOT_VERSION, sofaBootVersion);
+        properties.setProperty(SofaBootInfraConstants.SOFA_BOOT_FORMATTED_VERSION,
             sofaBootFormattedVersion);
         return properties;
     }

@@ -18,12 +18,13 @@ package com.alipay.sofa.healthcheck.bean;
 
 import com.alipay.sofa.healthcheck.core.HealthChecker;
 import org.springframework.boot.actuate.health.Health;
+import org.springframework.core.PriorityOrdered;
 
 /**
  * @author liangen
  * @version 2.3.0
  */
-public class MemoryHealthChecker implements HealthChecker {
+public class MemoryHealthChecker implements HealthChecker, PriorityOrdered {
 
     private int     count;
 
@@ -70,5 +71,10 @@ public class MemoryHealthChecker implements HealthChecker {
 
     public int getCount() {
         return count;
+    }
+
+    @Override
+    public int getOrder() {
+        return LOWEST_PRECEDENCE;
     }
 }

@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.healthcheck.bean;
 
-import com.alipay.sofa.healthcheck.startup.SofaBootAfterReadinessCheckCallback;
+import com.alipay.sofa.healthcheck.startup.ReadinessCheckCallback;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.context.ApplicationContext;
 
@@ -24,7 +24,7 @@ import org.springframework.context.ApplicationContext;
  * @author liangen
  * @version 2.3.0
  */
-public class ApplicationHealthCheckCallback implements SofaBootAfterReadinessCheckCallback {
+public class ApplicationHealthCheckCallback implements ReadinessCheckCallback {
 
     private boolean mark;
 

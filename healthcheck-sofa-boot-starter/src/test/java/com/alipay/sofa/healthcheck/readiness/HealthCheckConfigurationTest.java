@@ -19,7 +19,7 @@ package com.alipay.sofa.healthcheck.readiness;
 import com.alipay.sofa.healthcheck.base.BaseHealthCheckTest;
 import com.alipay.sofa.healthcheck.configuration.HealthCheckConstants;
 import com.alipay.sofa.healthcheck.configuration.SofaBootHealthCheckAutoConfiguration;
-import com.alipay.sofa.healthcheck.core.AfterHealthCheckCallbackProcessor;
+import com.alipay.sofa.healthcheck.core.AfterReadinessCheckCallbackProcessor;
 import com.alipay.sofa.healthcheck.core.HealthCheckerProcessor;
 import com.alipay.sofa.healthcheck.core.HealthIndicatorProcessor;
 import com.alipay.sofa.healthcheck.startup.ReadinessCheckListener;
@@ -40,7 +40,7 @@ public class HealthCheckConfigurationTest extends BaseHealthCheckTest {
         Assert.notNull(applicationContext.getBean(ReadinessCheckListener.class));
         Assert.notNull(applicationContext.getBean(HealthCheckerProcessor.class));
         Assert.notNull(applicationContext.getBean(HealthIndicatorProcessor.class));
-        Assert.notNull(applicationContext.getBean(AfterHealthCheckCallbackProcessor.class));
+        Assert.notNull(applicationContext.getBean(AfterReadinessCheckCallbackProcessor.class));
 
         ReadinessCheckListener readinessCheckListener = applicationContext
             .getBean(ReadinessCheckListener.class);

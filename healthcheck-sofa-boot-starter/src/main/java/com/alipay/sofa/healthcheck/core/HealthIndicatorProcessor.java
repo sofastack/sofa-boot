@@ -18,16 +18,17 @@ package com.alipay.sofa.healthcheck.core;
 
 import com.alipay.sofa.healthcheck.log.SofaBootHealthCheckLoggerFactory;
 import com.alipay.sofa.healthcheck.service.SofaBootHealthIndicator;
+import com.alipay.sofa.infra.utils.BinaryOperators;
+import com.alipay.sofa.healthcheck.utils.HealthCheckUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.BeansException;
-import org.springframework.boot.actuate.health.Health;
-import org.springframework.boot.actuate.health.HealthIndicator;
-import org.springframework.boot.actuate.health.Status;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.health.*;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.util.Assert;
 import org.slf4j.Logger;
+import org.springframework.util.ClassUtils;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -38,38 +39,39 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author qilong.zql
  * @version 2.3.0
  */
-public class HealthIndicatorProcessor implements ApplicationContextAware {
+public class HealthIndicatorProcessor {
 
-    private static Logger                logger           = SofaBootHealthCheckLoggerFactory
-                                                              .getLogger(HealthIndicatorProcessor.class);
+    private static Logger                          logger           = SofaBootHealthCheckLoggerFactory
+                                                                        .getLogger(HealthIndicatorProcessor.class);
 
-    private ObjectMapper                 objectMapper     = new ObjectMapper();
+    private ObjectMapper                           objectMapper     = new ObjectMapper();
 
-    private AtomicBoolean                isInitiated      = new AtomicBoolean(false);
+    private AtomicBoolean                          isInitiated      = new AtomicBoolean(false);
 
-    private Map<String, HealthIndicator> healthIndicators = null;
+    private LinkedHashMap<String, HealthIndicator> healthIndicators = null;
 
-    private ApplicationContext           applicationContext;
+    @Autowired
+    private ApplicationContext                     applicationContext;
+
+    private final static String                    REACTOR_CLASS    = "reactor.core.publisher.Mono";
 
     public void init() {
         if (isInitiated.compareAndSet(false, true)) {
-            Assert.notNull(applicationContext, "Application must not be null");
-
-            healthIndicators = applicationContext.getBeansOfType(HealthIndicator.class);
-            StringBuilder healthIndicatorInfo = new StringBuilder();
-            healthIndicatorInfo.append("Found ").append(healthIndicators.size())
-                .append(" HealthIndicator implementation:");
-            for (String beanId : healthIndicators.keySet()) {
-                healthIndicatorInfo.append(beanId).append(",");
+            Assert.notNull(applicationContext, () -> "Application must not be null");
+            Map<String, HealthIndicator> beansOfType = applicationContext
+                    .getBeansOfType(HealthIndicator.class);
+            if (ClassUtils.isPresent(REACTOR_CLASS, null)) {
+                applicationContext.getBeansOfType(ReactiveHealthIndicator.class).forEach(
+                        (name, indicator) -> beansOfType.put(name, () -> indicator.health().block()));
             }
-            logger.info(healthIndicatorInfo.deleteCharAt(healthIndicatorInfo.length() - 1)
-                .toString());
-        }
-    }
+            healthIndicators = HealthCheckUtils.sortMapAccordingToValue(beansOfType,
+                    applicationContext.getAutowireCapableBeanFactory());
 
-    @Override
-    public void setApplicationContext(ApplicationContext cxt) throws BeansException {
-        applicationContext = cxt;
+            StringBuilder healthIndicatorInfo = new StringBuilder(512).append("Found ")
+                    .append(healthIndicators.size()).append(" HealthIndicator implementation:")
+                    .append(String.join(",", healthIndicators.keySet()));
+            logger.info(healthIndicatorInfo.toString());
+        }
     }
 
     /**
@@ -79,16 +81,13 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
      * @return
      */
     public boolean readinessHealthCheck(Map<String, Health> healthMap) {
-        Assert.notNull(healthIndicators, "HealthIndicators must not be null.");
+        Assert.notNull(healthIndicators, () -> "HealthIndicators must not be null.");
 
         logger.info("Begin SOFABoot HealthIndicator readiness check.");
-        boolean result = true;
-        for (String beanId : healthIndicators.keySet()) {
-            if (healthIndicators.get(beanId) instanceof SofaBootHealthIndicator) {
-                continue;
-            }
-            result = doHealthCheck(beanId, healthIndicators.get(beanId), healthMap) && result;
-        }
+        boolean result = healthIndicators.entrySet().stream()
+                .filter(entry -> !(entry.getValue() instanceof SofaBootHealthIndicator))
+                .map(entry -> doHealthCheck(entry.getKey(), entry.getValue(), healthMap))
+                .reduce(true, BinaryOperators.andBoolean());
         if (result) {
             logger.info("SOFABoot HealthIndicator readiness check result: success.");
         } else {
@@ -99,34 +98,34 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
 
     public boolean doHealthCheck(String beanId, HealthIndicator healthIndicator,
                                  Map<String, Health> healthMap) {
-        Assert.notNull(healthMap, "HealthMap must not be null");
+        Assert.notNull(healthMap, () -> "HealthMap must not be null");
 
-        boolean result = true;
+        boolean result;
         try {
             Health health = healthIndicator.health();
             Status status = health.getStatus();
-            if (!status.equals(Status.UP)) {
-                result = false;
-                logger
-                    .error(
+            result = status.equals(Status.UP);
+            if (result) {
+                logger.info("HealthIndicator[{}] readiness check success.", beanId);
+            } else {
+                logger.error(
                         "HealthIndicator[{}] readiness check fail; the status is: {}; the detail is: {}.",
                         beanId, status, objectMapper.writeValueAsString(health.getDetails()));
-            } else {
-                logger.info("HealthIndicator[{}] readiness check success.", beanId);
             }
             healthMap.put(getKey(beanId), health);
         } catch (Exception e) {
             result = false;
-            logger.error(String.format(
-                "Error occurred while doing HealthIndicator[%s] readiness check.",
-                healthIndicator.getClass()), e);
+            logger.error(
+                    String.format("Error occurred while doing HealthIndicator[%s] readiness check.",
+                            healthIndicator.getClass()),
+                    e);
         }
 
         return result;
     }
 
     /**
-     * refer to {@link org.springframework.boot.actuate.endpoint.HealthEndpoint#getKey}
+     * refer to {@link HealthIndicatorNameFactory#apply(String)}
      */
     public String getKey(String name) {
         int index = name.toLowerCase().indexOf("healthindicator");

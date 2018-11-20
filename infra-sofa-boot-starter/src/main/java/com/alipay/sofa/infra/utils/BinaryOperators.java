@@ -14,15 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.healthcheck.startup;
+package com.alipay.sofa.infra.utils;
+
+import java.util.function.BinaryOperator;
 
 /**
- * @author liangen
- * @version 2.3.0
- * @deprecated this class is not intended for use and will be removed the next major version.
- * {@link ReadinessCheckCallback} combined with {@link org.springframework.core.PriorityOrdered}
- * or {@link org.springframework.core.Ordered} are recommended to use instead.
+ * @author qilong.zql
+ * @since 3.0.0
  */
-@Deprecated
-public interface SofaBootAfterReadinessCheckCallback extends ReadinessCheckCallback {
+public class BinaryOperators {
+    public static BinaryOperator<Boolean> andBoolean() {
+        return (a, b) -> a && b;
+    }
 }

@@ -18,7 +18,7 @@ package com.alipay.sofa.runtime.spring.configuration;
 
 import com.alipay.sofa.ark.spi.model.Biz;
 import com.alipay.sofa.healthcheck.core.HealthChecker;
-import com.alipay.sofa.infra.constants.CommonMiddlewareConstants;
+import com.alipay.sofa.infra.constants.SofaBootInfraConstants;
 import com.alipay.sofa.runtime.api.client.ReferenceClient;
 import com.alipay.sofa.runtime.api.client.ServiceClient;
 import com.alipay.sofa.runtime.client.impl.ClientFactoryImpl;
@@ -84,7 +84,7 @@ public class SofaRuntimeAutoConfiguration {
     @Bean
     @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
     public static SofaRuntimeContext sofaRuntimeContext(@Value("${"
-                                                               + CommonMiddlewareConstants.APP_NAME_KEY
+                                                               + SofaBootInfraConstants.APP_NAME_KEY
                                                                + "}") String appName,
                                                         BindingConverterFactory bindingConverterFactory,
                                                         BindingAdapterFactory bindingAdapterFactory) {

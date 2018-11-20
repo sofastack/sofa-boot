@@ -17,7 +17,6 @@
 package com.alipay.sofa.infra.usercases;
 
 import com.alipay.sofa.infra.base.AbstractTestBase;
-import com.alipay.sofa.infra.endpoint.SofaBootVersionEndpointMvcAdapter;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,8 +35,7 @@ public class ServiceTest extends AbstractTestBase {
     @Test
     public void testServiceGet() {
         assertNotNull(urlHttpPrefix);
-        String sofaBootVersionUrl = urlHttpPrefix + "/"
-                                    + SofaBootVersionEndpointMvcAdapter.SOFA_BOOT_VERSION_URL;
+        String sofaBootVersionUrl = urlHttpPrefix + "/actuator/versions";
         ResponseEntity<String> result = testRestTemplate.getForEntity(sofaBootVersionUrl,
             String.class);
         assertEquals(HttpStatus.OK.value(), result.getStatusCode().value());
