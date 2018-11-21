@@ -75,4 +75,6 @@ public @interface SofaServiceBinding {
      * @return timeout
      */
     int timeout() default 3000;
+
+    String serializeType() default "";
 }
