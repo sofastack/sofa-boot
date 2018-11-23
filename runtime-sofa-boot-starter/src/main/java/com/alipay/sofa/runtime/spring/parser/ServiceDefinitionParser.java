@@ -25,8 +25,8 @@ import org.w3c.dom.Element;
  * @author xuanbei 18/3/1
  */
 public class ServiceDefinitionParser extends AbstractContractDefinitionParser {
-    private static final String REF     = "ref";
-    private static final String BEAN_ID = "beanId";
+    public static final String REF     = "ref";
+    public static final String BEAN_ID = "beanId";
 
     @Override
     protected void doParseInternal(Element element, ParserContext parserContext,

@@ -40,15 +40,15 @@ import java.util.List;
 public abstract class AbstractContractDefinitionParser extends AbstractSingleBeanDefinitionParser
                                                                                                  implements
                                                                                                  SofaBootTagNameSupport {
-    private static final String INTERFACE_ELEMENT           = "interface";
-    private static final String INTERFACE_PROPERTY          = "interfaceType";
-    private static final String BEAN_ID_ELEMENT             = "id";
-    private static final String BEAN_ID_PROPERTY            = "beanId";
-    private static final String UNIQUE_ID_ELEMENT           = "unique-id";
-    private static final String UNIQUE_ID_PROPERTY          = "uniqueId";
-    private static final String ELEMENTS                    = "elements";
-    private static final String REPEAT_REFER_LIMIT_ELEMENT  = "repeatReferLimit";
-    private static final String REPEAT_REFER_LIMIT_PROPERTY = "repeatReferLimit";
+    public static final String INTERFACE_ELEMENT           = "interface";
+    public static final String INTERFACE_PROPERTY          = "interfaceType";
+    public static final String BEAN_ID_ELEMENT             = "id";
+    public static final String BEAN_ID_PROPERTY            = "beanId";
+    public static final String UNIQUE_ID_ELEMENT           = "unique-id";
+    public static final String UNIQUE_ID_PROPERTY          = "uniqueId";
+    public static final String ELEMENTS                    = "elements";
+    public static final String REPEAT_REFER_LIMIT_ELEMENT  = "repeatReferLimit";
+    public static final String REPEAT_REFER_LIMIT_PROPERTY = "repeatReferLimit";
 
     @Override
     protected void doParse(Element element, ParserContext parserContext,
