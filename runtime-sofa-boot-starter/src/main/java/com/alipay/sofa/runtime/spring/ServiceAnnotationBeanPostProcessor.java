@@ -16,6 +16,23 @@
  */
 package com.alipay.sofa.runtime.spring;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+
+import org.springframework.aop.framework.AopProxyUtils;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.core.Ordered;
+import org.springframework.core.env.Environment;
+import org.springframework.util.Assert;
+import org.springframework.util.ReflectionUtils;
+
+import com.alipay.sofa.runtime.annotation.PlaceHolderAnnotationInvocationHandler.AnnotationWrapperBuilder;
+import com.alipay.sofa.runtime.annotation.PlaceHolderBinder;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.annotation.SofaReference;
 import com.alipay.sofa.runtime.api.annotation.SofaService;
@@ -39,18 +56,6 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
-import org.springframework.aop.framework.AopProxyUtils;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.core.Ordered;
-import org.springframework.util.Assert;
-import org.springframework.util.ReflectionUtils;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 
 /**
  * @author xuanbei 18/5/9
@@ -61,6 +66,10 @@ public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, Or
     private BindingAdapterFactory   bindingAdapterFactory;
     private BindingConverterFactory bindingConverterFactory;
     private ApplicationContext      applicationContext;
+
+    @Autowired
+    private Environment             environment;
+    private final PlaceHolderBinder binder = new DefaultPlaceHolderBinder();
 
     /**
      * To construct a ServiceAnnotationBeanPostProcessor via a Spring Bean
@@ -88,14 +97,17 @@ public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, Or
         return bean;
     }
 
+    @SuppressWarnings("unchecked")
     private void processSofaService(Object bean, String beanName) {
         final Class<?> beanClass = AopProxyUtils.ultimateTargetClass(bean);
 
         SofaService sofaServiceAnnotation = beanClass.getAnnotation(SofaService.class);
-
         if (sofaServiceAnnotation == null) {
             return;
         }
+        AnnotationWrapperBuilder<SofaService> builder = AnnotationWrapperBuilder.wrap(
+            sofaServiceAnnotation).withBinder(binder);
+        sofaServiceAnnotation = builder.build();
 
         Class<?> interfaceType = sofaServiceAnnotation.interfaceType();
 
@@ -131,8 +143,12 @@ public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, Or
         ReflectionUtils.doWithFields(beanClass, new ReflectionUtils.FieldCallback() {
 
             @Override
+            @SuppressWarnings("unchecked")
             public void doWith(Field field) throws IllegalArgumentException, IllegalAccessException {
-                SofaReference sofaReferenceAnnotation = field.getAnnotation(SofaReference.class);
+                AnnotationWrapperBuilder<SofaReference> builder = AnnotationWrapperBuilder.wrap(
+                    field.getAnnotation(SofaReference.class)).withBinder(binder);
+                SofaReference sofaReferenceAnnotation = builder.build();
+
                 if (sofaReferenceAnnotation == null) {
                     return;
                 }
@@ -157,6 +173,7 @@ public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, Or
 
         ReflectionUtils.doWithMethods(beanClass, new ReflectionUtils.MethodCallback() {
             @Override
+            @SuppressWarnings("unchecked")
             public void doWith(Method method) throws IllegalArgumentException,
                                              IllegalAccessException {
                 Class[] parameterTypes = method.getParameterTypes();
@@ -167,6 +184,9 @@ public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, Or
                 if (sofaReferenceAnnotation == null) {
                     return;
                 }
+                AnnotationWrapperBuilder<SofaReference> builder = AnnotationWrapperBuilder.wrap(
+                    sofaReferenceAnnotation).withBinder(binder);
+                sofaReferenceAnnotation = builder.build();
 
                 Class<?> interfaceType = sofaReferenceAnnotation.interfaceType();
                 if (interfaceType.equals(void.class)) {
@@ -255,5 +275,12 @@ public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, Or
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
+    }
+
+    class DefaultPlaceHolderBinder implements PlaceHolderBinder {
+        @Override
+        public String bind(String text) {
+            return environment.resolvePlaceholders(text);
+        }
     }
 }
