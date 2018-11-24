@@ -16,6 +16,20 @@
  */
 package com.alipay.sofa.isle;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.lang.reflect.Method;
+import java.util.HashSet;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import org.springframework.context.ApplicationContext;
+
 import com.alipay.sofa.runtime.api.annotation.SofaReference;
 import com.alipay.sofa.runtime.api.annotation.SofaReferenceBinding;
 import com.alipay.sofa.runtime.api.annotation.SofaService;
@@ -31,20 +45,6 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
 import com.alipay.sofa.runtime.spring.ServiceAnnotationBeanPostProcessor;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-import org.springframework.context.ApplicationContext;
-
-import java.lang.reflect.Method;
-import java.util.HashSet;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  * @author xuanbei 18/5/15
@@ -82,8 +82,7 @@ public class ServiceAnnotationBeanPostProcessorTest {
         boolean hasException = false;
         BindingConverterFactory bindingConverterFactory = new BindingConverterFactoryImpl();
         ServiceAnnotationBeanPostProcessor serviceAnnotationBeanPostProcessor = new ServiceAnnotationBeanPostProcessor(
-            null, bindingConverterFactory);
-        serviceAnnotationBeanPostProcessor.setApplicationContext(applicationContext);
+            applicationContext, sofaRuntimeContext, null, bindingConverterFactory);
         try {
             createReferenceProxy.invoke(serviceAnnotationBeanPostProcessor, sofaReference,
                 ServiceAnnotationBeanPostProcessorTest.class);
@@ -143,8 +142,7 @@ public class ServiceAnnotationBeanPostProcessorTest {
         boolean hasException = false;
         BindingConverterFactory bindingConverterFactory = new BindingConverterFactoryImpl();
         ServiceAnnotationBeanPostProcessor serviceAnnotationBeanPostProcessor = new ServiceAnnotationBeanPostProcessor(
-            null, bindingConverterFactory);
-        serviceAnnotationBeanPostProcessor.setApplicationContext(applicationContext);
+            applicationContext, sofaRuntimeContext, null, bindingConverterFactory);
         try {
             createReferenceProxy.invoke(serviceAnnotationBeanPostProcessor, service, sofaService,
                 sofaServiceBinding);

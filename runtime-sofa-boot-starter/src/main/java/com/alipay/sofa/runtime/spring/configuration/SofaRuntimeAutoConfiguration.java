@@ -65,81 +65,8 @@ import java.util.Set;
 @EnableConfigurationProperties(SofaRuntimeConfigurationProperties.class)
 public class SofaRuntimeAutoConfiguration {
     @Bean
-    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
-    public static BindingConverterFactory bindingConverterFactory() {
-        BindingConverterFactory bindingConverterFactory = new BindingConverterFactoryImpl();
-        bindingConverterFactory
-            .addBindingConverters(getClassesByServiceLoader(BindingConverter.class));
-        return bindingConverterFactory;
-    }
-
-    @Bean
-    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
-    public static BindingAdapterFactory bindingAdapterFactory() {
-        BindingAdapterFactory bindingAdapterFactory = new BindingAdapterFactoryImpl();
-        bindingAdapterFactory.addBindingAdapters(getClassesByServiceLoader(BindingAdapter.class));
-        return bindingAdapterFactory;
-    }
-
-    @Bean
-    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
-    public static SofaRuntimeContext sofaRuntimeContext(@Value("${"
-                                                               + SofaBootInfraConstants.APP_NAME_KEY
-                                                               + "}") String appName,
-                                                        BindingConverterFactory bindingConverterFactory,
-                                                        BindingAdapterFactory bindingAdapterFactory) {
-        ClientFactoryInternal clientFactoryInternal = new ClientFactoryImpl();
-        SofaRuntimeManager sofaRuntimeManager = new StandardSofaRuntimeManager(appName,
-            SofaRuntimeAutoConfiguration.class.getClassLoader(), clientFactoryInternal);
-        sofaRuntimeManager.getComponentManager().registerComponentClient(
-            ReferenceClient.class,
-            new ReferenceClientImpl(sofaRuntimeManager.getSofaRuntimeContext(),
-                bindingConverterFactory, bindingAdapterFactory));
-        sofaRuntimeManager.getComponentManager().registerComponentClient(
-            ServiceClient.class,
-            new ServiceClientImpl(sofaRuntimeManager.getSofaRuntimeContext(),
-                bindingConverterFactory, bindingAdapterFactory));
-        SofaFramework.registerSofaRuntimeManager(sofaRuntimeManager);
-        return sofaRuntimeManager.getSofaRuntimeContext();
-
-    }
-
-    @Bean
-    public static ServiceAnnotationBeanPostProcessor serviceAnnotationBeanPostProcessor(BindingAdapterFactory bindingAdapterFactory,
-                                                                                        BindingConverterFactory bindingConverterFactory) {
-        return new ServiceAnnotationBeanPostProcessor(bindingAdapterFactory,
-            bindingConverterFactory);
-    }
-
-    @Bean
-    public static ClientFactoryBeanPostProcessor clientFactoryBeanPostProcessor(SofaRuntimeContext sofaRuntimeContext) {
-        return new ClientFactoryBeanPostProcessor(sofaRuntimeContext.getClientFactory());
-    }
-
-    @Bean
-    public static ApplicationShutdownCallbackPostProcessor applicationShutdownCallbackPostProcessor(SofaRuntimeContext sofaRuntimeContext) {
-        return new ApplicationShutdownCallbackPostProcessor(
-            sofaRuntimeContext.getSofaRuntimeManager());
-    }
-
-    @Bean
-    public static SofaRuntimeContextAwareProcessor sofaRuntimeContextAwareProcessor(SofaRuntimeContext sofaRuntimeContext) {
-        return new SofaRuntimeContextAwareProcessor(sofaRuntimeContext);
-    }
-
-    @Bean
     public CloseApplicationContextCallBack closeApplicationContextCallBack() {
         return new CloseApplicationContextCallBack();
-    }
-
-    private static <T> Set<T> getClassesByServiceLoader(Class<T> clazz) {
-        ServiceLoader<T> serviceLoader = ServiceLoader.load(clazz);
-
-        Set<T> result = new HashSet<>();
-        for (T t : serviceLoader) {
-            result.add(t);
-        }
-        return result;
     }
 
     @Configuration
