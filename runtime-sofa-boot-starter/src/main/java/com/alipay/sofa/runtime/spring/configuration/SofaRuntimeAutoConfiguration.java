@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.runtime.spring.configuration;
 
-import org.springframework.beans.factory.support.BeanNameGenerator;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -24,13 +23,10 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClas
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.ParameterNameDiscoverer;
 
 import com.alipay.sofa.ark.spi.model.Biz;
 import com.alipay.sofa.healthcheck.core.HealthChecker;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
-import com.alipay.sofa.runtime.spring.bean.SofaBeanNameGenerator;
-import com.alipay.sofa.runtime.spring.bean.SofaParameterNameDiscoverer;
 import com.alipay.sofa.runtime.spring.callback.CloseApplicationContextCallBack;
 import com.alipay.sofa.runtime.spring.config.SofaRuntimeConfigurationProperties;
 import com.alipay.sofa.runtime.spring.health.DefaultRuntimeHealthChecker;
@@ -47,11 +43,6 @@ public class SofaRuntimeAutoConfiguration {
     @Bean
     public CloseApplicationContextCallBack closeApplicationContextCallBack() {
         return new CloseApplicationContextCallBack();
-    }
-
-    @Bean
-    public ParameterNameDiscoverer parameterNameDiscoverer() {
-        return new SofaParameterNameDiscoverer();
     }
 
     @Configuration

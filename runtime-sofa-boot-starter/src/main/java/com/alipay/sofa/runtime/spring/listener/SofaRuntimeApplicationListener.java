@@ -57,7 +57,7 @@ import com.alipay.sofa.runtime.spring.configuration.SofaRuntimeAutoConfiguration
  * @since 3.1.0
  */
 public class SofaRuntimeApplicationListener implements
-                                           ApplicationListener<ApplicationPreparedEvent> {
+                                            ApplicationListener<ApplicationPreparedEvent> {
     /**
      * Objects shared by multi spring application context
      */
@@ -80,14 +80,13 @@ public class SofaRuntimeApplicationListener implements
                 bindingConverterFactory, bindingAdapterFactory);
         }
 
-        applicationContext
-            .addBeanFactoryPostProcessor(new ServiceBeanFactoryPostProcessor(applicationContext,
-                sofaRuntimeContext, bindingAdapterFactory, bindingConverterFactory));
+        applicationContext.addBeanFactoryPostProcessor(new ServiceBeanFactoryPostProcessor(
+            applicationContext, sofaRuntimeContext, bindingConverterFactory));
         beanFactory.registerSingleton(
             SofaRuntimeFrameworkConstants.BINDING_CONVERTER_FACTORY_BEAN_ID,
             bindingConverterFactory);
-        beanFactory.registerSingleton(
-            SofaRuntimeFrameworkConstants.BINDING_ADAPTER_FACTORY_BEAN_ID, bindingAdapterFactory);
+        beanFactory.registerSingleton(SofaRuntimeFrameworkConstants.BINDING_ADAPTER_FACTORY_BEAN_ID,
+            bindingAdapterFactory);
         beanFactory.registerSingleton(SofaRuntimeFrameworkConstants.SOFA_RUNTIME_CONTEXT_BEAN_ID,
             sofaRuntimeContext);
 
@@ -96,11 +95,10 @@ public class SofaRuntimeApplicationListener implements
                 bindingAdapterFactory, bindingConverterFactory));
         beanFactory.registerSingleton(ClientFactoryBeanPostProcessor.class.getCanonicalName(),
             new ClientFactoryBeanPostProcessor(sofaRuntimeContext.getClientFactory()));
-        beanFactory
-            .registerSingleton(
-                ApplicationShutdownCallbackPostProcessor.class.getCanonicalName(),
-                new ApplicationShutdownCallbackPostProcessor(sofaRuntimeContext
-                    .getSofaRuntimeManager()));
+        beanFactory.registerSingleton(
+            ApplicationShutdownCallbackPostProcessor.class.getCanonicalName(),
+            new ApplicationShutdownCallbackPostProcessor(
+                sofaRuntimeContext.getSofaRuntimeManager()));
         beanFactory.registerSingleton(SofaRuntimeContextAwareProcessor.class.getCanonicalName(),
             new SofaRuntimeContextAwareProcessor(sofaRuntimeContext));
 
@@ -129,12 +127,10 @@ public class SofaRuntimeApplicationListener implements
         ClientFactoryInternal clientFactoryInternal = new ClientFactoryImpl();
         SofaRuntimeManager sofaRuntimeManager = new StandardSofaRuntimeManager(appName,
             SofaRuntimeAutoConfiguration.class.getClassLoader(), clientFactoryInternal);
-        sofaRuntimeManager.getComponentManager().registerComponentClient(
-            ReferenceClient.class,
+        sofaRuntimeManager.getComponentManager().registerComponentClient(ReferenceClient.class,
             new ReferenceClientImpl(sofaRuntimeManager.getSofaRuntimeContext(),
                 bindingConverterFactory, bindingAdapterFactory));
-        sofaRuntimeManager.getComponentManager().registerComponentClient(
-            ServiceClient.class,
+        sofaRuntimeManager.getComponentManager().registerComponentClient(ServiceClient.class,
             new ServiceClientImpl(sofaRuntimeManager.getSofaRuntimeContext(),
                 bindingConverterFactory, bindingAdapterFactory));
         SofaFramework.registerSofaRuntimeManager(sofaRuntimeManager);

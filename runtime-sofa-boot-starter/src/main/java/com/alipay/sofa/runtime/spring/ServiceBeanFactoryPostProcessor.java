@@ -54,7 +54,6 @@ import com.alipay.sofa.runtime.api.annotation.SofaServiceBinding;
 import com.alipay.sofa.runtime.api.binding.BindingType;
 import com.alipay.sofa.runtime.service.binding.JvmBinding;
 import com.alipay.sofa.runtime.spi.binding.Binding;
-import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.log.SofaLogger;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
@@ -74,17 +73,14 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
     private final PlaceHolderBinder        binder = new DefaultPlaceHolderBinder();
     private ConfigurableApplicationContext applicationContext;
     private SofaRuntimeContext             sofaRuntimeContext;
-    private BindingAdapterFactory          bindingAdapterFactory;
     private BindingConverterFactory        bindingConverterFactory;
     private ConfigurableEnvironment        environment;
 
     public ServiceBeanFactoryPostProcessor(ConfigurableApplicationContext applicationContext,
                                            SofaRuntimeContext sofaRuntimeContext,
-                                           BindingAdapterFactory bindingAdapterFactory,
                                            BindingConverterFactory bindingConverterFactory) {
         this.applicationContext = applicationContext;
         this.sofaRuntimeContext = sofaRuntimeContext;
-        this.bindingAdapterFactory = bindingAdapterFactory;
         this.bindingConverterFactory = bindingConverterFactory;
         this.environment = applicationContext.getEnvironment();
     }
@@ -115,7 +111,8 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
                 SofaLogger.warn("Bean class type cant be resolved from bean of {}", beanId);
                 return;
             }
-            generateSofaServiceDefinitionOnClass(beanId, beanClassType, beanDefinition, beanFactory);
+            generateSofaServiceDefinitionOnClass(beanId, beanClassType, beanDefinition,
+                beanFactory);
         }
     }
 
@@ -151,8 +148,8 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
             if (sofaServiceAnnotation == null) {
                 sofaServiceAnnotation = returnType.getAnnotation(SofaService.class);
             }
-            generateSofaServiceDefinition(beanId, sofaServiceAnnotation, returnType,
-                beanDefinition, beanFactory);
+            generateSofaServiceDefinition(beanId, sofaServiceAnnotation, returnType, beanDefinition,
+                beanFactory);
             generateSofaReferenceDefinition(beanId, method, beanFactory);
         }
     }
@@ -171,14 +168,15 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void doGenerateSofaReferenceDefinition(BeanDefinition beanDefinition,
                                                    SofaReference sofaReference,
                                                    Class<?> parameterType,
                                                    ConfigurableListableBeanFactory beanFactory) {
         Assert.isTrue("jvm".equals(sofaReference.binding().bindingType()),
             "Only jvm type of @SofaReference on parameter is supported.");
-        AnnotationWrapperBuilder<SofaReference> wrapperBuilder = AnnotationWrapperBuilder.wrap(
-            sofaReference).withBinder(binder);
+        AnnotationWrapperBuilder<SofaReference> wrapperBuilder = AnnotationWrapperBuilder
+            .wrap(sofaReference).withBinder(binder);
         sofaReference = wrapperBuilder.build();
         Class<?> interfaceType = sofaReference.interfaceType();
         if (interfaceType.equals(void.class)) {
@@ -228,8 +226,8 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
         if (sofaServiceAnnotation == null) {
             return;
         }
-        AnnotationWrapperBuilder<SofaService> wrapperBuilder = AnnotationWrapperBuilder.wrap(
-            sofaServiceAnnotation).withBinder(binder);
+        AnnotationWrapperBuilder<SofaService> wrapperBuilder = AnnotationWrapperBuilder
+            .wrap(sofaServiceAnnotation).withBinder(binder);
         sofaServiceAnnotation = wrapperBuilder.build();
 
         Class<?> interfaceType = sofaServiceAnnotation.interfaceType();
@@ -261,8 +259,8 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
             true);
         builder.addDependsOn(beanId);
 
-        ((BeanDefinitionRegistry) beanFactory).registerBeanDefinition(
-            SofaBeanNameGenerator.generateSofaServiceBeanName(builder.getBeanDefinition()),
+        ((BeanDefinitionRegistry) beanFactory).registerBeanDefinition(SofaBeanNameGenerator
+            .generateSofaServiceBeanName(interfaceType, sofaServiceAnnotation.uniqueId()),
             builder.getBeanDefinition());
     }
 
@@ -278,7 +276,7 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
                 if (bindingConverter == null) {
                     throw new ServiceRuntimeException(
                         "Can not found binding converter for binding type "
-                                + sofaServiceBinding.bindingType());
+                                                      + sofaServiceBinding.bindingType());
                 }
                 BindingConverterContext bindingConverterContext = new BindingConverterContext();
                 bindingConverterContext.setInBinding(false);
@@ -301,11 +299,8 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
      * @return
      */
     private boolean isFromConfigurationSource(BeanDefinition beanDefinition) {
-        return beanDefinition
-            .getClass()
-            .getCanonicalName()
-            .startsWith(
-                "org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader");
+        return beanDefinition.getClass().getCanonicalName().startsWith(
+            "org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader");
     }
 
     /**
@@ -338,8 +333,8 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
             } catch (IllegalStateException ex) {
                 try {
                     String className = beanDefinition.getBeanClassName();
-                    clazz = StringUtils.isEmpty(className) ? null : ClassUtils.forName(className,
-                        null);
+                    clazz = StringUtils.isEmpty(className) ? null
+                        : ClassUtils.forName(className, null);
                 } catch (Throwable throwable) {
                     // ignore
                 }
