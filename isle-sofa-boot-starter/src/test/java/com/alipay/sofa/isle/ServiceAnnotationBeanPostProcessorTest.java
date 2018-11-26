@@ -32,12 +32,9 @@ import org.springframework.context.ApplicationContext;
 
 import com.alipay.sofa.runtime.api.annotation.SofaReference;
 import com.alipay.sofa.runtime.api.annotation.SofaReferenceBinding;
-import com.alipay.sofa.runtime.api.annotation.SofaService;
-import com.alipay.sofa.runtime.api.annotation.SofaServiceBinding;
 import com.alipay.sofa.runtime.api.binding.BindingType;
 import com.alipay.sofa.runtime.constants.SofaRuntimeFrameworkConstants;
 import com.alipay.sofa.runtime.model.InterfaceMode;
-import com.alipay.sofa.runtime.service.component.Service;
 import com.alipay.sofa.runtime.service.component.impl.ReferenceImpl;
 import com.alipay.sofa.runtime.service.helper.ReferenceRegisterHelper;
 import com.alipay.sofa.runtime.service.impl.BindingConverterFactoryImpl;
@@ -113,54 +110,5 @@ public class ServiceAnnotationBeanPostProcessorTest {
 
         PowerMockito.verifyStatic();
         ReferenceRegisterHelper.registerReference(referenceImpl, null, sofaRuntimeContext);
-    }
-
-    @Test
-    public void testHandleSofaServiceBinding() throws Exception {
-        Class clazz = Class
-            .forName("com.alipay.sofa.runtime.spring.ServiceAnnotationBeanPostProcessor");
-        Method createReferenceProxy = clazz.getDeclaredMethod("handleSofaServiceBinding",
-            Service.class, SofaService.class, SofaServiceBinding.class);
-        createReferenceProxy.setAccessible(true);
-
-        Service service = mock(Service.class);
-        SofaService sofaService = mock(SofaService.class);
-        SofaServiceBinding sofaServiceBinding = mock(SofaServiceBinding.class);
-
-        when(sofaServiceBinding.bindingType()).thenReturn("bolt");
-
-        SofaRuntimeContext sofaRuntimeContext = mock(SofaRuntimeContext.class);
-        when(sofaRuntimeContext.getAppName()).thenReturn("testcase");
-        when(sofaRuntimeContext.getAppClassLoader()).thenReturn(
-            ServiceAnnotationBeanPostProcessorTest.class.getClassLoader());
-
-        ApplicationContext applicationContext = mock(ApplicationContext.class);
-        when(
-            applicationContext.getBean(SofaRuntimeFrameworkConstants.SOFA_RUNTIME_CONTEXT_BEAN_ID,
-                SofaRuntimeContext.class)).thenReturn(sofaRuntimeContext);
-
-        boolean hasException = false;
-        BindingConverterFactory bindingConverterFactory = new BindingConverterFactoryImpl();
-        ServiceAnnotationBeanPostProcessor serviceAnnotationBeanPostProcessor = new ServiceAnnotationBeanPostProcessor(
-            applicationContext, sofaRuntimeContext, null, bindingConverterFactory);
-        try {
-            createReferenceProxy.invoke(serviceAnnotationBeanPostProcessor, service, sofaService,
-                sofaServiceBinding);
-        } catch (Exception e) {
-            Assert.assertEquals("Can not found binding converter for binding type bolt", e
-                .getCause().getMessage());
-            hasException = true;
-        }
-        Assert.assertTrue(hasException);
-
-        BindingConverter bindingConverter = mock(BindingConverter.class);
-        when(bindingConverter.supportBindingType()).thenReturn(new BindingType("bolt"));
-        when(bindingConverter.supportTagName()).thenReturn("binding:bolt");
-        HashSet<BindingConverter> bindingConverters = new HashSet<>();
-        bindingConverters.add(bindingConverter);
-        bindingConverterFactory.addBindingConverters(bindingConverters);
-
-        createReferenceProxy.invoke(serviceAnnotationBeanPostProcessor, service, sofaService,
-            sofaServiceBinding);
     }
 }

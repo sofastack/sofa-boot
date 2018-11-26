@@ -20,12 +20,15 @@ import com.alipay.sofa.ark.spi.model.Biz;
 import com.alipay.sofa.runtime.integration.features.AwareTest;
 import com.alipay.sofa.runtime.integration.invoke.DynamicJvmServiceProxyFinder;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
+import com.alipay.sofa.runtime.spring.listener.SofaRuntimeApplicationListener;
 import mockit.Mock;
 import mockit.MockUp;
 import mockit.Mocked;
 import mockit.NonStrictExpectations;
 import org.junit.Before;
+import org.mockito.Mockito;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.context.event.ApplicationPreparedEvent;
 import org.springframework.boot.test.util.EnvironmentTestUtils;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
@@ -34,6 +37,8 @@ import org.springframework.context.annotation.ImportResource;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.mockito.Mockito.when;
 
 /**
  * @author qilong.zql
@@ -76,6 +81,11 @@ public abstract class AbstractTestBase {
             EnvironmentTestUtils.addEnvironment(this.applicationContext,
                 buildProperty(property.getKey(), property.getValue()));
         }
+
+        ApplicationPreparedEvent applicationPreparedEvent = Mockito
+            .mock(ApplicationPreparedEvent.class);
+        when(applicationPreparedEvent.getApplicationContext()).thenReturn(applicationContext);
+        new SofaRuntimeApplicationListener().onApplicationEvent(applicationPreparedEvent);
 
         this.applicationContext.register(annotatedClasses);
         this.applicationContext.refresh();

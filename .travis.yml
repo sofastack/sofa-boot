@@ -7,10 +7,10 @@ jdk:
 install:
 
 - mvn clean install -DskipTests -B -V
+- mvn test
 
 script:
 - sh ./check_format.sh
 
 after_success:
-- mvn clean test
 - bash <(curl -s https://codecov.io/bash)

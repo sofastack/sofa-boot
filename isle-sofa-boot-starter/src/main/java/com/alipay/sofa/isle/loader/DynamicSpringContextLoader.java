@@ -18,6 +18,7 @@ package com.alipay.sofa.isle.loader;
 
 import java.util.Map;
 
+import com.alipay.sofa.runtime.spring.listener.SofaRuntimeApplicationListener;
 import org.springframework.beans.CachedIntrospectionResults;
 import org.springframework.beans.PropertyEditorRegistrar;
 import org.springframework.beans.PropertyEditorRegistry;
@@ -40,7 +41,6 @@ import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
 import com.alipay.sofa.isle.spring.context.SofaModuleApplicationContext;
 import com.alipay.sofa.isle.spring.factory.BeanLoadCostBeanFactory;
 import com.alipay.sofa.runtime.spi.log.SofaLogger;
-import com.alipay.sofa.runtime.spring.bean.SofaParameterNameDiscoverer;
 
 /**
  *
@@ -56,18 +56,16 @@ public class DynamicSpringContextLoader implements SpringContextLoader {
     @Override
     public void loadSpringContext(DeploymentDescriptor deployment,
                                   ApplicationRuntimeModel application) throws Exception {
-        SofaModuleProperties sofaModuleProperties = rootApplicationContext.getBean(
-            SofaModuleFrameworkConstants.SOFA_MODULE_PROPERTIES_BEAN_ID,
-            SofaModuleProperties.class);
+        SofaModuleProperties sofaModuleProperties = rootApplicationContext
+            .getBean(SofaModuleFrameworkConstants.SOFA_MODULE_PROPERTIES_BEAN_ID,
+                SofaModuleProperties.class);
         BeanLoadCostBeanFactory beanFactory = new BeanLoadCostBeanFactory(
             sofaModuleProperties.getBeanLoadCost());
-        beanFactory.setParameterNameDiscoverer(new SofaParameterNameDiscoverer());
         beanFactory
             .setAutowireCandidateResolver(new QualifierAnnotationAutowireCandidateResolver());
-
-        GenericApplicationContext ctx = sofaModuleProperties.isPublishEventToParent()
-            ? new GenericApplicationContext(beanFactory)
-            : new SofaModuleApplicationContext(beanFactory);
+        GenericApplicationContext ctx = sofaModuleProperties.isPublishEventToParent() ? new GenericApplicationContext(
+            beanFactory) : new SofaModuleApplicationContext(beanFactory);
+        SofaRuntimeApplicationListener.initApplicationContext(ctx);
         String activeProfiles = sofaModuleProperties.getActiveProfiles();
         if (StringUtils.hasText(activeProfiles)) {
             String[] profiles = activeProfiles
@@ -80,8 +78,8 @@ public class DynamicSpringContextLoader implements SpringContextLoader {
         CachedIntrospectionResults.acceptClassLoader(moduleClassLoader);
 
         // set allowBeanDefinitionOverriding
-        ctx.setAllowBeanDefinitionOverriding(rootApplicationContext
-            .getBean(SofaModuleProperties.class).isAllowBeanDefinitionOverriding());
+        ctx.setAllowBeanDefinitionOverriding(rootApplicationContext.getBean(
+            SofaModuleProperties.class).isAllowBeanDefinitionOverriding());
 
         ctx.getBeanFactory().setBeanClassLoader(moduleClassLoader);
         ctx.getBeanFactory().addPropertyEditorRegistrar(new PropertyEditorRegistrar() {
