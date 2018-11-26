@@ -119,16 +119,11 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
     private void generateSofaServiceDefinitionOnMethod(String beanId,
                                                        AnnotatedBeanDefinition beanDefinition,
                                                        ConfigurableListableBeanFactory beanFactory) {
-        MethodMetadata methodMetadata = beanDefinition.getFactoryMethodMetadata();
-        if (methodMetadata == null
-            || methodMetadata.getAnnotationAttributes(SofaService.class.getCanonicalName()) == null) {
-            return;
-        }
-
-        Class returnType;
-        Class declaringClass;
+        Class<?> returnType;
+        Class<?> declaringClass;
         Method method = null;
 
+        MethodMetadata methodMetadata = beanDefinition.getFactoryMethodMetadata();
         try {
             returnType = ClassUtils.forName(methodMetadata.getReturnTypeName(), null);
             declaringClass = ClassUtils.forName(methodMetadata.getDeclaringClassName(), null);
@@ -150,6 +145,9 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
 
         if (method != null) {
             SofaService sofaServiceAnnotation = method.getAnnotation(SofaService.class);
+            if(sofaServiceAnnotation == null) {
+                sofaServiceAnnotation = returnType.getAnnotation(SofaService.class);
+            }
             generateSofaServiceDefinition(beanId, sofaServiceAnnotation, returnType,
                 beanDefinition, beanFactory);
         }
@@ -159,9 +157,6 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
                                                       BeanDefinition beanDefinition,
                                                       ConfigurableListableBeanFactory beanFactory) {
         SofaService sofaServiceAnnotation = beanClass.getAnnotation(SofaService.class);
-        if (sofaServiceAnnotation == null) {
-            return;
-        }
         generateSofaServiceDefinition(beanId, sofaServiceAnnotation, beanClass, beanDefinition,
             beanFactory);
     }
@@ -181,7 +176,7 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
         if (interfaceType.equals(void.class)) {
             Class<?> interfaces[] = beanClass.getInterfaces();
 
-            if (interfaces == null || interfaces.length == 0) {
+            if (beanClass.isInterface() || interfaces == null || interfaces.length == 0) {
                 interfaceType = beanClass;
             } else if (interfaces.length == 1) {
                 interfaceType = interfaces[0];
@@ -203,7 +198,7 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
             getSofaServiceBinding(sofaServiceAnnotation, sofaServiceAnnotation.bindings()));
         builder.addPropertyReference(ServiceDefinitionParser.REF, beanId);
         builder.addPropertyValue(ServiceDefinitionParser.BEAN_ID, serviceBeanId);
-        builder.addPropertyValue(AbstractContractDefinitionParser.DEFINITION_BUILDING_TYPE, true);
+        builder.addPropertyValue(AbstractContractDefinitionParser.DEFINITION_BUILDING_API_TYPE, true);
         builder.addDependsOn(beanId);
 
         ((BeanDefinitionRegistry) beanFactory).registerBeanDefinition(serviceBeanId,

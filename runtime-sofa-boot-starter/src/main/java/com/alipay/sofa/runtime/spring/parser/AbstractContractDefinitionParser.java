@@ -40,20 +40,19 @@ import com.alipay.sofa.runtime.api.ServiceRuntimeException;
  * @author xuanbei 18/3/1
  */
 public abstract class AbstractContractDefinitionParser extends AbstractSingleBeanDefinitionParser
-                                                                                                 implements
-                                                                                                 SofaBootTagNameSupport {
-    public static final String INTERFACE_ELEMENT           = "interface";
-    public static final String INTERFACE_PROPERTY          = "interfaceType";
-    public static final String INTERFACE_CLASS_PROPERTY    = "interfaceClass";
-    public static final String BEAN_ID_ELEMENT             = "id";
-    public static final String BEAN_ID_PROPERTY            = "beanId";
-    public static final String UNIQUE_ID_ELEMENT           = "unique-id";
-    public static final String UNIQUE_ID_PROPERTY          = "uniqueId";
-    public static final String ELEMENTS                    = "elements";
-    public static final String BINDINGS                    = "bindings";
-    public static final String REPEAT_REFER_LIMIT_ELEMENT  = "repeatReferLimit";
-    public static final String REPEAT_REFER_LIMIT_PROPERTY = "repeatReferLimit";
-    public static final String DEFINITION_BUILDING_TYPE    = "apiType";
+                                                       implements SofaBootTagNameSupport {
+    public static final String INTERFACE_ELEMENT            = "interface";
+    public static final String INTERFACE_PROPERTY           = "interfaceType";
+    public static final String INTERFACE_CLASS_PROPERTY     = "interfaceClass";
+    public static final String BEAN_ID_ELEMENT              = "id";
+    public static final String BEAN_ID_PROPERTY             = "beanId";
+    public static final String UNIQUE_ID_ELEMENT            = "unique-id";
+    public static final String UNIQUE_ID_PROPERTY           = "uniqueId";
+    public static final String ELEMENTS                     = "elements";
+    public static final String BINDINGS                     = "bindings";
+    public static final String REPEAT_REFER_LIMIT_ELEMENT   = "repeatReferLimit";
+    public static final String REPEAT_REFER_LIMIT_PROPERTY  = "repeatReferLimit";
+    public static final String DEFINITION_BUILDING_API_TYPE = "apiType";
 
     @Override
     protected void doParse(Element element, ParserContext parserContext,
@@ -63,8 +62,8 @@ public abstract class AbstractContractDefinitionParser extends AbstractSingleBea
 
         String interfaceType = element.getAttribute(INTERFACE_ELEMENT);
         builder.addPropertyValue(INTERFACE_PROPERTY, interfaceType);
-        builder.getBeanDefinition().getConstructorArgumentValues()
-            .addIndexedArgumentValue(0, interfaceType);
+        builder.getBeanDefinition().getConstructorArgumentValues().addIndexedArgumentValue(0,
+            interfaceType);
 
         String uniqueId = element.getAttribute(UNIQUE_ID_ELEMENT);
         builder.addPropertyValue(UNIQUE_ID_PROPERTY, uniqueId);
