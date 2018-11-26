@@ -22,6 +22,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory;
 import org.springframework.boot.context.event.ApplicationPreparedEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -46,6 +47,7 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
 import com.alipay.sofa.runtime.spring.*;
+import com.alipay.sofa.runtime.spring.bean.SofaParameterNameDiscoverer;
 import com.alipay.sofa.runtime.spring.configuration.SofaRuntimeAutoConfiguration;
 
 /**
@@ -101,6 +103,11 @@ public class SofaRuntimeApplicationListener implements
                     .getSofaRuntimeManager()));
         beanFactory.registerSingleton(SofaRuntimeContextAwareProcessor.class.getCanonicalName(),
             new SofaRuntimeContextAwareProcessor(sofaRuntimeContext));
+
+        if (beanFactory instanceof AbstractAutowireCapableBeanFactory) {
+            ((AbstractAutowireCapableBeanFactory) beanFactory)
+                .setParameterNameDiscoverer(new SofaParameterNameDiscoverer());
+        }
     }
 
     private BindingConverterFactory bindingConverterFactory() {

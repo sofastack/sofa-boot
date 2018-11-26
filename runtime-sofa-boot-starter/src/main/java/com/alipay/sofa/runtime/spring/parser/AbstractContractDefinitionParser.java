@@ -40,7 +40,8 @@ import com.alipay.sofa.runtime.api.ServiceRuntimeException;
  * @author xuanbei 18/3/1
  */
 public abstract class AbstractContractDefinitionParser extends AbstractSingleBeanDefinitionParser
-                                                       implements SofaBootTagNameSupport {
+                                                                                                 implements
+                                                                                                 SofaBootTagNameSupport {
     public static final String INTERFACE_ELEMENT            = "interface";
     public static final String INTERFACE_PROPERTY           = "interfaceType";
     public static final String INTERFACE_CLASS_PROPERTY     = "interfaceClass";
@@ -62,8 +63,8 @@ public abstract class AbstractContractDefinitionParser extends AbstractSingleBea
 
         String interfaceType = element.getAttribute(INTERFACE_ELEMENT);
         builder.addPropertyValue(INTERFACE_PROPERTY, interfaceType);
-        builder.getBeanDefinition().getConstructorArgumentValues().addIndexedArgumentValue(0,
-            interfaceType);
+        builder.getBeanDefinition().getConstructorArgumentValues()
+            .addIndexedArgumentValue(0, interfaceType);
 
         String uniqueId = element.getAttribute(UNIQUE_ID_ELEMENT);
         builder.addPropertyValue(UNIQUE_ID_PROPERTY, uniqueId);

@@ -16,47 +16,27 @@
  */
 package com.alipay.sofa.runtime.spring.configuration;
 
+import org.springframework.beans.factory.support.BeanNameGenerator;
+import org.springframework.boot.actuate.health.HealthIndicator;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.ParameterNameDiscoverer;
+
 import com.alipay.sofa.ark.spi.model.Biz;
 import com.alipay.sofa.healthcheck.core.HealthChecker;
-import com.alipay.sofa.infra.constants.SofaBootInfraConstants;
-import com.alipay.sofa.runtime.api.client.ReferenceClient;
-import com.alipay.sofa.runtime.api.client.ServiceClient;
-import com.alipay.sofa.runtime.client.impl.ClientFactoryImpl;
-import com.alipay.sofa.runtime.component.impl.StandardSofaRuntimeManager;
-import com.alipay.sofa.runtime.service.client.ReferenceClientImpl;
-import com.alipay.sofa.runtime.service.client.ServiceClientImpl;
-import com.alipay.sofa.runtime.service.impl.BindingAdapterFactoryImpl;
-import com.alipay.sofa.runtime.service.impl.BindingConverterFactoryImpl;
-import com.alipay.sofa.runtime.SofaFramework;
-import com.alipay.sofa.runtime.spi.binding.BindingAdapter;
-import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
-import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
-import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
-import com.alipay.sofa.runtime.spi.service.BindingConverter;
-import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
-import com.alipay.sofa.runtime.spring.ApplicationShutdownCallbackPostProcessor;
-import com.alipay.sofa.runtime.spring.ClientFactoryBeanPostProcessor;
-import com.alipay.sofa.runtime.spring.ServiceAnnotationBeanPostProcessor;
-import com.alipay.sofa.runtime.spring.SofaRuntimeContextAwareProcessor;
+import com.alipay.sofa.runtime.spring.bean.SofaBeanNameGenerator;
+import com.alipay.sofa.runtime.spring.bean.SofaParameterNameDiscoverer;
 import com.alipay.sofa.runtime.spring.callback.CloseApplicationContextCallBack;
 import com.alipay.sofa.runtime.spring.config.SofaRuntimeConfigurationProperties;
 import com.alipay.sofa.runtime.spring.health.DefaultRuntimeHealthChecker;
 import com.alipay.sofa.runtime.spring.health.MultiApplicationHealthIndicator;
 import com.alipay.sofa.runtime.spring.health.SofaComponentHealthChecker;
 import com.alipay.sofa.runtime.spring.health.SofaComponentHealthIndicator;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.boot.actuate.health.HealthIndicator;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.*;
-
-import java.util.HashSet;
-import java.util.ServiceLoader;
-import java.util.Set;
 
 /**
  * @author xuanbei 18/3/17
@@ -67,6 +47,11 @@ public class SofaRuntimeAutoConfiguration {
     @Bean
     public CloseApplicationContextCallBack closeApplicationContextCallBack() {
         return new CloseApplicationContextCallBack();
+    }
+
+    @Bean
+    public ParameterNameDiscoverer parameterNameDiscoverer() {
+        return new SofaParameterNameDiscoverer();
     }
 
     @Configuration

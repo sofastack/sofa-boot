@@ -16,7 +16,10 @@
  */
 package com.alipay.sofa.runtime.spring.parser;
 
+import com.alipay.sofa.runtime.spring.bean.SofaBeanNameGenerator;
 import com.alipay.sofa.runtime.spring.factory.ServiceFactoryBean;
+import org.springframework.beans.factory.BeanDefinitionStoreException;
+import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;
@@ -47,8 +50,9 @@ public class ServiceDefinitionParser extends AbstractContractDefinitionParser {
     }
 
     @Override
-    protected boolean shouldGenerateIdAsFallback() {
-        return true;
+    protected String resolveId(Element element, AbstractBeanDefinition definition,
+                               ParserContext parserContext) throws BeanDefinitionStoreException {
+        return SofaBeanNameGenerator.generateSofaServiceBeanName(definition);
     }
 
     @Override

@@ -23,6 +23,7 @@ import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
 import com.alipay.sofa.isle.spring.context.SofaModuleApplicationContext;
 import com.alipay.sofa.isle.spring.factory.BeanLoadCostBeanFactory;
 import com.alipay.sofa.runtime.spi.log.SofaLogger;
+import com.alipay.sofa.runtime.spring.bean.SofaParameterNameDiscoverer;
 import org.springframework.beans.CachedIntrospectionResults;
 import org.springframework.beans.PropertyEditorRegistrar;
 import org.springframework.beans.PropertyEditorRegistry;
@@ -35,7 +36,6 @@ import org.springframework.beans.propertyeditors.ClassEditor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
-import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.core.io.Resource;
 import org.springframework.util.StringUtils;
 
@@ -60,7 +60,7 @@ public class DynamicSpringContextLoader implements SpringContextLoader {
                 SofaModuleProperties.class);
         BeanLoadCostBeanFactory beanFactory = new BeanLoadCostBeanFactory(
             sofaModuleProperties.getBeanLoadCost());
-        beanFactory.setParameterNameDiscoverer(new LocalVariableTableParameterNameDiscoverer());
+        beanFactory.setParameterNameDiscoverer(new SofaParameterNameDiscoverer());
         beanFactory
             .setAutowireCandidateResolver(new QualifierAnnotationAutowireCandidateResolver());
 

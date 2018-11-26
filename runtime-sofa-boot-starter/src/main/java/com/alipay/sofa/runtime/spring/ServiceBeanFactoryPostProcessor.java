@@ -16,11 +16,11 @@
  */
 package com.alipay.sofa.runtime.spring;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -40,12 +40,15 @@ import org.springframework.context.annotation.ScannedGenericBeanDefinition;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.core.type.MethodMetadata;
+import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import com.alipay.sofa.runtime.annotation.PlaceHolderAnnotationInvocationHandler.AnnotationWrapperBuilder;
 import com.alipay.sofa.runtime.annotation.PlaceHolderBinder;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
+import com.alipay.sofa.runtime.api.annotation.SofaReference;
 import com.alipay.sofa.runtime.api.annotation.SofaService;
 import com.alipay.sofa.runtime.api.annotation.SofaServiceBinding;
 import com.alipay.sofa.runtime.api.binding.BindingType;
@@ -57,6 +60,8 @@ import com.alipay.sofa.runtime.spi.log.SofaLogger;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
+import com.alipay.sofa.runtime.spring.bean.SofaBeanNameGenerator;
+import com.alipay.sofa.runtime.spring.factory.ReferenceFactoryBean;
 import com.alipay.sofa.runtime.spring.factory.ServiceFactoryBean;
 import com.alipay.sofa.runtime.spring.parser.AbstractContractDefinitionParser;
 import com.alipay.sofa.runtime.spring.parser.ServiceDefinitionParser;
@@ -66,14 +71,12 @@ import com.alipay.sofa.runtime.spring.parser.ServiceDefinitionParser;
  * @since 2.3.0
  */
 public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
-    private final static String            BEAN_ID_PREFIX  = "com.alipay.sofa.runtime.spring.factory.ServiceFactoryBean#api#";
-    private final PlaceHolderBinder        binder          = new DefaultPlaceHolderBinder();
+    private final PlaceHolderBinder        binder = new DefaultPlaceHolderBinder();
     private ConfigurableApplicationContext applicationContext;
     private SofaRuntimeContext             sofaRuntimeContext;
     private BindingAdapterFactory          bindingAdapterFactory;
     private BindingConverterFactory        bindingConverterFactory;
     private ConfigurableEnvironment        environment;
-    private AtomicInteger                  beanIdGenerator = new AtomicInteger(0);
 
     public ServiceBeanFactoryPostProcessor(ConfigurableApplicationContext applicationContext,
                                            SofaRuntimeContext sofaRuntimeContext,
@@ -145,11 +148,68 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
 
         if (method != null) {
             SofaService sofaServiceAnnotation = method.getAnnotation(SofaService.class);
-            if(sofaServiceAnnotation == null) {
+            if (sofaServiceAnnotation == null) {
                 sofaServiceAnnotation = returnType.getAnnotation(SofaService.class);
             }
             generateSofaServiceDefinition(beanId, sofaServiceAnnotation, returnType,
                 beanDefinition, beanFactory);
+            generateSofaReferenceDefinition(beanId, method, beanFactory);
+        }
+    }
+
+    private void generateSofaReferenceDefinition(String beanId, Method method,
+                                                 ConfigurableListableBeanFactory beanFactory) {
+        Class<?>[] parameterTypes = method.getParameterTypes();
+        Annotation[][] parameterAnnotations = method.getParameterAnnotations();
+        for (int i = 0; i < parameterAnnotations.length; ++i) {
+            for (Annotation annotation : parameterAnnotations[i]) {
+                if (annotation instanceof SofaReference) {
+                    doGenerateSofaReferenceDefinition(beanFactory.getBeanDefinition(beanId),
+                        (SofaReference) annotation, parameterTypes[i], beanFactory);
+                }
+            }
+        }
+    }
+
+    private void doGenerateSofaReferenceDefinition(BeanDefinition beanDefinition,
+                                                   SofaReference sofaReference,
+                                                   Class<?> parameterType,
+                                                   ConfigurableListableBeanFactory beanFactory) {
+        Assert.isTrue("jvm".equals(sofaReference.binding().bindingType()),
+            "Only jvm type of @SofaReference on parameter is supported.");
+        AnnotationWrapperBuilder<SofaReference> wrapperBuilder = AnnotationWrapperBuilder.wrap(
+            sofaReference).withBinder(binder);
+        sofaReference = wrapperBuilder.build();
+        Class<?> interfaceType = sofaReference.interfaceType();
+        if (interfaceType.equals(void.class)) {
+            interfaceType = parameterType;
+        }
+        String uniqueId = sofaReference.uniqueId();
+        String referenceId = SofaBeanNameGenerator.generateSofaReferenceBeanName(interfaceType,
+            uniqueId);
+
+        // build sofa reference definition
+        if (!beanFactory.containsBeanDefinition(referenceId)) {
+            BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition();
+            builder.getRawBeanDefinition().setScope(beanDefinition.getScope());
+            builder.getRawBeanDefinition().setLazyInit(beanDefinition.isLazyInit());
+            builder.getRawBeanDefinition().setBeanClass(ReferenceFactoryBean.class);
+            builder.addPropertyValue(AbstractContractDefinitionParser.UNIQUE_ID_PROPERTY, uniqueId);
+            builder.addPropertyValue(AbstractContractDefinitionParser.INTERFACE_CLASS_PROPERTY,
+                interfaceType);
+            builder.addPropertyValue(AbstractContractDefinitionParser.DEFINITION_BUILDING_API_TYPE,
+                true);
+            ((BeanDefinitionRegistry) beanFactory).registerBeanDefinition(referenceId,
+                builder.getBeanDefinition());
+        }
+
+        // add bean dependency relationship
+        if (beanDefinition.getDependsOn() == null) {
+            beanDefinition.setDependsOn(referenceId);
+        } else {
+            String[] added = ObjectUtils.addObjectToArray(beanDefinition.getDependsOn(),
+                referenceId);
+            beanDefinition.setDependsOn(added);
         }
     }
 
@@ -185,7 +245,6 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
             }
         }
 
-        String serviceBeanId = BEAN_ID_PREFIX + beanIdGenerator.getAndIncrement();
         BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition();
         builder.getRawBeanDefinition().setScope(beanDefinition.getScope());
         builder.setLazyInit(beanDefinition.isLazyInit());
@@ -197,11 +256,13 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
         builder.addPropertyValue(AbstractContractDefinitionParser.BINDINGS,
             getSofaServiceBinding(sofaServiceAnnotation, sofaServiceAnnotation.bindings()));
         builder.addPropertyReference(ServiceDefinitionParser.REF, beanId);
-        builder.addPropertyValue(ServiceDefinitionParser.BEAN_ID, serviceBeanId);
-        builder.addPropertyValue(AbstractContractDefinitionParser.DEFINITION_BUILDING_API_TYPE, true);
+        builder.addPropertyValue(ServiceDefinitionParser.BEAN_ID, beanId);
+        builder.addPropertyValue(AbstractContractDefinitionParser.DEFINITION_BUILDING_API_TYPE,
+            true);
         builder.addDependsOn(beanId);
 
-        ((BeanDefinitionRegistry) beanFactory).registerBeanDefinition(serviceBeanId,
+        ((BeanDefinitionRegistry) beanFactory).registerBeanDefinition(
+            SofaBeanNameGenerator.generateSofaServiceBeanName(builder.getBeanDefinition()),
             builder.getBeanDefinition());
     }
 
