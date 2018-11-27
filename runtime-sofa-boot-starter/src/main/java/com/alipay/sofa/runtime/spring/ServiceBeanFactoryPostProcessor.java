@@ -243,24 +243,29 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
         }
 
         BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition();
-        builder.getRawBeanDefinition().setScope(beanDefinition.getScope());
-        builder.setLazyInit(beanDefinition.isLazyInit());
-        builder.getRawBeanDefinition().setBeanClass(ServiceFactoryBean.class);
-        builder.addPropertyValue(AbstractContractDefinitionParser.INTERFACE_CLASS_PROPERTY,
-            interfaceType);
-        builder.addPropertyValue(AbstractContractDefinitionParser.UNIQUE_ID_PROPERTY,
+        String serviceId = SofaBeanNameGenerator.generateSofaServiceBeanName(interfaceType,
             sofaServiceAnnotation.uniqueId());
-        builder.addPropertyValue(AbstractContractDefinitionParser.BINDINGS,
-            getSofaServiceBinding(sofaServiceAnnotation, sofaServiceAnnotation.bindings()));
-        builder.addPropertyReference(ServiceDefinitionParser.REF, beanId);
-        builder.addPropertyValue(ServiceDefinitionParser.BEAN_ID, beanId);
-        builder.addPropertyValue(AbstractContractDefinitionParser.DEFINITION_BUILDING_API_TYPE,
-            true);
-        builder.addDependsOn(beanId);
 
-        ((BeanDefinitionRegistry) beanFactory).registerBeanDefinition(
-            SofaBeanNameGenerator.generateSofaServiceBeanName(interfaceType,
-                sofaServiceAnnotation.uniqueId()), builder.getBeanDefinition());
+        if (!beanFactory.containsBeanDefinition(serviceId)) {
+            builder.getRawBeanDefinition().setScope(beanDefinition.getScope());
+            builder.setLazyInit(beanDefinition.isLazyInit());
+            builder.getRawBeanDefinition().setBeanClass(ServiceFactoryBean.class);
+            builder.addPropertyValue(AbstractContractDefinitionParser.INTERFACE_CLASS_PROPERTY,
+                interfaceType);
+            builder.addPropertyValue(AbstractContractDefinitionParser.UNIQUE_ID_PROPERTY,
+                sofaServiceAnnotation.uniqueId());
+            builder.addPropertyValue(AbstractContractDefinitionParser.BINDINGS,
+                getSofaServiceBinding(sofaServiceAnnotation, sofaServiceAnnotation.bindings()));
+            builder.addPropertyReference(ServiceDefinitionParser.REF, beanId);
+            builder.addPropertyValue(ServiceDefinitionParser.BEAN_ID, beanId);
+            builder.addPropertyValue(AbstractContractDefinitionParser.DEFINITION_BUILDING_API_TYPE,
+                true);
+            builder.addDependsOn(beanId);
+            ((BeanDefinitionRegistry) beanFactory).registerBeanDefinition(serviceId,
+                builder.getBeanDefinition());
+        } else {
+            SofaLogger.error("SofaService was already registered: {0}", serviceId);
+        }
     }
 
     private List<Binding> getSofaServiceBinding(SofaService sofaServiceAnnotation,

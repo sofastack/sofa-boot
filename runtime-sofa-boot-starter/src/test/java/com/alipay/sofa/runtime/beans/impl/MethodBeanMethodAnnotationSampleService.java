@@ -20,11 +20,11 @@ import com.alipay.sofa.runtime.beans.service.SampleService;
 
 /**
  * @author qilong.zql
- * @since 2.3.1
+ * @since 3.1.0
  */
-public class XmlSampleService implements SampleService {
+public class MethodBeanMethodAnnotationSampleService implements SampleService {
     @Override
     public String service() {
-        return "XmlSampleService";
+        return "methodBeanMethodAnnotationSampleService";
     }
 }

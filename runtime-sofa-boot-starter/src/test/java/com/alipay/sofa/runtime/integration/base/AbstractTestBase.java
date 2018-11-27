@@ -16,42 +16,43 @@
  */
 package com.alipay.sofa.runtime.integration.base;
 
-import com.alipay.sofa.ark.spi.model.Biz;
-import com.alipay.sofa.runtime.integration.features.AwareTest;
-import com.alipay.sofa.runtime.integration.invoke.DynamicJvmServiceProxyFinder;
-import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
-import com.alipay.sofa.runtime.spring.listener.SofaRuntimeApplicationListener;
-import mockit.Mock;
-import mockit.MockUp;
-import mockit.Mocked;
-import mockit.NonStrictExpectations;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.Before;
-import org.mockito.Mockito;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.context.event.ApplicationPreparedEvent;
-import org.springframework.boot.test.util.EnvironmentTestUtils;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.alipay.sofa.ark.spi.model.Biz;
+import com.alipay.sofa.runtime.api.annotation.SofaReference;
+import com.alipay.sofa.runtime.api.annotation.SofaService;
+import com.alipay.sofa.runtime.beans.impl.MethodBeanClassAnnotationSampleService;
+import com.alipay.sofa.runtime.beans.impl.MethodBeanMethodAnnotationSampleService;
+import com.alipay.sofa.runtime.beans.impl.ParameterAnnotationSampleService;
+import com.alipay.sofa.runtime.beans.service.SampleService;
+import com.alipay.sofa.runtime.integration.features.AwareTest;
+import com.alipay.sofa.runtime.integration.invoke.DynamicJvmServiceProxyFinder;
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 
-import static org.mockito.Mockito.when;
+import mockit.Mock;
+import mockit.MockUp;
+import mockit.Mocked;
+import mockit.NonStrictExpectations;
 
 /**
  * @author qilong.zql
  * @since 2.3.1
  */
-public abstract class AbstractTestBase {
+public abstract class AbstractTestBase extends TestBase {
 
-    public AwareTest                          awareTest;
-
-    public AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
+    public AwareTest awareTest;
 
     @Mocked
-    public Biz                                biz;
+    public Biz       biz;
 
     @Before
     public void before() {
@@ -71,28 +72,9 @@ public abstract class AbstractTestBase {
 
         Map<String, Object> properties = new HashMap<>();
         properties.put("spring.application.name", "runtime-test");
+        properties.put("mix-xml-annotation-unique-id", "xmlAnnotationSampleService");
         initApplicationContext(properties, IntegrationTestConfiguration.class);
         awareTest = applicationContext.getBean(AwareTest.class);
-    }
-
-    protected void initApplicationContext(Map<String, Object> properties,
-                                          Class<?>... annotatedClasses) {
-        for (Map.Entry<String, Object> property : properties.entrySet()) {
-            EnvironmentTestUtils.addEnvironment(this.applicationContext,
-                buildProperty(property.getKey(), property.getValue()));
-        }
-
-        ApplicationPreparedEvent applicationPreparedEvent = Mockito
-            .mock(ApplicationPreparedEvent.class);
-        when(applicationPreparedEvent.getApplicationContext()).thenReturn(applicationContext);
-        new SofaRuntimeApplicationListener().onApplicationEvent(applicationPreparedEvent);
-
-        this.applicationContext.register(annotatedClasses);
-        this.applicationContext.refresh();
-    }
-
-    private String buildProperty(String key, Object value) {
-        return key + ":" + value;
     }
 
     @Configuration
@@ -100,5 +82,30 @@ public abstract class AbstractTestBase {
     @ImportResource({ "classpath*:META-INF/spring/*.xml" })
     @ComponentScan({ "com.alipay.sofa.runtime.integration.features" })
     static class IntegrationTestConfiguration {
+        @Configuration
+        static class BeforeConfiguration {
+            @Bean
+            MethodBeanClassAnnotationSampleService methodBeanClassAnnotationSampleService() {
+                return new MethodBeanClassAnnotationSampleService();
+            }
+
+            @Bean
+            @SofaService(uniqueId = "methodBeanMethodAnnotationSampleService")
+            SampleService methodBeanMethodAnnotationSampleService() {
+                return new MethodBeanMethodAnnotationSampleService();
+            }
+        }
+
+        @Configuration
+        @AutoConfigureAfter(BeforeConfiguration.class)
+        static class AfterConfiguration {
+            @Bean
+            SampleService parameterAnnotationSampleService(@SofaReference(uniqueId = "${mix-xml-annotation-unique-id}") SampleService service1,
+                                                           @SofaReference(uniqueId = "methodBeanClassAnnotationSampleService") SampleService service2,
+                                                           @SofaReference(uniqueId = "methodBeanMethodAnnotationSampleService") SampleService service3) {
+                return new ParameterAnnotationSampleService(service1, service2, service3);
+            }
+        }
     }
+
 }

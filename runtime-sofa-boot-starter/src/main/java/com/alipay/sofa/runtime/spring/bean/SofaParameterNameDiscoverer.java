@@ -22,7 +22,10 @@ import java.lang.reflect.Method;
 
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.core.ParameterNameDiscoverer;
+import org.springframework.core.env.Environment;
 
+import com.alipay.sofa.runtime.annotation.PlaceHolderAnnotationInvocationHandler.AnnotationWrapperBuilder;
+import com.alipay.sofa.runtime.annotation.PlaceHolderBinder;
 import com.alipay.sofa.runtime.api.annotation.SofaReference;
 
 /**
@@ -30,7 +33,13 @@ import com.alipay.sofa.runtime.api.annotation.SofaReference;
  * @since 3.1.0
  */
 public class SofaParameterNameDiscoverer implements ParameterNameDiscoverer {
+    private final PlaceHolderBinder                   binder                                    = new DefaultPlaceHolderBinder();
     private LocalVariableTableParameterNameDiscoverer localVariableTableParameterNameDiscoverer = new LocalVariableTableParameterNameDiscoverer();
+    private Environment                               environment;
+
+    public SofaParameterNameDiscoverer(Environment environment) {
+        this.environment = environment;
+    }
 
     @Override
     public String[] getParameterNames(Method method) {
@@ -49,21 +58,32 @@ public class SofaParameterNameDiscoverer implements ParameterNameDiscoverer {
         return transformParameterNames(parameterNames, parameterTypes, annotations);
     }
 
+    @SuppressWarnings("unchecked")
     protected String[] transformParameterNames(String[] parameterNames, Class<?>[] parameterType,
                                                Annotation[][] annotations) {
         for (int i = 0; i < annotations.length; ++i) {
             for (Annotation annotation : annotations[i]) {
                 if (annotation instanceof SofaReference) {
-                    Class interfaceType = ((SofaReference) annotation).interfaceType();
+                    AnnotationWrapperBuilder<SofaReference> wrapperBuilder = AnnotationWrapperBuilder
+                        .wrap(annotation).withBinder(binder);
+                    SofaReference delegate = wrapperBuilder.build();
+                    Class interfaceType = delegate.interfaceType();
                     if (interfaceType.equals(void.class)) {
                         interfaceType = parameterType[i];
                     }
-                    String uniqueId = ((SofaReference) annotation).uniqueId();
+                    String uniqueId = delegate.uniqueId();
                     parameterNames[i] = SofaBeanNameGenerator.generateSofaReferenceBeanName(
                         interfaceType, uniqueId);
                 }
             }
         }
         return parameterNames;
+    }
+
+    class DefaultPlaceHolderBinder implements PlaceHolderBinder {
+        @Override
+        public String bind(String text) {
+            return environment.resolvePlaceholders(text);
+        }
     }
 }

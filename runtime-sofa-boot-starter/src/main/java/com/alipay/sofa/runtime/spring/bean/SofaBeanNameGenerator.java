@@ -49,13 +49,13 @@ public class SofaBeanNameGenerator {
         if (StringUtils.isEmpty(uniqueId)) {
             return SERVICE_BEAN_NAME_PREFIX + interfaceType.getCanonicalName();
         }
-        return SERVICE_BEAN_NAME_PREFIX + interfaceType + ":" + uniqueId;
+        return SERVICE_BEAN_NAME_PREFIX + interfaceType.getCanonicalName() + ":" + uniqueId;
     }
 
     public static String generateSofaReferenceBeanName(Class<?> interfaceType, String uniqueId) {
         if (StringUtils.isEmpty(uniqueId)) {
             return REFERENCE_BEAN_NAME_PREFIX + interfaceType.getCanonicalName();
         }
-        return REFERENCE_BEAN_NAME_PREFIX + interfaceType + ":" + uniqueId;
+        return REFERENCE_BEAN_NAME_PREFIX + interfaceType.getCanonicalName() + ":" + uniqueId;
     }
 }

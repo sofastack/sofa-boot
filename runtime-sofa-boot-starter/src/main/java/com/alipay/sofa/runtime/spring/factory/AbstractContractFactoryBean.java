@@ -153,6 +153,10 @@ public abstract class AbstractContractFactoryBean implements InitializingBean, F
                 interfaceClass = this.getClass().getClassLoader().loadClass(interfaceType);
             } catch (ClassNotFoundException e) {
                 throw new RuntimeException(e);
+            } catch (NullPointerException e) {
+                // No type found for shortcut FactoryBean instance:
+                // fall back to full creation of the FactoryBean instance
+                return null;
             }
         }
 

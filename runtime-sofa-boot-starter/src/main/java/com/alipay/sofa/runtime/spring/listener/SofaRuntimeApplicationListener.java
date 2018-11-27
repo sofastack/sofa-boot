@@ -93,7 +93,8 @@ public class SofaRuntimeApplicationListener implements
 
         if (beanFactory instanceof AbstractAutowireCapableBeanFactory) {
             ((AbstractAutowireCapableBeanFactory) beanFactory)
-                .setParameterNameDiscoverer(new SofaParameterNameDiscoverer());
+                .setParameterNameDiscoverer(new SofaParameterNameDiscoverer(applicationContext
+                    .getEnvironment()));
         }
     }
 
