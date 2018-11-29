@@ -19,11 +19,17 @@ package com.alipay.sofa.isle.spring.health;
 import com.alipay.sofa.healthcheck.configuration.HealthCheckConstants;
 import com.alipay.sofa.isle.spring.configuration.SofaModuleAutoConfiguration;
 import com.alipay.sofa.runtime.spring.configuration.SofaRuntimeAutoConfiguration;
+import com.alipay.sofa.runtime.spring.listener.SofaRuntimeApplicationListener;
 import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
+import org.springframework.boot.context.event.ApplicationPreparedEvent;
 import org.springframework.boot.test.util.EnvironmentTestUtils;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+import static org.mockito.Mockito.when;
 
 /**
  * @author abby.zh
@@ -36,6 +42,14 @@ public class SofaModuleHealthCheckerTest {
     @After
     public void closeContext() {
         this.applicationContext.close();
+    }
+
+    @Before
+    public void before() {
+        ApplicationPreparedEvent applicationPreparedEvent = Mockito
+            .mock(ApplicationPreparedEvent.class);
+        when(applicationPreparedEvent.getApplicationContext()).thenReturn(applicationContext);
+        new SofaRuntimeApplicationListener().onApplicationEvent(applicationPreparedEvent);
     }
 
     @Test
