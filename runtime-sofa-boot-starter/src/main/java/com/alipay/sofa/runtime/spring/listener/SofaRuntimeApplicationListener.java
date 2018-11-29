@@ -24,6 +24,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory;
 import org.springframework.boot.context.event.ApplicationPreparedEvent;
+import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -78,8 +79,9 @@ public class SofaRuntimeApplicationListener implements
         beanFactory.registerSingleton(SofaRuntimeFrameworkConstants.SOFA_RUNTIME_CONTEXT_BEAN_ID,
             sofaRuntimeContext);
 
-        beanFactory.registerSingleton(ServiceAnnotationBeanPostProcessor.class.getCanonicalName(),
-            new ServiceAnnotationBeanPostProcessor(applicationContext, sofaRuntimeContext,
+        beanFactory.registerSingleton(
+            ReferenceAnnotationBeanPostProcessor.class.getCanonicalName(),
+            new ReferenceAnnotationBeanPostProcessor(applicationContext, sofaRuntimeContext,
                 bindingAdapterFactory, bindingConverterFactory));
         beanFactory.registerSingleton(ClientFactoryBeanPostProcessor.class.getCanonicalName(),
             new ClientFactoryBeanPostProcessor(sofaRuntimeContext.getClientFactory()));

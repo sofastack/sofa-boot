@@ -18,11 +18,10 @@ package com.alipay.sofa.runtime.spring;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.FatalBeanException;
@@ -36,6 +35,7 @@ import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ScannedGenericBeanDefinition;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.type.AnnotationMetadata;
@@ -67,7 +67,7 @@ import com.alipay.sofa.runtime.spring.parser.ServiceDefinitionParser;
 
 /**
  * @author qilong.zql
- * @since 2.3.0
+ * @since 3.1.0
  */
 public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
     private final PlaceHolderBinder        binder = new DefaultPlaceHolderBinder();
@@ -127,7 +127,14 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
             returnType = ClassUtils.forName(methodMetadata.getReturnTypeName(), null);
             declaringClass = ClassUtils.forName(methodMetadata.getDeclaringClassName(), null);
             for (Method m : declaringClass.getDeclaredMethods()) {
-                if (!m.getName().equals(beanId)) {
+
+                Bean bean = m.getAnnotation(Bean.class);
+                Set<String> beanNames = Stream.of(m.getName()).collect(Collectors.toSet());
+                if (bean != null) {
+                    beanNames.addAll(Arrays.asList(bean.name()));
+                    beanNames.addAll(Arrays.asList(bean.value()));
+                }
+                if (!beanNames.contains(beanId)) {
                     continue;
                 }
                 if (method != null) {

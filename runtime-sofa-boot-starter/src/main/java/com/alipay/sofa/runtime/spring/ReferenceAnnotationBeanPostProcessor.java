@@ -51,7 +51,7 @@ import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
  *
  * @author xuanbei 18/5/9
  */
-public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, Ordered {
+public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor, Ordered {
     private final PlaceHolderBinder binder = new DefaultPlaceHolderBinder();
     private ApplicationContext      applicationContext;
     private SofaRuntimeContext      sofaRuntimeContext;
@@ -60,17 +60,17 @@ public class ServiceAnnotationBeanPostProcessor implements BeanPostProcessor, Or
     private Environment             environment;
 
     /**
-     * To construct a ServiceAnnotationBeanPostProcessor via a Spring Bean
+     * To construct a ReferenceAnnotationBeanPostProcessor via a Spring Bean
      * sofaRuntimeContext and sofaRuntimeProperties will be obtained from applicationContext
      * @param applicationContext
      * @param sofaRuntimeContext
      * @param bindingAdapterFactory
      * @param bindingConverterFactory
      */
-    public ServiceAnnotationBeanPostProcessor(ApplicationContext applicationContext,
-                                              SofaRuntimeContext sofaRuntimeContext,
-                                              BindingAdapterFactory bindingAdapterFactory,
-                                              BindingConverterFactory bindingConverterFactory) {
+    public ReferenceAnnotationBeanPostProcessor(ApplicationContext applicationContext,
+                                                SofaRuntimeContext sofaRuntimeContext,
+                                                BindingAdapterFactory bindingAdapterFactory,
+                                                BindingConverterFactory bindingConverterFactory) {
         this.applicationContext = applicationContext;
         this.sofaRuntimeContext = sofaRuntimeContext;
         this.bindingAdapterFactory = bindingAdapterFactory;

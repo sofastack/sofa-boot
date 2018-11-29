@@ -39,17 +39,18 @@ public class SofaBeanNameGenerator {
         }
         String uniqueId = (String) definition.getPropertyValues().get(
             AbstractContractDefinitionParser.UNIQUE_ID_PROPERTY);
+        return generateSofaServiceBeanName(interfaceName, uniqueId);
+    }
+
+    public static String generateSofaServiceBeanName(Class<?> interfaceType, String uniqueId) {
+        return generateSofaServiceBeanName(interfaceType.getCanonicalName(), uniqueId);
+    }
+
+    public static String generateSofaServiceBeanName(String interfaceName, String uniqueId) {
         if (StringUtils.isEmpty(uniqueId)) {
             return SERVICE_BEAN_NAME_PREFIX + interfaceName;
         }
         return SERVICE_BEAN_NAME_PREFIX + interfaceName + ":" + uniqueId;
-    }
-
-    public static String generateSofaServiceBeanName(Class<?> interfaceType, String uniqueId) {
-        if (StringUtils.isEmpty(uniqueId)) {
-            return SERVICE_BEAN_NAME_PREFIX + interfaceType.getCanonicalName();
-        }
-        return SERVICE_BEAN_NAME_PREFIX + interfaceType.getCanonicalName() + ":" + uniqueId;
     }
 
     public static String generateSofaReferenceBeanName(Class<?> interfaceType, String uniqueId) {

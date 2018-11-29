@@ -89,7 +89,7 @@ public abstract class AbstractTestBase extends TestBase {
                 return new MethodBeanClassAnnotationSampleService();
             }
 
-            @Bean
+            @Bean({ "name1", "name2" })
             @SofaService(uniqueId = "methodBeanMethodAnnotationSampleService")
             SampleService methodBeanMethodAnnotationSampleService() {
                 return new MethodBeanMethodAnnotationSampleService();
