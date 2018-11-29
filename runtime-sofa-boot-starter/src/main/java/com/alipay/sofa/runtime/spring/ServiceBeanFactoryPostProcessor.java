@@ -114,8 +114,7 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
                 SofaLogger.warn("Bean class type cant be resolved from bean of {}", beanId);
                 return;
             }
-            generateSofaServiceDefinitionOnClass(beanId, beanClassType, beanDefinition,
-                beanFactory);
+            generateSofaServiceDefinitionOnClass(beanId, beanClassType, beanDefinition, beanFactory);
         }
     }
 
@@ -158,8 +157,8 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
             if (sofaServiceAnnotation == null) {
                 sofaServiceAnnotation = returnType.getAnnotation(SofaService.class);
             }
-            generateSofaServiceDefinition(beanId, sofaServiceAnnotation, returnType, beanDefinition,
-                beanFactory);
+            generateSofaServiceDefinition(beanId, sofaServiceAnnotation, returnType,
+                beanDefinition, beanFactory);
             generateSofaReferenceDefinition(beanId, method, beanFactory);
         }
     }
@@ -186,8 +185,8 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
         Assert.isTrue(
             JvmBinding.JVM_BINDING_TYPE.getType().equals(sofaReference.binding().bindingType()),
             "Only jvm type of @SofaReference on parameter is supported.");
-        AnnotationWrapperBuilder<SofaReference> wrapperBuilder = AnnotationWrapperBuilder
-            .wrap(sofaReference).withBinder(binder);
+        AnnotationWrapperBuilder<SofaReference> wrapperBuilder = AnnotationWrapperBuilder.wrap(
+            sofaReference).withBinder(binder);
         sofaReference = wrapperBuilder.build();
         Class<?> interfaceType = sofaReference.interfaceType();
         if (interfaceType.equals(void.class)) {
@@ -237,8 +236,8 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
         if (sofaServiceAnnotation == null) {
             return;
         }
-        AnnotationWrapperBuilder<SofaService> wrapperBuilder = AnnotationWrapperBuilder
-            .wrap(sofaServiceAnnotation).withBinder(binder);
+        AnnotationWrapperBuilder<SofaService> wrapperBuilder = AnnotationWrapperBuilder.wrap(
+            sofaServiceAnnotation).withBinder(binder);
         sofaServiceAnnotation = wrapperBuilder.build();
 
         Class<?> interfaceType = sofaServiceAnnotation.interfaceType();
@@ -292,7 +291,7 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
                 if (bindingConverter == null) {
                     throw new ServiceRuntimeException(
                         "Can not found binding converter for binding type "
-                                                      + sofaServiceBinding.bindingType());
+                                + sofaServiceBinding.bindingType());
                 }
                 BindingConverterContext bindingConverterContext = new BindingConverterContext();
                 bindingConverterContext.setInBinding(false);
@@ -315,8 +314,11 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
      * @return
      */
     private boolean isFromConfigurationSource(BeanDefinition beanDefinition) {
-        return beanDefinition.getClass().getCanonicalName().startsWith(
-            "org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader");
+        return beanDefinition
+            .getClass()
+            .getCanonicalName()
+            .startsWith(
+                "org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader");
     }
 
     /**
@@ -349,8 +351,8 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
             } catch (IllegalStateException ex) {
                 try {
                     String className = beanDefinition.getBeanClassName();
-                    clazz = StringUtils.isEmpty(className) ? null
-                        : ClassUtils.forName(className, null);
+                    clazz = StringUtils.isEmpty(className) ? null : ClassUtils.forName(className,
+                        null);
                 } catch (Throwable throwable) {
                     // ignore
                 }
