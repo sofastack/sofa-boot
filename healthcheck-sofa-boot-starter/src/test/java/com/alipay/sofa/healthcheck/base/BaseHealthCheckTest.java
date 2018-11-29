@@ -16,11 +16,11 @@
  */
 package com.alipay.sofa.healthcheck.base;
 
-import org.springframework.boot.actuate.autoconfigure.health.HealthEndpointAutoConfiguration;
-import org.springframework.boot.test.util.EnvironmentTestUtils;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
 import java.util.Map;
+
+import org.springframework.boot.actuate.autoconfigure.health.HealthEndpointAutoConfiguration;
+import org.springframework.boot.test.util.TestPropertyValues;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 /**
  * init an annotation application context with properties and classes
@@ -29,19 +29,18 @@ import java.util.Map;
 public class BaseHealthCheckTest {
     protected final AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
 
-    protected void initApplicationContext(Map<String, Object> properties,
-                                          Class<?>... annotatedClasses) {
-        for (Map.Entry<String, Object> property : properties.entrySet()) {
-            EnvironmentTestUtils.addEnvironment(this.applicationContext,
-                buildProperty(property.getKey(), property.getValue()));
-        }
-        this.applicationContext.register(HealthEndpointAutoConfiguration.class);
-        this.applicationContext.register(annotatedClasses);
-        this.applicationContext.refresh();
-    }
-
     private static String buildProperty(String key, Object value) {
         return key + ":" + value;
     }
 
+    protected void initApplicationContext(Map<String, Object> properties,
+                                          Class<?>... annotatedClasses) {
+        TestPropertyValues
+            .of(properties.entrySet().stream()
+                .map(entry -> buildProperty(entry.getKey(), entry.getValue())))
+            .applyTo(applicationContext);
+        this.applicationContext.register(HealthEndpointAutoConfiguration.class);
+        this.applicationContext.register(annotatedClasses);
+        this.applicationContext.refresh();
+    }
 }

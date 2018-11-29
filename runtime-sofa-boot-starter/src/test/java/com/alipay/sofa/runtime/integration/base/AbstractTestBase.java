@@ -16,24 +16,26 @@
  */
 package com.alipay.sofa.runtime.integration.base;
 
-import com.alipay.sofa.ark.spi.model.Biz;
-import com.alipay.sofa.runtime.integration.features.AwareTest;
-import com.alipay.sofa.runtime.integration.invoke.DynamicJvmServiceProxyFinder;
-import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
-import mockit.Mock;
-import mockit.MockUp;
-import mockit.Mocked;
-import mockit.NonStrictExpectations;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.Before;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.test.util.EnvironmentTestUtils;
+import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.alipay.sofa.ark.spi.model.Biz;
+import com.alipay.sofa.runtime.integration.features.AwareTest;
+import com.alipay.sofa.runtime.integration.invoke.DynamicJvmServiceProxyFinder;
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
+
+import mockit.Mock;
+import mockit.MockUp;
+import mockit.Mocked;
+import mockit.NonStrictExpectations;
 
 /**
  * @author qilong.zql
@@ -72,11 +74,10 @@ public abstract class AbstractTestBase {
 
     protected void initApplicationContext(Map<String, Object> properties,
                                           Class<?>... annotatedClasses) {
-        for (Map.Entry<String, Object> property : properties.entrySet()) {
-            EnvironmentTestUtils.addEnvironment(this.applicationContext,
-                buildProperty(property.getKey(), property.getValue()));
-        }
-
+        TestPropertyValues
+            .of(properties.entrySet().stream()
+                .map(entry -> buildProperty(entry.getKey(), entry.getValue())))
+            .applyTo(applicationContext);
         this.applicationContext.register(annotatedClasses);
         this.applicationContext.refresh();
     }

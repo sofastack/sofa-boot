@@ -16,15 +16,16 @@
  */
 package com.alipay.sofa.runtime.spring.config;
 
-import com.alipay.sofa.runtime.SofaRuntimeProperties;
-import com.alipay.sofa.runtime.spring.configuration.SofaRuntimeAutoConfiguration;
-import org.junit.After;
-import org.junit.Test;
-import org.springframework.boot.test.util.EnvironmentTestUtils;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import org.junit.After;
+import org.junit.Test;
+import org.springframework.boot.test.util.TestPropertyValues;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+import com.alipay.sofa.runtime.SofaRuntimeProperties;
+import com.alipay.sofa.runtime.spring.configuration.SofaRuntimeAutoConfiguration;
 
 public class SofaRuntimePropertiesTest {
 
@@ -38,9 +39,8 @@ public class SofaRuntimePropertiesTest {
     @Test
     public void testDisableJvmFirstProperty() {
         assertFalse(SofaRuntimeProperties.isDisableJvmFirst(applicationContext.getClassLoader()));
-
-        EnvironmentTestUtils.addEnvironment(this.applicationContext,
-            "com.alipay.sofa.boot.disableJvmFirst=true");
+        TestPropertyValues.of("com.alipay.sofa.boot.disableJvmFirst=true").applyTo(
+            applicationContext);
         this.applicationContext.register(SofaRuntimeAutoConfiguration.class);
         this.applicationContext.refresh();
         SofaRuntimeConfigurationProperties configurationProperties = this.applicationContext
@@ -55,8 +55,8 @@ public class SofaRuntimePropertiesTest {
         assertFalse(SofaRuntimeProperties.isSkipJvmReferenceHealthCheck(applicationContext
             .getClassLoader()));
 
-        EnvironmentTestUtils.addEnvironment(this.applicationContext,
-            "com.alipay.sofa.boot.skipJvmReferenceHealthCheck=true");
+        TestPropertyValues.of("com.alipay.sofa.boot.skipJvmReferenceHealthCheck=true").applyTo(
+            applicationContext);
         this.applicationContext.register(SofaRuntimeAutoConfiguration.class);
         this.applicationContext.refresh();
         SofaRuntimeConfigurationProperties configurationProperties = this.applicationContext
