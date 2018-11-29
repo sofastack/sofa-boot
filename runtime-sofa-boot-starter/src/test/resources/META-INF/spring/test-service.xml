@@ -13,6 +13,7 @@
     <bean id="processor" class="com.alipay.sofa.runtime.beans.FactoryBeanPostProcessor"/>
     <bean id="xmlSampleService" class="com.alipay.sofa.runtime.beans.impl.XmlSampleService"/>
     <bean id="xmlSampleServiceWithUniqueId" class="com.alipay.sofa.runtime.beans.impl.XmlSampleServiceWithUniqueId"/>
+    <bean id="xmlAnnotationSampleService" class="com.alipay.sofa.runtime.beans.impl.XmlAnnotationSampleService"/>
 
     <sofa:service ref="xmlSampleService" interface="com.alipay.sofa.runtime.beans.service.SampleService"/>
     <sofa:service ref="xmlSampleServiceWithUniqueId" interface="com.alipay.sofa.runtime.beans.service.SampleService" unique-id="xml"/>

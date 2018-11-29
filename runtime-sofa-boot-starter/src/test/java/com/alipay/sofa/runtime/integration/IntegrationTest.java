@@ -16,16 +16,24 @@
  */
 package com.alipay.sofa.runtime.integration;
 
-import com.alipay.sofa.healthcheck.configuration.HealthCheckConstants;
-import com.alipay.sofa.healthcheck.core.HealthChecker;
-import com.alipay.sofa.runtime.beans.service.SampleService;
-import com.alipay.sofa.runtime.integration.aop.SampleServiceAspect;
-import com.alipay.sofa.runtime.integration.base.AbstractTestBase;
-import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.boot.actuate.health.Status;
 import org.springframework.context.ApplicationContext;
+
+import com.alipay.sofa.healthcheck.configuration.HealthCheckConstants;
+import com.alipay.sofa.healthcheck.core.HealthChecker;
+import com.alipay.sofa.runtime.beans.impl.XmlAnnotationSampleService;
+import com.alipay.sofa.runtime.beans.impl.XmlSampleServiceWithUniqueId;
+import com.alipay.sofa.runtime.beans.service.SampleService;
+import com.alipay.sofa.runtime.integration.aop.SampleServiceAspect;
+import com.alipay.sofa.runtime.integration.base.AbstractTestBase;
+import com.alipay.sofa.runtime.integration.features.SampleServiceAnnotationImplWithMethod;
+import com.alipay.sofa.runtime.integration.features.SampleServiceAnnotationImplWithUniqueId;
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
+import com.alipay.sofa.runtime.spring.bean.SofaBeanNameGenerator;
+import com.alipay.sofa.runtime.spring.factory.ReferenceFactoryBean;
+import com.alipay.sofa.runtime.spring.factory.ServiceFactoryBean;
 
 /**
  * @author qilong.zql
@@ -97,5 +105,131 @@ public class IntegrationTest extends AbstractTestBase {
         Assert.assertEquals(awareTest.getServiceWithoutInterface().service(),
             "ServiceWithoutInterface");
         Assert.assertTrue(SampleServiceAspect.isAspectInvoked());
+
+        Assert.assertEquals(awareTest.getXmlAnnotationSampleService().service(),
+            "XmlAnnotationSampleService");
+        Assert.assertTrue(SampleServiceAspect.isAspectInvoked());
+    }
+
+    @Test
+    public void testFactoryBean() {
+        ApplicationContext applicationContext = awareTest.getApplicationContext();
+        ServiceFactoryBean serviceFactoryBean;
+        ReferenceFactoryBean referenceFactoryBean;
+
+        /**
+         * {@link com.alipay.sofa.runtime.beans.impl.MethodBeanClassAnnotationSampleService}
+         **/
+        serviceFactoryBean = (ServiceFactoryBean) applicationContext
+            .getBean("&"
+                     + SofaBeanNameGenerator.generateSofaServiceBeanName(SampleService.class,
+                         "methodBeanClassAnnotationSampleService"));
+        Assert.assertTrue(serviceFactoryBean.isApiType());
+        referenceFactoryBean = (ReferenceFactoryBean) applicationContext
+            .getBean("&"
+                     + SofaBeanNameGenerator.generateSofaReferenceBeanName(SampleService.class,
+                         "methodBeanClassAnnotationSampleService"));
+        Assert.assertTrue(serviceFactoryBean.isApiType());
+
+        /**
+         * {@link com.alipay.sofa.runtime.integration.base.AbstractTestBase.IntegrationTestConfiguration.BeforeConfiguration}
+         */
+        serviceFactoryBean = (ServiceFactoryBean) applicationContext
+            .getBean("&"
+                     + SofaBeanNameGenerator.generateSofaServiceBeanName(SampleService.class,
+                         "methodBeanMethodAnnotationSampleService"));
+        Assert.assertTrue(serviceFactoryBean.isApiType());
+        referenceFactoryBean = (ReferenceFactoryBean) applicationContext
+            .getBean("&"
+                     + SofaBeanNameGenerator.generateSofaReferenceBeanName(SampleService.class,
+                         "methodBeanMethodAnnotationSampleService"));
+        Assert.assertTrue(referenceFactoryBean.isApiType());
+
+        /**
+         * {@link XmlAnnotationSampleService}
+         */
+        serviceFactoryBean = (ServiceFactoryBean) applicationContext
+            .getBean("&"
+                     + SofaBeanNameGenerator.generateSofaServiceBeanName(SampleService.class,
+                         "xmlAnnotationSampleService"));
+        Assert.assertTrue(serviceFactoryBean.isApiType());
+        referenceFactoryBean = (ReferenceFactoryBean) applicationContext
+            .getBean("&"
+                     + SofaBeanNameGenerator.generateSofaReferenceBeanName(SampleService.class,
+                         "xmlAnnotationSampleService"));
+        Assert.assertTrue(referenceFactoryBean.isApiType());
+
+        /**
+         * {@link com.alipay.sofa.runtime.beans.impl.XmlSampleService}
+         */
+        serviceFactoryBean = (ServiceFactoryBean) applicationContext
+            .getBean("&"
+                     + SofaBeanNameGenerator.generateSofaServiceBeanName(SampleService.class, ""));
+        Assert.assertFalse(serviceFactoryBean.isApiType());
+        referenceFactoryBean = (ReferenceFactoryBean) applicationContext.getBean("&xmlReference");
+        Assert.assertFalse(referenceFactoryBean.isApiType());
+
+        /**
+         * {@link XmlSampleServiceWithUniqueId}
+         */
+        serviceFactoryBean = (ServiceFactoryBean) applicationContext
+            .getBean("&"
+                     + SofaBeanNameGenerator
+                         .generateSofaServiceBeanName(SampleService.class, "xml"));
+        Assert.assertFalse(serviceFactoryBean.isApiType());
+        referenceFactoryBean = (ReferenceFactoryBean) applicationContext
+            .getBean("&xmlReferenceWithUniqueId");
+        Assert.assertFalse(referenceFactoryBean.isApiType());
+
+        /**
+         * {@link SampleServiceAnnotationImplWithMethod}
+         */
+        serviceFactoryBean = (ServiceFactoryBean) applicationContext
+            .getBean("&"
+                     + SofaBeanNameGenerator.generateSofaServiceBeanName(SampleService.class,
+                         "method"));
+        Assert.assertTrue(serviceFactoryBean.isApiType());
+
+        /**
+         * {@link SampleServiceAnnotationImplWithUniqueId}
+         */
+        serviceFactoryBean = (ServiceFactoryBean) applicationContext
+            .getBean("&"
+                     + SofaBeanNameGenerator.generateSofaServiceBeanName(SampleService.class,
+                         "annotation"));
+        Assert.assertTrue(serviceFactoryBean.isApiType());
+    }
+
+    @Test
+    public void testParameterSofaReference() {
+        ApplicationContext applicationContext = awareTest.getApplicationContext();
+        SampleService parameterAnnotationSampleService = (SampleService) applicationContext
+            .getBean("parameterAnnotationSampleService");
+
+        SampleService xmlAnnotationSampleService = (SampleService) applicationContext
+            .getBean(SofaBeanNameGenerator.generateSofaReferenceBeanName(SampleService.class,
+                "xmlAnnotationSampleService"));
+
+        SampleService methodBeanClassAnnotationSampleService = (SampleService) applicationContext
+            .getBean(SofaBeanNameGenerator.generateSofaReferenceBeanName(SampleService.class,
+                "methodBeanClassAnnotationSampleService"));
+
+        SampleService methodBeanMethodAnnotationSampleService = (SampleService) applicationContext
+            .getBean(SofaBeanNameGenerator.generateSofaReferenceBeanName(SampleService.class,
+                "methodBeanMethodAnnotationSampleService"));
+
+        Assert.assertEquals(
+            parameterAnnotationSampleService.service(),
+            xmlAnnotationSampleService.service() + "@"
+                    + methodBeanClassAnnotationSampleService.service() + "@"
+                    + methodBeanMethodAnnotationSampleService.service());
+    }
+
+    @Test
+    public void testServiceFactoryBean() {
+        ApplicationContext applicationContext = awareTest.getApplicationContext();
+        applicationContext.getBeansOfType(ServiceFactoryBean.class).forEach((key, value) -> {
+            Assert.assertTrue(key.startsWith("&ServiceFactoryBean#"));
+        });
     }
 }

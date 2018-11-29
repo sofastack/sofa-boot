@@ -16,6 +16,23 @@
  */
 package com.alipay.sofa.runtime.ark;
 
+import static org.mockito.Mockito.when;
+
+import java.util.Collections;
+import java.util.Set;
+
+import org.aopalliance.intercept.MethodInvocation;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mockito;
+import org.springframework.boot.context.event.ApplicationPreparedEvent;
+import org.springframework.boot.test.util.EnvironmentTestUtils;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+
 import com.alipay.sofa.ark.spi.constant.Constants;
 import com.alipay.sofa.ark.spi.event.BizEvent;
 import com.alipay.sofa.ark.spi.model.Biz;
@@ -31,17 +48,9 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import com.alipay.sofa.runtime.spi.service.ServiceProxy;
 import com.alipay.sofa.runtime.spring.configuration.SofaRuntimeAutoConfiguration;
-import mockit.*;
-import org.aopalliance.intercept.MethodInvocation;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.boot.test.util.EnvironmentTestUtils;
-import org.springframework.context.annotation.*;
+import com.alipay.sofa.runtime.spring.listener.SofaRuntimeApplicationListener;
 
-import java.util.Collections;
-import java.util.Set;
+import mockit.*;
 
 /**
  * @author qilong.zql
@@ -77,12 +86,17 @@ public class SofaEventHandlerTest {
         };
 
         applicationContext = new AnnotationConfigApplicationContext();
+        ApplicationPreparedEvent applicationPreparedEvent = Mockito
+            .mock(ApplicationPreparedEvent.class);
+        when(applicationPreparedEvent.getApplicationContext()).thenReturn(applicationContext);
+
         EnvironmentTestUtils.addEnvironment(this.applicationContext,
             "com.alipay.sofa.boot.disableJvmFirst=true");
         EnvironmentTestUtils.addEnvironment(this.applicationContext,
             "com.alipay.sofa.boot.skipJvmReferenceHealthCheck=true");
         this.applicationContext.register(SofaRuntimeAutoConfiguration.class,
             SofaBootHealthCheckInitializer.class, XmlConfiguration.class);
+        new SofaRuntimeApplicationListener().onApplicationEvent(applicationPreparedEvent);
         this.applicationContext.refresh();
     }
 
