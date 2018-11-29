@@ -16,8 +16,17 @@
  */
 package com.alipay.sofa.runtime.spring.configuration;
 
+import org.springframework.boot.actuate.health.HealthIndicator;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
 import com.alipay.sofa.ark.spi.model.Biz;
 import com.alipay.sofa.healthcheck.core.HealthChecker;
+<<<<<<< HEAD
 import com.alipay.sofa.infra.constants.CommonMiddlewareConstants;
 import com.alipay.sofa.runtime.api.client.ReferenceClient;
 import com.alipay.sofa.runtime.api.client.ServiceClient;
@@ -31,32 +40,15 @@ import com.alipay.sofa.runtime.SofaFramework;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapter;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
 import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
+=======
+>>>>>>> 50a95ec... Support  @SofaService to annotated on method and refactor related code. (#288)
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
-import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
-import com.alipay.sofa.runtime.spi.service.BindingConverter;
-import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
-import com.alipay.sofa.runtime.spring.ApplicationShutdownCallbackPostProcessor;
-import com.alipay.sofa.runtime.spring.ClientFactoryBeanPostProcessor;
-import com.alipay.sofa.runtime.spring.ServiceAnnotationBeanPostProcessor;
-import com.alipay.sofa.runtime.spring.SofaRuntimeContextAwareProcessor;
 import com.alipay.sofa.runtime.spring.callback.CloseApplicationContextCallBack;
 import com.alipay.sofa.runtime.spring.config.SofaRuntimeConfigurationProperties;
 import com.alipay.sofa.runtime.spring.health.DefaultRuntimeHealthChecker;
 import com.alipay.sofa.runtime.spring.health.MultiApplicationHealthIndicator;
 import com.alipay.sofa.runtime.spring.health.SofaComponentHealthChecker;
 import com.alipay.sofa.runtime.spring.health.SofaComponentHealthIndicator;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.boot.actuate.health.HealthIndicator;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.*;
-
-import java.util.HashSet;
-import java.util.ServiceLoader;
-import java.util.Set;
 
 /**
  * @author xuanbei 18/3/17
@@ -65,6 +57,7 @@ import java.util.Set;
 @EnableConfigurationProperties(SofaRuntimeConfigurationProperties.class)
 public class SofaRuntimeAutoConfiguration {
     @Bean
+<<<<<<< HEAD
     @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
     public static BindingConverterFactory bindingConverterFactory() {
         BindingConverterFactory bindingConverterFactory = new BindingConverterFactoryImpl();
@@ -128,18 +121,10 @@ public class SofaRuntimeAutoConfiguration {
     }
 
     @Bean
+=======
+>>>>>>> 50a95ec... Support  @SofaService to annotated on method and refactor related code. (#288)
     public CloseApplicationContextCallBack closeApplicationContextCallBack() {
         return new CloseApplicationContextCallBack();
-    }
-
-    private static <T> Set<T> getClassesByServiceLoader(Class<T> clazz) {
-        ServiceLoader<T> serviceLoader = ServiceLoader.load(clazz);
-
-        Set<T> result = new HashSet<>();
-        for (T t : serviceLoader) {
-            result.add(t);
-        }
-        return result;
     }
 
     @Configuration

@@ -59,6 +59,9 @@ public class AwareTest implements ClientFactoryAware, ApplicationContextAware, I
     @SofaReference(uniqueId = "annotation")
     private ServiceWithoutInterface serviceWithoutInterface;
 
+    @SofaReference(uniqueId = "${mix-xml-annotation-unique-id}")
+    private SampleService           xmlAnnotationSampleService;
+
     private SampleService           sampleServicePublishedByServiceClient;
 
     private SampleService           sampleServiceAnnotationImplWithMethod;
@@ -118,6 +121,10 @@ public class AwareTest implements ClientFactoryAware, ApplicationContextAware, I
 
     public SampleService getSampleServiceAnnotationImplWithMethod() {
         return sampleServiceAnnotationImplWithMethod;
+    }
+
+    public SampleService getXmlAnnotationSampleService() {
+        return xmlAnnotationSampleService;
     }
 
     public ServiceWithoutInterface getServiceWithoutInterface() {
