@@ -18,13 +18,18 @@ package com.alipay.sofa.runtime.spring.config;
 
 import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import com.alipay.sofa.runtime.spring.configuration.SofaRuntimeAutoConfiguration;
+import com.alipay.sofa.runtime.spring.listener.SofaRuntimeApplicationListener;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
+import org.springframework.boot.context.event.ApplicationPreparedEvent;
 import org.springframework.boot.test.util.EnvironmentTestUtils;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 
 public class SofaRuntimePropertiesTest {
 
@@ -33,6 +38,14 @@ public class SofaRuntimePropertiesTest {
     @After
     public void closeContext() {
         this.applicationContext.close();
+    }
+
+    @Before
+    public void before() {
+        ApplicationPreparedEvent applicationPreparedEvent = Mockito
+            .mock(ApplicationPreparedEvent.class);
+        when(applicationPreparedEvent.getApplicationContext()).thenReturn(applicationContext);
+        new SofaRuntimeApplicationListener().onApplicationEvent(applicationPreparedEvent);
     }
 
     @Test
