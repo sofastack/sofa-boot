@@ -16,7 +16,8 @@
  */
 package com.alipay.sofa.runtime.ark;
 
-import java.util.Collections;
+import static org.mockito.Mockito.when;
+
 import java.util.Set;
 
 import org.aopalliance.intercept.MethodInvocation;
@@ -24,6 +25,9 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.springframework.boot.context.event.ApplicationPreparedEvent;
 import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
@@ -44,8 +48,12 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import com.alipay.sofa.runtime.spi.service.ServiceProxy;
 import com.alipay.sofa.runtime.spring.configuration.SofaRuntimeAutoConfiguration;
+import com.alipay.sofa.runtime.spring.listener.SofaRuntimeApplicationListener;
 
-import mockit.*;
+import mockit.Expectations;
+import mockit.Mock;
+import mockit.MockUp;
+import mockit.Mocked;
 
 /**
  * @author qilong.zql
@@ -57,40 +65,37 @@ public class SofaEventHandlerTest {
 
     @Mocked
     private Biz                                biz;
+    @Mocked
+    private SofaRuntimeManager                 sofaRuntimeManager;
+    @Mocked
+    private Contract                           contract;
+    @Mocked
+    private MethodInvocation                   invocation;
 
     @Before
     public void before() {
-        new NonStrictExpectations() {
-            {
-                biz.getBizClassLoader();
-                result = this.getClass().getClassLoader();
-
-                biz.getIdentity();
-                result = "MockName:MockVersion";
-
-                biz.getBizState();
-                result = BizState.ACTIVATED;
-            }
-        };
-
-        new MockUp<DynamicJvmServiceProxyFinder>() {
-            @Mock
-            public Biz getBiz(SofaRuntimeManager sofaRuntimeManager) {
-                return biz;
-            }
-        };
-
         applicationContext = new AnnotationConfigApplicationContext();
         TestPropertyValues.of("com.alipay.sofa.boot.disableJvmFirst=true")
             .and("com.alipay.sofa.boot.skipJvmReferenceHealthCheck=true")
             .applyTo(applicationContext);
+        ApplicationPreparedEvent applicationPreparedEvent = Mockito
+            .mock(ApplicationPreparedEvent.class);
+        when(applicationPreparedEvent.getApplicationContext()).thenReturn(applicationContext);
+
         this.applicationContext.register(SofaRuntimeAutoConfiguration.class,
             SofaBootHealthCheckInitializer.class, XmlConfiguration.class);
+        new SofaRuntimeApplicationListener().onApplicationEvent(applicationPreparedEvent);
         this.applicationContext.refresh();
     }
 
     @Test
     public void testUninstallEvent() {
+        new Expectations() {
+            {
+                biz.getBizClassLoader();
+                result = this.getClass().getClassLoader();
+            }
+        };
         Assert.assertTrue(SofaRuntimeProperties.isDisableJvmFirst(applicationContext
             .getClassLoader()));
         Assert.assertTrue(SofaRuntimeProperties.isSkipJvmReferenceHealthCheck(applicationContext
@@ -112,27 +117,40 @@ public class SofaEventHandlerTest {
 
     @Test
     public void testHealthCheck() {
+        new Expectations() {
+            {
+                biz.getBizClassLoader();
+                result = this.getClass().getClassLoader();
+            }
+        };
         SofaEventHandler sofaEventHandler = new SofaEventHandler();
         sofaEventHandler.handleEvent(new BizEvent(biz, Constants.BIZ_EVENT_TOPIC_HEALTH_CHECK));
     }
 
     @Test
-    public void testDynamicProxyFinder(@Mocked final SofaFramework sofaFramework,
-                                       @Mocked final SofaRuntimeManager sofaRuntimeManager,
-                                       @Mocked final Contract contract,
-                                       @Mocked final MethodInvocation invocation) throws Exception {
-        new Expectations() {
-            {
-                sofaFramework.getRuntimeSet();
-                result = Collections.singleton(sofaRuntimeManager);
-                sofaRuntimeManager.getAppClassLoader();
-                result = applicationContext.getClassLoader().getParent();
-                sofaRuntimeManager.getAppClassLoader();
-                result = applicationContext.getClassLoader();
+    public void testDynamicProxyFinder() throws Exception {
+        SofaFramework.registerSofaRuntimeManager(sofaRuntimeManager);
+        new MockUp<DynamicJvmServiceProxyFinder>() {
+            @Mock
+            public Biz getBiz(SofaRuntimeManager sofaRuntimeManager) {
+                return biz;
             }
         };
 
-        new NonStrictExpectations() {
+        new Expectations() {
+            {
+                biz.getIdentity();
+                result = "MockName:MockVersion";
+
+                biz.getBizState();
+                result = BizState.ACTIVATED;
+
+                sofaRuntimeManager.getAppClassLoader();
+                result = applicationContext.getClassLoader().getParent();
+            }
+        };
+
+        new Expectations() {
             {
                 sofaRuntimeManager.getComponentManager();
                 result = ((SofaRuntimeContext) applicationContext.getBean("sofaRuntimeContext"))

@@ -16,12 +16,12 @@
  */
 package com.alipay.sofa.isle.util;
 
-import com.alipay.sofa.isle.integration.IntegrationTest;
-
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Enumeration;
+
+import com.alipay.sofa.isle.integration.IntegrationTest;
 
 /**
  * @author xuanbei 18/5/8
@@ -31,10 +31,17 @@ public class ClassPathUtil {
         Enumeration<URL> urls = IntegrationTest.class.getClassLoader().getResources(jarName);
         while (urls.hasMoreElements()) {
             URL url = urls.nextElement();
-            URLClassLoader classLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
-            Method method = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
-            method.setAccessible(true);
-            method.invoke(classLoader, url);
+            ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+            if (classLoader instanceof URLClassLoader) {
+                Method method = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
+                method.setAccessible(true);
+                method.invoke(classLoader, url);
+            } else {
+                Method method = classLoader.getClass().getDeclaredMethod(
+                    "appendToClassPathForInstrumentation", String.class);
+                method.setAccessible(true);
+                method.invoke(classLoader, url.getFile());
+            }
         }
     }
 }

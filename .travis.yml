@@ -3,14 +3,15 @@ sudo: false
 
 jdk:
 - oraclejdk8
+- openjdk11
 
 install:
 
 - mvn clean install -DskipTests -B -V
+- sh ./execute_test.sh
 
 script:
 - sh ./check_format.sh
 
 after_success:
-- mvn clean test
 - bash <(curl -s https://codecov.io/bash)
