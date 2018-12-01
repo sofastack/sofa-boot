@@ -58,7 +58,7 @@ public @interface SofaServiceBinding {
     /**
      * custorm thread pool for current service
      *
-     * @return custorm thread pool
+     * @return custom thread pool
      */
     String userThreadPool() default "";
 
