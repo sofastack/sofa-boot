@@ -274,6 +274,28 @@
             </pluginRepositories>
         </profile>
         <profile>
+            <id>jdk8</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.21.0</version>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.ow2.asm</groupId>
+                                <artifactId>asm</artifactId>
+                                <version>6.2</version>
+                            </dependency>
+                        </dependencies>
+                        <configuration>
+                            <reuseForks>false</reuseForks>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
             <id>jdk11</id>
             <build>
                 <plugins>
