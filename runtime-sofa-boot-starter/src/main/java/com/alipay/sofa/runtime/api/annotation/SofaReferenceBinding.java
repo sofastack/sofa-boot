@@ -108,4 +108,6 @@ public @interface SofaReferenceBinding {
     boolean lazy() default false;
 
     String serializeType() default "";
+
+    String loadBalancer() default "";
 }
