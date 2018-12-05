@@ -275,6 +275,9 @@
         </profile>
         <profile>
             <id>jdk8</id>
+            <activation>
+                <jdk>1.8</jdk>
+            </activation>
             <build>
                 <plugins>
                     <plugin>
@@ -297,6 +300,9 @@
         </profile>
         <profile>
             <id>jdk11</id>
+            <activation>
+                <jdk>11</jdk>
+            </activation>
             <build>
                 <plugins>
                     <plugin>

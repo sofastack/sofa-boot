@@ -8,7 +8,7 @@ jdk:
 install:
 
 - mvn clean install -DskipTests -B -V
-- sh ./execute_test.sh
+- mvn test
 
 script:
 - sh ./check_format.sh
