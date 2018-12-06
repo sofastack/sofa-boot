@@ -34,12 +34,17 @@ import java.util.Map;
  * @author xuanbei 18/4/3
  */
 public class ComponentManagerImplTest {
-    private ComponentType type = new ComponentType("testType");
-    private ComponentName name = new ComponentName(type, "object");
+
+    @Mocked
+    private ClientFactoryInternal mockClientFactoryInternal;
+    @Mocked
+    private ComponentInfo         mockComponentInfo;
+
+    private ComponentType         type = new ComponentType("testType");
+    private ComponentName         name = new ComponentName(type, "object");
 
     @Test
-    public void testRegister(@Mocked final ClientFactoryInternal mockClientFactoryInternal,
-                             @Mocked final ComponentInfo mockComponentInfo) {
+    public void testRegister() {
         new Expectations() {
             {
                 mockComponentInfo.getName();
@@ -64,7 +69,7 @@ public class ComponentManagerImplTest {
     }
 
     @Test(expected = ServiceRuntimeException.class)
-    public void testRegisterDuplicated(@Mocked final ClientFactoryInternal mockClientFactoryInternal) {
+    public void testRegisterDuplicated() {
 
         ComponentManagerImpl componentManager = new ComponentManagerImpl(mockClientFactoryInternal);
         ComponentInfo testComponentInfo = new AbstractComponent() {

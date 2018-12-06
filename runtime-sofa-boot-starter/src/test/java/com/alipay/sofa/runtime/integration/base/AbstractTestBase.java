@@ -16,9 +16,13 @@
  */
 package com.alipay.sofa.runtime.integration.base;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import com.alipay.sofa.runtime.api.annotation.SofaReference;
+import com.alipay.sofa.runtime.api.annotation.SofaService;
+import com.alipay.sofa.runtime.beans.impl.MethodBeanClassAnnotationSampleService;
+import com.alipay.sofa.runtime.beans.impl.MethodBeanMethodAnnotationSampleService;
+import com.alipay.sofa.runtime.beans.impl.ParameterAnnotationSampleService;
+import com.alipay.sofa.runtime.beans.service.SampleService;
+import com.alipay.sofa.runtime.integration.features.AwareTest;
 import org.junit.Before;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -27,21 +31,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 
-import com.alipay.sofa.ark.spi.model.Biz;
-import com.alipay.sofa.runtime.api.annotation.SofaReference;
-import com.alipay.sofa.runtime.api.annotation.SofaService;
-import com.alipay.sofa.runtime.beans.impl.MethodBeanClassAnnotationSampleService;
-import com.alipay.sofa.runtime.beans.impl.MethodBeanMethodAnnotationSampleService;
-import com.alipay.sofa.runtime.beans.impl.ParameterAnnotationSampleService;
-import com.alipay.sofa.runtime.beans.service.SampleService;
-import com.alipay.sofa.runtime.integration.features.AwareTest;
-import com.alipay.sofa.runtime.integration.invoke.DynamicJvmServiceProxyFinder;
-import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
-
-import mockit.Mock;
-import mockit.MockUp;
-import mockit.Mocked;
-import mockit.NonStrictExpectations;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author qilong.zql
@@ -51,25 +42,8 @@ public abstract class AbstractTestBase extends TestBase {
 
     public AwareTest awareTest;
 
-    @Mocked
-    public Biz       biz;
-
     @Before
     public void before() {
-        new MockUp<DynamicJvmServiceProxyFinder>() {
-            @Mock
-            public Biz getBiz(SofaRuntimeManager sofaRuntimeManager) {
-                return biz;
-            }
-        };
-
-        new NonStrictExpectations() {
-            {
-                biz.getIdentity();
-                result = "MockName:MockVersion";
-            }
-        };
-
         Map<String, Object> properties = new HashMap<>();
         properties.put("spring.application.name", "runtime-test");
         properties.put("mix-xml-annotation-unique-id", "xmlAnnotationSampleService");

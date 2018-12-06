@@ -19,7 +19,6 @@ package com.alipay.sofa.infra.utils;
 import com.alipay.sofa.infra.base.AbstractTestBase;
 import com.alipay.sofa.infra.constants.SofaBootInfraConstants;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;

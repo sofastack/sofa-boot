@@ -258,7 +258,7 @@ public class DependencyTree<K, T> implements Iterable<DependencyTree.Entry<K, T>
         }
 
         /**
-         * Getter method for property <tt>dependencies</tt>.
+         * Getter method for property of dependencies.
          *
          * @return property value of dependencies
          */

@@ -22,7 +22,7 @@ import java.util.Map;
 
 import org.mockito.Mockito;
 import org.springframework.boot.context.event.ApplicationPreparedEvent;
-import org.springframework.boot.test.util.EnvironmentTestUtils;
+import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import com.alipay.sofa.runtime.spring.listener.SofaRuntimeApplicationListener;
@@ -36,10 +36,10 @@ public abstract class TestBase {
 
     protected void initApplicationContext(Map<String, Object> properties,
                                           Class<?>... annotatedClasses) {
-        for (Map.Entry<String, Object> property : properties.entrySet()) {
-            EnvironmentTestUtils.addEnvironment(this.applicationContext,
-                buildProperty(property.getKey(), property.getValue()));
-        }
+        TestPropertyValues
+            .of(properties.entrySet().stream()
+                .map(entry -> buildProperty(entry.getKey(), entry.getValue())))
+            .applyTo(applicationContext);
 
         ApplicationPreparedEvent applicationPreparedEvent = Mockito
             .mock(ApplicationPreparedEvent.class);
