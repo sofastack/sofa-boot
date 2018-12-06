@@ -16,14 +16,15 @@
  */
 package com.alipay.sofa.healthcheck.base;
 
-import java.util.Map;
-
 import org.springframework.boot.actuate.autoconfigure.health.HealthEndpointAutoConfiguration;
 import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import java.util.Map;
+
 /**
  * init an annotation application context with properties and classes
+ *
  * @author scienjus
  */
 public class BaseHealthCheckTest {
@@ -36,9 +37,9 @@ public class BaseHealthCheckTest {
     protected void initApplicationContext(Map<String, Object> properties,
                                           Class<?>... annotatedClasses) {
         TestPropertyValues
-            .of(properties.entrySet().stream()
-                .map(entry -> buildProperty(entry.getKey(), entry.getValue())))
-            .applyTo(applicationContext);
+                .of(properties.entrySet().stream()
+                        .map(entry -> buildProperty(entry.getKey(), entry.getValue())))
+                .applyTo(applicationContext);
         this.applicationContext.register(HealthEndpointAutoConfiguration.class);
         this.applicationContext.register(annotatedClasses);
         this.applicationContext.refresh();

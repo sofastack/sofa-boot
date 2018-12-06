@@ -16,12 +16,12 @@
  */
 package com.alipay.sofa.isle.util;
 
+import com.alipay.sofa.isle.integration.IntegrationTest;
+
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Enumeration;
-
-import com.alipay.sofa.isle.integration.IntegrationTest;
 
 /**
  * @author xuanbei 18/5/8

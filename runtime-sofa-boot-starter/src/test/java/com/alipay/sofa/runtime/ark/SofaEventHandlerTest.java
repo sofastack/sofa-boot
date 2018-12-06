@@ -16,23 +16,6 @@
  */
 package com.alipay.sofa.runtime.ark;
 
-import static org.mockito.Mockito.when;
-
-import java.util.Set;
-
-import org.aopalliance.intercept.MethodInvocation;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.springframework.boot.context.event.ApplicationPreparedEvent;
-import org.springframework.boot.test.util.TestPropertyValues;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-
 import com.alipay.sofa.ark.spi.constant.Constants;
 import com.alipay.sofa.ark.spi.event.BizEvent;
 import com.alipay.sofa.ark.spi.model.Biz;
@@ -49,11 +32,25 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import com.alipay.sofa.runtime.spi.service.ServiceProxy;
 import com.alipay.sofa.runtime.spring.configuration.SofaRuntimeAutoConfiguration;
 import com.alipay.sofa.runtime.spring.listener.SofaRuntimeApplicationListener;
-
 import mockit.Expectations;
 import mockit.Mock;
 import mockit.MockUp;
 import mockit.Mocked;
+import org.aopalliance.intercept.MethodInvocation;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mockito;
+import org.springframework.boot.context.event.ApplicationPreparedEvent;
+import org.springframework.boot.test.util.TestPropertyValues;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+
+import java.util.Set;
+
+import static org.mockito.Mockito.when;
 
 /**
  * @author qilong.zql

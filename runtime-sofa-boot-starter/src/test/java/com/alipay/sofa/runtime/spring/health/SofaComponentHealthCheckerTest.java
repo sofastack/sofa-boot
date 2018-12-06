@@ -16,8 +16,9 @@
  */
 package com.alipay.sofa.runtime.spring.health;
 
-import static org.mockito.Mockito.when;
-
+import com.alipay.sofa.healthcheck.configuration.HealthCheckConstants;
+import com.alipay.sofa.runtime.spring.configuration.SofaRuntimeAutoConfiguration;
+import com.alipay.sofa.runtime.spring.listener.SofaRuntimeApplicationListener;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -27,9 +28,7 @@ import org.springframework.boot.context.event.ApplicationPreparedEvent;
 import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import com.alipay.sofa.healthcheck.configuration.HealthCheckConstants;
-import com.alipay.sofa.runtime.spring.configuration.SofaRuntimeAutoConfiguration;
-import com.alipay.sofa.runtime.spring.listener.SofaRuntimeApplicationListener;
+import static org.mockito.Mockito.when;
 
 /**
  * @author abby.zh

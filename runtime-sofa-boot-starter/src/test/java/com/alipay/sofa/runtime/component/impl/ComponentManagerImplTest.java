@@ -16,11 +16,6 @@
  */
 package com.alipay.sofa.runtime.component.impl;
 
-import java.util.Map;
-
-import org.junit.Assert;
-import org.junit.Test;
-
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.api.component.Property;
@@ -28,9 +23,12 @@ import com.alipay.sofa.runtime.model.ComponentType;
 import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
 import com.alipay.sofa.runtime.spi.component.AbstractComponent;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
-
 import mockit.Expectations;
 import mockit.Mocked;
+import org.junit.Assert;
+import org.junit.Test;
+
+import java.util.Map;
 
 /**
  * @author xuanbei 18/4/3
