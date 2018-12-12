@@ -108,7 +108,6 @@ public class ReferenceAnnotationBeanPostProcessorTest {
         createReferenceProxy.invoke(referenceAnnotationBeanPostProcessor, sofaReference,
             ReferenceAnnotationBeanPostProcessorTest.class);
 
-        PowerMockito.verifyStatic();
         ReferenceRegisterHelper.registerReference(referenceImpl, null, sofaRuntimeContext);
     }
 }

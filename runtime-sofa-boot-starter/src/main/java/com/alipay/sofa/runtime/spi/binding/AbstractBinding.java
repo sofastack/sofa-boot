@@ -52,7 +52,7 @@ public abstract class AbstractBinding implements Binding {
     }
 
     /**
-     * Getter method for property <tt>isDestroyed</tt>.
+     * Getter method for property of isDestroyed.
      *
      * @return property value of isDestroyed
      */
