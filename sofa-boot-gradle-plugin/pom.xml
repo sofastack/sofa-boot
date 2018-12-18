@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.alipay.sofa</groupId>
         <artifactId>sofa-boot-runtime</artifactId>
-        <version>3.1.0</version>
+        <version>3.1.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>sofa-boot-gradle-plugin</artifactId>
@@ -20,6 +20,11 @@
         <kotlin.version>1.2.20</kotlin.version>
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-gradle-plugin</artifactId>
+            <version>2.1.0.RELEASE</version>
+        </dependency>
         <dependency>
             <groupId>io.spring.gradle</groupId>
             <artifactId>dependency-management-plugin</artifactId>
