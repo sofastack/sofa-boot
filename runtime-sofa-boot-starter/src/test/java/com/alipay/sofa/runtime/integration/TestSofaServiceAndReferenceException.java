@@ -89,7 +89,8 @@ public class TestSofaServiceAndReferenceException extends TestBase {
     }
 
     @EnableAutoConfiguration
-    static class EmptyConfiguration{}
+    static class EmptyConfiguration {
+    }
 
     static class TestSofaReferenceConfiguration {
         @Bean
