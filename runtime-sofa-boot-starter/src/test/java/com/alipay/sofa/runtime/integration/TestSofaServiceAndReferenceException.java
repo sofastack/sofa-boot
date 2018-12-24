@@ -24,6 +24,8 @@ import java.util.Map;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.beans.FatalBeanException;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 
 import com.alipay.sofa.runtime.api.annotation.SofaReference;
@@ -69,6 +71,25 @@ public class TestSofaServiceAndReferenceException extends TestBase {
                                            + SofaBeanNameGenerator.generateSofaServiceBeanName(
                                                SampleService.class, "")));
     }
+
+    @Test(expected = FatalBeanException.class)
+    public void testMultiSofaServiceFactoryMethod() {
+        Map<String, Object> properties = new HashMap<>();
+        properties.put("spring.application.name", "runtime-test");
+        properties.put("multiSofaService", "true");
+        initApplicationContext(properties, EmptyConfiguration.class);
+    }
+
+    @Test(expected = FatalBeanException.class)
+    public void testMultiSofaReferenceFactoryMethod() {
+        Map<String, Object> properties = new HashMap<>();
+        properties.put("spring.application.name", "runtime-test");
+        properties.put("multiSofaReference", "true");
+        initApplicationContext(properties, EmptyConfiguration.class);
+    }
+
+    @EnableAutoConfiguration
+    static class EmptyConfiguration{}
 
     static class TestSofaReferenceConfiguration {
         @Bean

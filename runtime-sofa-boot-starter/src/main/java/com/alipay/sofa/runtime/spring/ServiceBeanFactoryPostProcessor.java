@@ -18,10 +18,7 @@ package com.alipay.sofa.runtime.spring;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -40,9 +37,11 @@ import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ScannedGenericBeanDefinition;
+import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.core.type.MethodMetadata;
+import org.springframework.core.type.StandardMethodMetadata;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ObjectUtils;
@@ -111,7 +110,7 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
         } else {
             Class<?> beanClassType = resolveBeanClassType(beanDefinition);
             if (beanClassType == null) {
-                SofaLogger.warn("Bean class type cant be resolved from bean of {}", beanId);
+                SofaLogger.warn("Bean class type cant be resolved from bean of {0}", beanId);
                 return;
             }
             generateSofaServiceDefinitionOnClass(beanId, beanClassType, beanDefinition, beanFactory);
@@ -123,43 +122,82 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
                                                        ConfigurableListableBeanFactory beanFactory) {
         Class<?> returnType;
         Class<?> declaringClass;
-        Method method = null;
+        List<Method> candidateMethods = new ArrayList<>();
 
         MethodMetadata methodMetadata = beanDefinition.getFactoryMethodMetadata();
         try {
             returnType = ClassUtils.forName(methodMetadata.getReturnTypeName(), null);
             declaringClass = ClassUtils.forName(methodMetadata.getDeclaringClassName(), null);
-            for (Method m : declaringClass.getDeclaredMethods()) {
-
-                Bean bean = m.getAnnotation(Bean.class);
-                Set<String> beanNames = Stream.of(m.getName()).collect(Collectors.toSet());
-                if (bean != null) {
-                    beanNames.addAll(Arrays.asList(bean.name()));
-                    beanNames.addAll(Arrays.asList(bean.value()));
-                }
-                if (!beanNames.contains(beanId)) {
-                    continue;
-                }
-                if (method != null) {
-                    throw new IllegalStateException("multi @Bean-method with same name in "
-                                                    + declaringClass.getCanonicalName());
-                }
-                method = m;
-            }
         } catch (Throwable throwable) {
-            SofaLogger.error(throwable, "Failed to resolve @SofaService on @Bean-method({}) in {}",
-                beanId, methodMetadata.getDeclaringClassName());
-            throw new FatalBeanException("Failed to resolve @SofaService on method", throwable);
+            // it's impossible to catch throwable here
+            SofaLogger.error(throwable,
+                "Failed to parse factoryBeanMethod of BeanDefinition( {0} )", beanId);
+            return;
         }
 
-        if (method != null) {
-            SofaService sofaServiceAnnotation = method.getAnnotation(SofaService.class);
+        for (Method m : declaringClass.getDeclaredMethods()) {
+            if (methodMetadata instanceof StandardMethodMetadata) {
+                if (((StandardMethodMetadata) methodMetadata).getIntrospectedMethod().equals(m)) {
+                    candidateMethods.add(m);
+                    break;
+                }
+            }
+
+            // check methodName and return type
+            if (!m.getName().equals(methodMetadata.getMethodName())
+                || !m.getReturnType().getTypeName().equals(methodMetadata.getReturnTypeName())) {
+                continue;
+            }
+
+            // check bean method
+            if (!AnnotatedElementUtils.hasAnnotation(m, Bean.class)) {
+                continue;
+            }
+
+            Bean bean = m.getAnnotation(Bean.class);
+            Set<String> beanNames = Stream.of(m.getName()).collect(Collectors.toSet());
+            if (bean != null) {
+                beanNames.addAll(Arrays.asList(bean.name()));
+                beanNames.addAll(Arrays.asList(bean.value()));
+            }
+
+            // check bean name
+            if (!beanNames.contains(beanId)) {
+                continue;
+            }
+
+            candidateMethods.add(m);
+        }
+
+        if (candidateMethods.size() == 1) {
+            SofaService sofaServiceAnnotation = candidateMethods.get(0).getAnnotation(
+                SofaService.class);
             if (sofaServiceAnnotation == null) {
                 sofaServiceAnnotation = returnType.getAnnotation(SofaService.class);
             }
             generateSofaServiceDefinition(beanId, sofaServiceAnnotation, returnType,
                 beanDefinition, beanFactory);
-            generateSofaReferenceDefinition(beanId, method, beanFactory);
+            generateSofaReferenceDefinition(beanId, candidateMethods.get(0), beanFactory);
+        } else if (candidateMethods.size() > 1) {
+            for (Method m : candidateMethods) {
+                if (AnnotatedElementUtils.hasAnnotation(m, SofaService.class)
+                    || AnnotatedElementUtils.hasAnnotation(returnType, SofaService.class)) {
+                    throw new FatalBeanException(
+                        "multi @Bean-method with same name try to publish SofaService in "
+                                + declaringClass.getCanonicalName());
+                }
+
+                Annotation[][] parameterAnnotations = m.getParameterAnnotations();
+                for (Annotation[] parameterAnnotation : parameterAnnotations) {
+                    for (Annotation annotation : parameterAnnotation) {
+                        if (annotation instanceof SofaReference) {
+                            throw new FatalBeanException(
+                                "multi @Bean-method with same name try to reference SofaService in"
+                                        + declaringClass.getCanonicalName());
+                        }
+                    }
+                }
+            }
         }
     }
 
