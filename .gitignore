@@ -22,3 +22,4 @@ logs
 .m2
 sofa-boot-gradle-plugin/build/
 .gradle
+sofa-boot-gradle-plugin/out/
