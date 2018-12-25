@@ -77,4 +77,11 @@ public @interface SofaServiceBinding {
     int timeout() default 3000;
 
     String serializeType() default "";
+
+    /**
+     * parameters of service
+     *
+     * @return parameters of service
+     */
+    SofaParameter[] parameters() default {};
 }

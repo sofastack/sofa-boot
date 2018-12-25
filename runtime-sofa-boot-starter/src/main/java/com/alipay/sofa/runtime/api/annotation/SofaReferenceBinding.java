@@ -110,4 +110,11 @@ public @interface SofaReferenceBinding {
     String serializeType() default "";
 
     String loadBalancer() default "";
+
+    /**
+     * parameters of consumer
+     *
+     * @return parameters of consumer
+     */
+    SofaParameter[] parameters() default {};
 }
