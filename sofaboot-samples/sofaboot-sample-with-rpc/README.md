@@ -9,9 +9,10 @@ SOFABoot 提供了如健康检查，上下文隔离等基础能力，同时提�
 <parent>
     <groupId>com.alipay.sofa</groupId>
     <artifactId>sofaboot-dependencies</artifactId>
-    <version>2.5.2</version>
+    <version>${sofa.boot.version}</version>
 </parent>
 ```
+参考 SOFABoot [发布报告](https://github.com/alipay/sofa-boot/releases) 指定对应的 SOFABoot 版本。
 
 ## 引入 SOFARPC Starter
 SOFARPC Starter 是 SOFARPC 基于 SOFABoot 实现的框架，能够将 SOFARPC 的能力以统一的编程界面和简单的操作形式提供给使用者。该依赖已被 SOFABoot 管控，用户只需要引入如下依赖：
