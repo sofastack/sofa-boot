@@ -50,6 +50,7 @@ public abstract class AbstractTestBase extends TestBase {
         Map<String, Object> properties = new HashMap<>();
         properties.put("spring.application.name", "runtime-test");
         properties.put("mix-xml-annotation-unique-id", "xmlAnnotationSampleService");
+        properties.put("spring.jmx.enabled", "false");
         initApplicationContext(properties, IntegrationTestConfiguration.class);
         awareTest = applicationContext.getBean(AwareTest.class);
     }
