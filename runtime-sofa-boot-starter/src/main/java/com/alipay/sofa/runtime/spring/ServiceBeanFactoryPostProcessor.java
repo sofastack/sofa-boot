@@ -188,15 +188,11 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
                                 + declaringClass.getCanonicalName());
                 }
 
-                Annotation[][] parameterAnnotations = m.getParameterAnnotations();
-                for (Annotation[] parameterAnnotation : parameterAnnotations) {
-                    for (Annotation annotation : parameterAnnotation) {
-                        if (annotation instanceof SofaReference) {
-                            throw new FatalBeanException(
-                                "multi @Bean-method with same name try to reference SofaService in"
-                                        + declaringClass.getCanonicalName());
-                        }
-                    }
+                if (Stream.of(m.getParameterAnnotations())
+                        .flatMap(Stream::of).anyMatch(annotation -> annotation instanceof SofaReference)) {
+                    throw new FatalBeanException(
+                            "multi @Bean-method with same name try to reference SofaService in"
+                                    + declaringClass.getCanonicalName());
                 }
             }
         }
