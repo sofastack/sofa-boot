@@ -16,41 +16,22 @@
  */
 package com.alipay.sofa.runtime.integration.base;
 
-import static org.mockito.Mockito.when;
-
 import java.util.Map;
 
-import org.mockito.Mockito;
-import org.springframework.boot.context.event.ApplicationPreparedEvent;
-import org.springframework.boot.test.util.EnvironmentTestUtils;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
-import com.alipay.sofa.runtime.spring.listener.SofaRuntimeApplicationListener;
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 
 /**
  * @author qilong.zql
  * @since 3.1.0
  */
 public abstract class TestBase {
-    public AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
+    public ConfigurableApplicationContext applicationContext;
 
     protected void initApplicationContext(Map<String, Object> properties,
                                           Class<?>... annotatedClasses) {
-        for (Map.Entry<String, Object> property : properties.entrySet()) {
-            EnvironmentTestUtils.addEnvironment(this.applicationContext,
-                buildProperty(property.getKey(), property.getValue()));
-        }
-
-        ApplicationPreparedEvent applicationPreparedEvent = Mockito
-            .mock(ApplicationPreparedEvent.class);
-        when(applicationPreparedEvent.getApplicationContext()).thenReturn(applicationContext);
-        new SofaRuntimeApplicationListener().onApplicationEvent(applicationPreparedEvent);
-
-        this.applicationContext.register(annotatedClasses);
-        this.applicationContext.refresh();
-    }
-
-    private String buildProperty(String key, Object value) {
-        return key + ":" + value;
+        SpringApplication springApplication = new SpringApplication(annotatedClasses);
+        springApplication.setDefaultProperties(properties);
+        applicationContext = springApplication.run(new String[] {});
     }
 }
