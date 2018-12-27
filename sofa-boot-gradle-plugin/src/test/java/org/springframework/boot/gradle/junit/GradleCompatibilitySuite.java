@@ -44,7 +44,7 @@ public final class GradleCompatibilitySuite extends Suite {
     private static List<String> GRADLE_VERSIONS;
 
     static {
-        if (System.getProperty("java.version").equals("11")) {
+        if (System.getProperty("java.version").startsWith("11")) {
             GRADLE_VERSIONS = Collections.singletonList("5.0");
         } else {
             GRADLE_VERSIONS = Arrays.asList("default", "4.5.1", "4.6", "4.7", "4.8.1", "4.9",
