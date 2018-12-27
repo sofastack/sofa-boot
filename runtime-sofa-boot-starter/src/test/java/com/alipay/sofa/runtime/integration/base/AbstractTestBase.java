@@ -21,11 +21,14 @@ import com.alipay.sofa.runtime.api.annotation.SofaService;
 import com.alipay.sofa.runtime.beans.impl.MethodBeanClassAnnotationSampleService;
 import com.alipay.sofa.runtime.beans.impl.MethodBeanMethodAnnotationSampleService;
 import com.alipay.sofa.runtime.beans.impl.ParameterAnnotationSampleService;
+import com.alipay.sofa.runtime.beans.impl.SampleServiceImpl;
 import com.alipay.sofa.runtime.beans.service.SampleService;
 import com.alipay.sofa.runtime.integration.features.AwareTest;
 import org.junit.Before;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -68,6 +71,16 @@ public abstract class AbstractTestBase extends TestBase {
             @SofaService(uniqueId = "methodBeanMethodAnnotationSampleService")
             SampleService methodBeanMethodAnnotationSampleService() {
                 return new MethodBeanMethodAnnotationSampleService();
+            }
+
+            @Bean("multiService")
+            SampleService service() {
+                return new SampleServiceImpl("");
+            }
+
+            @Bean("multiService")
+            SampleService service(@Value("$spring.application.name") String appName) {
+                return new SampleServiceImpl("");
             }
         }
 

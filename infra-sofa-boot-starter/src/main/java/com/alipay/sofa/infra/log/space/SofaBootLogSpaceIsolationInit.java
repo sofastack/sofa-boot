@@ -39,7 +39,7 @@ public class SofaBootLogSpaceIsolationInit {
         String loggingPath = environment.getProperty(Constants.LOG_PATH);
         if (!StringUtils.isEmpty(loggingPath)) {
             System.setProperty(Constants.LOG_PATH, environment.getProperty(Constants.LOG_PATH));
-            ReportUtil.report("Actual " + Constants.LOG_PATH + " is [ " + loggingPath + " ]");
+            ReportUtil.reportDebug("Actual " + Constants.LOG_PATH + " is [ " + loggingPath + " ]");
         }
 
         //for example : init logging.level.com.alipay.sofa.runtime argument
