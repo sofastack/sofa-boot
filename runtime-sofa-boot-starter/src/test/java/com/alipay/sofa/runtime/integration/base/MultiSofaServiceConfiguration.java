@@ -16,22 +16,30 @@
  */
 package com.alipay.sofa.runtime.integration.base;
 
-import java.util.Map;
-
-import org.springframework.boot.SpringApplication;
-import org.springframework.context.ConfigurableApplicationContext;
+import com.alipay.sofa.runtime.api.annotation.SofaService;
+import com.alipay.sofa.runtime.beans.impl.SampleServiceImpl;
+import com.alipay.sofa.runtime.beans.service.SampleService;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * @author qilong.zql
- * @since 3.1.0
+ * @since 3.1.1
  */
-public abstract class TestBase {
-    public ConfigurableApplicationContext applicationContext;
+@Configuration
+@ConditionalOnProperty(name = "multiSofaService", havingValue = "true")
+public class MultiSofaServiceConfiguration {
+    @Bean("multiSofaService")
+    @SofaService
+    SampleService service() {
+        return new SampleServiceImpl("");
+    }
 
-    protected void initApplicationContext(Map<String, Object> properties,
-                                          Class<?>... annotatedClasses) {
-        SpringApplication springApplication = new SpringApplication(annotatedClasses);
-        springApplication.setDefaultProperties(properties);
-        applicationContext = springApplication.run(new String[] {});
+    @Bean("multiSofaService")
+    @SofaService
+    SampleService service(@Value("$spring.application.name") String appName) {
+        return new SampleServiceImpl("");
     }
 }
