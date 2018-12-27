@@ -138,40 +138,36 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
                 "Failed to parse factoryBeanMethod of BeanDefinition( {0} )", beanId);
             return;
         }
-
-        for (Method m : declaringClass.getDeclaredMethods()) {
-            if (methodMetadata instanceof StandardMethodMetadata) {
-                if (((StandardMethodMetadata) methodMetadata).getIntrospectedMethod().equals(m)) {
-                    candidateMethods.add(m);
-                    break;
+        if (methodMetadata instanceof StandardMethodMetadata) {
+           candidateMethods.add(((StandardMethodMetadata) methodMetadata).getIntrospectedMethod());
+        } else {
+            for (Method m : declaringClass.getDeclaredMethods()) {
+                // check methodName and return type
+                if (!m.getName().equals(methodMetadata.getMethodName())
+                        || !m.getReturnType().getTypeName().equals(methodMetadata.getReturnTypeName())) {
+                    continue;
                 }
-            }
 
-            // check methodName and return type
-            if (!m.getName().equals(methodMetadata.getMethodName())
-                || !m.getReturnType().getTypeName().equals(methodMetadata.getReturnTypeName())) {
-                continue;
-            }
+                // check bean method
+                if (!AnnotatedElementUtils.hasAnnotation(m, Bean.class)) {
+                    continue;
+                }
 
-            // check bean method
-            if (!AnnotatedElementUtils.hasAnnotation(m, Bean.class)) {
-                continue;
-            }
+                Bean bean = m.getAnnotation(Bean.class);
+                Set<String> beanNames = new HashSet<>();
+                beanNames.add(m.getName());
+                if (bean != null) {
+                    beanNames.addAll(Arrays.asList(bean.name()));
+                    beanNames.addAll(Arrays.asList(bean.value()));
+                }
 
-            Bean bean = m.getAnnotation(Bean.class);
-            Set<String> beanNames = new HashSet<>();
-            beanNames.add(m.getName());
-            if (bean != null) {
-                beanNames.addAll(Arrays.asList(bean.name()));
-                beanNames.addAll(Arrays.asList(bean.value()));
-            }
+                // check bean name
+                if (!beanNames.contains(beanId)) {
+                    continue;
+                }
 
-            // check bean name
-            if (!beanNames.contains(beanId)) {
-                continue;
+                candidateMethods.add(m);
             }
-
-            candidateMethods.add(m);
         }
 
         if (candidateMethods.size() == 1) {
