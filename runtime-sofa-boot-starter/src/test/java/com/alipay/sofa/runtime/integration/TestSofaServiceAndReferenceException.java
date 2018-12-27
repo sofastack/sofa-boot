@@ -21,18 +21,21 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.alipay.sofa.runtime.api.annotation.SofaReference;
+import com.alipay.sofa.runtime.api.annotation.SofaReferenceBinding;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.beans.FatalBeanException;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 
-import com.alipay.sofa.runtime.api.annotation.SofaReference;
-import com.alipay.sofa.runtime.api.annotation.SofaReferenceBinding;
 import com.alipay.sofa.runtime.api.annotation.SofaService;
 import com.alipay.sofa.runtime.beans.impl.SampleServiceImpl;
 import com.alipay.sofa.runtime.beans.service.SampleService;
 import com.alipay.sofa.runtime.integration.base.TestBase;
 import com.alipay.sofa.runtime.spring.bean.SofaBeanNameGenerator;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * @author qilong.zql
@@ -70,6 +73,29 @@ public class TestSofaServiceAndReferenceException extends TestBase {
                                                SampleService.class, "")));
     }
 
+    @Test(expected = FatalBeanException.class)
+    public void testMultiSofaServiceFactoryMethod() {
+        Map<String, Object> properties = new HashMap<>();
+        properties.put("spring.application.name", "runtime-test");
+        properties.put("multiSofaService", "true");
+        initApplicationContext(properties, EmptyConfiguration.class);
+    }
+
+    @Test(expected = FatalBeanException.class)
+    public void testMultiSofaReferenceFactoryMethod() {
+        Map<String, Object> properties = new HashMap<>();
+        properties.put("spring.application.name", "runtime-test");
+        properties.put("multiSofaReference", "true");
+        initApplicationContext(properties, EmptyConfiguration.class);
+    }
+
+    @EnableAutoConfiguration
+    @Configuration
+    static class EmptyConfiguration {
+    }
+
+    @Configuration
+    @EnableAutoConfiguration
     static class TestSofaReferenceConfiguration {
         @Bean
         SampleService sampleService(@SofaReference(uniqueId = "rpc", binding = @SofaReferenceBinding(bindingType = "bolt")) SampleService sampleService) {
@@ -77,6 +103,8 @@ public class TestSofaServiceAndReferenceException extends TestBase {
         }
     }
 
+    @Configuration
+    @EnableAutoConfiguration
     static class TestSofaServiceConfiguration {
         @Bean
         @SofaService
