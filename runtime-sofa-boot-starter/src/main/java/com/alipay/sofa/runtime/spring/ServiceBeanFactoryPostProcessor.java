@@ -38,9 +38,11 @@ import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ScannedGenericBeanDefinition;
+import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.core.type.MethodMetadata;
+import org.springframework.core.type.StandardMethodMetadata;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ObjectUtils;
@@ -111,7 +113,7 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
         } else {
             Class<?> beanClassType = resolveBeanClassType(beanDefinition);
             if (beanClassType == null) {
-                SofaLogger.warn("Bean class type cant be resolved from bean of {}", beanId);
+                SofaLogger.warn("Bean class type cant be resolved from bean of {0}", beanId);
                 return;
             }
             generateSofaServiceDefinitionOnClass(beanId, beanClassType, beanDefinition, beanFactory);
@@ -123,13 +125,32 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
                                                        ConfigurableListableBeanFactory beanFactory) {
         Class<?> returnType;
         Class<?> declaringClass;
-        Method method = null;
+        List<Method> candidateMethods = new ArrayList<>();
 
         MethodMetadata methodMetadata = beanDefinition.getFactoryMethodMetadata();
         try {
             returnType = ClassUtils.forName(methodMetadata.getReturnTypeName(), null);
             declaringClass = ClassUtils.forName(methodMetadata.getDeclaringClassName(), null);
+        } catch (Throwable throwable) {
+            // it's impossible to catch throwable here
+            SofaLogger.error(throwable,
+                "Failed to parse factoryBeanMethod of BeanDefinition( {0} )", beanId);
+            return;
+        }
+        if (methodMetadata instanceof StandardMethodMetadata) {
+            candidateMethods.add(((StandardMethodMetadata) methodMetadata).getIntrospectedMethod());
+        } else {
             for (Method m : declaringClass.getDeclaredMethods()) {
+                // check methodName and return type
+                if (!m.getName().equals(methodMetadata.getMethodName())
+                    || !getTypeName(m.getReturnType()).equals(methodMetadata.getReturnTypeName())) {
+                    continue;
+                }
+
+                // check bean method
+                if (!AnnotatedElementUtils.hasAnnotation(m, Bean.class)) {
+                    continue;
+                }
 
                 Bean bean = m.getAnnotation(Bean.class);
                 Set<String> beanNames = new HashSet<>();
@@ -138,30 +159,72 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
                     beanNames.addAll(Arrays.asList(bean.name()));
                     beanNames.addAll(Arrays.asList(bean.value()));
                 }
+
+                // check bean name
                 if (!beanNames.contains(beanId)) {
                     continue;
                 }
-                if (method != null) {
-                    throw new IllegalStateException("multi @Bean-method with same name in "
-                                                    + declaringClass.getCanonicalName());
-                }
-                method = m;
+
+                candidateMethods.add(m);
             }
-        } catch (Throwable throwable) {
-            SofaLogger.error(throwable, "Failed to resolve @SofaService on @Bean-method({}) in {}",
-                beanId, methodMetadata.getDeclaringClassName());
-            throw new FatalBeanException("Failed to resolve @SofaService on method", throwable);
         }
 
-        if (method != null) {
-            SofaService sofaServiceAnnotation = method.getAnnotation(SofaService.class);
+        if (candidateMethods.size() == 1) {
+            SofaService sofaServiceAnnotation = candidateMethods.get(0).getAnnotation(
+                SofaService.class);
             if (sofaServiceAnnotation == null) {
                 sofaServiceAnnotation = returnType.getAnnotation(SofaService.class);
             }
             generateSofaServiceDefinition(beanId, sofaServiceAnnotation, returnType,
                 beanDefinition, beanFactory);
-            generateSofaReferenceDefinition(beanId, method, beanFactory);
+            generateSofaReferenceDefinition(beanId, candidateMethods.get(0), beanFactory);
+        } else if (candidateMethods.size() > 1) {
+            for (Method m : candidateMethods) {
+                if (AnnotatedElementUtils.hasAnnotation(m, SofaService.class)
+                    || AnnotatedElementUtils.hasAnnotation(returnType, SofaService.class)) {
+                    throw new FatalBeanException(
+                        "multi @Bean-method with same name try to publish SofaService in "
+                                + declaringClass.getCanonicalName());
+                }
+
+                for (Annotation[] annotations : m.getParameterAnnotations()) {
+                    for (Annotation annotation : annotations) {
+                        if (annotation instanceof SofaReference) {
+                            throw new FatalBeanException(
+                                "multi @Bean-method with same name try to reference SofaService in"
+                                        + declaringClass.getCanonicalName());
+                        }
+                    }
+                }
+            }
         }
+    }
+
+    /**
+     * get class type name
+     *
+     * @param clazz
+     * @return
+     */
+    private String getTypeName(Class clazz) {
+        if (clazz.isArray()) {
+            try {
+                Class<?> cl = clazz;
+                int dimensions = 0;
+                while (cl.isArray()) {
+                    dimensions++;
+                    cl = cl.getComponentType();
+                }
+                StringBuilder sb = new StringBuilder();
+                sb.append(cl.getName());
+                for (int i = 0; i < dimensions; i++) {
+                    sb.append("[]");
+                }
+                return sb.toString();
+            } catch (Throwable e) { /*FALLTHRU*/
+            }
+        }
+        return clazz.getName();
     }
 
     private void generateSofaReferenceDefinition(String beanId, Method method,

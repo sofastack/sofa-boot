@@ -16,10 +16,16 @@
  */
 package com.alipay.sofa.runtime.integration.base;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import com.alipay.sofa.runtime.api.annotation.SofaReference;
+import com.alipay.sofa.runtime.api.annotation.SofaService;
+import com.alipay.sofa.runtime.beans.impl.MethodBeanClassAnnotationSampleService;
+import com.alipay.sofa.runtime.beans.impl.MethodBeanMethodAnnotationSampleService;
+import com.alipay.sofa.runtime.beans.impl.ParameterAnnotationSampleService;
+import com.alipay.sofa.runtime.beans.impl.SampleServiceImpl;
+import com.alipay.sofa.runtime.beans.service.SampleService;
+import com.alipay.sofa.runtime.integration.features.AwareTest;
 import org.junit.Before;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -28,13 +34,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 
 import com.alipay.sofa.ark.spi.model.Biz;
-import com.alipay.sofa.runtime.api.annotation.SofaReference;
-import com.alipay.sofa.runtime.api.annotation.SofaService;
-import com.alipay.sofa.runtime.beans.impl.MethodBeanClassAnnotationSampleService;
-import com.alipay.sofa.runtime.beans.impl.MethodBeanMethodAnnotationSampleService;
-import com.alipay.sofa.runtime.beans.impl.ParameterAnnotationSampleService;
-import com.alipay.sofa.runtime.beans.service.SampleService;
-import com.alipay.sofa.runtime.integration.features.AwareTest;
 import com.alipay.sofa.runtime.integration.invoke.DynamicJvmServiceProxyFinder;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 
@@ -42,6 +41,9 @@ import mockit.Mock;
 import mockit.MockUp;
 import mockit.Mocked;
 import mockit.NonStrictExpectations;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author qilong.zql
@@ -94,6 +96,16 @@ public abstract class AbstractTestBase extends TestBase {
             @SofaService(uniqueId = "methodBeanMethodAnnotationSampleService")
             SampleService methodBeanMethodAnnotationSampleService() {
                 return new MethodBeanMethodAnnotationSampleService();
+            }
+
+            @Bean("multiService")
+            SampleService service() {
+                return new SampleServiceImpl("");
+            }
+
+            @Bean("multiService")
+            SampleService service(@Value("$spring.application.name") String appName) {
+                return new SampleServiceImpl("");
             }
         }
 
