@@ -79,7 +79,25 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>gradle</id>
+                        <id>gradle_test</id>
+                        <phase>test</phase>
+                        <configuration>
+                            <executable>${gradle.executable}</executable>
+                            <arguments>
+                                <argument>clean</argument>
+                                <argument>test</argument>
+                                <argument>-Pversion=${project.version}</argument>
+                                <argument>-Pdescription=${project.description}</argument>
+                                <argument>-S</argument>
+                            </arguments>
+                            <skip>${skip.gradle.build}</skip>
+                        </configuration>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>gradle_build</id>
                         <phase>prepare-package</phase>
                         <configuration>
                             <executable>${gradle.executable}</executable>
@@ -89,6 +107,8 @@
                                 <argument>-Pversion=${project.version}</argument>
                                 <argument>-Pdescription=${project.description}</argument>
                                 <argument>-S</argument>
+                                <argument>-x</argument>
+                                <argument>test</argument>
                             </arguments>
                             <skip>${skip.gradle.build}</skip>
                         </configuration>
