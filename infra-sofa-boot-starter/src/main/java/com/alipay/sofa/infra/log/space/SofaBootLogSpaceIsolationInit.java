@@ -16,10 +16,7 @@
  */
 package com.alipay.sofa.infra.log.space;
 
-import com.alipay.sofa.common.log.Constants;
-import com.alipay.sofa.common.log.ReportUtil;
 import org.springframework.core.env.Environment;
-import org.springframework.util.StringUtils;
 
 /**
  * SofaBootLogSpaceIsolationInit
@@ -27,6 +24,7 @@ import org.springframework.util.StringUtils;
  * @author yangguanchao
  * @since 2018/04/09
  */
+@Deprecated
 public class SofaBootLogSpaceIsolationInit {
 
     /***
@@ -35,23 +33,5 @@ public class SofaBootLogSpaceIsolationInit {
      * @param runtimeLogLevelKey sofa-common-tools Runtime Log Level for every SOFABoot starters or plugin,such as logging.level.com.alipay.sofa.runtime
      */
     public static void initSofaBootLogger(Environment environment, String runtimeLogLevelKey) {
-        // init logging.path argument
-        String loggingPath = environment.getProperty(Constants.LOG_PATH);
-        if (!StringUtils.isEmpty(loggingPath)) {
-            System.setProperty(Constants.LOG_PATH, environment.getProperty(Constants.LOG_PATH));
-            ReportUtil.reportDebug("Actual " + Constants.LOG_PATH + " is [ " + loggingPath + " ]");
-        }
-
-        //for example : init logging.level.com.alipay.sofa.runtime argument
-        String runtimeLogLevelValue = environment.getProperty(runtimeLogLevelKey);
-        if (runtimeLogLevelValue != null) {
-            System.setProperty(runtimeLogLevelKey, runtimeLogLevelValue);
-        }
-
-        // init file.encoding
-        String fileEncoding = environment.getProperty(Constants.LOG_ENCODING_PROP_KEY);
-        if (!StringUtils.isEmpty(fileEncoding)) {
-            System.setProperty(Constants.LOG_ENCODING_PROP_KEY, fileEncoding);
-        }
     }
 }

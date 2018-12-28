@@ -120,11 +120,6 @@ public class SofaRuntimeSpringContextInitializer
         if (SOFABootEnvUtils.isSpringCloudBootstrapEnvironment(environment)) {
             return;
         }
-        //init logging.level.com.alipay.sofa.runtime argument
-        String runtimeLogLevelKey = Constants.LOG_LEVEL_PREFIX
-                                    + SofaRuntimeLoggerFactory.SOFA_RUNTIME_LOG_SPACE;
-        SofaBootLogSpaceIsolationInit.initSofaBootLogger(environment, runtimeLogLevelKey);
-
         SofaLogger.info("SOFABoot Runtime Starting!");
     }
 
