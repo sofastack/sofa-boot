@@ -33,8 +33,8 @@ import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
  * @author xuanbei 18/3/1
  */
 public class ServiceFactoryBean extends AbstractContractFactoryBean {
-    private Object  ref;
-    private Service service;
+    protected Object  ref;
+    protected Service service;
 
     public ServiceFactoryBean() {
     }
@@ -89,7 +89,7 @@ public class ServiceFactoryBean extends AbstractContractFactoryBean {
         bindingConverterContext.setBeanId(beanId);
     }
 
-    private Service buildService() {
+    protected Service buildService() {
         return new ServiceImpl(uniqueId, getInterfaceClass(), InterfaceMode.spring, ref);
     }
 
