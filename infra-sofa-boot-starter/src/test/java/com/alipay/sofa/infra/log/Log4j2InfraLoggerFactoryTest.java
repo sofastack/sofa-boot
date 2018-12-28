@@ -23,7 +23,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 
-import static org.junit.Assert.*;
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Log4jInfrastructureHealthCheckLoggerFactory Tester.
