@@ -17,6 +17,7 @@
 package com.alipay.sofa.runtime.spi.component;
 
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
+import com.alipay.sofa.runtime.api.component.ComponentLifeCycle;
 
 /**
  * <p>
@@ -44,7 +45,7 @@ import com.alipay.sofa.runtime.api.ServiceRuntimeException;
  *
  * @author xuanbei 18/2/28
  */
-public interface Component {
+public interface Component extends ComponentLifeCycle {
     /**
      * register component
      */
@@ -66,20 +67,6 @@ public interface Component {
      * unresolve component
      */
     void unresolve() throws ServiceRuntimeException;
-
-    /**
-     * activate component
-     *
-     * @throws ServiceRuntimeException
-     */
-    void activate() throws ServiceRuntimeException;
-
-    /**
-     * deactivate component
-     *
-     * @throws ServiceRuntimeException
-     */
-    void deactivate() throws ServiceRuntimeException;
 
     /**
      * create an exception to describe error

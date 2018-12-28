@@ -30,4 +30,8 @@
             <aop:around method="doAround" pointcut-ref="serviceAround"/>
         </aop:aspect>
     </aop:config>
+
+    <bean id="lifeCycleService" class="com.alipay.sofa.runtime.beans.impl.ComponentLifeCycleServiceImpl" />
+    <sofa:service ref="lifeCycleService" interface="com.alipay.sofa.runtime.beans.service.LifeCycleService"/>
+
 </beans>

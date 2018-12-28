@@ -17,6 +17,7 @@
 package com.alipay.sofa.runtime.spi.component;
 
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
+import com.alipay.sofa.runtime.api.component.ComponentLifeCycle;
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.model.ComponentStatus;
 import com.alipay.sofa.runtime.spi.health.HealthResult;
@@ -121,6 +122,13 @@ public abstract class AbstractComponent implements ComponentInfo {
             return;
         }
 
+        if (this.implementation != null) {
+            Object target = this.implementation.getTarget();
+            if (!(target instanceof Component) && target instanceof ComponentLifeCycle) {
+                ((ComponentLifeCycle) target).activate();
+            }
+        }
+
         componentStatus = ComponentStatus.ACTIVATED;
     }
 
@@ -132,6 +140,13 @@ public abstract class AbstractComponent implements ComponentInfo {
     public void deactivate() throws ServiceRuntimeException {
         if (componentStatus != ComponentStatus.ACTIVATED) {
             return;
+        }
+
+        if (this.implementation != null) {
+            Object target = this.implementation.getTarget();
+            if (!(target instanceof Component) && target instanceof ComponentLifeCycle) {
+                ((ComponentLifeCycle) target).deactivate();
+            }
         }
 
         componentStatus = ComponentStatus.RESOLVED;
