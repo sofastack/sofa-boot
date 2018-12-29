@@ -34,10 +34,17 @@
     </properties>
 
     <dependencies>
+        <!--strictly depend on log-sofa-boot-starter-->
+        <dependency>
+            <groupId>com.alipay.sofa.common</groupId>
+            <artifactId>log-sofa-boot-starter</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-beans</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>

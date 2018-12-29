@@ -41,6 +41,7 @@
         <module>test-sofa-boot-starter</module>
         <module>isle-sofa-boot-starter</module>
         <module>runtime-sofa-boot-plugin</module>
+        <module>sofa-boot-gradle-plugin</module>
     </modules>
 
     <properties>

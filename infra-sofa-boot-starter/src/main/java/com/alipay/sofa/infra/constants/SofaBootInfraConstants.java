@@ -31,6 +31,8 @@ public class SofaBootInfraConstants {
 
     public static final String SOFA_DEFAULT_PROPERTY_SOURCE              = "sofaConfigurationProperties";
     public static final String SOFA_BOOTSTRAP                            = "sofaBootstrap";
+    public static final String SPRING_CLOUD_BOOTSTRAP                    = "bootstrap";
+    public static final String SOFA_HIGH_PRIORITY_CONFIG                 = "sofaHighPriorityConfig";
 
     /**
      * {@link org.springframework.boot.ResourceBanner#getVersionsMap}
