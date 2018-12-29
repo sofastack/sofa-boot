@@ -16,10 +16,9 @@
  */
 package com.alipay.sofa.infra.initializer;
 
-import com.alipay.sofa.common.log.Constants;
 import com.alipay.sofa.infra.log.InfraHealthCheckLoggerFactory;
-import com.alipay.sofa.infra.log.space.SofaBootLogSpaceIsolationInit;
 import com.alipay.sofa.infra.utils.SOFABootEnvUtils;
+import org.slf4j.Logger;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.Ordered;
@@ -35,6 +34,9 @@ public class SOFABootInfrastructureSpringContextInitializer
                                                            ApplicationContextInitializer<ConfigurableApplicationContext>,
                                                            Ordered {
 
+    private final static Logger LOGGER = InfraHealthCheckLoggerFactory
+                                           .getLogger(SOFABootInfrastructureSpringContextInitializer.class);
+
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
         //init log
@@ -42,14 +44,7 @@ public class SOFABootInfrastructureSpringContextInitializer
         if (SOFABootEnvUtils.isSpringCloudBootstrapEnvironment(environment)) {
             return;
         }
-        String infraLogLevelKey = Constants.LOG_LEVEL_PREFIX
-                                  + InfraHealthCheckLoggerFactory.INFRASTRUCTURE_LOG_SPACE;
-        SofaBootLogSpaceIsolationInit.initSofaBootLogger(environment, infraLogLevelKey);
-
-        InfraHealthCheckLoggerFactory.getLogger(
-            SOFABootInfrastructureSpringContextInitializer.class).info(
-            "SOFABoot Infrastructure Starting!");
-
+        LOGGER.info("SOFABoot Infrastructure Starting!");
     }
 
     @Override

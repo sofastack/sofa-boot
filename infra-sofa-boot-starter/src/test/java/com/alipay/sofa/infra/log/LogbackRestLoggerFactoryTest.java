@@ -17,8 +17,8 @@
 package com.alipay.sofa.infra.log;
 
 import com.alipay.sofa.common.log.Constants;
+import com.alipay.sofa.common.log.env.LogEnvUtils;
 import com.alipay.sofa.infra.log.base.AbstractTestBase;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -42,34 +42,20 @@ public class LogbackRestLoggerFactoryTest extends AbstractTestBase {
         System.setProperty(Constants.LOG4J_MIDDLEWARE_LOG_DISABLE_PROP_KEY, "true");
     }
 
-    @After
-    public void after() throws Exception {
-        super.after();
-    }
-
     /**
      * Method: getLogger(String name)
      */
     @Test
-    public void testDebugGetLogger() throws Exception {
-        //TODO: Test goes here...
-        // 设置级别为Debug
-        System.getProperties().put(restLogLevel, "DEBUG");
+    public void testDebugGetLogger() {
+        LogEnvUtils.processGlobalSystemLogProperties().put(restLogLevel, "DEBUG");
         try {
-            String name1 = "com.test.1";
+            String name1 = "com.test.name";
             org.slf4j.Logger logger = InfraHealthCheckLoggerFactory.getLogger(name1);
             assertNotNull(logger);
-            logger.debug("test1 debug ok");
-
-            String name2 = "com.test.2";
-            org.slf4j.Logger logger2 = InfraHealthCheckLoggerFactory.getLogger(name2);
-            logger2.debug("test2 debug ok");
-
             assertFalse(logger.isTraceEnabled());
-            assertTrue(logger.isInfoEnabled());
             assertTrue(logger.isDebugEnabled());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } finally {
+            LogEnvUtils.processGlobalSystemLogProperties().remove(restLogLevel);
         }
     }
 
@@ -77,75 +63,44 @@ public class LogbackRestLoggerFactoryTest extends AbstractTestBase {
      * Method: getLogger(String name)
      */
     @Test
-    public void testInfoGetLogger() throws Exception {
-        //TODO: Test goes here...
-        System.getProperties().put(restLogLevel, "INFO");
+    public void testInfoGetLogger() {
+        LogEnvUtils.processGlobalSystemLogProperties().put(restLogLevel, "INFO");
         try {
-            String name1 = "com.test.3";
+            String name1 = "com.test.name";
             org.slf4j.Logger logger = InfraHealthCheckLoggerFactory.getLogger(name1);
-            System.err.println("\nLoggerName1 : " + logger.getName() + " ,logger1:" + logger);
             assertNotNull(logger);
-            logger.info("test1 info ok");
-
-            String name2 = "com.test.4";
-            org.slf4j.Logger logger2 = InfraHealthCheckLoggerFactory.getLogger(name2);
-            System.err.println("\nLoggerName2 : " + logger2.getName() + " ,logger2:" + logger2);
-            logger2.info("test2 info ok");
-
             assertTrue(logger.isInfoEnabled());
             assertFalse(logger.isDebugEnabled());
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } finally {
+            LogEnvUtils.processGlobalSystemLogProperties().remove(restLogLevel);
         }
     }
 
     @Test
-    public void testWarnGetLogger() throws Exception {
-        //TODO: Test goes here...
-        System.getProperties().put(restLogLevel, "WARN");
+    public void testWarnGetLogger() {
+        LogEnvUtils.processGlobalSystemLogProperties().put(restLogLevel, "WARN");
         try {
-            String name1 = "com.test.5";
+            String name1 = "com.test.name";
             org.slf4j.Logger logger = InfraHealthCheckLoggerFactory.getLogger(name1);
             assertNotNull(logger);
-            logger.warn("test1 warn ok");
-
-            String name2 = "com.test.6";
-            org.slf4j.Logger logger2 = InfraHealthCheckLoggerFactory.getLogger(name2);
-            System.err.println("\nLoggerName2 : " + logger2.getName() + " ,logger2:" + logger2);
-            logger2.warn("test2 warn ok");
-
             assertFalse(logger.isInfoEnabled());
-            assertFalse(logger.isDebugEnabled());
             assertTrue(logger.isWarnEnabled());
-            assertTrue(logger.isErrorEnabled());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } finally {
+            LogEnvUtils.processGlobalSystemLogProperties().remove(restLogLevel);
         }
     }
 
     @Test
-    public void testErrorGetLogger() throws Exception {
-        //TODO: Test goes here...
-        System.getProperties().put(restLogLevel, "ERROR");
+    public void testErrorGetLogger() {
+        LogEnvUtils.processGlobalSystemLogProperties().put(restLogLevel, "ERROR");
         try {
-            String name1 = "com.test.7";
+            String name1 = "com.test.name";
             org.slf4j.Logger logger = InfraHealthCheckLoggerFactory.getLogger(name1);
-            System.err.println("\nLoggerName1 : " + logger.getName() + " ,logger1:" + logger);
             assertNotNull(logger);
-            logger.error("test1 error ok");
-
-            String name2 = "com.test.8";
-            org.slf4j.Logger logger2 = InfraHealthCheckLoggerFactory.getLogger(name2);
-            System.err.println("\nLoggerName2 : " + logger2.getName() + " ,logger2:" + logger2);
-            logger2.error("test2 error ok");
-
-            assertFalse(logger.isInfoEnabled());
-            assertFalse(logger.isDebugEnabled());
             assertFalse(logger.isWarnEnabled());
             assertTrue(logger.isErrorEnabled());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } finally {
+            LogEnvUtils.processGlobalSystemLogProperties().remove(restLogLevel);
         }
     }
 }

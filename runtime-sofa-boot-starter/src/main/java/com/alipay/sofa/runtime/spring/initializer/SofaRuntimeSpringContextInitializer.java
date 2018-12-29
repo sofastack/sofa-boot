@@ -16,9 +16,7 @@
  */
 package com.alipay.sofa.runtime.spring.initializer;
 
-import com.alipay.sofa.common.log.Constants;
 import com.alipay.sofa.infra.constants.CommonMiddlewareConstants;
-import com.alipay.sofa.infra.log.space.SofaBootLogSpaceIsolationInit;
 import com.alipay.sofa.infra.utils.SOFABootEnvUtils;
 import com.alipay.sofa.runtime.SofaFramework;
 import com.alipay.sofa.runtime.api.client.ReferenceClient;
@@ -36,7 +34,6 @@ import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import com.alipay.sofa.runtime.spi.log.SofaLogger;
-import com.alipay.sofa.runtime.spi.log.SofaRuntimeLoggerFactory;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
 import com.alipay.sofa.runtime.spring.*;
@@ -47,6 +44,8 @@ import org.springframework.beans.factory.support.AbstractAutowireCapableBeanFact
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.PropertySource;
+import org.springframework.util.StringUtils;
 
 import java.util.HashSet;
 import java.util.ServiceLoader;
@@ -111,20 +110,23 @@ public class SofaRuntimeSpringContextInitializer
         if (isInitiated.compareAndSet(false, true)) {
             bindingConverterFactory = bindingConverterFactory();
             bindingAdapterFactory = bindingAdapterFactory();
-            sofaRuntimeContext = sofaRuntimeContext(
-                environment.getProperty(CommonMiddlewareConstants.APP_NAME_KEY),
-                bindingConverterFactory, bindingAdapterFactory);
+            String appName = environment.getProperty(CommonMiddlewareConstants.APP_NAME_KEY);
+            PropertySource sofaHighPriorityConfig = environment.getPropertySources().get(
+                CommonMiddlewareConstants.SOFA_HIGH_PRIORITY_CONFIG);
+            if (sofaHighPriorityConfig != null
+                && !StringUtils.isEmpty(sofaHighPriorityConfig
+                    .getProperty(CommonMiddlewareConstants.APP_NAME_KEY))) {
+                appName = (String) sofaHighPriorityConfig
+                    .getProperty(CommonMiddlewareConstants.APP_NAME_KEY);
+            }
+            sofaRuntimeContext = sofaRuntimeContext(appName, bindingConverterFactory,
+                bindingAdapterFactory);
         }
         initApplicationContext(applicationContext);
 
         if (SOFABootEnvUtils.isSpringCloudBootstrapEnvironment(environment)) {
             return;
         }
-        //init logging.level.com.alipay.sofa.runtime argument
-        String runtimeLogLevelKey = Constants.LOG_LEVEL_PREFIX
-                                    + SofaRuntimeLoggerFactory.SOFA_RUNTIME_LOG_SPACE;
-        SofaBootLogSpaceIsolationInit.initSofaBootLogger(environment, runtimeLogLevelKey);
-
         SofaLogger.info("SOFABoot Runtime Starting!");
     }
 

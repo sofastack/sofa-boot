@@ -16,8 +16,8 @@
  */
 package com.alipay.sofa.infra.log.base;
 
+import com.alipay.sofa.common.boot.logging.CommonLoggingApplicationListener;
 import com.alipay.sofa.common.log.Constants;
-import com.alipay.sofa.common.log.LoggerSpaceManager;
 import com.alipay.sofa.common.log.MultiAppLoggerSpaceManager;
 import com.alipay.sofa.common.log.SpaceId;
 import com.alipay.sofa.common.log.env.LogEnvUtils;
@@ -52,25 +52,14 @@ public abstract class AbstractTestBase {
     }
 
     public void before() throws Exception {
-        System.getProperties().put("logging.path", "./logs");
+        SPACES_MAP.remove(new SpaceId(InfraHealthCheckLoggerFactory.INFRASTRUCTURE_LOG_SPACE));
+        new CommonLoggingApplicationListener().setReInitialize(true);
     }
 
     public void after() throws Exception {
-
-        System.err.println("\n " + Constants.LOG_ENCODING_PROP_KEY + " : "
-                           + System.getProperty("file.encoding"));
-        System.err.println("\n " + Constants.LOG_PATH + " : " + System.getProperty("logging.path"));
-        String restLogLevel = Constants.LOG_LEVEL_PREFIX
-                              + InfraHealthCheckLoggerFactory.INFRASTRUCTURE_LOG_SPACE;
-        System.err.println("\n " + restLogLevel + " : " + System.getProperty(restLogLevel));
-
-        System.clearProperty(Constants.LOG_PATH);
-        System.clearProperty(restLogLevel);
         //关闭禁用开关
         System.clearProperty(Constants.LOGBACK_MIDDLEWARE_LOG_DISABLE_PROP_KEY);
         System.clearProperty(Constants.LOG4J2_MIDDLEWARE_LOG_DISABLE_PROP_KEY);
         System.clearProperty(Constants.LOG4J_MIDDLEWARE_LOG_DISABLE_PROP_KEY);
-        SPACES_MAP.remove(new SpaceId(InfraHealthCheckLoggerFactory.INFRASTRUCTURE_LOG_SPACE));
-        globalSystemProperties.set(null, null);
     }
 }
