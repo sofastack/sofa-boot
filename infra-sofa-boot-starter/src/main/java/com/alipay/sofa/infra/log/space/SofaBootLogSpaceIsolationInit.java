@@ -27,6 +27,7 @@ import org.springframework.util.StringUtils;
  * @author yangguanchao
  * @since 2018/04/09
  */
+@Deprecated
 public class SofaBootLogSpaceIsolationInit {
 
     /***
@@ -39,7 +40,7 @@ public class SofaBootLogSpaceIsolationInit {
         String loggingPath = environment.getProperty(Constants.LOG_PATH);
         if (!StringUtils.isEmpty(loggingPath)) {
             System.setProperty(Constants.LOG_PATH, environment.getProperty(Constants.LOG_PATH));
-            ReportUtil.reportDebug("Actual " + Constants.LOG_PATH + " is [ " + loggingPath + " ]");
+            ReportUtil.report("Actual " + Constants.LOG_PATH + " is [ " + loggingPath + " ]");
         }
 
         //for example : init logging.level.com.alipay.sofa.runtime argument

@@ -20,6 +20,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.StreamSupport;
 
+import com.alipay.sofa.common.log.env.LogEnvUtils;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
@@ -29,6 +30,7 @@ import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEven
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.EnumerablePropertySource;
 import org.springframework.core.env.MapPropertySource;
 import org.springframework.core.env.PropertySource;
 import org.springframework.core.env.StandardEnvironment;
@@ -46,23 +48,21 @@ public class SofaBootstrapRunListener implements
                                      ApplicationListener<ApplicationEnvironmentPreparedEvent>,
                                      Ordered {
 
-    private final static String  LOGGING_PATH  = "logging.path";
-    private final static String  LOGGING_LEVEL = "logging.level";
-    private static AtomicBoolean executed      = new AtomicBoolean(false);
+    private static AtomicBoolean           executed             = new AtomicBoolean(false);
+    private final static MapPropertySource HIGH_PRIORITY_CONFIG = new MapPropertySource(
+                                                                    SofaBootInfraConstants.SOFA_HIGH_PRIORITY_CONFIG,
+                                                                    new HashMap<>());
 
     /**
      * config log settings
      */
     private void assemblyLogSetting(ConfigurableEnvironment environment) {
-        if (StringUtils.hasText(environment.getProperty(LOGGING_PATH))) {
-            System.getProperties().setProperty(LOGGING_PATH, environment.getProperty(LOGGING_PATH));
-        }
         StreamSupport.stream(environment.getPropertySources().spliterator(), false)
-            .filter(propertySource -> propertySource instanceof MapPropertySource)
+            .filter(propertySource -> propertySource instanceof EnumerablePropertySource)
             .map(propertySource -> Arrays
                 .asList(((MapPropertySource) propertySource).getPropertyNames()))
-            .flatMap(Collection::stream).filter(key -> key.startsWith(LOGGING_LEVEL)).forEach(
-                (key) -> System.getProperties().setProperty(key, environment.getProperty(key)));
+                .flatMap(Collection::stream).filter(LogEnvUtils::filterAllLogConfig)
+                .forEach((key) -> HIGH_PRIORITY_CONFIG.getSource().put(key, environment.getProperty(key)));
     }
 
     /**
@@ -71,7 +71,7 @@ public class SofaBootstrapRunListener implements
      */
     private void assemblyRequireProperties(ConfigurableEnvironment environment) {
         if (StringUtils.hasText(environment.getProperty(SofaBootInfraConstants.APP_NAME_KEY))) {
-            System.getProperties().setProperty(SofaBootInfraConstants.APP_NAME_KEY,
+            HIGH_PRIORITY_CONFIG.getSource().put(SofaBootInfraConstants.APP_NAME_KEY,
                 environment.getProperty(SofaBootInfraConstants.APP_NAME_KEY));
         }
     }
@@ -103,12 +103,9 @@ public class SofaBootstrapRunListener implements
         SpringApplication application = event.getSpringApplication();
         if (SOFABootEnvUtils.isSpringCloud() && executed.compareAndSet(false, true)) {
             StandardEnvironment bootstrapEnvironment = new StandardEnvironment();
-            for (PropertySource<?> source : event.getEnvironment().getPropertySources()) {
-                if (source instanceof PropertySource.StubPropertySource) {
-                    continue;
-                }
-                bootstrapEnvironment.getPropertySources().addLast(source);
-            }
+            StreamSupport.stream(environment.getPropertySources().spliterator(), false)
+                    .filter(source->!(source instanceof PropertySource.StubPropertySource))
+                    .forEach(source -> bootstrapEnvironment.getPropertySources().addLast(source));
 
             List<Class> sources = new ArrayList<>();
             for (Object s : application.getAllSources()) {
@@ -120,24 +117,27 @@ public class SofaBootstrapRunListener implements
             }
 
             SpringApplication bootstrapApplication = new SpringApplicationBuilder()
-                .profiles(environment.getActiveProfiles()).bannerMode(Banner.Mode.OFF)
-                .environment(bootstrapEnvironment).sources(sources.toArray(new Class[] {}))
-                .registerShutdownHook(false).logStartupInfo(false).web(WebApplicationType.NONE)
-                .listeners().initializers().build(event.getArgs());
+                    .profiles(environment.getActiveProfiles()).bannerMode(Banner.Mode.OFF)
+                    .environment(bootstrapEnvironment).sources(sources.toArray(new Class[] {}))
+                    .registerShutdownHook(false).logStartupInfo(false).web(WebApplicationType.NONE)
+                    .listeners().initializers().build(event.getArgs());
 
             ApplicationEnvironmentPreparedEvent bootstrapEvent = new ApplicationEnvironmentPreparedEvent(
-                bootstrapApplication, event.getArgs(), bootstrapEnvironment);
+                    bootstrapApplication, event.getArgs(), bootstrapEnvironment);
 
             application.getListeners().stream()
-                .filter(listener -> listener instanceof ConfigFileApplicationListener)
-                .forEach(listener -> ((ConfigFileApplicationListener) listener)
-                    .onApplicationEvent(bootstrapEvent));
+                    .filter(listener -> listener instanceof ConfigFileApplicationListener)
+                    .forEach(listener -> ((ConfigFileApplicationListener) listener)
+                            .onApplicationEvent(bootstrapEvent));
 
             assemblyLogSetting(bootstrapEnvironment);
             assemblyRequireProperties(bootstrapEnvironment);
             assemblyEnvironmentMark(environment);
         } else {
             unAssemblyEnvironmentMark(environment);
+        }
+        if (environment.getPropertySources().contains(SofaBootInfraConstants.SPRING_CLOUD_BOOTSTRAP)) {
+            environment.getPropertySources().addLast(HIGH_PRIORITY_CONFIG);
         }
     }
 }
