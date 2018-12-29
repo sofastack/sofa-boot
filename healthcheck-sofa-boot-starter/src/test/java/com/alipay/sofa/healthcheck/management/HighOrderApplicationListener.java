@@ -54,26 +54,13 @@ public class HighOrderApplicationListener implements ApplicationListener<Context
         if (!applicationContext.equals(contextRefreshedEvent.getApplicationContext())) {
             return;
         }
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                readinessCheckResponse = testRestTemplate.getForEntity("http://localhost:"
-                                                                       + managementPort
-                                                                       + "/health/readiness",
-                    String.class);
 
-                livenessCheckResponse = testRestTemplate.getForEntity("http://localhost:"
-                                                                      + managementPort + "/health",
-                    String.class);
+        readinessCheckResponse = testRestTemplate.getForEntity("http://localhost:" + managementPort
+                                                               + "/health/readiness", String.class);
 
-            }
-        }).start();
+        livenessCheckResponse = testRestTemplate.getForEntity("http://localhost:" + managementPort
+                                                              + "/health", String.class);
 
-        try {
-            Thread.sleep(3000);
-        } catch (Throwable e) {
-            //ignore
-        }
     }
 
     @Override
