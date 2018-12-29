@@ -1,22 +1,30 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2018 All Rights Reserved.
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.alipay.sofa.healthcheck.management;
 
-import org.junit.Before;
+import com.alipay.sofa.healthcheck.configuration.HealthCheckConstants;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.autoconfigure.LocalManagementPort;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.core.PriorityOrdered;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -29,20 +37,27 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @SpringBootApplication
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Component
 public class HealthCheckManagementTest {
 
     @Autowired
-    private SleepBeanListener sleepBeanListener;
+    private HighOrderApplicationListener highOrderApplicationListener;
 
-    @Before
-    public void before(){
-        sleepBeanListener.getNpeTimes().set(0);
+    @Test
+    public void testHealthCheckNotReadyReadiness() {
+        ResponseEntity<String> responseEntity = highOrderApplicationListener
+            .getReadinessCheckResponse();
+        Assert.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());
+        Assert.assertTrue(responseEntity.getBody().contains(
+            HealthCheckConstants.SOFABOOT_HEALTH_CHECK_NOT_READY_MSG));
     }
 
     @Test
-    public void testHealthCheckNotReady(){
+    public void testHealthCheckNotReadyLiveness() {
+        ResponseEntity<String> responseEntity = highOrderApplicationListener
+            .getLivenessCheckResponse();
+        Assert.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());
+        Assert.assertTrue(responseEntity.getBody().contains(
+            HealthCheckConstants.SOFABOOT_HEALTH_CHECK_NOT_READY_MSG));
 
     }
-
 }
