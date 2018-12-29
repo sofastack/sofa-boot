@@ -17,7 +17,6 @@
 package com.alipay.sofa.healthcheck.core;
 
 import com.alipay.sofa.healthcheck.log.SofaBootHealthCheckLoggerFactory;
-import com.alipay.sofa.healthcheck.startup.ReadinessCheckListener;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.BeansException;
