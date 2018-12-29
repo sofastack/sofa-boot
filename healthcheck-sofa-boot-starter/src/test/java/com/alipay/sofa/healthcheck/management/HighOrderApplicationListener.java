@@ -29,7 +29,7 @@ import org.springframework.stereotype.Component;
 /**
  *
  * @author ruoshan
- * @version $Id: SleepBean.java, v 0.1 2018年12月27日 10:12 PM ruoshan Exp $
+ * @since 2.6.0
  */
 @Component
 public class HighOrderApplicationListener implements ApplicationListener<ContextRefreshedEvent>,
@@ -50,7 +50,7 @@ public class HighOrderApplicationListener implements ApplicationListener<Context
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-        // 只监听 root 上下文的事件
+        // only listen to root application
         if (!applicationContext.equals(contextRefreshedEvent.getApplicationContext())) {
             return;
         }
