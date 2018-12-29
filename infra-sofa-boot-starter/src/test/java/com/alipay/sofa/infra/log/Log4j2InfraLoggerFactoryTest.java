@@ -95,15 +95,15 @@ public class Log4j2InfraLoggerFactoryTest extends AbstractTestBase {
     }
 
     @Test
-    public void testErrorGetLogger() throws Exception {
+    public void testErrorGetLogger() {
         LogEnvUtils.processGlobalSystemLogProperties().put(restLogLevel, "ERROR");
         try {
             String name1 = "com.test.name";
             org.slf4j.Logger logger = InfraHealthCheckLoggerFactory.getLogger(name1);
             assertFalse(logger.isWarnEnabled());
             assertTrue(logger.isErrorEnabled());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } finally {
+            LogEnvUtils.processGlobalSystemLogProperties().remove(restLogLevel);
         }
     }
 }
