@@ -22,15 +22,6 @@ import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.FactoryBean;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.config.TypedStringValue;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.w3c.dom.Element;
-import org.xml.sax.InputSource;
-
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.constants.SofaRuntimeFrameworkConstants;
 import com.alipay.sofa.runtime.service.binding.JvmBinding;
@@ -40,6 +31,14 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.FactoryBean;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.config.TypedStringValue;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.w3c.dom.Element;
+import org.xml.sax.InputSource;
 
 /**
  * Abstract Contract Factory Bean
@@ -93,16 +92,24 @@ public abstract class AbstractContractFactoryBean implements InitializingBean, F
         }
         sofaRuntimeContext = applicationContext.getBean(
             SofaRuntimeFrameworkConstants.SOFA_RUNTIME_CONTEXT_BEAN_ID, SofaRuntimeContext.class);
-        bindingConverterFactory = applicationContext.getBean(
-            SofaRuntimeFrameworkConstants.BINDING_CONVERTER_FACTORY_BEAN_ID,
-            BindingConverterFactory.class);
-        bindingAdapterFactory = applicationContext.getBean(
-            SofaRuntimeFrameworkConstants.BINDING_ADAPTER_FACTORY_BEAN_ID,
-            BindingAdapterFactory.class);
+        bindingConverterFactory = getBindingConverterFactory();
+        bindingAdapterFactory = getBindingAdapterFactory();
         if (!apiType) {
             this.bindings = parseBindings(tempElements, applicationContext, isInBinding());
         }
         doAfterPropertiesSet();
+    }
+
+    protected BindingConverterFactory getBindingConverterFactory() {
+        return applicationContext.getBean(
+            SofaRuntimeFrameworkConstants.BINDING_CONVERTER_FACTORY_BEAN_ID,
+            BindingConverterFactory.class);
+    }
+
+    protected BindingAdapterFactory getBindingAdapterFactory() {
+        return applicationContext.getBean(
+            SofaRuntimeFrameworkConstants.BINDING_ADAPTER_FACTORY_BEAN_ID,
+            BindingAdapterFactory.class);
     }
 
     protected List<Binding> parseBindings(List<Element> parseElements,
@@ -116,11 +123,7 @@ public abstract class AbstractContractFactoryBean implements InitializingBean, F
                     .getBindingConverterByTagName(tagName);
 
                 if (bindingConverter == null) {
-                    if (!tagName.equals(SofaRuntimeFrameworkConstants.BINDING_PREFIX
-                                        + JvmBinding.JVM_BINDING_TYPE.toString())) {
-                        throw new ServiceRuntimeException("Can't find BindingConverter of type "
-                                                          + tagName);
-                    }
+                    dealWithbindingConverterNotExist(tagName);
                     continue;
                 }
 
@@ -130,6 +133,7 @@ public abstract class AbstractContractFactoryBean implements InitializingBean, F
                 bindingConverterContext.setAppName(sofaRuntimeContext.getAppName());
                 bindingConverterContext.setAppClassLoader(sofaRuntimeContext.getAppClassLoader());
                 bindingConverterContext.setRepeatReferLimit(repeatReferLimit);
+                bindingConverterContext.setBeanId(beanId);
 
                 setProperties(bindingConverterContext);
 
@@ -140,6 +144,13 @@ public abstract class AbstractContractFactoryBean implements InitializingBean, F
         }
 
         return result;
+    }
+
+    protected void dealWithbindingConverterNotExist(String tagName) {
+        if (!tagName.equals(SofaRuntimeFrameworkConstants.BINDING_PREFIX
+                            + JvmBinding.JVM_BINDING_TYPE.toString())) {
+            throw new ServiceRuntimeException("Can't find BindingConverter of type " + tagName);
+        }
     }
 
     @Override
