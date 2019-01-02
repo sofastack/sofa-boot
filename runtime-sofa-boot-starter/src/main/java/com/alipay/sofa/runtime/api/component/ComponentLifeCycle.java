@@ -33,7 +33,7 @@ public interface ComponentLifeCycle {
     void activate() throws ServiceRuntimeException;
 
     /**
-     * Component lifecycle event occurred when component is activated.
+     * Component lifecycle event occurred when component is deactivated.
      *
      * @throws ServiceRuntimeException
      */
