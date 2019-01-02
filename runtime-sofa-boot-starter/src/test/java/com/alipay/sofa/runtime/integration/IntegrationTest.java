@@ -35,6 +35,8 @@ import com.alipay.sofa.runtime.spring.bean.SofaBeanNameGenerator;
 import com.alipay.sofa.runtime.spring.factory.ReferenceFactoryBean;
 import com.alipay.sofa.runtime.spring.factory.ServiceFactoryBean;
 
+import java.util.Map;
+
 /**
  * @author qilong.zql
  * @since 2.3.1
@@ -228,8 +230,10 @@ public class IntegrationTest extends AbstractTestBase {
     @Test
     public void testServiceFactoryBean() {
         ApplicationContext applicationContext = awareTest.getApplicationContext();
-        applicationContext.getBeansOfType(ServiceFactoryBean.class).forEach((key, value) -> {
+        Map<String, ServiceFactoryBean> beanMap = applicationContext
+            .getBeansOfType(ServiceFactoryBean.class);
+        for (String key : beanMap.keySet()) {
             Assert.assertTrue(key.startsWith("&ServiceFactoryBean#"));
-        });
+        }
     }
 }

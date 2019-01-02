@@ -85,6 +85,12 @@ public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor, 
         return bean;
     }
 
+    @Override
+    public Object postProcessAfterInitialization(Object bean, String beanName)
+                                                                              throws BeansException {
+        return bean;
+    }
+
     private void processSofaReference(final Object bean) {
         final Class<?> beanClass = bean.getClass();
 

@@ -21,15 +21,14 @@ import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import com.alipay.sofa.infra.constants.CommonMiddlewareConstants;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory;
 import org.springframework.boot.context.event.ApplicationPreparedEvent;
-import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
 
-import com.alipay.sofa.infra.constants.SofaBootInfraConstants;
 import com.alipay.sofa.runtime.SofaFramework;
 import com.alipay.sofa.runtime.api.client.ReferenceClient;
 import com.alipay.sofa.runtime.api.client.ServiceClient;
@@ -108,7 +107,7 @@ public class SofaRuntimeApplicationListener implements
             bindingConverterFactory = bindingConverterFactory();
             bindingAdapterFactory = bindingAdapterFactory();
             sofaRuntimeContext = sofaRuntimeContext(
-                environment.getProperty(SofaBootInfraConstants.APP_NAME_KEY),
+                environment.getProperty(CommonMiddlewareConstants.APP_NAME_KEY),
                 bindingConverterFactory, bindingAdapterFactory);
         }
         initApplicationContext(applicationContext);

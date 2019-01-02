@@ -42,23 +42,6 @@ import com.alipay.sofa.runtime.service.impl.BindingConverterFactoryImpl;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
-<<<<<<< HEAD:isle-sofa-boot-starter/src/test/java/com/alipay/sofa/isle/ServiceAnnotationBeanPostProcessorTest.java
-import com.alipay.sofa.runtime.spring.ServiceAnnotationBeanPostProcessor;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-import org.springframework.context.ApplicationContext;
-
-import java.lang.reflect.Method;
-import java.util.HashSet;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-=======
->>>>>>> 50a95ec... Support  @SofaService to annotated on method and refactor related code. (#288):isle-sofa-boot-starter/src/test/java/com/alipay/sofa/isle/ReferenceAnnotationBeanPostProcessorTest.java
 
 /**
  * @author xuanbei 18/5/15

@@ -26,22 +26,6 @@ import org.springframework.context.annotation.Configuration;
 
 import com.alipay.sofa.ark.spi.model.Biz;
 import com.alipay.sofa.healthcheck.core.HealthChecker;
-<<<<<<< HEAD
-import com.alipay.sofa.infra.constants.CommonMiddlewareConstants;
-import com.alipay.sofa.runtime.api.client.ReferenceClient;
-import com.alipay.sofa.runtime.api.client.ServiceClient;
-import com.alipay.sofa.runtime.client.impl.ClientFactoryImpl;
-import com.alipay.sofa.runtime.component.impl.StandardSofaRuntimeManager;
-import com.alipay.sofa.runtime.service.client.ReferenceClientImpl;
-import com.alipay.sofa.runtime.service.client.ServiceClientImpl;
-import com.alipay.sofa.runtime.service.impl.BindingAdapterFactoryImpl;
-import com.alipay.sofa.runtime.service.impl.BindingConverterFactoryImpl;
-import com.alipay.sofa.runtime.SofaFramework;
-import com.alipay.sofa.runtime.spi.binding.BindingAdapter;
-import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
-import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
-=======
->>>>>>> 50a95ec... Support  @SofaService to annotated on method and refactor related code. (#288)
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spring.callback.CloseApplicationContextCallBack;
 import com.alipay.sofa.runtime.spring.config.SofaRuntimeConfigurationProperties;
@@ -57,72 +41,6 @@ import com.alipay.sofa.runtime.spring.health.SofaComponentHealthIndicator;
 @EnableConfigurationProperties(SofaRuntimeConfigurationProperties.class)
 public class SofaRuntimeAutoConfiguration {
     @Bean
-<<<<<<< HEAD
-    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
-    public static BindingConverterFactory bindingConverterFactory() {
-        BindingConverterFactory bindingConverterFactory = new BindingConverterFactoryImpl();
-        bindingConverterFactory
-            .addBindingConverters(getClassesByServiceLoader(BindingConverter.class));
-        return bindingConverterFactory;
-    }
-
-    @Bean
-    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
-    public static BindingAdapterFactory bindingAdapterFactory() {
-        BindingAdapterFactory bindingAdapterFactory = new BindingAdapterFactoryImpl();
-        bindingAdapterFactory.addBindingAdapters(getClassesByServiceLoader(BindingAdapter.class));
-        return bindingAdapterFactory;
-    }
-
-    @Bean
-    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
-    public static SofaRuntimeContext sofaRuntimeContext(@Value("${"
-                                                               + CommonMiddlewareConstants.APP_NAME_KEY
-                                                               + "}") String appName,
-                                                        BindingConverterFactory bindingConverterFactory,
-                                                        BindingAdapterFactory bindingAdapterFactory) {
-        ClientFactoryInternal clientFactoryInternal = new ClientFactoryImpl();
-        SofaRuntimeManager sofaRuntimeManager = new StandardSofaRuntimeManager(appName,
-            SofaRuntimeAutoConfiguration.class.getClassLoader(), clientFactoryInternal);
-        sofaRuntimeManager.getComponentManager().registerComponentClient(
-            ReferenceClient.class,
-            new ReferenceClientImpl(sofaRuntimeManager.getSofaRuntimeContext(),
-                bindingConverterFactory, bindingAdapterFactory));
-        sofaRuntimeManager.getComponentManager().registerComponentClient(
-            ServiceClient.class,
-            new ServiceClientImpl(sofaRuntimeManager.getSofaRuntimeContext(),
-                bindingConverterFactory, bindingAdapterFactory));
-        SofaFramework.registerSofaRuntimeManager(sofaRuntimeManager);
-        return sofaRuntimeManager.getSofaRuntimeContext();
-
-    }
-
-    @Bean
-    public static ServiceAnnotationBeanPostProcessor serviceAnnotationBeanPostProcessor(BindingAdapterFactory bindingAdapterFactory,
-                                                                                        BindingConverterFactory bindingConverterFactory) {
-        return new ServiceAnnotationBeanPostProcessor(bindingAdapterFactory,
-            bindingConverterFactory);
-    }
-
-    @Bean
-    public static ClientFactoryBeanPostProcessor clientFactoryBeanPostProcessor(SofaRuntimeContext sofaRuntimeContext) {
-        return new ClientFactoryBeanPostProcessor(sofaRuntimeContext.getClientFactory());
-    }
-
-    @Bean
-    public static ApplicationShutdownCallbackPostProcessor applicationShutdownCallbackPostProcessor(SofaRuntimeContext sofaRuntimeContext) {
-        return new ApplicationShutdownCallbackPostProcessor(
-            sofaRuntimeContext.getSofaRuntimeManager());
-    }
-
-    @Bean
-    public static SofaRuntimeContextAwareProcessor sofaRuntimeContextAwareProcessor(SofaRuntimeContext sofaRuntimeContext) {
-        return new SofaRuntimeContextAwareProcessor(sofaRuntimeContext);
-    }
-
-    @Bean
-=======
->>>>>>> 50a95ec... Support  @SofaService to annotated on method and refactor related code. (#288)
     public CloseApplicationContextCallBack closeApplicationContextCallBack() {
         return new CloseApplicationContextCallBack();
     }

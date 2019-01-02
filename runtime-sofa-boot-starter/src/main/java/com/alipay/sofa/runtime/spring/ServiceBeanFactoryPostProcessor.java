@@ -20,11 +20,9 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.FatalBeanException;
@@ -89,10 +87,12 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
     }
 
     @Override
-    public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        Arrays.stream(beanFactory.getBeanDefinitionNames())
-            .collect(Collectors.toMap(Function.identity(), beanFactory::getBeanDefinition))
-            .forEach((key, value) -> transformSofaBeanDefinition(key, value, beanFactory));
+    public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory)
+                                                                                   throws BeansException {
+        for (String beanName : beanFactory.getBeanDefinitionNames()) {
+            transformSofaBeanDefinition(beanName, beanFactory.getBeanDefinition(beanName),
+                beanFactory);
+        }
     }
 
     /**
@@ -132,7 +132,8 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
             for (Method m : declaringClass.getDeclaredMethods()) {
 
                 Bean bean = m.getAnnotation(Bean.class);
-                Set<String> beanNames = Stream.of(m.getName()).collect(Collectors.toSet());
+                Set<String> beanNames = new HashSet<>();
+                beanNames.add(m.getName());
                 if (bean != null) {
                     beanNames.addAll(Arrays.asList(bean.name()));
                     beanNames.addAll(Arrays.asList(bean.value()));
