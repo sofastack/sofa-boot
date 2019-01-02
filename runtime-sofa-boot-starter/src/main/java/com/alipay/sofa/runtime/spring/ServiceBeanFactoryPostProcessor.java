@@ -154,10 +154,12 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
 
                 Bean bean = m.getAnnotation(Bean.class);
                 Set<String> beanNames = new HashSet<>();
-                beanNames.add(m.getName());
                 if (bean != null) {
                     beanNames.addAll(Arrays.asList(bean.name()));
                     beanNames.addAll(Arrays.asList(bean.value()));
+                }
+                if (beanNames.isEmpty()) {
+                    beanNames.add(m.getName());
                 }
 
                 // check bean name
