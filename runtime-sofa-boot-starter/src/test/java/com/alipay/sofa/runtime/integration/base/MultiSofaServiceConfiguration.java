@@ -32,10 +32,6 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnProperty(name = "multiSofaService", havingValue = "true")
 public class MultiSofaServiceConfiguration {
 
-    public MultiSofaServiceConfiguration() {
-        System.out.println("xx");
-    }
-
     @Bean("multiSofaService")
     @SofaService
     SampleService service() {
