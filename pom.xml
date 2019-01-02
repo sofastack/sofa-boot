@@ -23,12 +23,12 @@
     <parent>
         <groupId>com.alipay.sofa</groupId>
         <artifactId>sofaboot-dependencies</artifactId>
-        <version>3.1.1-SNAPSHOT</version>
+        <version>3.1.1</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>sofa-boot-runtime</artifactId>
-    <version>3.1.1-SNAPSHOT</version>
+    <version>3.1.1</version>
     <packaging>pom</packaging>
 
     <name>SOFABoot Runtime</name>
@@ -41,6 +41,7 @@
         <module>test-sofa-boot-starter</module>
         <module>isle-sofa-boot-starter</module>
         <module>runtime-sofa-boot-plugin</module>
+        <module>sofa-boot-gradle-plugin</module>
     </modules>
 
     <properties>
