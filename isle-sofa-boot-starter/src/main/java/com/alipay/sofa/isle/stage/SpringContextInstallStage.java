@@ -155,7 +155,7 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
         ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
         try {
             for (DeploymentDescriptor deployment : application.getResolvedDeployments()) {
-                if (deployment.isSpringPowered()) {
+                if (deployment.isSpringPowered() && !application.getFailed().contains(deployment)) {
                     Thread.currentThread().setContextClassLoader(deployment.getClassLoader());
                     doRefreshSpringContext(deployment, application);
                 }
@@ -236,7 +236,8 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
                     Thread.currentThread().setName(
                         "sofa-module-start-" + deployment.getModuleName());
                     Thread.currentThread().setContextClassLoader(deployment.getClassLoader());
-                    if (deployment.isSpringPowered()) {
+                    if (deployment.isSpringPowered()
+                        && !application.getFailed().contains(deployment)) {
                         doRefreshSpringContext(deployment, application);
                     }
                     DependencyTree.Entry<String, DeploymentDescriptor> entry = application
