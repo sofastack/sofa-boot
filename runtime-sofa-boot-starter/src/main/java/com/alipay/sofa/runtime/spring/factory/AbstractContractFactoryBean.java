@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.runtime.spring.factory;
 
+import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.constants.SofaRuntimeFrameworkConstants;
 import com.alipay.sofa.runtime.service.binding.JvmBinding;
@@ -86,14 +87,22 @@ public abstract class AbstractContractFactoryBean implements InitializingBean, F
         }
         sofaRuntimeContext = applicationContext.getBean(
             SofaRuntimeFrameworkConstants.SOFA_RUNTIME_CONTEXT_BEAN_ID, SofaRuntimeContext.class);
-        bindingConverterFactory = applicationContext.getBean(
-            SofaRuntimeFrameworkConstants.BINDING_CONVERTER_FACTORY_BEAN_ID,
-            BindingConverterFactory.class);
-        bindingAdapterFactory = applicationContext.getBean(
-            SofaRuntimeFrameworkConstants.BINDING_ADAPTER_FACTORY_BEAN_ID,
-            BindingAdapterFactory.class);
+        bindingConverterFactory = getBindingConverterFactory();
+        bindingAdapterFactory = getBindingAdapterFactory();
         this.bindings = parseBindings(tempElements, applicationContext, isInBinding());
         doAfterPropertiesSet();
+    }
+
+    protected BindingConverterFactory getBindingConverterFactory() {
+        return applicationContext.getBean(
+            SofaRuntimeFrameworkConstants.BINDING_CONVERTER_FACTORY_BEAN_ID,
+            BindingConverterFactory.class);
+    }
+
+    protected BindingAdapterFactory getBindingAdapterFactory() {
+        return applicationContext.getBean(
+            SofaRuntimeFrameworkConstants.BINDING_ADAPTER_FACTORY_BEAN_ID,
+            BindingAdapterFactory.class);
     }
 
     protected List<Binding> parseBindings(List<Element> parseElements,
@@ -107,11 +116,7 @@ public abstract class AbstractContractFactoryBean implements InitializingBean, F
                     .getBindingConverterByTagName(tagName);
 
                 if (bindingConverter == null) {
-                    if (!tagName.equals(SofaRuntimeFrameworkConstants.BINDING_PREFIX
-                                        + JvmBinding.JVM_BINDING_TYPE.toString())) {
-                        throw new ServiceRuntimeException("Can't find BindingConverter of type "
-                                                          + tagName);
-                    }
+                    dealWithbindingConverterNotExist(tagName);
                     continue;
                 }
 
@@ -121,6 +126,7 @@ public abstract class AbstractContractFactoryBean implements InitializingBean, F
                 bindingConverterContext.setAppName(sofaRuntimeContext.getAppName());
                 bindingConverterContext.setAppClassLoader(sofaRuntimeContext.getAppClassLoader());
                 bindingConverterContext.setRepeatReferLimit(repeatReferLimit);
+                bindingConverterContext.setBeanId(beanId);
 
                 setProperties(bindingConverterContext);
 
@@ -131,6 +137,13 @@ public abstract class AbstractContractFactoryBean implements InitializingBean, F
         }
 
         return result;
+    }
+
+    protected void dealWithbindingConverterNotExist(String tagName) {
+        if (!tagName.equals(SofaRuntimeFrameworkConstants.BINDING_PREFIX
+                            + JvmBinding.JVM_BINDING_TYPE.toString())) {
+            throw new ServiceRuntimeException("Can't find BindingConverter of type " + tagName);
+        }
     }
 
     @Override
