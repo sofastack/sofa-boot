@@ -88,8 +88,14 @@ public class HealthCheckConstants {
      */
     public static final long   SOFABOOT_MODULE_CHECK_RETRY_DEFAULT_INTERVAL    = 1000;
 
+    /**
+     * health check not ready result key
+     */
     public static final String SOFABOOT_HEALTH_CHECK_NOT_READY_KEY             = "HEALTH-CHECK-NOT-READY";
 
+    /**
+     * health check not ready result
+     */
     public static final String SOFABOOT_HEALTH_CHECK_NOT_READY_MSG             = "App is still in startup process, please try later!";
 
 }
