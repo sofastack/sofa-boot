@@ -6,11 +6,10 @@ jdk:
 - openjdk7
 
 install:
-
 - mvn clean install -B -V
 
 script:
 - sh ./check_format.sh
 
 after_success:
-- mvn clean test cobertura:cobertura org.eluder.coveralls:coveralls-maven-plugin:report
+- bash <(curl -s https://codecov.io/bash)

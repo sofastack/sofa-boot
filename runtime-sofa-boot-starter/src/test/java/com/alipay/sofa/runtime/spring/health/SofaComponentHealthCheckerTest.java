@@ -17,12 +17,16 @@
 package com.alipay.sofa.runtime.spring.health;
 
 import com.alipay.sofa.healthcheck.configuration.HealthCheckConstants;
-import com.alipay.sofa.runtime.spring.configuration.SofaRuntimeAutoConfiguration;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
-import org.springframework.boot.test.util.EnvironmentTestUtils;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Configuration;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author abby.zh
@@ -30,7 +34,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
  */
 public class SofaComponentHealthCheckerTest {
 
-    private final AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
+    private ConfigurableApplicationContext applicationContext;
 
     @After
     public void closeContext() {
@@ -39,8 +43,8 @@ public class SofaComponentHealthCheckerTest {
 
     @Test
     public void testDefaultConfig() {
-        this.applicationContext.register(SofaRuntimeAutoConfiguration.class);
-        this.applicationContext.refresh();
+        SpringApplication springApplication = new SpringApplication(EmptyConfiguration.class);
+        this.applicationContext = springApplication.run(new String[] {});
         SofaComponentHealthChecker sofaComponentHealthChecker = applicationContext
             .getBean(SofaComponentHealthChecker.class);
         Assert.assertEquals(HealthCheckConstants.SOFABOOT_COMPONENT_CHECK_RETRY_DEFAULT_COUNT,
@@ -53,18 +57,22 @@ public class SofaComponentHealthCheckerTest {
     public void testCustomConfig() {
         int customRetryCount = 10;
         int customRetryInterval = 30;
-        this.applicationContext.register(SofaRuntimeAutoConfiguration.class);
-        EnvironmentTestUtils.addEnvironment(this.applicationContext,
-            HealthCheckConstants.SOFABOOT_COMPONENT_CHECK_RETRY_COUNT + "=" + customRetryCount);
-        EnvironmentTestUtils.addEnvironment(this.applicationContext,
-            HealthCheckConstants.SOFABOOT_COMPONENT_CHECK_RETRY_INTERVAL + "="
-                    + customRetryInterval);
-        this.applicationContext.register(SofaRuntimeAutoConfiguration.class);
-        this.applicationContext.refresh();
+        Map<String, Object> properties = new HashMap<>();
+        properties.put(HealthCheckConstants.SOFABOOT_COMPONENT_CHECK_RETRY_COUNT, customRetryCount);
+        properties.put(HealthCheckConstants.SOFABOOT_COMPONENT_CHECK_RETRY_INTERVAL,
+            customRetryInterval);
+        SpringApplication springApplication = new SpringApplication(EmptyConfiguration.class);
+        springApplication.setDefaultProperties(properties);
+        this.applicationContext = springApplication.run(new String[] {});
         SofaComponentHealthChecker sofaComponentHealthChecker = applicationContext
             .getBean(SofaComponentHealthChecker.class);
         Assert.assertEquals(customRetryCount, sofaComponentHealthChecker.getRetryCount());
         Assert.assertEquals(customRetryInterval, sofaComponentHealthChecker.getRetryTimeInterval());
+    }
+
+    @EnableAutoConfiguration
+    @Configuration
+    static class EmptyConfiguration {
     }
 
 }

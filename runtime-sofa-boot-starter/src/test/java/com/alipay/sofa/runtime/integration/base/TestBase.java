@@ -14,17 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime.beans.impl;
+package com.alipay.sofa.runtime.integration.base;
 
-import com.alipay.sofa.runtime.beans.service.SampleService;
+import java.util.Map;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 
 /**
  * @author qilong.zql
- * @since 2.3.1
+ * @since 3.1.0
  */
-public class XmlSampleService implements SampleService {
-    @Override
-    public String service() {
-        return "XmlSampleService";
+public abstract class TestBase {
+    public ConfigurableApplicationContext applicationContext;
+
+    protected void initApplicationContext(Map<String, Object> properties,
+                                          Class<?>... annotatedClasses) {
+        SpringApplication springApplication = new SpringApplication(annotatedClasses);
+        springApplication.setDefaultProperties(properties);
+        applicationContext = springApplication.run(new String[] {});
     }
 }

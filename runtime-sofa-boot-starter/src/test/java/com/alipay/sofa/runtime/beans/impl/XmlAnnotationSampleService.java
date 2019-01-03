@@ -16,15 +16,17 @@
  */
 package com.alipay.sofa.runtime.beans.impl;
 
+import com.alipay.sofa.runtime.api.annotation.SofaService;
 import com.alipay.sofa.runtime.beans.service.SampleService;
 
 /**
  * @author qilong.zql
- * @since 2.3.1
+ * @since 3.1.0
  */
-public class XmlSampleService implements SampleService {
+@SofaService(uniqueId = "${mix-xml-annotation-unique-id}")
+public class XmlAnnotationSampleService implements SampleService {
     @Override
     public String service() {
-        return "XmlSampleService";
+        return "XmlAnnotationSampleService";
     }
 }

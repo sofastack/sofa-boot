@@ -30,11 +30,11 @@ import org.springframework.util.Assert;
  * @author xuanbei 18/3/1
  */
 public class ReferenceFactoryBean extends AbstractContractFactoryBean {
-    private Object  proxy;
+    protected Object  proxy;
     /** jvm first or not */
-    private boolean jvmFirst = true;
+    protected boolean jvmFirst = true;
     /** load balance **/
-    private String  loadBalance;
+    protected String  loadBalance;
 
     public ReferenceFactoryBean() {
     }
@@ -63,10 +63,9 @@ public class ReferenceFactoryBean extends AbstractContractFactoryBean {
     @Override
     protected void setProperties(BindingConverterContext bindingConverterContext) {
         bindingConverterContext.setLoadBalance(loadBalance);
-        bindingConverterContext.setBeanId(beanId);
     }
 
-    private Reference buildReference() {
+    protected Reference buildReference() {
         return new ReferenceImpl(uniqueId, getInterfaceClass(), InterfaceMode.spring, jvmFirst);
     }
 

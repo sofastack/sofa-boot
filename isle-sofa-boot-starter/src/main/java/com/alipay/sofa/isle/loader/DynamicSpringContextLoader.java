@@ -16,13 +16,9 @@
  */
 package com.alipay.sofa.isle.loader;
 
-import com.alipay.sofa.isle.ApplicationRuntimeModel;
-import com.alipay.sofa.isle.constants.SofaModuleFrameworkConstants;
-import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
-import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
-import com.alipay.sofa.isle.spring.context.SofaModuleApplicationContext;
-import com.alipay.sofa.isle.spring.factory.BeanLoadCostBeanFactory;
-import com.alipay.sofa.runtime.spi.log.SofaLogger;
+import java.util.Map;
+
+import com.alipay.sofa.runtime.spring.initializer.SofaRuntimeSpringContextInitializer;
 import org.springframework.beans.CachedIntrospectionResults;
 import org.springframework.beans.PropertyEditorRegistrar;
 import org.springframework.beans.PropertyEditorRegistry;
@@ -35,11 +31,16 @@ import org.springframework.beans.propertyeditors.ClassEditor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
-import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.core.io.Resource;
 import org.springframework.util.StringUtils;
 
-import java.util.Map;
+import com.alipay.sofa.isle.ApplicationRuntimeModel;
+import com.alipay.sofa.isle.constants.SofaModuleFrameworkConstants;
+import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
+import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
+import com.alipay.sofa.isle.spring.context.SofaModuleApplicationContext;
+import com.alipay.sofa.isle.spring.factory.BeanLoadCostBeanFactory;
+import com.alipay.sofa.runtime.spi.log.SofaLogger;
 
 /**
  *
@@ -58,14 +59,14 @@ public class DynamicSpringContextLoader implements SpringContextLoader {
         SofaModuleProperties sofaModuleProperties = rootApplicationContext
             .getBean(SofaModuleFrameworkConstants.SOFA_MODULE_PROPERTIES_BEAN_ID,
                 SofaModuleProperties.class);
+
         BeanLoadCostBeanFactory beanFactory = new BeanLoadCostBeanFactory(
-            sofaModuleProperties.getBeanLoadCost());
-        beanFactory.setParameterNameDiscoverer(new LocalVariableTableParameterNameDiscoverer());
+            sofaModuleProperties.getBeanLoadCost(), deployment.getModuleName());
         beanFactory
             .setAutowireCandidateResolver(new QualifierAnnotationAutowireCandidateResolver());
-
         GenericApplicationContext ctx = sofaModuleProperties.isPublishEventToParent() ? new GenericApplicationContext(
             beanFactory) : new SofaModuleApplicationContext(beanFactory);
+        SofaRuntimeSpringContextInitializer.initApplicationContext(ctx);
         String activeProfiles = sofaModuleProperties.getActiveProfiles();
         if (StringUtils.hasText(activeProfiles)) {
             String[] profiles = activeProfiles

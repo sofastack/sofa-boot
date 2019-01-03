@@ -14,17 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime.beans.impl;
+package com.alipay.sofa.runtime.integration.base;
 
+import com.alipay.sofa.runtime.api.annotation.SofaService;
+import com.alipay.sofa.runtime.beans.impl.SampleServiceImpl;
 import com.alipay.sofa.runtime.beans.service.SampleService;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * @author qilong.zql
- * @since 2.3.1
+ * @since 3.1.1
  */
-public class XmlSampleService implements SampleService {
-    @Override
-    public String service() {
-        return "XmlSampleService";
+@Configuration
+@ConditionalOnProperty(name = "multiSofaService", havingValue = "true")
+public class MultiSofaServiceConfiguration {
+
+    @Bean("multiSofaService")
+    @SofaService
+    SampleService service() {
+        return new SampleServiceImpl("");
+    }
+
+    @Bean("multiSofaService")
+    @SofaService
+    SampleService service(@Value("$spring.application.name") String appName) {
+        return new SampleServiceImpl("");
     }
 }
