@@ -19,9 +19,9 @@
 <configuration status="OFF">
     <Properties>
         <!-- 将系统属性进行一次本地转换 -->
-        <Property name="INFRASTRUCTURE_LOG_LEVEL">${sys:logging.level.com.alipay.sofa.infra}</Property>
-        <Property name="INFRASTRUCTURE_LOG_PATH">${sys:logging.path}</Property>
-        <Property name="INFRASTRUCTURE_FILE_ENCODING">${sys:file.encoding}</Property>
+        <Property name="INFRASTRUCTURE_LOG_LEVEL">${ctx:logging.level.com.alipay.sofa.infra}</Property>
+        <Property name="INFRASTRUCTURE_LOG_PATH">${ctx:logging.path}</Property>
+        <Property name="INFRASTRUCTURE_FILE_ENCODING">${ctx:file.encoding}</Property>
     </Properties>
 
     <appenders>

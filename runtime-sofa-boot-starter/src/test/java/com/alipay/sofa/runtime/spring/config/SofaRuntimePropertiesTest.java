@@ -17,18 +17,21 @@
 package com.alipay.sofa.runtime.spring.config;
 
 import com.alipay.sofa.runtime.SofaRuntimeProperties;
-import com.alipay.sofa.runtime.spring.configuration.SofaRuntimeAutoConfiguration;
 import org.junit.After;
 import org.junit.Test;
-import org.springframework.boot.test.util.EnvironmentTestUtils;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Configuration;
 
-import static org.junit.Assert.assertFalse;
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.junit.Assert.assertTrue;
 
 public class SofaRuntimePropertiesTest {
 
-    private final AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
+    private ConfigurableApplicationContext applicationContext;
 
     @After
     public void closeContext() {
@@ -37,12 +40,11 @@ public class SofaRuntimePropertiesTest {
 
     @Test
     public void testDisableJvmFirstProperty() {
-        assertFalse(SofaRuntimeProperties.isDisableJvmFirst(applicationContext.getClassLoader()));
-
-        EnvironmentTestUtils.addEnvironment(this.applicationContext,
-            "com.alipay.sofa.boot.disableJvmFirst=true");
-        this.applicationContext.register(SofaRuntimeAutoConfiguration.class);
-        this.applicationContext.refresh();
+        Map<String, Object> properties = new HashMap<>();
+        properties.put("com.alipay.sofa.boot.disableJvmFirst", "true");
+        SpringApplication springApplication = new SpringApplication(EmptyConfiguration.class);
+        springApplication.setDefaultProperties(properties);
+        this.applicationContext = springApplication.run(new String[] {});
         SofaRuntimeConfigurationProperties configurationProperties = this.applicationContext
             .getBean(SofaRuntimeConfigurationProperties.class);
 
@@ -52,19 +54,22 @@ public class SofaRuntimePropertiesTest {
 
     @Test
     public void testSkipJvmReferenceHealthCheckProperty() {
-        assertFalse(SofaRuntimeProperties.isSkipJvmReferenceHealthCheck(applicationContext
-            .getClassLoader()));
-
-        EnvironmentTestUtils.addEnvironment(this.applicationContext,
-            "com.alipay.sofa.boot.skipJvmReferenceHealthCheck=true");
-        this.applicationContext.register(SofaRuntimeAutoConfiguration.class);
-        this.applicationContext.refresh();
+        Map<String, Object> properties = new HashMap<>();
+        properties.put("com.alipay.sofa.boot.skipJvmReferenceHealthCheck", "true");
+        SpringApplication springApplication = new SpringApplication(EmptyConfiguration.class);
+        springApplication.setDefaultProperties(properties);
+        this.applicationContext = springApplication.run(new String[] {});
         SofaRuntimeConfigurationProperties configurationProperties = this.applicationContext
             .getBean(SofaRuntimeConfigurationProperties.class);
 
         assertTrue(SofaRuntimeProperties.isSkipJvmReferenceHealthCheck(applicationContext
             .getClassLoader()));
         assertTrue(configurationProperties.isSkipJvmReferenceHealthCheck());
+    }
+
+    @EnableAutoConfiguration
+    @Configuration
+    static class EmptyConfiguration {
     }
 
 }

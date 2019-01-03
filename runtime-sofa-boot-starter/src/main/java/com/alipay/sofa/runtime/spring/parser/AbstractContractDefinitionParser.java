@@ -16,8 +16,16 @@
  */
 package com.alipay.sofa.runtime.spring.parser;
 
-import com.alipay.sofa.infra.config.spring.namespace.spi.SofaBootTagNameSupport;
-import com.alipay.sofa.runtime.api.ServiceRuntimeException;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
 import org.springframework.beans.factory.config.TypedStringValue;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
@@ -25,14 +33,8 @@ import org.springframework.beans.factory.xml.ParserContext;
 import org.springframework.util.xml.DomUtils;
 import org.w3c.dom.Element;
 
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.List;
+import com.alipay.sofa.infra.config.spring.namespace.spi.SofaBootTagNameSupport;
+import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 
 /**
  * @author xuanbei 18/3/1
@@ -40,15 +42,18 @@ import java.util.List;
 public abstract class AbstractContractDefinitionParser extends AbstractSingleBeanDefinitionParser
                                                                                                  implements
                                                                                                  SofaBootTagNameSupport {
-    protected static final String INTERFACE_ELEMENT           = "interface";
-    protected static final String INTERFACE_PROPERTY          = "interfaceType";
-    protected static final String BEAN_ID_ELEMENT             = "id";
-    protected static final String BEAN_ID_PROPERTY            = "beanId";
-    protected static final String UNIQUE_ID_ELEMENT           = "unique-id";
-    protected static final String UNIQUE_ID_PROPERTY          = "uniqueId";
-    protected static final String ELEMENTS                    = "elements";
-    protected static final String REPEAT_REFER_LIMIT_ELEMENT  = "repeatReferLimit";
-    protected static final String REPEAT_REFER_LIMIT_PROPERTY = "repeatReferLimit";
+    public static final String INTERFACE_ELEMENT            = "interface";
+    public static final String INTERFACE_PROPERTY           = "interfaceType";
+    public static final String INTERFACE_CLASS_PROPERTY     = "interfaceClass";
+    public static final String BEAN_ID_ELEMENT              = "id";
+    public static final String BEAN_ID_PROPERTY             = "beanId";
+    public static final String UNIQUE_ID_ELEMENT            = "unique-id";
+    public static final String UNIQUE_ID_PROPERTY           = "uniqueId";
+    public static final String ELEMENTS                     = "elements";
+    public static final String BINDINGS                     = "bindings";
+    public static final String REPEAT_REFER_LIMIT_ELEMENT   = "repeatReferLimit";
+    public static final String REPEAT_REFER_LIMIT_PROPERTY  = "repeatReferLimit";
+    public static final String DEFINITION_BUILDING_API_TYPE = "apiType";
 
     @Override
     protected void doParse(Element element, ParserContext parserContext,
