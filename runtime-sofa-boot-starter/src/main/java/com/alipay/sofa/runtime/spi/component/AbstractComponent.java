@@ -124,7 +124,7 @@ public abstract class AbstractComponent implements ComponentInfo {
 
         if (this.implementation != null) {
             Object target = this.implementation.getTarget();
-            if (!(target instanceof Component) && target instanceof ComponentLifeCycle) {
+            if (target instanceof ComponentLifeCycle) {
                 ((ComponentLifeCycle) target).activate();
             }
         }
@@ -144,7 +144,7 @@ public abstract class AbstractComponent implements ComponentInfo {
 
         if (this.implementation != null) {
             Object target = this.implementation.getTarget();
-            if (!(target instanceof Component) && target instanceof ComponentLifeCycle) {
+            if (target instanceof ComponentLifeCycle) {
                 ((ComponentLifeCycle) target).deactivate();
             }
         }
