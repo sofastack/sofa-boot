@@ -79,8 +79,7 @@ public class DynamicSpringContextLoader implements SpringContextLoader {
         CachedIntrospectionResults.acceptClassLoader(moduleClassLoader);
 
         // set allowBeanDefinitionOverriding
-        ctx.setAllowBeanDefinitionOverriding(rootApplicationContext.getBean(
-            SofaModuleProperties.class).isAllowBeanDefinitionOverriding());
+        ctx.setAllowBeanDefinitionOverriding(sofaModuleProperties.isAllowBeanDefinitionOverriding());
 
         ctx.getBeanFactory().setBeanClassLoader(moduleClassLoader);
         ctx.getBeanFactory().addPropertyEditorRegistrar(new PropertyEditorRegistrar() {
