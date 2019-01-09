@@ -88,6 +88,6 @@ public class ClientFactoryBeanPostProcessor implements BeanPostProcessor, Priori
 
     @Override
     public int getOrder() {
-        return LOWEST_PRECEDENCE;
+        return PriorityOrdered.HIGHEST_PRECEDENCE;
     }
 }
