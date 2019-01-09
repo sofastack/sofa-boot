@@ -16,10 +16,13 @@
  */
 package com.alipay.sofa.healthcheck.service;
 
+import com.alipay.sofa.healthcheck.configuration.HealthCheckConstants;
 import com.alipay.sofa.healthcheck.core.HealthCheckerProcessor;
+import com.alipay.sofa.healthcheck.startup.ReadinessCheckListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
+import org.springframework.util.Assert;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,8 +41,14 @@ public class SofaBootHealthIndicator implements HealthIndicator {
     @Autowired
     private HealthCheckerProcessor healthCheckerProcessor;
 
+    @Autowired
+    private ReadinessCheckListener readinessCheckListener;
+
     @Override
     public Health health() {
+        Assert.isTrue(readinessCheckListener.isReadinessCheckFinish(),
+            HealthCheckConstants.SOFABOOT_HEALTH_CHECK_NOT_READY_MSG);
+
         Map<String, Health> healths = new HashMap<>();
         boolean checkSuccessful = healthCheckerProcessor.livenessHealthCheck(healths);
 

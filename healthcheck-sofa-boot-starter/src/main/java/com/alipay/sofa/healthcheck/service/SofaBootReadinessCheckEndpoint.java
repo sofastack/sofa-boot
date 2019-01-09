@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.healthcheck.service;
 
+import com.alipay.sofa.healthcheck.configuration.HealthCheckConstants;
 import com.alipay.sofa.healthcheck.startup.ReadinessCheckListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.endpoint.AbstractEndpoint;
@@ -50,32 +51,44 @@ public class SofaBootReadinessCheckEndpoint extends AbstractEndpoint<Health> {
 
     @Override
     public Health invoke() {
-        boolean healthCheckerStatus = readinessCheckListener.getHealthCheckerStatus();
-        Map<String, Health> healthCheckerDetails = readinessCheckListener.getHealthCheckerDetails();
-        Map<String, Health> healthIndicatorDetails = readinessCheckListener
-            .getHealthIndicatorDetails();
-
-        boolean afterHealthCheckCallbackStatus = readinessCheckListener.getHealthCallbackStatus();
-        Map<String, Health> afterHealthCheckCallbackDetails = readinessCheckListener
-            .getHealthCallbackDetails();
-
-        Builder builder;
         Map<String, Health> healths = new HashMap<>();
-        if (healthCheckerStatus && afterHealthCheckCallbackStatus) {
-            builder = Health.up();
+        if (!readinessCheckListener.isReadinessCheckFinish()) {
+            healths.put(
+                HealthCheckConstants.SOFABOOT_HEALTH_CHECK_NOT_READY_KEY,
+                Health
+                    .unknown()
+                    .withDetail(HealthCheckConstants.SOFABOOT_HEALTH_CHECK_NOT_READY_KEY,
+                        HealthCheckConstants.SOFABOOT_HEALTH_CHECK_NOT_READY_MSG).build());
         } else {
-            builder = Health.down();
-        }
-        if (!CollectionUtils.isEmpty(healthCheckerDetails)) {
-            builder = builder.withDetail("HealthChecker", healthCheckerDetails);
-        }
-        if (!CollectionUtils.isEmpty(afterHealthCheckCallbackDetails)) {
-            builder = builder.withDetail("ReadinessCheckCallback", afterHealthCheckCallbackDetails);
-        }
-        healths.put("SOFABootReadinessHealthCheckInfo", builder.build());
+            boolean healthCheckerStatus = readinessCheckListener.getHealthCheckerStatus();
+            Map<String, Health> healthCheckerDetails = readinessCheckListener
+                .getHealthCheckerDetails();
+            Map<String, Health> healthIndicatorDetails = readinessCheckListener
+                .getHealthIndicatorDetails();
 
-        // HealthIndicator
-        healths.putAll(healthIndicatorDetails);
+            boolean afterHealthCheckCallbackStatus = readinessCheckListener
+                .getHealthCallbackStatus();
+            Map<String, Health> afterHealthCheckCallbackDetails = readinessCheckListener
+                .getHealthCallbackDetails();
+
+            Builder builder;
+            if (healthCheckerStatus && afterHealthCheckCallbackStatus) {
+                builder = Health.up();
+            } else {
+                builder = Health.down();
+            }
+            if (!CollectionUtils.isEmpty(healthCheckerDetails)) {
+                builder = builder.withDetail("HealthChecker", healthCheckerDetails);
+            }
+            if (!CollectionUtils.isEmpty(afterHealthCheckCallbackDetails)) {
+                builder = builder.withDetail("ReadinessCheckCallback",
+                    afterHealthCheckCallbackDetails);
+            }
+            healths.put("SOFABootReadinessHealthCheckInfo", builder.build());
+
+            // HealthIndicator
+            healths.putAll(healthIndicatorDetails);
+        }
         return this.healthAggregator.aggregate(healths);
     }
 

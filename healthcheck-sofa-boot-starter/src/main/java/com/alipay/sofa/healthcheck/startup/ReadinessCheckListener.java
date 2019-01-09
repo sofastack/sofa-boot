@@ -71,6 +71,8 @@ public class ReadinessCheckListener implements ApplicationContextAware, Environm
 
     private Map<String, Health>               healthCallbackDetails  = new HashMap<>();
 
+    private boolean                           readinessCheckFinish   = false;
+
     @Override
     public void setApplicationContext(ApplicationContext cxt) throws BeansException {
         applicationContext = cxt;
@@ -88,11 +90,14 @@ public class ReadinessCheckListener implements ApplicationContextAware, Environm
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        healthCheckerProcessor.init();
-        healthIndicatorProcessor.init();
-        afterHealthCheckCallbackProcessor.init();
-        publishBeforeHealthCheckEvent();
-        readinessHealthCheck();
+        if (applicationContext.equals(event.getApplicationContext())) {
+            healthCheckerProcessor.init();
+            healthIndicatorProcessor.init();
+            afterHealthCheckCallbackProcessor.init();
+            publishBeforeHealthCheckEvent();
+            readinessHealthCheck();
+            readinessCheckFinish = true;
+        }
     }
 
     /**
@@ -172,5 +177,9 @@ public class ReadinessCheckListener implements ApplicationContextAware, Environm
 
     public Map<String, Health> getHealthCallbackDetails() {
         return healthCallbackDetails;
+    }
+
+    public boolean isReadinessCheckFinish() {
+        return readinessCheckFinish;
     }
 }

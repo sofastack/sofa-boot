@@ -84,6 +84,7 @@ public class SofaBootReadinessCheckMvcEndpoint
     private void setupDefaultStatusMapping() {
         addStatusMapping(Status.DOWN, HttpStatus.SERVICE_UNAVAILABLE);
         addStatusMapping(Status.OUT_OF_SERVICE, HttpStatus.SERVICE_UNAVAILABLE);
+        addStatusMapping(Status.UNKNOWN, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     private void addStatusMapping(Status status, HttpStatus httpStatus) {
