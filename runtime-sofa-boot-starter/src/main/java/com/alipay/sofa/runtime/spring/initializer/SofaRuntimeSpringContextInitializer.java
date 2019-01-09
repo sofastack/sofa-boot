@@ -79,19 +79,21 @@ public class SofaRuntimeSpringContextInitializer
         beanFactory.registerSingleton(SofaRuntimeFrameworkConstants.SOFA_RUNTIME_CONTEXT_BEAN_ID,
             sofaRuntimeContext);
 
-        beanFactory.registerSingleton(
-            ReferenceAnnotationBeanPostProcessor.class.getCanonicalName(),
-            new ReferenceAnnotationBeanPostProcessor(applicationContext, sofaRuntimeContext,
-                bindingAdapterFactory, bindingConverterFactory));
-        beanFactory.registerSingleton(ClientFactoryBeanPostProcessor.class.getCanonicalName(),
-            new ClientFactoryBeanPostProcessor(sofaRuntimeContext.getClientFactory()));
+        // work on all bean
+        beanFactory.addBeanPostProcessor(new SofaRuntimeContextAwareProcessor(sofaRuntimeContext));
+        beanFactory.addBeanPostProcessor(new ClientFactoryBeanPostProcessor(sofaRuntimeContext
+            .getClientFactory()));
         beanFactory
-            .registerSingleton(
-                ApplicationShutdownCallbackPostProcessor.class.getCanonicalName(),
-                new ApplicationShutdownCallbackPostProcessor(sofaRuntimeContext
-                    .getSofaRuntimeManager()));
-        beanFactory.registerSingleton(SofaRuntimeContextAwareProcessor.class.getCanonicalName(),
-            new SofaRuntimeContextAwareProcessor(sofaRuntimeContext));
+            .addBeanPostProcessor(new ReferenceAnnotationBeanPostProcessor(applicationContext,
+                sofaRuntimeContext, bindingAdapterFactory, bindingConverterFactory));
+
+        // work on all bean on the beginning, then reorder after all bean post processors being registered
+        ApplicationShutdownCallbackPostProcessor applicationShutdownCallbackPostProcessor = new ApplicationShutdownCallbackPostProcessor(
+            sofaRuntimeContext.getSofaRuntimeManager());
+        beanFactory.addBeanPostProcessor(applicationShutdownCallbackPostProcessor);
+        beanFactory.registerSingleton(
+            ApplicationShutdownCallbackPostProcessor.class.getCanonicalName(),
+            applicationShutdownCallbackPostProcessor);
 
         if (beanFactory instanceof AbstractAutowireCapableBeanFactory) {
             ((AbstractAutowireCapableBeanFactory) beanFactory)
