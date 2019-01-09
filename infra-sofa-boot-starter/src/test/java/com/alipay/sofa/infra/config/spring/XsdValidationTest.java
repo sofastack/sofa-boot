@@ -17,12 +17,14 @@
 package com.alipay.sofa.infra.config.spring;
 
 import com.sun.org.apache.xml.internal.utils.DefaultErrorHandler;
+import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.xml.DefaultDocumentLoader;
 import org.springframework.beans.factory.xml.DelegatingEntityResolver;
 import org.springframework.beans.factory.xml.DocumentLoader;
 import org.springframework.util.xml.XmlValidationModeDetector;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXParseException;
 
 /**
  * XML validation with rpc.xsd
@@ -34,6 +36,41 @@ public class XsdValidationTest {
     @Test
     public void testSofaParameter() throws Exception {
         loadXml("config/spring/test_sofa_parameter.xml");
+    }
+
+    @Test
+    public void testSofaParameterMissingKey() throws Exception {
+        try {
+            loadXml("config/spring/test_sofa_parameter_missing_key.xml");
+            Assert.fail();
+        } catch (SAXParseException e) {
+            // org.xml.sax.SAXParseException; lineNumber: 10; columnNumber: 52;
+            // cvc-complex-type.4: Attribute 'key' must appear on element 'sofa:parameter'.
+            assertSaxException(10, 52, "cvc-complex-type.4", e);
+        }
+    }
+
+    @Test
+    public void testSofaParameterOutsideBinding() throws Exception {
+        try {
+            loadXml("config/spring/test_sofa_parameter_outside_binding.xml");
+            Assert.fail();
+        } catch (SAXParseException e) {
+            // org.xml.sax.SAXParseException; lineNumber: 11; columnNumber: 65;
+            // cvc-complex-type.2.4.a: Invalid content was found starting with element 'sofa:parameter'.
+            // One of '{"http://sofastack.io/schema/sofaboot":binding.jvm,
+            // "http://sofastack.io/schema/sofaboot":binding.rest,
+            // "http://sofastack.io/schema/sofaboot":binding.dubbo,
+            // "http://sofastack.io/schema/sofaboot":binding.h2c}' is expected.
+            assertSaxException(11, 65, "cvc-complex-type.2.4.a", e);
+        }
+    }
+
+    private void assertSaxException(int expectedLineNumber, int expectedColumnNumber,
+                                    String expectedErrorCode, SAXParseException e) {
+        Assert.assertEquals(expectedLineNumber, e.getLineNumber());
+        Assert.assertEquals(expectedColumnNumber, e.getColumnNumber());
+        Assert.assertEquals(expectedErrorCode, e.getMessage().split(":")[0]);
     }
 
     private void loadXml(String xml) throws Exception {
