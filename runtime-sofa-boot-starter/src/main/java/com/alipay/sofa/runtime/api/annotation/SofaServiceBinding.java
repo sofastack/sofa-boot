@@ -82,4 +82,11 @@ public @interface SofaServiceBinding {
      * @return
      */
     String serializeType() default "";
+
+    /**
+     * parameters of service
+     *
+     * @return parameters of service
+     */
+    SofaParameter[] parameters() default {};
 }
