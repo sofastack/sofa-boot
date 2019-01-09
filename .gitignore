@@ -20,3 +20,6 @@ velocity.log
 .DS_Store
 logs
 .m2
+sofa-boot-gradle-plugin/build/
+.gradle
+sofa-boot-gradle-plugin/out/

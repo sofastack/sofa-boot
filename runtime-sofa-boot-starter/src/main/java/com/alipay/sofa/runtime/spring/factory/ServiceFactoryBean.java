@@ -45,7 +45,7 @@ public class ServiceFactoryBean extends AbstractContractFactoryBean {
 
     @Override
     protected void doAfterPropertiesSet() {
-        if (hasSofaServiceAnnotation()) {
+        if (!apiType && hasSofaServiceAnnotation()) {
             throw new ServiceRuntimeException(
                 "Bean " + beanId + " of type " + ref.getClass()
                         + " has already annotated by @SofaService,"

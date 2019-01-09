@@ -70,10 +70,9 @@ public @interface SofaReferenceBinding {
     String directUrl() default "";
 
     /**
+     * @return callback handler
      * @deprecated this attribute is not intended for use and will be removed the next major version.
      * callback handler
-     *
-     * @return callback handler
      */
     @Deprecated
     String callbackHandler() default "";
@@ -103,7 +102,12 @@ public @interface SofaReferenceBinding {
 
     /**
      * dalay init connection
+     *
      * @return
      */
     boolean lazy() default false;
+
+    String serializeType() default "";
+
+    String loadBalancer() default "";
 }
