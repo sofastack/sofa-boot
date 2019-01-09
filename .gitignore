@@ -20,3 +20,5 @@ velocity.log
 .DS_Store
 logs
 .m2
+.java-version
+
