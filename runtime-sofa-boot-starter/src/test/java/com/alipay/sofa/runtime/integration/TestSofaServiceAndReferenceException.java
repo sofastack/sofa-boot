@@ -107,7 +107,7 @@ public class TestSofaServiceAndReferenceException extends TestBase {
     @EnableAutoConfiguration
     static class MultipleBindingsSofaServiceConfiguration {
 
-        // 测试使用注解配置多个 binding，因为 sofa-boot 没有 binding converter，所以只能使用多个 jvm binding
+        // since the sofa-boot does not have any binding converter implementation, we can use two jvm bindings for now.
         @Bean
         @SofaService(bindings = { @SofaServiceBinding, @SofaServiceBinding })
         SampleService sampleService() {
