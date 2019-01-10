@@ -95,7 +95,9 @@ public abstract class AbstractContractFactoryBean implements InitializingBean, F
             SofaRuntimeFrameworkConstants.SOFA_RUNTIME_CONTEXT_BEAN_ID, SofaRuntimeContext.class);
         bindingConverterFactory = getBindingConverterFactory();
         bindingAdapterFactory = getBindingAdapterFactory();
-        this.bindings = parseBindings(tempElements, applicationContext, isInBinding());
+        if (!apiType) {
+            this.bindings = parseBindings(tempElements, applicationContext, isInBinding());
+        }
         doAfterPropertiesSet();
     }
 

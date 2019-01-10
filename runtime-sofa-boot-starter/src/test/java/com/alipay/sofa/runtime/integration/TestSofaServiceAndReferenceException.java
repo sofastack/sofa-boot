@@ -23,6 +23,9 @@ import java.util.Map;
 
 import com.alipay.sofa.runtime.api.annotation.SofaReference;
 import com.alipay.sofa.runtime.api.annotation.SofaReferenceBinding;
+import com.alipay.sofa.runtime.api.annotation.SofaServiceBinding;
+import com.alipay.sofa.runtime.api.binding.BindingType;
+import com.alipay.sofa.runtime.spring.factory.ServiceFactoryBean;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -87,6 +90,29 @@ public class TestSofaServiceAndReferenceException extends TestBase {
         properties.put("spring.application.name", "runtime-test");
         properties.put("multiSofaReference", "true");
         initApplicationContext(properties, EmptyConfiguration.class);
+    }
+
+    @Test
+    public void testSofaServiceWithMultipleBindings() {
+        Map<String, Object> properties = new HashMap<>();
+        properties.put("spring.application.name", "runtime-test");
+        initApplicationContext(properties, MultipleBindingsSofaServiceConfiguration.class);
+        ServiceFactoryBean bean = applicationContext.getBean(ServiceFactoryBean.class);
+        Assert.assertEquals(2, bean.getBindings().size());
+        Assert.assertEquals(new BindingType("jvm"), bean.getBindings().get(0).getBindingType());
+        Assert.assertEquals(new BindingType("jvm"), bean.getBindings().get(1).getBindingType());
+    }
+
+    @Configuration
+    @EnableAutoConfiguration
+    static class MultipleBindingsSofaServiceConfiguration {
+
+        // since the sofa-boot does not have any binding converter implementation, we can use two jvm bindings for now.
+        @Bean
+        @SofaService(bindings = { @SofaServiceBinding, @SofaServiceBinding })
+        SampleService sampleService() {
+            return new SampleServiceImpl("test");
+        }
     }
 
     @EnableAutoConfiguration

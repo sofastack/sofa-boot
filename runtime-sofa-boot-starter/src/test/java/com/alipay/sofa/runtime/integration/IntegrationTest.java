@@ -131,7 +131,7 @@ public class IntegrationTest extends AbstractTestBase {
             .getBean("&"
                      + SofaBeanNameGenerator.generateSofaReferenceBeanName(SampleService.class,
                          "methodBeanClassAnnotationSampleService"));
-        Assert.assertTrue(serviceFactoryBean.isApiType());
+        Assert.assertTrue(referenceFactoryBean.isApiType());
 
         /**
          * {@link com.alipay.sofa.runtime.integration.base.AbstractTestBase.IntegrationTestConfiguration.BeforeConfiguration}
