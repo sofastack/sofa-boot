@@ -20,6 +20,11 @@ velocity.log
 .DS_Store
 logs
 .m2
+<<<<<<< HEAD
 sofa-boot-gradle-plugin/build/
 .gradle
 sofa-boot-gradle-plugin/out/
+=======
+.java-version
+
+>>>>>>> 4c2b0f6... add missing apiType logic (#335)
