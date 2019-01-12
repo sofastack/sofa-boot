@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.runtime.integration;
 
+import com.alipay.sofa.runtime.beans.TimeWasteBean;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.boot.actuate.health.Status;
@@ -235,5 +236,23 @@ public class IntegrationTest extends AbstractTestBase {
         for (String key : beanMap.keySet()) {
             Assert.assertTrue(key.startsWith("&ServiceFactoryBean#"));
         }
+    }
+
+    @Test
+    public void testAsyncInitBean() throws Exception {
+        long min = Long.MAX_VALUE;
+        long max = Long.MIN_VALUE;
+        Assert.assertEquals(12, TimeWasteBean.getCount());
+        for (int i = 1; i <= 10; i++) {
+            TimeWasteBean bean = applicationContext.getBean("testBean" + i, TimeWasteBean.class);
+            if (bean.getPrintTime() < min) {
+                min = bean.getPrintTime();
+            }
+            if (bean.getPrintTime() > max) {
+                max = bean.getPrintTime();
+            }
+        }
+        Assert.assertTrue("max:" + max + ", min:" + min, max - min < 10000);
+        TimeWasteBean.resetCount();
     }
 }

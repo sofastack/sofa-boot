@@ -606,4 +606,7 @@
     </xsd:complexType>
     <!-- registry.confreg -->
 
+    <!-- async init -->
+    <xsd:attribute name="async-init" type="xsd:boolean"/>
+
 </xsd:schema>
