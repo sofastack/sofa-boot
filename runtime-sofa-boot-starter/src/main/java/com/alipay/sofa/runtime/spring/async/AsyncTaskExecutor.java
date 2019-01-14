@@ -38,14 +38,14 @@ import static com.alipay.sofa.infra.constants.CommonMiddlewareConstants.ASYNC_IN
  * @since 2.6.0
  */
 public class AsyncTaskExecutor {
-    private static final int                                 CPU_COUNT       = Runtime
-                                                                                 .getRuntime()
-                                                                                 .availableProcessors();
-    private static final AtomicReference<ThreadPoolExecutor> THREAD_POOL_REF = new AtomicReference<ThreadPoolExecutor>();
+    protected static final int                                 CPU_COUNT       = Runtime
+                                                                                   .getRuntime()
+                                                                                   .availableProcessors();
+    protected static final AtomicReference<ThreadPoolExecutor> THREAD_POOL_REF = new AtomicReference<ThreadPoolExecutor>();
 
-    private static final List<Future>                        FUTURES         = new ArrayList<>();
-    private static final AtomicBoolean                       STARTED         = new AtomicBoolean(
-                                                                                 false);
+    protected static final List<Future>                        FUTURES         = new ArrayList<>();
+    protected static final AtomicBoolean                       STARTED         = new AtomicBoolean(
+                                                                                   false);
 
     public static Future submitTask(Environment environment, Runnable runnable) {
         if (THREAD_POOL_REF.get() == null) {
@@ -98,6 +98,7 @@ public class AsyncTaskExecutor {
         FUTURES.clear();
         if (THREAD_POOL_REF.get() != null) {
             THREAD_POOL_REF.get().shutdown();
+            THREAD_POOL_REF.set(null);
         }
     }
 
