@@ -25,7 +25,6 @@ import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -105,8 +104,8 @@ public class AsyncProxyBeanPostProcessor implements BeanPostProcessor, Applicati
 
         @Override
         public Object invoke(final MethodInvocation invocation) throws Throwable {
-            // 如果不是启动期, 直接执行method
-            if (!AsyncTaskExecutor.isStartPhase()) {
+            // if the spring refreshing is finished
+            if (AsyncTaskExecutor.isStarted()) {
                 return invocation.getMethod().invoke(targetObject, invocation.getArguments());
             }
 

@@ -17,6 +17,7 @@
 package com.alipay.sofa.runtime.spring.configuration;
 
 import com.alipay.sofa.runtime.spring.AsyncProxyBeanPostProcessor;
+import com.alipay.sofa.runtime.spring.async.AsyncTaskExecutionListener;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -46,8 +47,14 @@ public class SofaRuntimeAutoConfiguration {
         return new CloseApplicationContextCallBack();
     }
 
+    @Bean
     public AsyncProxyBeanPostProcessor asyncProxyBeanPostProcessor() {
         return new AsyncProxyBeanPostProcessor();
+    }
+
+    @Bean
+    public AsyncTaskExecutionListener asyncTaskExecutionListener() {
+        return new AsyncTaskExecutionListener();
     }
 
     @Configuration

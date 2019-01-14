@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.runtime.spring.async;
 
-import org.springframework.util.Assert;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

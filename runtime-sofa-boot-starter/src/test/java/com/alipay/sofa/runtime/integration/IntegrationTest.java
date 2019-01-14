@@ -252,7 +252,7 @@ public class IntegrationTest extends AbstractTestBase {
                 max = bean.getPrintTime();
             }
         }
-        Assert.assertTrue("max:" + max + ", min:" + min, max - min < 10000);
+        Assert.assertTrue("max:" + max + ", min:" + min, max - min < 3000);
         TimeWasteBean.resetCount();
     }
 }

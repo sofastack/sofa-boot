@@ -85,7 +85,7 @@ public class AsyncTaskExecutor {
             new ThreadPoolExecutor.CallerRunsPolicy());
     }
 
-    public static void ensureAsyncTasksFinish(String appName) {
+    public static void ensureAsyncTasksFinish() {
         for (Future future : FUTURES) {
             try {
                 future.get();
@@ -101,7 +101,7 @@ public class AsyncTaskExecutor {
         }
     }
 
-    public static boolean isStartPhase() {
+    public static boolean isStarted() {
         return STARTED.get();
     }
 }
