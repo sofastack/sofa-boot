@@ -23,8 +23,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 
-import java.lang.reflect.Method;
-
 /**
  * @author qilong.zql
  * @author ruoshan
@@ -32,35 +30,23 @@ import java.lang.reflect.Method;
  */
 public class AsyncInitBeanDefinitionDecoratorTest {
 
-    private AsyncInitBeanDefinitionDecorator asyncInitBeanDefinitionDecorator = new AsyncInitBeanDefinitionDecorator();
-
     @Test
-    public void testIsleModule() throws Exception {
+    public void testIsleModule() {
         String moduleName = "testModule";
         BeanLoadCostBeanFactory beanFactory = new BeanLoadCostBeanFactory(10, moduleName);
-        Assert.assertTrue(invokeIsBeanLoadCostBeanFactory(beanFactory.getClass()));
-        Assert.assertEquals(moduleName, invokeGetModuleName(beanFactory));
+        Assert.assertTrue(AsyncInitBeanDefinitionDecorator.isBeanLoadCostBeanFactory(beanFactory
+            .getClass()));
+        Assert.assertEquals(moduleName,
+            AsyncInitBeanDefinitionDecorator.getModuleNameFromBeanFactory(beanFactory));
     }
 
     @Test
-    public void testNoIsleModule() throws Exception {
+    public void testNoIsleModule() {
         DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
-        Assert.assertFalse(invokeIsBeanLoadCostBeanFactory(beanFactory.getClass()));
+        Assert.assertFalse(AsyncInitBeanDefinitionDecorator.isBeanLoadCostBeanFactory(beanFactory
+            .getClass()));
         Assert.assertEquals(CommonMiddlewareConstants.ROOT_APPLICATION_CONTEXT,
-            invokeGetModuleName(beanFactory));
+            AsyncInitBeanDefinitionDecorator.getModuleNameFromBeanFactory(beanFactory));
     }
 
-    private boolean invokeIsBeanLoadCostBeanFactory(Class factoryClass) throws Exception {
-        Method method = asyncInitBeanDefinitionDecorator.getClass().getDeclaredMethod(
-            "isBeanLoadCostBeanFactory", Class.class);
-        method.setAccessible(true);
-        return (Boolean) method.invoke(asyncInitBeanDefinitionDecorator, factoryClass);
-    }
-
-    private String invokeGetModuleName(Object factory) throws Exception {
-        Method method = asyncInitBeanDefinitionDecorator.getClass().getDeclaredMethod(
-            "getModuleNameFromBeanFactory", Object.class);
-        method.setAccessible(true);
-        return (String) method.invoke(asyncInitBeanDefinitionDecorator, factory);
-    }
 }

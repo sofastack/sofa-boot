@@ -91,9 +91,9 @@ public class AsyncProxyBeanPostProcessor implements BeanPostProcessor, Applicati
         private final String         asyncMethodName;
         private final String         beanName;
         private final CountDownLatch initCountDownLatch = new CountDownLatch(1);
-        // 标识正在进行异步化调用
+        // mark async-init method is during first invocation.
         private volatile boolean     isAsyncCalling     = false;
-        // 标识是否调用过init-method，init-method只应该在spring refresh时调用一次
+        // mark init-method is called.
         private volatile boolean     isAsyncCalled      = false;
 
         AsyncInitializeBeanMethodInvoker(Object targetObject, String beanName, String methodName) {

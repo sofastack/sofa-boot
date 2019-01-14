@@ -30,6 +30,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.alipay.sofa.infra.constants.CommonMiddlewareConstants.ASYNC_INIT_BEAN_CORE_SIZE;
+import static com.alipay.sofa.infra.constants.CommonMiddlewareConstants.ASYNC_INIT_BEAN_MAX_SIZE;
 
 /**
  * @author qilong.zql
@@ -60,8 +61,7 @@ public class AsyncTaskExecutor {
     }
 
     /**
-     * 根据sofa-config.properties创建线程池
-     * 对于合并部署情况，会使用第一个配置异步化应用的sofa-config.properties配置
+     * Create thread pool to execute async init task
      * @return
      */
     private static ThreadPoolExecutor createThreadPoolExecutor(Environment environment) {
@@ -72,7 +72,7 @@ public class AsyncTaskExecutor {
         }
 
         int threadPoolMaxSize = CPU_COUNT + 1;
-        String maxSizeStr = environment.getProperty("ASYNC_INIT_BEAN_MAX_SIZE");
+        String maxSizeStr = environment.getProperty(ASYNC_INIT_BEAN_MAX_SIZE);
         if (maxSizeStr != null) {
             threadPoolMaxSize = Integer.parseInt(maxSizeStr);
         }

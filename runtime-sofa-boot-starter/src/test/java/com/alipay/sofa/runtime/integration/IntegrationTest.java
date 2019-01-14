@@ -237,22 +237,4 @@ public class IntegrationTest extends AbstractTestBase {
             Assert.assertTrue(key.startsWith("&ServiceFactoryBean#"));
         }
     }
-
-    @Test
-    public void testAsyncInitBean() throws Exception {
-        long min = Long.MAX_VALUE;
-        long max = Long.MIN_VALUE;
-        Assert.assertEquals(12, TimeWasteBean.getCount());
-        for (int i = 1; i <= 10; i++) {
-            TimeWasteBean bean = applicationContext.getBean("testBean" + i, TimeWasteBean.class);
-            if (bean.getPrintTime() < min) {
-                min = bean.getPrintTime();
-            }
-            if (bean.getPrintTime() > max) {
-                max = bean.getPrintTime();
-            }
-        }
-        Assert.assertTrue("max:" + max + ", min:" + min, max - min < 3000);
-        TimeWasteBean.resetCount();
-    }
 }

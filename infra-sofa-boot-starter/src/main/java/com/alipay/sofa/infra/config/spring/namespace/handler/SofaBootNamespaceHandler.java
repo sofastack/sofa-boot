@@ -56,8 +56,7 @@ public class SofaBootNamespaceHandler extends NamespaceHandlerSupport {
         } else {
             logger.error(tagNameSupport.getClass() + " tag name supported ["
                          + tagNameSupport.supportTagName() + "] parser are not instance of "
-                         + BeanDefinitionParser.class);
-            return;
+                         + BeanDefinitionParser.class + "or " + BeanDefinitionDecorator.class);
         }
     }
 }
