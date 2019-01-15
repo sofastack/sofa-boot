@@ -6,7 +6,8 @@ jdk:
 - openjdk7
 
 install:
-- mvn clean install -B -V
+- mvn clean install -DskipTests -B -V
+- mvn test
 
 script:
 - sh ./check_format.sh

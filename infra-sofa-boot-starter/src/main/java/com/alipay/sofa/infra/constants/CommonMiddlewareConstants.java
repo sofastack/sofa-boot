@@ -39,4 +39,24 @@ public class CommonMiddlewareConstants {
      */
     public static final String SOFA_BOOT_VERSION           = "sofa-boot.version";
     public static final String SOFA_BOOT_FORMATTED_VERSION = "sofa-boot.formatted-version";
+
+    /**
+     * root application context name
+     */
+    public static final String ROOT_APPLICATION_CONTEXT    = "RootApplicationContext";
+
+    /**
+     * sofa configuration prefix
+     */
+    public static final String PREFIX                      = "com.alipay.sofa.boot";
+
+    /**
+     * Thread Pool Core Size to execute async bean initialization
+     */
+    public static final String ASYNC_INIT_BEAN_CORE_SIZE   = PREFIX + ".asyncInitBeanCoreSize";
+
+    /**
+     * Thread Pool Max Size to execute async bean initialization
+     */
+    public static final String ASYNC_INIT_BEAN_MAX_SIZE    = PREFIX + ".asyncInitBeanMaxSize";
 }
