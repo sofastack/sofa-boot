@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.runtime.integration;
 
-import com.alipay.sofa.runtime.beans.TimeWasteBean;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.boot.actuate.health.Status;
