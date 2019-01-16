@@ -1,0 +1,46 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+}
+
+plugins {
+    id 'java'
+    id 'maven'
+}
+
+group 'com.alipay.sofa'
+version '3.1.1'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+
+}
+
+dependencies {
+    implementation localGroovy()
+    implementation gradleApi()
+    compile group: 'org.springframework.boot', name: 'spring-boot-gradle-plugin', version: '2.1.0.RELEASE'
+    compile 'io.spring.gradle:dependency-management-plugin:1.0.6.RELEASE'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testImplementation gradleTestKit()
+}
+
+jar {
+    manifest {
+        attributes 'Implementation-Version': (version ? version : 'unknown')
+    }
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives sourcesJar
+}

@@ -16,11 +16,9 @@
  */
 package com.alipay.sofa.healthcheck.initializer;
 
-import com.alipay.sofa.common.log.Constants;
-import com.alipay.sofa.healthcheck.configuration.HealthCheckConstants;
 import com.alipay.sofa.healthcheck.log.SofaBootHealthCheckLoggerFactory;
-import com.alipay.sofa.infra.log.space.SofaBootLogSpaceIsolationInit;
 import com.alipay.sofa.infra.utils.SOFABootEnvUtils;
+import org.slf4j.Logger;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.Environment;
@@ -34,19 +32,16 @@ public class SofaBootHealthCheckInitializer
                                            implements
                                            ApplicationContextInitializer<ConfigurableApplicationContext> {
 
+    private static final Logger LOGGER = SofaBootHealthCheckLoggerFactory
+                                           .getLogger(SofaBootHealthCheckInitializer.class);
+
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
         Environment environment = applicationContext.getEnvironment();
         if (SOFABootEnvUtils.isSpringCloudBootstrapEnvironment(environment)) {
             return;
         }
-        // init logging.level.com.alipay.sofa.runtime argument
-        String healthCheckLogLevelKey = Constants.LOG_LEVEL_PREFIX
-                                        + HealthCheckConstants.SOFABOOT_HEALTH_LOG_SPACE;
-        SofaBootLogSpaceIsolationInit.initSofaBootLogger(environment, healthCheckLogLevelKey);
-
-        SofaBootHealthCheckLoggerFactory.getLogger(SofaBootHealthCheckInitializer.class).info(
-            "SOFABoot HealthCheck Starting!");
+        LOGGER.info("SOFABoot HealthCheck Starting!");
     }
 
 }

@@ -22,7 +22,7 @@
     <parent>
         <groupId>com.alipay.sofa</groupId>
         <artifactId>sofa-boot-runtime</artifactId>
-        <version>3.1.1-SNAPSHOT</version>
+        <version>3.1.1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -34,10 +34,17 @@
     </properties>
 
     <dependencies>
+        <!--strictly depend on log-sofa-boot-starter-->
+        <dependency>
+            <groupId>com.alipay.sofa.common</groupId>
+            <artifactId>log-sofa-boot-starter</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-beans</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
