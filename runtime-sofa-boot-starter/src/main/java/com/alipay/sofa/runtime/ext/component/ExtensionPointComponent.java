@@ -25,7 +25,7 @@ import com.alipay.sofa.runtime.spi.component.ComponentManager;
 import com.alipay.sofa.runtime.spi.component.Implementation;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
-import com.alipay.sofa.service.api.component.ExtensionPoint;
+import com.alipay.sofa.runtime.api.component.ExtensionPoint;
 
 import java.util.Map;
 

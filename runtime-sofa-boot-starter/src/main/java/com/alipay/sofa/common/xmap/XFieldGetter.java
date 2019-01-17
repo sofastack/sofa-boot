@@ -32,11 +32,6 @@ public class XFieldGetter implements XGetter {
      */
     private Field field;
 
-    /**
-     * 构建一个<code>XFieldGetter</code>对象
-     *
-     * @param field <code>Field</code>实例
-     */
     public XFieldGetter(Field field) {
         this.field = field;
         this.field.setAccessible(true);

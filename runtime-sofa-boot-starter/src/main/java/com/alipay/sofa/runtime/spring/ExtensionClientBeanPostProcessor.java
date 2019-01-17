@@ -23,6 +23,7 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.core.PriorityOrdered;
 
 /**
+ * {@link ExtensionClientAware}
  *
  * @author ruoshan
  * @since 2.6.0

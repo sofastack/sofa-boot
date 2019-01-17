@@ -44,22 +44,11 @@ public class ExtensionBeanDefinitionParser extends AbstractExtBeanDefinitionPars
         return instance;
     }
 
-    /**
-     *
-     * @param element the <code>Element</code> that is being parsed
-     * @return
-     */
     @Override
     protected Class<?> getBeanClass(Element element) {
         return ExtensionFactoryBean.class;
     }
 
-    /**
-     *
-     * @param element
-     * @param parserContext
-     * @param builder
-     */
     @Override
     protected void parserSubElement(Element element, ParserContext parserContext,
                                     BeanDefinitionBuilder builder) {
@@ -78,10 +67,6 @@ public class ExtensionBeanDefinitionParser extends AbstractExtBeanDefinitionPars
         }
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public String supportTagName() {
         return "extension";

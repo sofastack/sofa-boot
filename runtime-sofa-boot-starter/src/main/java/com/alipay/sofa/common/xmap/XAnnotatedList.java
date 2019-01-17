@@ -34,7 +34,6 @@ import java.util.List;
  * @author <a href="mailto:bs@nuxeo.com">Bogdan Stefanescu</a>
  * @author xi.hux@alipay.com
  * @since 2.6.0
- * @since 2.6.0
  */
 public class XAnnotatedList extends XAnnotatedMember {
 

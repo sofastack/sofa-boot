@@ -27,17 +27,17 @@ import org.w3c.dom.NamedNodeMap;
 /**
  *
  * @author xi.hux@alipay.com
- * @author ruoshan
  * @since 2.6.0
  */
 public class ParserUtils {
 
     /**
-     * ID, LAZY-INIT, DEPENDS-ON。
+     * Parse custom attributes, as ID, LAZY-INIT, DEPENDS-ON。
      *
-     * @param element
-     * @param builder
-     * @param callback
+     * @param element element
+     * @param parserContext parser context
+     * @param builder builder
+     * @param callback callback
      */
     public static void parseCustomAttributes(Element element, ParserContext parserContext,
                                              BeanDefinitionBuilder builder,
@@ -67,16 +67,17 @@ public class ParserUtils {
     /**
      *
      * @author xi.hux@alipay.com
-     * @author ruoshan
      * @since 2.6.0
      */
     public interface AttributeCallback {
+
         /**
+         * Parser attribute
          *
-         * @param parent
-         * @param attribute
-         * @param builder
-         * @param parserContext
+         * @param parent element parent
+         * @param attribute attribute
+         * @param builder builder
+         * @param parserContext parser context
          */
         void process(Element parent, Attr attribute, BeanDefinitionBuilder builder,
                      ParserContext parserContext);

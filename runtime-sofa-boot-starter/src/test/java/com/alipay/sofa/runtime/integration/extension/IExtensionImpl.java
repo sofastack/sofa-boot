@@ -18,9 +18,10 @@ package com.alipay.sofa.runtime.integration.extension;
 
 /**
  * @author khotyn
+ * @author ruoshan
  * @since 2.6.0
  */
-import com.alipay.sofa.service.api.component.Extension;
+import com.alipay.sofa.runtime.api.component.Extension;
 
 public class IExtensionImpl implements IExtension {
 

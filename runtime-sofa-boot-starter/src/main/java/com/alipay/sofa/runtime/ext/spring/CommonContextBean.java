@@ -44,37 +44,20 @@ public class CommonContextBean implements ApplicationContextAware, BeanNameAware
             SofaRuntimeFrameworkConstants.SOFA_RUNTIME_CONTEXT_BEAN_ID, SofaRuntimeContext.class);
     }
 
-    /**
-     *
-     * @param applicationContext
-     * @throws BeansException
-     */
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
         configurableListableBeanFactory = (ConfigurableListableBeanFactory) applicationContext
             .getAutowireCapableBeanFactory();
     }
 
-    /**
-     *
-     * @param beanClassLoader
-     */
     public void setBeanClassLoader(ClassLoader beanClassLoader) {
         this.beanClassLoader = beanClassLoader;
     }
 
-    /**
-     *
-     * @return
-     */
     public ClassLoader getBeanClassLoader() {
         return beanClassLoader;
     }
 
-    /**
-     *
-     * @param beanName
-     */
     public void setBeanName(String beanName) {
         this.beanName = beanName;
     }

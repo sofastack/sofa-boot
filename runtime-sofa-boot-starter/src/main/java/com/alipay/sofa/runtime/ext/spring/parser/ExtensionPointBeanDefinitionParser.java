@@ -56,22 +56,11 @@ public class ExtensionPointBeanDefinitionParser extends AbstractExtBeanDefinitio
         return instance;
     }
 
-    /**
-     *
-     * @param element the <code>Element</code> that is being parsed
-     * @return
-     */
     @Override
     protected Class<?> getBeanClass(Element element) {
         return ExtensionPointFactoryBean.class;
     }
 
-    /**
-     *
-     * @param element
-     * @param parserContext
-     * @param builder
-     */
     @Override
     protected void parserSubElement(Element element, ParserContext parserContext,
                                     BeanDefinitionBuilder builder) {

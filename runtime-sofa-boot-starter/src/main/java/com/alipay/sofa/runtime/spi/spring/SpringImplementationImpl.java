@@ -16,25 +16,26 @@
  */
 package com.alipay.sofa.runtime.spi.spring;
 
-import com.alipay.sofa.runtime.spi.component.AbstractImplementation;
+import com.alipay.sofa.runtime.spi.component.DefaultImplementation;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.Assert;
 
 /**
- * Spring 的组件实现类。
+ * Spring Component Implement
  *
  * @author xi.hux@alipay.com
- * @version $Id: SpringImplementationImpl.java,v 0.1 2009-9-24 下午07:29:02 xi.hux Exp $
+ * @since 2.6.0
  */
 
-public class SpringImplementationImpl extends AbstractImplementation {
+public class SpringImplementationImpl extends DefaultImplementation {
 
     protected ApplicationContext applicationContext;
     protected String             beanName;
+    protected Object             target;
 
     public SpringImplementationImpl(String beanName, ApplicationContext applicationContext) {
-        Assert.hasText(beanName);
-        Assert.notNull(applicationContext);
+        Assert.hasText(beanName, "beanName must not be empty");
+        Assert.notNull(applicationContext, "applicationContext must not be null");
 
         this.beanName = beanName;
         this.applicationContext = applicationContext;
@@ -59,4 +60,5 @@ public class SpringImplementationImpl extends AbstractImplementation {
     public String getName() {
         return beanName;
     }
+
 }
