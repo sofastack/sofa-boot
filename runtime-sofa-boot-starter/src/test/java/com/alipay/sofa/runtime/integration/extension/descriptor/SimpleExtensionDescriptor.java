@@ -16,23 +16,151 @@
  */
 package com.alipay.sofa.runtime.integration.extension.descriptor;
 
+import com.alipay.sofa.common.xmap.Resource;
 import com.alipay.sofa.common.xmap.annotation.XNode;
 import com.alipay.sofa.common.xmap.annotation.XObject;
 
+import java.io.File;
+import java.net.URL;
+import java.util.Date;
+
 /**
  * @author khotyn
+ * @author ruoshan
  * @since 2.6.0
  */
-@XObject("word")
+@XObject("simple")
 public class SimpleExtensionDescriptor {
-    @XNode("value")
-    private String value;
 
-    /**
-     *
-     * @return
-     */
-    public String getValue() {
-        return value;
+    @XNode("value")
+    private String   stringValue;
+
+    @XNode("path/value")
+    private String   stringValueWithPath;
+
+    @XNode("intValue")
+    private Integer  intValue;
+
+    @XNode("longValue")
+    private Long     longValue;
+
+    @XNode("floatValue")
+    private Float    floatValue;
+
+    @XNode("doubleValue")
+    private Double   doubleValue;
+
+    @XNode("booleanValue")
+    private Boolean  booleanValue;
+
+    @XNode("dateValue")
+    private Date     dateValue;
+
+    @XNode("fileValue")
+    private File     fileValue;
+
+    @XNode("urlValue")
+    private URL      urlValue;
+
+    @XNode("classValue")
+    private Class    classValue;
+
+    @XNode("resourceValue")
+    private Resource resourceValue;
+
+    public String getStringValue() {
+        return stringValue;
+    }
+
+    public void setStringValue(String stringValue) {
+        this.stringValue = stringValue;
+    }
+
+    public String getStringValueWithPath() {
+        return stringValueWithPath;
+    }
+
+    public void setStringValueWithPath(String stringValueWithPath) {
+        this.stringValueWithPath = stringValueWithPath;
+    }
+
+    public Integer getIntValue() {
+        return intValue;
+    }
+
+    public void setIntValue(Integer intValue) {
+        this.intValue = intValue;
+    }
+
+    public Long getLongValue() {
+        return longValue;
+    }
+
+    public void setLongValue(Long longValue) {
+        this.longValue = longValue;
+    }
+
+    public Float getFloatValue() {
+        return floatValue;
+    }
+
+    public void setFloatValue(Float floatValue) {
+        this.floatValue = floatValue;
+    }
+
+    public Double getDoubleValue() {
+        return doubleValue;
+    }
+
+    public void setDoubleValue(Double doubleValue) {
+        this.doubleValue = doubleValue;
+    }
+
+    public Boolean getBooleanValue() {
+        return booleanValue;
+    }
+
+    public void setBooleanValue(Boolean booleanValue) {
+        this.booleanValue = booleanValue;
+    }
+
+    public Date getDateValue() {
+        return dateValue;
+    }
+
+    public void setDateValue(Date dateValue) {
+        this.dateValue = dateValue;
+    }
+
+    public File getFileValue() {
+        return fileValue;
+    }
+
+    public void setFileValue(File fileValue) {
+        this.fileValue = fileValue;
+    }
+
+    public URL getUrlValue() {
+        return urlValue;
+    }
+
+    public void setUrlValue(URL urlValue) {
+        this.urlValue = urlValue;
+    }
+
+    public Class getClassValue() {
+        return classValue;
+    }
+
+    public void setClassValue(Class classValue) {
+        this.classValue = classValue;
+    }
+
+    public Resource getResourceValue() {
+        return resourceValue;
+    }
+
+    public void setResourceValue(Resource resourceValue) {
+        this.resourceValue = resourceValue;
     }
 }

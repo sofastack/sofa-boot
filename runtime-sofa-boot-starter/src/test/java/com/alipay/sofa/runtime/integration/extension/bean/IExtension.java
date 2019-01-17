@@ -16,6 +16,8 @@
  */
 package com.alipay.sofa.runtime.integration.extension.bean;
 
+import com.alipay.sofa.runtime.integration.extension.descriptor.SimpleExtensionDescriptor;
+
 import java.util.List;
 import java.util.Map;
 
@@ -29,12 +31,12 @@ public interface IExtension {
     /**
      * Simple XNode Test
      */
-    String say();
+    SimpleExtensionDescriptor getSimpleExtensionDescriptor();
 
     /**
      * Extension Client Test
      */
-    String sayFromClient();
+    String getClientValue();
 
     /**
      * XNodeList Test
@@ -54,10 +56,21 @@ public interface IExtension {
     /**
      * XNodeSpringList Test
      */
-    List<SimpleSpringListBean> getSimpleSpringListBean();
+    List<SimpleSpringListBean> getSimpleSpringListBeans();
 
     /**
      * XNodeSpringMap Test
      */
-    Map<String, SimpleSpringMapBean> getSimpleSpringMapBean();
+    Map<String, SimpleSpringMapBean> getSimpleSpringMapBeanMap();
+
+    /**
+     * XContext Test
+     */
+    String getTestContextValue();
+
+    /**
+     * XParent Test
+     */
+    String getTestParentValue();
+
 }

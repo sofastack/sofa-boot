@@ -18,7 +18,9 @@ package com.alipay.sofa.runtime.integration.extension.bean;
 
 import com.alipay.sofa.runtime.api.component.Extension;
 import com.alipay.sofa.runtime.integration.extension.descriptor.ClientExtensionDescriptor;
+import com.alipay.sofa.runtime.integration.extension.descriptor.ContextExtensionDescriptor;
 import com.alipay.sofa.runtime.integration.extension.descriptor.MapExtensionDescriptor;
+import com.alipay.sofa.runtime.integration.extension.descriptor.ParentExtensionDescriptor;
 import com.alipay.sofa.runtime.integration.extension.descriptor.SimpleExtensionDescriptor;
 import com.alipay.sofa.runtime.integration.extension.descriptor.ListExtensionDescriptor;
 import com.alipay.sofa.runtime.integration.extension.descriptor.SpringListExtensionDescriptor;
@@ -37,9 +39,9 @@ import java.util.Map;
  */
 public class IExtensionImpl implements IExtension {
 
-    private String                           word;
+    private String                           clientValue;
 
-    private String                           clientWord;
+    private SimpleExtensionDescriptor        simpleExtensionDescriptor;
 
     private List<String>                     testList               = new ArrayList<>();
 
@@ -51,14 +53,17 @@ public class IExtensionImpl implements IExtension {
 
     private Map<String, SimpleSpringMapBean> simpleSpringMapBeanMap = new HashMap<>();
 
-    @Override
-    public String say() {
-        return word;
+    private String                           testContextValue;
+
+    private String                           testParentValue;
+
+    public SimpleExtensionDescriptor getSimpleExtensionDescriptor() {
+        return simpleExtensionDescriptor;
     }
 
     @Override
-    public String sayFromClient() {
-        return clientWord;
+    public String getClientValue() {
+        return clientValue;
     }
 
     @Override
@@ -77,13 +82,21 @@ public class IExtensionImpl implements IExtension {
     }
 
     @Override
-    public List<SimpleSpringListBean> getSimpleSpringListBean() {
+    public List<SimpleSpringListBean> getSimpleSpringListBeans() {
         return simpleSpringListBeans;
     }
 
     @Override
-    public Map<String, SimpleSpringMapBean> getSimpleSpringMapBean() {
+    public Map<String, SimpleSpringMapBean> getSimpleSpringMapBeanMap() {
         return simpleSpringMapBeanMap;
+    }
+
+    public String getTestContextValue() {
+        return testContextValue;
+    }
+
+    public String getTestParentValue() {
+        return testParentValue;
     }
 
     /**
@@ -101,10 +114,10 @@ public class IExtensionImpl implements IExtension {
         }
 
         for (Object contribution : contributions) {
-            if ("word".equals(extensionPoint)) {
-                word = ((SimpleExtensionDescriptor) contribution).getValue();
-            } else if ("clientWord".equals(extensionPoint)) {
-                clientWord = ((ClientExtensionDescriptor) contribution).getValue();
+            if ("simple".equals(extensionPoint)) {
+                simpleExtensionDescriptor = (SimpleExtensionDescriptor) contribution;
+            } else if ("clientValue".equals(extensionPoint)) {
+                clientValue = ((ClientExtensionDescriptor) contribution).getValue();
             } else if ("testList".equals(extensionPoint)) {
                 testList.addAll(((ListExtensionDescriptor) contribution).getValues());
             } else if ("testMap".equals(extensionPoint)) {
@@ -117,6 +130,11 @@ public class IExtensionImpl implements IExtension {
             } else if ("testSpringMap".equals(extensionPoint)) {
                 simpleSpringMapBeanMap.putAll(((SpringMapExtensionDescriptor) contribution)
                     .getValues());
+            } else if ("testContext".equals(extensionPoint)) {
+                testContextValue = ((ContextExtensionDescriptor) contribution).getContextValue();
+            } else if ("testParent".equals(extensionPoint)) {
+                testParentValue = ((ParentExtensionDescriptor) contribution)
+                    .getSubExtensionDescriptor().getParentValue().getValue();
             }
         }
     }

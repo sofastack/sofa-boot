@@ -45,7 +45,7 @@ public @interface XMemberAnnotation {
     /**
      * The type of the annotation.
      *
-     * @return
+     * @return the type of the annotation.
      */
     int value();
 

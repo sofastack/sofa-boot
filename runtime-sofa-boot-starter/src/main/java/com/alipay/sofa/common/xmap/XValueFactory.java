@@ -67,12 +67,7 @@ public abstract class XValueFactory {
     }
 
     public static final XValueFactory STRING   = new XValueFactory() {
-                                                   /**
-                                                    *
-                                                    * @param ctx
-                                                    * @param value
-                                                    * @return
-                                                    */
+
                                                    @Override
                                                    public Object getValue(Context ctx, String value) {
                                                        return value;
@@ -80,12 +75,7 @@ public abstract class XValueFactory {
                                                };
 
     public static final XValueFactory INTEGER  = new XValueFactory() {
-                                                   /**
-                                                    *
-                                                    * @param ctx
-                                                    * @param value
-                                                    * @return
-                                                    */
+
                                                    @Override
                                                    public Object getValue(Context ctx, String value) {
                                                        return Integer.valueOf(value);
@@ -93,12 +83,7 @@ public abstract class XValueFactory {
                                                };
 
     public static final XValueFactory LONG     = new XValueFactory() {
-                                                   /**
-                                                    *
-                                                    * @param ctx
-                                                    * @param value
-                                                    * @return
-                                                    */
+
                                                    @Override
                                                    public Object getValue(Context ctx, String value) {
                                                        return Long.valueOf(value);
@@ -106,12 +91,7 @@ public abstract class XValueFactory {
                                                };
 
     public static final XValueFactory DOUBLE   = new XValueFactory() {
-                                                   /**
-                                                    *
-                                                    * @param ctx
-                                                    * @param value
-                                                    * @return
-                                                    */
+
                                                    @Override
                                                    public Object getValue(Context ctx, String value) {
                                                        return Double.valueOf(value);
@@ -119,12 +99,7 @@ public abstract class XValueFactory {
                                                };
 
     public static final XValueFactory FLOAT    = new XValueFactory() {
-                                                   /**
-                                                    *
-                                                    * @param ctx
-                                                    * @param value
-                                                    * @return
-                                                    */
+
                                                    @Override
                                                    public Object getValue(Context ctx, String value) {
                                                        return Float.valueOf(value);
@@ -132,12 +107,7 @@ public abstract class XValueFactory {
                                                };
 
     public static final XValueFactory BOOLEAN  = new XValueFactory() {
-                                                   /**
-                                                    *
-                                                    * @param ctx
-                                                    * @param value
-                                                    * @return
-                                                    */
+
                                                    @Override
                                                    public Object getValue(Context ctx, String value) {
                                                        return Boolean.valueOf(value);
@@ -148,12 +118,6 @@ public abstract class XValueFactory {
                                                    final DateFormat df = DateFormat
                                                                            .getDateInstance();
 
-                                                   /**
-                                                    *
-                                                    * @param ctx
-                                                    * @param value
-                                                    * @return
-                                                    */
                                                    @Override
                                                    public Object getValue(Context ctx, String value) {
                                                        try {
@@ -165,12 +129,7 @@ public abstract class XValueFactory {
                                                };
 
     public static final XValueFactory FILE     = new XValueFactory() {
-                                                   /**
-                                                    *
-                                                    * @param ctx
-                                                    * @param value
-                                                    * @return
-                                                    */
+
                                                    @Override
                                                    public Object getValue(Context ctx, String value) {
                                                        return new File(value);
@@ -189,12 +148,7 @@ public abstract class XValueFactory {
                                                };
 
     public static final XValueFactory CLASS    = new XValueFactory() {
-                                                   /**
-                                                    *
-                                                    * @param ctx
-                                                    * @param value
-                                                    * @return
-                                                    */
+
                                                    @Override
                                                    public Object getValue(Context ctx, String value) {
                                                        try {
@@ -207,12 +161,7 @@ public abstract class XValueFactory {
                                                };
 
     public static final XValueFactory RESOURCE = new XValueFactory() {
-                                                   /**
-                                                    *
-                                                    * @param ctx
-                                                    * @param value
-                                                    * @return
-                                                    */
+
                                                    @Override
                                                    public Object getValue(Context ctx, String value) {
                                                        try {
@@ -230,6 +179,7 @@ public abstract class XValueFactory {
         addFactory(String.class, STRING);
         addFactory(Integer.class, INTEGER);
         addFactory(Long.class, LONG);
+        addFactory(Float.class, FLOAT);
         addFactory(Double.class, DOUBLE);
         addFactory(Date.class, DATE);
         addFactory(Boolean.class, BOOLEAN);

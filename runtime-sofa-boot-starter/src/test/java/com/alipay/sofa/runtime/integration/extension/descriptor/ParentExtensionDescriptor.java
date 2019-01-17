@@ -23,16 +23,28 @@ import com.alipay.sofa.common.xmap.annotation.XObject;
  * @author ruoshan
  * @since 2.6.0
  */
-@XObject("clientValue")
-public class ClientExtensionDescriptor {
-    @XNode("value")
-    private String value;
+@XObject("testParent")
+public class ParentExtensionDescriptor {
 
-    /**
-     *
-     * @return
-     */
+    @XNode("value")
+    private String                 value;
+
+    @XNode("testSub")
+    private SubExtensionDescriptor subExtensionDescriptor;
+
+    public SubExtensionDescriptor getSubExtensionDescriptor() {
+        return subExtensionDescriptor;
+    }
+
     public String getValue() {
         return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public void setSubExtensionDescriptor(SubExtensionDescriptor subExtensionDescriptor) {
+        this.subExtensionDescriptor = subExtensionDescriptor;
     }
 }

@@ -16,23 +16,25 @@
  */
 package com.alipay.sofa.runtime.integration.extension.descriptor;
 
-import com.alipay.sofa.common.xmap.annotation.XNode;
 import com.alipay.sofa.common.xmap.annotation.XObject;
+import com.alipay.sofa.common.xmap.annotation.XParent;
 
 /**
+ *
  * @author ruoshan
  * @since 2.6.0
  */
-@XObject("clientValue")
-public class ClientExtensionDescriptor {
-    @XNode("value")
-    private String value;
+@XObject("testSub")
+public class SubExtensionDescriptor {
 
-    /**
-     *
-     * @return
-     */
-    public String getValue() {
-        return value;
+    @XParent
+    private ParentExtensionDescriptor parentValue;
+
+    public ParentExtensionDescriptor getParentValue() {
+        return parentValue;
+    }
+
+    public void setParentValue(ParentExtensionDescriptor parentValue) {
+        this.parentValue = parentValue;
     }
 }

@@ -26,6 +26,7 @@ import com.alipay.sofa.runtime.integration.extension.bean.SimpleSpringBean;
 import com.alipay.sofa.runtime.integration.extension.bean.SimpleSpringListBean;
 import com.alipay.sofa.runtime.integration.extension.bean.SimpleSpringMapBean;
 import com.alipay.sofa.runtime.integration.extension.descriptor.ClientExtensionDescriptor;
+import com.alipay.sofa.runtime.integration.extension.descriptor.SimpleExtensionDescriptor;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -68,15 +69,38 @@ public class ExtensionTest implements ExtensionClientAware {
     private SimpleSpringMapBean  springMapBean2;
 
     @Test
-    public void testSimple() {
+    public void testSimple() throws Exception {
         Assert.assertNotNull(iExtension);
-        Assert.assertEquals("SOFABoot Extension Test", iExtension.say());
+        Assert.assertNotNull(iExtension.getSimpleExtensionDescriptor());
+        Assert.assertEquals("SOFABoot Extension Test", iExtension.getSimpleExtensionDescriptor()
+            .getStringValue());
+        Assert.assertEquals("value with path", iExtension.getSimpleExtensionDescriptor()
+            .getStringValueWithPath());
+        Assert.assertEquals(new Integer(10), iExtension.getSimpleExtensionDescriptor()
+            .getIntValue());
+        Assert.assertEquals(new Long(20), iExtension.getSimpleExtensionDescriptor().getLongValue());
+        Assert.assertEquals(new Float(1.1), iExtension.getSimpleExtensionDescriptor()
+            .getFloatValue());
+        Assert.assertEquals(new Double(2.2), iExtension.getSimpleExtensionDescriptor()
+            .getDoubleValue());
+        Assert.assertEquals(Boolean.TRUE, iExtension.getSimpleExtensionDescriptor()
+            .getBooleanValue());
+        Assert.assertEquals("Thu Jan 17 00:00:00 CST 2019", iExtension
+            .getSimpleExtensionDescriptor().getDateValue().toString());
+        Assert.assertEquals("file", iExtension.getSimpleExtensionDescriptor().getFileValue()
+            .getName());
+        Assert.assertEquals(SimpleExtensionDescriptor.class.getName(), iExtension
+            .getSimpleExtensionDescriptor().getClassValue().getName());
+        Assert.assertEquals("http://test", iExtension.getSimpleExtensionDescriptor().getUrlValue()
+            .toString());
+        Assert.assertEquals("extension.xml", iExtension.getSimpleExtensionDescriptor()
+            .getResourceValue().toFile().getName());
     }
 
     @Test
     public void testExtensionClient() throws Exception {
         ExtensionPointParam extensionPointParam = new ExtensionPointParam();
-        extensionPointParam.setName("clientWord");
+        extensionPointParam.setName("clientValue");
         extensionPointParam.setTargetName("iExtension");
         extensionPointParam.setTarget(iExtension);
         extensionPointParam.setContributionClass(ClientExtensionDescriptor.class);
@@ -87,12 +111,12 @@ public class ExtensionTest implements ExtensionClientAware {
         Document doc = dBuilder.parse(new File(Thread.currentThread().getContextClassLoader()
             .getResource("META-INF/extension/extension.xml").toURI()));
         ExtensionParam extensionParam = new ExtensionParam();
-        extensionParam.setTargetName("clientWord");
+        extensionParam.setTargetName("clientValue");
         extensionParam.setTargetInstanceName("iExtension");
         extensionParam.setElement(doc.getDocumentElement());
         extensionClient.publishExtension(extensionParam);
 
-        Assert.assertEquals("SOFABoot Extension Client Test", iExtension.sayFromClient());
+        Assert.assertEquals("SOFABoot Extension Client Test", iExtension.getClientValue());
     }
 
     @Test
@@ -117,18 +141,28 @@ public class ExtensionTest implements ExtensionClientAware {
 
     @Test
     public void testSpringList() {
-        Assert.assertEquals(2, iExtension.getSimpleSpringListBean().size());
-        Assert.assertTrue(iExtension.getSimpleSpringListBean().contains(simpleSpringListBean1));
-        Assert.assertTrue(iExtension.getSimpleSpringListBean().contains(simpleSpringListBean2));
+        Assert.assertEquals(2, iExtension.getSimpleSpringListBeans().size());
+        Assert.assertTrue(iExtension.getSimpleSpringListBeans().contains(simpleSpringListBean1));
+        Assert.assertTrue(iExtension.getSimpleSpringListBeans().contains(simpleSpringListBean2));
     }
 
     @Test
     public void testSpringMap() {
-        Assert.assertEquals(2, iExtension.getSimpleSpringMapBean().size());
+        Assert.assertEquals(2, iExtension.getSimpleSpringMapBeanMap().size());
         Assert.assertEquals(springMapBean1,
-            iExtension.getSimpleSpringMapBean().get("testMapSpringKey1"));
+            iExtension.getSimpleSpringMapBeanMap().get("testMapSpringKey1"));
         Assert.assertEquals(springMapBean2,
-            iExtension.getSimpleSpringMapBean().get("testMapSpringKey2"));
+            iExtension.getSimpleSpringMapBeanMap().get("testMapSpringKey2"));
+    }
+
+    @Test
+    public void testContext() {
+        Assert.assertEquals("testContextValue\n", iExtension.getTestContextValue());
+    }
+
+    @Test
+    public void testParent() {
+        Assert.assertEquals("testParentValue", iExtension.getTestParentValue());
     }
 
     @Override

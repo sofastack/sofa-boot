@@ -90,7 +90,6 @@ public class XMapSpring extends XMap {
             Annotation anno = checkMemberAnnotation(method);
             if (anno != null) {
                 XAnnotatedMember member = createMethodMember(method, xob.klass, anno);
-                //如果返回空，进行Spring的Annotation查找
                 if (member == null) {
                     member = createExtendMethodMember(method, anno, xob);
                 }

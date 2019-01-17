@@ -16,23 +16,28 @@
  */
 package com.alipay.sofa.runtime.integration.extension.descriptor;
 
-import com.alipay.sofa.common.xmap.annotation.XNode;
+import com.alipay.sofa.common.xmap.annotation.XContent;
+import com.alipay.sofa.common.xmap.annotation.XNodeList;
 import com.alipay.sofa.common.xmap.annotation.XObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author ruoshan
  * @since 2.6.0
  */
-@XObject("clientValue")
-public class ClientExtensionDescriptor {
-    @XNode("value")
-    private String value;
+@XObject("testContext")
+public class ContextExtensionDescriptor {
 
-    /**
-     *
-     * @return
-     */
-    public String getValue() {
-        return value;
+    @XContent(value = "value")
+    private String contextValue;
+
+    public String getContextValue() {
+        return contextValue;
+    }
+
+    public void setContextValue(String contextValue) {
+        this.contextValue = contextValue;
     }
 }

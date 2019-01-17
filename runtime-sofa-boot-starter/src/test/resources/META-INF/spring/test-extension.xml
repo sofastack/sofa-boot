@@ -13,15 +13,28 @@
 
     <bean id="iExtension" class="com.alipay.sofa.runtime.integration.extension.bean.IExtensionImpl"/>
 
-    <sofa:extension-point name="word" ref="iExtension">
+    <sofa:extension-point name="simple" ref="iExtension">
         <sofa:object class="com.alipay.sofa.runtime.integration.extension.descriptor.SimpleExtensionDescriptor"/>
     </sofa:extension-point>
 
-    <sofa:extension bean="iExtension" point="word">
+    <sofa:extension bean="iExtension" point="simple">
         <sofa:content>
-            <word>
+            <simple>
                 <value>SOFABoot Extension Test</value>
-            </word>
+                <path>
+                    <value>value with path</value>
+                </path>
+                <intValue>10</intValue>
+                <longValue>20</longValue>
+                <floatValue>1.1</floatValue>
+                <doubleValue>2.2</doubleValue>
+                <booleanValue>true</booleanValue>
+                <dateValue>Jan 17, 2019</dateValue>
+                <fileValue>file</fileValue>
+                <urlValue>http://test</urlValue>
+                <classValue>com.alipay.sofa.runtime.integration.extension.descriptor.SimpleExtensionDescriptor</classValue>
+                <resourceValue>META-INF/extension/extension.xml</resourceValue>
+            </simple>
         </sofa:content>
     </sofa:extension>
 
@@ -98,6 +111,35 @@
                 <value name="testMapSpringKey1">springMapBean1</value>
                 <value name="testMapSpringKey2">springMapBean2</value>
             </testSpringMap>
+        </sofa:content>
+    </sofa:extension>
+
+
+    <sofa:extension-point name="testContext" ref="iExtension">
+        <sofa:object class="com.alipay.sofa.runtime.integration.extension.descriptor.ContextExtensionDescriptor"/>
+    </sofa:extension-point>
+
+    <sofa:extension bean="iExtension" point="testContext">
+        <sofa:content>
+            <testContext>
+                <value>testContextValue</value>
+            </testContext>
+        </sofa:content>
+    </sofa:extension>
+
+
+    <sofa:extension-point name="testParent" ref="iExtension">
+        <sofa:object class="com.alipay.sofa.runtime.integration.extension.descriptor.ParentExtensionDescriptor"/>
+    </sofa:extension-point>
+
+    <sofa:extension bean="iExtension" point="testParent">
+        <sofa:content>
+            <testParent>
+                <value>testParentValue</value>
+                <testSub>
+                    <parentValue></parentValue>
+                </testSub>
+            </testParent>
         </sofa:content>
     </sofa:extension>
 

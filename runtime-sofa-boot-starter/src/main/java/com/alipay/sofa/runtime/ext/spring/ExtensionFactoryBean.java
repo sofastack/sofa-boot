@@ -58,6 +58,10 @@ public class ExtensionFactoryBean extends AbstractExtFactoryBean {
             throw new IllegalArgumentException("'point' have to be specified");
         }
 
+        if (classLoader == null) {
+            classLoader = Thread.currentThread().getContextClassLoader();
+        }
+
         try {
             publishAsNuxeoExtension();
         } catch (Exception e) {

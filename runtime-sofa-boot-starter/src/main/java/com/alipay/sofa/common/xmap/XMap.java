@@ -95,9 +95,9 @@ public class XMap {
      * Creates a new XMap object.
      */
     public XMap() {
-        objects = new Hashtable<Class, XAnnotatedObject>();
-        roots = new Hashtable<String, XAnnotatedObject>();
-        factories = new Hashtable<Class, XValueFactory>(XValueFactory.defaultFactories);
+        objects = new Hashtable<>();
+        roots = new Hashtable<>();
+        factories = new Hashtable<>(XValueFactory.defaultFactories);
     }
 
     /**
