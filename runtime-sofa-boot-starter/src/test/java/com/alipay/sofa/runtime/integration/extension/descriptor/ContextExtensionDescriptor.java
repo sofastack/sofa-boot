@@ -17,11 +17,7 @@
 package com.alipay.sofa.runtime.integration.extension.descriptor;
 
 import com.alipay.sofa.common.xmap.annotation.XContent;
-import com.alipay.sofa.common.xmap.annotation.XNodeList;
 import com.alipay.sofa.common.xmap.annotation.XObject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author ruoshan
