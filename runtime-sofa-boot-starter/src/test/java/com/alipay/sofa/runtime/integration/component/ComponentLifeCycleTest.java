@@ -17,7 +17,7 @@
 package com.alipay.sofa.runtime.integration.component;
 
 import com.alipay.sofa.runtime.beans.service.LifeCycleService;
-import com.alipay.sofa.runtime.integration.base.SofaBootTestApplication;
+import com.alipay.sofa.runtime.integration.bootstrap.SofaBootTestApplication;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import org.junit.Assert;
 import org.junit.Test;

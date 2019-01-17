@@ -11,10 +11,12 @@
        default-autowire="byName">
 
 
-    <bean id="iExtension" class="com.alipay.sofa.runtime.integration.extension.IExtensionImpl"/>
+    <bean id="iExtension" class="com.alipay.sofa.runtime.integration.extension.bean.IExtensionImpl"/>
+
     <sofa:extension-point name="word" ref="iExtension">
-        <sofa:object class="com.alipay.sofa.runtime.integration.extension.ExtensionDescriptor"/>
+        <sofa:object class="com.alipay.sofa.runtime.integration.extension.descriptor.SimpleExtensionDescriptor"/>
     </sofa:extension-point>
+
     <sofa:extension bean="iExtension" point="word">
         <sofa:content>
             <word>
@@ -22,5 +24,82 @@
             </word>
         </sofa:content>
     </sofa:extension>
+
+
+    <sofa:extension-point name="testList" ref="iExtension">
+        <sofa:object class="com.alipay.sofa.runtime.integration.extension.descriptor.ListExtensionDescriptor"/>
+    </sofa:extension-point>
+
+    <sofa:extension bean="iExtension" point="testList">
+        <sofa:content>
+            <testList>
+                <value>test1</value>
+                <value>test2</value>
+            </testList>
+        </sofa:content>
+    </sofa:extension>
+
+
+    <sofa:extension-point name="testMap" ref="iExtension">
+        <sofa:object class="com.alipay.sofa.runtime.integration.extension.descriptor.MapExtensionDescriptor"/>
+    </sofa:extension-point>
+
+    <sofa:extension bean="iExtension" point="testMap">
+        <sofa:content>
+            <testMap>
+                <value name="testMapKey1">testMapValue1</value>
+                <value name="testMapKey2">testMapValue2</value>
+            </testMap>
+        </sofa:content>
+    </sofa:extension>
+
+
+    <sofa:extension-point name="simpleSpring" ref="iExtension">
+        <sofa:object class="com.alipay.sofa.runtime.integration.extension.descriptor.SpringSimpleExtensionDescriptor"/>
+    </sofa:extension-point>
+
+    <bean id="simpleSpringBean" class="com.alipay.sofa.runtime.integration.extension.bean.SimpleSpringBean"/>
+
+    <sofa:extension bean="iExtension" point="simpleSpring">
+        <sofa:content>
+            <simpleSpring>
+                <value>simpleSpringBean</value>
+            </simpleSpring>
+        </sofa:content>
+    </sofa:extension>
+
+
+    <sofa:extension-point name="testSpringList" ref="iExtension">
+        <sofa:object class="com.alipay.sofa.runtime.integration.extension.descriptor.SpringListExtensionDescriptor"/>
+    </sofa:extension-point>
+
+    <bean id="simpleSpringListBean1" class="com.alipay.sofa.runtime.integration.extension.bean.SimpleSpringListBean" />
+    <bean id="simpleSpringListBean2" class="com.alipay.sofa.runtime.integration.extension.bean.SimpleSpringListBean" />
+
+    <sofa:extension bean="iExtension" point="testSpringList">
+        <sofa:content>
+            <testSpringList>
+                <value>simpleSpringListBean1</value>
+                <value>simpleSpringListBean2</value>
+            </testSpringList>
+        </sofa:content>
+    </sofa:extension>
+
+    <sofa:extension-point name="testSpringMap" ref="iExtension">
+        <sofa:object class="com.alipay.sofa.runtime.integration.extension.descriptor.SpringMapExtensionDescriptor"/>
+    </sofa:extension-point>
+
+    <bean id="springMapBean1" class="com.alipay.sofa.runtime.integration.extension.bean.SimpleSpringMapBean"/>
+    <bean id="springMapBean2" class="com.alipay.sofa.runtime.integration.extension.bean.SimpleSpringMapBean"/>
+
+    <sofa:extension bean="iExtension" point="testSpringMap">
+        <sofa:content>
+            <testSpringMap>
+                <value name="testMapSpringKey1">springMapBean1</value>
+                <value name="testMapSpringKey2">springMapBean2</value>
+            </testSpringMap>
+        </sofa:content>
+    </sofa:extension>
+
 
 </beans>

@@ -14,25 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime.integration.extension;
+package com.alipay.sofa.runtime.integration.bootstrap;
 
-import com.alipay.sofa.common.xmap.annotation.XNode;
-import com.alipay.sofa.common.xmap.annotation.XObject;
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.annotation.ImportResource;
 
 /**
- * @author khotyn
- * @since 2.6.0
+ * @author qilong.zql
+ * @since 2.3.1
  */
-@XObject("word")
-public class ExtensionDescriptor {
-    @XNode("value")
-    private String value;
+@ImportResource({ "classpath*:META-INF/spring/*.xml" })
+@org.springframework.boot.autoconfigure.SpringBootApplication
+public class SofaBootTestApplication {
 
-    /**
-     *
-     * @return
-     */
-    public String getValue() {
-        return value;
+    public static void main(String[] args) {
+        SpringApplication springApplication = new SpringApplication(SofaBootTestApplication.class);
+        springApplication.run(args);
     }
+
 }

@@ -14,25 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime.integration.extension;
+package com.alipay.sofa.runtime.integration.extension.descriptor;
 
-import com.alipay.sofa.common.xmap.annotation.XNode;
 import com.alipay.sofa.common.xmap.annotation.XObject;
+import com.alipay.sofa.common.xmap.spring.XNodeListSpring;
+import com.alipay.sofa.runtime.integration.extension.bean.SimpleSpringListBean;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author ruoshan
  * @since 2.6.0
  */
-@XObject("clientWord")
-public class ClientExtensionDescriptor {
-    @XNode("value")
-    private String value;
+@XObject("testSpringList")
+public class SpringListExtensionDescriptor {
 
-    /**
-     *
-     * @return
-     */
-    public String getValue() {
-        return value;
+    @XNodeListSpring(value = "value", componentType = SimpleSpringListBean.class, type = ArrayList.class)
+    private List<SimpleSpringListBean> values;
+
+    public List<SimpleSpringListBean> getValues() {
+        return values;
     }
 }

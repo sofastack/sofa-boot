@@ -14,16 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime.integration.extension;
+package com.alipay.sofa.runtime.integration.extension.descriptor;
+
+import com.alipay.sofa.common.xmap.annotation.XObject;
+import com.alipay.sofa.common.xmap.spring.XNodeSpring;
+import com.alipay.sofa.runtime.integration.extension.bean.SimpleSpringBean;
 
 /**
- * @author khotyn
  * @author ruoshan
  * @since 2.6.0
  */
-public interface IExtension {
+@XObject("simpleSpring")
+public class SpringSimpleExtensionDescriptor {
 
-    String say();
+    @XNodeSpring(value = "value", type = SimpleSpringBean.class)
+    private SimpleSpringBean value;
 
-    String sayFromClient();
+    /**
+     *
+     * @return
+     */
+    public SimpleSpringBean getValue() {
+        return value;
+    }
 }

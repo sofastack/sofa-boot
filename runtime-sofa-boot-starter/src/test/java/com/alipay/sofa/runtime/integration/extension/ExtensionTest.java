@@ -20,7 +20,12 @@ import com.alipay.sofa.runtime.api.aware.ExtensionClientAware;
 import com.alipay.sofa.runtime.api.client.ExtensionClient;
 import com.alipay.sofa.runtime.api.client.param.ExtensionParam;
 import com.alipay.sofa.runtime.api.client.param.ExtensionPointParam;
-import com.alipay.sofa.runtime.integration.base.SofaBootTestApplication;
+import com.alipay.sofa.runtime.integration.bootstrap.SofaBootTestApplication;
+import com.alipay.sofa.runtime.integration.extension.bean.IExtension;
+import com.alipay.sofa.runtime.integration.extension.bean.SimpleSpringBean;
+import com.alipay.sofa.runtime.integration.extension.bean.SimpleSpringListBean;
+import com.alipay.sofa.runtime.integration.extension.bean.SimpleSpringMapBean;
+import com.alipay.sofa.runtime.integration.extension.descriptor.ClientExtensionDescriptor;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,13 +47,28 @@ import java.io.File;
 @SpringBootTest(classes = SofaBootTestApplication.class)
 public class ExtensionTest implements ExtensionClientAware {
 
-    private ExtensionClient extensionClient;
+    private ExtensionClient      extensionClient;
 
     @Autowired
-    IExtension              iExtension;
+    private IExtension           iExtension;
+
+    @Autowired
+    private SimpleSpringBean     simpleSpringBean;
+
+    @Autowired
+    private SimpleSpringListBean simpleSpringListBean1;
+
+    @Autowired
+    private SimpleSpringListBean simpleSpringListBean2;
+
+    @Autowired
+    private SimpleSpringMapBean  springMapBean1;
+
+    @Autowired
+    private SimpleSpringMapBean  springMapBean2;
 
     @Test
-    public void test() {
+    public void testSimple() {
         Assert.assertNotNull(iExtension);
         Assert.assertEquals("SOFABoot Extension Test", iExtension.say());
     }
@@ -73,6 +93,42 @@ public class ExtensionTest implements ExtensionClientAware {
         extensionClient.publishExtension(extensionParam);
 
         Assert.assertEquals("SOFABoot Extension Client Test", iExtension.sayFromClient());
+    }
+
+    @Test
+    public void testList() {
+        Assert.assertEquals(2, iExtension.getTestList().size());
+        Assert.assertTrue(iExtension.getTestList().contains("test1"));
+        Assert.assertTrue(iExtension.getTestList().contains("test2"));
+    }
+
+    @Test
+    public void testMap() {
+        Assert.assertEquals(2, iExtension.getTestMap().size());
+        Assert.assertEquals("testMapValue1", iExtension.getTestMap().get("testMapKey1"));
+        Assert.assertEquals("testMapValue2", iExtension.getTestMap().get("testMapKey2"));
+    }
+
+    @Test
+    public void testSimpleString() {
+        Assert.assertNotNull(iExtension.getSimpleSpringBean());
+        Assert.assertEquals(iExtension.getSimpleSpringBean(), simpleSpringBean);
+    }
+
+    @Test
+    public void testSpringList() {
+        Assert.assertEquals(2, iExtension.getSimpleSpringListBean().size());
+        Assert.assertTrue(iExtension.getSimpleSpringListBean().contains(simpleSpringListBean1));
+        Assert.assertTrue(iExtension.getSimpleSpringListBean().contains(simpleSpringListBean2));
+    }
+
+    @Test
+    public void testSpringMap() {
+        Assert.assertEquals(2, iExtension.getSimpleSpringMapBean().size());
+        Assert.assertEquals(springMapBean1,
+            iExtension.getSimpleSpringMapBean().get("testMapSpringKey1"));
+        Assert.assertEquals(springMapBean2,
+            iExtension.getSimpleSpringMapBean().get("testMapSpringKey2"));
     }
 
     @Override
