@@ -37,3 +37,5 @@
 com.alipay.sofa.runtime.spring.parser.ReferenceDefinitionParser
 com.alipay.sofa.runtime.spring.parser.ServiceDefinitionParser
 com.alipay.sofa.runtime.spring.parser.AsyncInitBeanDefinitionDecorator
+com.alipay.sofa.runtime.ext.spring.parser.ExtensionPointBeanDefinitionParser
+com.alipay.sofa.runtime.ext.spring.parser.ExtensionBeanDefinitionParser
