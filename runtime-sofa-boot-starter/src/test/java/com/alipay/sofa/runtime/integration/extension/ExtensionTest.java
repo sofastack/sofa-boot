@@ -16,6 +16,9 @@
  */
 package com.alipay.sofa.runtime.integration.extension;
 
+import com.alipay.sofa.common.xmap.Context;
+import com.alipay.sofa.common.xmap.DOMSerializer;
+import com.alipay.sofa.common.xmap.Resource;
 import com.alipay.sofa.common.xmap.XMap;
 import com.alipay.sofa.runtime.api.aware.ExtensionClientAware;
 import com.alipay.sofa.runtime.api.client.ExtensionClient;
@@ -38,8 +41,9 @@ import org.w3c.dom.Document;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.net.URL;
+import java.io.OutputStream;
 
 /**
  *
@@ -73,15 +77,14 @@ public class ExtensionTest implements ExtensionClientAware {
     @Test
     public void testXMap() throws Exception {
         XMap xMap = new XMap();
-        URL url = Thread.currentThread().getContextClassLoader()
-            .getResource("META-INF/extension/extension.xml");
-        xMap.register(ClientExtensionDescriptor.class, false);
-        Object object = xMap.load(url);
+        Resource resource = new Resource(new Context(), "META-INF/extension/extension.xml");
+        xMap.register(ClientExtensionDescriptor.class, true);
+        Object object = xMap.load(resource.toURL());
         Assert.assertNotNull(object);
         Assert.assertTrue(object instanceof ClientExtensionDescriptor);
         ClientExtensionDescriptor clientExtensionDescriptor = (ClientExtensionDescriptor) object;
         Assert.assertEquals("SOFABoot Extension Client Test", clientExtensionDescriptor.getValue());
-        Assert.assertEquals(1, xMap.loadAll(url).length);
+        Assert.assertEquals(1, xMap.loadAll(resource.toURL()).length);
     }
 
     @Test
@@ -91,6 +94,19 @@ public class ExtensionTest implements ExtensionClientAware {
         Document document = xMap.asXml(new ClientExtensionDescriptor(), null);
         Assert.assertNotNull(document);
         Assert.assertEquals("clientValue", document.getDocumentElement().getTagName());
+
+        String value = DOMSerializer.toString(document);
+        Assert.assertNotNull(value);
+        Assert.assertTrue(value.contains("clientValue"));
+
+        OutputStream out = new ByteArrayOutputStream();
+        DOMSerializer.write(document, out);
+        Assert.assertNotNull(out);
+        Assert.assertTrue(out.toString().contains("clientValue"));
+
+        DOMSerializer.write(document.getDocumentElement(),out);
+        Assert.assertNotNull(out);
+        Assert.assertTrue(out.toString().contains("clientValue"));
     }
 
     @Test
@@ -200,6 +216,11 @@ public class ExtensionTest implements ExtensionClientAware {
     @Test
     public void testParent() {
         Assert.assertEquals("testParentValue", iExtension.getTestParentValue());
+    }
+
+    @Test
+    public void testBad() {
+        Assert.assertNull(iExtension.getBadDescriptor());
     }
 
     @Override

@@ -18,6 +18,7 @@ package com.alipay.sofa.runtime.integration.extension.descriptor;
 
 import com.alipay.sofa.common.xmap.annotation.XNodeMap;
 import com.alipay.sofa.common.xmap.annotation.XObject;
+import com.alipay.sofa.runtime.integration.extension.bean.SimpleSpringMapBean;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,6 +35,9 @@ public class MapExtensionDescriptor {
 
     @XNodeMap(value = "simple", key = "@key", componentType = SimpleExtensionDescriptor.class, type = HashMap.class)
     private Map<String, SimpleExtensionDescriptor> simpleValues;
+
+    @XNodeMap(value = "value/attribute[@id='mapTest']", key = "@name", componentType = SimpleSpringMapBean.class, type = HashMap.class)
+    private Map<String, SimpleExtensionDescriptor> valueAttributes;
 
     public Map<String, String> getValues() {
         return values;

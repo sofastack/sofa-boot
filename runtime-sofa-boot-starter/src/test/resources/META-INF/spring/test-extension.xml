@@ -83,6 +83,10 @@
                         <value>test</value>
                     </simple>
                 </simple>
+                <value>
+                    <attribute id="mapTest" name="mapTest1">value1</attribute>
+                    <attribute id="mapTest" name="mapTest2">value2</attribute>
+                </value>
             </testMap>
         </sofa:content>
     </sofa:extension>
@@ -131,6 +135,10 @@
             <testSpringMap>
                 <value name="testMapSpringKey1">springMapBean1</value>
                 <value name="testMapSpringKey2">springMapBean2</value>
+                <value>
+                    <attribute id="springMapTest" name="springMapTest1">value1</attribute>
+                    <attribute id="springMapTest" name="springMapTest2">value2</attribute>
+                </value>
             </testSpringMap>
         </sofa:content>
     </sofa:extension>
@@ -161,6 +169,17 @@
                     <parentValue></parentValue>
                 </testSub>
             </testParent>
+        </sofa:content>
+    </sofa:extension>
+
+
+    <sofa:extension-point name="bad" ref="iExtension">
+        <sofa:object class="com.alipay.sofa.runtime.integration.extension.descriptor.SimpleExtensionDescriptor"/>
+    </sofa:extension-point>
+
+    <sofa:extension bean="iExtension" point="bad">
+        <sofa:content>
+            <bad>bad</bad>
         </sofa:content>
     </sofa:extension>
 

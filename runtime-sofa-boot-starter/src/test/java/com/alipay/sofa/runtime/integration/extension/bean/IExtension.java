@@ -74,4 +74,9 @@ public interface IExtension {
      */
     String getTestParentValue();
 
+    /**
+     * Bad Test
+     */
+    SimpleExtensionDescriptor getBadDescriptor();
+
 }

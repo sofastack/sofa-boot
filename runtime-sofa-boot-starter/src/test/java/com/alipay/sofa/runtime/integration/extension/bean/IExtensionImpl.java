@@ -57,6 +57,8 @@ public class IExtensionImpl implements IExtension {
 
     private String                           testParentValue;
 
+    private SimpleExtensionDescriptor        badDescriptor;
+
     @Override
     public String getClientValue() {
         return clientValue;
@@ -98,6 +100,10 @@ public class IExtensionImpl implements IExtension {
         return testParentValue;
     }
 
+    public SimpleExtensionDescriptor getBadDescriptor() {
+        return badDescriptor;
+    }
+
     /**
      * Component method, framework will invoke this method to contribute the extension to the existing extension point.
      *
@@ -134,6 +140,9 @@ public class IExtensionImpl implements IExtension {
             } else if ("testParent".equals(extensionPoint)) {
                 testParentValue = ((ParentExtensionDescriptor) contribution)
                     .getSubExtensionDescriptor().getParentValue().getValue();
+            } else if ("bad".equals(extensionPoint)) {
+                badDescriptor = (SimpleExtensionDescriptor) contribution;
+                ;
             }
         }
     }
