@@ -85,8 +85,8 @@ public class ExtensionTest implements ExtensionClientAware {
             .getDoubleValue());
         Assert.assertEquals(Boolean.TRUE, iExtension.getSimpleExtensionDescriptor()
             .getBooleanValue());
-        Assert.assertEquals("Thu Jan 17 00:00:00 CST 2019", iExtension
-            .getSimpleExtensionDescriptor().getDateValue().toString());
+        Assert.assertTrue(iExtension.getSimpleExtensionDescriptor().getDateValue().toString()
+            .contains("Thu Jan 17 00:00:00"));
         Assert.assertEquals("file", iExtension.getSimpleExtensionDescriptor().getFileValue()
             .getName());
         Assert.assertEquals(SimpleExtensionDescriptor.class.getName(), iExtension
