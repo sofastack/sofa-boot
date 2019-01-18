@@ -69,6 +69,28 @@ public class ExtensionTest implements ExtensionClientAware {
     private SimpleSpringMapBean  springMapBean2;
 
     @Test
+    public void testExtensionClient() throws Exception {
+        ExtensionPointParam extensionPointParam = new ExtensionPointParam();
+        extensionPointParam.setName("clientValue");
+        extensionPointParam.setTargetName("iExtension");
+        extensionPointParam.setTarget(iExtension);
+        extensionPointParam.setContributionClass(ClientExtensionDescriptor.class);
+        extensionClient.publishExtensionPoint(extensionPointParam);
+
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+        Document doc = dBuilder.parse(new File(Thread.currentThread().getContextClassLoader()
+            .getResource("META-INF/extension/extension.xml").toURI()));
+        ExtensionParam extensionParam = new ExtensionParam();
+        extensionParam.setTargetName("clientValue");
+        extensionParam.setTargetInstanceName("iExtension");
+        extensionParam.setElement(doc.getDocumentElement());
+        extensionClient.publishExtension(extensionParam);
+
+        Assert.assertEquals("SOFABoot Extension Client Test", iExtension.getClientValue());
+    }
+
+    @Test
     public void testSimple() throws Exception {
         Assert.assertNotNull(iExtension);
         Assert.assertNotNull(iExtension.getSimpleExtensionDescriptor());
@@ -98,32 +120,22 @@ public class ExtensionTest implements ExtensionClientAware {
     }
 
     @Test
-    public void testExtensionClient() throws Exception {
-        ExtensionPointParam extensionPointParam = new ExtensionPointParam();
-        extensionPointParam.setName("clientValue");
-        extensionPointParam.setTargetName("iExtension");
-        extensionPointParam.setTarget(iExtension);
-        extensionPointParam.setContributionClass(ClientExtensionDescriptor.class);
-        extensionClient.publishExtensionPoint(extensionPointParam);
-
-        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-        Document doc = dBuilder.parse(new File(Thread.currentThread().getContextClassLoader()
-            .getResource("META-INF/extension/extension.xml").toURI()));
-        ExtensionParam extensionParam = new ExtensionParam();
-        extensionParam.setTargetName("clientValue");
-        extensionParam.setTargetInstanceName("iExtension");
-        extensionParam.setElement(doc.getDocumentElement());
-        extensionClient.publishExtension(extensionParam);
-
-        Assert.assertEquals("SOFABoot Extension Client Test", iExtension.getClientValue());
-    }
-
-    @Test
     public void testList() {
-        Assert.assertEquals(2, iExtension.getTestList().size());
-        Assert.assertTrue(iExtension.getTestList().contains("test1"));
-        Assert.assertTrue(iExtension.getTestList().contains("test2"));
+        Assert.assertEquals(2, iExtension.getListExtensionDescriptor().getValues().size());
+        Assert.assertTrue(iExtension.getListExtensionDescriptor().getValues().contains("test1"));
+        Assert.assertTrue(iExtension.getListExtensionDescriptor().getValues().contains("test2"));
+        Assert.assertEquals(2, iExtension.getListExtensionDescriptor().getIntValues().length);
+        Assert.assertEquals(1, iExtension.getListExtensionDescriptor().getIntValues()[0]);
+        Assert.assertEquals(2, iExtension.getListExtensionDescriptor().getIntValues()[1]);
+        Assert.assertEquals(2, iExtension.getListExtensionDescriptor().getLongValues().length);
+        Assert.assertEquals(11, iExtension.getListExtensionDescriptor().getLongValues()[0]);
+        Assert.assertEquals(22, iExtension.getListExtensionDescriptor().getLongValues()[1]);
+        Assert.assertEquals(2, iExtension.getListExtensionDescriptor().getFloatValues().length);
+        Assert.assertEquals(2, iExtension.getListExtensionDescriptor().getDoubleValues().length);
+        Assert.assertEquals(2, iExtension.getListExtensionDescriptor().getBooleanValues().length);
+        Assert.assertEquals(2, iExtension.getListExtensionDescriptor().getCharValues().length);
+        Assert.assertEquals(2, iExtension.getListExtensionDescriptor().getShortValues().length);
+        Assert.assertEquals(2, iExtension.getListExtensionDescriptor().getByteValues().length);
     }
 
     @Test

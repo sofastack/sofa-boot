@@ -48,6 +48,22 @@
             <testList>
                 <value>test1</value>
                 <value>test2</value>
+                <intValue>1</intValue>
+                <intValue>2</intValue>
+                <longValue>11</longValue>
+                <longValue>22</longValue>
+                <floatValue>1.1</floatValue>
+                <floatValue>2.2</floatValue>
+                <doubleValue>11.11</doubleValue>
+                <doubleValue>22.22</doubleValue>
+                <booleanValue>true</booleanValue>
+                <booleanValue>false</booleanValue>
+                <charValue>a</charValue>
+                <charValue>b</charValue>
+                <shortValue>33</shortValue>
+                <shortValue>44</shortValue>
+                <byteValue>7</byteValue>
+                <byteValue>8</byteValue>
             </testList>
         </sofa:content>
     </sofa:extension>

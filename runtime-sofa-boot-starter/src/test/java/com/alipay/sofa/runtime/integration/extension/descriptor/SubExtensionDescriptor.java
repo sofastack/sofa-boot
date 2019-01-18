@@ -34,6 +34,7 @@ public class SubExtensionDescriptor {
         return parentValue;
     }
 
+    @XParent
     public void setParentValue(ParentExtensionDescriptor parentValue) {
         this.parentValue = parentValue;
     }

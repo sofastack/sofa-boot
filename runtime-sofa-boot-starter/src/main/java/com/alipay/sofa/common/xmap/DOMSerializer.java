@@ -21,9 +21,6 @@ import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentFragment;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.ranges.DocumentRange;
-import org.w3c.dom.ranges.Range;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.ByteArrayOutputStream;
@@ -33,6 +30,7 @@ import java.io.OutputStream;
 /**
  * @author <a href="mailto:bs@nuxeo.com">Bogdan Stefanescu</a>
  * @author xi.hux@alipay.com
+ * @author ruoshan
  * @since 2.6.0
  */
 public final class DOMSerializer {
@@ -116,17 +114,6 @@ public final class DOMSerializer {
                                                                                  throws IOException {
         XMLSerializer serializer = new XMLSerializer(out, format);
         serializer.asDOMSerializer().serialize(doc);
-    }
-
-    public static DocumentFragment getContentAsFragment(Element element) {
-        Node node = element.getFirstChild();
-        if (node == null) {
-            return null; // no content
-        }
-        Range range = ((DocumentRange) element.getOwnerDocument()).createRange();
-        range.setStartBefore(node);
-        range.setEndAfter(element.getLastChild());
-        return range.cloneContents();
     }
 
 }

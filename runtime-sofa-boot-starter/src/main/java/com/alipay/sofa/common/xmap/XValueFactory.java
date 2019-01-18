@@ -32,6 +32,7 @@ import java.util.Map;
  *
  * @author <a href="mailto:bs@nuxeo.com">Bogdan Stefanescu</a>
  * @author xi.hux@alipay.com
+ * @author ruoshan
  * @since 2.6.0
  */
 public abstract class XValueFactory {
@@ -175,6 +176,35 @@ public abstract class XValueFactory {
                                                    }
                                                };
 
+    public static final XValueFactory SHORT    = new XValueFactory() {
+                                                   @Override
+                                                   public Object getValue(Context ctx, String value) {
+                                                       return Short.valueOf(value);
+                                                   }
+                                               };
+
+    public static final XValueFactory CHAR     = new XValueFactory() {
+                                                   @Override
+                                                   public Object getValue(Context ctx, String value) {
+                                                       try {
+                                                           return value.toCharArray()[0];
+                                                       } catch (Throwable e) {
+                                                           return null;
+                                                       }
+                                                   }
+                                               };
+
+    public static final XValueFactory BYTE     = new XValueFactory() {
+                                                   @Override
+                                                   public Object getValue(Context ctx, String value) {
+                                                       try {
+                                                           return value.getBytes()[0];
+                                                       } catch (Throwable e) {
+                                                           return null;
+                                                       }
+                                                   }
+                                               };
+
     static {
         addFactory(String.class, STRING);
         addFactory(Integer.class, INTEGER);
@@ -185,12 +215,18 @@ public abstract class XValueFactory {
         addFactory(Boolean.class, BOOLEAN);
         addFactory(File.class, FILE);
         addFactory(java.net.URL.class, URL);
+        addFactory(Short.class, SHORT);
+        addFactory(Character.class, CHAR);
+        addFactory(Byte.class, BYTE);
 
         addFactory(int.class, INTEGER);
         addFactory(long.class, LONG);
         addFactory(double.class, DOUBLE);
         addFactory(float.class, FLOAT);
         addFactory(boolean.class, BOOLEAN);
+        addFactory(short.class, SHORT);
+        addFactory(char.class, CHAR);
+        addFactory(byte.class, BYTE);
 
         addFactory(Class.class, CLASS);
         addFactory(Resource.class, RESOURCE);

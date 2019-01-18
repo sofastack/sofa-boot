@@ -43,7 +43,7 @@ public class IExtensionImpl implements IExtension {
 
     private SimpleExtensionDescriptor        simpleExtensionDescriptor;
 
-    private List<String>                     testList               = new ArrayList<>();
+    private ListExtensionDescriptor          listExtensionDescriptor;
 
     private Map<String, String>              testMap                = new HashMap<>();
 
@@ -57,18 +57,17 @@ public class IExtensionImpl implements IExtension {
 
     private String                           testParentValue;
 
-    public SimpleExtensionDescriptor getSimpleExtensionDescriptor() {
-        return simpleExtensionDescriptor;
-    }
-
     @Override
     public String getClientValue() {
         return clientValue;
     }
 
-    @Override
-    public List<String> getTestList() {
-        return testList;
+    public SimpleExtensionDescriptor getSimpleExtensionDescriptor() {
+        return simpleExtensionDescriptor;
+    }
+
+    public ListExtensionDescriptor getListExtensionDescriptor() {
+        return listExtensionDescriptor;
     }
 
     @Override
@@ -114,12 +113,12 @@ public class IExtensionImpl implements IExtension {
         }
 
         for (Object contribution : contributions) {
-            if ("simple".equals(extensionPoint)) {
-                simpleExtensionDescriptor = (SimpleExtensionDescriptor) contribution;
-            } else if ("clientValue".equals(extensionPoint)) {
+            if ("clientValue".equals(extensionPoint)) {
                 clientValue = ((ClientExtensionDescriptor) contribution).getValue();
+            } else if ("simple".equals(extensionPoint)) {
+                simpleExtensionDescriptor = (SimpleExtensionDescriptor) contribution;
             } else if ("testList".equals(extensionPoint)) {
-                testList.addAll(((ListExtensionDescriptor) contribution).getValues());
+                listExtensionDescriptor = (ListExtensionDescriptor) contribution;
             } else if ("testMap".equals(extensionPoint)) {
                 testMap.putAll(((MapExtensionDescriptor) contribution).getValues());
             } else if ("simpleSpring".equals(extensionPoint)) {

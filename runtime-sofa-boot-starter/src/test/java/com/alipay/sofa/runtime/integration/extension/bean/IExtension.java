@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.runtime.integration.extension.bean;
 
+import com.alipay.sofa.runtime.integration.extension.descriptor.ListExtensionDescriptor;
 import com.alipay.sofa.runtime.integration.extension.descriptor.SimpleExtensionDescriptor;
 
 import java.util.List;
@@ -29,19 +30,19 @@ import java.util.Map;
 public interface IExtension {
 
     /**
-     * Simple XNode Test
-     */
-    SimpleExtensionDescriptor getSimpleExtensionDescriptor();
-
-    /**
      * Extension Client Test
      */
     String getClientValue();
 
     /**
+     * Simple XNode Test
+     */
+    SimpleExtensionDescriptor getSimpleExtensionDescriptor();
+
+    /**
      * XNodeList Test
      */
-    List<String> getTestList();
+    ListExtensionDescriptor getListExtensionDescriptor();
 
     /**
      * XNodeMap Test
