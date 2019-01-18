@@ -32,7 +32,6 @@ import org.springframework.core.Ordered;
  */
 public class AbstractExtFactoryBean extends CommonContextBean implements BeanFactoryAware,
                                                              FactoryBean, Ordered {
-
     /* Spring bean context for looking up spring's bean */
     protected BeanFactory      beanFactory;
 
@@ -64,18 +63,10 @@ public class AbstractExtFactoryBean extends CommonContextBean implements BeanFac
         return String.class;
     }
 
-    /**
-     *
-     * @return
-     */
     public boolean isSingleton() {
         return true;
     }
 
-    /**
-     *
-     * @return
-     */
     public int getOrder() {
         return Ordered.LOWEST_PRECEDENCE;
     }
@@ -91,10 +82,6 @@ public class AbstractExtFactoryBean extends CommonContextBean implements BeanFac
         this.target = target;
     }
 
-    /**
-     *
-     * @param name
-     */
     public void setTargetBeanName(String name) {
         this.targetBeanName = name;
     }

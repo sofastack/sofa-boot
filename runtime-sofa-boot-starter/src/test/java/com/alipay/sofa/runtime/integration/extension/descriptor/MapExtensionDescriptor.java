@@ -30,7 +30,10 @@ import java.util.Map;
 public class MapExtensionDescriptor {
 
     @XNodeMap(value = "value", key = "@name", componentType = String.class, type = HashMap.class)
-    private Map<String, String> values;
+    private Map<String, String>                    values;
+
+    @XNodeMap(value = "simple", key = "@key", componentType = SimpleExtensionDescriptor.class, type = HashMap.class)
+    private Map<String, SimpleExtensionDescriptor> simpleValues;
 
     public Map<String, String> getValues() {
         return values;

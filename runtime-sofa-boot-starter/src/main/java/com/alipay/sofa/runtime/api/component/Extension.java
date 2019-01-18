@@ -71,11 +71,6 @@ public interface Extension {
 
     /**
      * Identifies the extension inside the contributing component.
-     * The id should be unique in the application. It is recommended to use the following name convention
-     * for the ID: 'component_name#contribution_name'
-     *
-     * The id is never null. If the user is not specifying an ID, one will be generated as follow:
-     * componentName#targetExtensionPoint.randomNumber
      *
      * @return id
      */

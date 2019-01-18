@@ -37,15 +37,10 @@ public class ExtensionPointImpl implements ExtensionPointInternal, Serializable 
     protected String                   documentation;
     protected transient List<Class<?>> contributions    = new ArrayList<Class<?>>(2);
     protected transient XMap           xmap;
-    protected transient ComponentInfo  ci;
     protected ClassLoader              beanClassLoader;
-
-    public ExtensionPointImpl() {
-    }
 
     public ExtensionPointImpl(String name, Class<?> contributionClass) {
         this.name = name;
-        //        this.documentation = documentation;
         if (contributionClass != null) {
             this.contributions.add(contributionClass);
         }

@@ -32,10 +32,6 @@ import java.io.Serializable;
 public class ExtensionImpl implements ExtensionInternal, Serializable {
 
     private static final long    serialVersionUID = 14648778982899384L;
-
-    private String               id;
-
-    // 扩展信息
     protected ComponentName      name;
     protected ComponentName      target;
     protected String             extensionPoint;
@@ -43,9 +39,6 @@ public class ExtensionImpl implements ExtensionInternal, Serializable {
     protected ClassLoader        appClassLoader;
     protected transient Element  element;
     protected transient Object[] contributions;
-
-    public ExtensionImpl() {
-    }
 
     public ExtensionImpl(ComponentName name, String extensionPoint) {
         this(name, extensionPoint, null, null);
@@ -106,7 +99,7 @@ public class ExtensionImpl implements ExtensionInternal, Serializable {
     }
 
     public String getId() {
-        return id;
+        return null;
     }
 
     @Override

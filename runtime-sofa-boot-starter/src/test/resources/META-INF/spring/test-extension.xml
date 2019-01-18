@@ -78,6 +78,11 @@
             <testMap>
                 <value name="testMapKey1">testMapValue1</value>
                 <value name="testMapKey2">testMapValue2</value>
+                <simple key="simpleKey1">
+                    <simple>
+                        <value>test</value>
+                    </simple>
+                </simple>
             </testMap>
         </sofa:content>
     </sofa:extension>

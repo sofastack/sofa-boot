@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.runtime.integration.extension;
 
+import com.alipay.sofa.common.xmap.XMap;
 import com.alipay.sofa.runtime.api.aware.ExtensionClientAware;
 import com.alipay.sofa.runtime.api.client.ExtensionClient;
 import com.alipay.sofa.runtime.api.client.param.ExtensionParam;
@@ -38,6 +39,7 @@ import org.w3c.dom.Document;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
+import java.net.URL;
 
 /**
  *
@@ -67,6 +69,29 @@ public class ExtensionTest implements ExtensionClientAware {
 
     @Autowired
     private SimpleSpringMapBean  springMapBean2;
+
+    @Test
+    public void testXMap() throws Exception {
+        XMap xMap = new XMap();
+        URL url = Thread.currentThread().getContextClassLoader()
+            .getResource("META-INF/extension/extension.xml");
+        xMap.register(ClientExtensionDescriptor.class, false);
+        Object object = xMap.load(url);
+        Assert.assertNotNull(object);
+        Assert.assertTrue(object instanceof ClientExtensionDescriptor);
+        ClientExtensionDescriptor clientExtensionDescriptor = (ClientExtensionDescriptor) object;
+        Assert.assertEquals("SOFABoot Extension Client Test", clientExtensionDescriptor.getValue());
+        Assert.assertEquals(1, xMap.loadAll(url).length);
+    }
+
+    @Test
+    public void testXMapAsString() throws Exception {
+        XMap xMap = new XMap();
+        xMap.register(ClientExtensionDescriptor.class);
+        Document document = xMap.asXml(new ClientExtensionDescriptor(), null);
+        Assert.assertNotNull(document);
+        Assert.assertEquals("clientValue", document.getDocumentElement().getTagName());
+    }
 
     @Test
     public void testExtensionClient() throws Exception {

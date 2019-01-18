@@ -40,16 +40,9 @@ public class ExtensionPointComponent extends AbstractComponent {
     private static final String       LINK_SYMBOL                    = "$";
     public static final ComponentType EXTENSION_POINT_COMPONENT_TYPE = new ComponentType(
                                                                          "extension-point");
-
     // Extension
     private ExtensionPoint            extensionPoint;
 
-    /**
-     *
-     * @param extensionPoint
-     * @param sofaRuntimeContext
-     * @param implementation
-     */
     public ExtensionPointComponent(ExtensionPoint extensionPoint,
                                    SofaRuntimeContext sofaRuntimeContext,
                                    Implementation implementation) {
@@ -61,28 +54,16 @@ public class ExtensionPointComponent extends AbstractComponent {
                                             + this.extensionPoint.getName());
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public ComponentType getType() {
         return EXTENSION_POINT_COMPONENT_TYPE;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public Map<String, Property> getProperties() {
         return null;
     }
 
-    /**
-     *
-     * @throws ServiceRuntimeException
-     */
     @Override
     public void activate() throws ServiceRuntimeException {
         super.activate();
@@ -101,10 +82,6 @@ public class ExtensionPointComponent extends AbstractComponent {
         }
     }
 
-    /**
-     *
-     * @throws ServiceRuntimeException
-     */
     @Override
     public void deactivate() throws ServiceRuntimeException {
         ComponentManager componentManager = sofaRuntimeContext.getComponentManager();

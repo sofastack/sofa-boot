@@ -40,14 +40,10 @@ public class SpringExtensionPointImpl extends ExtensionPointImpl {
         super(name, contributionClass);
     }
 
-    public SpringExtensionPointImpl(String name) {
-        this(name, null);
-    }
-
     @Override
     public Object[] loadContributions(ExtensionInternal extension) throws Exception {
 
-        ApplicationContext applicationContext = null; //扩展点所在的应用上下文。
+        ApplicationContext applicationContext = null;
 
         if (extension instanceof SpringExtensionImpl) {
             applicationContext = ((SpringExtensionImpl) extension).getApplicationContext();
