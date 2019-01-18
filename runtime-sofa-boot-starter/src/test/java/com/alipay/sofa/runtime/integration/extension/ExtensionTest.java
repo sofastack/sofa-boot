@@ -104,7 +104,7 @@ public class ExtensionTest implements ExtensionClientAware {
         Assert.assertNotNull(out);
         Assert.assertTrue(out.toString().contains("clientValue"));
 
-        DOMSerializer.write(document.getDocumentElement(),out);
+        DOMSerializer.write(document.getDocumentElement(), out);
         Assert.assertNotNull(out);
         Assert.assertTrue(out.toString().contains("clientValue"));
     }
