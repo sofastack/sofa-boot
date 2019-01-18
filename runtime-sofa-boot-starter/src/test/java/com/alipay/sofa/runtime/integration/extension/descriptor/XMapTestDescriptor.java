@@ -27,10 +27,10 @@ import java.util.List;
  * @author ruoshan
  * @since 2.6.0
  */
-@XObject(value = "xmaptest", order = {"value1", "value2"})
+@XObject(value = "xmaptest", order = { "value1", "value2" })
 public class XMapTestDescriptor {
     @XNode("value")
-    private String value;
+    private String       value;
 
     @XNodeList(value = "values", trim = false, type = ArrayList.class, componentType = String.class)
     private List<String> values = new ArrayList<>();
