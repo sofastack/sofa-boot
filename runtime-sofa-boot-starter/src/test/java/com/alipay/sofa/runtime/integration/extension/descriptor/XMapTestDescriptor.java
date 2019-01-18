@@ -17,18 +17,29 @@
 package com.alipay.sofa.runtime.integration.extension.descriptor;
 
 import com.alipay.sofa.common.xmap.annotation.XNode;
+import com.alipay.sofa.common.xmap.annotation.XNodeList;
 import com.alipay.sofa.common.xmap.annotation.XObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author ruoshan
  * @since 2.6.0
  */
-@XObject("clientValue")
-public class ClientExtensionDescriptor {
+@XObject(value = "xmaptest", order = {"value1", "value2"})
+public class XMapTestDescriptor {
     @XNode("value")
     private String value;
 
+    @XNodeList(value = "values", trim = false, type = ArrayList.class, componentType = String.class)
+    private List<String> values = new ArrayList<>();
+
     public String getValue() {
         return value;
+    }
+
+    public List<String> getValues() {
+        return values;
     }
 }

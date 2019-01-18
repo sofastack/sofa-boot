@@ -48,6 +48,10 @@
             <testList>
                 <value>test1</value>
                 <value>test2</value>
+                <attribute>
+                    <value id="listTest">attributeTest1</value>
+                    <value id="listTest">attributeTest2</value>
+                </attribute>
                 <intValue>1</intValue>
                 <intValue>2</intValue>
                 <longValue>11</longValue>

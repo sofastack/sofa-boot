@@ -31,6 +31,7 @@ import com.alipay.sofa.runtime.integration.extension.bean.SimpleSpringListBean;
 import com.alipay.sofa.runtime.integration.extension.bean.SimpleSpringMapBean;
 import com.alipay.sofa.runtime.integration.extension.descriptor.ClientExtensionDescriptor;
 import com.alipay.sofa.runtime.integration.extension.descriptor.SimpleExtensionDescriptor;
+import com.alipay.sofa.runtime.integration.extension.descriptor.XMapTestDescriptor;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -77,36 +78,36 @@ public class ExtensionTest implements ExtensionClientAware {
     @Test
     public void testXMap() throws Exception {
         XMap xMap = new XMap();
-        Resource resource = new Resource(new Context(), "META-INF/extension/extension.xml");
-        xMap.register(ClientExtensionDescriptor.class, true);
+        Resource resource = new Resource(new Context(), "META-INF/extension/extension-xmap.xml");
+        xMap.register(XMapTestDescriptor.class, true);
         Object object = xMap.load(resource.toURL());
         Assert.assertNotNull(object);
-        Assert.assertTrue(object instanceof ClientExtensionDescriptor);
-        ClientExtensionDescriptor clientExtensionDescriptor = (ClientExtensionDescriptor) object;
-        Assert.assertEquals("SOFABoot Extension Client Test", clientExtensionDescriptor.getValue());
+        Assert.assertTrue(object instanceof XMapTestDescriptor);
+        XMapTestDescriptor xMapTestDescriptor = (XMapTestDescriptor) object;
+        Assert.assertEquals("xmaptest", xMapTestDescriptor.getValue());
         Assert.assertEquals(1, xMap.loadAll(resource.toURL()).length);
     }
 
     @Test
     public void testXMapAsString() throws Exception {
         XMap xMap = new XMap();
-        xMap.register(ClientExtensionDescriptor.class);
-        Document document = xMap.asXml(new ClientExtensionDescriptor(), null);
+        xMap.register(XMapTestDescriptor.class);
+        Document document = xMap.asXml(new XMapTestDescriptor(), null);
         Assert.assertNotNull(document);
-        Assert.assertEquals("clientValue", document.getDocumentElement().getTagName());
+        Assert.assertEquals("xmaptest", document.getDocumentElement().getTagName());
 
         String value = DOMSerializer.toString(document);
         Assert.assertNotNull(value);
-        Assert.assertTrue(value.contains("clientValue"));
+        Assert.assertTrue(value.contains("xmaptest"));
 
         OutputStream out = new ByteArrayOutputStream();
         DOMSerializer.write(document, out);
         Assert.assertNotNull(out);
-        Assert.assertTrue(out.toString().contains("clientValue"));
+        Assert.assertTrue(out.toString().contains("xmaptest"));
 
         DOMSerializer.write(document.getDocumentElement(), out);
         Assert.assertNotNull(out);
-        Assert.assertTrue(out.toString().contains("clientValue"));
+        Assert.assertTrue(out.toString().contains("xmaptest"));
     }
 
     @Test

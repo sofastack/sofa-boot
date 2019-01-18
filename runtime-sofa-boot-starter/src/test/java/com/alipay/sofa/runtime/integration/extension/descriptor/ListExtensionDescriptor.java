@@ -20,6 +20,7 @@ import com.alipay.sofa.common.xmap.annotation.XNodeList;
 import com.alipay.sofa.common.xmap.annotation.XObject;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -31,6 +32,12 @@ public class ListExtensionDescriptor {
 
     @XNodeList(value = "value", componentType = String.class, type = ArrayList.class)
     private List<String> values;
+
+    @XNodeList(value = "attribute/value[@id='listTest']", componentType = String.class, type = String[].class)
+    private String[]     attributeValues;
+
+    @XNodeList(value = "value", componentType = String.class, type = LinkedList.class)
+    private List<String> LinkedListValues;
 
     @XNodeList(value = "intValue", componentType = int.class, type = int[].class)
     int[]                intValues;
@@ -58,6 +65,10 @@ public class ListExtensionDescriptor {
 
     public List<String> getValues() {
         return values;
+    }
+
+    public String[] getAttributeValues() {
+        return attributeValues;
     }
 
     public int[] getIntValues() {
