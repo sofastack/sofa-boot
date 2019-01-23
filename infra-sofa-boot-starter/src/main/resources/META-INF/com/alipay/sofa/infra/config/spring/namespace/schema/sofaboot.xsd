@@ -20,6 +20,7 @@
 
 <xsd:schema xmlns="http://sofastack.io/schema/sofaboot"
             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:beans="http://www.springframework.org/schema/beans"
             targetNamespace="http://sofastack.io/schema/sofaboot"
             elementFormDefault="qualified" attributeFormDefault="unqualified">
 
@@ -29,5 +30,53 @@
     <!-- Use xsd:import to bring in an XSD from a different namespace -->
     <!-- http://itdoc.hitachi.co.jp/manuals/3020/30203Y4340e/EY430034.HTM -->
     <xsd:include schemaLocation="./rpc.xsd"/>
+
+    <!-- extension-point -->
+    <xsd:element name="extension-point" type="Textension-point"/>
+
+    <xsd:complexType name="Textension-point">
+        <xsd:complexContent>
+            <xsd:extension base="beans:identifiedType">
+                <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+                    <xsd:element name="object" type="Tobject" minOccurs="0"/>
+                    <!-- nested bean declaration -->
+                    <xsd:any namespace="##other" minOccurs="0" maxOccurs="1" processContents="skip"/>
+                </xsd:sequence>
+                <xsd:attribute name="name" type="xsd:string" use="required"/>
+                <xsd:attribute name="ref" type="xsd:string"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="Tobject">
+        <xsd:attribute name="class" type="xsd:string" use="required"/>
+    </xsd:complexType>
+
+    <xsd:element name="extension" type="Textension"/>
+
+    <xsd:complexType name="Textension">
+        <xsd:complexContent>
+            <xsd:extension base="beans:identifiedType">
+                <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+                    <xsd:element name="require" type="Trequire" minOccurs="0"/>
+                    <xsd:element name="content" type="Tcontent" minOccurs="0"
+                                 maxOccurs="1"/>
+                </xsd:sequence>
+                <xsd:attribute name="bean" type="xsd:string" use="required"/>
+                <xsd:attribute name="point" type="xsd:string" use="required"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="Trequire">
+        <xsd:attribute name="bean" type="xsd:string" use="required"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="Tcontent">
+        <xsd:sequence>
+            <xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="skip"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
 
 </xsd:schema>

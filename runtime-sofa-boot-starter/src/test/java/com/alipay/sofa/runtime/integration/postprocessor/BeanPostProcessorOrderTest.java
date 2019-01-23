@@ -17,7 +17,7 @@
 package com.alipay.sofa.runtime.integration.postprocessor;
 
 import com.alipay.sofa.runtime.api.event.ApplicationShutdownCallback;
-import com.alipay.sofa.runtime.integration.base.SofaBootTestApplication;
+import com.alipay.sofa.runtime.integration.bootstrap.SofaBootTestApplication;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import org.junit.Assert;
