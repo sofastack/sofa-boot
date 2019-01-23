@@ -63,7 +63,7 @@ public class AsyncInitTest extends TestBase {
                 max = bean.getPrintTime();
             }
         }
-        Assert.assertTrue("max:" + max + ", min:" + min, max - min < 3000);
+        Assert.assertTrue("max:" + max + ", min:" + min, max - min < 3500);
         TimeWasteBean.resetCount();
     }
 
