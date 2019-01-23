@@ -76,4 +76,4 @@ SOFA 的第一个版本是阿玺创造的，感谢阿玺给 SOFA 打下了坚实
 
 ## 八、开源许可
 
-SOFABoot 基于 Apache License 2.0 协议，SOFABoot 依赖了一些三方组件，他们的开源协议参见 [依赖组件版权说明](https://www.sofastack.tech/sofa-boot/docs/NOTICE)
+SOFABoot 基于 Apache License 2.0 协议，SOFABoot 依赖了一些三方组件，它们的开源协议参见 [依赖组件版权说明](https://www.sofastack.tech/sofa-boot/docs/NOTICE)
