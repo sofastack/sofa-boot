@@ -28,9 +28,9 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.health.HealthResult;
 import com.alipay.sofa.runtime.spi.log.SofaLogger;
 import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
-import com.alipay.sofa.runtime.api.component.Extensible;
-import com.alipay.sofa.runtime.api.component.Extension;
-import com.alipay.sofa.runtime.api.component.ExtensionPoint;
+import com.alipay.sofa.service.api.component.Extensible;
+import com.alipay.sofa.service.api.component.Extension;
+import com.alipay.sofa.service.api.component.ExtensionPoint;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.ReflectionUtils;
 
