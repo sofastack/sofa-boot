@@ -49,18 +49,6 @@ public class ExtensionBuilder {
      * create extension builder
      *
      * @param extensionPoint     extension point name
-     * @param applicationContext application context
-     * @return extension builder
-     */
-    public static ExtensionBuilder genericExtension(String extensionPoint,
-                                                    ApplicationContext applicationContext) {
-        return genericExtension(extensionPoint, applicationContext);
-    }
-
-    /**
-     * create extension builder
-     *
-     * @param extensionPoint     extension point name
      * @param element            element
      * @param applicationContext application context
      * @return extension builder
