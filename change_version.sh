@@ -23,12 +23,7 @@ sed "/<project /,/<packaging/ s/<version>.*<\/version>/<version>$1<\/version>/" 
 
 echo "Change version in subproject pom ===>"
 for filename in `find . -name "pom.xml" -mindepth 2`;do
-    if [[ $filename =~ "sofaboot-samples" ]]
-    then
-        echo "skip $filename"
-    else
-        echo "Deal with $filename"
-        sed "/<parent>/,/<\/parent>/ s/<version>.*<\/version>/<version>$1<\/version>/" $filename
-    fi
+    echo "Deal with $filename"
+    sed "/<parent>/,/<\/parent>/ s/<version>.*<\/version>/<version>$1<\/version>/" $filename
 done
 
