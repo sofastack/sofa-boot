@@ -17,7 +17,7 @@
 package com.alipay.sofa.runtime.ext.spring;
 
 import com.alipay.sofa.runtime.ext.component.ExtensionPointInternal;
-import com.alipay.sofa.runtime.api.component.ExtensionPoint;
+import com.alipay.sofa.service.api.component.ExtensionPoint;
 
 /**
  * Extension point builder
