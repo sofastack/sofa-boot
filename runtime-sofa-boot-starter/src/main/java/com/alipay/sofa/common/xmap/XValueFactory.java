@@ -21,6 +21,7 @@ import org.w3c.dom.Node;
 
 import java.io.File;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Map;
@@ -116,8 +117,8 @@ public abstract class XValueFactory {
                                                };
 
     public static final XValueFactory DATE     = new XValueFactory() {
-                                                   final DateFormat df = DateFormat
-                                                                           .getDateInstance();
+                                                   final DateFormat df = new SimpleDateFormat(
+                                                                           "dd-MM-yyyy");
 
                                                    @Override
                                                    public Object getValue(Context ctx, String value) {

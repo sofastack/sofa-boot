@@ -29,7 +29,7 @@
                 <floatValue>1.1</floatValue>
                 <doubleValue>2.2</doubleValue>
                 <booleanValue>true</booleanValue>
-                <dateValue>Jan 17, 2019</dateValue>
+                <dateValue>17-01-2019</dateValue>
                 <fileValue>file</fileValue>
                 <urlValue>http://test</urlValue>
                 <classValue>com.alipay.sofa.runtime.integration.extension.descriptor.SimpleExtensionDescriptor</classValue>
