@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.runtime.integration.extension.bean;
 
-import com.alipay.sofa.runtime.api.component.Extension;
+import com.alipay.sofa.service.api.component.Extension;
 import com.alipay.sofa.runtime.integration.extension.descriptor.ClientExtensionDescriptor;
 import com.alipay.sofa.runtime.integration.extension.descriptor.ContextExtensionDescriptor;
 import com.alipay.sofa.runtime.integration.extension.descriptor.MapExtensionDescriptor;
