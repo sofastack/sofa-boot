@@ -11,4 +11,10 @@
 
     <!-- define SampleBeanPostProcessor in SOFABoot Module Application Context. -->
     <bean id="sampleBeanPostProcessor" class="com.alipay.sofa.isle.processor.SampleBeanPostProcessor" />
+
+    <bean id="testBean" class="com.alipay.sofa.isle.bean.TestBean"/>
+
+    <bean id="testFactoryBean" class="com.alipay.sofa.isle.bean.TestFactoryBean">
+        <property name="testBean" ref="testBean" />
+    </bean>
 </beans>

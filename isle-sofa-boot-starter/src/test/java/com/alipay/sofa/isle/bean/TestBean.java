@@ -14,20 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.isle.integration;
-
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ImportResource;
+package com.alipay.sofa.isle.bean;
 
 /**
- * @author xuanbei 18/5/8
+ *
+ * @author ruoshan
+ * @since 2.6.0
  */
-@SpringBootApplication
-@ImportResource("classpath:META-INF/spring/test-service.xml")
-public class SofaBootTestApplication {
-    public static void main(String[] args) {
-        SpringApplication springApplication = new SpringApplication(SofaBootTestApplication.class);
-        springApplication.run(args);
+public class TestBean {
+
+    private boolean postProcessed = false;
+
+    public boolean isPostProcessed() {
+        return postProcessed;
+    }
+
+    public void setPostProcessed(boolean postProcessed) {
+        this.postProcessed = postProcessed;
     }
 }

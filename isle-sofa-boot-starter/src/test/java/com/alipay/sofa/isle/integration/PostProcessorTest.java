@@ -16,18 +16,28 @@
  */
 package com.alipay.sofa.isle.integration;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ImportResource;
+import com.alipay.sofa.isle.bean.TestBean;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 /**
- * @author xuanbei 18/5/8
+ *
+ * @author ruoshan
+ * @since 2.6.0
  */
-@SpringBootApplication
-@ImportResource("classpath:META-INF/spring/test-service.xml")
-public class SofaBootTestApplication {
-    public static void main(String[] args) {
-        SpringApplication springApplication = new SpringApplication(SofaBootTestApplication.class);
-        springApplication.run(args);
+@SpringBootTest(classes = SofaBootTestApplication.class)
+@RunWith(SpringRunner.class)
+public class PostProcessorTest {
+
+    @Autowired
+    private TestBean testBean;
+
+    @Test
+    public void test() {
+        Assert.assertTrue(testBean.isPostProcessed());
     }
 }

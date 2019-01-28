@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.isle.processor;
 
+import com.alipay.sofa.isle.bean.TestBean;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 
@@ -33,6 +34,9 @@ public class SampleBeanPostProcessor implements BeanPostProcessor {
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName)
                                                                               throws BeansException {
+        if (bean instanceof TestBean) {
+            ((TestBean) bean).setPostProcessed(true);
+        }
         return bean;
     }
 }

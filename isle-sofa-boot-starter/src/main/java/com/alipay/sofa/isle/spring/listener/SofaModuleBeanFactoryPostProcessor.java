@@ -55,7 +55,7 @@ public class SofaModuleBeanFactoryPostProcessor implements BeanFactoryPostProces
                                                                   Class... types) {
         Map<String, BeanDefinition> map = new HashMap<>();
         for (Class type : types) {
-            String[] beanNamesForType = beanFactory.getBeanNamesForType(type);
+            String[] beanNamesForType = beanFactory.getBeanNamesForType(type, true, false);
             List<String> beanDefinitionNames = Arrays.asList(beanFactory.getBeanDefinitionNames());
             for (String beanName : beanNamesForType) {
                 if (notInWhiteNameList(beanName) && beanDefinitionNames.contains(beanName)) {
