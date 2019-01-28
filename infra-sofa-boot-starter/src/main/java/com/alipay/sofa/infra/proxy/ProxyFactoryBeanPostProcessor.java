@@ -39,12 +39,22 @@ public class ProxyFactoryBeanPostProcessor implements BeanFactoryPostProcessor {
                 BeanDefinition beanDefinition = beanFactory.getBeanDefinition(transFormBeanName);
                 if (ProxyFactoryBean.class.getName().equals(beanDefinition.getBeanClassName())) {
                     beanDefinition.setBeanClassName(SofaProxyFactoryBean.class.getName());
+                    Object proxyInterfaces = beanDefinition.getPropertyValues().get(
+                        "proxyInterfaces");
+                    if (proxyInterfaces == null) {
+                        proxyInterfaces = beanDefinition.getPropertyValues().get("interfaces");
+                    }
                     beanDefinition.getConstructorArgumentValues().addIndexedArgumentValue(0,
-                        beanDefinition.getPropertyValues().get("proxyInterfaces"));
+                        proxyInterfaces);
                     beanDefinition.getConstructorArgumentValues().addIndexedArgumentValue(1,
                         beanDefinition.getPropertyValues().get("targetName"));
+                    beanDefinition.getConstructorArgumentValues().addIndexedArgumentValue(2,
+                        beanDefinition.getPropertyValues().get("targetClass"));
+                    beanDefinition.getConstructorArgumentValues().addIndexedArgumentValue(3,
+                        beanFactory);
                 }
             }
         }
     }
+
 }

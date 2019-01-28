@@ -14,25 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.infra.proxy;
+package com.alipay.sofa.infra.proxy.bean;
 
-import org.springframework.aop.framework.ProxyFactoryBean;
-import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.BeanPostProcessor;
 
 /**
  *
  * @author ruoshan
  * @since 2.6.1
  */
-public class SofaProxyFactoryBean extends ProxyFactoryBean {
+public class ProxyTestPostProcessor implements BeanPostProcessor {
 
-    public SofaProxyFactoryBean(Class<?>[] proxyInterfaces, String targetName,
-                                Class<?> targetClass, BeanFactory beanFactory) {
-        if (proxyInterfaces != null) {
-            setInterfaces(proxyInterfaces);
+    @Override
+    public Object postProcessBeforeInitialization(Object bean, String beanName)
+                                                                               throws BeansException {
+        return bean;
+    }
+
+    @Override
+    public Object postProcessAfterInitialization(Object bean, String beanName)
+                                                                              throws BeansException {
+        if ("proxyTestBean".equals(beanName)) {
+            ((ProxyTestBeanFacade) bean).setPostProcessed(true);
         }
-        setTargetName(targetName);
-        setTargetClass(targetClass);
-        setBeanFactory(beanFactory);
+        return bean;
     }
 }
