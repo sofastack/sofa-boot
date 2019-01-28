@@ -37,7 +37,6 @@
         <dependency>
             <groupId>com.alipay.sofa</groupId>
             <artifactId>runtime-sofa-boot-starter</artifactId>
-            <version>2.6.0</version>
         </dependency>
         <dependency>
             <groupId>aopalliance</groupId>
