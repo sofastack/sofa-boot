@@ -16,8 +16,10 @@
  */
 package com.alipay.sofa.infra.base;
 
+import com.alipay.sofa.infra.proxy.ProxyConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 
 /**
@@ -26,6 +28,7 @@ import org.springframework.context.annotation.ImportResource;
  * Created by yangguanchao on 16/7/22.
  */
 @ImportResource({ "classpath*:META-INF/sofaboot-web-test/*.xml" })
+@Import(ProxyConfiguration.class)
 @SpringBootApplication
 public class SofaBootWebSpringBootApplication {
 
