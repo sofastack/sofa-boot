@@ -28,15 +28,15 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
  * @author ruoshan
  * @since 2.6.1
  */
-public class ProxyFactoryBeanPostProcessor implements BeanFactoryPostProcessor {
+public class ProxyBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory)
                                                                                    throws BeansException {
         for (String beanName : beanFactory.getBeanNamesForType(ProxyFactoryBean.class, true, false)) {
-            String transFormBeanName = BeanFactoryUtils.transformedBeanName(beanName);
-            if (beanFactory.containsBeanDefinition(transFormBeanName)) {
-                BeanDefinition beanDefinition = beanFactory.getBeanDefinition(transFormBeanName);
+            String transformedBeanName = BeanFactoryUtils.transformedBeanName(beanName);
+            if (beanFactory.containsBeanDefinition(transformedBeanName)) {
+                BeanDefinition beanDefinition = beanFactory.getBeanDefinition(transformedBeanName);
                 if (ProxyFactoryBean.class.getName().equals(beanDefinition.getBeanClassName())) {
                     beanDefinition.setBeanClassName(SofaProxyFactoryBean.class.getName());
                     Object proxyInterfaces = beanDefinition.getPropertyValues().get(
