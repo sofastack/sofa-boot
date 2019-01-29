@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.isle.integration;
 
+import com.alipay.sofa.isle.processor.FactoryBeanPostProcessor;
 import com.alipay.sofa.isle.processor.SampleBeanPostProcessor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,5 +35,10 @@ public class SofaBootTestAutoConfiguration {
     @Bean
     public SampleBeanPostProcessor sampleBeanPostProcessor() {
         return new SampleBeanPostProcessor();
+    }
+
+    @Bean
+    public FactoryBeanPostProcessor factoryBeanPostProcessor() {
+        return new FactoryBeanPostProcessor();
     }
 }

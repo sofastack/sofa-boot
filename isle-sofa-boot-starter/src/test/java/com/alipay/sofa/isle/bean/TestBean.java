@@ -19,7 +19,7 @@ package com.alipay.sofa.isle.bean;
 /**
  *
  * @author ruoshan
- * @since 2.6.0
+ * @since 2.6.1
  */
 public class TestBean {
 

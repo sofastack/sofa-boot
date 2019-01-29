@@ -18,6 +18,7 @@ package com.alipay.sofa.isle.spring.listener;
 
 import com.alipay.sofa.isle.constants.SofaModuleFrameworkConstants;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.BeanPostProcessor;
@@ -56,10 +57,11 @@ public class SofaModuleBeanFactoryPostProcessor implements BeanFactoryPostProces
         Map<String, BeanDefinition> map = new HashMap<>();
         for (Class type : types) {
             String[] beanNamesForType = beanFactory.getBeanNamesForType(type, true, false);
-            List<String> beanDefinitionNames = Arrays.asList(beanFactory.getBeanDefinitionNames());
             for (String beanName : beanNamesForType) {
-                if (notInWhiteNameList(beanName) && beanDefinitionNames.contains(beanName)) {
-                    map.put(beanName, beanFactory.getBeanDefinition(beanName));
+                String transformedBeanName = BeanFactoryUtils.transformedBeanName(beanName);
+                if (notInWhiteNameList(transformedBeanName)
+                    && beanFactory.containsBeanDefinition(transformedBeanName)) {
+                    map.put(transformedBeanName, beanFactory.getBeanDefinition(transformedBeanName));
                 }
             }
         }

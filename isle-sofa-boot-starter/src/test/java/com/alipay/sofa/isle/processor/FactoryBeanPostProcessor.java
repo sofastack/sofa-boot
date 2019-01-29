@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.isle.bean;
+package com.alipay.sofa.isle.processor;
 
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.FactoryBean;
+import org.springframework.beans.factory.config.BeanPostProcessor;
 
 /**
  *
  * @author ruoshan
  * @since 2.6.1
  */
-public class TestFactoryBean implements FactoryBean {
-
-    private TestBean testBean;
+public class FactoryBeanPostProcessor implements FactoryBean, BeanPostProcessor {
 
     @Override
     public Object getObject() throws Exception {
@@ -39,14 +39,18 @@ public class TestFactoryBean implements FactoryBean {
 
     @Override
     public boolean isSingleton() {
-        return false;
+        return true;
     }
 
-    public TestBean getTestBean() {
-        return testBean;
+    @Override
+    public Object postProcessBeforeInitialization(Object bean, String beanName)
+                                                                               throws BeansException {
+        return bean;
     }
 
-    public void setTestBean(TestBean testBean) {
-        this.testBean = testBean;
+    @Override
+    public Object postProcessAfterInitialization(Object bean, String beanName)
+                                                                              throws BeansException {
+        return bean;
     }
 }
