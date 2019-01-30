@@ -56,7 +56,7 @@ public @interface SofaServiceBinding {
     String[] filters() default {};
 
     /**
-     * custorm thread pool for current service
+     * custom thread pool for current service
      *
      * @return custom thread pool
      */
@@ -76,5 +76,10 @@ public @interface SofaServiceBinding {
      */
     int timeout() default 3000;
 
+    /**
+     * specify serialize type
+     *
+     * @return
+     */
     String serializeType() default "";
 }
