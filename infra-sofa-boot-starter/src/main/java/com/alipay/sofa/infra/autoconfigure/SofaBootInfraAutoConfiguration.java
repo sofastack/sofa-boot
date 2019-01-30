@@ -18,6 +18,7 @@ package com.alipay.sofa.infra.autoconfigure;
 
 import com.alipay.sofa.infra.endpoint.SofaBootVersionEndpoint;
 import com.alipay.sofa.infra.endpoint.SofaBootVersionEndpointMvcAdapter;
+import com.alipay.sofa.infra.proxy.ProxyBeanFactoryPostProcessor;
 import org.springframework.boot.actuate.endpoint.Endpoint;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -51,5 +52,11 @@ public class SofaBootInfraAutoConfiguration {
         public SofaBootVersionEndpointMvcAdapter sofaBootVersionEndpointMvcAdapter(SofaBootVersionEndpoint sofaBootVersionEndpoint) {
             return new SofaBootVersionEndpointMvcAdapter(sofaBootVersionEndpoint);
         }
+    }
+
+    @Bean
+    @ConditionalOnProperty(prefix = "com.alipay.sofa.proxy.bean", name = "enabled", havingValue = "true")
+    public static ProxyBeanFactoryPostProcessor proxyBeanFactoryPostProcessor() {
+        return new ProxyBeanFactoryPostProcessor();
     }
 }

@@ -14,27 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.infra.base;
+package com.alipay.sofa.infra.proxy;
 
-import com.alipay.sofa.infra.proxy.ProxyConfiguration;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.ImportResource;
+import org.springframework.aop.framework.ProxyFactoryBean;
+import org.springframework.beans.factory.BeanFactory;
 
 /**
- * SofaBootWebSpringBootApplication
- * <p/>
- * Created by yangguanchao on 16/7/22.
+ *
+ * @author ruoshan
+ * @since 2.6.1
  */
-@ImportResource({ "classpath*:META-INF/sofaboot-web-test/*.xml" })
-@Import(ProxyConfiguration.class)
-@SpringBootApplication
-public class SofaBootWebSpringBootApplication {
+public class SofaProxyFactoryBean extends ProxyFactoryBean {
 
-    public static void main(String[] args) {
-        SpringApplication springApplication = new SpringApplication(
-            SofaBootWebSpringBootApplication.class);
-        springApplication.run(args);
+    public SofaProxyFactoryBean(Class<?>[] proxyInterfaces, String targetName,
+                                Class<?> targetClass, BeanFactory beanFactory) {
+        if (proxyInterfaces != null) {
+            setInterfaces(proxyInterfaces);
+        }
+        setTargetName(targetName);
+        setTargetClass(targetClass);
+        setBeanFactory(beanFactory);
     }
 }
