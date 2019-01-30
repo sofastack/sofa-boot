@@ -3,7 +3,6 @@ sudo: false
 
 jdk:
 - oraclejdk8
-- openjdk11
 
 install:
 
