@@ -45,6 +45,10 @@ public class SofaLogger {
         }
     }
 
+    public static void error(String msg, Throwable throwable) {
+        DEFAULT_LOG.error(msg, throwable);
+    }
+
     public static void error(String format, Object... args) {
         DEFAULT_LOG.error(getMessage(format, args));
     }

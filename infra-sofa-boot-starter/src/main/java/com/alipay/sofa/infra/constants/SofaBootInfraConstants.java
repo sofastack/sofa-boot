@@ -50,4 +50,26 @@ public class SofaBootInfraConstants {
      */
     public static final String ENDPOINTS_WEB_EXPOSURE_INCLUDE_CONFIG     = "management.endpoints.web.exposure.include";
     public static final String SOFA_DEFAULT_ENDPOINTS_WEB_EXPOSURE_VALUE = "info, health, versions, readiness";
+
+    /**
+     * root application context name
+     */
+    public static final String ROOT_APPLICATION_CONTEXT                  = "RootApplicationContext";
+
+    /**
+     * sofa configuration prefix
+     */
+    public static final String PREFIX                                    = "com.alipay.sofa.boot";
+
+    /**
+     * Thread Pool Core Size to execute async bean initialization
+     */
+    public static final String ASYNC_INIT_BEAN_CORE_SIZE                 = PREFIX
+                                                                           + ".asyncInitBeanCoreSize";
+
+    /**
+     * Thread Pool Max Size to execute async bean initialization
+     */
+    public static final String ASYNC_INIT_BEAN_MAX_SIZE                  = PREFIX
+                                                                           + ".asyncInitBeanMaxSize";
 }

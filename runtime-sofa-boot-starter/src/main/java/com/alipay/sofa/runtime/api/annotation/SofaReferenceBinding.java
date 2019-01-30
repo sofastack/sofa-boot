@@ -101,13 +101,30 @@ public @interface SofaReferenceBinding {
     String registry() default "";
 
     /**
-     * dalay init connection
+     * delay init connection
      *
      * @return
      */
     boolean lazy() default false;
 
+    /**
+     * specify serialize type
+     *
+     * @return
+     */
     String serializeType() default "";
 
+    /**
+     * specify load balance type
+     *
+     * @return
+     */
     String loadBalancer() default "";
+
+    /**
+     * parameters of consumer
+     *
+     * @return parameters of consumer
+     */
+    SofaParameter[] parameters() default {};
 }
