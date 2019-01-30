@@ -71,8 +71,7 @@ public class TestSofaServiceAndReferenceException extends TestBase {
 
     @Test
     public void testMultiSofaServiceWithSameInterfaceAndUniqueId() throws IOException {
-        File sofaLog = new File(System.getProperty("user.home") + File.separator + "logs"
-                                + File.separator + "sofa-runtime" + File.separator
+        File sofaLog = new File("./logs" + File.separator + "sofa-runtime" + File.separator
                                 + "common-error.log");
         FileUtils.write(sofaLog, "", System.getProperty("file.encoding"));
         Map<String, Object> properties = new HashMap<>();

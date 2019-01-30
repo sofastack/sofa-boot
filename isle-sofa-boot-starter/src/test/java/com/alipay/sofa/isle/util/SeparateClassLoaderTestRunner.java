@@ -87,7 +87,8 @@ public class SeparateClassLoaderTestRunner extends SpringJUnit4ClassRunner {
 
         @Override
         public Class<?> loadClass(String name) throws ClassNotFoundException {
-            if (name.startsWith("org.junit") || name.startsWith("java")) {
+            if (name.startsWith("org.junit") || name.startsWith("java")
+                || name.startsWith("org.apache.logging")) {
                 return getSystemClassLoader().loadClass(name);
             }
 
