@@ -14,31 +14,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.isle.integration;
+package com.alipay.sofa.isle.bean;
 
-import com.alipay.sofa.isle.processor.FactoryBeanPostProcessor;
-import com.alipay.sofa.isle.processor.SampleBeanPostProcessor;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.FactoryBean;
 
 /**
- * @author xuanbei
- * @since 2.4.4
+ *
+ * @author ruoshan
+ * @since 2.6.1
  */
-@Configuration
-public class SofaBootTestAutoConfiguration {
-    /**
-     * define SampleBeanPostProcessor in Root Application Context.
-     *
-     * @return SampleBeanPostProcessor
-     */
-    @Bean
-    public SampleBeanPostProcessor sampleBeanPostProcessor() {
-        return new SampleBeanPostProcessor();
+public class TestFactoryBean implements FactoryBean {
+
+    private TestBean testBean;
+
+    @Override
+    public Object getObject() throws Exception {
+        return null;
     }
 
-    @Bean
-    public FactoryBeanPostProcessor factoryBeanPostProcessor() {
-        return new FactoryBeanPostProcessor();
+    @Override
+    public Class<?> getObjectType() {
+        return null;
+    }
+
+    @Override
+    public boolean isSingleton() {
+        return false;
+    }
+
+    public TestBean getTestBean() {
+        return testBean;
+    }
+
+    public void setTestBean(TestBean testBean) {
+        this.testBean = testBean;
     }
 }

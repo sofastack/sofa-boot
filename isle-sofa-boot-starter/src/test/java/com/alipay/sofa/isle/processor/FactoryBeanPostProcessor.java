@@ -16,15 +16,32 @@
  */
 package com.alipay.sofa.isle.processor;
 
-import com.alipay.sofa.isle.bean.TestBean;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 
 /**
- * @author xuanbei
- * @since 2.4.4
+ *
+ * @author ruoshan
+ * @since 2.6.1
  */
-public class SampleBeanPostProcessor implements BeanPostProcessor {
+public class FactoryBeanPostProcessor implements FactoryBean, BeanPostProcessor {
+
+    @Override
+    public Object getObject() throws Exception {
+        return null;
+    }
+
+    @Override
+    public Class<?> getObjectType() {
+        return null;
+    }
+
+    @Override
+    public boolean isSingleton() {
+        return true;
+    }
+
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName)
                                                                                throws BeansException {
@@ -34,9 +51,6 @@ public class SampleBeanPostProcessor implements BeanPostProcessor {
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName)
                                                                               throws BeansException {
-        if (bean instanceof TestBean) {
-            ((TestBean) bean).setPostProcessed(true);
-        }
         return bean;
     }
 }

@@ -18,11 +18,13 @@ package com.alipay.sofa.isle.integration;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ImportResource;
 
 /**
  * @author xuanbei 18/5/8
  */
 @SpringBootApplication
+@ImportResource("classpath:META-INF/spring/test-service.xml")
 public class SofaBootTestApplication {
     public static void main(String[] args) {
         SpringApplication springApplication = new SpringApplication(SofaBootTestApplication.class);
