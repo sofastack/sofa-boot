@@ -90,7 +90,7 @@ public class SofaBootHealthCheckAutoConfiguration {
 
         @Bean
         @ConditionalOnMissingBean
-        public HealthStatusHttpMapper sofaBootStatusHttpMapper(HealthIndicatorProperties healthIndicatorProperties) {
+        public HealthStatusHttpMapper createHealthStatusHttpMapper(HealthIndicatorProperties healthIndicatorProperties) {
             HealthStatusHttpMapper statusHttpMapper = new HealthStatusHttpMapper();
             if (healthIndicatorProperties.getHttpMapping() != null) {
                 statusHttpMapper.addStatusMapping(healthIndicatorProperties.getHttpMapping());
@@ -100,12 +100,5 @@ public class SofaBootHealthCheckAutoConfiguration {
             return statusHttpMapper;
         }
 
-        @Bean
-        @ConditionalOnMissingBean
-        public HealthWebEndpointResponseMapper sofaBootHealthWebEndpointResponseMapper(HealthStatusHttpMapper sofaBootStatusHttpMapper,
-                                                                                       HealthEndpointProperties properties) {
-            return new HealthWebEndpointResponseMapper(sofaBootStatusHttpMapper,
-                properties.getShowDetails(), properties.getRoles());
-        }
     }
 }
