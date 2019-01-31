@@ -24,7 +24,14 @@ import com.alipay.sofa.healthcheck.service.SofaBootHealthIndicator;
 import com.alipay.sofa.healthcheck.service.SofaBootReadinessCheckEndpoint;
 import com.alipay.sofa.healthcheck.startup.ReadinessCheckListener;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnEnabledEndpoint;
+import org.springframework.boot.actuate.autoconfigure.health.HealthEndpointProperties;
+import org.springframework.boot.actuate.autoconfigure.health.HealthIndicatorProperties;
 import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
+import org.springframework.boot.actuate.endpoint.web.WebEndpointResponse;
+import org.springframework.boot.actuate.health.HealthStatusHttpMapper;
+import org.springframework.boot.actuate.health.HealthWebEndpointResponseMapper;
+import org.springframework.boot.actuate.health.Status;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -72,12 +79,33 @@ public class SofaBootHealthCheckAutoConfiguration {
     }
 
     @ConditionalOnClass(Endpoint.class)
+    @AutoConfigureBefore(name = "org.springframework.boot.actuate.autoconfigure.health.HealthEndpointAutoConfiguration")
     public static class ReadinessCheckExtensionConfiguration {
         @Bean
         @ConditionalOnMissingBean
         @ConditionalOnEnabledEndpoint
         public ReadinessEndpointWebExtension readinessEndpointWebExtension() {
             return new ReadinessEndpointWebExtension();
+        }
+
+        @Bean
+        @ConditionalOnMissingBean
+        public HealthStatusHttpMapper sofaBootStatusHttpMapper(HealthIndicatorProperties healthIndicatorProperties) {
+            HealthStatusHttpMapper statusHttpMapper = new HealthStatusHttpMapper();
+            if (healthIndicatorProperties.getHttpMapping() != null) {
+                statusHttpMapper.addStatusMapping(healthIndicatorProperties.getHttpMapping());
+            }
+            statusHttpMapper.addStatusMapping(Status.UNKNOWN,
+                WebEndpointResponse.STATUS_INTERNAL_SERVER_ERROR);
+            return statusHttpMapper;
+        }
+
+        @Bean
+        @ConditionalOnMissingBean
+        public HealthWebEndpointResponseMapper sofaBootHealthWebEndpointResponseMapper(HealthStatusHttpMapper sofaBootStatusHttpMapper,
+                                                                                       HealthEndpointProperties properties) {
+            return new HealthWebEndpointResponseMapper(sofaBootStatusHttpMapper,
+                properties.getShowDetails(), properties.getRoles());
         }
     }
 }

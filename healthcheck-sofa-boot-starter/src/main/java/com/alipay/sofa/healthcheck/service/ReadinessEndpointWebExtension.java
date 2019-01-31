@@ -36,11 +36,12 @@ public class ReadinessEndpointWebExtension {
     private SofaBootReadinessCheckEndpoint  delegate;
 
     @Autowired
-    private HealthWebEndpointResponseMapper responseMapper;
+    private HealthWebEndpointResponseMapper sofaBootHealthWebEndpointResponseMapper;
 
     @ReadOperation
     public WebEndpointResponse<Health> getHealth(SecurityContext securityContext) {
-        return this.responseMapper.map(this.delegate.health(), securityContext, ShowDetails.ALWAYS);
+        return this.sofaBootHealthWebEndpointResponseMapper.map(this.delegate.health(),
+            securityContext, ShowDetails.ALWAYS);
     }
 
 }
