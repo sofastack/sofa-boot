@@ -200,4 +200,21 @@ public abstract class AbstractDeploymentDescriptor implements DeploymentDescript
     }
 
     protected abstract void loadSpringXMLs();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof AbstractDeploymentDescriptor)) {
+            return false;
+        }
+        AbstractDeploymentDescriptor that = (AbstractDeploymentDescriptor) o;
+        return Objects.equals(this.getModuleName(), that.getModuleName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getModuleName());
+    }
 }

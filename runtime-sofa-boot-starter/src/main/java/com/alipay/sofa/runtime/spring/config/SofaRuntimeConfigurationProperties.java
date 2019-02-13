@@ -16,15 +16,15 @@
  */
 package com.alipay.sofa.runtime.spring.config;
 
+import com.alipay.sofa.infra.constants.SofaBootInfraConstants;
 import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * @author xuanbei 18/5/9
  */
-@ConfigurationProperties(SofaRuntimeConfigurationProperties.PREFIX)
+@ConfigurationProperties(SofaBootInfraConstants.PREFIX)
 public class SofaRuntimeConfigurationProperties {
-    static final String PREFIX = "com.alipay.sofa.boot";
 
     public void setSkipJvmReferenceHealthCheck(boolean skipJvmReferenceHealthCheck) {
         SofaRuntimeProperties.setSkipJvmReferenceHealthCheck(this.getClass().getClassLoader(),

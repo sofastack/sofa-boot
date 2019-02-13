@@ -19,6 +19,7 @@ package com.alipay.sofa.infra.config.spring.namespace.handler;
 import com.alipay.sofa.infra.config.spring.namespace.spi.SofaBootTagNameSupport;
 import com.alipay.sofa.infra.log.InfraHealthCheckLoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.xml.BeanDefinitionDecorator;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 
@@ -29,6 +30,7 @@ import java.util.stream.StreamSupport;
  * SofaBootNamespaceHandler
  *
  * @author yangguanchao
+ * @author qilong.zql
  * @since 2018/04/08
  */
 public class SofaBootNamespaceHandler extends NamespaceHandlerSupport {
@@ -38,19 +40,21 @@ public class SofaBootNamespaceHandler extends NamespaceHandlerSupport {
 
     @Override
     public void init() {
-        ServiceLoader<SofaBootTagNameSupport> serviceLoaderSofaBoot = ServiceLoader
-                .load(SofaBootTagNameSupport.class);
+        ServiceLoader<SofaBootTagNameSupport> serviceLoaderSofaBoot = ServiceLoader.load(SofaBootTagNameSupport.class);
         serviceLoaderSofaBoot.forEach(this::registerTagParser);
     }
 
     private void registerTagParser(SofaBootTagNameSupport tagNameSupport) {
-        if (!(tagNameSupport instanceof BeanDefinitionParser)) {
-            logger.error("{} tag name supported [{}] parser are not instance of {}.",
-                tagNameSupport.getClass(), tagNameSupport.supportTagName(),
-                BeanDefinitionParser.class);
-            return;
+        if (tagNameSupport instanceof BeanDefinitionParser) {
+            registerBeanDefinitionParser(tagNameSupport.supportTagName(),
+                (BeanDefinitionParser) tagNameSupport);
+        } else if (tagNameSupport instanceof BeanDefinitionDecorator) {
+            registerBeanDefinitionDecoratorForAttribute(tagNameSupport.supportTagName(),
+                (BeanDefinitionDecorator) tagNameSupport);
+        } else {
+            logger.error(tagNameSupport.getClass() + " tag name supported ["
+                         + tagNameSupport.supportTagName() + "] parser are not instance of "
+                         + BeanDefinitionParser.class + "or " + BeanDefinitionDecorator.class);
         }
-        String tagName = tagNameSupport.supportTagName();
-        registerBeanDefinitionParser(tagName, (BeanDefinitionParser) tagNameSupport);
     }
 }

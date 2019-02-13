@@ -23,7 +23,7 @@ import java.lang.reflect.Modifier;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.ApplicationContext;
-import org.springframework.core.Ordered;
+import org.springframework.core.PriorityOrdered;
 import org.springframework.core.env.Environment;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
@@ -51,7 +51,7 @@ import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
  *
  * @author xuanbei 18/5/9
  */
-public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor, Ordered {
+public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor, PriorityOrdered {
     private final PlaceHolderBinder binder = new DefaultPlaceHolderBinder();
     private ApplicationContext      applicationContext;
     private SofaRuntimeContext      sofaRuntimeContext;
@@ -184,7 +184,7 @@ public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor, 
 
     @Override
     public int getOrder() {
-        return Ordered.LOWEST_PRECEDENCE;
+        return PriorityOrdered.HIGHEST_PRECEDENCE;
     }
 
     class DefaultPlaceHolderBinder implements PlaceHolderBinder {

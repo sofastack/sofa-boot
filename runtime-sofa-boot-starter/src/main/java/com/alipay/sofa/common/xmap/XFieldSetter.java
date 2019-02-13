@@ -14,22 +14,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime.integration.base;
+package com.alipay.sofa.common.xmap;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.context.annotation.ImportResource;
+import java.lang.reflect.Field;
 
 /**
- * @author qilong.zql
- * @since 2.3.1
+ *
+ * @author xi.hux@alipay.com
+ * @since 2.6.0
  */
-@ImportResource({ "classpath*:META-INF/spring/*.xml" })
-@org.springframework.boot.autoconfigure.SpringBootApplication
-public class SofaBootTestApplication {
+public class XFieldSetter implements XSetter {
 
-    public static void main(String[] args) {
-        SpringApplication springApplication = new SpringApplication(SofaBootTestApplication.class);
-        springApplication.run(args);
+    /**
+     * field
+     */
+    private final Field field;
+
+    public XFieldSetter(Field field) {
+        this.field = field;
+        this.field.setAccessible(true);
     }
 
+    /**
+     * @see XSetter#getType()
+     */
+    public Class<?> getType() {
+        return field.getType();
+    }
+
+    /**
+     * @see XSetter#setValue(Object, Object)
+     */
+    public void setValue(Object instance, Object value) throws IllegalAccessException {
+        field.set(instance, value);
+    }
 }

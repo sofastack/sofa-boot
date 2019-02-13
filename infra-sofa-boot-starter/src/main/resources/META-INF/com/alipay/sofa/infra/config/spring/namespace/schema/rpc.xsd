@@ -33,6 +33,11 @@
         </xsd:complexContent>
     </xsd:complexType>
 
+    <!-- parameters in service/reference binding.* -->
+    <xsd:complexType name="TParameter">
+        <xsd:attribute name="key" type="xsd:string" use="required" />
+        <xsd:attribute name="value" type="xsd:string" use="required" />
+    </xsd:complexType>
 
     <!-- Bolt Start -->
 
@@ -130,6 +135,7 @@
                     <xsd:element name="global-attrs" type="BBindingTRRefAttr" minOccurs="0" maxOccurs="1"/>
                     <xsd:element name="route" type="BBindingTRRefRoute" minOccurs="0" maxOccurs="1"/>
                     <xsd:element name="method" type="BBindingTRRefMethod" minOccurs="0" maxOccurs="unbounded"/>
+                    <xsd:element name="parameter" type="TParameter" minOccurs="0" maxOccurs="unbounded"/>
                     <xsd:any minOccurs="0"/>
                 </xsd:sequence>
             </xsd:extension>
@@ -142,6 +148,7 @@
                 <xsd:sequence minOccurs="0">
                     <xsd:element name="global-attrs" type="BBindingTRSerAttr" minOccurs="0" maxOccurs="1"/>
                     <xsd:element name="method" type="BBindingTRSerMethod" minOccurs="0" maxOccurs="unbounded"/>
+                    <xsd:element name="parameter" type="TParameter" minOccurs="0" maxOccurs="unbounded"/>
                     <xsd:any minOccurs="0"/>
                 </xsd:sequence>
             </xsd:extension>
@@ -243,6 +250,7 @@
                     <xsd:element name="global-attrs" type="RestBindingTRRefAttr" minOccurs="0" maxOccurs="1"/>
                     <xsd:element name="route" type="RestBindingTRRefRoute" minOccurs="0" maxOccurs="1"/>
                     <xsd:element name="method" type="RestBindingTRRefMethod" minOccurs="0" maxOccurs="unbounded"/>
+                    <xsd:element name="parameter" type="TParameter" minOccurs="0" maxOccurs="unbounded"/>
                     <xsd:any minOccurs="0"/>
                 </xsd:sequence>
             </xsd:extension>
@@ -255,6 +263,7 @@
                 <xsd:sequence minOccurs="0">
                     <xsd:element name="global-attrs" type="RestBindingTRSerAttr" minOccurs="0" maxOccurs="1"/>
                     <xsd:element name="method" type="RestBindingTRSerMethod" minOccurs="0" maxOccurs="unbounded"/>
+                    <xsd:element name="parameter" type="TParameter" minOccurs="0" maxOccurs="unbounded"/>
                     <xsd:any minOccurs="0"/>
                 </xsd:sequence>
             </xsd:extension>
@@ -367,6 +376,7 @@
                     <xsd:element name="global-attrs" type="DubboBindingTRRefAttr" minOccurs="0" maxOccurs="1"/>
                     <xsd:element name="route" type="DubboBindingTRRefRoute" minOccurs="0" maxOccurs="1"/>
                     <xsd:element name="method" type="DubboBindingTRRefMethod" minOccurs="0" maxOccurs="unbounded"/>
+                    <xsd:element name="parameter" type="TParameter" minOccurs="0" maxOccurs="unbounded"/>
                     <xsd:any minOccurs="0"/>
                 </xsd:sequence>
             </xsd:extension>
@@ -379,6 +389,7 @@
                 <xsd:sequence minOccurs="0">
                     <xsd:element name="global-attrs" type="DubboBindingTRSerAttr" minOccurs="0" maxOccurs="1"/>
                     <xsd:element name="method" type="DubboBindingTRSerMethod" minOccurs="0" maxOccurs="unbounded"/>
+                    <xsd:element name="parameter" type="TParameter" minOccurs="0" maxOccurs="unbounded"/>
                     <xsd:any minOccurs="0"/>
                 </xsd:sequence>
             </xsd:extension>
@@ -499,6 +510,7 @@
                     <xsd:element name="global-attrs" type="H2cBindingRefAttr" minOccurs="0" maxOccurs="1"/>
                     <xsd:element name="route" type="H2cBindingRefRoute" minOccurs="0" maxOccurs="1"/>
                     <xsd:element name="method" type="H2cBindingRefMethod" minOccurs="0" maxOccurs="unbounded"/>
+                    <xsd:element name="parameter" type="TParameter" minOccurs="0" maxOccurs="unbounded"/>
                     <xsd:any minOccurs="0"/>
                 </xsd:sequence>
             </xsd:extension>
@@ -511,6 +523,7 @@
                 <xsd:sequence minOccurs="0">
                     <xsd:element name="global-attrs" type="H2cBindingSerAttr" minOccurs="0" maxOccurs="1"/>
                     <xsd:element name="method" type="H2cBindingSerMethod" minOccurs="0" maxOccurs="unbounded"/>
+                    <xsd:element name="parameter" type="TParameter" minOccurs="0" maxOccurs="unbounded"/>
                     <xsd:any minOccurs="0"/>
                 </xsd:sequence>
             </xsd:extension>
@@ -592,5 +605,8 @@
         </xsd:complexContent>
     </xsd:complexType>
     <!-- registry.confreg -->
+
+    <!-- async init -->
+    <xsd:attribute name="async-init" type="xsd:boolean"/>
 
 </xsd:schema>

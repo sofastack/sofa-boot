@@ -61,7 +61,7 @@ public class DynamicSpringContextLoader implements SpringContextLoader {
                 SofaModuleProperties.class);
 
         BeanLoadCostBeanFactory beanFactory = new BeanLoadCostBeanFactory(
-            sofaModuleProperties.getBeanLoadCost());
+            sofaModuleProperties.getBeanLoadCost(), deployment.getModuleName());
         beanFactory
             .setAutowireCandidateResolver(new QualifierAnnotationAutowireCandidateResolver());
         GenericApplicationContext ctx = sofaModuleProperties.isPublishEventToParent() ? new GenericApplicationContext(
@@ -79,8 +79,7 @@ public class DynamicSpringContextLoader implements SpringContextLoader {
         CachedIntrospectionResults.acceptClassLoader(moduleClassLoader);
 
         // set allowBeanDefinitionOverriding
-        ctx.setAllowBeanDefinitionOverriding(rootApplicationContext.getBean(
-            SofaModuleProperties.class).isAllowBeanDefinitionOverriding());
+        ctx.setAllowBeanDefinitionOverriding(sofaModuleProperties.isAllowBeanDefinitionOverriding());
 
         ctx.getBeanFactory().setBeanClassLoader(moduleClassLoader);
         ctx.getBeanFactory().addPropertyEditorRegistrar(new PropertyEditorRegistrar() {
