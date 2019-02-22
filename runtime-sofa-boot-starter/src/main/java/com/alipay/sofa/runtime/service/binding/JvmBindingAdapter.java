@@ -189,7 +189,7 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
                             + getInterfaceName()
                             + "#"
                             + getUniqueId()
-                            + "] cant not find the corresponding JVM service. "
+                            + "] can not find the corresponding JVM service. "
                             + "Please check if there is a SOFA deployment publish the corresponding JVM service. "
                             + "If this exception occurred when the application starts up, please add Require-Module to SOFA deployment's MANIFEST.MF to indicate the startup dependency of SOFA modules.");
             }
