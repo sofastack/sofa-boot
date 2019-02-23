@@ -19,7 +19,7 @@ package com.alipay.sofa.boot.examples.demo.service;
 import com.alipay.sofa.boot.examples.demo.service.facade.ReferenceService;
 import com.alipay.sofa.boot.examples.demo.service.facade.SampleService;
 import com.alipay.sofa.rpc.config.ConsumerConfig;
-import org.junit.Assert;
+import org.springframework.util.Assert;
 
 /**
  * @author qilong.zql
@@ -35,7 +35,7 @@ public class ReferenceServiceImpl implements ReferenceService {
 
         SampleService sampleService = consumerConfig.refer();
 
-        Assert.assertTrue("service".equals(sampleService.service()));
+        Assert.isTrue("service".equals(sampleService.service()));
     }
 
 }
