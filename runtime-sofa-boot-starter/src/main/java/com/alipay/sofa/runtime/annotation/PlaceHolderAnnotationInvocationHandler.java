@@ -100,7 +100,7 @@ public class PlaceHolderAnnotationInvocationHandler implements InvocationHandler
         @SuppressWarnings("unchecked")
         public A build() {
             if (delegate != null) {
-                ClassLoader cl = delegate.getClass().getClassLoader();
+                ClassLoader cl = this.getClass().getClassLoader();
                 Class<?>[] exposedInterface = { delegate.annotationType(), WrapperAnnotation.class };
                 return (A) Proxy.newProxyInstance(cl, exposedInterface,
                     new PlaceHolderAnnotationInvocationHandler(delegate, binder));
