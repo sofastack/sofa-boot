@@ -54,6 +54,7 @@ public abstract class AbstractTestBase extends TestBase {
         properties.put("spring.application.name", "runtime-test");
         properties.put("mix-xml-annotation-unique-id", "xmlAnnotationSampleService");
         properties.put("spring.jmx.enabled", "false");
+        properties.put("com.alipay.sofa.boot.skipJvmReferenceHealthCheck", true);
         initApplicationContext(properties, IntegrationTestConfiguration.class);
         awareTest = applicationContext.getBean(AwareTest.class);
         sofaRuntimeContext = applicationContext.getBean(SofaRuntimeContext.class);
