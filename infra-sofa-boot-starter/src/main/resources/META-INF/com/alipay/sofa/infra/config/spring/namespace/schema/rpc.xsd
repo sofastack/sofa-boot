@@ -127,6 +127,10 @@
         <xsd:attribute name="registry" type="xsd:string" use="optional"/>
         <xsd:attribute name="serialize-type" type="xsd:string" use="optional"/>
     </xsd:complexType>
+    <!-- binding.jvm im reference -->
+    <xsd:complexType name="BBindingJvmReference">
+        <xsd:attribute name="serialize" type="xsd:boolean" default="false" use="optional"/>
+    </xsd:complexType>
     <!-- binding.bolt in reference -->
     <xsd:complexType name="BBindingTRReference">
         <xsd:complexContent>
@@ -140,6 +144,10 @@
                 </xsd:sequence>
             </xsd:extension>
         </xsd:complexContent>
+    </xsd:complexType>
+    <!--jvm service-->
+    <xsd:complexType name="BBindingJvmService">
+         <xsd:attribute name="serialize" type="xsd:boolean" default="true" use="optional"/>
     </xsd:complexType>
     <!-- binding.bolt in service -->
     <xsd:complexType name="BBindingTRService">
@@ -567,7 +575,7 @@
         <xsd:complexContent>
             <xsd:extension base="beans:identifiedType">
                 <xsd:all minOccurs="0" maxOccurs="1">
-                    <xsd:element name="binding.jvm" minOccurs="0"/>
+                    <xsd:element name="binding.jvm" type="BBindingJvmReference" minOccurs="0"/>
                     <xsd:element name="binding.bolt" type="BBindingTRReference" minOccurs="0"/>
                     <xsd:element name="binding.rest" type="RestBindingTRReference" minOccurs="0"/>
                     <xsd:element name="binding.dubbo" type="DubboBindingTRReference" minOccurs="0"/>
@@ -590,7 +598,7 @@
         <xsd:complexContent>
             <xsd:extension base="beans:identifiedType">
                 <xsd:all minOccurs="0" maxOccurs="1">
-                    <xsd:element name="binding.jvm" minOccurs="0"/>
+                    <xsd:element name="binding.jvm"  type="BBindingJvmService" minOccurs="0"/>
                     <xsd:element name="binding.bolt" type="BBindingTRService" minOccurs="0"/>
                     <xsd:element name="binding.rest" type="RestBindingTRService" minOccurs="0"/>
                     <xsd:element name="binding.dubbo" type="DubboBindingTRService" minOccurs="0"/>

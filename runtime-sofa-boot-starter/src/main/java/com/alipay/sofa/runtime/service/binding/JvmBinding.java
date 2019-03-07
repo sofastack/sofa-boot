@@ -33,8 +33,18 @@ public class JvmBinding extends AbstractBinding {
      */
     public static BindingType JVM_BINDING_TYPE = new BindingType("jvm");
 
-    public JvmBinding() {
+    private JvmBindingParam   jvmBindingParam  = new JvmBindingParam();
 
+    public JvmBinding() {
+    }
+
+    public JvmBindingParam getJvmBindingParam() {
+        return jvmBindingParam;
+    }
+
+    public JvmBinding setJvmBindingParam(JvmBindingParam jvmBindingParam) {
+        this.jvmBindingParam = jvmBindingParam;
+        return this;
     }
 
     /**
@@ -84,5 +94,11 @@ public class JvmBinding extends AbstractBinding {
         HealthResult healthResult = new HealthResult(getName());
         healthResult.setHealthy(isHealthy);
         return healthResult;
+    }
+
+    public static class XmlConstants {
+        public static String SERIALIZE        = "serialize";
+        public static String SUPPORT_TAG_NAME = "binding.jvm";
+        public static String BINDING_TYPE     = "jvm";
     }
 }

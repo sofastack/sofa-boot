@@ -17,13 +17,16 @@
 package com.alipay.sofa.runtime.integration.base;
 
 import com.alipay.sofa.runtime.api.annotation.SofaReference;
+import com.alipay.sofa.runtime.api.annotation.SofaReferenceBinding;
 import com.alipay.sofa.runtime.api.annotation.SofaService;
+import com.alipay.sofa.runtime.api.annotation.SofaServiceBinding;
 import com.alipay.sofa.runtime.beans.impl.MethodBeanClassAnnotationSampleService;
 import com.alipay.sofa.runtime.beans.impl.MethodBeanMethodAnnotationSampleService;
 import com.alipay.sofa.runtime.beans.impl.ParameterAnnotationSampleService;
 import com.alipay.sofa.runtime.beans.impl.SampleServiceImpl;
 import com.alipay.sofa.runtime.beans.service.SampleService;
 import com.alipay.sofa.runtime.integration.features.AwareTest;
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import org.junit.Before;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -42,7 +45,8 @@ import java.util.Map;
  */
 public abstract class AbstractTestBase extends TestBase {
 
-    public AwareTest awareTest;
+    public AwareTest          awareTest;
+    public SofaRuntimeContext sofaRuntimeContext;
 
     @Before
     public void before() {
@@ -52,6 +56,7 @@ public abstract class AbstractTestBase extends TestBase {
         properties.put("spring.jmx.enabled", "false");
         initApplicationContext(properties, IntegrationTestConfiguration.class);
         awareTest = applicationContext.getBean(AwareTest.class);
+        sofaRuntimeContext = applicationContext.getBean(SofaRuntimeContext.class);
     }
 
     @Configuration
@@ -72,6 +77,18 @@ public abstract class AbstractTestBase extends TestBase {
                 return new MethodBeanMethodAnnotationSampleService();
             }
 
+            @Bean({ "name3" })
+            @SofaService(uniqueId = "serializeFalseViaAnnotation", bindings = { @SofaServiceBinding(serialize = false) })
+            SampleService serializeFalseViaAnnotationSampleService() {
+                return new MethodBeanMethodAnnotationSampleService();
+            }
+
+            @Bean({ "name4" })
+            @SofaService(uniqueId = "defaultSerializeTrueViaAnnotation")
+            SampleService defaultSerializeTrueViaAnnotationSampleService() {
+                return new MethodBeanMethodAnnotationSampleService();
+            }
+
             @Bean("multiService")
             SampleService service() {
                 return new SampleServiceImpl("");
@@ -81,6 +98,7 @@ public abstract class AbstractTestBase extends TestBase {
             SampleService service(@Value("$spring.application.name") String appName) {
                 return new SampleServiceImpl("");
             }
+
         }
 
         @Configuration
@@ -89,7 +107,9 @@ public abstract class AbstractTestBase extends TestBase {
             @Bean
             SampleService parameterAnnotationSampleService(@SofaReference(uniqueId = "${mix-xml-annotation-unique-id}") SampleService service1,
                                                            @SofaReference(uniqueId = "methodBeanClassAnnotationSampleService") SampleService service2,
-                                                           @SofaReference(uniqueId = "methodBeanMethodAnnotationSampleService") SampleService service3) {
+                                                           @SofaReference(uniqueId = "methodBeanMethodAnnotationSampleService") SampleService service3,
+                                                           @SofaReference(uniqueId = "serializeTrueViaAnnotation", binding = @SofaReferenceBinding(serialize = true)) SampleService service4,
+                                                           @SofaReference(uniqueId = "defaultSerializeFalseViaAnnotation") SampleService service5) {
                 return new ParameterAnnotationSampleService(service1, service2, service3);
             }
         }
