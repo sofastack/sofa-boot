@@ -24,7 +24,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.constants.SofaRuntimeFrameworkConstants;
-import com.alipay.sofa.runtime.service.binding.JvmBinding;
 import com.alipay.sofa.runtime.spi.binding.Binding;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;

@@ -161,7 +161,7 @@ public class DynamicJvmServiceProxyFinder {
                     ClassLoader tcl = Thread.currentThread().getContextClassLoader();
                     try {
                         pushThreadContextClassLoader(getServiceClassLoader());
-                        targetMethod.invoke(targetService, targetArguments);
+                        return targetMethod.invoke(targetService, targetArguments);
                     } finally {
                         pushThreadContextClassLoader(tcl);
                     }
