@@ -165,8 +165,10 @@ public class DynamicJvmServiceProxyFinder {
                     } finally {
                         pushThreadContextClassLoader(tcl);
                     }
-                } else if (TOSTRING_METHOD.equalsIgnoreCase(targetMethod.getName())
-                           && targetMethod.getParameterTypes().length == 0) {
+                }
+
+                if (TOSTRING_METHOD.equalsIgnoreCase(targetMethod.getName())
+                    && targetMethod.getParameterTypes().length == 0) {
                     return targetService.toString();
                 } else if (EQUALS_METHOD.equalsIgnoreCase(targetMethod.getName())
                            && targetMethod.getParameterTypes().length == 1) {
