@@ -24,7 +24,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.constants.SofaRuntimeFrameworkConstants;
-import com.alipay.sofa.runtime.service.binding.JvmBinding;
 import com.alipay.sofa.runtime.spi.binding.Binding;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
@@ -147,10 +146,7 @@ public abstract class AbstractContractFactoryBean implements InitializingBean, F
     }
 
     protected void dealWithbindingConverterNotExist(String tagName) {
-        if (!tagName.equals(SofaRuntimeFrameworkConstants.BINDING_PREFIX
-                            + JvmBinding.JVM_BINDING_TYPE.toString())) {
-            throw new ServiceRuntimeException("Can't find BindingConverter of type " + tagName);
-        }
+        throw new ServiceRuntimeException("Can't find BindingConverter of type " + tagName);
     }
 
     @Override

@@ -19,6 +19,7 @@ package com.alipay.sofa.runtime.spring.factory;
 import com.alipay.sofa.runtime.constants.SofaRuntimeFrameworkConstants;
 import com.alipay.sofa.runtime.model.InterfaceMode;
 import com.alipay.sofa.runtime.service.binding.JvmBinding;
+import com.alipay.sofa.runtime.service.binding.JvmBindingParam;
 import com.alipay.sofa.runtime.service.component.Reference;
 import com.alipay.sofa.runtime.service.component.impl.ReferenceImpl;
 import com.alipay.sofa.runtime.service.helper.ReferenceRegisterHelper;
@@ -50,8 +51,12 @@ public class ReferenceFactoryBean extends AbstractContractFactoryBean {
             .isTrue(bindings.size() <= 1,
                 "Found more than one binding in <sofa:reference/>, <sofa:reference/> can only have one binding.");
 
+        // default add jvm binding and reference jvm binding should set serialize as false
         if (bindings.size() == 0) {
-            bindings.add(new JvmBinding());
+            // default reference prefer to ignore serialize
+            JvmBindingParam jvmBindingParam = new JvmBindingParam();
+            jvmBindingParam.setSerialize(true);
+            bindings.add(new JvmBinding().setJvmBindingParam(jvmBindingParam));
         }
 
         reference.addBinding(bindings.get(0));
