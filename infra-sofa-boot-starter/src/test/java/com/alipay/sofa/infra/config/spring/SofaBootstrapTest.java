@@ -14,25 +14,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.infra.base;
+package com.alipay.sofa.infra.config.spring;
 
+import org.junit.Assert;
+import org.junit.Test;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ImportResource;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.context.annotation.Configuration;
 
 /**
- * SofaBootWebSpringBootApplication
- * <p/>
- * Created by yangguanchao on 16/7/22.
+ * @author qilong.zql
+ * @since 0.6.0
  */
-@ImportResource({ "classpath*:META-INF/sofaboot-web-test/*.xml" })
-@SpringBootApplication
-public class SofaBootWebSpringBootApplication {
+public class SofaBootstrapTest {
 
-    public static void main(String[] args) {
-        SpringApplication springApplication = new SpringApplication(
-            SofaBootWebSpringBootApplication.class);
-        springApplication.run();
+    @Test
+    public void commandLineArgsTest() {
+        Throwable throwable = null;
+        try {
+            SpringApplication springApplication = new SpringApplication(EmptyConfiguration.class);
+            String[] args = { "-A=B" };
+            springApplication.run(args);
+        } catch (Throwable t) {
+            throwable = t;
+        }
+        Assert.assertNull(throwable);
+    }
+
+    @EnableAutoConfiguration
+    @Configuration
+    public static class EmptyConfiguration {
+
     }
 }

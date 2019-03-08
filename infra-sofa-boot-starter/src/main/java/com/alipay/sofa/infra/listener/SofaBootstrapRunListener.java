@@ -60,7 +60,7 @@ public class SofaBootstrapRunListener implements
         StreamSupport.stream(environment.getPropertySources().spliterator(), false)
             .filter(propertySource -> propertySource instanceof EnumerablePropertySource)
             .map(propertySource -> Arrays
-                .asList(((MapPropertySource) propertySource).getPropertyNames()))
+                .asList(((EnumerablePropertySource) propertySource).getPropertyNames()))
                 .flatMap(Collection::stream).filter(LogEnvUtils::filterAllLogConfig)
                 .forEach((key) -> HIGH_PRIORITY_CONFIG.getSource().put(key, environment.getProperty(key)));
     }
