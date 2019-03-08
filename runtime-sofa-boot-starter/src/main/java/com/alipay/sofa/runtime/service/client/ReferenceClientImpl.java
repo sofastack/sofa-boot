@@ -23,6 +23,7 @@ import com.alipay.sofa.runtime.api.client.param.ReferenceParam;
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.model.InterfaceMode;
 import com.alipay.sofa.runtime.service.binding.JvmBinding;
+import com.alipay.sofa.runtime.service.binding.JvmBindingParam;
 import com.alipay.sofa.runtime.service.component.Reference;
 import com.alipay.sofa.runtime.service.component.ReferenceComponent;
 import com.alipay.sofa.runtime.service.component.impl.ReferenceImpl;
@@ -63,8 +64,10 @@ public class ReferenceClientImpl implements ReferenceClient {
             referenceParam.getInterfaceType(), InterfaceMode.api, referenceParam.isJvmFirst(), null);
 
         if (bindingParam == null) {
-            // add JVM Binding Default
-            reference.addBinding(new JvmBinding());
+            // default add jvm binding and reference jvm binding should set serialize as false
+            JvmBindingParam jvmBindingParam = new JvmBindingParam();
+            jvmBindingParam.setSerialize(false);
+            reference.addBinding(new JvmBinding().setJvmBindingParam(jvmBindingParam));
         } else {
             BindingConverter bindingConverter = bindingConverterFactory
                 .getBindingConverter(bindingParam.getBindingType());

@@ -43,6 +43,7 @@ public class ReferenceRegisterHelper {
         if (!binding.getBindingType().equals(JvmBinding.JVM_BINDING_TYPE)
             && !SofaRuntimeProperties.isDisableJvmFirst(sofaRuntimeContext)
             && reference.isJvmFirst()) {
+            // as rpc invocation would be serialized, so here would Not ignore serialized
             reference.addBinding(new JvmBinding());
         }
 
