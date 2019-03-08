@@ -127,7 +127,7 @@
         <xsd:attribute name="registry" type="xsd:string" use="optional"/>
         <xsd:attribute name="serialize-type" type="xsd:string" use="optional"/>
     </xsd:complexType>
-    <!-- binding.jvm im reference -->
+    <!-- binding.jvm in reference -->
     <xsd:complexType name="BBindingJvmReference">
         <xsd:attribute name="serialize" type="xsd:boolean" default="false" use="optional"/>
     </xsd:complexType>
