@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * @author qilong.zql
- * @since 0.6.0
+ * @since 3.1.2
  */
 public class SofaBootstrapTest {
 
