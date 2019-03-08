@@ -31,7 +31,7 @@ public class JvmBinding extends AbstractBinding {
     /**
      * binding type: JVM
      */
-    public static BindingType JVM_BINDING_TYPE = new BindingType("jvm");
+    public static BindingType JVM_BINDING_TYPE = new BindingType(XmlConstants.BINDING_TYPE);
 
     private JvmBindingParam   jvmBindingParam  = new JvmBindingParam();
 
