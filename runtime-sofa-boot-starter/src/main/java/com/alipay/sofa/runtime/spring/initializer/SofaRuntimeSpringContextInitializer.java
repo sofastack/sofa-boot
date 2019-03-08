@@ -16,9 +16,7 @@
  */
 package com.alipay.sofa.runtime.spring.initializer;
 
-import com.alipay.sofa.common.log.Constants;
 import com.alipay.sofa.infra.constants.SofaBootInfraConstants;
-import com.alipay.sofa.infra.log.space.SofaBootLogSpaceIsolationInit;
 import com.alipay.sofa.infra.utils.SOFABootEnvUtils;
 import com.alipay.sofa.runtime.SofaFramework;
 import com.alipay.sofa.runtime.api.client.ReferenceClient;
@@ -37,7 +35,6 @@ import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import com.alipay.sofa.runtime.spi.log.SofaLogger;
-import com.alipay.sofa.runtime.spi.log.SofaRuntimeLoggerFactory;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
 import com.alipay.sofa.runtime.spring.*;
