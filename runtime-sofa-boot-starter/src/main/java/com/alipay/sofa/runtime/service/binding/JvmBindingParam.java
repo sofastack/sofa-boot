@@ -14,24 +14,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.infra.base;
+package com.alipay.sofa.runtime.service.binding;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ImportResource;
+import com.alipay.sofa.runtime.api.binding.BindingType;
+import com.alipay.sofa.runtime.api.client.param.BindingParam;
 
 /**
- * SofaBootWebSpringBootApplication
- * <p/>
- * Created by yangguanchao on 16/7/22.
+ * @author qilong.zql
+ * @since 3.1.2
  */
-@ImportResource({ "classpath*:META-INF/sofaboot-web-test/*.xml" })
-@SpringBootApplication
-public class SofaBootWebSpringBootApplication {
+public class JvmBindingParam implements BindingParam {
 
-    public static void main(String[] args) {
-        SpringApplication springApplication = new SpringApplication(
-            SofaBootWebSpringBootApplication.class);
-        springApplication.run();
+    private boolean serialize = true;
+
+    @Override
+    public BindingType getBindingType() {
+        return JvmBinding.JVM_BINDING_TYPE;
+    }
+
+    /**
+     * whether ignore serialize when invoke across ClassLoader.
+     *
+     * @return
+     */
+    public boolean isSerialize() {
+        return serialize;
+    }
+
+    /**
+     * Set whether ignore serialize when invoke across ClassLoader.
+     *
+     * @param serialize
+     */
+    public JvmBindingParam setSerialize(boolean serialize) {
+        this.serialize = serialize;
+        return this;
     }
 }

@@ -25,6 +25,7 @@ import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import com.alipay.sofa.runtime.beans.service.SampleService;
 import com.alipay.sofa.runtime.integration.invoke.DynamicJvmServiceProxyFinder;
 import com.alipay.sofa.runtime.integration.service.SofaEventHandler;
+import com.alipay.sofa.runtime.service.binding.JvmBinding;
 import com.alipay.sofa.runtime.spi.binding.Contract;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
@@ -147,6 +148,8 @@ public class SofaEventHandlerTest {
                 result = SampleService.class;
                 contract.getUniqueId();
                 result = "";
+                contract.getBinding(JvmBinding.JVM_BINDING_TYPE);
+                result = new JvmBinding();
 
                 invocation.getArguments();
                 result = new Object[] {};
