@@ -93,7 +93,8 @@ public class SofaEventHandlerTest {
         Assert.assertTrue(applicationContext.isActive());
 
         SofaEventHandler sofaEventHandler = new SofaEventHandler();
-        sofaEventHandler.handleEvent(new BizEvent(biz, Constants.BIZ_EVENT_TOPIC_UNINSTALL));
+        sofaEventHandler.handleEvent(new BizEvent(biz,
+            Constants.BIZ_EVENT_TOPIC_AFTER_INVOKE_BIZ_STOP));
 
         Assert.assertFalse(SofaRuntimeProperties.isDisableJvmFirst(applicationContext
             .getClassLoader()));
@@ -113,7 +114,8 @@ public class SofaEventHandlerTest {
             }
         };
         SofaEventHandler sofaEventHandler = new SofaEventHandler();
-        sofaEventHandler.handleEvent(new BizEvent(biz, Constants.BIZ_EVENT_TOPIC_HEALTH_CHECK));
+        sofaEventHandler.handleEvent(new BizEvent(biz,
+            Constants.BIZ_EVENT_TOPIC_AFTER_INVOKE_BIZ_START));
     }
 
     @Test
