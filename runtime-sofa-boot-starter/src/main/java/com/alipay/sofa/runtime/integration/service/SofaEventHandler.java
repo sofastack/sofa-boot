@@ -32,9 +32,9 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 public class SofaEventHandler implements EventHandler {
     @Override
     public void handleEvent(ArkEvent event) {
-        if (Constants.BIZ_EVENT_TOPIC_UNINSTALL.equals(event.getTopic())) {
+        if (Constants.BIZ_EVENT_TOPIC_AFTER_INVOKE_BIZ_STOP.equals(event.getTopic())) {
             doUninstallBiz((BizEvent) event);
-        } else if (Constants.BIZ_EVENT_TOPIC_HEALTH_CHECK.equals(event.getTopic())) {
+        } else if (Constants.BIZ_EVENT_TOPIC_AFTER_INVOKE_BIZ_START.equals(event.getTopic())) {
             doHealthCheck((BizEvent) event);
         }
     }
