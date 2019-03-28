@@ -201,7 +201,9 @@ public class DynamicJvmServiceProxyFinder {
 
         @Override
         protected void doFinally(MethodInvocation invocation, long startTime) {
-            SofaLogger.debug(getCommonInvocationLog("Finally", invocation, startTime));
+            if (SofaLogger.isDebugEnabled()) {
+                SofaLogger.debug(getCommonInvocationLog("Finally", invocation, startTime));
+            }
         }
 
         private Class getInterfaceType() {
