@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.alipay.sofa</groupId>
         <artifactId>sofaboot-sample-standard-parent</artifactId>
-        <version>2.6.2-SNAPSHOT</version>
+        <version>2.6.2</version>
         <relativePath>../../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
