@@ -202,7 +202,7 @@ public class JvmServiceConsumer implements ClientFactoryAware {
 <parent>
     <groupId>com.alipay.sofa</groupId>
     <artifactId>sofaboot-dependencies</artifactId>
-    <version>2.5.2</version>
+    <version>${sofa.boot.version}</version>
 </parent>
 ```
 
