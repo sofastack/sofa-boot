@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.runtime.integration.service;
 
-import com.alipay.sofa.ark.spi.constant.Constants;
 import com.alipay.sofa.ark.spi.event.ArkEvent;
 import com.alipay.sofa.ark.spi.event.BizEvent;
 import com.alipay.sofa.ark.spi.model.Biz;
@@ -30,11 +29,15 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
  * @since 2.5.0
  */
 public class SofaEventHandler implements EventHandler {
+    // TODO FIX After Release SOFAArk 1.0.0, the constant variable would be removed.
+    public final static String BIZ_EVENT_TOPIC_AFTER_INVOKE_BIZ_START = "AFTER-INVOKE-BIZ-START";
+    public final static String BIZ_EVENT_TOPIC_AFTER_INVOKE_BIZ_STOP  = "AFTER-INVOKE-BIZ-STOP";
+
     @Override
     public void handleEvent(ArkEvent event) {
-        if (Constants.BIZ_EVENT_TOPIC_AFTER_INVOKE_BIZ_STOP.equals(event.getTopic())) {
+        if (BIZ_EVENT_TOPIC_AFTER_INVOKE_BIZ_STOP.equals(event.getTopic())) {
             doUninstallBiz((BizEvent) event);
-        } else if (Constants.BIZ_EVENT_TOPIC_AFTER_INVOKE_BIZ_START.equals(event.getTopic())) {
+        } else if (BIZ_EVENT_TOPIC_AFTER_INVOKE_BIZ_START.equals(event.getTopic())) {
             doHealthCheck((BizEvent) event);
         }
     }
