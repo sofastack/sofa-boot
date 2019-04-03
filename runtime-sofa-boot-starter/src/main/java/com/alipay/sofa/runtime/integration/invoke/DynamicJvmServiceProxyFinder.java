@@ -20,6 +20,7 @@ import com.alipay.sofa.ark.spi.model.Biz;
 import com.alipay.sofa.ark.spi.model.BizState;
 import com.alipay.sofa.ark.spi.service.ArkInject;
 import com.alipay.sofa.ark.spi.service.biz.BizManagerService;
+import com.alipay.sofa.runtime.service.binding.JvmBinding;
 import com.alipay.sofa.runtime.service.component.ServiceComponent;
 import com.alipay.sofa.runtime.SofaFramework;
 import com.alipay.sofa.runtime.spi.binding.Contract;
@@ -70,9 +71,15 @@ public class DynamicJvmServiceProxyFinder {
                 ServiceComponent serviceComponent = findServiceComponent(uniqueId, interfaceType,
                     sofaRuntimeManager.getComponentManager());
                 if (serviceComponent != null) {
+                    JvmBinding referenceJvmBinding = (JvmBinding) contract
+                        .getBinding(JvmBinding.JVM_BINDING_TYPE);
+                    JvmBinding serviceJvmBinding = (JvmBinding) serviceComponent.getService()
+                        .getBinding(JvmBinding.JVM_BINDING_TYPE);
+                    boolean serialize = referenceJvmBinding.getJvmBindingParam().isSerialize()
+                                        || serviceJvmBinding.getJvmBindingParam().isSerialize();
                     return new DynamicJvmServiceInvoker(clientClassloader,
                         sofaRuntimeManager.getAppClassLoader(), serviceComponent.getService()
-                            .getTarget(), contract, biz.getIdentity());
+                            .getTarget(), contract, biz.getIdentity(), serialize);
                 }
             }
         }
@@ -123,6 +130,7 @@ public class DynamicJvmServiceProxyFinder {
         private Object                   targetService;
         private String                   bizIdentity;
         private ThreadLocal<ClassLoader> clientClassloader = new ThreadLocal<>();
+        private boolean                  serialize;
 
         static protected final String    TOSTRING_METHOD   = "toString";
         static protected final String    EQUALS_METHOD     = "equals";
@@ -130,12 +138,13 @@ public class DynamicJvmServiceProxyFinder {
 
         public DynamicJvmServiceInvoker(ClassLoader clientClassloader,
                                         ClassLoader serviceClassLoader, Object targetService,
-                                        Contract contract, String bizIdentity) {
+                                        Contract contract, String bizIdentity, boolean serialize) {
             super(serviceClassLoader);
             this.clientClassloader.set(clientClassloader);
             this.targetService = targetService;
             this.contract = contract;
             this.bizIdentity = bizIdentity;
+            this.serialize = serialize;
         }
 
         @Override
@@ -147,6 +156,16 @@ public class DynamicJvmServiceProxyFinder {
                 SofaLogger
                     .debug(">> Start in Cross App JVM service invoke, the service interface is  - "
                            + getInterfaceType());
+
+                if (!serialize) {
+                    ClassLoader tcl = Thread.currentThread().getContextClassLoader();
+                    try {
+                        pushThreadContextClassLoader(getServiceClassLoader());
+                        return targetMethod.invoke(targetService, targetArguments);
+                    } finally {
+                        pushThreadContextClassLoader(tcl);
+                    }
+                }
 
                 if (TOSTRING_METHOD.equalsIgnoreCase(targetMethod.getName())
                     && targetMethod.getParameterTypes().length == 0) {
@@ -182,7 +201,9 @@ public class DynamicJvmServiceProxyFinder {
 
         @Override
         protected void doFinally(MethodInvocation invocation, long startTime) {
-            SofaLogger.debug(getCommonInvocationLog("Finally", invocation, startTime));
+            if (SofaLogger.isDebugEnabled()) {
+                SofaLogger.debug(getCommonInvocationLog("Finally", invocation, startTime));
+            }
         }
 
         private Class getInterfaceType() {
