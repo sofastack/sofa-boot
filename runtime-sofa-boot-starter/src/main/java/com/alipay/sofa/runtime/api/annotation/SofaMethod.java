@@ -23,7 +23,6 @@ import java.lang.annotation.Target;
 
 /**
  * @author bystander
- * @version : SofaMethod.java, v 0.1 2019年04月15日 10:00 bystander Exp $
  * @since 2.6.4
  */
 @Retention(RetentionPolicy.RUNTIME)
