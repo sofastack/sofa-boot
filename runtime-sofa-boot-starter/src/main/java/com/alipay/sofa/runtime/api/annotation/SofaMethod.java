@@ -24,6 +24,7 @@ import java.lang.annotation.Target;
 /**
  * @author bystander
  * @version : SofaMethod.java, v 0.1 2019年04月15日 10:00 bystander Exp $
+ * @since 2.6.4
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
@@ -33,6 +34,7 @@ public @interface SofaMethod {
      * method name
      *
      * @return method name
+     * @since 2.6.4
      */
     String name() default "";
 
@@ -40,6 +42,7 @@ public @interface SofaMethod {
      * timeout
      *
      * @return timeout
+     * @since 2.6.4
      */
     int timeout() default 3000;
 
@@ -47,6 +50,7 @@ public @interface SofaMethod {
      * retry times
      *
      * @return retry times
+     * @since 2.6.4
      */
     int retries() default 0;
 
@@ -54,6 +58,7 @@ public @interface SofaMethod {
      * invoke type
      *
      * @return invoke type
+     * @since 2.6.4
      */
     String invokeType() default "sync";
 
@@ -61,7 +66,7 @@ public @interface SofaMethod {
      * callback implementation class name
      *
      * @return callback implementation class name
-     * @since 2.5.0
+     * @since 2.6.4
      */
     String callbackClass() default "";
 
@@ -69,7 +74,7 @@ public @interface SofaMethod {
      * callback spring beanName ref
      *
      * @return callback spring beanName ref
-     * @since 2.5.0
+     * @since 2.6.4
      */
     String callbackRef() default "";
 }

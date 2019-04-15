@@ -142,6 +142,7 @@ public @interface SofaReferenceBinding {
      * for each method config
      *
      * @return method configs
+     * @since 2.6.4
      */
     SofaMethod[] methodInfos() default {};
 }
