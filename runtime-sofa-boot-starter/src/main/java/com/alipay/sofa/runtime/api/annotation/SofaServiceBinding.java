@@ -100,4 +100,12 @@ public @interface SofaServiceBinding {
      * @return
      */
     boolean serialize() default true;
+
+    /**
+     * for each method config
+     *
+     * @return method configs
+     * @since 2.6.4
+     */
+    SofaMethod[] methodInfos() default {};
 }

@@ -70,10 +70,9 @@ public @interface SofaReferenceBinding {
     String directUrl() default "";
 
     /**
+     * @return callback handler
      * @deprecated this attribute is not intended for use and will be removed the next major version.
      * callback handler
-     *
-     * @return callback handler
      */
     @Deprecated
     String callbackHandler() default "";
@@ -138,4 +137,12 @@ public @interface SofaReferenceBinding {
      * @return
      */
     boolean serialize() default false;
+
+    /**
+     * for each method config
+     *
+     * @return method configs
+     * @since 2.6.4
+     */
+    SofaMethod[] methodInfos() default {};
 }
