@@ -24,6 +24,7 @@
         <groupId>com.alipay.sofa</groupId>
         <artifactId>sofaboot-dependencies</artifactId>
         <version>3.1.3</version>
+        <relativePath>./sofa-boot-dependencies/pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -35,13 +36,15 @@
     <description>SOFABoot Runtime</description>
 
     <modules>
-        <module>infra-sofa-boot-starter</module>
-        <module>healthcheck-sofa-boot-starter</module>
-        <module>runtime-sofa-boot-starter</module>
-        <module>test-sofa-boot-starter</module>
-        <module>isle-sofa-boot-starter</module>
-        <module>runtime-sofa-boot-plugin</module>
-        <module>sofa-boot-gradle-plugin</module>
+        <module>sofa-boot</module>
+        <module>sofa-boot-dependencies</module>
+        <module>sofa-boot-autoconfigure</module>
+        <module>sofa-boot-actuator</module>
+        <module>sofa-boot-actuator-autoconfigure</module>
+        <module>sofa-boot-starters</module>
+        <module>sofa-boot-tools</module>
+        <module>sofa-boot-plugin</module>
+        <module>sofa-boot-core</module>
     </modules>
 
     <properties>
