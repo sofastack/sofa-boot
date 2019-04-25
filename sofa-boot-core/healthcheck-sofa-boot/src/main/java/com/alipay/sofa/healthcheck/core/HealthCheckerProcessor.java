@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.healthcheck.core;
 
-import com.alipay.sofa.healthcheck.log.HealthCheckLoggerFactory;
+import com.alipay.sofa.boot.log.HealthCheckLoggerFactory;
 import com.alipay.sofa.boot.util.BinaryOperators;
 import com.alipay.sofa.healthcheck.util.HealthCheckUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;

@@ -1,0 +1,6 @@
+org.springframework.context.ApplicationContextInitializer=\
+com.alipay.sofa.boot.autoconfigure.runtime.SofaRuntimeSpringContextInitializer
+
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.alipay.sofa.boot.autoconfigure.runtime.SofaRuntimeAutoConfiguration
+

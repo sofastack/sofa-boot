@@ -35,6 +35,17 @@
             <artifactId>healthcheck-sofa-boot</artifactId>
             <optional>true</optional>
         </dependency>
+
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>runtime-sofa-boot</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>sofa-ark-spi</artifactId>
+            <optional>true</optional></dependency>
     </dependencies>
 
 </project>

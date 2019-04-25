@@ -16,12 +16,16 @@
  */
 package com.alipay.sofa.healthcheck.core;
 
-import com.alipay.sofa.healthcheck.log.HealthCheckLoggerFactory;
+import com.alipay.sofa.boot.log.HealthCheckLoggerFactory;
 import com.alipay.sofa.boot.util.BinaryOperators;
 import com.alipay.sofa.healthcheck.util.HealthCheckUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.health.*;
+import org.springframework.boot.actuate.health.Health;
+import org.springframework.boot.actuate.health.HealthIndicator;
+import org.springframework.boot.actuate.health.ReactiveHealthIndicator;
+import org.springframework.boot.actuate.health.HealthIndicatorNameFactory;
+import org.springframework.boot.actuate.health.Status;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.Assert;
 import org.slf4j.Logger;

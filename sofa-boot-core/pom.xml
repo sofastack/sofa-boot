@@ -11,6 +11,8 @@
     <packaging>pom</packaging>
     <modules>
         <module>healthcheck-sofa-boot</module>
+        <module>runtime-sofa-boot</module>
+        <module>isle-sofa-boot</module>
     </modules>
 
     <artifactId>sofa-boot-core</artifactId>

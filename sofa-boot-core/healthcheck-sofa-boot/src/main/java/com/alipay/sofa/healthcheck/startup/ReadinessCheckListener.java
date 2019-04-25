@@ -18,7 +18,7 @@ package com.alipay.sofa.healthcheck.startup;
 
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.healthcheck.core.*;
-import com.alipay.sofa.healthcheck.log.HealthCheckLoggerFactory;
+import com.alipay.sofa.boot.log.HealthCheckLoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;

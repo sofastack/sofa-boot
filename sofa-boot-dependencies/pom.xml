@@ -123,6 +123,12 @@
                 <version>${sofa.boot.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>runtime-sofa-boot</artifactId>
+                <version>${sofa.boot.version}</version>
+            </dependency>
+
             <!-- starter management begin -->
             <dependency>
                 <groupId>com.alipay.sofa</groupId>

@@ -18,12 +18,13 @@
             <artifactId>sofa-boot</artifactId>
         </dependency>
 
+        <!-- Optional -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-actuator</artifactId>
+            <optional>true</optional>
         </dependency>
 
-        <!-- Optional -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -39,6 +40,12 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>io.projectreactor</groupId>
+            <artifactId>reactor-core</artifactId>
             <optional>true</optional>
         </dependency>
     </dependencies>

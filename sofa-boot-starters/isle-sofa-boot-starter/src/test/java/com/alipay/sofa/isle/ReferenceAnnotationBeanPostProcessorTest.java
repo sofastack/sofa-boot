@@ -34,7 +34,7 @@ import org.springframework.context.ApplicationContext;
 import com.alipay.sofa.runtime.api.annotation.SofaReference;
 import com.alipay.sofa.runtime.api.annotation.SofaReferenceBinding;
 import com.alipay.sofa.runtime.api.binding.BindingType;
-import com.alipay.sofa.runtime.constants.SofaRuntimeFrameworkConstants;
+import com.alipay.sofa.runtime.constants.SofaBootConstants;
 import com.alipay.sofa.runtime.model.InterfaceMode;
 import com.alipay.sofa.runtime.service.component.impl.ReferenceImpl;
 import com.alipay.sofa.runtime.service.helper.ReferenceRegisterHelper;
@@ -73,7 +73,7 @@ public class ReferenceAnnotationBeanPostProcessorTest {
 
         ApplicationContext applicationContext = mock(ApplicationContext.class);
         when(
-            applicationContext.getBean(SofaRuntimeFrameworkConstants.SOFA_RUNTIME_CONTEXT_BEAN_ID,
+            applicationContext.getBean(SofaBootConstants.SOFA_RUNTIME_CONTEXT_BEAN_ID,
                 SofaRuntimeContext.class)).thenReturn(sofaRuntimeContext);
 
         boolean hasException = false;
