@@ -14,9 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.boot.actuator.health;
+package com.alipay.sofa.healthcheck.impl;
 
 import com.alipay.sofa.boot.health.RuntimeHealthChecker;
+import com.alipay.sofa.healthcheck.ReadinessCheckListener;
+import com.alipay.sofa.healthcheck.core.NestedHealthChecker;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import org.springframework.beans.BeansException;
 import org.springframework.boot.actuate.health.HealthIndicator;
@@ -34,6 +36,8 @@ public class DefaultRuntimeHealthChecker implements RuntimeHealthChecker, Applic
 
     private Map<String, HealthIndicator> indicatorMap;
 
+    private ReadinessCheckListener readinessCheckListener;
+
     private ApplicationContext           cxt;
 
     public DefaultRuntimeHealthChecker(SofaRuntimeContext sofaRuntimeContext) {
@@ -41,13 +45,21 @@ public class DefaultRuntimeHealthChecker implements RuntimeHealthChecker, Applic
     }
 
     @Override
-    public boolean isHealth() {
+    public boolean isReadinessHealth() {
+        if(readinessCheckListener == null) {
+            readinessCheckListener = cxt.getBean(ReadinessCheckListener.class);
+        }
+        return readinessCheckListener.aggregateReadinessHealth().getStatus().equals(Status.UP);
+    }
+
+    @Override
+    public boolean isLivenessHealth() {
         if (indicatorMap == null) {
             indicatorMap = cxt.getBeansOfType(HealthIndicator.class);
         }
 
         for (HealthIndicator healthIndicator : indicatorMap.values()) {
-            if (healthIndicator instanceof MultiApplicationHealthIndicator) {
+            if (healthIndicator instanceof NestedHealthChecker) {
                 continue;
             }
 

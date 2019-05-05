@@ -17,6 +17,7 @@
 package com.alipay.sofa.isle.stage;
 
 import com.alipay.sofa.boot.constant.SofaBootConstants;
+import com.alipay.sofa.boot.log.SofaLogger;
 import com.alipay.sofa.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
 import com.alipay.sofa.isle.spring.factory.BeanLoadCostBeanFactory;

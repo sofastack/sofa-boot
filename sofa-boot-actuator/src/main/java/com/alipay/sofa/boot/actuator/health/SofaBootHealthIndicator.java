@@ -17,9 +17,9 @@
 package com.alipay.sofa.boot.actuator.health;
 
 import com.alipay.sofa.boot.constant.SofaBootConstants;
-import com.alipay.sofa.healthcheck.core.HealthCheckerProcessor;
-import com.alipay.sofa.healthcheck.core.NonReadinessHealthCheck;
-import com.alipay.sofa.healthcheck.startup.ReadinessCheckListener;
+import com.alipay.sofa.healthcheck.HealthCheckerProcessor;
+import com.alipay.sofa.healthcheck.core.NonReadinessHealthChecker;
+import com.alipay.sofa.healthcheck.ReadinessCheckListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
@@ -35,7 +35,7 @@ import java.util.Map;
  * @author qilong.zql
  * @since 2.3.0
  */
-public class SofaBootHealthIndicator implements HealthIndicator, NonReadinessHealthCheck {
+public class SofaBootHealthIndicator implements HealthIndicator, NonReadinessHealthChecker {
 
     private static final String    CHECK_RESULT_PREFIX = "Middleware";
 

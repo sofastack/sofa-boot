@@ -49,7 +49,7 @@ public class SofaEventHandler implements EventHandler {
 
     private void doHealthCheck(BizEvent event) {
         SofaRuntimeManager sofaRuntimeManager = getSofaRuntimeManager(event.getBiz());
-        if (!sofaRuntimeManager.isHealthCheckPassed()) {
+        if (!sofaRuntimeManager.isReadinessHealth()) {
             throw new RuntimeException("Health check failed.");
         }
     }

@@ -41,6 +41,12 @@
             <optional>true</optional>
         </dependency>
 
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>isle-sofa-boot</artifactId>
+            <optional>true</optional>
+        </dependency>
+
     </dependencies>
 
 </project>

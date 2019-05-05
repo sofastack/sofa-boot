@@ -14,20 +14,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.isle.spring.health;
+package com.alipay.sofa.boot.actuator.health;
 
+import com.alipay.sofa.healthcheck.ReadinessCheckListener;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
+import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
 import org.springframework.boot.actuate.health.Health;
-import org.springframework.boot.actuate.health.HealthIndicator;
 
 /**
- * module health checker which implements ${@link org.springframework.boot.actuate.health.HealthIndicator}
+ * The health check HTTP checker for start status.
  *
- * @author xuanbei 18/5/16
+ * @author liangen
+ * @author qilong.zql
+ * @version 2.3.0
  */
-public class SofaModuleHealthIndicator extends AbstractModuleHealthChecker implements
-                                                                          HealthIndicator {
-    @Override
+@Endpoint(id = "readiness")
+public class SofaBootReadinessEndpoint {
+
+    @Autowired
+    private ReadinessCheckListener readinessCheckListener;
+
+    @ReadOperation
     public Health health() {
-        return doHealthCheck();
+        return readinessCheckListener.aggregateReadinessHealth();
     }
 }

@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.isle.spring.health;
+package com.alipay.sofa.healthcheck.impl;
 
+import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.isle.ApplicationRuntimeModel;
-import com.alipay.sofa.isle.constants.SofaModuleFrameworkConstants;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
 import org.springframework.beans.BeansException;
 import org.springframework.boot.actuate.health.Health;
@@ -36,7 +36,7 @@ public abstract class AbstractModuleHealthChecker implements ApplicationContextA
     public Health doHealthCheck() {
         Health.Builder builder = new Health.Builder();
         ApplicationRuntimeModel application = applicationContext.getBean(
-            SofaModuleFrameworkConstants.APPLICATION, ApplicationRuntimeModel.class);
+                SofaBootConstants.APPLICATION, ApplicationRuntimeModel.class);
 
         for (DeploymentDescriptor deploymentDescriptor : application.getInstalled()) {
             builder.withDetail(deploymentDescriptor.getName(), "passed");

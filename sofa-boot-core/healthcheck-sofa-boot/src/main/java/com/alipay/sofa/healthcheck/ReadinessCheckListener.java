@@ -14,21 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.healthcheck.startup;
+package com.alipay.sofa.healthcheck;
 
 import com.alipay.sofa.boot.constant.SofaBootConstants;
-import com.alipay.sofa.healthcheck.core.*;
 import com.alipay.sofa.boot.log.HealthCheckLoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.Health;
+import org.springframework.boot.actuate.health.HealthAggregator;
+import org.springframework.boot.actuate.health.OrderedHealthAggregator;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.PriorityOrdered;
 import org.springframework.core.env.Environment;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
@@ -44,6 +46,9 @@ public class ReadinessCheckListener implements ApplicationContextAware, Priority
 
     private static Logger                        logger                 = HealthCheckLoggerFactory
                                                                             .getLogger(ReadinessCheckListener.class);
+
+    private final HealthAggregator healthAggregator = new OrderedHealthAggregator();
+
     private ApplicationContext                   applicationContext;
 
     @Autowired
@@ -119,6 +124,44 @@ public class ReadinessCheckListener implements ApplicationContextAware, Priority
         } else {
             logger.error("Readiness check result: fail");
         }
+    }
+
+    public Health aggregateReadinessHealth() {
+        Map<String, Health> healths = new HashMap<>();
+        if (!isReadinessCheckFinish()) {
+            healths.put(
+                    SofaBootConstants.SOFABOOT_HEALTH_CHECK_NOT_READY_KEY,
+                    Health
+                            .unknown()
+                            .withDetail(SofaBootConstants.SOFABOOT_HEALTH_CHECK_NOT_READY_KEY,
+                                    SofaBootConstants.SOFABOOT_HEALTH_CHECK_NOT_READY_MSG).build());
+        } else {
+            boolean healthCheckerStatus = getHealthCheckerStatus();
+            Map<String, Health> healthCheckerDetails = getHealthCheckerDetails();
+            Map<String, Health> healthIndicatorDetails = getHealthIndicatorDetails();
+
+            boolean afterReadinessCheckCallbackStatus = getHealthCallbackStatus();
+            Map<String, Health> afterReadinessCheckCallbackDetails = getHealthCallbackDetails();
+
+            Health.Builder builder;
+            if (healthCheckerStatus && afterReadinessCheckCallbackStatus) {
+                builder = Health.up();
+            } else {
+                builder = Health.down();
+            }
+            if (!CollectionUtils.isEmpty(healthCheckerDetails)) {
+                builder = builder.withDetail("HealthChecker", healthCheckerDetails);
+            }
+            if (!CollectionUtils.isEmpty(afterReadinessCheckCallbackDetails)) {
+                builder = builder.withDetail("ReadinessCheckCallback",
+                        afterReadinessCheckCallbackDetails);
+            }
+            healths.put("SOFABootReadinessHealthCheckInfo", builder.build());
+
+            // HealthIndicator
+            healths.putAll(healthIndicatorDetails);
+        }
+        return this.healthAggregator.aggregate(healths);
     }
 
     public boolean skipAllCheck() {

@@ -14,10 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.healthcheck.core;
+package com.alipay.sofa.healthcheck;
 
 import com.alipay.sofa.boot.log.HealthCheckLoggerFactory;
 import com.alipay.sofa.boot.util.BinaryOperators;
+import com.alipay.sofa.healthcheck.core.NonReadinessHealthChecker;
 import com.alipay.sofa.healthcheck.util.HealthCheckUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,7 +89,7 @@ public class HealthIndicatorProcessor {
 
         logger.info("Begin SOFABoot HealthIndicator readiness check.");
         boolean result = healthIndicators.entrySet().stream()
-                .filter(entry -> !(entry.getValue() instanceof NonReadinessHealthCheck))
+                .filter(entry -> !(entry.getValue() instanceof NonReadinessHealthChecker))
                 .map(entry -> doHealthCheck(entry.getKey(), entry.getValue(), healthMap))
                 .reduce(true, BinaryOperators.andBoolean());
         if (result) {

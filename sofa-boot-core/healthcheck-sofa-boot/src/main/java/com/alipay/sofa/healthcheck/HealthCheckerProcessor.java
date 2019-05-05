@@ -14,10 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.healthcheck.core;
+package com.alipay.sofa.healthcheck;
 
 import com.alipay.sofa.boot.log.HealthCheckLoggerFactory;
 import com.alipay.sofa.boot.util.BinaryOperators;
+import com.alipay.sofa.healthcheck.core.HealthChecker;
 import com.alipay.sofa.healthcheck.util.HealthCheckUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -62,7 +62,7 @@ public class EnvironmentCustomizer implements EnvironmentPostProcessor {
      * {@link org.springframework.boot.ResourceBanner#getVersionsMap}
      * Get SOFABoot Version and print it on banner
      */
-    private Properties getSofaBootVersionProperties() {
+    protected Properties getSofaBootVersionProperties() {
         Properties properties = new Properties();
         String sofaBootVersion = EnvironmentCustomizer.class.getPackage()
             .getImplementationVersion();

@@ -15,7 +15,6 @@
  * limitations under the License.
  */
 package com.alipay.sofa.healthcheck.core;
-
 import org.springframework.boot.actuate.health.Health;
 
 /**

@@ -14,33 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.boot.actuator.health;
+package com.alipay.sofa.healthcheck.impl;
 
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.healthcheck.core.HealthChecker;
-import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.Health;
 
 /**
- * component health checker which implements ${@link com.alipay.sofa.healthcheck.core.HealthChecker}
+ * module health checker which implements ${@link com.alipay.sofa.healthcheck.core.HealthChecker}
  *
- * @author xuanbei 18/3/17
+ * @author xuanbei 18/5/6
  */
-public class SofaComponentHealthChecker extends AbstractComponentHealthChecker implements
-                                                                              HealthChecker {
+public class SofaModuleHealthChecker extends AbstractModuleHealthChecker implements HealthChecker {
 
-    @Value("${" + SofaBootConstants.SOFABOOT_COMPONENT_CHECK_RETRY_COUNT + ":"
-           + SofaBootConstants.SOFABOOT_COMPONENT_CHECK_RETRY_DEFAULT_COUNT + "}")
-    private int retryCount;
+    @Value("${" + SofaBootConstants.SOFABOOT_MODULE_CHECK_RETRY_COUNT + ":"
+           + SofaBootConstants.SOFABOOT_MODULE_CHECK_RETRY_DEFAULT_COUNT + "}")
+    private int  retryCount;
 
-    @Value("${" + SofaBootConstants.SOFABOOT_COMPONENT_CHECK_RETRY_INTERVAL + ":"
-           + SofaBootConstants.SOFABOOT_COMPONENT_CHECK_RETRY_DEFAULT_INTERVAL + "}")
-    private int retryInterval;
-
-    public SofaComponentHealthChecker(SofaRuntimeContext sofaRuntimeContext) {
-        super(sofaRuntimeContext);
-    }
+    @Value("${" + SofaBootConstants.SOFABOOT_MODULE_CHECK_RETRY_INTERVAL + ":"
+           + SofaBootConstants.SOFABOOT_MODULE_CHECK_RETRY_DEFAULT_INTERVAL + "}")
+    private long retryInterval;
 
     @Override
     public Health isHealthy() {
@@ -49,7 +43,7 @@ public class SofaComponentHealthChecker extends AbstractComponentHealthChecker i
 
     @Override
     public String getComponentName() {
-        return "SOFABoot-Components";
+        return "SOFABoot-Modules";
     }
 
     @Override

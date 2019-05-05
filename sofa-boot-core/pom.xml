@@ -13,6 +13,9 @@
         <module>healthcheck-sofa-boot</module>
         <module>runtime-sofa-boot</module>
         <module>isle-sofa-boot</module>
+        <module>rpc-sofa-boot</module>
+        <module>tracer-sofa-boot</module>
+        <module>log-sofa-boot</module>
     </modules>
 
     <artifactId>sofa-boot-core</artifactId>

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.isle.spring.health;
+package com.alipay.sofa.isle;
 
 import com.alipay.sofa.healthcheck.configuration.HealthCheckConstants;
 import org.junit.After;

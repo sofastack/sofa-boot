@@ -16,7 +16,15 @@
  */
 package com.alipay.sofa.isle.deployment;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
@@ -30,7 +38,7 @@ public class DependencyTree<K, T> implements Iterable<DependencyTree.Entry<K, T>
     // the sorted list of resolved entries.
     // given an element e from that list it is ensured that any element at the left
     // of 'e' doesn't depends on it
-    private final List<Entry<K, T>>   resolved;
+    private final List<Entry<K, T>> resolved;
 
     public DependencyTree() {
         registry = new HashMap<>();

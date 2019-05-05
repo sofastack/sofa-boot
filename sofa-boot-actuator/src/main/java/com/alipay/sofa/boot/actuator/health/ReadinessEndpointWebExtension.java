@@ -29,11 +29,11 @@ import org.springframework.boot.actuate.health.ShowDetails;
  * @author qilong.zql
  * @since 3.0.0
  */
-@EndpointWebExtension(endpoint = SofaBootReadinessCheckEndpoint.class)
+@EndpointWebExtension(endpoint = SofaBootReadinessEndpoint.class)
 public class ReadinessEndpointWebExtension {
 
     @Autowired
-    private SofaBootReadinessCheckEndpoint  delegate;
+    private SofaBootReadinessEndpoint delegate;
 
     @Autowired
     private HealthWebEndpointResponseMapper responseMapper;

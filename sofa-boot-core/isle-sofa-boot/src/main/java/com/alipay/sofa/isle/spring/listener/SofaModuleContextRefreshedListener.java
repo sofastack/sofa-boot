@@ -16,9 +16,9 @@
  */
 package com.alipay.sofa.isle.spring.listener;
 
+import com.alipay.sofa.boot.log.SofaLogger;
 import com.alipay.sofa.isle.stage.DefaultPipelineContext;
 import com.alipay.sofa.isle.stage.PipelineStage;
-import com.alipay.sofa.runtime.spi.log.SofaLogger;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;

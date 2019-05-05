@@ -14,22 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.boot.health;
+package com.alipay.sofa.boot.actuator.health;
+
+import com.alipay.sofa.healthcheck.impl.AbstractModuleHealthChecker;
+import org.springframework.boot.actuate.health.Health;
+import org.springframework.boot.actuate.health.HealthIndicator;
 
 /**
- * Check whether runtime is healthy.
+ * module health checker which implements ${@link org.springframework.boot.actuate.health.HealthIndicator}
  *
- * @author qilong.zql
- * @since 2.5.0
+ * @author xuanbei 18/5/16
  */
-public interface RuntimeHealthChecker {
-    /**
-     * Check whether runtime is readiness healthy
-     */
-    boolean isReadinessHealth();
-
-    /**
-     * Check whether runtime is liveness health
-     */
-    boolean isLivenessHealth();
+public class SofaModuleHealthIndicator extends AbstractModuleHealthChecker implements
+                                                                          HealthIndicator {
+    @Override
+    public Health health() {
+        return doHealthCheck();
+    }
 }

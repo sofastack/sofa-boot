@@ -14,20 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.isle.spring.configuration;
+package com.alipay.sofa.boot.autoconfigure.isle;
 
-import com.alipay.sofa.healthcheck.core.HealthChecker;
 import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
-import com.alipay.sofa.isle.spring.health.SofaModuleHealthChecker;
-import com.alipay.sofa.isle.spring.health.SofaModuleHealthIndicator;
 import com.alipay.sofa.isle.spring.listener.SofaModuleBeanFactoryPostProcessor;
 import com.alipay.sofa.isle.spring.listener.SofaModuleContextRefreshedListener;
 import com.alipay.sofa.isle.stage.ModelCreatingStage;
 import com.alipay.sofa.isle.stage.ModuleLogOutputStage;
 import com.alipay.sofa.isle.stage.SpringContextInstallStage;
-import org.springframework.boot.actuate.health.HealthIndicator;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -66,24 +60,5 @@ public class SofaModuleAutoConfiguration {
     @Bean
     public ModuleLogOutputStage moduleLogOutputStage(ApplicationContext applicationContext) {
         return new ModuleLogOutputStage((AbstractApplicationContext) applicationContext);
-    }
-
-    @Configuration
-    @ConditionalOnClass({ HealthIndicator.class })
-    @ConditionalOnMissingClass({ "com.alipay.sofa.healthcheck.core.HealthChecker" })
-    public static class SofaModuleHealthIndicatorConfiguration {
-        @Bean
-        public SofaModuleHealthIndicator sofaModuleHealthIndicator() {
-            return new SofaModuleHealthIndicator();
-        }
-    }
-
-    @Configuration
-    @ConditionalOnClass({ HealthChecker.class })
-    public static class SofaModuleHealthCheckerConfiguration {
-        @Bean
-        public SofaModuleHealthChecker sofaModuleHealthChecker() {
-            return new SofaModuleHealthChecker();
-        }
     }
 }

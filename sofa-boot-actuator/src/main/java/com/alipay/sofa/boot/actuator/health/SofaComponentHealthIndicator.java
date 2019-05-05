@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.boot.actuator.health;
 
+import com.alipay.sofa.healthcheck.impl.AbstractComponentHealthChecker;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;

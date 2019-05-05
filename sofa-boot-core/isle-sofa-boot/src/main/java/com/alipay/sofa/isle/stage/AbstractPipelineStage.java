@@ -17,7 +17,7 @@
 package com.alipay.sofa.isle.stage;
 
 import com.alipay.sofa.boot.constant.SofaBootConstants;
-import com.alipay.sofa.runtime.spi.log.SofaLogger;
+import com.alipay.sofa.boot.log.SofaLogger;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.core.Ordered;
 

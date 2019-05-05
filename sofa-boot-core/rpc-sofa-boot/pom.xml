@@ -9,18 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>isle-sofa-boot</artifactId>
+    <artifactId>rpc-sofa-boot</artifactId>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.alipay.sofa</groupId>
-            <artifactId>sofa-boot</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.alipay.sofa</groupId>
-            <artifactId>runtime-sofa-boot</artifactId>
-        </dependency>
-    </dependencies>
 
 </project>

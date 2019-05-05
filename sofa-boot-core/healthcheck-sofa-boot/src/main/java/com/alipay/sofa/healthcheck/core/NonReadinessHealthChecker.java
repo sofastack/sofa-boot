@@ -9,7 +9,7 @@ package com.alipay.sofa.healthcheck.core;
  * to be skip during readiness health check.
  *
  * @author qilong.zql
- * @since 2019/04/22
+ * @since 3.2.0
  */
-public interface NonReadinessHealthCheck {
+public interface NonReadinessHealthChecker {
 }
