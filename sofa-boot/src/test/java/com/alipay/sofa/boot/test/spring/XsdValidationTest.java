@@ -76,8 +76,8 @@ public class XsdValidationTest {
     private void loadXml(String xml) throws Exception {
         DocumentLoader documentLoader = new DefaultDocumentLoader();
         documentLoader.loadDocument(new InputSource(this.getClass().getClassLoader()
-                        .getResourceAsStream(xml)), new DelegatingEntityResolver(this.getClass()
-                        .getClassLoader()), new DefaultErrorHandler(),
-                XmlValidationModeDetector.VALIDATION_XSD, true);
+            .getResourceAsStream(xml)), new DelegatingEntityResolver(this.getClass()
+            .getClassLoader()), new DefaultErrorHandler(),
+            XmlValidationModeDetector.VALIDATION_XSD, true);
     }
 }

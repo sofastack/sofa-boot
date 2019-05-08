@@ -1,6 +1,18 @@
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2019 All Rights Reserved.
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.alipay.sofa.boot.test.cloud;
 
@@ -36,18 +48,26 @@ public class SpringCloudEnvTest {
         Assert.assertEquals(1L, SampleSpringContextInitializer.bootstrapContext.get());
         Assert.assertEquals(1L, SampleSpringContextInitializer.applicationContext.get());
         Assert.assertFalse(SofaBootEnvUtils.isSpringCloudBootstrapEnvironment(null));
-        Assert.assertEquals("sofa-boot-test",
-                SampleSpringContextInitializer.bootstrapEnvironment.getProperty(SofaBootConstants.APP_NAME_KEY));
-        Assert.assertEquals("sofa-boot-test",
-                SampleSpringContextInitializer.applicationEnvironment.getProperty(SofaBootConstants.APP_NAME_KEY));
-        Assert.assertEquals("INFO", SampleSpringContextInitializer.bootstrapEnvironment.getProperty("logging.level.com.alipay.test"));
-        Assert.assertEquals("INFO", SampleSpringContextInitializer.applicationEnvironment.getProperty("logging.level.com.alipay.test"));
-        Assert.assertEquals("WARN", SampleSpringContextInitializer.bootstrapEnvironment.getProperty("logging.level.com.test.demo"));
-        Assert.assertEquals("WARN", SampleSpringContextInitializer.applicationEnvironment.getProperty("logging.level.com.test.demo"));
-        Assert.assertEquals("./logs", SampleSpringContextInitializer.bootstrapEnvironment.getProperty("logging.path"));
-        Assert.assertEquals("./logs", SampleSpringContextInitializer.applicationEnvironment.getProperty("logging.path"));
-        Assert.assertEquals(null, SampleSpringContextInitializer.bootstrapEnvironment.getProperty("any.key"));
-        Assert.assertEquals("any.value", SampleSpringContextInitializer.applicationEnvironment.getProperty("any.key"));
+        Assert.assertEquals("sofa-boot-test", SampleSpringContextInitializer.bootstrapEnvironment
+            .getProperty(SofaBootConstants.APP_NAME_KEY));
+        Assert.assertEquals("sofa-boot-test", SampleSpringContextInitializer.applicationEnvironment
+            .getProperty(SofaBootConstants.APP_NAME_KEY));
+        Assert.assertEquals("INFO", SampleSpringContextInitializer.bootstrapEnvironment
+            .getProperty("logging.level.com.alipay.test"));
+        Assert.assertEquals("INFO", SampleSpringContextInitializer.applicationEnvironment
+            .getProperty("logging.level.com.alipay.test"));
+        Assert.assertEquals("WARN", SampleSpringContextInitializer.bootstrapEnvironment
+            .getProperty("logging.level.com.test.demo"));
+        Assert.assertEquals("WARN", SampleSpringContextInitializer.applicationEnvironment
+            .getProperty("logging.level.com.test.demo"));
+        Assert.assertEquals("./logs",
+            SampleSpringContextInitializer.bootstrapEnvironment.getProperty("logging.path"));
+        Assert.assertEquals("./logs",
+            SampleSpringContextInitializer.applicationEnvironment.getProperty("logging.path"));
+        Assert.assertEquals(null,
+            SampleSpringContextInitializer.bootstrapEnvironment.getProperty("any.key"));
+        Assert.assertEquals("any.value",
+            SampleSpringContextInitializer.applicationEnvironment.getProperty("any.key"));
     }
 
 }

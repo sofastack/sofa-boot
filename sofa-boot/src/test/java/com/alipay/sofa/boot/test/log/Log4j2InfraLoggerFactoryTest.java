@@ -20,6 +20,7 @@ import static junit.framework.TestCase.assertTrue;
 
 import com.alipay.sofa.boot.log.InfraLoggerFactory;
 import com.alipay.sofa.boot.test.log.base.BaseLogTest;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,6 +44,11 @@ public class Log4j2InfraLoggerFactoryTest extends BaseLogTest {
         System.setProperty(Constants.LOGBACK_MIDDLEWARE_LOG_DISABLE_PROP_KEY, "true");
         //disable log4j
         System.setProperty(Constants.LOG4J_MIDDLEWARE_LOG_DISABLE_PROP_KEY, "true");
+    }
+
+    @After
+    public void after() throws Exception {
+        super.after();
     }
 
     /**

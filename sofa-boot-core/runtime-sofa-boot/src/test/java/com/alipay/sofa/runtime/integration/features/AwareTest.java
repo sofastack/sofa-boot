@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.runtime.integration.features;
 
+import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.runtime.api.annotation.SofaClientFactory;
 import com.alipay.sofa.runtime.api.annotation.SofaReference;
 import com.alipay.sofa.runtime.api.aware.ClientFactoryAware;
@@ -26,7 +27,6 @@ import com.alipay.sofa.runtime.api.client.param.ReferenceParam;
 import com.alipay.sofa.runtime.api.client.param.ServiceParam;
 import com.alipay.sofa.runtime.beans.impl.SampleServiceImpl;
 import com.alipay.sofa.runtime.beans.service.SampleService;
-import com.alipay.sofa.runtime.constants.SofaBootConstants;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;

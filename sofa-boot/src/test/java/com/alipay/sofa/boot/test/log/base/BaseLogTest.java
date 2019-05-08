@@ -31,11 +31,12 @@ import com.alipay.sofa.common.log.env.LogEnvUtils;
  * <p/>
  * Created by yangguanchao on 18/01/04.
  */
-public abstract class BaseLogTest{
+public abstract class BaseLogTest {
 
-    public static final String restLogLevel = Constants.LOG_LEVEL_PREFIX + InfraLoggerFactory.INFRASTRUCTURE_LOG_SPACE;
-    private static Map SPACES_MAP;
-    private static Field globalSystemProperties;
+    public static final String restLogLevel = Constants.LOG_LEVEL_PREFIX
+                                              + InfraLoggerFactory.INFRASTRUCTURE_LOG_SPACE;
+    private static Map         SPACES_MAP;
+    private static Field       globalSystemProperties;
 
     static {
         try {

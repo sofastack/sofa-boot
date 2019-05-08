@@ -34,7 +34,7 @@ import org.springframework.core.PriorityOrdered;
  */
 public class HigherOrderBeanPostProcessor implements BeanPostProcessor, PriorityOrdered,
                                          SofaRuntimeContextAware, ClientFactoryAware,
-                                         ApplicationShutdownCallback {
+        ApplicationShutdownCallback {
 
     private SofaRuntimeContext sofaRuntimeContext;
 
