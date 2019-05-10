@@ -33,10 +33,7 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>com.alipay.sofa</groupId>
-            <artifactId>sofa-boot-starter</artifactId>
-        </dependency>
+
     </dependencies>
 
 </project>

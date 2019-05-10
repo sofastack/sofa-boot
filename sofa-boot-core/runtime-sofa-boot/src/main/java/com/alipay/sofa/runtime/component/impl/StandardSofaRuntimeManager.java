@@ -18,6 +18,7 @@ package com.alipay.sofa.runtime.component.impl;
 
 import com.alipay.sofa.boot.health.RuntimeHealthChecker;
 import com.alipay.sofa.boot.event.RuntimeShutdownCallback;
+import com.alipay.sofa.runtime.SofaFramework;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
 import com.alipay.sofa.runtime.spi.component.ComponentManager;
@@ -34,13 +35,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class StandardSofaRuntimeManager implements SofaRuntimeManager {
 
-    private ComponentManager                  componentManager;
-    private ClientFactoryInternal             clientFactoryInternal;
-    private SofaRuntimeContext                sofaRuntimeContext;
-    private String                            appName;
-    private ClassLoader                       appClassLoader;
-    private List<RuntimeShutdownCallback>     runtimeShutdownCallbacks = new CopyOnWriteArrayList<RuntimeShutdownCallback>();
-    private List<RuntimeHealthChecker>        runtimeHealthCheckers        = new CopyOnWriteArrayList<>();
+    private ComponentManager              componentManager;
+    private ClientFactoryInternal         clientFactoryInternal;
+    private SofaRuntimeContext            sofaRuntimeContext;
+    private String                        appName;
+    private ClassLoader                   appClassLoader;
+    private List<RuntimeShutdownCallback> runtimeShutdownCallbacks = new CopyOnWriteArrayList<RuntimeShutdownCallback>();
+    private List<RuntimeHealthChecker>    runtimeHealthCheckers    = new CopyOnWriteArrayList<>();
 
     public StandardSofaRuntimeManager(String appName, ClassLoader appClassLoader,
                                       ClientFactoryInternal clientFactoryInternal) {
@@ -61,7 +62,6 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager {
     public ClientFactoryInternal getClientFactoryInternal() {
         return clientFactoryInternal;
     }
-
 
     @Override
     public boolean isReadinessHealth() {
@@ -105,6 +105,7 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager {
      */
     public void shutdown() throws ServiceRuntimeException {
         try {
+            SofaFramework.unRegisterSofaRuntimeManager(this);
             for (RuntimeShutdownCallback callback : runtimeShutdownCallbacks) {
                 callback.shutdown();
             }

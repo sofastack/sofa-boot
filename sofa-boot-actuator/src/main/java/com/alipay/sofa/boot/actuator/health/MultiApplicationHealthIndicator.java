@@ -19,7 +19,7 @@ package com.alipay.sofa.boot.actuator.health;
 import com.alipay.sofa.healthcheck.core.NestedHealthChecker;
 import com.alipay.sofa.healthcheck.core.NonReadinessHealthChecker;
 import com.alipay.sofa.runtime.SofaFramework;
-import com.alipay.sofa.runtime.integration.invoke.DynamicJvmServiceProxyFinder;
+import com.alipay.sofa.runtime.test.invoke.DynamicJvmServiceProxyFinder;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
@@ -28,7 +28,8 @@ import org.springframework.boot.actuate.health.HealthIndicator;
  * @author qilong.zql
  * @since 2.5.0
  */
-public class MultiApplicationHealthIndicator implements HealthIndicator, NestedHealthChecker, NonReadinessHealthChecker {
+public class MultiApplicationHealthIndicator implements HealthIndicator, NestedHealthChecker,
+                                            NonReadinessHealthChecker {
 
     @Override
     public Health health() {

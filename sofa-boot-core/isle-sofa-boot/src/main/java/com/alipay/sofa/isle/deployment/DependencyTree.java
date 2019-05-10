@@ -38,7 +38,7 @@ public class DependencyTree<K, T> implements Iterable<DependencyTree.Entry<K, T>
     // the sorted list of resolved entries.
     // given an element e from that list it is ensured that any element at the left
     // of 'e' doesn't depends on it
-    private final List<Entry<K, T>> resolved;
+    private final List<Entry<K, T>>   resolved;
 
     public DependencyTree() {
         registry = new HashMap<>();

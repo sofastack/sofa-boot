@@ -46,8 +46,7 @@ public class SofaModuleBeanFactoryPostProcessor implements BeanFactoryPostProces
                                                                                    throws BeansException {
         Map<String, BeanDefinition> postProcessorDefinitions = getBeanDefinitionsForType(
             beanFactory, BeanPostProcessor.class, BeanFactoryPostProcessor.class);
-        beanFactory.registerSingleton(
-                SofaBootConstants.PROCESSORS_OF_ROOT_APPLICATION_CONTEXT,
+        beanFactory.registerSingleton(SofaBootConstants.PROCESSORS_OF_ROOT_APPLICATION_CONTEXT,
             postProcessorDefinitions);
     }
 

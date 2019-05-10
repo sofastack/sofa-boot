@@ -100,14 +100,12 @@ public abstract class AbstractContractFactoryBean implements InitializingBean, F
     }
 
     protected BindingConverterFactory getBindingConverterFactory() {
-        return applicationContext.getBean(
-            SofaBootConstants.BINDING_CONVERTER_FACTORY_BEAN_ID,
+        return applicationContext.getBean(SofaBootConstants.BINDING_CONVERTER_FACTORY_BEAN_ID,
             BindingConverterFactory.class);
     }
 
     protected BindingAdapterFactory getBindingAdapterFactory() {
-        return applicationContext.getBean(
-            SofaBootConstants.BINDING_ADAPTER_FACTORY_BEAN_ID,
+        return applicationContext.getBean(SofaBootConstants.BINDING_ADAPTER_FACTORY_BEAN_ID,
             BindingAdapterFactory.class);
     }
 

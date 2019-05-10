@@ -64,15 +64,13 @@ public class AsyncTaskExecutor {
      */
     private static ThreadPoolExecutor createThreadPoolExecutor(Environment environment) {
         int threadPoolCoreSize = CPU_COUNT + 1;
-        String coreSizeStr = environment
-            .getProperty(SofaBootConstants.ASYNC_INIT_BEAN_CORE_SIZE);
+        String coreSizeStr = environment.getProperty(SofaBootConstants.ASYNC_INIT_BEAN_CORE_SIZE);
         if (coreSizeStr != null) {
             threadPoolCoreSize = Integer.parseInt(coreSizeStr);
         }
 
         int threadPoolMaxSize = CPU_COUNT + 1;
-        String maxSizeStr = environment
-            .getProperty(SofaBootConstants.ASYNC_INIT_BEAN_MAX_SIZE);
+        String maxSizeStr = environment.getProperty(SofaBootConstants.ASYNC_INIT_BEAN_MAX_SIZE);
         if (maxSizeStr != null) {
             threadPoolMaxSize = Integer.parseInt(maxSizeStr);
         }

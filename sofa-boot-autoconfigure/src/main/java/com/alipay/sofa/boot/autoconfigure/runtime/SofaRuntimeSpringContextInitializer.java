@@ -24,7 +24,6 @@ import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
 
-
 /**
  * @author xuanbei 18/3/13
  */
@@ -34,7 +33,8 @@ public class SofaRuntimeSpringContextInitializer
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
         ConfigurableEnvironment environment = applicationContext.getEnvironment();
-        RuntimeContextInitializer.sofaRuntimeContext(environment.getProperty(SofaBootConstants.APP_NAME_KEY));
+        RuntimeContextInitializer.sofaRuntimeContext(environment
+            .getProperty(SofaBootConstants.APP_NAME_KEY));
         RuntimeContextInitializer.initialize(applicationContext);
         if (SofaBootEnvUtils.isSpringCloudBootstrapEnvironment(environment)) {
             return;

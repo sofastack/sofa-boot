@@ -41,9 +41,9 @@ public class DefaultSofaModuleProfileEnvironment implements SofaModuleProfileEnv
             return;
         }
 
-        String activeProfiles = applicationContext
-            .getBean(SofaBootConstants.SOFA_MODULE_PROPERTIES_BEAN_ID,
-                SofaModuleProperties.class).getActiveProfiles();
+        String activeProfiles = applicationContext.getBean(
+            SofaBootConstants.SOFA_MODULE_PROPERTIES_BEAN_ID, SofaModuleProperties.class)
+            .getActiveProfiles();
         if (StringUtils.hasText(activeProfiles)) {
             String[] activeConfigProfileList = activeProfiles
                 .split(SofaBootConstants.PROFILE_SEPARATOR);

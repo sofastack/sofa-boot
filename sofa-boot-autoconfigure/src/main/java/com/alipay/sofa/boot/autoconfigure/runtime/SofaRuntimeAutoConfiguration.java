@@ -19,6 +19,7 @@ package com.alipay.sofa.boot.autoconfigure.runtime;
 import com.alipay.sofa.runtime.SofaFramework;
 import com.alipay.sofa.runtime.spring.AsyncProxyBeanPostProcessor;
 import com.alipay.sofa.runtime.spring.async.AsyncTaskExecutionListener;
+import com.alipay.sofa.runtime.spring.initializer.RuntimeContextInitializer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -46,5 +47,10 @@ public class SofaRuntimeAutoConfiguration {
     @Bean
     public AsyncTaskExecutionListener asyncTaskExecutionListener() {
         return new AsyncTaskExecutionListener();
+    }
+
+    @Bean
+    public RuntimeContextInitializer runtimeContextInitializer() {
+        return new RuntimeContextInitializer();
     }
 }

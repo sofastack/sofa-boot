@@ -56,9 +56,8 @@ public class DynamicSpringContextLoader implements SpringContextLoader {
     @Override
     public void loadSpringContext(DeploymentDescriptor deployment,
                                   ApplicationRuntimeModel application) throws Exception {
-        SofaModuleProperties sofaModuleProperties = rootApplicationContext
-            .getBean(SofaBootConstants.SOFA_MODULE_PROPERTIES_BEAN_ID,
-                SofaModuleProperties.class);
+        SofaModuleProperties sofaModuleProperties = rootApplicationContext.getBean(
+            SofaBootConstants.SOFA_MODULE_PROPERTIES_BEAN_ID, SofaModuleProperties.class);
 
         BeanLoadCostBeanFactory beanFactory = new BeanLoadCostBeanFactory(
             sofaModuleProperties.getBeanLoadCost(), deployment.getModuleName());
@@ -69,8 +68,7 @@ public class DynamicSpringContextLoader implements SpringContextLoader {
         RuntimeContextInitializer.initialize(ctx);
         String activeProfiles = sofaModuleProperties.getActiveProfiles();
         if (StringUtils.hasText(activeProfiles)) {
-            String[] profiles = activeProfiles
-                .split(SofaBootConstants.PROFILE_SEPARATOR);
+            String[] profiles = activeProfiles.split(SofaBootConstants.PROFILE_SEPARATOR);
             ctx.getEnvironment().setActiveProfiles(profiles);
         }
         setUpParentSpringContext(ctx, deployment, application);

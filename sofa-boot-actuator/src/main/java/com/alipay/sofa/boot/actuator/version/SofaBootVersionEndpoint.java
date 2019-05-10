@@ -51,7 +51,7 @@ public class SofaBootVersionEndpoint {
     private Logger                              logger                  = InfraLoggerFactory
                                                                             .getLogger(SofaBootVersionEndpoint.class);
 
-    private List<Object> endpointResult          = new ArrayList<>();
+    private List<Object>                        endpointResult          = new ArrayList<>();
 
     private PathMatchingResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
 

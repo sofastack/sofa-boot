@@ -53,8 +53,7 @@ public class SofaModuleProfileUtil {
 
     private static String[] getActiveModuleProfiles(DeploymentDescriptor deploymentDescriptor) {
         String[] activeModuleProfiles = new String[] { SofaBootConstants.DEFAULT_PROFILE_VALUE };
-        String profiles = deploymentDescriptor
-            .getProperty(SofaBootConstants.MODULE_PROFILE);
+        String profiles = deploymentDescriptor.getProperty(SofaBootConstants.MODULE_PROFILE);
         if (profiles == null || profiles.length() == 0) {
             return activeModuleProfiles;
         }

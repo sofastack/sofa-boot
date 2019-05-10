@@ -11,10 +11,6 @@
 
     <artifactId>runtime-sofa-boot</artifactId>
 
-    <properties>
-        <commons.io.version>2.6</commons.io.version>
-    </properties>
-
     <dependencies>
         <!-- Compile -->
         <dependency>
@@ -55,15 +51,8 @@
         </dependency>
 
         <dependency>
-            <groupId>org.jmockit</groupId>
-            <artifactId>jmockit</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>${commons.io.version}</version>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

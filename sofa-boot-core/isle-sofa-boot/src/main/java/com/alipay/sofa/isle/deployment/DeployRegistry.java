@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.isle.deployment;
 
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;

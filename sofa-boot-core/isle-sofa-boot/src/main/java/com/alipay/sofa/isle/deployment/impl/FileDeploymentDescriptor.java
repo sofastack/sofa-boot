@@ -27,7 +27,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
-
 /**
  *
  * @author yangyanzhao
@@ -46,7 +45,7 @@ public class FileDeploymentDescriptor extends AbstractDeploymentDescriptor {
         springResources = new HashMap<>();
         File springXml = new File(url.getFile().substring(0,
             url.getFile().length() - SofaBootConstants.SOFA_MODULE_FILE.length()),
-                SofaBootConstants.SPRING_CONTEXT_PATH);
+            SofaBootConstants.SPRING_CONTEXT_PATH);
         List<File> springFiles = new ArrayList<>();
         if (springXml.exists()) {
             listFiles(springFiles, springXml, ".xml");

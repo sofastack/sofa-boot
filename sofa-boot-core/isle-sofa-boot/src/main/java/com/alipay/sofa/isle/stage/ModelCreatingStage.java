@@ -46,13 +46,12 @@ public class ModelCreatingStage extends AbstractPipelineStage {
         application.setAppName(appName);
         application.setModuleDeploymentValidator(new DefaultModuleDeploymentValidator());
         getAllDeployments(application);
-        applicationContext.getBeanFactory().registerSingleton(
-                SofaBootConstants.APPLICATION, application);
+        applicationContext.getBeanFactory().registerSingleton(SofaBootConstants.APPLICATION,
+            application);
     }
 
     private void getAllDeployments(ApplicationRuntimeModel application) throws IOException {
-        Enumeration<URL> urls = appClassLoader
-            .getResources(SofaBootConstants.SOFA_MODULE_FILE);
+        Enumeration<URL> urls = appClassLoader.getResources(SofaBootConstants.SOFA_MODULE_FILE);
         if (urls == null || !urls.hasMoreElements()) {
             return;
         }

@@ -36,7 +36,7 @@ public class DefaultRuntimeHealthChecker implements RuntimeHealthChecker, Applic
 
     private Map<String, HealthIndicator> indicatorMap;
 
-    private ReadinessCheckListener readinessCheckListener;
+    private ReadinessCheckListener       readinessCheckListener;
 
     private ApplicationContext           cxt;
 
@@ -46,7 +46,7 @@ public class DefaultRuntimeHealthChecker implements RuntimeHealthChecker, Applic
 
     @Override
     public boolean isReadinessHealth() {
-        if(readinessCheckListener == null) {
+        if (readinessCheckListener == null) {
             readinessCheckListener = cxt.getBean(ReadinessCheckListener.class);
         }
         return readinessCheckListener.aggregateReadinessHealth().getStatus().equals(Status.UP);

@@ -36,7 +36,7 @@ public abstract class AbstractModuleHealthChecker implements ApplicationContextA
     public Health doHealthCheck() {
         Health.Builder builder = new Health.Builder();
         ApplicationRuntimeModel application = applicationContext.getBean(
-                SofaBootConstants.APPLICATION, ApplicationRuntimeModel.class);
+            SofaBootConstants.APPLICATION, ApplicationRuntimeModel.class);
 
         for (DeploymentDescriptor deploymentDescriptor : application.getInstalled()) {
             builder.withDetail(deploymentDescriptor.getName(), "passed");

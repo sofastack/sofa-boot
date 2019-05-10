@@ -54,7 +54,7 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
     @Override
     protected void doProcess() throws Exception {
         ApplicationRuntimeModel application = applicationContext.getBean(
-                SofaBootConstants.APPLICATION, ApplicationRuntimeModel.class);
+            SofaBootConstants.APPLICATION, ApplicationRuntimeModel.class);
 
         try {
             doProcess(application);

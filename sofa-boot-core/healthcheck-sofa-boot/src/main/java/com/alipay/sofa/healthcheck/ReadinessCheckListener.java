@@ -47,7 +47,7 @@ public class ReadinessCheckListener implements ApplicationContextAware, Priority
     private static Logger                        logger                 = HealthCheckLoggerFactory
                                                                             .getLogger(ReadinessCheckListener.class);
 
-    private final HealthAggregator healthAggregator = new OrderedHealthAggregator();
+    private final HealthAggregator               healthAggregator       = new OrderedHealthAggregator();
 
     private ApplicationContext                   applicationContext;
 
@@ -130,11 +130,11 @@ public class ReadinessCheckListener implements ApplicationContextAware, Priority
         Map<String, Health> healths = new HashMap<>();
         if (!isReadinessCheckFinish()) {
             healths.put(
-                    SofaBootConstants.SOFABOOT_HEALTH_CHECK_NOT_READY_KEY,
-                    Health
-                            .unknown()
-                            .withDetail(SofaBootConstants.SOFABOOT_HEALTH_CHECK_NOT_READY_KEY,
-                                    SofaBootConstants.SOFABOOT_HEALTH_CHECK_NOT_READY_MSG).build());
+                SofaBootConstants.SOFABOOT_HEALTH_CHECK_NOT_READY_KEY,
+                Health
+                    .unknown()
+                    .withDetail(SofaBootConstants.SOFABOOT_HEALTH_CHECK_NOT_READY_KEY,
+                        SofaBootConstants.SOFABOOT_HEALTH_CHECK_NOT_READY_MSG).build());
         } else {
             boolean healthCheckerStatus = getHealthCheckerStatus();
             Map<String, Health> healthCheckerDetails = getHealthCheckerDetails();
@@ -154,7 +154,7 @@ public class ReadinessCheckListener implements ApplicationContextAware, Priority
             }
             if (!CollectionUtils.isEmpty(afterReadinessCheckCallbackDetails)) {
                 builder = builder.withDetail("ReadinessCheckCallback",
-                        afterReadinessCheckCallbackDetails);
+                    afterReadinessCheckCallbackDetails);
             }
             healths.put("SOFABootReadinessHealthCheckInfo", builder.build());
 

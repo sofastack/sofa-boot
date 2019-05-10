@@ -24,7 +24,7 @@ import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
 /**
  * @author xuanbei 18/2/28
  */
-public interface SofaRuntimeManager extends RuntimeHealthChecker{
+public interface SofaRuntimeManager extends RuntimeHealthChecker {
     /**
      * get sofa runtime context
      *

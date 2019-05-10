@@ -31,7 +31,8 @@ import org.w3c.dom.Element;
  *
  * @author xuanbei 18/2/28
  */
-public interface BindingConverter<L extends BindingParam, R extends Binding> extends SofaBootTagNameSupport {
+public interface BindingConverter<L extends BindingParam, R extends Binding> extends
+                                                                             SofaBootTagNameSupport {
     /**
      * convert {@link BindingParam} to concrete {@link Binding}
      *

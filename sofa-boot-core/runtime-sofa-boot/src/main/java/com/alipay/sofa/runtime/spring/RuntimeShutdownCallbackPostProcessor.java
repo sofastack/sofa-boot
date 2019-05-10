@@ -29,7 +29,7 @@ import org.springframework.core.PriorityOrdered;
  * @since 2.5.0
  */
 public class RuntimeShutdownCallbackPostProcessor implements MergedBeanDefinitionPostProcessor,
-                                                     PriorityOrdered {
+                                                 PriorityOrdered {
 
     private SofaRuntimeManager sofaRuntimeManager;
 

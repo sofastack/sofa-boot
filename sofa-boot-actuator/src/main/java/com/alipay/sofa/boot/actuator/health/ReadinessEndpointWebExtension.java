@@ -33,7 +33,7 @@ import org.springframework.boot.actuate.health.ShowDetails;
 public class ReadinessEndpointWebExtension {
 
     @Autowired
-    private SofaBootReadinessEndpoint delegate;
+    private SofaBootReadinessEndpoint       delegate;
 
     @Autowired
     private HealthWebEndpointResponseMapper responseMapper;

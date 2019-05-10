@@ -34,8 +34,7 @@ public abstract class AbstractPipelineStage implements PipelineStage, Ordered {
 
     public AbstractPipelineStage(AbstractApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
-        appName = applicationContext.getEnvironment().getProperty(
-            SofaBootConstants.APP_NAME_KEY);
+        appName = applicationContext.getEnvironment().getProperty(SofaBootConstants.APP_NAME_KEY);
     }
 
     @Override

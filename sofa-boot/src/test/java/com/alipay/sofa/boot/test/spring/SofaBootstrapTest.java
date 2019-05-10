@@ -35,7 +35,7 @@ import org.springframework.test.context.junit4.SpringRunner;
  * @author qilong.zql
  * @since  2.5.0
  */
-@SpringBootTest
+@SpringBootTest(classes = EmptyConfiguration.class)
 @RunWith(SpringRunner.class)
 public class SofaBootstrapTest {
 

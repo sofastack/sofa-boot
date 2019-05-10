@@ -60,7 +60,7 @@
                         <configuration>
                             <priority>1500</priority>
                             <pluginName>${ark.plugin.name}</pluginName>
-                            <activator>com.alipay.sofa.runtime.integration.activator.SofaRuntimeActivator</activator>
+                            <activator>com.alipay.sofa.runtime.test.activator.SofaRuntimeActivator</activator>
 
                             <exported>
                                 <packages>
@@ -68,7 +68,7 @@
                                     <package>com.alipay.sofa.runtime.client.*</package>
                                     <package>com.alipay.sofa.runtime.component.*</package>
                                     <package>com.alipay.sofa.runtime.constants.*</package>
-                                    <package>com.alipay.sofa.runtime.integration.*</package>
+                                    <package>com.alipay.sofa.runtime.test.*</package>
                                     <package>com.alipay.sofa.runtime.model.*</package>
                                     <package>com.alipay.sofa.runtime.service.component</package>
                                     <package>com.alipay.sofa.runtime.service.helper</package>

@@ -18,7 +18,7 @@ package com.alipay.sofa.runtime.service.binding;
 
 import com.alipay.sofa.runtime.api.binding.BindingType;
 import com.alipay.sofa.runtime.api.component.ComponentName;
-import com.alipay.sofa.runtime.integration.invoke.DynamicJvmServiceProxyFinder;
+import com.alipay.sofa.runtime.test.invoke.DynamicJvmServiceProxyFinder;
 import com.alipay.sofa.runtime.service.component.ServiceComponent;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapter;
 import com.alipay.sofa.runtime.spi.binding.Contract;
