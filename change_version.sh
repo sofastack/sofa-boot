@@ -27,3 +27,9 @@ for filename in `find . -name "pom.xml" -mindepth 2`;do
     sed "/<parent>/,/<\/parent>/ s/<version>.*<\/version>/<version>$1<\/version>/" $filename
 done
 
+echo "Change version in gradle.properties"
+for filename in `find . -name "gradle.properties" -mindepth 3`;do
+    echo "Deal with $filename"
+    sed "s/sofaVersion=.*/sofaVersion=$1/g" $filename
+done
+
