@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.runtime.spring.health;
 
+import com.alipay.sofa.healthcheck.service.SofaBootHealthIndicator;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.health.RuntimeHealthChecker;
 import org.springframework.beans.BeansException;
@@ -51,7 +52,10 @@ public class DefaultRuntimeHealthChecker implements RuntimeHealthChecker, Applic
                 continue;
             }
 
-            if (healthIndicator.health().getStatus().equals(Status.DOWN)) {
+            if (healthIndicator instanceof SofaBootHealthIndicator) {
+                return !((SofaBootHealthIndicator) healthIndicator).checkHealth().getStatus()
+                        .equals(Status.DOWN);
+            } else if (healthIndicator.health().getStatus().equals(Status.DOWN)) {
                 return false;
             }
         }
