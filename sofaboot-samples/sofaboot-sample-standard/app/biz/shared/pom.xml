@@ -4,13 +4,12 @@
     <parent>
         <groupId>com.alipay.sofa</groupId>
         <artifactId>sofaboot-sample-standard-parent</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>3.1.4-SNAPSHOT</version>
         <relativePath>../../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>sofaboot-sample-standard-biz-shared</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
     <url>http://home.alipay.net</url>
     <description>Alipay sofaboot-sample-standard-biz-shared</description>
     <packaging>jar</packaging>

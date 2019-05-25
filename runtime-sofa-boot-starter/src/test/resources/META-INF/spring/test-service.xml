@@ -16,9 +16,21 @@
     <bean id="xmlAnnotationSampleService" class="com.alipay.sofa.runtime.beans.impl.XmlAnnotationSampleService"/>
 
     <sofa:service ref="xmlSampleService" interface="com.alipay.sofa.runtime.beans.service.SampleService"/>
+    <sofa:service ref="xmlSampleService" interface="com.alipay.sofa.runtime.beans.service.SampleService" unique-id="default-element">
+        <sofa:binding.jvm/>
+    </sofa:service>
+    <sofa:service ref="xmlSampleService" interface="com.alipay.sofa.runtime.beans.service.SampleService" unique-id="element">
+        <sofa:binding.jvm serialize="false"/>
+    </sofa:service>
     <sofa:service ref="xmlSampleServiceWithUniqueId" interface="com.alipay.sofa.runtime.beans.service.SampleService" unique-id="xml"/>
 
     <sofa:reference id="xmlReference" interface="com.alipay.sofa.runtime.beans.service.SampleService"/>
+    <sofa:reference id="xmlReferenceDefaultElement" interface="com.alipay.sofa.runtime.beans.service.SampleService" unique-id="default-element">
+        <sofa:binding.jvm/>
+    </sofa:reference>
+    <sofa:reference id="xmlReferenceElement" interface="com.alipay.sofa.runtime.beans.service.SampleService" unique-id="element">
+        <sofa:binding.jvm serialize="true"/>
+    </sofa:reference>
     <sofa:reference id="xmlReferenceWithUniqueId" interface="com.alipay.sofa.runtime.beans.service.SampleService" unique-id="xml"/>
 
     <bean id="serviceAspect"
@@ -31,4 +43,8 @@
             <aop:around method="doAround" pointcut-ref="serviceAround"/>
         </aop:aspect>
     </aop:config>
+
+    <bean id="lifeCycleService" class="com.alipay.sofa.runtime.beans.impl.ComponentLifeCycleServiceImpl" />
+    <sofa:service ref="lifeCycleService" interface="com.alipay.sofa.runtime.beans.service.LifeCycleService"/>
+
 </beans>

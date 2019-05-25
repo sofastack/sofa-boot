@@ -3,10 +3,8 @@ sudo: false
 
 jdk:
 - oraclejdk8
-- openjdk11
 
 install:
-
 - mvn clean install -DskipTests -B -V
 - mvn test
 

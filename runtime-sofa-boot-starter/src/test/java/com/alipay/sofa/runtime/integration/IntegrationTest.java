@@ -16,6 +16,14 @@
  */
 package com.alipay.sofa.runtime.integration;
 
+import com.alipay.sofa.runtime.api.component.ComponentName;
+import com.alipay.sofa.runtime.service.binding.JvmBinding;
+import com.alipay.sofa.runtime.service.component.ReferenceComponent;
+import com.alipay.sofa.runtime.service.component.ServiceComponent;
+import com.alipay.sofa.runtime.spi.component.ComponentInfo;
+import com.alipay.sofa.runtime.spi.component.ComponentManager;
+import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
+import com.alipay.sofa.runtime.util.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.boot.actuate.health.Status;
@@ -34,6 +42,8 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spring.bean.SofaBeanNameGenerator;
 import com.alipay.sofa.runtime.spring.factory.ReferenceFactoryBean;
 import com.alipay.sofa.runtime.spring.factory.ServiceFactoryBean;
+
+import java.util.Collection;
 
 /**
  * @author qilong.zql
@@ -129,7 +139,7 @@ public class IntegrationTest extends AbstractTestBase {
             .getBean("&"
                      + SofaBeanNameGenerator.generateSofaReferenceBeanName(SampleService.class,
                          "methodBeanClassAnnotationSampleService"));
-        Assert.assertTrue(serviceFactoryBean.isApiType());
+        Assert.assertTrue(referenceFactoryBean.isApiType());
 
         /**
          * {@link com.alipay.sofa.runtime.integration.base.AbstractTestBase.IntegrationTestConfiguration.BeforeConfiguration}
@@ -231,5 +241,114 @@ public class IntegrationTest extends AbstractTestBase {
         applicationContext.getBeansOfType(ServiceFactoryBean.class).forEach((key, value) -> {
             Assert.assertTrue(key.startsWith("&ServiceFactoryBean#"));
         });
+    }
+
+    @Test
+    public void testReferenceBinding() {
+        ComponentManager componentManager = sofaRuntimeContext.getComponentManager();
+        ReferenceComponent serializeTrueViaAnnotation = null;
+        ReferenceComponent defaultSerializeFalseViaAnnotation = null;
+        ReferenceComponent defaultElement = null;
+        ReferenceComponent element = null;
+        ReferenceComponent noneUniqueId = null;
+        Collection<ComponentInfo> componentInfos = componentManager
+            .getComponentInfosByType(ReferenceComponent.REFERENCE_COMPONENT_TYPE);
+        for (ComponentInfo componentInfo : componentInfos) {
+            String rawName = componentInfo.getName().getRawName();
+            if (rawName.contains(getReferenceComponentName(SampleService.class,
+                "serializeTrueViaAnnotation").getRawName())) {
+                serializeTrueViaAnnotation = (ReferenceComponent) componentInfo;
+            } else if (rawName.contains(getReferenceComponentName(SampleService.class,
+                "defaultSerializeFalseViaAnnotation").getRawName())) {
+                defaultSerializeFalseViaAnnotation = (ReferenceComponent) componentInfo;
+            } else if (rawName.contains(getReferenceComponentName(SampleService.class,
+                "default-element").getRawName())) {
+                defaultElement = (ReferenceComponent) componentInfo;
+            } else if (componentInfo.getName().getRawName()
+                .contains(getReferenceComponentName(SampleService.class, "element").getRawName())) {
+                element = (ReferenceComponent) componentInfo;
+            } else if (rawName.contains(":#")
+                       && rawName.contains(getReferenceComponentName(SampleService.class, "")
+                           .getRawName())) {
+                noneUniqueId = (ReferenceComponent) componentInfo;
+            }
+        }
+        Assert.assertNotNull(serializeTrueViaAnnotation);
+        Assert.assertNotNull(defaultSerializeFalseViaAnnotation);
+        Assert.assertNotNull(defaultElement);
+        Assert.assertNotNull(element);
+        Assert.assertNotNull(noneUniqueId);
+
+        JvmBinding jvmBinding;
+        jvmBinding = (JvmBinding) serializeTrueViaAnnotation.getReference().getBinding(
+            JvmBinding.JVM_BINDING_TYPE);
+        Assert.assertTrue(jvmBinding.getJvmBindingParam().isSerialize());
+
+        jvmBinding = (JvmBinding) defaultSerializeFalseViaAnnotation.getReference().getBinding(
+            JvmBinding.JVM_BINDING_TYPE);
+        Assert.assertFalse(jvmBinding.getJvmBindingParam().isSerialize());
+
+        jvmBinding = (JvmBinding) defaultElement.getReference().getBinding(
+            JvmBinding.JVM_BINDING_TYPE);
+        Assert.assertFalse(jvmBinding.getJvmBindingParam().isSerialize());
+
+        jvmBinding = (JvmBinding) element.getReference().getBinding(JvmBinding.JVM_BINDING_TYPE);
+        Assert.assertTrue(jvmBinding.getJvmBindingParam().isSerialize());
+
+        jvmBinding = (JvmBinding) noneUniqueId.getReference().getBinding(
+            JvmBinding.JVM_BINDING_TYPE);
+        Assert.assertFalse(jvmBinding.getJvmBindingParam().isSerialize());
+    }
+
+    @Test
+    public void testServiceBinding() {
+        ComponentManager componentManager = sofaRuntimeContext.getComponentManager();
+        ServiceComponent serializeFalseViaAnnotation = (ServiceComponent) componentManager
+            .getComponentInfo(getServiceComponentName(SampleService.class,
+                "serializeFalseViaAnnotation"));
+        ServiceComponent defaultSerializeTrueViaAnnotation = (ServiceComponent) componentManager
+            .getComponentInfo(getServiceComponentName(SampleService.class,
+                "defaultSerializeTrueViaAnnotation"));
+        ServiceComponent defaultElement = (ServiceComponent) componentManager
+            .getComponentInfo(getServiceComponentName(SampleService.class, "default-element"));
+        ServiceComponent element = (ServiceComponent) componentManager
+            .getComponentInfo(getServiceComponentName(SampleService.class, "element"));
+        ServiceComponent noneUniqueId = (ServiceComponent) componentManager
+            .getComponentInfo(getServiceComponentName(SampleService.class, ""));
+
+        Assert.assertNotNull(serializeFalseViaAnnotation);
+        Assert.assertNotNull(defaultSerializeTrueViaAnnotation);
+        Assert.assertNotNull(defaultElement);
+        Assert.assertNotNull(element);
+        Assert.assertNotNull(noneUniqueId);
+
+        JvmBinding jvmBinding;
+        jvmBinding = (JvmBinding) serializeFalseViaAnnotation.getService().getBinding(
+            JvmBinding.JVM_BINDING_TYPE);
+        Assert.assertFalse(jvmBinding.getJvmBindingParam().isSerialize());
+
+        jvmBinding = (JvmBinding) defaultSerializeTrueViaAnnotation.getService().getBinding(
+            JvmBinding.JVM_BINDING_TYPE);
+        Assert.assertTrue(jvmBinding.getJvmBindingParam().isSerialize());
+
+        jvmBinding = (JvmBinding) defaultElement.getService().getBinding(
+            JvmBinding.JVM_BINDING_TYPE);
+        Assert.assertTrue(jvmBinding.getJvmBindingParam().isSerialize());
+
+        jvmBinding = (JvmBinding) element.getService().getBinding(JvmBinding.JVM_BINDING_TYPE);
+        Assert.assertFalse(jvmBinding.getJvmBindingParam().isSerialize());
+
+        jvmBinding = (JvmBinding) noneUniqueId.getService().getBinding(JvmBinding.JVM_BINDING_TYPE);
+        Assert.assertTrue(jvmBinding.getJvmBindingParam().isSerialize());
+    }
+
+    private ComponentName getServiceComponentName(Class clazz, String uniqueId) {
+        return ComponentNameFactory.createComponentName(ServiceComponent.SERVICE_COMPONENT_TYPE,
+            clazz, uniqueId);
+    }
+
+    private ComponentName getReferenceComponentName(Class clazz, String uniqueId) {
+        return ComponentNameFactory.createComponentName(
+            ReferenceComponent.REFERENCE_COMPONENT_TYPE, clazz, uniqueId);
     }
 }

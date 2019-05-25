@@ -20,13 +20,14 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.spring.SofaRuntimeContextAware;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.core.PriorityOrdered;
 
 /**
  * @author qilong.zql
  * @author khotyn
  * @since  2.5.0
  */
-public class SofaRuntimeContextAwareProcessor implements BeanPostProcessor {
+public class SofaRuntimeContextAwareProcessor implements BeanPostProcessor, PriorityOrdered {
     private SofaRuntimeContext sofaRuntimeContext;
 
     public SofaRuntimeContextAwareProcessor(SofaRuntimeContext sofaRuntimeContext) {
@@ -47,5 +48,10 @@ public class SofaRuntimeContextAwareProcessor implements BeanPostProcessor {
     public Object postProcessAfterInitialization(Object bean, String beanName)
                                                                               throws BeansException {
         return bean;
+    }
+
+    @Override
+    public int getOrder() {
+        return PriorityOrdered.HIGHEST_PRECEDENCE;
     }
 }

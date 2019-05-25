@@ -1,0 +1,13 @@
+apply plugin: 'java'
+
+
+repositories {
+	mavenCentral()
+    maven{
+        url "https://oss.sonatype.org/content/repositories/snapshots"
+    }
+}
+
+dependencies {
+    compile "com.alipay.sofa:runtime-sofa-boot-starter:${sofaVersion}"
+}

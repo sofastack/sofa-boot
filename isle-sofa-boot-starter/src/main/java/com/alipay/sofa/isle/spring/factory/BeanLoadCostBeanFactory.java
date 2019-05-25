@@ -36,8 +36,11 @@ public class BeanLoadCostBeanFactory extends DefaultListableBeanFactory {
 
     private long                 beanLoadCost           = DEFAULT_BEAN_LOAD_COST;
 
-    public BeanLoadCostBeanFactory(long beanCost) {
+    private String               moduleName;
+
+    public BeanLoadCostBeanFactory(long beanCost, String moduleName) {
         this.beanLoadCost = beanCost;
+        this.moduleName = moduleName;
     }
 
     protected Object createBean(String beanName, RootBeanDefinition mbd, Object[] args)
@@ -68,6 +71,10 @@ public class BeanLoadCostBeanFactory extends DefaultListableBeanFactory {
 
     public List<BeanNode> getBeanLoadList() {
         return beanCostList;
+    }
+
+    public String getModuleName() {
+        return moduleName;
     }
 
     public class BeanNode {
