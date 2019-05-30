@@ -49,10 +49,6 @@ public class SofaBootHealthIndicator implements HealthIndicator {
         Assert.isTrue(readinessCheckListener.isReadinessCheckFinish(),
             HealthCheckConstants.SOFABOOT_HEALTH_CHECK_NOT_READY_MSG);
 
-        return checkHealth();
-    }
-
-    public Health checkHealth() {
         Map<String, Health> healths = new HashMap<>();
         boolean checkSuccessful = healthCheckerProcessor.livenessHealthCheck(healths);
 
