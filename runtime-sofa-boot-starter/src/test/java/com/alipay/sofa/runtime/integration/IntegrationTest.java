@@ -78,7 +78,8 @@ public class IntegrationTest extends AbstractTestBase {
         ApplicationContext context = awareTest.getApplicationContext();
         Assert.assertNotNull(context.getBean("sofaComponentHealthChecker"));
 
-        ReadinessCheckListener readinessCheckListener = (ReadinessCheckListener)context.getBean("readinessCheckListener");
+        ReadinessCheckListener readinessCheckListener = (ReadinessCheckListener) context
+            .getBean("readinessCheckListener");
         Assert.assertTrue(readinessCheckListener.getHealthIndicatorStatus());
 
         HealthChecker healthChecker = (HealthChecker) context.getBean("sofaComponentHealthChecker");
