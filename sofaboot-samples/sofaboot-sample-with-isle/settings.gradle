@@ -1,0 +1,4 @@
+include ':service-consumer'
+include ':service-facade'
+include ':service-provider'
+include ':sofa-boot-run'

@@ -20,6 +20,8 @@ velocity.log
 .DS_Store
 logs
 .m2
-sofa-boot-gradle-plugin/build/
+
+# gradle related ignore in sub directories
 .gradle
-sofa-boot-gradle-plugin/out/
+build
+out
