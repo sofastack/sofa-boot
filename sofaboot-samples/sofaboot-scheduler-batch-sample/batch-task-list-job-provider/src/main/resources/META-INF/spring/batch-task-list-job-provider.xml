@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:sofa="http://sofastack.io/schema/sofaboot"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/util
+       http://www.springframework.org/schema/util/spring-util.xsd
+       http://sofastack.io/schema/sofaboot
+       http://sofastack.io/schema/sofaboot.xsd"
+       default-autowire="byName">
+
+    <!-- Define the bean for the task required to define in a job's task list -->
+    <bean id="simpleTaskAImpl" class="com.alipay.sofa.batch.task.SimpleTaskAImpl"/>
+    <bean id="simpleTaskBImpl" class="com.alipay.sofa.batch.task.SimpleTaskBImpl"/>
+
+    <!-- Define the task list that will be set into "taskServiceList" property for TaskListJobImpl -->
+    <util:list id="sampleJobTaskList" value-type="com.alipay.sofa.batch.task.TaskService">
+        <ref bean="simpleTaskAImpl"/>
+        <ref bean="simpleTaskBImpl"/>
+    </util:list>
+
+    <!-- define the bean for this particular job that will execute the list of task linked here -->
+    <bean id="sampleJobService" class="com.alipay.sofa.batch.job.TaskListJobImpl">
+        <property name="taskServiceList" ref="sampleJobTaskList"/>
+    </bean>
+
+    <!-- sofa service configuration with binding,
+    define jvm binding to allow deployment in the same JVM with needing RPC -->
+    <sofa:service ref="sampleJobService" interface="com.alipay.sofa.batch.job.JobService">
+        <sofa:binding.jvm/>
+        <sofa:binding.bolt/>
+    </sofa:service>
+
+</beans>

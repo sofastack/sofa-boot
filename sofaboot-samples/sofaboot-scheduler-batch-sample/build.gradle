@@ -1,0 +1,30 @@
+apply plugin: 'java'
+
+buildscript {
+    repositories {
+        maven {
+            url "https://oss.sonatype.org/content/repositories/snapshots"
+        }
+    }
+}
+
+subprojects {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://oss.sonatype.org/content/repositories/snapshots"
+        }
+    }
+
+    ext.lib = [
+            sofaHealthCheck: "com.alipay.sofa:healthcheck-sofa-boot-starter:${sofaVersion}",
+            sofaInfra      : "com.alipay.sofa:infra-sofa-boot-starter:${sofaVersion}",
+            sofaIsle       : "com.alipay.sofa:isle-sofa-boot-starter:${sofaVersion}",
+            sofaRuntime    : "com.alipay.sofa:runtime-sofa-boot-starter:${sofaVersion}",
+            sofaRpc        : "com.alipay.sofa:rpc-sofa-boot-starter:${sofaRpcVersion}",
+            springBootWeb  : 'org.springframework.boot:spring-boot-starter-web',
+            springBatch    : "org.springframework.batch:spring-batch-core:4.1.2.RELEASE",
+            lombok         : 'org.projectlombok:lombok:1.18.6',
+            jug            : 'com.fasterxml.uuid:java-uuid-generator:3.1.5'
+    ]
+}
