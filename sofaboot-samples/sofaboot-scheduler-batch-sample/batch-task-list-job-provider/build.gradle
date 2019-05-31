@@ -1,0 +1,8 @@
+plugins {
+    id 'java'
+}
+
+dependencies {
+    compile project(':batch-job-facade')
+    compile project(':batch-task-facade')
+}

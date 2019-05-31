@@ -1,0 +1,22 @@
+plugins {
+    id 'org.springframework.boot' version '2.1.4.RELEASE'
+    id 'java'
+}
+
+apply plugin: 'io.spring.dependency-management'
+
+group = 'com.antfin'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+dependencies {
+    compile lib.sofaHealthCheck
+    compile lib.sofaInfra
+    compile lib.sofaIsle
+    compile lib.springBootWeb
+    compile lib.sofaRpc
+    compile project(':batch-task-list-job-provider')
+
+    implementation 'org.springframework.boot:spring-boot-starter'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
