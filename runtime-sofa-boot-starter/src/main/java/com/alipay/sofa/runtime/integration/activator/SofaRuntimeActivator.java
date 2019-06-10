@@ -21,7 +21,6 @@ import com.alipay.sofa.ark.spi.service.PluginActivator;
 import com.alipay.sofa.ark.spi.service.event.EventHandler;
 import com.alipay.sofa.runtime.integration.invoke.DynamicJvmServiceProxyFinder;
 import com.alipay.sofa.runtime.integration.service.SofaEventHandler;
-import com.alipay.sofa.runtime.spi.log.SofaLogger;
 
 /**
  * @author qilong.zql
@@ -30,7 +29,6 @@ import com.alipay.sofa.runtime.spi.log.SofaLogger;
 public class SofaRuntimeActivator implements PluginActivator {
     @Override
     public void start(PluginContext context) {
-        SofaLogger.info("SofaRuntime is activating.");
         context.publishService(EventHandler.class, new SofaEventHandler());
         context.publishService(DynamicJvmServiceProxyFinder.class,
             DynamicJvmServiceProxyFinder.getDynamicJvmServiceProxyFinder());
