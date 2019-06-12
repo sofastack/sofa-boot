@@ -1,7 +1,7 @@
 ## SOFABoot
 
 [![Build Status](https://travis-ci.org/sofastack/sofa-boot.svg?branch=master)](https://travis-ci.org/sofastack/sofa-boot)
-[![Coverage Status](https://codecov.io/gh/sofastack/sofa-boot/branch/3.0.x/graph/badge.svg)](https://codecov.io/gh/sofastack/sofa-boot/branch/3.0.x/graph/badge.svg)
+[![Coverage Status](https://codecov.io/gh/sofastack/sofa-boot/branch/master/graph/badge.svg)](https://codecov.io/gh/sofastack/sofa-boot/branch/master)
 ![license](https://img.shields.io/badge/license-Apache--2.0-green.svg)
 ![maven](https://img.shields.io/github/release/sofastack/sofa-boot.svg)
 
