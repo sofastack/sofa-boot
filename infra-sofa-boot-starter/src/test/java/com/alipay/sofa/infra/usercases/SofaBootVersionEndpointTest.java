@@ -43,7 +43,7 @@ public class SofaBootVersionEndpointTest {
 
         Assert.assertTrue("com.alipay.sofa".equals(versionInfo.getProperty("GroupId")));
         Assert.assertTrue("infra-sofa-boot-starter".equals(versionInfo.getProperty("ArtifactId")));
-        Assert.assertTrue("https://github.com/alipay/sofa-boot".equals(versionInfo
+        Assert.assertTrue("https://github.com/sofastack/sofa-boot".equals(versionInfo
             .getProperty("Doc-Url")));
     }
 }

@@ -20,6 +20,7 @@ import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.annotation.SofaService;
 import com.alipay.sofa.runtime.model.InterfaceMode;
 import com.alipay.sofa.runtime.service.binding.JvmBinding;
+import com.alipay.sofa.runtime.service.binding.JvmBindingParam;
 import com.alipay.sofa.runtime.service.component.Service;
 import com.alipay.sofa.runtime.service.component.ServiceComponent;
 import com.alipay.sofa.runtime.service.component.impl.ServiceImpl;
@@ -33,8 +34,8 @@ import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
  * @author xuanbei 18/3/1
  */
 public class ServiceFactoryBean extends AbstractContractFactoryBean {
-    private Object  ref;
-    private Service service;
+    protected Object  ref;
+    protected Service service;
 
     public ServiceFactoryBean() {
     }
@@ -56,8 +57,11 @@ public class ServiceFactoryBean extends AbstractContractFactoryBean {
         implementation.setTarget(ref);
         service = buildService();
 
+        // default add jvm binding and service jvm binding should set serialize as true
         if (bindings.size() == 0) {
-            bindings.add(new JvmBinding());
+            JvmBinding jvmBinding = new JvmBinding();
+            JvmBindingParam jvmBindingParam = new JvmBindingParam().setSerialize(true);
+            bindings.add(new JvmBinding().setJvmBindingParam(jvmBindingParam));
         }
 
         for (Binding binding : bindings) {
@@ -89,7 +93,7 @@ public class ServiceFactoryBean extends AbstractContractFactoryBean {
         bindingConverterContext.setBeanId(beanId);
     }
 
-    private Service buildService() {
+    protected Service buildService() {
         return new ServiceImpl(uniqueId, getInterfaceClass(), InterfaceMode.spring, ref);
     }
 

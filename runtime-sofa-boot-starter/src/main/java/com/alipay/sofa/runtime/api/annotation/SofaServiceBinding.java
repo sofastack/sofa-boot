@@ -56,7 +56,7 @@ public @interface SofaServiceBinding {
     String[] filters() default {};
 
     /**
-     * custorm thread pool for current service
+     * custom thread pool for current service
      *
      * @return custom thread pool
      */
@@ -76,5 +76,36 @@ public @interface SofaServiceBinding {
      */
     int timeout() default 3000;
 
+    /**
+     * specify serialize type
+     *
+     * @return
+     */
     String serializeType() default "";
+
+    /**
+     * parameters of service
+     *
+     * @return parameters of service
+     */
+    SofaParameter[] parameters() default {};
+
+    /**
+     * serialization between biz, default is true.
+     * only serialize of reference and service is false
+     * then invocation between biz would skip serialization
+     *
+     * Note that the serialize of {@link SofaReferenceBinding} is false
+     *
+     * @return
+     */
+    boolean serialize() default true;
+
+    /**
+     * for each method config
+     *
+     * @return method configs
+     * @since 2.6.4
+     */
+    SofaMethod[] methodInfos() default {};
 }

@@ -106,4 +106,11 @@ public interface ComponentManager {
      * @return components
      */
     Collection<ComponentInfo> getComponentInfosByType(ComponentType type);
+
+    /**
+     * resolve pending component
+     *
+     * @param componentName component name
+     */
+    void resolvePendingResolveComponent(ComponentName componentName);
 }

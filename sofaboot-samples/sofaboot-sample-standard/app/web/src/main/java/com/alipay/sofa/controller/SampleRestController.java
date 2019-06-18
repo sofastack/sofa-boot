@@ -116,4 +116,9 @@ public class SampleRestController {
         return resultMap;
     }
 
+    @RequestMapping("/json")
+    public String sampleController() {
+        return "zhangsan";
+    }
+
 }

@@ -20,8 +20,11 @@ import com.alipay.sofa.healthcheck.configuration.HealthCheckConstants;
 import com.alipay.sofa.healthcheck.core.*;
 import com.alipay.sofa.healthcheck.log.SofaBootHealthCheckLoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.Health;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.PriorityOrdered;
@@ -36,11 +39,12 @@ import java.util.Map;
  * @author liangen
  * @author qilong.zql
  */
-public class ReadinessCheckListener implements PriorityOrdered,
+public class ReadinessCheckListener implements ApplicationContextAware, PriorityOrdered,
                                    ApplicationListener<ContextRefreshedEvent> {
 
     private static Logger                        logger                 = SofaBootHealthCheckLoggerFactory
                                                                             .getLogger(ReadinessCheckListener.class);
+    private ApplicationContext                   applicationContext;
 
     @Autowired
     private Environment                          environment;
@@ -63,8 +67,14 @@ public class ReadinessCheckListener implements PriorityOrdered,
     private Map<String, Health>                  healthIndicatorDetails = new HashMap<>();
 
     private boolean                              healthCallbackStatus   = true;
+    private boolean                              readinessCheckFinish   = false;
 
-    private Map<String, Health>                  healthCallbackDetails  = new HashMap<>();
+    @Override
+    public void setApplicationContext(ApplicationContext cxt) throws BeansException {
+        applicationContext = cxt;
+    }
+
+    private Map<String, Health> healthCallbackDetails = new HashMap<>();
 
     @Override
     public int getOrder() {
@@ -73,10 +83,13 @@ public class ReadinessCheckListener implements PriorityOrdered,
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        healthCheckerProcessor.init();
-        healthIndicatorProcessor.init();
-        afterReadinessCheckCallbackProcessor.init();
-        readinessHealthCheck();
+        if (applicationContext.equals(event.getApplicationContext())) {
+            healthCheckerProcessor.init();
+            healthIndicatorProcessor.init();
+            afterReadinessCheckCallbackProcessor.init();
+            readinessHealthCheck();
+            readinessCheckFinish = true;
+        }
     }
 
     /**
@@ -148,5 +161,9 @@ public class ReadinessCheckListener implements PriorityOrdered,
 
     public Map<String, Health> getHealthCallbackDetails() {
         return healthCallbackDetails;
+    }
+
+    public boolean isReadinessCheckFinish() {
+        return readinessCheckFinish;
     }
 }

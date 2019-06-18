@@ -1,7 +1,7 @@
 # 如何使用 SOFABoot 类隔离能力
 
 ## 简介
-该用例工程演示如何使用 SOFABoot 类隔离能力，阅读该文档之前，建议先了解 SOFABoot 提供的类隔离框架 [SOFAArk](https://github.com/alipay/sofa-ark)
+该用例工程演示如何使用 SOFABoot 类隔离能力，阅读该文档之前，建议先了解 SOFABoot 提供的类隔离框架 [SOFAArk](https://github.com/sofastack/sofa-ark)
 
 ## 工程演示
 SOFABoot 提供了类隔离框架 SOFAArk，弥补了 Spring Boot 在类隔离能力上的缺失，用以解决在实际开发中常见的类冲突、包冲突问题；使用 SOFABoot 类隔离能力只需两步操作；配置 `sofa-ark-maven-plugin` 打包插件以及引入 `sofa-ark-springboot-starter` 依赖；

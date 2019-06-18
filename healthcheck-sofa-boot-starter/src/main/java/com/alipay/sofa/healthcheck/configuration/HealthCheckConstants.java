@@ -82,4 +82,15 @@ public class HealthCheckConstants {
      * default {@literal com.alipay.sofa.isle.spring.health.SofaModuleHealthChecker} retry time interval value.
      */
     public static final long   SOFABOOT_MODULE_CHECK_RETRY_DEFAULT_INTERVAL    = 1000;
+
+    /**
+     * health check not ready result key
+     */
+    public static final String SOFABOOT_HEALTH_CHECK_NOT_READY_KEY             = "HEALTH-CHECK-NOT-READY";
+
+    /**
+     * health check not ready result
+     */
+    public static final String SOFABOOT_HEALTH_CHECK_NOT_READY_MSG             = "App is still in startup process, please try later!";
+
 }
