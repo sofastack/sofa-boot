@@ -14,9 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.isle.util;
-
-import com.alipay.sofa.isle.integration.IntegrationTest;
+package com.alipay.sofa.isle.test.util;
 
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -28,7 +26,7 @@ import java.util.Enumeration;
  */
 public class ClassPathUtil {
     public static void addClassPathAtRuntime(String jarName) throws Exception {
-        Enumeration<URL> urls = IntegrationTest.class.getClassLoader().getResources(jarName);
+        Enumeration<URL> urls = ClassPathUtil.class.getClassLoader().getResources(jarName);
         while (urls.hasMoreElements()) {
             URL url = urls.nextElement();
             ClassLoader classLoader = ClassLoader.getSystemClassLoader();

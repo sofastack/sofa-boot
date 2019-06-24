@@ -62,8 +62,8 @@ public class IntegrationTest implements ApplicationContextAware {
     @BeforeClass
     public static void before() throws Exception {
         // test JarDeploymentDescriptor, add jar file at runtime
-        ClassPathUtil.addClassPathAtRuntime("dev-module-0.1.0.jar");
-        ClassPathUtil.addClassPathAtRuntime("test-module-0.1.0.jar");
+        ClassPathUtil.addClassPathAtRuntime("src/test/resources/dev-module-0.1.0.jar");
+        ClassPathUtil.addClassPathAtRuntime("src/test/resources/test-module-0.1.0.jar");
 
         // add argument in System properties
         System.setProperty("com.alipay.sofa.boot.module-start-up-parallel", "true");

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.isle.util;
+package com.alipay.sofa.isle.test.util;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
