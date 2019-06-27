@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:sofa="http://sofastack.io/schema/sofaboot"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://sofastack.io/schema/sofaboot   http://sofastack.io/schema/sofaboot.xsd"
+       default-autowire="byName">
+    <!-- async init  test -->
+    <bean id="testBean1" class="com.alipay.sofa.runtime.test.beans.TimeWasteBean" init-method="init" sofa:async-init="true"/>
+    <bean id="testBean2" class="com.alipay.sofa.runtime.test.beans.TimeWasteBean" init-method="init" sofa:async-init="true"/>
+    <bean id="testBean3" class="com.alipay.sofa.runtime.test.beans.TimeWasteBean" init-method="init" sofa:async-init="true"/>
+    <bean id="testBean4" class="com.alipay.sofa.runtime.test.beans.TimeWasteBean" init-method="init" sofa:async-init="true"/>
+    <bean id="testBean5" class="com.alipay.sofa.runtime.test.beans.TimeWasteBean" init-method="init" sofa:async-init="true"/>
+    <bean id="testBean6" class="com.alipay.sofa.runtime.test.beans.TimeWasteBean" init-method="init" sofa:async-init="true"/>
+    <bean id="testBean7" class="com.alipay.sofa.runtime.test.beans.TimeWasteBean" init-method="init" sofa:async-init="true"/>
+    <bean id="testBean8" class="com.alipay.sofa.runtime.test.beans.TimeWasteBean" init-method="init" sofa:async-init="true"/>
+    <bean id="testBean9" class="com.alipay.sofa.runtime.test.beans.TimeWasteBean" init-method="init" sofa:async-init="true"/>
+    <bean id="testBean10" class="com.alipay.sofa.runtime.test.beans.TimeWasteBean" init-method="init" sofa:async-init="true"/>
+    <bean id="noAsyncInit" class="com.alipay.sofa.runtime.test.beans.TimeWasteBean" init-method="init"/>
+    <bean id="asyncInitFalse" class="com.alipay.sofa.runtime.test.beans.TimeWasteBean" init-method="init" sofa:async-init="false"/>
+    <bean id="noInitMethod" class="com.alipay.sofa.runtime.test.beans.TimeWasteBean" sofa:async-init="true"/>
+</beans>

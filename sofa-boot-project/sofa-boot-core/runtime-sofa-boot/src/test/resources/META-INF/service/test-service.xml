@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:sofa="http://sofastack.io/schema/sofaboot"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://sofastack.io/schema/sofaboot   http://sofastack.io/schema/sofaboot.xsd
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd"
+       default-autowire="byName">
+    
+    
+    <bean id="xmlSampleService" class="com.alipay.sofa.runtime.test.beans.service.DefaultSampleService"/>
+    <sofa:service ref="xmlSampleService" interface="com.alipay.sofa.runtime.test.beans.facade.SampleService"/>
+    <sofa:service ref="xmlSampleService" interface="com.alipay.sofa.runtime.test.beans.facade.SampleService" unique-id="default-element"/>
+    <sofa:service ref="xmlSampleService" interface="com.alipay.sofa.runtime.test.beans.facade.SampleService" unique-id="element">
+        <sofa:binding.jvm serialize="false"/>
+    </sofa:service>
+
+    <sofa:reference id="reference1" interface="com.alipay.sofa.runtime.test.beans.facade.SampleService" unique-id="default-element"/>
+    <sofa:reference id="reference2" interface="com.alipay.sofa.runtime.test.beans.facade.SampleService" unique-id="element">
+        <sofa:binding.jvm serialize="true"/>
+    </sofa:reference>
+    <sofa:reference id="reference3" interface="com.alipay.sofa.runtime.test.beans.facade.SampleService"/>
+
+    <sofa:reference id="xmlServiceWithoutInterface" interface="com.alipay.sofa.runtime.test.beans.service.ServiceWithoutInterface" unique-id="serviceWithoutInterface"/>
+</beans>

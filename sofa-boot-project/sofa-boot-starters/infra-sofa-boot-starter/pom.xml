@@ -19,20 +19,24 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
+    <parent>
+        <groupId>com.alipay.sofa</groupId>
+        <artifactId>sofa-boot-starters</artifactId>
+        <version>${revision}</version>
+    </parent>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.alipay.sofa</groupId>
-    <artifactId>sofa-boot-build</artifactId>
-    <version>${revision}</version>
-    <packaging>pom</packaging>
-    <name>SOFABoot Build</name>
-    <description>SOFABoot Build</description>
+
+    <artifactId>infra-sofa-boot-starter</artifactId>
 
     <properties>
-        <revision>3.2.0-SNAPSHOT</revision>
+        <main.user.dir>${basedir}/../../..</main.user.dir>
     </properties>
 
-    <modules>
-        <module>sofa-boot-project</module>
-    </modules>
+    <dependencies>
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>sofa-boot</artifactId>
+        </dependency>
+    </dependencies>
+
 </project>
