@@ -20,7 +20,6 @@ import java.util.Map;
 
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.runtime.log.SofaLogger;
-import com.alipay.sofa.runtime.spring.initializer.RuntimeContextInitializer;
 import org.springframework.beans.CachedIntrospectionResults;
 import org.springframework.beans.PropertyEditorRegistrar;
 import org.springframework.beans.PropertyEditorRegistry;
@@ -65,7 +64,6 @@ public class DynamicSpringContextLoader implements SpringContextLoader {
             .setAutowireCandidateResolver(new QualifierAnnotationAutowireCandidateResolver());
         GenericApplicationContext ctx = sofaModuleProperties.isPublishEventToParent() ? new GenericApplicationContext(
             beanFactory) : new SofaModuleApplicationContext(beanFactory);
-        RuntimeContextInitializer.initialize(ctx);
         String activeProfiles = sofaModuleProperties.getActiveProfiles();
         if (StringUtils.hasText(activeProfiles)) {
             String[] profiles = activeProfiles.split(SofaBootConstants.PROFILE_SEPARATOR);

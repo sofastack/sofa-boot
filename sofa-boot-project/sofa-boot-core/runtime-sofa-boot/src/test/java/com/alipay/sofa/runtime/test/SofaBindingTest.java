@@ -29,6 +29,7 @@ import com.alipay.sofa.runtime.spi.component.ComponentManager;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.test.beans.facade.SampleService;
 import com.alipay.sofa.runtime.test.beans.service.DefaultSampleService;
+import com.alipay.sofa.runtime.test.configuration.RuntimeConfiguration;
 import com.alipay.sofa.runtime.test.util.ComponentNameUtil;
 import org.junit.Assert;
 import org.junit.Test;
@@ -182,6 +183,7 @@ public class SofaBindingTest {
     }
 
     @Configuration
+    @Import(RuntimeConfiguration.class)
     @ImportResource("classpath*:META-INF/service/test-service.xml")
     static class SofaBindingTestConfiguration {
         @Bean

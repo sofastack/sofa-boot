@@ -18,7 +18,6 @@ package com.alipay.sofa.runtime.component.impl;
 
 import com.alipay.sofa.boot.health.RuntimeHealthChecker;
 import com.alipay.sofa.runtime.spi.spring.RuntimeShutdownAware;
-import com.alipay.sofa.runtime.SofaFramework;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
 import com.alipay.sofa.runtime.spi.component.ComponentManager;
@@ -105,7 +104,6 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager {
      */
     public void shutdown() throws ServiceRuntimeException {
         try {
-            SofaFramework.unRegisterSofaRuntimeManager(this);
             for (RuntimeShutdownAware shutdownAware : runtimeShutdownAwares) {
                 shutdownAware.shutdown();
             }

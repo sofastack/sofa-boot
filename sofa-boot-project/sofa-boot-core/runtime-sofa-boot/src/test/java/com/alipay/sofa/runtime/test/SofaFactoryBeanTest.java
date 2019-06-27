@@ -24,6 +24,7 @@ import com.alipay.sofa.runtime.spring.factory.ServiceFactoryBean;
 import com.alipay.sofa.runtime.test.beans.facade.SampleService;
 import com.alipay.sofa.runtime.test.beans.service.DefaultSampleService;
 import com.alipay.sofa.runtime.test.beans.service.ServiceWithoutInterface;
+import com.alipay.sofa.runtime.test.configuration.RuntimeConfiguration;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -102,6 +103,7 @@ public class SofaFactoryBeanTest {
     }
 
     @Configuration
+    @Import(RuntimeConfiguration.class)
     @ImportResource("classpath*:META-INF/service/test-service.xml")
     static class SofaFactoryBeanTestConfiguration {
         @Bean

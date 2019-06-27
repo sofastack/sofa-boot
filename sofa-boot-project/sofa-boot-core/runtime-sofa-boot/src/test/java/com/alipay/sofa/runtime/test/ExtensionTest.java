@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.runtime.test;
 
+import com.alipay.sofa.runtime.test.configuration.RuntimeConfiguration;
 import com.alipay.sofa.runtime.test.extension.bean.SimpleSpringBean;
 import com.alipay.sofa.runtime.test.extension.bean.SimpleSpringListBean;
 import com.alipay.sofa.runtime.test.extension.bean.SimpleSpringMapBean;
@@ -233,6 +234,7 @@ public class ExtensionTest implements ExtensionClientAware {
     }
 
     @Configuration
+    @Import(RuntimeConfiguration.class)
     @ImportResource("classpath*:META-INF/extension/test-extension.xml")
     static class ExtensionTestConfiguration {
 

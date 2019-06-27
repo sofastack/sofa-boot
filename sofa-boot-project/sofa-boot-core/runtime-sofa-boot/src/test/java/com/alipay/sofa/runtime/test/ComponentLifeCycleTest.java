@@ -18,9 +18,9 @@ package com.alipay.sofa.runtime.test;
 
 import com.alipay.sofa.runtime.api.annotation.SofaService;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
-import com.alipay.sofa.runtime.spring.initializer.RuntimeContextInitializer;
 import com.alipay.sofa.runtime.test.beans.facade.SampleService;
 import com.alipay.sofa.runtime.test.beans.service.LifeCycleSampleService;
+import com.alipay.sofa.runtime.test.configuration.RuntimeConfiguration;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -54,16 +55,12 @@ public class ComponentLifeCycleTest {
     }
 
     @Configuration
+    @Import(RuntimeConfiguration.class)
     static class ComponentLifeCycleTestConfiguration {
         @Bean
         @SofaService(interfaceType = SampleService.class)
         public LifeCycleSampleService lifeCycleSampleService() {
             return new LifeCycleSampleService("init");
-        }
-
-        @Bean
-        public RuntimeContextInitializer runtimeContextInitializer() {
-            return new RuntimeContextInitializer();
         }
     }
 }

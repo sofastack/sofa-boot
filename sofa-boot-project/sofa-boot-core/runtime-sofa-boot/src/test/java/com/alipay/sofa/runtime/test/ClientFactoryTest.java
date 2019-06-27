@@ -24,6 +24,7 @@ import com.alipay.sofa.runtime.api.client.ServiceClient;
 import com.alipay.sofa.runtime.api.client.param.ReferenceParam;
 import com.alipay.sofa.runtime.test.beans.ClientFactoryAwareBean;
 import com.alipay.sofa.runtime.test.beans.facade.SampleService;
+import com.alipay.sofa.runtime.test.configuration.RuntimeConfiguration;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -89,6 +90,7 @@ public class ClientFactoryTest {
     }
 
     @Configuration
+    @Import(RuntimeConfiguration.class)
     static class ClientFactoryTestConfiguration {
         @Bean
         public ClientFactoryAwareBean clientFactoryAwareBean() {

@@ -27,7 +27,6 @@ import org.springframework.context.support.AbstractApplicationContext;
  * @since 2.5.0
  */
 public class DefaultRuntimeShutdownAware implements RuntimeShutdownAware, ApplicationContextAware {
-
     private ApplicationContext cxt;
 
     @Override

@@ -16,11 +16,11 @@
  */
 package com.alipay.sofa.runtime.ext.spring;
 
-import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -35,13 +35,13 @@ public class CommonContextBean implements ApplicationContextAware, BeanNameAware
     protected String                          beanName;
     protected ClassLoader                     beanClassLoader;
     protected ConfigurableListableBeanFactory configurableListableBeanFactory;
+    @Autowired
     protected SofaRuntimeContext              sofaRuntimeContext;
     protected ApplicationContext              applicationContext;
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        sofaRuntimeContext = applicationContext.getBean(
-            SofaBootConstants.SOFA_RUNTIME_CONTEXT_BEAN_ID, SofaRuntimeContext.class);
+        // ignore
     }
 
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {

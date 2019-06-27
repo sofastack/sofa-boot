@@ -20,6 +20,7 @@ import com.alipay.sofa.runtime.api.annotation.SofaService;
 import com.alipay.sofa.runtime.test.beans.service.DefaultSampleService;
 import com.alipay.sofa.runtime.test.beans.StateMessage;
 import com.alipay.sofa.runtime.test.beans.processor.FactoryBeanPostProcessor;
+import com.alipay.sofa.runtime.test.configuration.RuntimeConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -47,6 +48,7 @@ public class StaticBeanPostProcessorTest {
 
     @Configuration
     @EnableAutoConfiguration
+    @Import(RuntimeConfiguration.class)
     static class BeanPostProcessorTestConfiguration {
         @Bean
         static public FactoryBeanPostProcessor factoryBeanPostProcessor() {

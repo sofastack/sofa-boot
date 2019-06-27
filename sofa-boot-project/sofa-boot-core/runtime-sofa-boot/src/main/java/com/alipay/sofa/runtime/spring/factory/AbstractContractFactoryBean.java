@@ -22,7 +22,6 @@ import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.spi.binding.Binding;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
@@ -33,6 +32,7 @@ import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.TypedStringValue;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -55,6 +55,7 @@ public abstract class AbstractContractFactoryBean implements InitializingBean, F
     /** interface class type */
     protected Class<?>                interfaceClass;
     /** sofa runtime context */
+    @Autowired
     protected SofaRuntimeContext      sofaRuntimeContext;
     /** xml elements */
     protected List<TypedStringValue>  elements;
@@ -67,8 +68,10 @@ public abstract class AbstractContractFactoryBean implements InitializingBean, F
     /** repeat times */
     protected String                  repeatReferLimit;
     /** binding converter factory */
+    @Autowired
     protected BindingConverterFactory bindingConverterFactory;
     /** binding adapter factory */
+    @Autowired
     protected BindingAdapterFactory   bindingAdapterFactory;
     /** way to create factory bean. api or xml*/
     protected boolean                 apiType;
@@ -89,24 +92,10 @@ public abstract class AbstractContractFactoryBean implements InitializingBean, F
                 tempElements.add(node);
             }
         }
-        sofaRuntimeContext = applicationContext.getBean(
-            SofaBootConstants.SOFA_RUNTIME_CONTEXT_BEAN_ID, SofaRuntimeContext.class);
-        bindingConverterFactory = getBindingConverterFactory();
-        bindingAdapterFactory = getBindingAdapterFactory();
         if (!apiType) {
             this.bindings = parseBindings(tempElements, applicationContext, isInBinding());
         }
         doAfterPropertiesSet();
-    }
-
-    protected BindingConverterFactory getBindingConverterFactory() {
-        return applicationContext.getBean(SofaBootConstants.BINDING_CONVERTER_FACTORY_BEAN_ID,
-            BindingConverterFactory.class);
-    }
-
-    protected BindingAdapterFactory getBindingAdapterFactory() {
-        return applicationContext.getBean(SofaBootConstants.BINDING_ADAPTER_FACTORY_BEAN_ID,
-            BindingAdapterFactory.class);
     }
 
     protected List<Binding> parseBindings(List<Element> parseElements,

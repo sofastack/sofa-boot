@@ -157,12 +157,6 @@ public class SofaBootConstants {
      */
     public static final String  SOFABOOT_HEALTH_CHECK_NOT_READY_MSG             = "App is still in startup process, please try later!";
 
-    /**
-     * runtime constants
-     */
-    public static String        SOFA_RUNTIME_CONTEXT_BEAN_ID                    = "sofaRuntimeContext";
-    public static String        BINDING_CONVERTER_FACTORY_BEAN_ID               = "bindingConverterFactory";
-    public static String        BINDING_ADAPTER_FACTORY_BEAN_ID                 = "bindingAdapterFactory";
 
     /** framework constants **/
     public static String        APPLICATION                                     = "SOFABOOT-APPLICATION";

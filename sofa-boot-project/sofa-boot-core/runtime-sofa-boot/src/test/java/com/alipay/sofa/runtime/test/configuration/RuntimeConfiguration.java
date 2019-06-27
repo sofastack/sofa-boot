@@ -14,8 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.boot.autoconfigure.runtime;
+package com.alipay.sofa.runtime.test.configuration;
 
+import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.runtime.SofaFramework;
 import com.alipay.sofa.runtime.api.client.ReferenceClient;
 import com.alipay.sofa.runtime.api.client.ServiceClient;
@@ -32,50 +33,25 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
-import com.alipay.sofa.runtime.spring.AsyncProxyBeanPostProcessor;
 import com.alipay.sofa.runtime.spring.RuntimeContextBeanFactoryPostProcessor;
 import com.alipay.sofa.runtime.spring.ServiceBeanFactoryPostProcessor;
-import com.alipay.sofa.runtime.spring.async.AsyncTaskExecutionListener;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import com.alipay.sofa.runtime.spring.aware.DefaultRuntimeShutdownAware;
+import org.springframework.core.env.Environment;
 
 import java.util.HashSet;
 import java.util.ServiceLoader;
 import java.util.Set;
 
 /**
- * @author xuanbei 18/3/17
+ * @author qilong.zql
+ * @since 3.2.0
  */
 @Configuration
-@EnableConfigurationProperties(SofaRuntimeConfigurationProperties.class)
-@ConditionalOnClass(SofaFramework.class)
-public class SofaRuntimeAutoConfiguration {
+public class RuntimeConfiguration {
     @Bean
-    @ConditionalOnMissingBean
-    public DefaultRuntimeShutdownAware defaultRuntimeShutdownAware() {
-        return new DefaultRuntimeShutdownAware();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public static AsyncProxyBeanPostProcessor asyncProxyBeanPostProcessor() {
-        return new AsyncProxyBeanPostProcessor();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public AsyncTaskExecutionListener asyncTaskExecutionListener() {
-        return new AsyncTaskExecutionListener();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
     public static BindingConverterFactory bindingConverterFactory() {
         BindingConverterFactory bindingConverterFactory = new BindingConverterFactoryImpl();
         bindingConverterFactory
@@ -93,12 +69,13 @@ public class SofaRuntimeAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public static SofaRuntimeContext sofaRuntimeContext(@Value("${spring.application.name}") String appName,
+    public static SofaRuntimeContext sofaRuntimeContext(Environment environment,
                                                         BindingConverterFactory bindingConverterFactory,
                                                         BindingAdapterFactory bindingAdapterFactory) {
+        String appName = environment.getProperty(SofaBootConstants.APP_NAME_KEY);
         ClientFactoryInternal clientFactoryInternal = new ClientFactoryImpl();
         SofaRuntimeManager sofaRuntimeManager = new StandardSofaRuntimeManager(appName,
-            SofaRuntimeAutoConfiguration.class.getClassLoader(), clientFactoryInternal);
+            RuntimeConfiguration.class.getClassLoader(), clientFactoryInternal);
         sofaRuntimeManager.getComponentManager().registerComponentClient(
             ReferenceClient.class,
             new ReferenceClientImpl(sofaRuntimeManager.getSofaRuntimeContext(),
@@ -112,7 +89,6 @@ public class SofaRuntimeAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean
     public static RuntimeContextBeanFactoryPostProcessor runtimeContextBeanFactoryPostProcessor(BindingAdapterFactory bindingAdapterFactory,
                                                                                                 BindingConverterFactory bindingConverterFactory,
                                                                                                 SofaRuntimeContext sofaRuntimeContext) {
@@ -121,7 +97,6 @@ public class SofaRuntimeAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean
     public static ServiceBeanFactoryPostProcessor serviceBeanFactoryPostProcessor(SofaRuntimeContext sofaRuntimeContext,
                                                                                   BindingConverterFactory bindingConverterFactory) {
         return new ServiceBeanFactoryPostProcessor(sofaRuntimeContext, bindingConverterFactory);

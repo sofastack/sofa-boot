@@ -30,6 +30,7 @@ import com.alipay.sofa.runtime.spring.factory.ServiceFactoryBean;
 import com.alipay.sofa.runtime.test.beans.facade.SampleService;
 import com.alipay.sofa.runtime.test.beans.service.DefaultSampleService;
 import com.alipay.sofa.runtime.test.configuration.MultiSofaServiceConfiguration;
+import com.alipay.sofa.runtime.test.configuration.RuntimeConfiguration;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -42,6 +43,7 @@ import org.springframework.context.annotation.Bean;
 import com.alipay.sofa.runtime.api.annotation.SofaService;
 import com.alipay.sofa.runtime.spring.bean.SofaBeanNameGenerator;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 /**
  * @author qilong.zql
@@ -66,7 +68,7 @@ public class SofaServiceAndReferenceTest {
         Throwable throwable = null;
         try {
             SpringApplication springApplication = new SpringApplication(
-                TestSofaReferenceConfiguration.class);
+                TestSofaReferenceConfiguration.class, RuntimeConfiguration.class);
             springApplication.setWebApplicationType(WebApplicationType.NONE);
             springApplication.setDefaultProperties(properties);
             springApplication.run();
@@ -83,7 +85,7 @@ public class SofaServiceAndReferenceTest {
         Map<String, Object> properties = new HashMap<>();
         properties.put("spring.application.name", "SofaServiceAndReferenceTest");
         SpringApplication springApplication = new SpringApplication(
-            TestSofaReferenceOnMethodConfiguration.class);
+            TestSofaReferenceOnMethodConfiguration.class, RuntimeConfiguration.class);
         springApplication.setWebApplicationType(WebApplicationType.NONE);
         springApplication.setDefaultProperties(properties);
         ApplicationContext ctx = springApplication.run();
@@ -133,7 +135,7 @@ public class SofaServiceAndReferenceTest {
         Map<String, Object> properties = new HashMap<>();
         properties.put("spring.application.name", "SofaServiceAndReferenceTest");
         SpringApplication springApplication = new SpringApplication(
-            MultipleBindingsSofaServiceConfiguration.class);
+            MultipleBindingsSofaServiceConfiguration.class, RuntimeConfiguration.class);
         springApplication.setWebApplicationType(WebApplicationType.NONE);
         springApplication.setDefaultProperties(properties);
         ApplicationContext ctx = springApplication.run();
@@ -173,6 +175,7 @@ public class SofaServiceAndReferenceTest {
     }
 
     @Configuration
+    @Import(RuntimeConfiguration.class)
     @EnableAutoConfiguration
     static class TestSofaServiceConfiguration {
         @Bean

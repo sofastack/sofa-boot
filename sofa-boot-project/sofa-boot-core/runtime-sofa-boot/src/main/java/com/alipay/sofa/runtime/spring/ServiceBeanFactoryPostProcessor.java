@@ -39,11 +39,17 @@ import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ScannedGenericBeanDefinition;
+import org.springframework.core.Ordered;
 import org.springframework.core.annotation.AnnotatedElementUtils;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.Environment;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.core.type.MethodMetadata;
 import org.springframework.core.type.StandardMethodMetadata;
@@ -76,20 +82,19 @@ import com.alipay.sofa.runtime.spring.parser.ServiceDefinitionParser;
  * @author qilong.zql
  * @since 3.1.0
  */
-public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
-    private final PlaceHolderBinder        binder = new DefaultPlaceHolderBinder();
-    private ConfigurableApplicationContext applicationContext;
-    private SofaRuntimeContext             sofaRuntimeContext;
-    private BindingConverterFactory        bindingConverterFactory;
-    private ConfigurableEnvironment        environment;
+@Order(Ordered.HIGHEST_PRECEDENCE + 10)
+public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor,
+                                            ApplicationContextAware, EnvironmentAware {
+    private final PlaceHolderBinder binder = new DefaultPlaceHolderBinder();
+    private ApplicationContext      applicationContext;
+    private SofaRuntimeContext      sofaRuntimeContext;
+    private BindingConverterFactory bindingConverterFactory;
+    private Environment             environment;
 
-    public ServiceBeanFactoryPostProcessor(ConfigurableApplicationContext applicationContext,
-                                           SofaRuntimeContext sofaRuntimeContext,
+    public ServiceBeanFactoryPostProcessor(SofaRuntimeContext sofaRuntimeContext,
                                            BindingConverterFactory bindingConverterFactory) {
-        this.applicationContext = applicationContext;
         this.sofaRuntimeContext = sofaRuntimeContext;
         this.bindingConverterFactory = bindingConverterFactory;
-        this.environment = applicationContext.getEnvironment();
     }
 
     @Override
@@ -428,6 +433,16 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
         } else {
             return clazz;
         }
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
+
+    @Override
+    public void setEnvironment(Environment environment) {
+        this.environment = environment;
     }
 
     class DefaultPlaceHolderBinder implements PlaceHolderBinder {

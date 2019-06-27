@@ -18,6 +18,7 @@ package com.alipay.sofa.runtime.test;
 
 import com.alipay.sofa.runtime.api.annotation.SofaReference;
 import com.alipay.sofa.runtime.test.beans.service.ServiceWithoutInterface;
+import com.alipay.sofa.runtime.test.configuration.RuntimeConfiguration;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,6 +47,7 @@ public class ServiceWithoutInterfaceTest {
     }
 
     @Configuration
+    @Import(RuntimeConfiguration.class)
     static class ServiceWithoutInterfaceTestConfiguration {
         @Bean
         public ServiceWithoutInterface serviceWithoutInterface() {

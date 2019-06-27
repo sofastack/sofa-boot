@@ -31,9 +31,9 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import com.alipay.sofa.runtime.spi.service.ServiceProxy;
 import com.alipay.sofa.runtime.spring.aware.DefaultRuntimeShutdownAware;
-import com.alipay.sofa.runtime.spring.initializer.RuntimeContextInitializer;
 import com.alipay.sofa.runtime.test.beans.facade.SampleService;
 import com.alipay.sofa.runtime.test.beans.service.DefaultSampleService;
+import com.alipay.sofa.runtime.test.configuration.RuntimeConfiguration;
 import mockit.Expectations;
 import mockit.Mock;
 import mockit.MockUp;
@@ -48,6 +48,7 @@ import org.springframework.boot.WebApplicationType;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 import java.util.Properties;
 import java.util.Set;
@@ -74,6 +75,7 @@ public class SofaEventHandlerTest {
         properties.setProperty("com.alipay.sofa.boot.disableJvmFirst", "true");
         properties.setProperty("com.alipay.sofa.boot.skipJvmReferenceHealthCheck", "true");
         properties.setProperty("spring.application.name", "tSofaEventHandlerTest");
+        SofaFramework.getRuntimeSet().forEach(value -> SofaFramework.unRegisterSofaRuntimeManager(value));
         SpringApplication springApplication = new SpringApplication(
             SofaEventHandlerTestConfiguration.class);
         springApplication.setDefaultProperties(properties);
@@ -167,25 +169,12 @@ public class SofaEventHandlerTest {
         }
     }
 
-    @After
-    public void closeContext() {
-        Set<SofaRuntimeManager> runtimeManagers = SofaFramework.getRuntimeSet();
-        for (SofaRuntimeManager runtimeManager : runtimeManagers) {
-            SofaFramework.unRegisterSofaRuntimeManager(runtimeManager);
-            runtimeManager.shutdown();
-        }
-    }
-
     @Configuration
+    @Import(RuntimeConfiguration.class)
     static class SofaEventHandlerTestConfiguration {
         @Bean
         public DefaultRuntimeShutdownAware defaultRuntimeShutdownAware() {
             return new DefaultRuntimeShutdownAware();
-        }
-
-        @Bean
-        public RuntimeContextInitializer runtimeContextInitializer() {
-            return new RuntimeContextInitializer();
         }
 
         @Bean

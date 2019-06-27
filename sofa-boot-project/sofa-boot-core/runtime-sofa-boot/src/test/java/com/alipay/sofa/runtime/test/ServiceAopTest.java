@@ -22,6 +22,7 @@ import com.alipay.sofa.runtime.test.beans.ClientFactoryAwareBean;
 import com.alipay.sofa.runtime.test.beans.StateAspect;
 import com.alipay.sofa.runtime.test.beans.facade.SampleService;
 import com.alipay.sofa.runtime.test.beans.service.DefaultSampleService;
+import com.alipay.sofa.runtime.test.configuration.RuntimeConfiguration;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -67,7 +68,7 @@ public class ServiceAopTest {
     }
 
     @Configuration
-    @Import(AopAutoConfiguration.class)
+    @Import({ AopAutoConfiguration.class, RuntimeConfiguration.class })
     @Aspect
     static class ServiceAopTestConfiguration {
         @Bean
