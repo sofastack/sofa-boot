@@ -39,7 +39,6 @@ import org.springframework.boot.actuate.endpoint.web.WebEndpointResponse;
 import org.springframework.boot.actuate.health.HealthStatusHttpMapper;
 import org.springframework.boot.actuate.health.Status;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;

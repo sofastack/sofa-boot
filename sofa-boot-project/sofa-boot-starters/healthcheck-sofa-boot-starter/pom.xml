@@ -36,12 +36,17 @@
     <dependencies>
         <dependency>
             <groupId>com.alipay.sofa</groupId>
-            <artifactId>infra-sofa-boot-starter</artifactId>
+            <artifactId>healthcheck-sofa-boot</artifactId>
         </dependency>
 
         <dependency>
             <groupId>com.alipay.sofa</groupId>
-            <artifactId>healthcheck-sofa-boot</artifactId>
+            <artifactId>sofa-boot-autoconfigure</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>sofa-boot-actuator-autoconfigure</artifactId>
         </dependency>
 
         <!--spring-boot-start-->

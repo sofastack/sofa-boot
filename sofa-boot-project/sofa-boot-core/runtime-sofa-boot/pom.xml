@@ -23,6 +23,13 @@
             <artifactId>sofa-boot</artifactId>
         </dependency>
 
+        <!--TODO-->
+        <dependency>
+            <groupId>com.alipay.sofa.common</groupId>
+            <artifactId>log-sofa-boot-starter</artifactId>
+            <version>1.0.18</version>
+        </dependency>
+
         <!--Optional-->
         <dependency>
             <groupId>com.alipay.sofa</groupId>
@@ -34,19 +41,6 @@
             <groupId>com.alipay.sofa</groupId>
             <artifactId>hessian</artifactId>
             <optional>true</optional>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <optional>true</optional>
-        </dependency>
-
-        <!--TODO-->
-        <dependency>
-            <groupId>com.alipay.sofa.common</groupId>
-            <artifactId>log-sofa-boot-starter</artifactId>
-            <version>1.0.18</version>
         </dependency>
 
         <!-- Test -->

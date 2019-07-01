@@ -22,13 +22,12 @@
             <artifactId>sofa-boot</artifactId>
         </dependency>
 
-        <!-- Optional -->
         <dependency>
             <groupId>com.alipay.sofa</groupId>
             <artifactId>runtime-sofa-boot</artifactId>
-            <optional>true</optional>
         </dependency>
 
+        <!-- Optional -->
         <dependency>
             <groupId>com.alipay.sofa</groupId>
             <artifactId>isle-sofa-boot</artifactId>
@@ -44,12 +43,6 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <optional>true</optional>
-        </dependency>
-
-        <dependency>
-            <groupId>com.alipay.sofa.common</groupId>
-            <artifactId>sofa-common-tools</artifactId>
             <optional>true</optional>
         </dependency>
 

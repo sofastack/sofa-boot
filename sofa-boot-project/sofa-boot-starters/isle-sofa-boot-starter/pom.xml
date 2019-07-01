@@ -19,19 +19,17 @@
     <dependencies>
         <dependency>
             <groupId>com.alipay.sofa</groupId>
-            <artifactId>runtime-sofa-boot-starter</artifactId>
+            <artifactId>isle-sofa-boot</artifactId>
         </dependency>
 
-        <!--provided-->
         <dependency>
             <groupId>com.alipay.sofa</groupId>
-            <artifactId>healthcheck-sofa-boot-starter</artifactId>
-            <scope>provided</scope>
+            <artifactId>runtime-sofa-boot</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-            <scope>provided</scope>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>sofa-boot-autoconfigure</artifactId>
         </dependency>
 
         <!--test-->

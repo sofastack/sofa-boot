@@ -157,7 +157,6 @@ public class SofaBootConstants {
      */
     public static final String  SOFABOOT_HEALTH_CHECK_NOT_READY_MSG             = "App is still in startup process, please try later!";
 
-
     /** framework constants **/
     public static String        APPLICATION                                     = "SOFABOOT-APPLICATION";
     public static String        PROCESSORS_OF_ROOT_APPLICATION_CONTEXT          = "PROCESSORS_OF_ROOT_APPLICATION_CONTEXT";

@@ -19,7 +19,6 @@
         <module>healthcheck-sofa-boot-starter</module>
         <module>runtime-sofa-boot-starter</module>
         <module>isle-sofa-boot-starter</module>
-        <module>actuator-sofa-boot-starter</module>
     </modules>
 
 </project>
