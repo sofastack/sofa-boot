@@ -1,0 +1,27 @@
+target
+bin
+bak
+.pmd
+.project
+.settings
+.classpath
+.idea.xml
+.idea
+*.class
+*.bak
+*.iml
+*.ipr
+*.iws
+bak
+null/
+tree.log
+tmp/
+velocity.log
+.DS_Store
+logs
+.m2
+
+# gradle related ignore in sub directories
+.gradle
+build
+out
