@@ -5,19 +5,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.alipay.sofa</groupId>
-        <artifactId>sofa-boot-build</artifactId>
-        <version>${revision}</version>
-        <relativePath>../..</relativePath>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>2.1.0.RELEASE</version>
     </parent>
 
+    <groupId>com.alipay.sofa</groupId>
     <artifactId>sofaboot-dependencies</artifactId>
     <packaging>pom</packaging>
+    <version>3.2.0-SNAPSHOT</version>
 
     <properties>
-        <!--spring boot version-->
-        <spring.boot.version>2.1.0.RELEASE</spring.boot.version>
-
         <!--project-->
         <java.version>1.7</java.version>
         <project.encoding>UTF-8</project.encoding>
@@ -94,14 +92,6 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring.boot.version}</version>
-                <scope>import</scope>
-                <type>pom</type>
-            </dependency>
-
-            <dependency>
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>sofa-boot</artifactId>
                 <version>${project.version}</version>
@@ -144,12 +134,6 @@
             </dependency>
 
             <!-- starter management begin -->
-            <dependency>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>sofa-boot-starter</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>infra-sofa-boot-starter</artifactId>
@@ -374,60 +358,6 @@
                     <groupId>com.alipay.sofa</groupId>
                     <artifactId>sofa-ark-maven-plugin</artifactId>
                     <version>${sofa.ark.version}</version>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>flatten-maven-plugin</artifactId>
-                    <inherited>false</inherited>
-                    <executions>
-                        <execution>
-                            <!-- Create an effective POM (with versions expanded) for the CLI and
-                                documentation -->
-                            <id>flatten-effective-pom</id>
-                            <phase>process-resources</phase>
-                            <goals>
-                                <goal>flatten</goal>
-                            </goals>
-                            <configuration>
-                                <updatePomFile>false</updatePomFile>
-                                <outputDirectory>${project.build.directory}/effective-pom</outputDirectory>
-                                <flattenedPomFilename>sofaboot-dependencies.xml</flattenedPomFilename>
-                                <flattenMode>oss</flattenMode>
-                                <pomElements>
-                                    <dependencyManagement>expand</dependencyManagement>
-                                    <pluginManagement>expand</pluginManagement>
-                                    <parent>expand</parent>
-                                    <properties>remove</properties>
-                                    <repositories>remove</repositories>
-                                </pomElements>
-                            </configuration>
-                        </execution>
-                        <execution>
-                            <!-- Flatten and simplify our own POM for install/deploy -->
-                            <id>flatten</id>
-                            <phase>process-resources</phase>
-                            <goals>
-                                <goal>flatten</goal>
-                            </goals>
-                            <configuration>
-                                <updatePomFile>true</updatePomFile>
-                                <flattenMode>bom</flattenMode>
-                                <pomElements>
-                                    <pluginManagement>keep</pluginManagement>
-                                    <properties>keep</properties>
-                                    <repositories>remove</repositories>
-                                </pomElements>
-                            </configuration>
-                        </execution>
-                        <execution>
-                            <id>flatten-clean</id>
-                            <phase>clean</phase>
-                            <goals>
-                                <goal>clean</goal>
-                            </goals>
-                        </execution>
-                    </executions>
                 </plugin>
             </plugins>
         </pluginManagement>
