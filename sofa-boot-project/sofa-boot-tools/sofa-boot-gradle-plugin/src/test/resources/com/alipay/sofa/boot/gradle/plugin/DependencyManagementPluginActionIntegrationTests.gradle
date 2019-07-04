@@ -3,10 +3,6 @@ plugins {
     id 'com.alipay.sofa.boot' version '{version}'
 }
 
-def property(String name, Object defaultValue) {
-    project.hasProperty(name) ? project.getProperty(name) : defaultValue
-}
-
 if (project.hasProperty('applyDependencyManagementPlugin')) {
     apply plugin: 'io.spring.dependency-management'
     dependencyManagement {
@@ -21,7 +17,7 @@ if (project.hasProperty('applyDependencyManagementPlugin')) {
 }
 
 repositories {
-    maven { url 'file:repository' }
+    mavenLocal()
 }
 
 task hasDependencyManagement {
