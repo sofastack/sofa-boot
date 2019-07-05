@@ -48,6 +48,7 @@
             <optional>true</optional>
         </dependency>
 
+        <!--Test-->
         <dependency>
             <groupId>org.jmockit</groupId>
             <artifactId>jmockit</artifactId>
@@ -77,14 +78,6 @@
             <artifactId>hessian</artifactId>
             <scope>test</scope>
         </dependency>
-
-        <dependency>
-            <groupId>com.alipay.sofa.common</groupId>
-            <artifactId>log-sofa-boot-starter</artifactId>
-            <version>1.0.18</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
-
 
 </project>

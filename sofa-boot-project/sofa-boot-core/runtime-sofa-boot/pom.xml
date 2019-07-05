@@ -23,13 +23,6 @@
             <artifactId>sofa-boot</artifactId>
         </dependency>
 
-        <!--TODO-->
-        <dependency>
-            <groupId>com.alipay.sofa.common</groupId>
-            <artifactId>log-sofa-boot-starter</artifactId>
-            <version>1.0.18</version>
-        </dependency>
-
         <!--Optional-->
         <dependency>
             <groupId>com.alipay.sofa</groupId>

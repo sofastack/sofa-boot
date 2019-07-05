@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.boot.actuator.health;
 
+import com.alipay.sofa.boot.health.NonReadinessCheck;
 import com.alipay.sofa.healthcheck.impl.ComponentHealthChecker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.Health;
@@ -26,7 +27,7 @@ import org.springframework.boot.actuate.health.HealthIndicator;
  *
  * @author xuanbei 18/5/15
  */
-public class ComponentHealthIndicator implements HealthIndicator {
+public class ComponentHealthIndicator implements HealthIndicator, NonReadinessCheck {
 
     @Autowired
     private ComponentHealthChecker componentHealthChecker;

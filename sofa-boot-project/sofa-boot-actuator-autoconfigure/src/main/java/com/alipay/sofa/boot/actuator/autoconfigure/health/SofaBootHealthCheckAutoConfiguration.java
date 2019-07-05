@@ -84,6 +84,7 @@ public class SofaBootHealthCheckAutoConfiguration {
     }
 
     @Bean
+    @ConditionalOnClass(name = { "com.alipay.sofa.ark.spi.model.Biz" })
     public MultiApplicationHealthIndicator multiApplicationHealthIndicator() {
         return new MultiApplicationHealthIndicator();
     }

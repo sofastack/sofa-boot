@@ -87,7 +87,7 @@
                 </executions>
                 <configuration>
                     <quiet>true</quiet>
-                    <header>${main.user.dir}/mvn/HEADER</header>
+                    <header>${main.user.dir}/tools/HEADER</header>
                     <includes>
                         <include>**/src/main/java/**</include>
                         <include>**/src/test/java/**</include>
@@ -111,7 +111,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <configFile>${main.user.dir}/mvn/Formatter.xml</configFile>
+                    <configFile>${main.user.dir}/tools/Formatter.xml</configFile>
                     <encoding>${project.encoding}</encoding>
                 </configuration>
             </plugin>

@@ -104,11 +104,11 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager {
      */
     public void shutdown() throws ServiceRuntimeException {
         try {
-            for (RuntimeShutdownAware shutdownAware : runtimeShutdownAwares) {
-                shutdownAware.shutdown();
-            }
             if (componentManager != null) {
                 componentManager.shutdown();
+            }
+            for (RuntimeShutdownAware shutdownAware : runtimeShutdownAwares) {
+                shutdownAware.shutdown();
             }
             clear();
         } catch (Throwable throwable) {

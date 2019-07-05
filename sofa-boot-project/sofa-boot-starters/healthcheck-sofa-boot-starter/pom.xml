@@ -76,19 +76,5 @@
         </dependency>
 
         <!--spring-boot-end-->
-
-        <!--log begin-->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.alipay.sofa.common</groupId>
-            <artifactId>sofa-common-tools</artifactId>
-        </dependency>
-        <!--log end-->
-
-
     </dependencies>
 </project>

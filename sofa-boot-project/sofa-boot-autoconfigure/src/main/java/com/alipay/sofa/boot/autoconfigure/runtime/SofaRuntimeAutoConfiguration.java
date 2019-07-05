@@ -64,14 +64,14 @@ public class SofaRuntimeAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public static AsyncProxyBeanPostProcessor asyncProxyBeanPostProcessor() {
-        return new AsyncProxyBeanPostProcessor();
+    public AsyncTaskExecutionListener asyncTaskExecutionListener() {
+        return new AsyncTaskExecutionListener();
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public AsyncTaskExecutionListener asyncTaskExecutionListener() {
-        return new AsyncTaskExecutionListener();
+    public static AsyncProxyBeanPostProcessor asyncProxyBeanPostProcessor() {
+        return new AsyncProxyBeanPostProcessor();
     }
 
     @Bean

@@ -9,7 +9,7 @@ install:
 - mvn test
 
 script:
-- sh ./check_format.sh
+- sh ./tools/check_format.sh
 
 after_success:
 - bash <(curl -s https://codecov.io/bash)

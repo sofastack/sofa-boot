@@ -133,6 +133,12 @@
                 <version>${project.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>test-sofa-boot</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
             <!-- starter management begin -->
             <dependency>
                 <groupId>com.alipay.sofa</groupId>

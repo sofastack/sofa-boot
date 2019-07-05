@@ -15,4 +15,11 @@
         <main.user.dir>${basedir}/../../..</main.user.dir>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>test-sofa-boot</artifactId>
+        </dependency>
+    </dependencies>
+
 </project>
