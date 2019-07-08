@@ -27,7 +27,6 @@ import com.alipay.sofa.rpc.config.ServerConfig;
  */
 public class PublishServiceImpl implements PublishService {
 
-    @Override
     public void publish() {
         ServerConfig serverConfig = new ServerConfig().setProtocol("bolt").setPort(9696);
 

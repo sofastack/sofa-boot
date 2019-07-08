@@ -24,7 +24,7 @@
 
         <!--starter-->
         <sofa.ark.version>0.6.0</sofa.ark.version>
-        <sofa.rpc.starter.version>6.0.1</sofa.rpc.starter.version>
+        <sofa.rpc.starter.version>6.0.3</sofa.rpc.starter.version>
         <sofa.tracer.version>3.0.2</sofa.tracer.version>
         <sofa.lookout.version>1.5.2</sofa.lookout.version>
         <sofa.jarslink.version>2.0.0</sofa.jarslink.version>
@@ -184,6 +184,12 @@
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>sofa-ark-springboot-starter</artifactId>
                 <version>${sofa.ark.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>rpc-sofa-boot-starter</artifactId>
+                <version>${sofa.rpc.starter.version}</version>
             </dependency>
             <!-- starter management end -->
 

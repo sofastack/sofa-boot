@@ -9,7 +9,7 @@
     </parent>
 
     <groupId>com.alipay.sofa</groupId>
-    <artifactId>sofaboot-sample-standard-parent</artifactId>
+    <artifactId>sofaboot-sample-standard</artifactId>
     <packaging>pom</packaging>
 
     <properties>

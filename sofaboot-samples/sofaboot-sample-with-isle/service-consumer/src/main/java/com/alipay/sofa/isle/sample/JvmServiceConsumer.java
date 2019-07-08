@@ -40,14 +40,13 @@ public class JvmServiceConsumer implements ClientFactoryAware {
         sampleJvmServiceByFieldAnnotation.message();
 
         ReferenceClient referenceClient = clientFactory.getClient(ReferenceClient.class);
-        ReferenceParam<SampleJvmService> referenceParam = new ReferenceParam<>();
+        ReferenceParam<SampleJvmService> referenceParam = new ReferenceParam<SampleJvmService>();
         referenceParam.setInterfaceType(SampleJvmService.class);
         referenceParam.setUniqueId("serviceClientImpl");
         SampleJvmService sampleJvmServiceClientImpl = referenceClient.reference(referenceParam);
         sampleJvmServiceClientImpl.message();
     }
 
-    @Override
     public void setClientFactory(ClientFactory clientFactory) {
         this.clientFactory = clientFactory;
     }

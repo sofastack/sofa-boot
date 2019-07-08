@@ -41,7 +41,6 @@ public class INewsManageDao implements NewsManageDao {
     @Autowired
     private DataSource dataSource;
 
-    @Override
     public int insert(NewsDO newDO) throws SQLException {
         Assert.notNull(newDO);
         Connection connection = dataSource.getConnection();
@@ -51,14 +50,13 @@ public class INewsManageDao implements NewsManageDao {
             newDO.getTitle()));
     }
 
-    @Override
     public List<NewsDO> query(String author) throws SQLException {
         Assert.isTrue(!StringUtils.isEmpty(author));
         Connection connection = dataSource.getConnection();
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(String.format(
             "SELECT * FROM NewsTable WHERE AUTHOR='%s';", author));
-        List<NewsDO> answer = new LinkedList<>();
+        List<NewsDO> answer = new LinkedList<NewsDO>();
         while (resultSet.next()) {
             NewsDO newDO = new NewsDO();
             newDO.setAuthor(resultSet.getString(2));
@@ -68,7 +66,6 @@ public class INewsManageDao implements NewsManageDao {
         return answer;
     }
 
-    @Override
     public void delete(String author) throws SQLException {
         Assert.isTrue(!StringUtils.isEmpty(author));
         Connection connection = dataSource.getConnection();

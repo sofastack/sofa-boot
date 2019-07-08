@@ -27,7 +27,6 @@ import org.springframework.util.Assert;
  */
 public class ReferenceServiceImpl implements ReferenceService {
 
-    @Override
     public void reference() {
         ConsumerConfig<SampleService> consumerConfig = new ConsumerConfig<SampleService>()
             .setInterfaceId(SampleService.class.getName()).setProtocol("bolt")
