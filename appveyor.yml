@@ -20,6 +20,10 @@ skip_tags: true
 build_script:
   - mvn clean install -DskipTests
 
+before_test:
+ - echo "Install Zookeeper 3.4.11"
+
+
 # verify artifacts
 test_script:
   - mvn test

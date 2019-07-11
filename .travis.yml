@@ -4,6 +4,13 @@ sudo: false
 jdk:
 - oraclejdk8
 
+before_install:
+- echo "Install Zookeeper 3.4.11"
+- wget http://archive.apache.org/dist/zookeeper/zookeeper-3.4.11/zookeeper-3.4.11.tar.gz
+- tar -zxf zookeeper-3.4.11.tar.gz
+- move zookeeper-3.4.11/conf/zoo_sample.cfg zookeeper-3.4.11/conf/zoo.cfg
+- zookeeper-3.4.11/bin/zkServer.cmd
+
 install:
 - mvn clean install -DskipTests -B -V
 - mvn test
