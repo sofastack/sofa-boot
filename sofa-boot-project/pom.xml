@@ -6,7 +6,6 @@
         <artifactId>sofa-boot-build</artifactId>
         <groupId>com.alipay.sofa</groupId>
         <version>3.2.0-SNAPSHOT</version>
-        <relativePath>../</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -24,8 +23,12 @@
         <module>sofa-boot-core</module>
         <!--imported or configured as parent by users-->
         <module>sofaboot-dependencies</module>
+        <!--imported or configured as parent by sofa boot module self-->
         <module>sofa-boot-parent</module>
     </modules>
 
+    <properties>
+        <main.user.dir>${basedir}/..</main.user.dir>
+    </properties>
 
 </project>

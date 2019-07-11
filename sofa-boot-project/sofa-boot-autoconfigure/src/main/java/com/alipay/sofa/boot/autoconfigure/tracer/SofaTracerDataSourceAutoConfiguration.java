@@ -34,7 +34,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @EnableConfigurationProperties(SofaTracerDataSourceProperties.class)
-@ConditionalOnClass({SofaTracerProperties.class, SmartDataSource.class})
+@ConditionalOnClass({ SofaTracerProperties.class, SmartDataSource.class })
 public class SofaTracerDataSourceAutoConfiguration {
 
     @Bean

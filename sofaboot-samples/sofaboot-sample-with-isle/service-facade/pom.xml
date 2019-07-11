@@ -10,4 +10,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>service-facade</artifactId>
+
+    <properties>
+        <main.user.dir>${basedir}/../../..</main.user.dir>
+    </properties>
+
 </project>

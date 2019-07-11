@@ -11,6 +11,10 @@
 
     <artifactId>sofa-boot-run</artifactId>
 
+    <properties>
+        <main.user.dir>${basedir}/../../..</main.user.dir>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>

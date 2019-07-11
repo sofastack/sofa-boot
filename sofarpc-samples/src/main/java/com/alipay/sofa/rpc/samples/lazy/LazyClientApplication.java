@@ -39,8 +39,10 @@ public class LazyClientApplication {
         SpringApplication springApplication = new SpringApplication(LazyClientApplication.class);
         ApplicationContext applicationContext = springApplication.run(args);
 
-        LazyService lazyServiceReferenceBolt = (LazyService) applicationContext.getBean("lazyServiceReferenceBolt");
-        LazyService lazyServiceReferenceDubbo = (LazyService) applicationContext.getBean("lazyServiceReferenceDubbo");
+        LazyService lazyServiceReferenceBolt = (LazyService) applicationContext
+            .getBean("lazyServiceReferenceBolt");
+        LazyService lazyServiceReferenceDubbo = (LazyService) applicationContext
+            .getBean("lazyServiceReferenceDubbo");
 
         String resultBolt = lazyServiceReferenceBolt.sayLazy("lazy_bolt");
         String resultDubbo = lazyServiceReferenceDubbo.sayLazy("lazy_dubbo");

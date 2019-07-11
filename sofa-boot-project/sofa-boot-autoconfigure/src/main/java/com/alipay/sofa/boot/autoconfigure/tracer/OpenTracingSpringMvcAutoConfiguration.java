@@ -45,7 +45,7 @@ import java.util.List;
 @Configuration
 @EnableConfigurationProperties(OpenTracingSpringMvcProperties.class)
 @ConditionalOnWebApplication
-@ConditionalOnClass({SofaTracerProperties.class, SpringMvcTracer.class})
+@ConditionalOnClass({ SofaTracerProperties.class, SpringMvcTracer.class })
 @AutoConfigureAfter(SofaTracerAutoConfiguration.class)
 public class OpenTracingSpringMvcAutoConfiguration {
 

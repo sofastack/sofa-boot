@@ -33,7 +33,8 @@ public class ThreadPoolClientApplication {
         //change port to run in local machine
         System.setProperty("server.port", "8081");
 
-        SpringApplication springApplication = new SpringApplication(ThreadPoolClientApplication.class);
+        SpringApplication springApplication = new SpringApplication(
+            ThreadPoolClientApplication.class);
         ApplicationContext applicationContext = springApplication.run(args);
 
         ThreadPoolService threadPoolService = (ThreadPoolService) applicationContext

@@ -36,7 +36,8 @@ public class FilterClientApplication {
         SpringApplication springApplication = new SpringApplication(FilterClientApplication.class);
         ApplicationContext applicationContext = springApplication.run(args);
 
-        FilterService filterServiceReference = (FilterService) applicationContext.getBean("filterServiceReference");
+        FilterService filterServiceReference = (FilterService) applicationContext
+            .getBean("filterServiceReference");
 
         try {
             Thread.sleep(5000);

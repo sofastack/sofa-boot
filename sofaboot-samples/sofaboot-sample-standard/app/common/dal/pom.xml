@@ -11,6 +11,10 @@
     <artifactId>sofaboot-sample-standard-common-dal</artifactId>
     <packaging>jar</packaging>
 
+    <properties>
+        <main.user.dir>${basedir}/../../../../..</main.user.dir>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.h2database</groupId>

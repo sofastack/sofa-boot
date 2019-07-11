@@ -45,7 +45,8 @@ public class GenericClientApplication {
             "com.alipay.sofa.rpc.samples.generic.SampleGenericParamModel");
         genericObject.putField("name", "Bible");
 
-        GenericObject genericResult = (GenericObject) sampleGenericServiceReference.$genericInvoke("sayGeneric",
+        GenericObject genericResult = (GenericObject) sampleGenericServiceReference.$genericInvoke(
+            "sayGeneric",
             new String[] { "com.alipay.sofa.rpc.samples.generic.SampleGenericParamModel" },
             new Object[] { genericObject });
 

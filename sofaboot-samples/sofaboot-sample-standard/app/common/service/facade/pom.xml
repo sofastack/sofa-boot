@@ -9,6 +9,10 @@
         <relativePath>../../../../pom.xml</relativePath>
     </parent>
 
+    <properties>
+        <main.user.dir>${basedir}/../../../../../..</main.user.dir>
+    </properties>
+
     <artifactId>sofaboot-sample-standard-common-service-facade</artifactId>
     <packaging>jar</packaging>
 

@@ -8,6 +8,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <properties>
+        <main.user.dir>${basedir}/../../../..</main.user.dir>
+    </properties>
+
     <artifactId>sofaboot-sample-standard-test</artifactId>
     <packaging>jar</packaging>
 

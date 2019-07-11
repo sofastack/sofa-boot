@@ -9,6 +9,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <properties>
+        <main.user.dir>${basedir}/../../../../..</main.user.dir>
+    </properties>
+
     <artifactId>sofaboot-sample-standard-biz-shared</artifactId>
     <url>http://home.alipay.net</url>
     <description>Alipay sofaboot-sample-standard-biz-shared</description>

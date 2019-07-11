@@ -37,7 +37,8 @@ public class DubboClientApplication {
         SpringApplication springApplication = new SpringApplication(DubboClientApplication.class);
         ApplicationContext applicationContext = springApplication.run(args);
 
-        DubboService directService = (DubboService) applicationContext.getBean("dubboServiceReference");
+        DubboService directService = (DubboService) applicationContext
+            .getBean("dubboServiceReference");
 
         try {
             Thread.sleep(5000);
@@ -53,7 +54,8 @@ public class DubboClientApplication {
             System.out.println("dubbo invoke fail");
         }
 
-        GenericService genericService = (GenericService) applicationContext.getBean("dubboServiceReference1");
+        GenericService genericService = (GenericService) applicationContext
+            .getBean("dubboServiceReference1");
 
         try {
             Thread.sleep(5000);

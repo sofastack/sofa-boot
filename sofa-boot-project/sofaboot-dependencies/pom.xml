@@ -24,9 +24,7 @@
 
         <!--starter-->
         <sofa.ark.version>0.6.0</sofa.ark.version>
-        <sofa.rpc.starter.version>6.0.3</sofa.rpc.starter.version>
         <sofa.lookout.version>1.5.2</sofa.lookout.version>
-        <sofa.jarslink.version>2.0.0</sofa.jarslink.version>
 
         <!--core-->
         <tracer.core.version>3.0.5</tracer.core.version>
@@ -404,7 +402,6 @@
                 <version>${zipkin.reporter.version}</version>
             </dependency>
             <!-- 3rd lib dependency end -->
-
         </dependencies>
     </dependencyManagement>
 

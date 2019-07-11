@@ -11,6 +11,10 @@
 
     <artifactId>service-provider</artifactId>
 
+    <properties>
+        <main.user.dir>${basedir}/../../..</main.user.dir>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.alipay.sofa</groupId>

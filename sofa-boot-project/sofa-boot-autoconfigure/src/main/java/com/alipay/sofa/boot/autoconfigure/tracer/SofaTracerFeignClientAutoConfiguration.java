@@ -33,7 +33,7 @@ import org.springframework.context.annotation.Configuration;
  * @since:
  **/
 @Configuration
-@ConditionalOnClass({SofaTracerProperties.class, Client.class, SofaTracerFeignContext.class})
+@ConditionalOnClass({ SofaTracerProperties.class, Client.class, SofaTracerFeignContext.class })
 @AutoConfigureBefore(FeignAutoConfiguration.class)
 @ConditionalOnProperty(name = "com.alipay.sofa.tracer.feign.enabled", havingValue = "true", matchIfMissing = true)
 public class SofaTracerFeignClientAutoConfiguration {

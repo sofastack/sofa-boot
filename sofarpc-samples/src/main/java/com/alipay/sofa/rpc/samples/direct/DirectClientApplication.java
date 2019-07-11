@@ -37,7 +37,8 @@ public class DirectClientApplication {
 
         ApplicationContext applicationContext = springApplication.run(args);
 
-        DirectService directService = (DirectService) applicationContext.getBean("directServiceReference");
+        DirectService directService = (DirectService) applicationContext
+            .getBean("directServiceReference");
 
         String result = directService.sayDirect("direct");
         System.out.println("invoke result:" + result);

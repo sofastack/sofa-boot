@@ -12,7 +12,7 @@
     <artifactId>sofarpc-samples</artifactId>
 
     <properties>
-        <main.user.dir>${user.dir}/..</main.user.dir>
+        <main.user.dir>${basedir}/..</main.user.dir>
         <cxf.version>3.0.14</cxf.version>
         <sofaboot.version>3.1.4</sofaboot.version>
         <curator-test.version>2.9.1</curator-test.version>

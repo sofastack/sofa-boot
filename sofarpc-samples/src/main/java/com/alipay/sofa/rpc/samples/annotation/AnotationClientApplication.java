@@ -31,11 +31,13 @@ public class AnotationClientApplication {
         //change port to run in local machine
         System.setProperty("server.port", "8081");
 
-        SpringApplication springApplication = new SpringApplication(AnotationClientApplication.class);
+        SpringApplication springApplication = new SpringApplication(
+            AnotationClientApplication.class);
 
         ApplicationContext applicationContext = springApplication.run(args);
 
-        AnnotationClientImpl annotationService = applicationContext.getBean(AnnotationClientImpl.class);
+        AnnotationClientImpl annotationService = applicationContext
+            .getBean(AnnotationClientImpl.class);
 
         String result = annotationService.sayClientAnnotation("annotation");
         System.out.println("invoke result:" + result);

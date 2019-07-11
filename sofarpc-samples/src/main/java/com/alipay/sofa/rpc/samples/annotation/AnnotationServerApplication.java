@@ -29,7 +29,8 @@ public class AnnotationServerApplication {
 
     public static void main(String[] args) {
 
-        SpringApplication springApplication = new SpringApplication(AnnotationServerApplication.class);
+        SpringApplication springApplication = new SpringApplication(
+            AnnotationServerApplication.class);
         ApplicationContext applicationContext = springApplication.run(args);
     }
 }

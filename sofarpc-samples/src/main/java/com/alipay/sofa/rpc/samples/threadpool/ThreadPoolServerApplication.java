@@ -30,7 +30,8 @@ public class ThreadPoolServerApplication {
 
     public static void main(String[] args) {
 
-        SpringApplication springApplication = new SpringApplication(ThreadPoolServerApplication.class);
+        SpringApplication springApplication = new SpringApplication(
+            ThreadPoolServerApplication.class);
         ApplicationContext applicationContext = springApplication.run(args);
     }
 }

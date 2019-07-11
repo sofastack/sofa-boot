@@ -29,7 +29,7 @@
     <artifactId>sofaboot-sample</artifactId>
 
     <properties>
-        <main.user.dir>${user.dir}/../..</main.user.dir>
+        <main.user.dir>${basedir}/../..</main.user.dir>
     </properties>
 
     <dependencies>
