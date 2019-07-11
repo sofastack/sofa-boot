@@ -1,0 +1,11 @@
+plugins {
+    id 'java'
+}
+
+dependencies {
+    compileOnly lib.lombok
+    compile lib.sofaRuntime
+    compile lib.jug
+    compile lib.springBatch
+    compile project(':batch-job-facade')
+}

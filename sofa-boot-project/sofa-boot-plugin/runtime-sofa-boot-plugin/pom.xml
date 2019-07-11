@@ -114,10 +114,9 @@
                                 <excludeArtifactId>jcl-over-slf4j</excludeArtifactId>
                                 <excludeArtifactId>jul-to-slf4j</excludeArtifactId>
                                 <excludeArtifactId>log4j-over-slf4j</excludeArtifactId>
-                                <excludeArtifactId>logback-core</excludeArtifactId>
-                                <excludeArtifactId>logback-classic</excludeArtifactId>
                                 <excludeArtifactId>snakeyaml</excludeArtifactId>
                                 <excludeArtifactId>validation-api</excludeArtifactId>
+                                <excludeArtifactId>log-sofa-boot-starter</excludeArtifactId>
                             </excludeArtifactIds>
 
                         </configuration>
