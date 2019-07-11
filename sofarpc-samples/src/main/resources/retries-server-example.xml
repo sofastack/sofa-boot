@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:sofa="http://sofastack.io/schema/sofaboot"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://sofastack.io/schema/sofaboot http://sofastack.io/schema/sofaboot.xsd"
+       default-autowire="byName">
+
+    <bean id="retriesServiceImpl" class="com.alipay.sofa.rpc.samples.retries.RetriesServiceImpl"/>
+    <sofa:service ref="retriesServiceImpl" interface="com.alipay.sofa.rpc.samples.retries.RetriesService">
+        <sofa:binding.bolt/>
+        <sofa:binding.dubbo/>
+    </sofa:service>
+</beans>

@@ -32,7 +32,8 @@ import com.alipay.sofa.rpc.boot.log.SofaBootRpcLoggerFactory;
  */
 public class RpcThreadPoolMonitor {
 
-    private static final Logger LOGGER     = SofaBootRpcLoggerFactory.getLogger("RPC-BOLT-THREADPOOL");
+    private static final Logger LOGGER     = SofaBootRpcLoggerFactory
+                                               .getLogger("RPC-BOLT-THREADPOOL");
 
     /**
      * 线程池
@@ -58,7 +59,8 @@ public class RpcThreadPoolMonitor {
                     StringBuilder sb = new StringBuilder();
                     sb.append("coreSize:" + threadPoolExecutor.getCorePoolSize() + ",");
                     sb.append("maxPoolSize:" + threadPoolExecutor.getMaximumPoolSize() + ",");
-                    sb.append("keepAliveTime:" + threadPoolExecutor.getKeepAliveTime(TimeUnit.MILLISECONDS) + "\n");
+                    sb.append("keepAliveTime:"
+                              + threadPoolExecutor.getKeepAliveTime(TimeUnit.MILLISECONDS) + "\n");
                     if (LOGGER.isInfoEnabled()) {
                         LOGGER.info(sb.toString());
                     }

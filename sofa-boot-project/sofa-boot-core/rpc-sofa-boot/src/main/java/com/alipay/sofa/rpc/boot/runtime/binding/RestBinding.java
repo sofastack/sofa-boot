@@ -27,8 +27,8 @@ import com.alipay.sofa.runtime.api.binding.BindingType;
  */
 public class RestBinding extends RpcBinding {
 
-    public RestBinding(RpcBindingParam bindingParam,
-                       ApplicationContext applicationContext, boolean inBinding) {
+    public RestBinding(RpcBindingParam bindingParam, ApplicationContext applicationContext,
+                       boolean inBinding) {
         super(bindingParam, applicationContext, inBinding);
     }
 

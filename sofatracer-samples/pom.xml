@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>sofa-boot-build</artifactId>
+        <groupId>com.alipay.sofa</groupId>
+        <version>3.2.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>sofatracer-samples</artifactId>
+
+    <modules>
+        <module>tracer-sample-with-springmvc</module>
+        <module>tracer-sample-with-zipkin</module>
+        <module>tracer-sample-with-slf4j</module>
+        <module>tracer-sample-with-sofarpc</module>
+        <module>tracer-sample-with-httpclient</module>
+        <module>tracer-sample-with-h2</module>
+        <module>tracer-sample-with-sampler</module>
+        <module>tracer-sample-with-dubbo</module>
+        <module>tracer-sample-with-openfeign</module>
+    </modules>
+
+</project>

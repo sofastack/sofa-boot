@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.rpc.boot.common;
 
-
 import org.springframework.util.StringUtils;
 
 /**

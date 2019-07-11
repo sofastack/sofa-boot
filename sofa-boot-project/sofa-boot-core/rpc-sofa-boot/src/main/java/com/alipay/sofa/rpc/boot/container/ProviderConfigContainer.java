@@ -64,8 +64,8 @@ public class ProviderConfigContainer {
         if (providerConfig != null) {
             if (RPC_SERVICE_CONTAINER.containsKey(key)) {
                 if (LOGGER.isWarnEnabled()) {
-                    LOGGER.warn("The same services and protocols already exist.key[" + key + "];protocol[" +
-                        providerConfig.getServer().get(0) + "]");
+                    LOGGER.warn("The same services and protocols already exist.key[" + key
+                                + "];protocol[" + providerConfig.getServer().get(0) + "]");
                 }
             } else {
                 RPC_SERVICE_CONTAINER.put(key, providerConfig);
@@ -108,7 +108,8 @@ public class ProviderConfigContainer {
         for (ProviderConfig providerConfig : getAllProviderConfig()) {
 
             ServerConfig serverConfig = (ServerConfig) providerConfig.getServer().get(0);
-            if (!serverConfig.getProtocol().equalsIgnoreCase(SofaBootRpcConfigConstants.RPC_PROTOCOL_DUBBO)) {
+            if (!serverConfig.getProtocol().equalsIgnoreCase(
+                SofaBootRpcConfigConstants.RPC_PROTOCOL_DUBBO)) {
                 providerConfig.setRegister(true);
 
                 List<RegistryConfig> registrys = providerConfig.getRegistry();
@@ -121,9 +122,9 @@ public class ProviderConfigContainer {
                     registry.register(providerConfig);
 
                     if (LOGGER.isInfoEnabled()) {
-                        LOGGER.info("service published.  interfaceId[" + providerConfig.getInterfaceId() +
-                            "]; protocol[" +
-                            serverConfig.getProtocol() + "]");
+                        LOGGER.info("service published.  interfaceId["
+                                    + providerConfig.getInterfaceId() + "]; protocol["
+                                    + serverConfig.getProtocol() + "]");
                     }
                 }
 
@@ -138,13 +139,15 @@ public class ProviderConfigContainer {
         for (ProviderConfig providerConfig : getAllProviderConfig()) {
 
             ServerConfig serverConfig = (ServerConfig) providerConfig.getServer().get(0);
-            if (serverConfig.getProtocol().equalsIgnoreCase(SofaBootRpcConfigConstants.RPC_PROTOCOL_DUBBO)) {
+            if (serverConfig.getProtocol().equalsIgnoreCase(
+                SofaBootRpcConfigConstants.RPC_PROTOCOL_DUBBO)) {
                 providerConfig.setRegister(true);
                 providerConfig.export();
 
                 if (LOGGER.isInfoEnabled()) {
-                    LOGGER.info("service published.  interfaceId[" + providerConfig.getInterfaceId() + "]; protocol[" +
-                        serverConfig.getProtocol() + "]");
+                    LOGGER.info("service published.  interfaceId["
+                                + providerConfig.getInterfaceId() + "]; protocol["
+                                + serverConfig.getProtocol() + "]");
                 }
             }
         }

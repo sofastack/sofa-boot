@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:sofa="http://sofastack.io/schema/sofaboot"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://sofastack.io/schema/sofaboot   http://sofastack.io/schema/sofaboot.xsd">
+
+    <sofa:reference jvm-first="false" id="helloSyncConsumerMesh" interface="com.alipay.sofa.rpc.boot.test.bean.invoke.HelloSyncService">
+        <sofa:binding.bolt/>
+    </sofa:reference>
+
+    <bean id="helloSyncServiceImpl" class="com.alipay.sofa.rpc.boot.test.bean.invoke.HelloSyncServiceImpl" />
+    <sofa:service  id="helloSyncProviderMesh" interface="com.alipay.sofa.rpc.boot.test.bean.invoke.HelloSyncService" ref="helloSyncServiceImpl">
+        <sofa:binding.bolt/>
+    </sofa:service>
+    <sofa:reference jvm-first="false" id="sampleServiceRef" interface="com.alipay.sofa.rpc.boot.test.bean.SampleService">
+        <sofa:binding.bolt/>
+    </sofa:reference>
+
+</beans>

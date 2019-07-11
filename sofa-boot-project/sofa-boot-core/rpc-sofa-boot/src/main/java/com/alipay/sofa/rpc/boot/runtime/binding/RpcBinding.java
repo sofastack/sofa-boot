@@ -36,7 +36,7 @@ public abstract class RpcBinding extends AbstractBinding {
 
     protected String             beanId;
 
-    protected RpcBindingParam rpcBindingParam;
+    protected RpcBindingParam    rpcBindingParam;
 
     /**
      * Spring 上下文
@@ -53,7 +53,8 @@ public abstract class RpcBinding extends AbstractBinding {
      */
     protected ConsumerConfig     consumerConfig;
 
-    public RpcBinding(RpcBindingParam bindingParam, ApplicationContext applicationContext, boolean inBinding) {
+    public RpcBinding(RpcBindingParam bindingParam, ApplicationContext applicationContext,
+                      boolean inBinding) {
         this.rpcBindingParam = bindingParam;
         this.applicationContext = applicationContext;
         this.inBinding = inBinding;
@@ -235,14 +236,16 @@ public abstract class RpcBinding extends AbstractBinding {
         if (beanId != null ? !beanId.equals(that.beanId) : that.beanId != null) {
             return false;
         }
-        if (rpcBindingParam != null ? !rpcBindingParam.equals(that.rpcBindingParam) : that.rpcBindingParam != null) {
+        if (rpcBindingParam != null ? !rpcBindingParam.equals(that.rpcBindingParam)
+            : that.rpcBindingParam != null) {
             return false;
         }
         if (applicationContext != null ? !applicationContext.equals(that.applicationContext)
             : that.applicationContext != null) {
             return false;
         }
-        return consumerConfig != null ? consumerConfig.equals(that.consumerConfig) : that.consumerConfig == null;
+        return consumerConfig != null ? consumerConfig.equals(that.consumerConfig)
+            : that.consumerConfig == null;
     }
 
     @Override

@@ -35,7 +35,8 @@ public class ApplicationContextRefreshedListener implements ApplicationListener 
     public void onApplicationEvent(ApplicationEvent event) {
         if (event instanceof ContextRefreshedEvent) {
 
-            ApplicationContext applicationContext = ((ContextRefreshedEvent) event).getApplicationContext();
+            ApplicationContext applicationContext = ((ContextRefreshedEvent) event)
+                .getApplicationContext();
             //rpc 开始启动事件监听器
             applicationContext.publishEvent(new SofaBootRpcStartEvent(applicationContext));
 

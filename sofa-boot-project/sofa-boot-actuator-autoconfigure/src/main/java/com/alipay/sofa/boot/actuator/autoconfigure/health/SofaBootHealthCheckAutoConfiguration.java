@@ -109,7 +109,7 @@ public class SofaBootHealthCheckAutoConfiguration {
     }
 
     @Configuration
-    @ConditionalOnClass(ModelCreatingStage.class)
+    @ConditionalOnClass({ HealthChecker.class, ModelCreatingStage.class })
     public static class SofaModuleHealthIndicatorConfiguration {
         @Bean
         public SofaModuleHealthIndicator sofaModuleHealthIndicator() {

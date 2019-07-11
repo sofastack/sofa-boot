@@ -305,9 +305,8 @@ public class SofaBootRpcProperties {
     }
 
     public String getAftLeastWindowExceptionRateMultiple() {
-        return StringUtils.isEmpty(aftLeastWindowExceptionRateMultiple)
-            ? getDotString(new Object() {
-            }.getClass().getEnclosingMethod().getName())
+        return StringUtils.isEmpty(aftLeastWindowExceptionRateMultiple) ? getDotString(new Object() {
+        }.getClass().getEnclosingMethod().getName())
             : aftLeastWindowExceptionRateMultiple;
     }
 
@@ -727,7 +726,7 @@ public class SofaBootRpcProperties {
         return environment.getProperty(PREFIX + "." + camelToDot(enclosingMethodName.substring(3)));
     }
 
-    String camelToDot(String camelCaseString) {
+    public String camelToDot(String camelCaseString) {
         return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_HYPHEN, camelCaseString).replaceAll("-",
             ".");
     }

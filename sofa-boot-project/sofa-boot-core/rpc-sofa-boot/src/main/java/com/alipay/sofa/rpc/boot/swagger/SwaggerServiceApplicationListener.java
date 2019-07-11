@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.alipay.sofa.rpc.boot.swagger;
 
 import java.util.ArrayList;
@@ -30,7 +29,8 @@ import com.alipay.sofa.runtime.api.client.ServiceClient;
 import com.alipay.sofa.runtime.api.client.param.BindingParam;
 import com.alipay.sofa.runtime.api.client.param.ServiceParam;
 
-public class SwaggerServiceApplicationListener implements ApplicationListener<ApplicationStartedEvent>,
+public class SwaggerServiceApplicationListener implements
+                                              ApplicationListener<ApplicationStartedEvent>,
                                               ClientFactoryAware {
     private ClientFactory clientFactory;
 

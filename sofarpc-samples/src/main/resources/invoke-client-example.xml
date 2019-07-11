@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:sofa="http://sofastack.io/schema/sofaboot"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://sofastack.io/schema/sofaboot http://sofastack.io/schema/sofaboot.xsd"
+       default-autowire="byName">
+    <!-- invoke sync-->
+    <sofa:reference jvm-first="false" id="helloSyncServiceReference" interface="com.alipay.sofa.rpc.samples.invoke.HelloSyncService">
+        <sofa:binding.bolt/>
+    </sofa:reference>
+    <!-- invoke future -->
+    <sofa:reference jvm-first="false" id="helloFutureServiceReference" interface="com.alipay.sofa.rpc.samples.invoke.HelloFutureService">
+        <sofa:binding.bolt>
+            <sofa:global-attrs type="future"/>
+        </sofa:binding.bolt>
+    </sofa:reference>
+    <!-- invoke callback -->
+    <bean id="callbackImpl" class="com.alipay.sofa.rpc.samples.invoke.CallbackImpl"/>
+    <sofa:reference jvm-first="false" id="helloCallbackServiceReference"
+                    interface="com.alipay.sofa.rpc.samples.invoke.HelloCallbackService">
+        <sofa:binding.bolt>
+            <sofa:global-attrs type="callback" callback-ref="callbackImpl"/>
+        </sofa:binding.bolt>
+    </sofa:reference>
+</beans>

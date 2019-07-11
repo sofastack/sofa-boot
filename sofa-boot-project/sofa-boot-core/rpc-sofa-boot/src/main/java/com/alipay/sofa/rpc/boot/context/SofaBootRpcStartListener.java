@@ -33,7 +33,7 @@ import com.alipay.sofa.rpc.config.ProviderConfig;
 import com.alipay.sofa.rpc.event.LookoutSubscriber;
 
 /**
- * {@link SofaBootRpcStartEvent ) 事件监听器.
+ * {@link SofaBootRpcStartEvent} 事件监听器.
  * 加载并初始化 SOFABoot RPC 需要的配置。
  * 开启服务器并发布服务元数据信息。
  *
@@ -46,11 +46,10 @@ public class SofaBootRpcStartListener implements ApplicationListener<SofaBootRpc
 
     private final ProviderConfigContainer    providerConfigContainer;
     private final FaultToleranceConfigurator faultToleranceConfigurator;
-    private final ServerConfigContainer serverConfigContainer;
-    private final RegistryConfigContainer registryConfigContainer;
+    private final ServerConfigContainer      serverConfigContainer;
+    private final RegistryConfigContainer    registryConfigContainer;
 
-    public SofaBootRpcStartListener(
-                                    ProviderConfigContainer providerConfigContainer,
+    public SofaBootRpcStartListener(ProviderConfigContainer providerConfigContainer,
                                     FaultToleranceConfigurator faultToleranceConfigurator,
                                     ServerConfigContainer serverConfigContainer,
                                     RegistryConfigContainer registryConfigContainer) {
@@ -68,7 +67,8 @@ public class SofaBootRpcStartListener implements ApplicationListener<SofaBootRpc
         //start fault tolerance
         faultToleranceConfigurator.startFaultTolerance();
 
-        Collection<ProviderConfig> allProviderConfig = providerConfigContainer.getAllProviderConfig();
+        Collection<ProviderConfig> allProviderConfig = providerConfigContainer
+            .getAllProviderConfig();
         if (!CollectionUtils.isEmpty(allProviderConfig)) {
             //start server
             serverConfigContainer.startServers();
@@ -85,7 +85,8 @@ public class SofaBootRpcStartListener implements ApplicationListener<SofaBootRpc
     }
 
     private void disableLookout() {
-        Boolean disable = SofaBootRpcParserUtil.parseBoolean(sofaBootRpcProperties.getLookoutCollectDisable());
+        Boolean disable = SofaBootRpcParserUtil.parseBoolean(sofaBootRpcProperties
+            .getLookoutCollectDisable());
 
         if (disable != null) {
             LookoutSubscriber.setLookoutCollectDisable(disable);

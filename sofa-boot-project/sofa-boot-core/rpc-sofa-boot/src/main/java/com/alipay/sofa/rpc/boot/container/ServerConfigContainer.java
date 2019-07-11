@@ -248,7 +248,7 @@ public class ServerConfigContainer {
      *
      * @return Bolt 的服务端配置信息
      */
-    ServerConfig createBoltServerConfig() {
+    public ServerConfig createBoltServerConfig() {
         String portStr = sofaBootRpcProperties.getBoltPort();
         String boltThreadPoolCoreSizeStr = sofaBootRpcProperties.getBoltThreadPoolCoreSize();
         String boltThreadPoolMaxSizeStr = sofaBootRpcProperties.getBoltThreadPoolMaxSize();
@@ -292,7 +292,7 @@ public class ServerConfigContainer {
      *
      * @return rest ServerConfig
      */
-    ServerConfig createRestServerConfig() {
+    public ServerConfig createRestServerConfig() {
         String hostName = sofaBootRpcProperties.getRestHostname();
         String portStr = sofaBootRpcProperties.getRestPort();
         String ioThreadSizeStr = sofaBootRpcProperties.getRestIoThreadSize();
@@ -356,14 +356,9 @@ public class ServerConfigContainer {
             parameters.put(RpcConstants.ALLOWED_ORIGINS, allowedOrigins);
         }
 
-        ServerConfig serverConfig = new ServerConfig()
-            .setPort(port)
-            .setIoThreads(ioThreadCount)
-            .setMaxThreads(restThreadPoolMaxSize)
-            .setPayload(maxRequestSize)
-            .setTelnet(telnet)
-            .setDaemon(daemon)
-            .setParameters(parameters);
+        ServerConfig serverConfig = new ServerConfig().setPort(port).setIoThreads(ioThreadCount)
+            .setMaxThreads(restThreadPoolMaxSize).setPayload(maxRequestSize).setTelnet(telnet)
+            .setDaemon(daemon).setParameters(parameters);
 
         if (!StringUtils.isEmpty(contextPath)) {
             serverConfig.setContextPath(contextPath);
@@ -383,7 +378,7 @@ public class ServerConfigContainer {
      *
      * @return dubbo ServerConfig
      */
-    ServerConfig createDubboServerConfig() {
+    public ServerConfig createDubboServerConfig() {
         String portStr = sofaBootRpcProperties.getDubboPort();
         String ioThreadSizeStr = sofaBootRpcProperties.getDubboIoThreadSize();
         String dubboThreadPoolMaxSizeStr = sofaBootRpcProperties.getDubboThreadPoolMaxSize();

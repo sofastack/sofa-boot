@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="OFF">
+
+    <Properties>
+        <!-- 将系统属性进行一次本地转换 -->
+        <Property name="RPC_LOG_LEVEL">${sys:logging.level.com.alipay.sofa.rpc.boot}</Property>
+        <Property name="RPC_LOG_PATH">${sys:logging.path}</Property>
+        <Property name="RPC_FILE_ENCODING">${sys:file.encoding}</Property>
+    </Properties>
+
+    <appenders>
+
+        <RollingFile name="ERROR-APPENDER" fileName="${RPC_LOG_PATH}/rpc/common-error.log" append="true"
+                     filePattern="${RPC_LOG_PATH}/rpc/common-error.log.%d{yyyy-MM-dd}">
+            <!-- only print error log -->
+            <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout charset="${RPC_FILE_ENCODING}">
+                <pattern>%d %-5p %-32t - %m%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <!-- 按天分日志文件:重要的是 filePattern 配置到按照天 -->
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+        </RollingFile>
+
+        <RollingFile name="ROOT-APPENDER" fileName="${RPC_LOG_PATH}/rpc/common-default.log" append="true"
+                     filePattern="${RPC_LOG_PATH}/rpc/common-default.log.%d{yyyy-MM-dd}">
+            <ThresholdFilter level="${RPC_LOG_LEVEL}" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout charset="${RPC_FILE_ENCODING}">
+                <pattern>%d %-5p %-32t - %m%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <!-- 按天分日志文件:重要的是 filePattern 配置到按照天 -->
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+        </RollingFile>
+
+        <RollingFile name="RPC-BOLT-THREADPOOL-LOG-FILE" fileName="${RPC_LOG_PATH}/rpc/bolt-threadpool.log" append="true"
+                     filePattern="${RPC_LOG_PATH}/rpc/bolt-threadpool.log.%d{yyyy-MM-dd}">
+            <ThresholdFilter level="${RPC_LOG_LEVEL}" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout charset="${RPC_FILE_ENCODING}">
+                <pattern>%d %-5p %-32t %c{2} - %m%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <!-- 按天分日志文件:重要的是 filePattern 配置到按照天 -->
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+        </RollingFile>
+    </appenders>
+
+    <loggers>
+
+        <logger name="RPC-BOLT-THREADPOOL" level="${RPC_LOG_LEVEL}" additivity="false">
+            <appender-ref ref="RPC-BOLT-THREADPOOL-LOG-FILE"/>
+            <appender-ref ref="ERROR-APPENDER"/>
+        </logger>
+
+        <root level="${RPC_LOG_LEVEL}">
+            <appender-ref ref="ROOT-APPENDER"/>
+            <appender-ref ref="ERROR-APPENDER"/>
+        </root>
+    </loggers>
+</configuration>

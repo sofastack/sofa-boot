@@ -39,8 +39,8 @@ public class MeshConfigurator implements RegistryConfigureProcessor {
             SofaBootRpcConfigConstants.REGISTRY_PROTOCOL_MESH);
 
         meshAddress = HTTP + meshAddress;
-        return new RegistryConfig().setAddress(meshAddress)
-            .setProtocol(SofaBootRpcConfigConstants.REGISTRY_PROTOCOL_MESH);
+        return new RegistryConfig().setAddress(meshAddress).setProtocol(
+            SofaBootRpcConfigConstants.REGISTRY_PROTOCOL_MESH);
     }
 
     @Override

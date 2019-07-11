@@ -27,8 +27,8 @@ import com.alipay.sofa.runtime.api.binding.BindingType;
  */
 public class DubboBinding extends RpcBinding {
 
-    public DubboBinding(RpcBindingParam bindingParam,
-                        ApplicationContext applicationContext, boolean inBinding) {
+    public DubboBinding(RpcBindingParam bindingParam, ApplicationContext applicationContext,
+                        boolean inBinding) {
         super(bindingParam, applicationContext, inBinding);
     }
 

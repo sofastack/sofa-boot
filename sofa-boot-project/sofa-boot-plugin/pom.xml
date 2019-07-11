@@ -15,6 +15,7 @@
 
     <modules>
         <module>runtime-sofa-boot-plugin</module>
+        <module>rpc-sofa-boot-plugin</module>
     </modules>
 
 </project>

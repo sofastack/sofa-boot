@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:sofa="http://sofastack.io/schema/sofaboot"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://sofastack.io/schema/sofaboot   http://sofastack.io/schema/sofaboot.xsd">
+
+    <bean id="parameterFilter" class="com.alipay.sofa.rpc.boot.test.bean.filter.ParameterFilter"/>
+
+    <sofa:reference id="helloSyncService" jvm-first="false" interface="com.alipay.sofa.rpc.boot.test.bean.invoke.HelloSyncService">
+        <sofa:binding.bolt>
+            <sofa:global-attrs filter="parameterFilter" />
+            <sofa:parameter key="static_key" value="static_value" />
+            <sofa:parameter key="${dynamic_key}" value="${dynamic_value}" />
+        </sofa:binding.bolt>
+    </sofa:reference>
+
+    <sofa:service ref="helloSyncServiceImpl" interface="com.alipay.sofa.rpc.boot.test.bean.invoke.HelloSyncService">
+        <sofa:binding.bolt>
+            <sofa:global-attrs filter="parameterFilter" />
+            <sofa:parameter key="static_key" value="static_value"/>
+            <sofa:parameter key="${dynamic_key}" value="${dynamic_value}" />
+        </sofa:binding.bolt>
+    </sofa:service>
+
+    <bean id="helloSyncServiceImpl" class="com.alipay.sofa.rpc.boot.test.bean.invoke.HelloSyncServiceImpl"/>
+</beans>

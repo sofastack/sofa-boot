@@ -39,11 +39,13 @@ public class ConsulConfigurator implements RegistryConfigureProcessor {
      *
      * @param config 配置 value
      */
-    String parseAddress(String config) {
+    public String parseAddress(String config) {
         String address = null;
 
-        if (StringUtils.isNotEmpty(config) && config.startsWith(SofaBootRpcConfigConstants.REGISTRY_PROTOCOL_CONSUL)) {
-            final String consulProtocol = SofaBootRpcConfigConstants.REGISTRY_PROTOCOL_CONSUL + "://";
+        if (StringUtils.isNotEmpty(config)
+            && config.startsWith(SofaBootRpcConfigConstants.REGISTRY_PROTOCOL_CONSUL)) {
+            final String consulProtocol = SofaBootRpcConfigConstants.REGISTRY_PROTOCOL_CONSUL
+                                          + "://";
             String value = config.substring(consulProtocol.length());
             if (!value.contains("?")) {
                 address = value;
@@ -103,10 +105,8 @@ public class ConsulConfigurator implements RegistryConfigureProcessor {
     public RegistryConfig buildFromAddress(String address) {
         String consulAddress = parseAddress(address);
         Map<String, String> map = parseParam(address);
-        return new RegistryConfig()
-            .setAddress(consulAddress)
-            .setProtocol(SofaBootRpcConfigConstants.REGISTRY_PROTOCOL_CONSUL)
-            .setParameters(map);
+        return new RegistryConfig().setAddress(consulAddress)
+            .setProtocol(SofaBootRpcConfigConstants.REGISTRY_PROTOCOL_CONSUL).setParameters(map);
 
     }
 

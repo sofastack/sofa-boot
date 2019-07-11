@@ -35,6 +35,8 @@
     <modules>
         <module>sofa-boot-project</module>
         <module>sofaboot-samples</module>
+        <module>sofarpc-samples</module>
+        <module>sofatracer-samples</module>
     </modules>
 
     <build>

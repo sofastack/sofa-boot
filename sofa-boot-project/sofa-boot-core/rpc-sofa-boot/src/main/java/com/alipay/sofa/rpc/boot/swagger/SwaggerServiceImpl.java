@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.alipay.sofa.rpc.boot.swagger;
 
 import java.util.Collection;
@@ -68,8 +67,10 @@ public class SwaggerServiceImpl implements SwaggerService {
             OpenApiContext.OPENAPI_CONTEXT_ID_DEFAULT);
         if (openApiContext instanceof GenericOpenApiContext) {
             restfulServices = getAllRestfulService();
-            SwaggerConfiguration oasConfig = new SwaggerConfiguration().resourceClasses(restfulServices);
-            ((GenericOpenApiContext) openApiContext).getOpenApiScanner().setConfiguration(oasConfig);
+            SwaggerConfiguration oasConfig = new SwaggerConfiguration()
+                .resourceClasses(restfulServices);
+            ((GenericOpenApiContext) openApiContext).getOpenApiScanner()
+                .setConfiguration(oasConfig);
             try {
                 ((GenericOpenApiContext) openApiContext).setCacheTTL(0);
                 return openApiContext.read();
@@ -84,10 +85,10 @@ public class SwaggerServiceImpl implements SwaggerService {
     private OpenAPI buildOpenApi() {
         try {
             restfulServices = getAllRestfulService();
-            SwaggerConfiguration oasConfig = new SwaggerConfiguration().resourceClasses(restfulServices);
+            SwaggerConfiguration oasConfig = new SwaggerConfiguration()
+                .resourceClasses(restfulServices);
 
-            OpenApiContext oac = new JaxrsOpenApiContextBuilder()
-                .openApiConfiguration(oasConfig)
+            OpenApiContext oac = new JaxrsOpenApiContextBuilder().openApiConfiguration(oasConfig)
                 .buildContext(true);
             return oac.read();
         } catch (OpenApiConfigurationException e) {

@@ -27,7 +27,8 @@ import com.alipay.sofa.runtime.api.binding.BindingType;
  */
 public class BoltBinding extends RpcBinding {
 
-    public BoltBinding(RpcBindingParam bindingParam, ApplicationContext applicationContext, boolean inBinding) {
+    public BoltBinding(RpcBindingParam bindingParam, ApplicationContext applicationContext,
+                       boolean inBinding) {
         super(bindingParam, applicationContext, inBinding);
     }
 

@@ -28,6 +28,14 @@
         <maven.surefire.plugin>2.21.0</maven.surefire.plugin>
 
         <!-- for dependencyManagement -->
+        <spring.cloud.starter.openfeign.version>2.1.0.RELEASE</spring.cloud.starter.openfeign.version>
+        <javax.servlet.version>3.1.0</javax.servlet.version>
+        <commons.io.version>2.4</commons.io.version>
+        <HikariCP.java6.version>2.3.8</HikariCP.java6.version>
+        <druid.version>1.0.12</druid.version>
+        <c3p0.version>0.9.1.1</c3p0.version>
+        <common.dbcp.version>1.4</common.dbcp.version>
+
         <jmockit.version>1.40</jmockit.version>
         <junit.jupiter.version>5.3.2</junit.jupiter.version>
         <junit.vintage.version>5.3.2</junit.vintage.version>
@@ -37,6 +45,52 @@
 
     <dependencyManagement>
         <dependencies>
+            <!--provided-->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-openfeign</artifactId>
+                <version>${spring.cloud.starter.openfeign.version}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>${javax.servlet.version}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <!--Test-->
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons.io.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.zaxxer</groupId>
+                <artifactId>HikariCP-java6</artifactId>
+                <version>${HikariCP.java6.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid</artifactId>
+                <version>${druid.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>c3p0</groupId>
+                <artifactId>c3p0</artifactId>
+                <version>${c3p0.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>commons-dbcp</groupId>
+                <artifactId>commons-dbcp</artifactId>
+                <version>${common.dbcp.version}</version>
+                <scope>test</scope>
+            </dependency>
             <dependency>
                 <groupId>org.jmockit</groupId>
                 <artifactId>jmockit</artifactId>

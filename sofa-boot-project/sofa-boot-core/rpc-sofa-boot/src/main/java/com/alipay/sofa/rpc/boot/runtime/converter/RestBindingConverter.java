@@ -37,8 +37,8 @@ import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
 public class RestBindingConverter extends RpcBindingConverter {
 
     @Override
-    protected RpcBinding createRpcBinding(RpcBindingParam bindingParam, ApplicationContext applicationContext,
-                                          boolean inBinding) {
+    protected RpcBinding createRpcBinding(RpcBindingParam bindingParam,
+                                          ApplicationContext applicationContext, boolean inBinding) {
         return new RestBinding(bindingParam, applicationContext, inBinding);
     }
 
@@ -48,7 +48,8 @@ public class RestBindingConverter extends RpcBindingConverter {
     }
 
     @Override
-    public RpcBinding convert(SofaService sofaServiceAnnotation, SofaServiceBinding sofaServiceBindingAnnotation,
+    public RpcBinding convert(SofaService sofaServiceAnnotation,
+                              SofaServiceBinding sofaServiceBindingAnnotation,
                               BindingConverterContext bindingConverterContext) {
         RpcBindingParam bindingParam = new RestBindingParam();
         convertServiceAnnotation(bindingParam, sofaServiceAnnotation, sofaServiceBindingAnnotation,
@@ -62,7 +63,8 @@ public class RestBindingConverter extends RpcBindingConverter {
                               SofaReferenceBinding sofaReferenceBindingAnnotation,
                               BindingConverterContext bindingConverterContext) {
         RpcBindingParam bindingParam = new RestBindingParam();
-        convertReferenceAnnotation(bindingParam, sofaReferenceBindingAnnotation, bindingConverterContext);
+        convertReferenceAnnotation(bindingParam, sofaReferenceBindingAnnotation,
+            bindingConverterContext);
 
         return new RestBinding(bindingParam, bindingConverterContext.getApplicationContext(),
             bindingConverterContext.isInBinding());

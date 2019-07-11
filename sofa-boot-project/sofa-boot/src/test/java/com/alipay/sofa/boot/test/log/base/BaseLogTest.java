@@ -20,7 +20,7 @@ import java.lang.reflect.Field;
 import java.util.Map;
 
 import com.alipay.sofa.boot.log.InfraLoggerFactory;
-import com.alipay.sofa.common.boot.logging.CommonLoggingApplicationListener;
+import com.alipay.sofa.boot.logging.CommonLoggingApplicationListener;
 import com.alipay.sofa.common.log.Constants;
 import com.alipay.sofa.common.log.MultiAppLoggerSpaceManager;
 import com.alipay.sofa.common.log.SpaceId;

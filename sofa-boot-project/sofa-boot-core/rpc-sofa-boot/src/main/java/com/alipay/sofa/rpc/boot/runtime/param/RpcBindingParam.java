@@ -456,31 +456,39 @@ public abstract class RpcBindingParam implements BindingParam {
 
         if (timeout != null ? !timeout.equals(that.timeout) : that.timeout != null)
             return false;
-        if (addressWaitTime != null ? !addressWaitTime.equals(that.addressWaitTime) : that.addressWaitTime != null)
+        if (addressWaitTime != null ? !addressWaitTime.equals(that.addressWaitTime)
+            : that.addressWaitTime != null)
             return false;
-        if (connectTimeout != null ? !connectTimeout.equals(that.connectTimeout) : that.connectTimeout != null)
+        if (connectTimeout != null ? !connectTimeout.equals(that.connectTimeout)
+            : that.connectTimeout != null)
             return false;
         if (retries != null ? !retries.equals(that.retries) : that.retries != null)
             return false;
         if (type != null ? !type.equals(that.type) : that.type != null)
             return false;
-        if (callbackClass != null ? !callbackClass.equals(that.callbackClass) : that.callbackClass != null)
+        if (callbackClass != null ? !callbackClass.equals(that.callbackClass)
+            : that.callbackClass != null)
             return false;
         if (callbackRef != null ? !callbackRef.equals(that.callbackRef) : that.callbackRef != null)
             return false;
-        if (callbackHandler != null ? !callbackHandler.equals(that.callbackHandler) : that.callbackHandler != null)
+        if (callbackHandler != null ? !callbackHandler.equals(that.callbackHandler)
+            : that.callbackHandler != null)
             return false;
         if (weight != null ? !weight.equals(that.weight) : that.weight != null)
             return false;
         if (warmUpTime != null ? !warmUpTime.equals(that.warmUpTime) : that.warmUpTime != null)
             return false;
-        if (warmUpWeight != null ? !warmUpWeight.equals(that.warmUpWeight) : that.warmUpWeight != null)
+        if (warmUpWeight != null ? !warmUpWeight.equals(that.warmUpWeight)
+            : that.warmUpWeight != null)
             return false;
-        if (userThreadPool != null ? !userThreadPool.equals(that.userThreadPool) : that.userThreadPool != null)
+        if (userThreadPool != null ? !userThreadPool.equals(that.userThreadPool)
+            : that.userThreadPool != null)
             return false;
-        if (genericInterface != null ? !genericInterface.equals(that.genericInterface) : that.genericInterface != null)
+        if (genericInterface != null ? !genericInterface.equals(that.genericInterface)
+            : that.genericInterface != null)
             return false;
-        if (loadBalancer != null ? !loadBalancer.equals(that.loadBalancer) : that.loadBalancer != null)
+        if (loadBalancer != null ? !loadBalancer.equals(that.loadBalancer)
+            : that.loadBalancer != null)
             return false;
         if (lazy != null ? !lazy.equals(that.lazy) : that.lazy != null)
             return false;
@@ -492,7 +500,8 @@ public abstract class RpcBindingParam implements BindingParam {
             return false;
         if (targetUrl != null ? !targetUrl.equals(that.targetUrl) : that.targetUrl != null)
             return false;
-        if (serialization != null ? !serialization.equals(that.serialization) : that.serialization != null)
+        if (serialization != null ? !serialization.equals(that.serialization)
+            : that.serialization != null)
             return false;
         if (parameters != null ? !parameters.equals(that.parameters) : that.parameters != null)
             return false;

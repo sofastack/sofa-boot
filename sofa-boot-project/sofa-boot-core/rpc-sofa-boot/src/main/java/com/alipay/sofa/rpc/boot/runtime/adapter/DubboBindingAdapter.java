@@ -36,7 +36,8 @@ public class DubboBindingAdapter extends RpcBindingAdapter {
     }
 
     @Override
-    public Object outBinding(Object contract, RpcBinding binding, Object target, SofaRuntimeContext sofaRuntimeContext) {
+    public Object outBinding(Object contract, RpcBinding binding, Object target,
+                             SofaRuntimeContext sofaRuntimeContext) {
         return Boolean.TRUE;
     }
 
@@ -44,7 +45,8 @@ public class DubboBindingAdapter extends RpcBindingAdapter {
     public void postUnoutBinding(Object contract, RpcBinding binding, Object target,
                                  SofaRuntimeContext sofaRuntimeContext) {
         try {
-            String key = SpringBridge.getProviderConfigContainer().createUniqueName((Contract) contract, binding);
+            String key = SpringBridge.getProviderConfigContainer().createUniqueName(
+                (Contract) contract, binding);
             SpringBridge.getProviderConfigContainer().removeProviderConfig(key);
         } catch (Exception e) {
             throw new ServiceRuntimeException(

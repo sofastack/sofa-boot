@@ -113,12 +113,12 @@ public class RpcFilterContainer {
                 try {
                     filters.add((Filter) filterClass.newInstance());
                 } catch (Exception e) {
-                    throw new SofaBootRpcRuntimeException("Error happen when create instance of " + filterClass + " ",
-                        e);
+                    throw new SofaBootRpcRuntimeException("Error happen when create instance of "
+                                                          + filterClass + " ", e);
                 }
             } else {
-                throw new SofaBootRpcRuntimeException(
-                    "The class of " + clazz + " should be a subclass of Filter");
+                throw new SofaBootRpcRuntimeException("The class of " + clazz
+                                                      + " should be a subclass of Filter");
             }
         }
     }

@@ -19,6 +19,9 @@
         <module>healthcheck-sofa-boot-starter</module>
         <module>runtime-sofa-boot-starter</module>
         <module>isle-sofa-boot-starter</module>
+        <module>rpc-sofa-boot-starter</module>
+        <module>tracer-sofa-boot-starter</module>
+        <module>log-sofa-boot-starter</module>
     </modules>
 
 </project>

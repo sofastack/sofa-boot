@@ -25,9 +25,12 @@
         <!--starter-->
         <sofa.ark.version>0.6.0</sofa.ark.version>
         <sofa.rpc.starter.version>6.0.3</sofa.rpc.starter.version>
-        <sofa.tracer.version>3.0.2</sofa.tracer.version>
         <sofa.lookout.version>1.5.2</sofa.lookout.version>
         <sofa.jarslink.version>2.0.0</sofa.jarslink.version>
+
+        <!--core-->
+        <tracer.core.version>3.0.5</tracer.core.version>
+        <rpc.core.version>5.5.7-SNAPSHOT</rpc.core.version>
 
         <!--2rd lib dependency-->
         <sofa.common.tools.version>1.0.19</sofa.common.tools.version>
@@ -139,6 +142,24 @@
                 <version>${project.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>rpc-sofa-boot</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>tracer-sofa-boot</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>log-sofa-boot</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
             <!-- starter management begin -->
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
@@ -175,6 +196,13 @@
                 <artifactId>tracer-sofa-boot-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>log-sofa-boot-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>com.alipay.sofa.lookout</groupId>
                 <artifactId>lookout-sofa-boot-starter</artifactId>
@@ -184,12 +212,6 @@
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>sofa-ark-springboot-starter</artifactId>
                 <version>${sofa.ark.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>rpc-sofa-boot-starter</artifactId>
-                <version>${sofa.rpc.starter.version}</version>
             </dependency>
             <!-- starter management end -->
 
@@ -212,16 +234,64 @@
                 <version>${project.version}</version>
             </dependency>
 
+            <!--tracer and its extension plugin-->
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>tracer-core</artifactId>
+                <version>${tracer.core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>tracer-extensions</artifactId>
+                <version>${tracer.core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>sofa-tracer-springmvc-plugin</artifactId>
+                <version>${tracer.core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>sofa-tracer-httpclient-plugin</artifactId>
+                <version>${tracer.core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>sofa-tracer-datasource-plugin</artifactId>
+                <version>${tracer.core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>sofa-tracer-spring-cloud-plugin</artifactId>
+                <version>${tracer.core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-openfeign</artifactId>
+                <version>${tracer.core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>sofa-tracer-dubbo-plugin</artifactId>
+                <version>${tracer.core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>sofa-tracer-zipkin-plugin</artifactId>
+                <version>${tracer.core.version}</version>
+            </dependency>
+
+            <!--rpc-->
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>sofa-rpc-all</artifactId>
+                <version>${rpc.core.version}</version>
+            </dependency>
+
             <!-- 2nd dependency begin -->
             <dependency>
                 <groupId>com.alipay.sofa.common</groupId>
                 <artifactId>sofa-common-tools</artifactId>
-                <version>${sofa.common.tools.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.alipay.sofa.common</groupId>
-                <artifactId>log-sofa-boot-starter</artifactId>
                 <version>${sofa.common.tools.version}</version>
             </dependency>
 
@@ -239,31 +309,6 @@
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>sofa-ark-spi</artifactId>
                 <version>${sofa.ark.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>tracer-core</artifactId>
-                <version>${sofa.tracer.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>tracer-extensions</artifactId>
-                <version>${sofa.tracer.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>sofa-tracer-springmvc-plugin</artifactId>
-                <version>${sofa.tracer.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>sofa-tracer-httpclient-plugin</artifactId>
-                <version>${sofa.tracer.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>sofa-tracer-datasource-plugin</artifactId>
-                <version>${sofa.tracer.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.alipay.sofa.lookout</groupId>
@@ -369,6 +414,11 @@
                 <plugin>
                     <groupId>com.alipay.sofa</groupId>
                     <artifactId>sofa-ark-maven-plugin</artifactId>
+                    <version>${sofa.ark.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>com.alipay.sofa</groupId>
+                    <artifactId>sofa-ark-plugin-maven-plugin</artifactId>
                     <version>${sofa.ark.version}</version>
                 </plugin>
             </plugins>

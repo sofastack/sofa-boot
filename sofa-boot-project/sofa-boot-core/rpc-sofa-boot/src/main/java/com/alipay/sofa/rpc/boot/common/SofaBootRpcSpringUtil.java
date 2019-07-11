@@ -31,7 +31,8 @@ import com.alipay.sofa.rpc.log.LogCodes;
  */
 public class SofaBootRpcSpringUtil {
 
-    private static final Logger LOGGER = SofaBootRpcLoggerFactory.getLogger(SofaBootRpcSpringUtil.class);
+    private static final Logger LOGGER = SofaBootRpcLoggerFactory
+                                           .getLogger(SofaBootRpcSpringUtil.class);
 
     /**
      * 根据配置的ref以及class字符串，获得真正的spring bean
@@ -44,14 +45,14 @@ public class SofaBootRpcSpringUtil {
      * @return 业务bean
      */
     public static Object getSpringBean(String beanRef, String beanClass,
-                                       ApplicationContext applicationContext, ClassLoader appClassLoader,
-                                       String appName) {
+                                       ApplicationContext applicationContext,
+                                       ClassLoader appClassLoader, String appName) {
         Object callbackHandler = null;
 
         if (StringUtils.hasText(beanRef)) {
             if (applicationContext == null) {
-                LOGGER.error("get bean from spring failed. beanRef[" + beanRef + "];classLoader[" + appClassLoader +
-                    "];appName[" + appName + "]");
+                LOGGER.error("get bean from spring failed. beanRef[" + beanRef + "];classLoader["
+                             + appClassLoader + "];appName[" + appName + "]");
             } else {
                 callbackHandler = applicationContext.getBean(beanRef);
             }
@@ -71,16 +72,14 @@ public class SofaBootRpcSpringUtil {
      * @param appClassLoader     业务上下文
      * @return 业务bean
      */
-    public static Object getSpringBean(String beanRef,
-                                       ApplicationContext applicationContext,
-                                       ClassLoader appClassLoader,
-                                       String appName) {
+    public static Object getSpringBean(String beanRef, ApplicationContext applicationContext,
+                                       ClassLoader appClassLoader, String appName) {
         Object object = null;
 
         if (StringUtils.hasText(beanRef)) {
             if (applicationContext == null) {
-                LOGGER.error("get bean from spring failed. beanRef[" + beanRef + "];classLoader[" + appClassLoader +
-                    "];appName[" + appName + "]");
+                LOGGER.error("get bean from spring failed. beanRef[" + beanRef + "];classLoader["
+                             + appClassLoader + "];appName[" + appName + "]");
             } else {
                 object = applicationContext.getBean(beanRef);
             }
@@ -103,8 +102,8 @@ public class SofaBootRpcSpringUtil {
         try {
             return Class.forName(clazz, true, loader).newInstance();
         } catch (Exception e) {
-            LOGGER.error("new instance failed. clazz[" + clazz + "];classLoader[" + loader + "];appName[" + appName +
-                "]", e);
+            LOGGER.error("new instance failed. clazz[" + clazz + "];classLoader[" + loader
+                         + "];appName[" + appName + "]", e);
             throw new RuntimeException(LogCodes.getLog(
                 LogCodes.ERROR_PROXY_BINDING_CLASS_CANNOT_FOUND, clazz), e);
         }

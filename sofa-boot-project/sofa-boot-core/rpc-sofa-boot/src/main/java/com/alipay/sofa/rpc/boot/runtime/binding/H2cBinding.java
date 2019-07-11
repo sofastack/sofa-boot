@@ -27,7 +27,8 @@ import com.alipay.sofa.runtime.api.binding.BindingType;
  */
 public class H2cBinding extends RpcBinding {
 
-    public H2cBinding(RpcBindingParam bindingParam, ApplicationContext applicationContext, boolean inBinding) {
+    public H2cBinding(RpcBindingParam bindingParam, ApplicationContext applicationContext,
+                      boolean inBinding) {
         super(bindingParam, applicationContext, inBinding);
     }
 

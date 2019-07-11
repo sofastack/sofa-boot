@@ -50,10 +50,12 @@ public abstract class RpcBindingAdapter implements BindingAdapter<RpcBinding> {
      * @param sofaRuntimeContext sofa runtime context
      */
     @Override
-    public void preOutBinding(Object contract, RpcBinding binding, Object target, SofaRuntimeContext sofaRuntimeContext) {
-        String uniqueName = SpringBridge.getProviderConfigContainer().createUniqueName((Contract) contract, binding);
-        ProviderConfig providerConfig = SpringBridge.getProviderConfigHelper().getProviderConfig((Contract) contract,
-            binding, target);
+    public void preOutBinding(Object contract, RpcBinding binding, Object target,
+                              SofaRuntimeContext sofaRuntimeContext) {
+        String uniqueName = SpringBridge.getProviderConfigContainer().createUniqueName(
+            (Contract) contract, binding);
+        ProviderConfig providerConfig = SpringBridge.getProviderConfigHelper().getProviderConfig(
+            (Contract) contract, binding, target);
         try {
             SpringBridge.getProviderConfigContainer().addProviderConfig(uniqueName, providerConfig);
         } catch (Exception e) {
@@ -71,13 +73,17 @@ public abstract class RpcBindingAdapter implements BindingAdapter<RpcBinding> {
      * @return binding result
      */
     @Override
-    public Object outBinding(Object contract, RpcBinding binding, Object target, SofaRuntimeContext sofaRuntimeContext) {
+    public Object outBinding(Object contract, RpcBinding binding, Object target,
+                             SofaRuntimeContext sofaRuntimeContext) {
 
-        String uniqueName = SpringBridge.getProviderConfigContainer().createUniqueName((Contract) contract, binding);
-        ProviderConfig providerConfig = SpringBridge.getProviderConfigContainer().getProviderConfig(uniqueName);
+        String uniqueName = SpringBridge.getProviderConfigContainer().createUniqueName(
+            (Contract) contract, binding);
+        ProviderConfig providerConfig = SpringBridge.getProviderConfigContainer()
+            .getProviderConfig(uniqueName);
 
         if (providerConfig == null) {
-            throw new ServiceRuntimeException(LogCodes.getLog(LogCodes.INFO_SERVICE_METADATA_IS_NULL, uniqueName));
+            throw new ServiceRuntimeException(LogCodes.getLog(
+                LogCodes.INFO_SERVICE_METADATA_IS_NULL, uniqueName));
         }
 
         try {
@@ -110,9 +116,8 @@ public abstract class RpcBindingAdapter implements BindingAdapter<RpcBinding> {
     @Override
     public void preUnoutBinding(Object contract, RpcBinding binding, Object target,
                                 SofaRuntimeContext sofaRuntimeContext) {
-        ProviderConfig providerConfig = SpringBridge.getProviderConfigHelper().getProviderConfig((Contract) contract,
-            binding,
-            target);
+        ProviderConfig providerConfig = SpringBridge.getProviderConfigHelper().getProviderConfig(
+            (Contract) contract, binding, target);
         try {
             providerConfig.unExport();
         } catch (Exception e) {
@@ -132,11 +137,13 @@ public abstract class RpcBindingAdapter implements BindingAdapter<RpcBinding> {
     @Override
     public void postUnoutBinding(Object contract, RpcBinding binding, Object target,
                                  SofaRuntimeContext sofaRuntimeContext) {
-        ProviderConfig metadata = SpringBridge.getProviderConfigHelper().getProviderConfig((Contract) contract,
-            binding, target);
+        ProviderConfig metadata = SpringBridge.getProviderConfigHelper().getProviderConfig(
+            (Contract) contract, binding, target);
         try {
-            String key = SpringBridge.getProviderConfigContainer().createUniqueName((Contract) contract, binding);
-            List<ServerConfig> servers = SpringBridge.getProviderConfigContainer().getProviderConfig(key).getServer();
+            String key = SpringBridge.getProviderConfigContainer().createUniqueName(
+                (Contract) contract, binding);
+            List<ServerConfig> servers = SpringBridge.getProviderConfigContainer()
+                .getProviderConfig(key).getServer();
             for (ServerConfig server : servers) {
                 server.getServer().unRegisterProcessor(metadata, false);
             }
@@ -155,9 +162,10 @@ public abstract class RpcBindingAdapter implements BindingAdapter<RpcBinding> {
      * @param sofaRuntimeContext sofa runtime context
      */
     @Override
-    public Object inBinding(Object contract, RpcBinding binding, SofaRuntimeContext sofaRuntimeContext) {
-        ConsumerConfig consumerConfig = SpringBridge.getConsumerConfigHelper().getConsumerConfig((Contract) contract,
-            binding);
+    public Object inBinding(Object contract, RpcBinding binding,
+                            SofaRuntimeContext sofaRuntimeContext) {
+        ConsumerConfig consumerConfig = SpringBridge.getConsumerConfigHelper().getConsumerConfig(
+            (Contract) contract, binding);
         SpringBridge.getConsumerConfigContainer().addConsumerConfig(binding, consumerConfig);
 
         try {
@@ -177,12 +185,13 @@ public abstract class RpcBindingAdapter implements BindingAdapter<RpcBinding> {
      * @param sofaRuntimeContext
      */
     @Override
-    public void unInBinding(Object contract, RpcBinding binding, SofaRuntimeContext sofaRuntimeContext) {
+    public void unInBinding(Object contract, RpcBinding binding,
+                            SofaRuntimeContext sofaRuntimeContext) {
         try {
             SpringBridge.getConsumerConfigContainer().removeAndUnReferConsumerConfig(binding);
         } catch (Exception e) {
-            throw new ServiceRuntimeException(
-                LogCodes.getLog(LogCodes.ERROR_PROXY_UNCOSUME_FAIL), e);
+            throw new ServiceRuntimeException(LogCodes.getLog(LogCodes.ERROR_PROXY_UNCOSUME_FAIL),
+                e);
         }
     }
 

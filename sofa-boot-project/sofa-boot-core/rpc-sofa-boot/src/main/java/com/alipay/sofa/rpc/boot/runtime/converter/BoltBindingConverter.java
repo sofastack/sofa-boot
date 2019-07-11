@@ -36,8 +36,8 @@ import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
  */
 public class BoltBindingConverter extends RpcBindingConverter {
     @Override
-    protected RpcBinding createRpcBinding(RpcBindingParam bindingParam, ApplicationContext applicationContext,
-                                          boolean inBinding) {
+    protected RpcBinding createRpcBinding(RpcBindingParam bindingParam,
+                                          ApplicationContext applicationContext, boolean inBinding) {
         return new BoltBinding(bindingParam, applicationContext, inBinding);
     }
 
@@ -47,7 +47,8 @@ public class BoltBindingConverter extends RpcBindingConverter {
     }
 
     @Override
-    public RpcBinding convert(SofaService sofaServiceAnnotation, SofaServiceBinding sofaServiceBindingAnnotation,
+    public RpcBinding convert(SofaService sofaServiceAnnotation,
+                              SofaServiceBinding sofaServiceBindingAnnotation,
                               BindingConverterContext bindingConverterContext) {
         RpcBindingParam bindingParam = new BoltBindingParam();
         convertServiceAnnotation(bindingParam, sofaServiceAnnotation, sofaServiceBindingAnnotation,
@@ -61,7 +62,8 @@ public class BoltBindingConverter extends RpcBindingConverter {
                               SofaReferenceBinding sofaReferenceBindingAnnotation,
                               BindingConverterContext bindingConverterContext) {
         RpcBindingParam bindingParam = new BoltBindingParam();
-        convertReferenceAnnotation(bindingParam, sofaReferenceBindingAnnotation, bindingConverterContext);
+        convertReferenceAnnotation(bindingParam, sofaReferenceBindingAnnotation,
+            bindingConverterContext);
 
         return new BoltBinding(bindingParam, bindingConverterContext.getApplicationContext(),
             bindingConverterContext.isInBinding());

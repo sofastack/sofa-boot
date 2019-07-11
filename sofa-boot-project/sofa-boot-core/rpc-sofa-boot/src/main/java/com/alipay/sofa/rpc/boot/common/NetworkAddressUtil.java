@@ -14,12 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * Alipay.com Inc.
- * Copyright (c) 2004-2017 All Rights Reserved.
- */
 package com.alipay.sofa.rpc.boot.common;
-
 
 import com.alipay.sofa.rpc.common.utils.StringUtils;
 
@@ -29,7 +24,6 @@ import java.net.UnknownHostException;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-
 
 /**
  * 地址处理类
@@ -98,7 +92,8 @@ public class NetworkAddressUtil {
                 boolean useNi = false;
                 NetworkInterface ni = netInterfaces.nextElement();
                 if (!StringUtils.isBlank(bindNetworkInterface)) {
-                    if (bindNetworkInterface.equals(ni.getDisplayName()) || bindNetworkInterface.equals(ni.getName())) {
+                    if (bindNetworkInterface.equals(ni.getDisplayName())
+                        || bindNetworkInterface.equals(ni.getName())) {
                         useNi = true;
                     } else {
                         continue;

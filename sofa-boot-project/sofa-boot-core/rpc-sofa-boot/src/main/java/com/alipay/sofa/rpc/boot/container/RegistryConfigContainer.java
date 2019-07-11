@@ -78,7 +78,8 @@ public class RegistryConfigContainer {
      * @return
      * @throws SofaBootRpcRuntimeException
      */
-    public RegistryConfig getRegistryConfig(String registryAlias) throws SofaBootRpcRuntimeException {
+    public RegistryConfig getRegistryConfig(String registryAlias)
+                                                                 throws SofaBootRpcRuntimeException {
         RegistryConfig registryConfig;
         String registryProtocol;
         String registryAddress;
@@ -123,7 +124,8 @@ public class RegistryConfigContainer {
         }
 
         if (registryConfigMap.get(registryProtocol) != null) {
-            RegistryConfigureProcessor registryConfigureProcessor = registryConfigMap.get(registryProtocol);
+            RegistryConfigureProcessor registryConfigureProcessor = registryConfigMap
+                .get(registryProtocol);
             registryConfig = registryConfigureProcessor.buildFromAddress(registryAddress);
             registryConfigs.put(registryAlias, registryConfig);
             //不再处理以.分隔的.
@@ -136,7 +138,8 @@ public class RegistryConfigContainer {
             }
             return registryConfig;
         } else {
-            throw new SofaBootRpcRuntimeException("registry config [" + registryAddress + "] is not supported");
+            throw new SofaBootRpcRuntimeException("registry config [" + registryAddress
+                                                  + "] is not supported");
         }
     }
 
@@ -184,8 +187,8 @@ public class RegistryConfigContainer {
 
         String meshConfig = sofaBootRpcProperties.getEnableMesh();
         final Map<String, String> registries = sofaBootRpcProperties.getRegistries();
-        if (StringUtils.isNotBlank(meshConfig) && registries != null &&
-            registries.get(SofaBootRpcConfigConstants.REGISTRY_PROTOCOL_MESH) != null) {
+        if (StringUtils.isNotBlank(meshConfig) && registries != null
+            && registries.get(SofaBootRpcConfigConstants.REGISTRY_PROTOCOL_MESH) != null) {
             if (meshConfig.equalsIgnoreCase(SofaBootRpcConfigConstants.ENABLE_MESH_ALL)) {
                 return true;
             } else {

@@ -42,7 +42,8 @@ public class FaultToleranceConfigurator {
         String degradeEffectiveStr = sofaBootRpcProperties.getAftDegradeEffective();
         String timeWindowStr = sofaBootRpcProperties.getAftTimeWindow();
         String leastWindowCountStr = sofaBootRpcProperties.getAftLeastWindowCount();
-        String leastWindowExceptionRateMultipleStr = sofaBootRpcProperties.getAftLeastWindowExceptionRateMultiple();
+        String leastWindowExceptionRateMultipleStr = sofaBootRpcProperties
+            .getAftLeastWindowExceptionRateMultiple();
         String weightDegradeRateStr = sofaBootRpcProperties.getAftWeightDegradeRate();
         String weightRecoverRateStr = sofaBootRpcProperties.getAftWeightRecoverRate();
         String degradeLeastWeightStr = sofaBootRpcProperties.getAftDegradeLeastWeight();
@@ -73,7 +74,8 @@ public class FaultToleranceConfigurator {
             faultToleranceConfig.setLeastWindowCount(leastWindowCount);
         }
         if (leastWindowExceptionRateMultiple != null) {
-            faultToleranceConfig.setLeastWindowExceptionRateMultiple(leastWindowExceptionRateMultiple);
+            faultToleranceConfig
+                .setLeastWindowExceptionRateMultiple(leastWindowExceptionRateMultiple);
         }
         if (weightDegradeRate != null) {
             faultToleranceConfig.setWeightDegradeRate(weightDegradeRate);

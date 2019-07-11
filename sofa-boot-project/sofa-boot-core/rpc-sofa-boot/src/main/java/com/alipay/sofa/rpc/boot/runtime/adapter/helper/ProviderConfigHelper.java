@@ -66,7 +66,7 @@ public class ProviderConfigHelper {
      * @throws SofaBootRpcRuntimeException
      */
     public ProviderConfig getProviderConfig(Contract contract, RpcBinding binding, Object target)
-        throws SofaBootRpcRuntimeException {
+                                                                                                 throws SofaBootRpcRuntimeException {
         RpcBindingParam param = binding.getRpcBindingParam();
 
         String id = binding.getBeanId();
@@ -82,7 +82,8 @@ public class ProviderConfigHelper {
         List<Filter> filters = param.getFilters();
         List<MethodConfig> methodConfigs = convertToMethodConfig(param.getMethodInfos());
 
-        ServerConfig serverConfig = serverConfigContainer.getServerConfig(binding.getBindingType().getType());
+        ServerConfig serverConfig = serverConfigContainer.getServerConfig(binding.getBindingType()
+            .getType());
 
         ProviderConfig providerConfig = new ProviderConfig();
         if (StringUtils.hasText(appName)) {
@@ -110,10 +111,12 @@ public class ProviderConfigHelper {
             providerConfig.setWeight(weight);
         }
         if (warmupTime != null) {
-            providerConfig.setParameter(ProviderInfoAttrs.ATTR_WARMUP_TIME, String.valueOf(warmupTime));
+            providerConfig.setParameter(ProviderInfoAttrs.ATTR_WARMUP_TIME,
+                String.valueOf(warmupTime));
         }
         if (warmupWeight != null) {
-            providerConfig.setParameter(ProviderInfoAttrs.ATTR_WARMUP_WEIGHT, String.valueOf(warmupWeight));
+            providerConfig.setParameter(ProviderInfoAttrs.ATTR_WARMUP_WEIGHT,
+                String.valueOf(warmupWeight));
         }
         if (!CollectionUtils.isEmpty(filters)) {
             providerConfig.setFilterRef(filters);
@@ -122,8 +125,8 @@ public class ProviderConfigHelper {
             providerConfig.setMethods(methodConfigs);
         }
         if (threadPool != null) {
-            UserThreadPoolManager.registerUserThread(ConfigUniqueNameGenerator.getUniqueName(providerConfig),
-                threadPool);
+            UserThreadPoolManager.registerUserThread(
+                ConfigUniqueNameGenerator.getUniqueName(providerConfig), threadPool);
         }
 
         providerConfig.setServer(serverConfig);
@@ -142,16 +145,15 @@ public class ProviderConfigHelper {
         if (param.getRegistrys() != null && param.getRegistrys().size() > 0) {
             List<String> registrys = param.getRegistrys();
             for (String registryAlias : registrys) {
-                RegistryConfig registryConfig = registryConfigContainer.getRegistryConfig(registryAlias);
+                RegistryConfig registryConfig = registryConfigContainer
+                    .getRegistryConfig(registryAlias);
                 providerConfig.setRegistry(registryConfig);
             }
-        }
-        else if (registryConfigContainer.isMeshEnabled(protocol)) {
+        } else if (registryConfigContainer.isMeshEnabled(protocol)) {
             RegistryConfig registryConfig = registryConfigContainer
                 .getRegistryConfig(SofaBootRpcConfigConstants.REGISTRY_PROTOCOL_MESH);
             providerConfig.setRegistry(registryConfig);
-        }
-        else {
+        } else {
             RegistryConfig registryConfig = registryConfigContainer.getRegistryConfig();
 
             providerConfig.setRegistry(registryConfig);

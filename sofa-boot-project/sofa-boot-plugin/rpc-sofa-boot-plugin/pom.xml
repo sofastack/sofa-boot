@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>sofa-boot-plugin</artifactId>
+        <groupId>com.alipay.sofa</groupId>
+        <version>3.2.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>rpc-sofa-boot-plugin</artifactId>
+
+    <properties>
+        <main.user.dir>${basedir}/../../..</main.user.dir>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>rpc-sofa-boot</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>sofa-ark-plugin-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>default-cli</id>
+                        <goals>
+                            <goal>ark-plugin</goal>
+                        </goals>
+
+                        <configuration>
+                            <priority>2000</priority>
+
+                            <exported>
+                                <packages>
+                                    <package>com.alipay.sofa.rpc.api.*</package>
+                                    <package>com.alipay.sofa.rpc.base.*</package>
+                                    <package>com.alipay.sofa.rpc.bootstrap.*</package>
+                                    <package>com.alipay.sofa.rpc.client.*</package>
+                                    <package>com.alipay.sofa.rpc.codec.*</package>
+                                    <package>com.alipay.sofa.rpc.common.*</package>
+                                    <package>com.alipay.sofa.rpc.config.*</package>
+                                    <package>com.alipay.sofa.rpc.context.*</package>
+                                    <package>com.alipay.sofa.rpc.core.*</package>
+                                    <package>com.alipay.sofa.rpc.event.*</package>
+                                    <package>com.alipay.sofa.rpc.ext.*</package>
+                                    <package>com.alipay.sofa.rpc.filter.*</package>
+                                    <package>com.alipay.sofa.rpc.invoke.*</package>
+                                    <package>com.alipay.sofa.rpc.listener.*</package>
+                                    <package>com.alipay.sofa.rpc.log.*</package>
+                                    <package>com.alipay.sofa.rpc.message.*</package>
+                                    <package>com.alipay.sofa.rpc.metrics.*</package>
+                                    <package>com.alipay.sofa.rpc.module.*</package>
+                                    <package>com.alipay.sofa.rpc.protocol.*</package>
+                                    <package>com.alipay.sofa.rpc.proxy.*</package>
+                                    <package>com.alipay.sofa.rpc.registry.*</package>
+                                    <package>com.alipay.sofa.rpc.server.*</package>
+                                    <package>com.alipay.sofa.rpc.tracer.*</package>
+                                    <package>com.alipay.sofa.rpc.transport.*</package>
+                                    <package>com.alipay.hessian.generic.model.*</package>
+                                    <package>com.alibaba.dubbo.*</package>
+                                    <package>org.I0Itec.zkclient.*</package>
+                                    <package>javax.ws.rs.*</package>
+                                </packages>
+
+                            </exported>
+
+                            <imported>
+                                <packages>
+                                    <package>com.alipay.common.tracer.core.*</package>
+                                    <package>io.opentracing.*</package>
+                                </packages>
+                            </imported>
+
+                            <excludeGroupIds>
+                                <excludeGroupId>org.springframework</excludeGroupId>
+                                <excludeGroupId>org.springframework.boot</excludeGroupId>
+                                <excludeGroupId>org.apache.tomcat.embed</excludeGroupId>
+                            </excludeGroupIds>
+
+                            <outputDirectory>${build.directory}</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

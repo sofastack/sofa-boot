@@ -43,13 +43,14 @@ public class SofaBootRpcConfigConstants {
     public static final int     DUBBO_PORT_DEFAULT                 = 20880;
 
     /* registry default configuration */
-    public static final String  REGISTRY_FILE_PATH_DEFAULT         = System.getProperty("user.home")
-                                                                       + System.getProperty(
-                                                                           "file.separator")
-                                                                       + "localFileRegistry"
-                                                                       + System.getProperty(
-                                                                           "file.separator")
-                                                                       + "localRegistry.reg";
+    public static final String  REGISTRY_FILE_PATH_DEFAULT         = System
+                                                                       .getProperty("user.home")
+                                                                     + System
+                                                                         .getProperty("file.separator")
+                                                                     + "localFileRegistry"
+                                                                     + System
+                                                                         .getProperty("file.separator")
+                                                                     + "localRegistry.reg";
 
     /* possible config value start ********************************************************/
 
