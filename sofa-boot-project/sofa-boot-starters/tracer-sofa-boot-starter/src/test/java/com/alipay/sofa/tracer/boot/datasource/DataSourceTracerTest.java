@@ -22,6 +22,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
 
 import javax.sql.DataSource;
 
@@ -29,6 +30,7 @@ import javax.sql.DataSource;
  * @author qilong.zql
  * @since 2.2.0
  */
+@ActiveProfiles("tracer")
 public class DataSourceTracerTest extends AbstractTestBase {
 
     @Autowired

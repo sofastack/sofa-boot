@@ -32,7 +32,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
@@ -43,6 +45,7 @@ import static org.junit.Assert.assertTrue;
 @SpringBootTest(classes = SpringBootWebApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {
                                                                                                                                     "spring.main.web-application-type=reactive",
                                                                                                                                     "com.alipay.sofa.tracer.springmvc.jsonOutput=true" })
+@TestPropertySource(properties = "spring.application.name=webflux-test")
 public class WebFluxTracerTest extends AbstractTestBase {
 
     @Autowired

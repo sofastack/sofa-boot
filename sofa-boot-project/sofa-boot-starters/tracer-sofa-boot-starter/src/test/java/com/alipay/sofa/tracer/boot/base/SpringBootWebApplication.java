@@ -18,6 +18,7 @@ package com.alipay.sofa.tracer.boot.base;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.context.annotation.PropertySource;
 
 /**
  * SpringBootWebApplication
@@ -27,6 +28,7 @@ import org.springframework.context.annotation.ImportResource;
  */
 @org.springframework.boot.autoconfigure.SpringBootApplication
 @ImportResource({ "classpath:hikariDataSource.xml" })
+@PropertySource("classpath:application.properties")
 public class SpringBootWebApplication {
 
     public static void main(String[] args) throws Exception {

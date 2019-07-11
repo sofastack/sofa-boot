@@ -19,7 +19,7 @@
         <module>sofa-boot-actuator-autoconfigure</module>
         <module>sofa-boot-starters</module>
         <module>sofa-boot-tools</module>
-        <module>sofa-boot-plugin</module>
+        <module>sofa-boot-plugins</module>
         <module>sofa-boot-core</module>
         <!--imported or configured as parent by users-->
         <module>sofaboot-dependencies</module>
