@@ -28,7 +28,6 @@
 
     <artifactId>runtime-sofa-boot-plugin</artifactId>
     <properties>
-        <ark.plugin.name>runtime-sofa-boot-plugin</ark.plugin.name>
         <main.user.dir>${basedir}/../../..</main.user.dir>
     </properties>
 
@@ -66,7 +65,6 @@
 
                         <configuration>
                             <priority>1500</priority>
-                            <pluginName>${ark.plugin.name}</pluginName>
                             <activator>com.alipay.sofa.runtime.ark.plugin.SofaRuntimeActivator</activator>
 
                             <exported>
