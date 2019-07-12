@@ -16,25 +16,26 @@
  */
 package com.alipay.sofa.healthcheck;
 
-import com.alipay.sofa.boot.health.NonReadinessCheck;
-import com.alipay.sofa.healthcheck.log.HealthCheckLoggerFactory;
-import com.alipay.sofa.boot.util.BinaryOperators;
-import com.alipay.sofa.healthcheck.util.HealthCheckUtils;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.health.Health;
-import org.springframework.boot.actuate.health.HealthIndicator;
-import org.springframework.boot.actuate.health.ReactiveHealthIndicator;
-import org.springframework.boot.actuate.health.HealthIndicatorNameFactory;
-import org.springframework.boot.actuate.health.Status;
-import org.springframework.context.ApplicationContext;
-import org.springframework.util.Assert;
-import org.slf4j.Logger;
-import org.springframework.util.ClassUtils;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.health.Health;
+import org.springframework.boot.actuate.health.HealthIndicator;
+import org.springframework.boot.actuate.health.HealthIndicatorNameFactory;
+import org.springframework.boot.actuate.health.ReactiveHealthIndicator;
+import org.springframework.boot.actuate.health.Status;
+import org.springframework.context.ApplicationContext;
+import org.springframework.util.Assert;
+import org.springframework.util.ClassUtils;
+
+import com.alipay.sofa.boot.health.NonReadinessCheck;
+import com.alipay.sofa.boot.util.BinaryOperators;
+import com.alipay.sofa.healthcheck.log.HealthCheckLoggerFactory;
+import com.alipay.sofa.healthcheck.util.HealthCheckUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Used to process all implementations of {@link HealthIndicator}

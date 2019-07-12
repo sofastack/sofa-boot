@@ -16,9 +16,9 @@
  */
 package com.alipay.sofa.isle.stage;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author xuanbei 18/3/12

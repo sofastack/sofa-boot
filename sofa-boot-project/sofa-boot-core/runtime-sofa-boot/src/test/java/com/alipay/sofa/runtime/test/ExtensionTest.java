@@ -16,22 +16,13 @@
  */
 package com.alipay.sofa.runtime.test;
 
-import com.alipay.sofa.runtime.test.configuration.RuntimeConfiguration;
-import com.alipay.sofa.runtime.test.extension.bean.SimpleSpringBean;
-import com.alipay.sofa.runtime.test.extension.bean.SimpleSpringListBean;
-import com.alipay.sofa.runtime.test.extension.bean.SimpleSpringMapBean;
-import com.alipay.sofa.runtime.test.extension.descriptor.SimpleExtensionDescriptor;
-import com.alipay.sofa.runtime.test.extension.descriptor.XMapTestDescriptor;
-import com.alipay.sofa.common.xmap.Context;
-import com.alipay.sofa.common.xmap.DOMSerializer;
-import com.alipay.sofa.common.xmap.Resource;
-import com.alipay.sofa.common.xmap.XMap;
-import com.alipay.sofa.runtime.api.aware.ExtensionClientAware;
-import com.alipay.sofa.runtime.api.client.ExtensionClient;
-import com.alipay.sofa.runtime.api.client.param.ExtensionParam;
-import com.alipay.sofa.runtime.api.client.param.ExtensionPointParam;
-import com.alipay.sofa.runtime.test.extension.bean.IExtension;
-import com.alipay.sofa.runtime.test.extension.descriptor.ClientExtensionDescriptor;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.OutputStream;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,11 +35,22 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.w3c.dom.Document;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.OutputStream;
+import com.alipay.sofa.common.xmap.Context;
+import com.alipay.sofa.common.xmap.DOMSerializer;
+import com.alipay.sofa.common.xmap.Resource;
+import com.alipay.sofa.common.xmap.XMap;
+import com.alipay.sofa.runtime.api.aware.ExtensionClientAware;
+import com.alipay.sofa.runtime.api.client.ExtensionClient;
+import com.alipay.sofa.runtime.api.client.param.ExtensionParam;
+import com.alipay.sofa.runtime.api.client.param.ExtensionPointParam;
+import com.alipay.sofa.runtime.test.configuration.RuntimeConfiguration;
+import com.alipay.sofa.runtime.test.extension.bean.IExtension;
+import com.alipay.sofa.runtime.test.extension.bean.SimpleSpringBean;
+import com.alipay.sofa.runtime.test.extension.bean.SimpleSpringListBean;
+import com.alipay.sofa.runtime.test.extension.bean.SimpleSpringMapBean;
+import com.alipay.sofa.runtime.test.extension.descriptor.ClientExtensionDescriptor;
+import com.alipay.sofa.runtime.test.extension.descriptor.SimpleExtensionDescriptor;
+import com.alipay.sofa.runtime.test.extension.descriptor.XMapTestDescriptor;
 
 /**
  * @author ruoshan

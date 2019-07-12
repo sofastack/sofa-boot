@@ -16,10 +16,11 @@
  */
 package com.alipay.sofa.runtime.service.binding;
 
+import org.w3c.dom.Element;
+
 import com.alipay.sofa.runtime.api.binding.BindingType;
 import com.alipay.sofa.runtime.spi.binding.AbstractBinding;
 import com.alipay.sofa.runtime.spi.health.HealthResult;
-import org.w3c.dom.Element;
 
 /**
  * JVM Service and Reference Binding

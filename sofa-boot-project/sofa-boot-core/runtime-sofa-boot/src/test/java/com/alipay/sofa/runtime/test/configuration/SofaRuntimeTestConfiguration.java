@@ -16,10 +16,11 @@
  */
 package com.alipay.sofa.runtime.test.configuration;
 
-import com.alipay.sofa.runtime.spring.AsyncProxyBeanPostProcessor;
-import com.alipay.sofa.runtime.spring.async.AsyncTaskExecutionListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import com.alipay.sofa.runtime.spring.AsyncProxyBeanPostProcessor;
+import com.alipay.sofa.runtime.spring.async.AsyncTaskExecutionListener;
 
 /**
  * Test runtime-sofa-boot-core, build some necessary beans.

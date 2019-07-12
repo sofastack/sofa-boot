@@ -16,10 +16,11 @@
  */
 package com.alipay.sofa.runtime.ext.spring;
 
-import com.alipay.sofa.runtime.api.component.ComponentName;
-import com.alipay.sofa.runtime.ext.component.ExtensionImpl;
 import org.springframework.context.ApplicationContext;
 import org.w3c.dom.Element;
+
+import com.alipay.sofa.runtime.api.component.ComponentName;
+import com.alipay.sofa.runtime.ext.component.ExtensionImpl;
 
 /**
  * Extension implement in spring env

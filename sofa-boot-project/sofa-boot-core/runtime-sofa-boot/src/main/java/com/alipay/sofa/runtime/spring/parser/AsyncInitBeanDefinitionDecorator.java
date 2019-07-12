@@ -16,9 +16,6 @@
  */
 package com.alipay.sofa.runtime.spring.parser;
 
-import com.alipay.sofa.boot.constant.SofaBootConstants;
-import com.alipay.sofa.boot.spring.namespace.spi.SofaBootTagNameSupport;
-import com.alipay.sofa.runtime.spring.async.AsyncInitBeanHolder;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
@@ -28,6 +25,10 @@ import org.springframework.beans.factory.xml.ParserContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Node;
+
+import com.alipay.sofa.boot.constant.SofaBootConstants;
+import com.alipay.sofa.boot.spring.namespace.spi.SofaBootTagNameSupport;
+import com.alipay.sofa.runtime.spring.async.AsyncInitBeanHolder;
 
 /**
  * @author qilong.zql

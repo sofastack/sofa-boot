@@ -16,11 +16,12 @@
  */
 package com.alipay.sofa.tracer.boot.springcloud.processor;
 
-import com.alipay.sofa.tracer.plugins.springcloud.instruments.feign.SofaTracerFeignContext;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.cloud.openfeign.FeignContext;
+
+import com.alipay.sofa.tracer.plugins.springcloud.instruments.feign.SofaTracerFeignContext;
 
 /**
  * @author: guolei.sgl (guolei.sgl@antfin.com) 2019/3/13 6:08 PM

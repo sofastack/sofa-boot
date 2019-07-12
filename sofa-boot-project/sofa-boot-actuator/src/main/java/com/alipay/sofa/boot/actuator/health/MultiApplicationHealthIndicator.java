@@ -16,12 +16,13 @@
  */
 package com.alipay.sofa.boot.actuator.health;
 
+import org.springframework.boot.actuate.health.Health;
+import org.springframework.boot.actuate.health.HealthIndicator;
+
 import com.alipay.sofa.boot.health.NonReadinessCheck;
 import com.alipay.sofa.runtime.SofaFramework;
 import com.alipay.sofa.runtime.invoke.DynamicJvmServiceProxyFinder;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
-import org.springframework.boot.actuate.health.Health;
-import org.springframework.boot.actuate.health.HealthIndicator;
 
 /**
  * @author qilong.zql

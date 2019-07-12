@@ -16,6 +16,9 @@
  */
 package com.alipay.sofa.runtime.service.client;
 
+import java.util.Collection;
+import java.util.Map;
+
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.client.ServiceClient;
 import com.alipay.sofa.runtime.api.client.param.BindingParam;
@@ -35,8 +38,6 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
-import java.util.Collection;
-import java.util.Map;
 
 /**
  * Service Client Implementation，you can publish a service by this class

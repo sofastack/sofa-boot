@@ -16,16 +16,17 @@
  */
 package com.alipay.sofa.healthcheck.impl;
 
-import com.alipay.sofa.boot.constant.SofaBootConstants;
-import com.alipay.sofa.healthcheck.core.HealthChecker;
-import com.alipay.sofa.isle.ApplicationRuntimeModel;
-import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.Status;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+
+import com.alipay.sofa.boot.constant.SofaBootConstants;
+import com.alipay.sofa.healthcheck.core.HealthChecker;
+import com.alipay.sofa.isle.ApplicationRuntimeModel;
+import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
 
 /**
  * Abstract Module Health Checker

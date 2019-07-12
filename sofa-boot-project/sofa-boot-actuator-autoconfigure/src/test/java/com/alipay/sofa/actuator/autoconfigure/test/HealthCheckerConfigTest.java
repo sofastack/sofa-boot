@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.actuator.autoconfigure.test;
 
-import com.alipay.sofa.healthcheck.impl.ComponentHealthChecker;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,6 +24,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import com.alipay.sofa.healthcheck.impl.ComponentHealthChecker;
 
 /**
  * @author qilong.zql

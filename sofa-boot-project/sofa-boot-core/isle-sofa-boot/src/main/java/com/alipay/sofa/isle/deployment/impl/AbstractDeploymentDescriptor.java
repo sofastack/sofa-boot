@@ -16,17 +16,24 @@
  */
 package com.alipay.sofa.isle.deployment.impl;
 
-import com.alipay.sofa.boot.constant.SofaBootConstants;
-import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
-import com.alipay.sofa.isle.deployment.DeploymentDescriptorConfiguration;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Properties;
+import java.util.stream.Stream;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import java.net.URL;
-import java.util.*;
-import java.util.stream.Stream;
+import com.alipay.sofa.boot.constant.SofaBootConstants;
+import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
+import com.alipay.sofa.isle.deployment.DeploymentDescriptorConfiguration;
 
 /**
  * @author yangyanzhao

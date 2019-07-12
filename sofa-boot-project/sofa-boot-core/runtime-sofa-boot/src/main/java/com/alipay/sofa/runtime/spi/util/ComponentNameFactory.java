@@ -16,9 +16,9 @@
  */
 package com.alipay.sofa.runtime.spi.util;
 
+import com.alipay.sofa.boot.util.StringUtils;
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.model.ComponentType;
-import com.alipay.sofa.boot.util.StringUtils;
 
 /**
  * ComponentName Factory

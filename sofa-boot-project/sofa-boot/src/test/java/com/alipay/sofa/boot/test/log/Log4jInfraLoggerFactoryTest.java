@@ -20,12 +20,12 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import com.alipay.sofa.boot.log.InfraLoggerFactory;
-import com.alipay.sofa.boot.test.log.base.BaseLogTest;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.alipay.sofa.boot.log.InfraLoggerFactory;
+import com.alipay.sofa.boot.test.log.base.BaseLogTest;
 import com.alipay.sofa.common.log.Constants;
 
 /**

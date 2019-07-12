@@ -16,11 +16,12 @@
  */
 package com.alipay.sofa.runtime.test.spi.component;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import com.alipay.sofa.runtime.model.InterfaceMode;
 import com.alipay.sofa.runtime.service.component.impl.ReferenceImpl;
 import com.alipay.sofa.runtime.service.component.impl.ServiceImpl;
-import org.junit.Assert;
-import org.junit.Test;
 
 /**
  * @author xuanbei

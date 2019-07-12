@@ -16,13 +16,13 @@
  */
 package com.alipay.sofa.boot.test.log;
 
-import com.alipay.sofa.boot.log.InfraLoggerFactory;
-import com.alipay.sofa.boot.test.log.base.BaseLogTest;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.alipay.sofa.boot.log.InfraLoggerFactory;
+import com.alipay.sofa.boot.test.log.base.BaseLogTest;
 import com.alipay.sofa.common.log.Constants;
 
 /**

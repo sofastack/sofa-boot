@@ -16,9 +16,10 @@
  */
 package com.alipay.sofa.runtime.ext.component;
 
+import org.w3c.dom.Element;
+
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.service.api.component.Extension;
-import org.w3c.dom.Element;
 
 /**
  * SOFA Extension Internal Object

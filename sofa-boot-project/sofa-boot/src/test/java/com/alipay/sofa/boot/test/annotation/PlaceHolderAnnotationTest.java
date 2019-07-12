@@ -16,15 +16,16 @@
  */
 package com.alipay.sofa.boot.test.annotation;
 
-import com.alipay.sofa.boot.annotation.PlaceHolderAnnotationInvocationHandler;
-import com.alipay.sofa.boot.annotation.PlaceHolderBinder;
-import org.junit.Assert;
-import org.junit.Test;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+import com.alipay.sofa.boot.annotation.PlaceHolderAnnotationInvocationHandler;
+import com.alipay.sofa.boot.annotation.PlaceHolderBinder;
 
 /**
  * @author qilong.zql

@@ -16,6 +16,8 @@
  */
 package com.alipay.sofa.runtime.ext.component;
 
+import java.util.Map;
+
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.component.Property;
 import com.alipay.sofa.runtime.model.ComponentType;
@@ -26,8 +28,6 @@ import com.alipay.sofa.runtime.spi.component.Implementation;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
 import com.alipay.sofa.service.api.component.ExtensionPoint;
-
-import java.util.Map;
 
 /**
  * SOFA ExtensionPoint Component

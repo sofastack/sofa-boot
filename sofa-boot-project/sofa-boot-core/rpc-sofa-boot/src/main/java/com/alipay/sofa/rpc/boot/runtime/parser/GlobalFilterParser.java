@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.rpc.boot.runtime.parser;
 
-import com.alipay.sofa.boot.spring.namespace.spi.SofaBootTagNameSupport;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.AbstractSimpleBeanDefinitionParser;
@@ -24,6 +23,7 @@ import org.springframework.beans.factory.xml.ParserContext;
 import org.springframework.util.StringUtils;
 import org.w3c.dom.Element;
 
+import com.alipay.sofa.boot.spring.namespace.spi.SofaBootTagNameSupport;
 import com.alipay.sofa.rpc.boot.container.RpcFilterContainer;
 import com.alipay.sofa.rpc.boot.log.SofaBootRpcLoggerFactory;
 

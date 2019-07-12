@@ -16,9 +16,9 @@
  */
 package com.alipay.sofa.runtime;
 
-import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
-
 import java.util.concurrent.ConcurrentHashMap;
+
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 
 /**
  * @author qilong.zql

@@ -16,17 +16,18 @@
  */
 package com.alipay.sofa.common.xmap;
 
-import com.alipay.sofa.common.xmap.annotation.XNodeMap;
-import com.alipay.sofa.runtime.log.SofaLogger;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.w3c.dom.Attr;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import com.alipay.sofa.common.xmap.annotation.XNodeMap;
+import com.alipay.sofa.runtime.log.SofaLogger;
 
 /**
  *

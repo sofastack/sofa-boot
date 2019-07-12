@@ -16,11 +16,12 @@
  */
 package com.alipay.sofa.common.xmap.annotation.spring;
 
-import com.alipay.sofa.common.xmap.DOMHelper;
-import com.alipay.sofa.common.xmap.XAnnotatedMember;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
 import org.w3c.dom.Element;
+
+import com.alipay.sofa.common.xmap.DOMHelper;
+import com.alipay.sofa.common.xmap.XAnnotatedMember;
 
 /**
  * XMapSpring util

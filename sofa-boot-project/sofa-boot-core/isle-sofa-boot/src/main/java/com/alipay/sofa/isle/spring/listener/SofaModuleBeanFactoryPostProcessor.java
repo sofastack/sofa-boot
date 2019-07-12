@@ -16,7 +16,11 @@
  */
 package com.alipay.sofa.isle.spring.listener;
 
-import com.alipay.sofa.boot.constant.SofaBootConstants;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
@@ -26,10 +30,7 @@ import org.springframework.context.annotation.ConfigurationClassPostProcessor;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.alipay.sofa.boot.constant.SofaBootConstants;
 
 /**
  * get all the BeanPostProcessors and BeanFactoryPostProcessors of the root application context

@@ -16,9 +16,10 @@
  */
 package com.alipay.sofa.boot.test.util;
 
-import com.alipay.sofa.boot.util.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;
+
+import com.alipay.sofa.boot.util.StringUtils;
 
 /**
  * @author qilong.zql

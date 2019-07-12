@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.boot.test.spring;
 
-import com.alipay.sofa.boot.constant.SofaBootConstants;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,6 +27,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.env.MutablePropertySources;
 import org.springframework.core.env.StandardEnvironment;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import com.alipay.sofa.boot.constant.SofaBootConstants;
 
 /**
  * Fix https://github.com/alipay/sofa-boot/issues/371

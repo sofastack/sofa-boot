@@ -16,19 +16,20 @@
  */
 package com.alipay.sofa.common.boot.logging.test;
 
-import com.alipay.sofa.boot.logging.CommonLoggingApplicationListener;
-import com.alipay.sofa.common.log.LoggerSpaceManager;
-import com.alipay.sofa.common.log.MultiAppLoggerSpaceManager;
-import com.alipay.sofa.common.log.SpaceId;
-import org.junit.After;
-import org.junit.Before;
-import org.slf4j.Logger;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.util.Map;
+
+import org.junit.After;
+import org.junit.Before;
+import org.slf4j.Logger;
+
+import com.alipay.sofa.boot.logging.CommonLoggingApplicationListener;
+import com.alipay.sofa.common.log.LoggerSpaceManager;
+import com.alipay.sofa.common.log.MultiAppLoggerSpaceManager;
+import com.alipay.sofa.common.log.SpaceId;
 
 /**
  * @author qilong.zql

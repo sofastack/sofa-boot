@@ -16,24 +16,17 @@
  */
 package com.alipay.sofa.isle.spring.listener;
 
-import com.alipay.sofa.isle.stage.PipelineContext;
-import com.alipay.sofa.runtime.log.SofaLogger;
-import com.alipay.sofa.isle.stage.DefaultPipelineContext;
-import com.alipay.sofa.isle.stage.PipelineStage;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.core.OrderComparator;
 import org.springframework.core.Ordered;
 import org.springframework.core.PriorityOrdered;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.alipay.sofa.isle.stage.PipelineContext;
+import com.alipay.sofa.runtime.log.SofaLogger;
 
 /**
  * SofaModuleContextRefreshedListener listens to ContextRefreshedEvent;

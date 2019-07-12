@@ -16,9 +16,9 @@
  */
 package com.alipay.sofa.runtime.ext.spring.parser;
 
-import com.alipay.sofa.runtime.ext.spring.ExtensionPointFactoryBean;
-import com.alipay.sofa.runtime.log.SofaLogger;
-import com.alipay.sofa.runtime.spi.util.ParserUtils;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import org.springframework.beans.factory.config.RuntimeBeanReference;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.ParserContext;
@@ -28,8 +28,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import com.alipay.sofa.runtime.ext.spring.ExtensionPointFactoryBean;
+import com.alipay.sofa.runtime.log.SofaLogger;
+import com.alipay.sofa.runtime.spi.util.ParserUtils;
 
 /**
  * Extension point definition parser

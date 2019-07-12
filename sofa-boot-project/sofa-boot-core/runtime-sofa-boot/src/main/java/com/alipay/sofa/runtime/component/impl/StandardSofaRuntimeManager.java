@@ -16,16 +16,16 @@
  */
 package com.alipay.sofa.runtime.component.impl;
 
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import com.alipay.sofa.boot.health.RuntimeHealthChecker;
-import com.alipay.sofa.runtime.spi.spring.RuntimeShutdownAware;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
 import com.alipay.sofa.runtime.spi.component.ComponentManager;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
-
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import com.alipay.sofa.runtime.spi.spring.RuntimeShutdownAware;
 
 /**
  * Default Sofa Runtime Manager

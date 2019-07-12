@@ -16,6 +16,13 @@
  */
 package com.alipay.sofa.common.xmap.annotation.spring;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+
 import com.alipay.sofa.common.xmap.Context;
 import com.alipay.sofa.common.xmap.DOMHelper;
 import com.alipay.sofa.common.xmap.Path;
@@ -25,12 +32,6 @@ import com.alipay.sofa.common.xmap.XGetter;
 import com.alipay.sofa.common.xmap.XMap;
 import com.alipay.sofa.common.xmap.XSetter;
 import com.alipay.sofa.common.xmap.spring.XNodeListSpring;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  *

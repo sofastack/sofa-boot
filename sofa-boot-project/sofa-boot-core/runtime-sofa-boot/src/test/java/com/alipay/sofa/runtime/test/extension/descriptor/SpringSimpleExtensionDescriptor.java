@@ -16,9 +16,9 @@
  */
 package com.alipay.sofa.runtime.test.extension.descriptor;
 
-import com.alipay.sofa.runtime.test.extension.bean.SimpleSpringBean;
 import com.alipay.sofa.common.xmap.annotation.XObject;
 import com.alipay.sofa.common.xmap.spring.XNodeSpring;
+import com.alipay.sofa.runtime.test.extension.bean.SimpleSpringBean;
 
 /**
  * @author ruoshan

@@ -16,11 +16,12 @@
  */
 package com.alipay.sofa.runtime.spring.parser;
 
-import com.alipay.sofa.runtime.spring.factory.ReferenceFactoryBean;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.springframework.util.StringUtils;
 import org.w3c.dom.Element;
+
+import com.alipay.sofa.runtime.spring.factory.ReferenceFactoryBean;
 
 /**
  * @author xuanbei 18/3/1

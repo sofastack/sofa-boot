@@ -16,13 +16,14 @@
  */
 package com.alipay.sofa.tracer.boot.base;
 
-import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
+
+import com.zaxxer.hikari.HikariDataSource;
 
 /**
  * @author qilong.zql

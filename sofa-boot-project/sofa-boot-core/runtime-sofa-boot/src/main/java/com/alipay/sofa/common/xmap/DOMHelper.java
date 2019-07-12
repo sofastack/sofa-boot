@@ -16,11 +16,11 @@
  */
 package com.alipay.sofa.common.xmap;
 
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-
 import java.util.Collection;
 import java.util.Map;
+
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 /**
  * @author <a href="mailto:bs@nuxeo.com">Bogdan Stefanescu</a>

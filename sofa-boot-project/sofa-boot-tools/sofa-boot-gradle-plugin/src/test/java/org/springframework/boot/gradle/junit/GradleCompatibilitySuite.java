@@ -16,6 +16,11 @@
  */
 package org.springframework.boot.gradle.junit;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import org.gradle.api.Rule;
 import org.junit.runner.Runner;
 import org.junit.runners.BlockJUnit4ClassRunner;
@@ -23,11 +28,6 @@ import org.junit.runners.Suite;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 import org.springframework.boot.gradle.testkit.GradleBuild;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Custom {@link Suite} that runs tests against multiple versions of Gradle. Test classes

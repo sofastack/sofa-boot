@@ -16,7 +16,8 @@
  */
 package com.alipay.sofa.tracer.boot.springcloud;
 
-import com.alipay.sofa.tracer.boot.base.AbstractTestCloudBase;
+import java.io.IOException;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.io.IOException;
+import com.alipay.sofa.tracer.boot.base.AbstractTestCloudBase;
 
 @ActiveProfiles("feign")
 @Import({ FeignAutoConfiguration.class, HttpMessageConvertersAutoConfiguration.class })

@@ -16,10 +16,11 @@
  */
 package com.alipay.sofa.common.boot.logging.test;
 
-import com.alipay.sofa.common.log.Constants;
-import com.alipay.sofa.common.log.LoggerSpaceManager;
-import com.alipay.sofa.common.log.SpaceId;
-import com.alipay.sofa.common.log.env.LogEnvUtils;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.logging.log4j.core.appender.AbstractManager;
 import org.apache.logging.log4j.core.config.DefaultConfiguration;
 import org.junit.After;
@@ -28,10 +29,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.boot.SpringApplication;
 
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.Map;
+import com.alipay.sofa.common.log.Constants;
+import com.alipay.sofa.common.log.LoggerSpaceManager;
+import com.alipay.sofa.common.log.SpaceId;
+import com.alipay.sofa.common.log.env.LogEnvUtils;
 
 /**
  * @author qilong.zql

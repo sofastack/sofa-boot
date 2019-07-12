@@ -16,14 +16,15 @@
  */
 package com.alipay.sofa.healthcheck.impl;
 
-import com.alipay.sofa.boot.health.RuntimeHealthChecker;
-import com.alipay.sofa.healthcheck.ReadinessCheckListener;
-import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.actuate.health.Status;
 
-import java.util.List;
+import com.alipay.sofa.boot.health.RuntimeHealthChecker;
+import com.alipay.sofa.healthcheck.ReadinessCheckListener;
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 
 /**
  * @author qilong.zql

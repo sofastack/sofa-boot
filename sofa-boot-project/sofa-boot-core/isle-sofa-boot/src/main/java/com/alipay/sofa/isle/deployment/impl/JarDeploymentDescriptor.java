@@ -16,12 +16,6 @@
  */
 package com.alipay.sofa.isle.deployment.impl;
 
-import com.alipay.sofa.boot.constant.SofaBootConstants;
-import com.alipay.sofa.isle.deployment.DeploymentDescriptorConfiguration;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.util.Assert;
-import org.springframework.util.ResourceUtils;
-
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.JarURLConnection;
@@ -32,6 +26,13 @@ import java.util.HashMap;
 import java.util.Properties;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.util.Assert;
+import org.springframework.util.ResourceUtils;
+
+import com.alipay.sofa.boot.constant.SofaBootConstants;
+import com.alipay.sofa.isle.deployment.DeploymentDescriptorConfiguration;
 
 /**
  *

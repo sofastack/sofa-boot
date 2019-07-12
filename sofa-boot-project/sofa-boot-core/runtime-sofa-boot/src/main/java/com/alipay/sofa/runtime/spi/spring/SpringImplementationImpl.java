@@ -16,9 +16,10 @@
  */
 package com.alipay.sofa.runtime.spi.spring;
 
-import com.alipay.sofa.runtime.spi.component.DefaultImplementation;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.Assert;
+
+import com.alipay.sofa.runtime.spi.component.DefaultImplementation;
 
 /**
  * Spring Component Implement

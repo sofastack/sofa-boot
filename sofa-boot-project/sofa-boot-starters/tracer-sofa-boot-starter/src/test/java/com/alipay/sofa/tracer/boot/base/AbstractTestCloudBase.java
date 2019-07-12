@@ -16,9 +16,13 @@
  */
 package com.alipay.sofa.tracer.boot.base;
 
-import com.alipay.common.tracer.core.appender.TracerLogRootDaemon;
-import com.alipay.common.tracer.core.configuration.SofaTracerConfiguration;
-import com.alipay.sofa.boot.listener.SofaBootstrapRunListener;
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import org.apache.commons.io.FileUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -27,12 +31,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicBoolean;
+import com.alipay.common.tracer.core.appender.TracerLogRootDaemon;
+import com.alipay.common.tracer.core.configuration.SofaTracerConfiguration;
+import com.alipay.sofa.boot.listener.SofaBootstrapRunListener;
 
 /**
  * @author: guolei.sgl (guolei.sgl@antfin.com) 2019/3/28 2:40 PM

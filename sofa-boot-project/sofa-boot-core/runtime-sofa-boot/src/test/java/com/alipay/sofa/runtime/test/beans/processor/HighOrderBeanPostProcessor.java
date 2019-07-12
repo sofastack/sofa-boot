@@ -16,16 +16,17 @@
  */
 package com.alipay.sofa.runtime.test.beans.processor;
 
-import com.alipay.sofa.runtime.spi.spring.RuntimeShutdownAware;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.core.PriorityOrdered;
+
 import com.alipay.sofa.runtime.api.annotation.SofaReference;
 import com.alipay.sofa.runtime.api.aware.ClientFactoryAware;
 import com.alipay.sofa.runtime.api.client.ClientFactory;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
+import com.alipay.sofa.runtime.spi.spring.RuntimeShutdownAware;
 import com.alipay.sofa.runtime.spi.spring.SofaRuntimeContextAware;
 import com.alipay.sofa.runtime.test.beans.facade.SampleService;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.core.PriorityOrdered;
 
 /**
  * @author ruoshan

@@ -16,10 +16,12 @@
  */
 package com.alipay.sofa.tracer.boot.datasource.processor;
 
-import com.alipay.common.tracer.core.utils.ReflectionUtils;
-import com.alipay.common.tracer.core.utils.StringUtils;
-import com.alipay.sofa.tracer.plugins.datasource.SmartDataSource;
-import com.alipay.sofa.tracer.plugins.datasource.utils.DataSourceUtils;
+import static com.alipay.common.tracer.core.configuration.SofaTracerConfiguration.TRACER_APPNAME_KEY;
+
+import java.lang.reflect.Method;
+
+import javax.sql.DataSource;
+
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
@@ -28,11 +30,10 @@ import org.springframework.core.PriorityOrdered;
 import org.springframework.core.env.Environment;
 import org.springframework.util.Assert;
 
-import javax.sql.DataSource;
-
-import java.lang.reflect.Method;
-
-import static com.alipay.common.tracer.core.configuration.SofaTracerConfiguration.TRACER_APPNAME_KEY;
+import com.alipay.common.tracer.core.utils.ReflectionUtils;
+import com.alipay.common.tracer.core.utils.StringUtils;
+import com.alipay.sofa.tracer.plugins.datasource.SmartDataSource;
+import com.alipay.sofa.tracer.plugins.datasource.utils.DataSourceUtils;
 
 /**
  * @author qilong.zql

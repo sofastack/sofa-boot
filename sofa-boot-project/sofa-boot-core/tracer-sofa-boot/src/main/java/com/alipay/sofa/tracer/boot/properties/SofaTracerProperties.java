@@ -16,15 +16,16 @@
  */
 package com.alipay.sofa.tracer.boot.properties;
 
-import com.alipay.common.tracer.core.appender.file.TimedRollingFileAppender;
-import com.alipay.common.tracer.core.configuration.SofaTracerConfiguration;
-import com.alipay.common.tracer.core.reporter.stat.manager.SofaTracerStatisticReporterManager;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import static com.alipay.common.tracer.core.configuration.SofaTracerConfiguration.DEFAULT_LOG_RESERVE_DAY;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.alipay.common.tracer.core.configuration.SofaTracerConfiguration.DEFAULT_LOG_RESERVE_DAY;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
+import com.alipay.common.tracer.core.appender.file.TimedRollingFileAppender;
+import com.alipay.common.tracer.core.configuration.SofaTracerConfiguration;
+import com.alipay.common.tracer.core.reporter.stat.manager.SofaTracerStatisticReporterManager;
 
 /**
  * OpenTracingSpringMvcProperties

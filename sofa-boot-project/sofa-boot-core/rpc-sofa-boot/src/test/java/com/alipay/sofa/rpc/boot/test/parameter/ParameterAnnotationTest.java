@@ -19,9 +19,6 @@ package com.alipay.sofa.rpc.boot.test.parameter;
 import java.util.Arrays;
 import java.util.Map;
 
-import com.alipay.sofa.rpc.boot.test.bean.filter.ParameterFilter;
-import com.alipay.sofa.rpc.boot.test.bean.invoke.HelloSyncService;
-import com.alipay.sofa.rpc.boot.test.bean.invoke.HelloSyncServiceImpl;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,6 +30,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.alipay.sofa.rpc.boot.test.bean.filter.ParameterFilter;
+import com.alipay.sofa.rpc.boot.test.bean.invoke.HelloSyncService;
+import com.alipay.sofa.rpc.boot.test.bean.invoke.HelloSyncServiceImpl;
 import com.alipay.sofa.runtime.api.annotation.SofaParameter;
 import com.alipay.sofa.runtime.api.annotation.SofaReference;
 import com.alipay.sofa.runtime.api.annotation.SofaReferenceBinding;

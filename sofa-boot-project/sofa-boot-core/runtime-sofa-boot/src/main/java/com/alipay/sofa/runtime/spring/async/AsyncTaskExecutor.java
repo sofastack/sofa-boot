@@ -16,11 +16,6 @@
  */
 package com.alipay.sofa.runtime.spring.async;
 
-import com.alipay.sofa.boot.constant.SofaBootConstants;
-import com.alipay.sofa.runtime.log.SofaLogger;
-import com.alipay.sofa.boot.util.NamedThreadFactory;
-import org.springframework.core.env.Environment;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Future;
@@ -29,6 +24,12 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
+
+import org.springframework.core.env.Environment;
+
+import com.alipay.sofa.boot.constant.SofaBootConstants;
+import com.alipay.sofa.boot.util.NamedThreadFactory;
+import com.alipay.sofa.runtime.log.SofaLogger;
 
 /**
  * @author qilong.zql

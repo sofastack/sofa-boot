@@ -16,23 +16,25 @@
  */
 package com.alipay.sofa.healthcheck;
 
-import com.alipay.sofa.boot.health.NonReadinessCheck;
-import com.alipay.sofa.healthcheck.log.HealthCheckLoggerFactory;
-import com.alipay.sofa.boot.util.BinaryOperators;
-import com.alipay.sofa.healthcheck.core.HealthChecker;
-import com.alipay.sofa.healthcheck.util.HealthCheckUtils;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.Status;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.Assert;
-import org.slf4j.Logger;
 
-import java.util.*;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
+import com.alipay.sofa.boot.health.NonReadinessCheck;
+import com.alipay.sofa.boot.util.BinaryOperators;
+import com.alipay.sofa.healthcheck.core.HealthChecker;
+import com.alipay.sofa.healthcheck.log.HealthCheckLoggerFactory;
+import com.alipay.sofa.healthcheck.util.HealthCheckUtils;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Used to process all implementations of {@link HealthChecker}

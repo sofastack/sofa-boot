@@ -16,9 +16,10 @@
  */
 package com.alipay.sofa.runtime.spi.service;
 
-import com.alipay.sofa.boot.util.StringUtils;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
+
+import com.alipay.sofa.boot.util.StringUtils;
 
 /**
  * @author xuanbei 18/2/28

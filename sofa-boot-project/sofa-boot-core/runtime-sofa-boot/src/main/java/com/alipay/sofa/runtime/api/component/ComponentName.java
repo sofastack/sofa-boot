@@ -16,9 +16,9 @@
  */
 package com.alipay.sofa.runtime.api.component;
 
-import com.alipay.sofa.runtime.model.ComponentType;
-
 import java.io.Serializable;
+
+import com.alipay.sofa.runtime.model.ComponentType;
 
 /**
  * ComponentName used to identify the component uniquely.

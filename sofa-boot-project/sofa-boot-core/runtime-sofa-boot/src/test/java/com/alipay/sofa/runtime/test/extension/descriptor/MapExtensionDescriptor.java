@@ -16,12 +16,12 @@
  */
 package com.alipay.sofa.runtime.test.extension.descriptor;
 
-import com.alipay.sofa.runtime.test.extension.bean.SimpleSpringMapBean;
-import com.alipay.sofa.common.xmap.annotation.XNodeMap;
-import com.alipay.sofa.common.xmap.annotation.XObject;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import com.alipay.sofa.common.xmap.annotation.XNodeMap;
+import com.alipay.sofa.common.xmap.annotation.XObject;
+import com.alipay.sofa.runtime.test.extension.bean.SimpleSpringMapBean;
 
 /**
  * @author ruoshan

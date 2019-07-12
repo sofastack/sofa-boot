@@ -16,13 +16,13 @@
  */
 package com.alipay.sofa.runtime.service.impl;
 
-import com.alipay.sofa.runtime.api.binding.BindingType;
-import com.alipay.sofa.runtime.spi.service.BindingConverter;
-import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
+import com.alipay.sofa.runtime.api.binding.BindingType;
+import com.alipay.sofa.runtime.spi.service.BindingConverter;
+import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
 
 /**
  * @author xuanbei 18/2/28

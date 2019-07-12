@@ -16,15 +16,6 @@
  */
 package com.alipay.sofa.runtime.test;
 
-import com.alipay.sofa.runtime.api.annotation.SofaClientFactory;
-import com.alipay.sofa.runtime.api.annotation.SofaReference;
-import com.alipay.sofa.runtime.api.client.ClientFactory;
-import com.alipay.sofa.runtime.api.client.ReferenceClient;
-import com.alipay.sofa.runtime.api.client.ServiceClient;
-import com.alipay.sofa.runtime.api.client.param.ReferenceParam;
-import com.alipay.sofa.runtime.test.beans.ClientFactoryAwareBean;
-import com.alipay.sofa.runtime.test.beans.facade.SampleService;
-import com.alipay.sofa.runtime.test.configuration.RuntimeConfiguration;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,6 +26,16 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import com.alipay.sofa.runtime.api.annotation.SofaClientFactory;
+import com.alipay.sofa.runtime.api.annotation.SofaReference;
+import com.alipay.sofa.runtime.api.client.ClientFactory;
+import com.alipay.sofa.runtime.api.client.ReferenceClient;
+import com.alipay.sofa.runtime.api.client.ServiceClient;
+import com.alipay.sofa.runtime.api.client.param.ReferenceParam;
+import com.alipay.sofa.runtime.test.beans.ClientFactoryAwareBean;
+import com.alipay.sofa.runtime.test.beans.facade.SampleService;
+import com.alipay.sofa.runtime.test.configuration.RuntimeConfiguration;
 
 /**
  * @author qilong.zql

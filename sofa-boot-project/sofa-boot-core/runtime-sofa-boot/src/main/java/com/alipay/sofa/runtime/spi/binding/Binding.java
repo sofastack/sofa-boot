@@ -16,9 +16,10 @@
  */
 package com.alipay.sofa.runtime.spi.binding;
 
+import org.w3c.dom.Element;
+
 import com.alipay.sofa.runtime.api.binding.BindingType;
 import com.alipay.sofa.runtime.spi.health.HealthResult;
-import org.w3c.dom.Element;
 
 /**
  * @author xuanbei 18/2/28

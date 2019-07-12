@@ -18,8 +18,8 @@ package com.alipay.sofa.runtime.spi.component;
 
 import com.alipay.sofa.boot.health.RuntimeHealthChecker;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
-import com.alipay.sofa.runtime.spi.spring.RuntimeShutdownAware;
 import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
+import com.alipay.sofa.runtime.spi.spring.RuntimeShutdownAware;
 
 /**
  * @author xuanbei 18/2/28

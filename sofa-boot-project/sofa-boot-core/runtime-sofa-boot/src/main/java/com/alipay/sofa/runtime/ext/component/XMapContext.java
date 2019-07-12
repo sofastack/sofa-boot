@@ -16,9 +16,9 @@
  */
 package com.alipay.sofa.runtime.ext.component;
 
-import com.alipay.sofa.common.xmap.Context;
-
 import java.net.URL;
+
+import com.alipay.sofa.common.xmap.Context;
 
 /**
  * @author <a href="mailto:bs@nuxeo.com">Bogdan Stefanescu</a>

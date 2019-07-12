@@ -16,8 +16,9 @@
  */
 package com.alipay.sofa.runtime.log;
 
-import com.alipay.sofa.common.log.LoggerSpaceManager;
 import org.slf4j.Logger;
+
+import com.alipay.sofa.common.log.LoggerSpaceManager;
 
 /**
  * @author xuanbei 18/2/28

@@ -16,11 +16,9 @@
  */
 package com.alipay.sofa.runtime.spring;
 
-import com.alipay.sofa.boot.constant.SofaBootConstants;
-import com.alipay.sofa.runtime.log.SofaLogger;
-import com.alipay.sofa.runtime.spring.async.AsyncInitBeanHolder;
-import com.alipay.sofa.runtime.spring.async.AsyncTaskExecutor;
-import com.alipay.sofa.runtime.spring.parser.AsyncInitBeanDefinitionDecorator;
+import java.lang.reflect.Method;
+import java.util.concurrent.CountDownLatch;
+
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.aop.framework.ProxyFactory;
@@ -32,8 +30,11 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.support.AbstractApplicationContext;
 
-import java.lang.reflect.Method;
-import java.util.concurrent.CountDownLatch;
+import com.alipay.sofa.boot.constant.SofaBootConstants;
+import com.alipay.sofa.runtime.log.SofaLogger;
+import com.alipay.sofa.runtime.spring.async.AsyncInitBeanHolder;
+import com.alipay.sofa.runtime.spring.async.AsyncTaskExecutor;
+import com.alipay.sofa.runtime.spring.parser.AsyncInitBeanDefinitionDecorator;
 
 /**
  * @author qilong.zql

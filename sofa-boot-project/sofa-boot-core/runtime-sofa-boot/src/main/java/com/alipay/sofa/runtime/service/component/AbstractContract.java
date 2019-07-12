@@ -16,15 +16,15 @@
  */
 package com.alipay.sofa.runtime.service.component;
 
-import com.alipay.sofa.runtime.api.binding.BindingType;
-import com.alipay.sofa.runtime.model.InterfaceMode;
-import com.alipay.sofa.runtime.spi.binding.Binding;
-import com.alipay.sofa.runtime.spi.binding.Contract;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import com.alipay.sofa.runtime.api.binding.BindingType;
+import com.alipay.sofa.runtime.model.InterfaceMode;
+import com.alipay.sofa.runtime.spi.binding.Binding;
+import com.alipay.sofa.runtime.spi.binding.Contract;
 
 /**
  * abstract contract implementation

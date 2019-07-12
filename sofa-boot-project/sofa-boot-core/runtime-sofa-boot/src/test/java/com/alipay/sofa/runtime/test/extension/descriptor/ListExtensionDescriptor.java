@@ -16,12 +16,12 @@
  */
 package com.alipay.sofa.runtime.test.extension.descriptor;
 
-import com.alipay.sofa.common.xmap.annotation.XNodeList;
-import com.alipay.sofa.common.xmap.annotation.XObject;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
+import com.alipay.sofa.common.xmap.annotation.XNodeList;
+import com.alipay.sofa.common.xmap.annotation.XObject;
 
 /**
  * @author ruoshan

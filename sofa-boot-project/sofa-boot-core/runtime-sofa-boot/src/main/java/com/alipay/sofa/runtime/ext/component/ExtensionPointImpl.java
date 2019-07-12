@@ -16,12 +16,13 @@
  */
 package com.alipay.sofa.runtime.ext.component;
 
-import com.alipay.sofa.common.xmap.XMap;
-import org.springframework.util.ClassUtils;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.util.ClassUtils;
+
+import com.alipay.sofa.common.xmap.XMap;
 
 /**
  * ExtensionPoint Implementation。

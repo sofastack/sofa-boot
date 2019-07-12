@@ -16,6 +16,14 @@
  */
 package com.alipay.sofa.isle.test;
 
+import java.net.URL;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Properties;
+
+import org.junit.Assert;
+import org.junit.Test;
+
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.isle.deployment.DeploymentBuilder;
@@ -24,13 +32,6 @@ import com.alipay.sofa.isle.deployment.DeploymentDescriptorConfiguration;
 import com.alipay.sofa.isle.deployment.impl.DefaultModuleDeploymentValidator;
 import com.alipay.sofa.isle.deployment.impl.FileDeploymentDescriptor;
 import com.alipay.sofa.isle.deployment.impl.JarDeploymentDescriptor;
-import org.junit.Assert;
-import org.junit.Test;
-
-import java.net.URL;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Properties;
 
 /**
  * @author xuanbei 18/5/8

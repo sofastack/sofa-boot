@@ -17,7 +17,6 @@
 package com.alipay.sofa.runtime.test.beans.service;
 
 import com.alipay.sofa.runtime.test.beans.facade.SampleService;
-import org.springframework.stereotype.Component;
 
 /**
  * @author qilong.zql

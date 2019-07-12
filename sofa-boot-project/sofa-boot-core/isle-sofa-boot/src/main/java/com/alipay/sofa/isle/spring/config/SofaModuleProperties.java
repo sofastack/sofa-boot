@@ -16,9 +16,9 @@
  */
 package com.alipay.sofa.isle.spring.config;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-
 import static com.alipay.sofa.isle.spring.config.SofaModuleProperties.PREFIX;
+
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * Properties

@@ -16,9 +16,8 @@
  */
 package com.alipay.sofa.boot.autoconfigure.tracer;
 
-import com.alipay.common.tracer.core.listener.SpanReportListener;
-import com.alipay.common.tracer.core.listener.SpanReportListenerHolder;
-import com.alipay.sofa.tracer.boot.properties.SofaTracerProperties;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -26,7 +25,9 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.List;
+import com.alipay.common.tracer.core.listener.SpanReportListener;
+import com.alipay.common.tracer.core.listener.SpanReportListenerHolder;
+import com.alipay.sofa.tracer.boot.properties.SofaTracerProperties;
 
 /**
  * SofaTracerAutoConfiguration

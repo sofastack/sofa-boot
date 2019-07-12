@@ -24,8 +24,6 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.StreamSupport;
 
-import com.alipay.sofa.boot.constant.SofaBootConstants;
-import com.alipay.sofa.common.log.env.LogEnvUtils;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
@@ -42,7 +40,9 @@ import org.springframework.core.env.StandardEnvironment;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
+import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.util.SofaBootEnvUtils;
+import com.alipay.sofa.common.log.env.LogEnvUtils;
 
 /**
  * @author qilong.zql

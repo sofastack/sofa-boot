@@ -16,9 +16,9 @@
  */
 package com.alipay.sofa.runtime.spi.service;
 
-import com.alipay.sofa.runtime.api.binding.BindingType;
-
 import java.util.Set;
+
+import com.alipay.sofa.runtime.api.binding.BindingType;
 
 /**
  * Binding Converter Factory

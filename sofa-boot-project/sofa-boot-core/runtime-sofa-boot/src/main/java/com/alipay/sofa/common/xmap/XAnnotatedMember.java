@@ -16,15 +16,16 @@
  */
 package com.alipay.sofa.common.xmap;
 
-import com.alipay.sofa.common.xmap.annotation.XNode;
+import java.util.List;
+import java.util.Map;
+
 import org.w3c.dom.Attr;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import java.util.List;
-import java.util.Map;
+import com.alipay.sofa.common.xmap.annotation.XNode;
 
 /**
  * @author <a href="mailto:bs@nuxeo.com">Bogdan Stefanescu</a>

@@ -16,6 +16,8 @@
  */
 package com.alipay.sofa.runtime.spi.service;
 
+import org.w3c.dom.Element;
+
 import com.alipay.sofa.boot.spring.namespace.spi.SofaBootTagNameSupport;
 import com.alipay.sofa.runtime.api.annotation.SofaReference;
 import com.alipay.sofa.runtime.api.annotation.SofaReferenceBinding;
@@ -24,7 +26,6 @@ import com.alipay.sofa.runtime.api.annotation.SofaServiceBinding;
 import com.alipay.sofa.runtime.api.binding.BindingType;
 import com.alipay.sofa.runtime.api.client.param.BindingParam;
 import com.alipay.sofa.runtime.spi.binding.Binding;
-import org.w3c.dom.Element;
 
 /**
  * Binding Converter, convert {@link BindingParam} or xml Element to concrete {@link Binding}

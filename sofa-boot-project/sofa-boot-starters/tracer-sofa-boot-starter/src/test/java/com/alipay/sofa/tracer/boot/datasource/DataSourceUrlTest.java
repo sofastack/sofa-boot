@@ -16,17 +16,18 @@
  */
 package com.alipay.sofa.tracer.boot.datasource;
 
-import com.alibaba.druid.pool.DruidDataSource;
-import com.alipay.common.tracer.core.utils.ReflectionUtils;
-import com.alipay.sofa.tracer.plugins.datasource.utils.DataSourceUtils;
-import com.mchange.v2.c3p0.ComboPooledDataSource;
-import com.zaxxer.hikari.HikariDataSource;
+import java.lang.reflect.Method;
+
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.tomcat.jdbc.pool.DataSource;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.lang.reflect.Method;
+import com.alibaba.druid.pool.DruidDataSource;
+import com.alipay.common.tracer.core.utils.ReflectionUtils;
+import com.alipay.sofa.tracer.plugins.datasource.utils.DataSourceUtils;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
+import com.zaxxer.hikari.HikariDataSource;
 
 /**
  * @author qilong.zql

@@ -16,14 +16,15 @@
  */
 package com.alipay.sofa.runtime.test.spi.component;
 
+import java.util.Map;
+
+import org.junit.Assert;
+import org.junit.Test;
+
 import com.alipay.sofa.runtime.api.component.Property;
 import com.alipay.sofa.runtime.model.ComponentStatus;
 import com.alipay.sofa.runtime.model.ComponentType;
 import com.alipay.sofa.runtime.spi.component.AbstractComponent;
-import org.junit.Assert;
-import org.junit.Test;
-
-import java.util.Map;
 
 /**
  * @author xuanbei

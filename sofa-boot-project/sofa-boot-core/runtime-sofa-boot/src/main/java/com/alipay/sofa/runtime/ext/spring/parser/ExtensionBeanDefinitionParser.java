@@ -16,12 +16,13 @@
  */
 package com.alipay.sofa.runtime.ext.spring.parser;
 
-import com.alipay.sofa.runtime.ext.spring.ExtensionFactoryBean;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import com.alipay.sofa.runtime.ext.spring.ExtensionFactoryBean;
 
 /**
  * Extension definition parser

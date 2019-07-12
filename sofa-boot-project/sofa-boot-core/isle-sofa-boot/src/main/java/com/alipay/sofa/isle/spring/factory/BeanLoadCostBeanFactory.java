@@ -16,13 +16,14 @@
  */
 package com.alipay.sofa.isle.spring.factory;
 
-import com.alipay.sofa.runtime.spring.factory.ServiceFactoryBean;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.alipay.sofa.runtime.spring.factory.ServiceFactoryBean;
 
 /**
  * beanFactory which can get bean load time

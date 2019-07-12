@@ -16,9 +16,16 @@
  */
 package com.alipay.sofa.runtime.ext.component;
 
+import java.lang.reflect.Method;
+import java.util.Map;
+
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.ReflectionUtils;
+
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.api.component.Property;
+import com.alipay.sofa.runtime.log.SofaLogger;
 import com.alipay.sofa.runtime.model.ComponentStatus;
 import com.alipay.sofa.runtime.model.ComponentType;
 import com.alipay.sofa.runtime.spi.component.AbstractComponent;
@@ -26,16 +33,10 @@ import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.ComponentManager;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.health.HealthResult;
-import com.alipay.sofa.runtime.log.SofaLogger;
 import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
 import com.alipay.sofa.service.api.component.Extensible;
 import com.alipay.sofa.service.api.component.Extension;
 import com.alipay.sofa.service.api.component.ExtensionPoint;
-import org.springframework.util.ObjectUtils;
-import org.springframework.util.ReflectionUtils;
-
-import java.lang.reflect.Method;
-import java.util.Map;
 
 /**
  * SOFA Extension Component

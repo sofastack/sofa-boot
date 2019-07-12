@@ -16,9 +16,9 @@
  */
 package com.alipay.sofa.runtime.log;
 
-import org.slf4j.Logger;
-
 import java.text.MessageFormat;
+
+import org.slf4j.Logger;
 
 /**
  * @author xuanbei 18/2/28

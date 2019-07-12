@@ -16,17 +16,18 @@
  */
 package com.alipay.sofa.boot.autoconfigure.tracer;
 
-import com.alipay.sofa.tracer.boot.datasource.processor.DataSourceBeanFactoryPostProcessor;
-import com.alipay.sofa.tracer.boot.datasource.processor.DataSourceBeanPostProcessor;
-import com.alipay.sofa.tracer.boot.datasource.properties.SofaTracerDataSourceProperties;
-import com.alipay.sofa.tracer.boot.properties.SofaTracerProperties;
-import com.alipay.sofa.tracer.plugins.datasource.SmartDataSource;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import com.alipay.sofa.tracer.boot.datasource.processor.DataSourceBeanFactoryPostProcessor;
+import com.alipay.sofa.tracer.boot.datasource.processor.DataSourceBeanPostProcessor;
+import com.alipay.sofa.tracer.boot.datasource.properties.SofaTracerDataSourceProperties;
+import com.alipay.sofa.tracer.boot.properties.SofaTracerProperties;
+import com.alipay.sofa.tracer.plugins.datasource.SmartDataSource;
 
 /**
  * @author qilong.zql

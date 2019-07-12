@@ -16,19 +16,20 @@
  */
 package com.alipay.sofa.tracer.boot.springmvc;
 
-import com.alipay.sofa.tracer.boot.TestUtil;
-import com.alipay.sofa.tracer.boot.base.AbstractTestBase;
-import com.alipay.sofa.tracer.boot.base.controller.SampleRestController;
-import com.alipay.sofa.tracer.plugins.springmvc.SpringMvcLogEnum;
+import static org.junit.Assert.assertTrue;
+
+import java.util.List;
+
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.List;
-
-import static org.junit.Assert.assertTrue;
+import com.alipay.sofa.tracer.boot.TestUtil;
+import com.alipay.sofa.tracer.boot.base.AbstractTestBase;
+import com.alipay.sofa.tracer.boot.base.controller.SampleRestController;
+import com.alipay.sofa.tracer.plugins.springmvc.SpringMvcLogEnum;
 
 /**
  * SpringMvcFilterTest

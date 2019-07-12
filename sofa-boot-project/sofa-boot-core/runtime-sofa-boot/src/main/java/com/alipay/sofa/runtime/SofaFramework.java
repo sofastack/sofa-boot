@@ -16,11 +16,11 @@
  */
 package com.alipay.sofa.runtime;
 
-import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
-
 import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
+
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 
 /**
  * SofaFramework Manager Interface

@@ -16,14 +16,14 @@
  */
 package com.alipay.sofa.rpc.boot.common;
 
-import com.alipay.sofa.rpc.common.utils.StringUtils;
-
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.UnknownHostException;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import com.alipay.sofa.rpc.common.utils.StringUtils;
 
 /**
  * 地址处理类

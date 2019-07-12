@@ -18,9 +18,6 @@ package com.alipay.sofa.rpc.boot.test.readiness;
 
 import java.util.concurrent.TimeUnit;
 
-import com.alipay.sofa.rpc.boot.test.ActivelyDestroyTest;
-import com.alipay.sofa.rpc.boot.test.bean.SampleFacade;
-import com.alipay.sofa.rpc.boot.test.util.TestUtils;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -38,6 +35,9 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.alipay.sofa.rpc.boot.config.SofaBootRpcConfigConstants;
+import com.alipay.sofa.rpc.boot.test.ActivelyDestroyTest;
+import com.alipay.sofa.rpc.boot.test.bean.SampleFacade;
+import com.alipay.sofa.rpc.boot.test.util.TestUtils;
 import com.alipay.sofa.rpc.core.exception.SofaRouteException;
 
 @SpringBootApplication

@@ -16,17 +16,18 @@
  */
 package com.alipay.sofa.common.xmap;
 
-import com.alipay.sofa.common.xmap.annotation.XObject;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+
+import com.alipay.sofa.common.xmap.annotation.XObject;
 
 /**
  *

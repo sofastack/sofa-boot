@@ -16,8 +16,6 @@
  */
 package com.alipay.sofa.autoconfigure.test.runtime;
 
-import com.alipay.sofa.boot.autoconfigure.runtime.SofaRuntimeConfigurationProperties;
-import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,6 +26,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import com.alipay.sofa.runtime.SofaRuntimeProperties;
+import com.alipay.sofa.runtime.configure.SofaRuntimeConfigurationProperties;
 
 /**
  * @author qilong.zql

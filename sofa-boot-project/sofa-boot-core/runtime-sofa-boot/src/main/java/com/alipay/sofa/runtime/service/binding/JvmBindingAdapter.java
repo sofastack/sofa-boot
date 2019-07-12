@@ -16,22 +16,23 @@
  */
 package com.alipay.sofa.runtime.service.binding;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Proxy;
+
+import org.aopalliance.intercept.MethodInvocation;
+import org.springframework.aop.framework.ProxyFactory;
+
 import com.alipay.sofa.runtime.api.binding.BindingType;
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.invoke.DynamicJvmServiceProxyFinder;
+import com.alipay.sofa.runtime.log.SofaLogger;
 import com.alipay.sofa.runtime.service.component.ServiceComponent;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapter;
 import com.alipay.sofa.runtime.spi.binding.Contract;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
-import com.alipay.sofa.runtime.log.SofaLogger;
 import com.alipay.sofa.runtime.spi.service.ServiceProxy;
 import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
-import org.aopalliance.intercept.MethodInvocation;
-import org.springframework.aop.framework.ProxyFactory;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Proxy;
 
 /**
  * JVM Binding Adapter, used to handle JvmBinding

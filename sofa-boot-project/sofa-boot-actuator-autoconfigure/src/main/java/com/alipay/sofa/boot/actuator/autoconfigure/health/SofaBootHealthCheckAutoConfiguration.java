@@ -16,22 +16,6 @@
  */
 package com.alipay.sofa.boot.actuator.autoconfigure.health;
 
-import com.alipay.sofa.boot.actuator.health.ComponentHealthIndicator;
-import com.alipay.sofa.boot.actuator.health.SofaModuleHealthIndicator;
-import com.alipay.sofa.healthcheck.impl.ComponentHealthChecker;
-import com.alipay.sofa.healthcheck.impl.ModuleHealthChecker;
-import com.alipay.sofa.healthcheck.impl.SofaRuntimeHealthChecker;
-import com.alipay.sofa.boot.actuator.health.MultiApplicationHealthIndicator;
-import com.alipay.sofa.boot.actuator.health.ReadinessEndpointWebExtension;
-import com.alipay.sofa.boot.actuator.health.SofaBootHealthIndicator;
-import com.alipay.sofa.boot.actuator.health.SofaBootReadinessEndpoint;
-import com.alipay.sofa.healthcheck.AfterReadinessCheckCallbackProcessor;
-import com.alipay.sofa.healthcheck.core.HealthChecker;
-import com.alipay.sofa.healthcheck.HealthCheckerProcessor;
-import com.alipay.sofa.healthcheck.HealthIndicatorProcessor;
-import com.alipay.sofa.healthcheck.ReadinessCheckListener;
-import com.alipay.sofa.isle.stage.ModelCreatingStage;
-import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnEnabledEndpoint;
 import org.springframework.boot.actuate.autoconfigure.health.HealthEndpointAutoConfiguration;
 import org.springframework.boot.actuate.autoconfigure.health.HealthIndicatorProperties;
@@ -43,6 +27,23 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import com.alipay.sofa.boot.actuator.health.ComponentHealthIndicator;
+import com.alipay.sofa.boot.actuator.health.MultiApplicationHealthIndicator;
+import com.alipay.sofa.boot.actuator.health.ReadinessEndpointWebExtension;
+import com.alipay.sofa.boot.actuator.health.SofaBootHealthIndicator;
+import com.alipay.sofa.boot.actuator.health.SofaBootReadinessEndpoint;
+import com.alipay.sofa.boot.actuator.health.SofaModuleHealthIndicator;
+import com.alipay.sofa.healthcheck.AfterReadinessCheckCallbackProcessor;
+import com.alipay.sofa.healthcheck.HealthCheckerProcessor;
+import com.alipay.sofa.healthcheck.HealthIndicatorProcessor;
+import com.alipay.sofa.healthcheck.ReadinessCheckListener;
+import com.alipay.sofa.healthcheck.core.HealthChecker;
+import com.alipay.sofa.healthcheck.impl.ComponentHealthChecker;
+import com.alipay.sofa.healthcheck.impl.ModuleHealthChecker;
+import com.alipay.sofa.healthcheck.impl.SofaRuntimeHealthChecker;
+import com.alipay.sofa.isle.stage.ModelCreatingStage;
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 
 /**
  * @author qilong.zql

@@ -16,13 +16,13 @@
  */
 package com.alipay.sofa.runtime.test.extension.descriptor;
 
-import com.alipay.sofa.common.xmap.Resource;
-import com.alipay.sofa.common.xmap.annotation.XNode;
-import com.alipay.sofa.common.xmap.annotation.XObject;
-
 import java.io.File;
 import java.net.URL;
 import java.util.Date;
+
+import com.alipay.sofa.common.xmap.Resource;
+import com.alipay.sofa.common.xmap.annotation.XNode;
+import com.alipay.sofa.common.xmap.annotation.XObject;
 
 /**
  * @author khotyn

@@ -16,11 +16,11 @@
  */
 package com.alipay.sofa.runtime.spi.component;
 
+import java.util.Collection;
+
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.model.ComponentType;
-
-import java.util.Collection;
 
 /**
  * Component Manager

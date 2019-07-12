@@ -16,9 +16,10 @@
  */
 package com.alipay.sofa.runtime.test.beans.processor;
 
-import com.alipay.sofa.runtime.test.beans.BeanPostProcessorOrderBean;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+
+import com.alipay.sofa.runtime.test.beans.BeanPostProcessorOrderBean;
 
 /**
  *

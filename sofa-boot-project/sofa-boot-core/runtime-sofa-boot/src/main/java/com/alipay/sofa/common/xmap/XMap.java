@@ -16,24 +16,6 @@
  */
 package com.alipay.sofa.common.xmap;
 
-import com.alipay.sofa.common.xmap.annotation.XContent;
-import com.alipay.sofa.common.xmap.annotation.XMemberAnnotation;
-import com.alipay.sofa.common.xmap.annotation.XNode;
-import com.alipay.sofa.common.xmap.annotation.XNodeList;
-import com.alipay.sofa.common.xmap.annotation.XNodeMap;
-import com.alipay.sofa.common.xmap.annotation.XObject;
-import com.alipay.sofa.common.xmap.annotation.XParent;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import java.beans.Introspector;
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,6 +30,26 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+
+import com.alipay.sofa.common.xmap.annotation.XContent;
+import com.alipay.sofa.common.xmap.annotation.XMemberAnnotation;
+import com.alipay.sofa.common.xmap.annotation.XNode;
+import com.alipay.sofa.common.xmap.annotation.XNodeList;
+import com.alipay.sofa.common.xmap.annotation.XNodeMap;
+import com.alipay.sofa.common.xmap.annotation.XObject;
+import com.alipay.sofa.common.xmap.annotation.XParent;
 
 /**
  * XMap maps an XML file to a java object.

@@ -16,12 +16,12 @@
  */
 package com.alipay.sofa.common.xmap.spring;
 
-import com.alipay.sofa.common.xmap.annotation.XMemberAnnotation;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
+import com.alipay.sofa.common.xmap.annotation.XMemberAnnotation;
 
 /**
  * @author xi.hux@alipay.com

@@ -16,6 +16,8 @@
  */
 package com.alipay.sofa.common.xmap.annotation.spring;
 
+import org.w3c.dom.Element;
+
 import com.alipay.sofa.common.xmap.Context;
 import com.alipay.sofa.common.xmap.Path;
 import com.alipay.sofa.common.xmap.XAnnotatedMember;
@@ -23,7 +25,6 @@ import com.alipay.sofa.common.xmap.XGetter;
 import com.alipay.sofa.common.xmap.XMap;
 import com.alipay.sofa.common.xmap.XSetter;
 import com.alipay.sofa.common.xmap.spring.XNodeSpring;
-import org.w3c.dom.Element;
 
 /**
  *

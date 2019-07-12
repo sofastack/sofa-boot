@@ -16,14 +16,9 @@
  */
 package com.alipay.sofa.runtime.test;
 
-import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
-import com.alipay.sofa.runtime.spi.spring.RuntimeShutdownAware;
-import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
-import com.alipay.sofa.runtime.test.beans.BeanPostProcessorOrderBean;
-import com.alipay.sofa.runtime.test.beans.service.DefaultSampleService;
-import com.alipay.sofa.runtime.test.beans.processor.HighOrderBeanPostProcessor;
-import com.alipay.sofa.runtime.test.beans.processor.LowOrderBeanPostProcessor;
-import com.alipay.sofa.runtime.test.configuration.RuntimeConfiguration;
+import java.lang.reflect.Field;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,8 +30,14 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.lang.reflect.Field;
-import java.util.List;
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
+import com.alipay.sofa.runtime.spi.spring.RuntimeShutdownAware;
+import com.alipay.sofa.runtime.test.beans.BeanPostProcessorOrderBean;
+import com.alipay.sofa.runtime.test.beans.processor.HighOrderBeanPostProcessor;
+import com.alipay.sofa.runtime.test.beans.processor.LowOrderBeanPostProcessor;
+import com.alipay.sofa.runtime.test.beans.service.DefaultSampleService;
+import com.alipay.sofa.runtime.test.configuration.RuntimeConfiguration;
 
 /**
  *

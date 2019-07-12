@@ -16,21 +16,21 @@
  */
 package com.alipay.sofa.runtime.test.extension.bean;
 
-import com.alipay.sofa.runtime.test.extension.descriptor.ListExtensionDescriptor;
-import com.alipay.sofa.runtime.test.extension.descriptor.MapExtensionDescriptor;
-import com.alipay.sofa.runtime.test.extension.descriptor.SimpleExtensionDescriptor;
-import com.alipay.sofa.runtime.test.extension.descriptor.SpringListExtensionDescriptor;
-import com.alipay.sofa.service.api.component.Extension;
-import com.alipay.sofa.runtime.test.extension.descriptor.ClientExtensionDescriptor;
-import com.alipay.sofa.runtime.test.extension.descriptor.ContextExtensionDescriptor;
-import com.alipay.sofa.runtime.test.extension.descriptor.ParentExtensionDescriptor;
-import com.alipay.sofa.runtime.test.extension.descriptor.SpringMapExtensionDescriptor;
-import com.alipay.sofa.runtime.test.extension.descriptor.SpringSimpleExtensionDescriptor;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.alipay.sofa.runtime.test.extension.descriptor.ClientExtensionDescriptor;
+import com.alipay.sofa.runtime.test.extension.descriptor.ContextExtensionDescriptor;
+import com.alipay.sofa.runtime.test.extension.descriptor.ListExtensionDescriptor;
+import com.alipay.sofa.runtime.test.extension.descriptor.MapExtensionDescriptor;
+import com.alipay.sofa.runtime.test.extension.descriptor.ParentExtensionDescriptor;
+import com.alipay.sofa.runtime.test.extension.descriptor.SimpleExtensionDescriptor;
+import com.alipay.sofa.runtime.test.extension.descriptor.SpringListExtensionDescriptor;
+import com.alipay.sofa.runtime.test.extension.descriptor.SpringMapExtensionDescriptor;
+import com.alipay.sofa.runtime.test.extension.descriptor.SpringSimpleExtensionDescriptor;
+import com.alipay.sofa.service.api.component.Extension;
 
 /**
  * @author khotyn

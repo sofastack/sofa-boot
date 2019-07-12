@@ -17,7 +17,6 @@
 package com.alipay.sofa.runtime.test.beans.service;
 
 import com.alipay.sofa.runtime.api.annotation.SofaService;
-import org.springframework.stereotype.Component;
 
 /**
  * @author xuanbei

@@ -16,6 +16,8 @@
  */
 package com.alipay.sofa.runtime.ext.client;
 
+import org.springframework.util.Assert;
+
 import com.alipay.sofa.runtime.api.client.ExtensionClient;
 import com.alipay.sofa.runtime.api.client.param.ExtensionParam;
 import com.alipay.sofa.runtime.api.client.param.ExtensionPointParam;
@@ -29,7 +31,6 @@ import com.alipay.sofa.runtime.spi.component.Implementation;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
 import com.alipay.sofa.service.api.component.ExtensionPoint;
-import org.springframework.util.Assert;
 
 /**
  * Programming API Implement for Extension/Extension-Point

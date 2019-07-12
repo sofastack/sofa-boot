@@ -16,10 +16,11 @@
  */
 package com.alipay.sofa.runtime.ext.component;
 
-import com.alipay.sofa.runtime.api.component.ComponentName;
+import java.io.Serializable;
+
 import org.w3c.dom.Element;
 
-import java.io.Serializable;
+import com.alipay.sofa.runtime.api.component.ComponentName;
 
 /**
  * Extension Implement

@@ -16,6 +16,12 @@
  */
 package com.alipay.sofa.common.xmap.annotation.spring;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
+import org.springframework.context.ApplicationContext;
+
 import com.alipay.sofa.common.xmap.XAnnotatedMember;
 import com.alipay.sofa.common.xmap.XAnnotatedObject;
 import com.alipay.sofa.common.xmap.XFieldGetter;
@@ -30,11 +36,6 @@ import com.alipay.sofa.common.xmap.annotation.XObject;
 import com.alipay.sofa.common.xmap.spring.XNodeListSpring;
 import com.alipay.sofa.common.xmap.spring.XNodeMapSpring;
 import com.alipay.sofa.common.xmap.spring.XNodeSpring;
-import org.springframework.context.ApplicationContext;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 /**
  * Integrate XMap with spring

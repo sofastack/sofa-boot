@@ -16,11 +16,13 @@
  */
 package com.alipay.sofa.isle.deployment;
 
-import com.alipay.sofa.isle.deployment.impl.FileDeploymentDescriptor;
-import com.alipay.sofa.isle.deployment.impl.JarDeploymentDescriptor;
-import org.springframework.util.ResourceUtils;
 import java.net.URL;
 import java.util.Properties;
+
+import org.springframework.util.ResourceUtils;
+
+import com.alipay.sofa.isle.deployment.impl.FileDeploymentDescriptor;
+import com.alipay.sofa.isle.deployment.impl.JarDeploymentDescriptor;
 
 /**
  * SOFABoot Module deployment creator

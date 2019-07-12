@@ -16,9 +16,10 @@
  */
 package com.alipay.sofa.rpc.boot;
 
-import com.alipay.sofa.rpc.boot.container.SpringBridge;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
+
+import com.alipay.sofa.rpc.boot.container.SpringBridge;
 
 /**
  * @author qilong.zql

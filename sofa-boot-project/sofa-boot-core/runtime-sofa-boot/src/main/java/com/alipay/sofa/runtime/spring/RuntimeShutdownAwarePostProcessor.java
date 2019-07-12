@@ -16,12 +16,13 @@
  */
 package com.alipay.sofa.runtime.spring;
 
-import com.alipay.sofa.runtime.spi.spring.RuntimeShutdownAware;
-import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.support.MergedBeanDefinitionPostProcessor;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.core.PriorityOrdered;
+
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
+import com.alipay.sofa.runtime.spi.spring.RuntimeShutdownAware;
 
 /**
  * @author xuanbei

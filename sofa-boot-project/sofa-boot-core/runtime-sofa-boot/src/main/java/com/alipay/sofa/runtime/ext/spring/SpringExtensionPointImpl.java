@@ -16,12 +16,13 @@
  */
 package com.alipay.sofa.runtime.ext.spring;
 
+import org.springframework.beans.factory.BeanFactoryAware;
+import org.springframework.context.ApplicationContext;
+
 import com.alipay.sofa.common.xmap.annotation.spring.XMapSpring;
 import com.alipay.sofa.runtime.ext.component.ExtensionInternal;
 import com.alipay.sofa.runtime.ext.component.ExtensionPointImpl;
 import com.alipay.sofa.runtime.ext.component.XMapContext;
-import org.springframework.beans.factory.BeanFactoryAware;
-import org.springframework.context.ApplicationContext;
 
 /**
  * Extension point implement in spring env

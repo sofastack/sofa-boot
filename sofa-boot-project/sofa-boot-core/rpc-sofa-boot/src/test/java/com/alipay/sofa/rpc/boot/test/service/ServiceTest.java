@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.rpc.boot.test.service;
 
-import com.alipay.sofa.rpc.boot.test.bean.SampleService;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
@@ -31,6 +30,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.alipay.sofa.rpc.boot.config.SofaBootRpcConfigConstants;
 import com.alipay.sofa.rpc.boot.container.ServerConfigContainer;
+import com.alipay.sofa.rpc.boot.test.bean.SampleService;
 import com.alipay.sofa.rpc.config.ServerConfig;
 import com.alipay.sofa.runtime.api.annotation.SofaService;
 import com.alipay.sofa.runtime.api.annotation.SofaServiceBinding;

@@ -16,12 +16,13 @@
  */
 package com.alipay.sofa.tracer.boot.datasource;
 
-import com.alipay.sofa.tracer.plugins.datasource.tracer.Endpoint;
-import com.alipay.sofa.tracer.plugins.datasource.utils.DataSourceUtils;
+import java.security.InvalidParameterException;
+
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.security.InvalidParameterException;
+import com.alipay.sofa.tracer.plugins.datasource.tracer.Endpoint;
+import com.alipay.sofa.tracer.plugins.datasource.utils.DataSourceUtils;
 
 /**
  * @author qilong.zql

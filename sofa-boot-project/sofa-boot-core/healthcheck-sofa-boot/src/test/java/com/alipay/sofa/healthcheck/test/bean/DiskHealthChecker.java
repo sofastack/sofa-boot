@@ -16,10 +16,11 @@
  */
 package com.alipay.sofa.healthcheck.test.bean;
 
-import com.alipay.sofa.healthcheck.core.HealthChecker;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+
+import com.alipay.sofa.healthcheck.core.HealthChecker;
 
 /**
  * @author qilong.zql

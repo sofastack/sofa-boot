@@ -16,10 +16,11 @@
  */
 package com.alipay.sofa.boot.actuator.health;
 
-import com.alipay.sofa.healthcheck.impl.ModuleHealthChecker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
+
+import com.alipay.sofa.healthcheck.impl.ModuleHealthChecker;
 
 /**
  * module health checker which implements ${@link org.springframework.boot.actuate.health.HealthIndicator}

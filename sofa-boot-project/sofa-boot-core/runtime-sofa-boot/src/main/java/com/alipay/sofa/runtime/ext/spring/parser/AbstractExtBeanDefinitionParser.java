@@ -16,14 +16,15 @@
  */
 package com.alipay.sofa.runtime.ext.spring.parser;
 
-import com.alipay.sofa.boot.spring.namespace.spi.SofaBootTagNameSupport;
-import com.alipay.sofa.runtime.spi.util.ParserUtils;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.springframework.core.Conventions;
 import org.springframework.core.io.Resource;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
+
+import com.alipay.sofa.boot.spring.namespace.spi.SofaBootTagNameSupport;
+import com.alipay.sofa.runtime.spi.util.ParserUtils;
 
 /**
  * Common parser for extension and extension point

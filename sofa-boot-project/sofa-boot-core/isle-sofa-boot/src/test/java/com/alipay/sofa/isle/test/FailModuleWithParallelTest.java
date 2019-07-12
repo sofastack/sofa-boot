@@ -16,11 +16,6 @@
  */
 package com.alipay.sofa.isle.test;
 
-import com.alipay.sofa.boot.constant.SofaBootConstants;
-import com.alipay.sofa.isle.ApplicationRuntimeModel;
-import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
-import com.alipay.sofa.isle.test.util.AddCustomJar;
-import com.alipay.sofa.isle.test.util.SeparateClassLoaderTestRunner;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,6 +25,12 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
+
+import com.alipay.sofa.boot.constant.SofaBootConstants;
+import com.alipay.sofa.isle.ApplicationRuntimeModel;
+import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
+import com.alipay.sofa.isle.test.util.AddCustomJar;
+import com.alipay.sofa.isle.test.util.SeparateClassLoaderTestRunner;
 
 /**
  * @author ruoshan

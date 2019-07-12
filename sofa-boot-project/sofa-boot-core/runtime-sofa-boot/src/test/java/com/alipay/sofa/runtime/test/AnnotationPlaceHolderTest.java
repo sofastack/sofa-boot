@@ -16,15 +16,6 @@
  */
 package com.alipay.sofa.runtime.test;
 
-import com.alipay.sofa.boot.annotation.PlaceHolderAnnotationInvocationHandler;
-import com.alipay.sofa.boot.annotation.PlaceHolderBinder;
-import com.alipay.sofa.boot.annotation.WrapperAnnotation;
-import com.alipay.sofa.runtime.api.annotation.SofaReference;
-import com.alipay.sofa.runtime.api.annotation.SofaReferenceBinding;
-import com.alipay.sofa.runtime.api.annotation.SofaService;
-import com.alipay.sofa.runtime.api.annotation.SofaServiceBinding;
-import com.alipay.sofa.runtime.test.beans.service.AnnotationSampleService;
-import com.alipay.sofa.runtime.test.beans.facade.SampleService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,6 +23,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import com.alipay.sofa.boot.annotation.PlaceHolderAnnotationInvocationHandler;
+import com.alipay.sofa.boot.annotation.PlaceHolderBinder;
+import com.alipay.sofa.boot.annotation.WrapperAnnotation;
+import com.alipay.sofa.runtime.api.annotation.SofaReference;
+import com.alipay.sofa.runtime.api.annotation.SofaReferenceBinding;
+import com.alipay.sofa.runtime.api.annotation.SofaService;
+import com.alipay.sofa.runtime.api.annotation.SofaServiceBinding;
+import com.alipay.sofa.runtime.test.beans.facade.SampleService;
+import com.alipay.sofa.runtime.test.beans.service.AnnotationSampleService;
 
 /**
  * Test {@link com.alipay.sofa.runtime.api.annotation.SofaServiceBinding} and

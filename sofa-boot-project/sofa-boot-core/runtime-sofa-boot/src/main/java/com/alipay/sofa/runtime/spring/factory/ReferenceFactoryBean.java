@@ -16,6 +16,8 @@
  */
 package com.alipay.sofa.runtime.spring.factory;
 
+import org.springframework.util.Assert;
+
 import com.alipay.sofa.runtime.model.InterfaceMode;
 import com.alipay.sofa.runtime.service.binding.JvmBinding;
 import com.alipay.sofa.runtime.service.binding.JvmBindingParam;
@@ -23,7 +25,6 @@ import com.alipay.sofa.runtime.service.component.Reference;
 import com.alipay.sofa.runtime.service.component.impl.ReferenceImpl;
 import com.alipay.sofa.runtime.service.helper.ReferenceRegisterHelper;
 import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
-import org.springframework.util.Assert;
 
 /**
  * @author xuanbei 18/3/1

@@ -16,8 +16,8 @@
  */
 package com.alipay.sofa.boot.test.cloud;
 
-import com.alipay.sofa.boot.constant.SofaBootConstants;
-import com.alipay.sofa.boot.util.SofaBootEnvUtils;
+import java.io.File;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
@@ -31,7 +31,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.FileSystemUtils;
 
-import java.io.File;
+import com.alipay.sofa.boot.constant.SofaBootConstants;
+import com.alipay.sofa.boot.util.SofaBootEnvUtils;
 
 /**
  * Fix https://github.com/alipay/sofa-boot/pull/268

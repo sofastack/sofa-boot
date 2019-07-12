@@ -16,9 +16,10 @@
  */
 package com.alipay.sofa.isle.stage;
 
+import org.springframework.context.support.AbstractApplicationContext;
+
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.runtime.log.SofaLogger;
-import org.springframework.context.support.AbstractApplicationContext;
 
 /**
  * {@link AbstractPipelineStage} is a common base class for {@link PipelineStage} implementations.

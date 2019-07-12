@@ -16,13 +16,10 @@
  */
 package com.alipay.sofa.isle.test;
 
-import com.alipay.sofa.boot.constant.SofaBootConstants;
-import com.alipay.sofa.isle.deployment.DeploymentBuilder;
-import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
-import com.alipay.sofa.isle.deployment.DeploymentDescriptorConfiguration;
-import com.alipay.sofa.isle.profile.DefaultSofaModuleProfileChecker;
-import com.alipay.sofa.isle.profile.SofaModuleProfileChecker;
-import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
+import java.net.URL;
+import java.util.Collections;
+import java.util.Properties;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,9 +31,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.net.URL;
-import java.util.Collections;
-import java.util.Properties;
+import com.alipay.sofa.boot.constant.SofaBootConstants;
+import com.alipay.sofa.isle.deployment.DeploymentBuilder;
+import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
+import com.alipay.sofa.isle.deployment.DeploymentDescriptorConfiguration;
+import com.alipay.sofa.isle.profile.DefaultSofaModuleProfileChecker;
+import com.alipay.sofa.isle.profile.SofaModuleProfileChecker;
+import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
 
 /**
  * @author xuanbei 18/5/8

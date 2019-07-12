@@ -16,15 +16,16 @@
  */
 package com.alipay.sofa.common.xmap;
 
-import com.alipay.sofa.runtime.log.SofaLogger;
-import org.w3c.dom.Node;
-
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Map;
+
+import org.w3c.dom.Node;
+
+import com.alipay.sofa.runtime.log.SofaLogger;
 
 /**
  * Value factories are used to decode values from XML strings.

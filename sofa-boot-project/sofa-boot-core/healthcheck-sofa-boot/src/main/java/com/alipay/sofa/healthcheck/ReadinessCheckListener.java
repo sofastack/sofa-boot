@@ -16,8 +16,9 @@
  */
 package com.alipay.sofa.healthcheck;
 
-import com.alipay.sofa.boot.constant.SofaBootConstants;
-import com.alipay.sofa.healthcheck.log.HealthCheckLoggerFactory;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +34,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.alipay.sofa.boot.constant.SofaBootConstants;
+import com.alipay.sofa.healthcheck.log.HealthCheckLoggerFactory;
 
 /**
  * Health check start checker.

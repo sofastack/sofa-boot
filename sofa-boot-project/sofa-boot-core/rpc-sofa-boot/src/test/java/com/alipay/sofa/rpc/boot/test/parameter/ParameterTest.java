@@ -19,8 +19,6 @@ package com.alipay.sofa.rpc.boot.test.parameter;
 import java.util.Arrays;
 import java.util.Map;
 
-import com.alipay.sofa.rpc.boot.test.bean.filter.ParameterFilter;
-import com.alipay.sofa.rpc.boot.test.bean.invoke.HelloSyncService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,6 +28,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import com.alipay.sofa.rpc.boot.test.bean.filter.ParameterFilter;
+import com.alipay.sofa.rpc.boot.test.bean.invoke.HelloSyncService;
 
 /**
  * @author <a href="mailto:scienjus@gmail.com">ScienJus</a>

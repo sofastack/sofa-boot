@@ -16,7 +16,15 @@
  */
 package com.alipay.sofa.boot.actuator.version;
 
-import com.alipay.sofa.boot.log.InfraLoggerFactory;
+import static com.alipay.sofa.boot.constant.SofaBootConstants.SOFA_BOOT_VERSION_PROPERTIES;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.slf4j.Logger;
 import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
 import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
@@ -26,14 +34,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.util.Assert;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static com.alipay.sofa.boot.constant.SofaBootConstants.SOFA_BOOT_VERSION_PROPERTIES;
+import com.alipay.sofa.boot.log.InfraLoggerFactory;
 
 /**
  * SOFABootVersionEndpoint

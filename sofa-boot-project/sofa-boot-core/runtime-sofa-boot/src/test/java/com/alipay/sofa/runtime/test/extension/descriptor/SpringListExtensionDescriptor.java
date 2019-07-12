@@ -16,12 +16,12 @@
  */
 package com.alipay.sofa.runtime.test.extension.descriptor;
 
-import com.alipay.sofa.runtime.test.extension.bean.SimpleSpringListBean;
-import com.alipay.sofa.common.xmap.annotation.XObject;
-import com.alipay.sofa.common.xmap.spring.XNodeListSpring;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import com.alipay.sofa.common.xmap.annotation.XObject;
+import com.alipay.sofa.common.xmap.spring.XNodeListSpring;
+import com.alipay.sofa.runtime.test.extension.bean.SimpleSpringListBean;
 
 /**
  * @author ruoshan

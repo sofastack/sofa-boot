@@ -16,14 +16,15 @@
  */
 package com.alipay.sofa.boot.spring.namespace.handler;
 
-import com.alipay.sofa.boot.spring.namespace.spi.SofaBootTagNameSupport;
+import java.util.ServiceLoader;
+
 import org.slf4j.Logger;
 import org.springframework.beans.factory.xml.BeanDefinitionDecorator;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
-import com.alipay.sofa.boot.log.InfraLoggerFactory;
 
-import java.util.ServiceLoader;
+import com.alipay.sofa.boot.log.InfraLoggerFactory;
+import com.alipay.sofa.boot.spring.namespace.spi.SofaBootTagNameSupport;
 
 /**
  * SofaBootNamespaceHandler

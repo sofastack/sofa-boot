@@ -18,12 +18,12 @@ package com.alipay.sofa.rpc.boot.test.converter;
 
 import java.util.List;
 
-import com.alipay.sofa.rpc.boot.runtime.converter.BoltBindingConverter;
-import com.alipay.sofa.rpc.boot.runtime.converter.RpcBindingConverter;
 import org.junit.Assert;
 import org.junit.Test;
 
 import com.alipay.sofa.rpc.boot.runtime.binding.RpcBindingMethodInfo;
+import com.alipay.sofa.rpc.boot.runtime.converter.BoltBindingConverter;
+import com.alipay.sofa.rpc.boot.runtime.converter.RpcBindingConverter;
 import com.alipay.sofa.runtime.api.annotation.SofaMethod;
 import com.alipay.sofa.runtime.api.annotation.SofaReference;
 import com.alipay.sofa.runtime.api.annotation.SofaReferenceBinding;

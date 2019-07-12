@@ -16,10 +16,10 @@
  */
 package com.alipay.sofa.rpc.boot.test.config;
 
-import com.alipay.sofa.rpc.boot.config.MeshConfigurator;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.alipay.sofa.rpc.boot.config.MeshConfigurator;
 import com.alipay.sofa.rpc.config.RegistryConfig;
 
 /**

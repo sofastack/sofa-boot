@@ -16,8 +16,6 @@
  */
 package com.alipay.sofa.rpc.boot.test.shutdown;
 
-import com.alipay.sofa.rpc.boot.test.ActivelyDestroyTest;
-import com.alipay.sofa.rpc.boot.test.util.TestUtils;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
@@ -32,6 +30,8 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.alipay.sofa.rpc.boot.config.SofaBootRpcConfigConstants;
+import com.alipay.sofa.rpc.boot.test.ActivelyDestroyTest;
+import com.alipay.sofa.rpc.boot.test.util.TestUtils;
 
 @SpringBootApplication
 @SpringBootTest(classes = RpcShutdownTest.class)

@@ -16,6 +16,8 @@
  */
 package com.alipay.sofa.runtime.service.client;
 
+import java.util.Collection;
+
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.client.ReferenceClient;
 import com.alipay.sofa.runtime.api.client.param.BindingParam;
@@ -36,8 +38,6 @@ import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
 import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
-
-import java.util.Collection;
 
 /**
  * Reference Client Implementation，you can reference a service by this class

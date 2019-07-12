@@ -16,11 +16,11 @@
  */
 package com.alipay.sofa.runtime.spi.binding;
 
-import com.alipay.sofa.runtime.api.binding.BindingType;
-import com.alipay.sofa.runtime.model.InterfaceMode;
-
 import java.util.Map;
 import java.util.Set;
+
+import com.alipay.sofa.runtime.api.binding.BindingType;
+import com.alipay.sofa.runtime.model.InterfaceMode;
 
 /**
  * Contract Description Interface

@@ -16,9 +16,10 @@
  */
 package com.alipay.sofa.healthcheck.test.bean;
 
-import com.alipay.sofa.healthcheck.startup.ReadinessCheckCallback;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.context.ApplicationContext;
+
+import com.alipay.sofa.healthcheck.startup.ReadinessCheckCallback;
 
 /**
  * @author liangen

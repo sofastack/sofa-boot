@@ -16,11 +16,11 @@
  */
 package com.alipay.sofa.isle.deployment;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.core.io.Resource;
-
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.core.io.Resource;
 
 /**
  * SOFABoot Module Deployment Descriptor.

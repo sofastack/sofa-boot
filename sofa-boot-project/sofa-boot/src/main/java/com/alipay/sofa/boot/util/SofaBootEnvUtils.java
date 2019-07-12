@@ -16,11 +16,12 @@
  */
 package com.alipay.sofa.boot.util;
 
-import com.alipay.sofa.boot.constant.SofaBootConstants;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.Environment;
 import org.springframework.util.ClassUtils;
+
+import com.alipay.sofa.boot.constant.SofaBootConstants;
 
 /**
  * SofaBootEnvUtils

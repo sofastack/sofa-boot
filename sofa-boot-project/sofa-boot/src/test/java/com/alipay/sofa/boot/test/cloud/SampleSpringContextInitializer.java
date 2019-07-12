@@ -16,12 +16,13 @@
  */
 package com.alipay.sofa.boot.test.cloud;
 
-import com.alipay.sofa.boot.util.SofaBootEnvUtils;
+import java.util.concurrent.atomic.AtomicLong;
+
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
 
-import java.util.concurrent.atomic.AtomicLong;
+import com.alipay.sofa.boot.util.SofaBootEnvUtils;
 
 /**
  * @author qilong.zql

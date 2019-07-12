@@ -16,10 +16,11 @@
  */
 package com.alipay.sofa.common.xmap.annotation.spring;
 
+import org.springframework.context.ApplicationContext;
+
 import com.alipay.sofa.common.xmap.XAnnotatedObject;
 import com.alipay.sofa.common.xmap.XMap;
 import com.alipay.sofa.common.xmap.annotation.XObject;
-import org.springframework.context.ApplicationContext;
 
 /**
  * @author xi.hux@alipay.com

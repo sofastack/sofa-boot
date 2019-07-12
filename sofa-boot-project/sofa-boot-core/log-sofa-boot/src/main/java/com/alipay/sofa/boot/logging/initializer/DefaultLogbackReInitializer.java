@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.boot.logging.initializer;
 
-import static com.alipay.sofa.common.log.Constants.*;
 import static com.alipay.sofa.common.log.Constants.SOFA_MIDDLEWARE_ALL_LOG_CONSOLE_LEVEL;
 import static com.alipay.sofa.common.log.Constants.SOFA_MIDDLEWARE_ALL_LOG_CONSOLE_SWITCH;
 import static com.alipay.sofa.common.log.Constants.SOFA_MIDDLEWARE_LOG_CONSOLE_LOGBACK_PATTERN;

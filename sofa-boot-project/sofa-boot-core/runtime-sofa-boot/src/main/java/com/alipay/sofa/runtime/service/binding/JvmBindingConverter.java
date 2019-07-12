@@ -16,6 +16,8 @@
  */
 package com.alipay.sofa.runtime.service.binding;
 
+import org.w3c.dom.Element;
+
 import com.alipay.sofa.runtime.api.annotation.SofaReference;
 import com.alipay.sofa.runtime.api.annotation.SofaReferenceBinding;
 import com.alipay.sofa.runtime.api.annotation.SofaService;
@@ -23,7 +25,6 @@ import com.alipay.sofa.runtime.api.annotation.SofaServiceBinding;
 import com.alipay.sofa.runtime.api.binding.BindingType;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
-import org.w3c.dom.Element;
 
 /**
  * @author qilong.zql

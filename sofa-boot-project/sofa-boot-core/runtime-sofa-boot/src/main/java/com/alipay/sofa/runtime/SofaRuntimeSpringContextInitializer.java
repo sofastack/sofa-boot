@@ -16,10 +16,11 @@
  */
 package com.alipay.sofa.runtime;
 
-import com.alipay.sofa.boot.util.SofaBootEnvUtils;
-import com.alipay.sofa.runtime.log.SofaLogger;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
+
+import com.alipay.sofa.boot.util.SofaBootEnvUtils;
+import com.alipay.sofa.runtime.log.SofaLogger;
 
 /**
  * @author xuanbei 18/3/13

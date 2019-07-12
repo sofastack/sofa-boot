@@ -16,11 +16,11 @@
  */
 package com.alipay.sofa.tracer.boot.springmvc.properties;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.core.Ordered;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.core.Ordered;
 
 /**
  * OpenTracingSpringMvcProperties

@@ -16,12 +16,12 @@
  */
 package com.alipay.sofa.runtime.test.beans.processor;
 
-import com.alipay.sofa.runtime.spring.factory.ReferenceFactoryBean;
-import com.alipay.sofa.runtime.spring.factory.ServiceFactoryBean;
-import com.alipay.sofa.runtime.test.beans.StateMessage;
 import org.springframework.aop.TargetSource;
 import org.springframework.aop.framework.autoproxy.AbstractAutoProxyCreator;
 import org.springframework.beans.BeansException;
+
+import com.alipay.sofa.runtime.spring.factory.ServiceFactoryBean;
+import com.alipay.sofa.runtime.test.beans.StateMessage;
 
 /**
  * @author qilong.zql

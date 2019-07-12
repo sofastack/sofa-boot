@@ -16,12 +16,8 @@
  */
 package com.alipay.sofa.boot.autoconfigure.tracer;
 
-import com.alipay.common.tracer.core.configuration.SofaTracerConfiguration;
-import com.alipay.sofa.tracer.boot.properties.SofaTracerProperties;
-import com.alipay.sofa.tracer.boot.springmvc.properties.OpenTracingSpringMvcProperties;
-import com.alipay.sofa.tracer.plugins.springmvc.SpringMvcSofaTracerFilter;
-import com.alipay.sofa.tracer.plugins.springmvc.SpringMvcTracer;
-import com.alipay.sofa.tracer.plugins.webflux.WebfluxSofaTracerFilter;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -34,7 +30,12 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.server.WebFilter;
 
-import java.util.List;
+import com.alipay.common.tracer.core.configuration.SofaTracerConfiguration;
+import com.alipay.sofa.tracer.boot.properties.SofaTracerProperties;
+import com.alipay.sofa.tracer.boot.springmvc.properties.OpenTracingSpringMvcProperties;
+import com.alipay.sofa.tracer.plugins.springmvc.SpringMvcSofaTracerFilter;
+import com.alipay.sofa.tracer.plugins.springmvc.SpringMvcTracer;
+import com.alipay.sofa.tracer.plugins.webflux.WebfluxSofaTracerFilter;
 
 /**
  * OpenTracingSpringMvcAutoConfiguration
