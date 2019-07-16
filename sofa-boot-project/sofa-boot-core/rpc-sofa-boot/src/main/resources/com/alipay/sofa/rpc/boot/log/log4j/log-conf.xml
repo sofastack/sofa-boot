@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+    <appender name="ERROR-APPENDER" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="file" value="${logging.path}/rpc/common-error.log"/>
+        <param name="append" value="true"/>
+        <param name="encoding" value="${file.encoding}"/>
+        <param name="threshold" value="error"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d %-5p %-32t - %m%n"/>
+        </layout>
+    </appender>
+
+    <appender name="ROOT-APPENDER" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="file" value="${logging.path}/rpc/common-default.log"/>
+        <param name="append" value="true"/>
+        <param name="encoding" value="${file.encoding}"/>
+        <param name="threshold" value="${logging.level.com.alipay.sofa.rpc.boot}"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d %-5p %-32t - %m%n"/>
+        </layout>
+    </appender>
+
+    <appender name="RPC-BOLT-THREADPOOL-LOG-FILE" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="file" value="${logging.path}/rpc/bolt-threadpool.log"/>
+        <param name="append" value="true"/>
+        <param name="encoding" value="${file.encoding}"/>
+        <param name="threshold" value="${logging.level.com.alipay.sofa.rpc.boot}"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d %-5p %-32t %c{2} - %m%n"/>
+        </layout>
+    </appender>
+
+    <logger name="RPC-BOLT-THREADPOOL">
+        <level value="${logging.level.com.alipay.sofa.rpc.boot}"/>
+        <appender-ref ref="RPC-BOLT-THREADPOOL-LOG-FILE"/>
+        <appender-ref ref="ERROR-APPENDER"/>
+    </logger>
+
+    <root>
+        <level value="${logging.level.com.alipay.sofa.rpc.boot}"/>
+        <appender-ref ref="ROOT-APPENDER"/>
+        <appender-ref ref="ERROR-APPENDER"/>
+    </root>
+
+</log4j:configuration>

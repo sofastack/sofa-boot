@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:sofa="http://sofastack.io/schema/sofaboot"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://sofastack.io/schema/sofaboot http://sofastack.io/schema/sofaboot.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+    <!-- invoke sync-->
+    <bean id="helloSyncServiceImpl" class="com.alipay.sofa.rpc.boot.test.bean.invoke.HelloSyncServiceImpl"/>
+    <sofa:service ref="helloSyncServiceImpl" interface="com.alipay.sofa.rpc.boot.test.bean.invoke.HelloSyncService">
+        <sofa:binding.bolt/>
+    </sofa:service>
+    <sofa:reference jvm-first="false" id="helloSyncService"
+                    interface="com.alipay.sofa.rpc.boot.test.bean.invoke.HelloSyncService">
+        <sofa:binding.bolt/>
+    </sofa:reference>
+
+    <!-- invoke future -->
+    <bean id="helloFutureServiceImpl" class="com.alipay.sofa.rpc.boot.test.bean.invoke.HelloFutureServiceImpl"/>
+    <sofa:service ref="helloFutureServiceImpl" interface="com.alipay.sofa.rpc.boot.test.bean.invoke.HelloFutureService">
+        <sofa:binding.bolt/>
+    </sofa:service>
+    <sofa:reference jvm-first="false" id="helloFutureService"
+                    interface="com.alipay.sofa.rpc.boot.test.bean.invoke.HelloFutureService">
+        <sofa:binding.bolt>
+            <sofa:global-attrs type="future"/>
+        </sofa:binding.bolt>
+    </sofa:reference>
+
+    <!-- invoke callback -->
+    <bean id="helloCallbackServiceImpl" class="com.alipay.sofa.rpc.boot.test.bean.invoke.HelloCallbackServiceImpl"/>
+    <sofa:service ref="helloCallbackServiceImpl" interface="com.alipay.sofa.rpc.boot.test.bean.invoke.HelloCallbackService">
+        <sofa:binding.bolt/>
+    </sofa:service>
+    <bean id="callbackImpl" class="com.alipay.sofa.rpc.boot.test.bean.invoke.CallbackImpl"/>
+    <sofa:reference jvm-first="false" id="helloCallbackService"
+                    interface="com.alipay.sofa.rpc.boot.test.bean.invoke.HelloCallbackService">
+        <sofa:binding.bolt>
+            <sofa:global-attrs type="callback" callback-ref="callbackImpl"/>
+        </sofa:binding.bolt>
+    </sofa:reference>
+
+    <!-- filter -->
+    <bean id="testFilter" class="com.alipay.sofa.rpc.boot.test.bean.filter.TestFilter"/>
+    <bean id="filterServiceImpl" class="com.alipay.sofa.rpc.boot.test.bean.filter.FilterServiceImpl"/>
+    <sofa:service ref="filterServiceImpl" interface="com.alipay.sofa.rpc.boot.test.bean.filter.FilterService">
+        <sofa:binding.bolt>
+            <sofa:global-attrs filter="testFilter"/>
+        </sofa:binding.bolt>
+    </sofa:service>
+    <sofa:reference jvm-first="false" id="filterService" interface="com.alipay.sofa.rpc.boot.test.bean.filter.FilterService">
+        <sofa:binding.bolt/>
+    </sofa:reference>
+
+    <!--Global Filter Test-->
+    <sofa:rpc-global-filter ref="testGlobalFilter"/>
+    <bean id="testGlobalFilter" class="com.alipay.sofa.rpc.boot.test.bean.globalfilter.TestGlobalFilter"/>
+
+    <bean id="globalFilterServiceImpl" class="com.alipay.sofa.rpc.boot.test.bean.globalfilter.GlobalFilterServiceImpl"/>
+    <sofa:service ref="globalFilterServiceImpl" interface="com.alipay.sofa.rpc.boot.test.bean.globalfilter.GlobalFilterService">
+        <sofa:binding.bolt/>
+    </sofa:service>
+    <sofa:reference jvm-first="false" id="globalFilterService"
+                    interface="com.alipay.sofa.rpc.boot.test.bean.globalfilter.GlobalFilterService">
+        <sofa:binding.bolt/>
+    </sofa:reference>
+
+    <!-- direct -->
+    <bean id="directServiceImpl" class="com.alipay.sofa.rpc.boot.test.bean.direct.DirectServiceImpl"/>
+    <sofa:service ref="directServiceImpl" interface="com.alipay.sofa.rpc.boot.test.bean.direct.DirectService">
+        <sofa:binding.bolt/>
+    </sofa:service>
+    <sofa:reference jvm-first="false" id="directService" interface="com.alipay.sofa.rpc.boot.test.bean.direct.DirectService">
+        <sofa:binding.bolt>
+            <sofa:route target-url="bolt://127.0.0.1:12200"/>
+        </sofa:binding.bolt>
+    </sofa:reference>
+
+    <!-- generic -->
+    <bean id="sampleGenericServiceImpl" class="com.alipay.sofa.rpc.boot.test.bean.generic.GenericServiceImpl"/>
+    <sofa:service ref="sampleGenericServiceImpl" interface="com.alipay.sofa.rpc.boot.test.bean.generic.GenericService">
+        <sofa:binding.bolt/>
+    </sofa:service>
+    <sofa:reference jvm-first="false" id="sampleGenericService" interface="com.alipay.sofa.rpc.api.GenericService">
+        <sofa:binding.bolt>
+            <sofa:global-attrs generic-interface="com.alipay.sofa.rpc.boot.test.bean.generic.GenericService"/>
+        </sofa:binding.bolt>
+    </sofa:reference>
+
+    <!-- thread pool -->
+    <bean id="customerThreadPool" class="com.alipay.sofa.rpc.server.UserThreadPool" init-method="init">
+        <property name="corePoolSize" value="10"/>
+        <property name="maximumPoolSize" value="10"/>
+        <property name="queueSize" value="5"/>
+        <property name="threadPoolName" value="customerThreadPool_name"/>
+    </bean>
+    <bean id="threadPoolServiceImpl" class="com.alipay.sofa.rpc.boot.test.bean.threadpool.ThreadPoolServiceImpl"/>
+    <sofa:service ref="threadPoolServiceImpl" interface="com.alipay.sofa.rpc.boot.test.bean.threadpool.ThreadPoolService">
+        <sofa:binding.bolt>
+            <sofa:global-attrs thread-pool-ref="customerThreadPool"/>
+        </sofa:binding.bolt>
+    </sofa:service>
+    <sofa:reference jvm-first="false" id="threadPoolService"
+                    interface="com.alipay.sofa.rpc.boot.test.bean.threadpool.ThreadPoolService">
+        <sofa:binding.bolt/>
+    </sofa:reference>
+
+    <!-- rest -->
+    <bean id="restServiceImpl" class="com.alipay.sofa.rpc.boot.test.bean.rest.RestServiceImpl"/>
+    <sofa:service ref="restServiceImpl" interface="com.alipay.sofa.rpc.boot.test.bean.rest.RestService">
+        <sofa:binding.rest/>
+    </sofa:service>
+    <sofa:reference jvm-first="false" id="restService" interface="com.alipay.sofa.rpc.boot.test.bean.rest.RestService">
+        <sofa:binding.rest/>
+    </sofa:reference>
+
+    <!-- dubbo -->
+    <bean id="dubboServiceImpl" class="com.alipay.sofa.rpc.boot.test.bean.dubbo.DubboServiceImpl"/>
+    <sofa:service ref="dubboServiceImpl" interface="com.alipay.sofa.rpc.boot.test.bean.dubbo.DubboService">
+        <sofa:binding.dubbo/>
+    </sofa:service>
+    <sofa:reference jvm-first="false" id="dubboService" interface="com.alipay.sofa.rpc.boot.test.bean.dubbo.DubboService">
+        <sofa:binding.dubbo/>
+    </sofa:reference>
+
+    <!-- retries -->
+    <bean id="retriesServiceImpl" class="com.alipay.sofa.rpc.boot.test.bean.retry.RetriesServiceImpl"/>
+    <sofa:service ref="retriesServiceImpl" interface="com.alipay.sofa.rpc.boot.test.bean.retry.RetriesService">
+        <sofa:binding.bolt/>
+        <sofa:binding.dubbo/>
+    </sofa:service>
+    <sofa:reference jvm-first="false" id="retriesServiceBolt" interface="com.alipay.sofa.rpc.boot.test.bean.retry.RetriesService">
+        <sofa:binding.bolt>
+            <sofa:global-attrs retries="2"/>
+        </sofa:binding.bolt>
+    </sofa:reference>
+    <sofa:reference jvm-first="false" id="retriesServiceDubbo"
+                    interface="com.alipay.sofa.rpc.boot.test.bean.retry.RetriesService">
+        <sofa:binding.dubbo>
+            <sofa:global-attrs retries="2"/>
+        </sofa:binding.dubbo>
+    </sofa:reference>
+
+    <!-- lazy -->
+    <bean id="lazyServiceImpl" class="com.alipay.sofa.rpc.boot.test.bean.lazy.LazyServiceImpl"/>
+    <sofa:service ref="lazyServiceImpl" interface="com.alipay.sofa.rpc.boot.test.bean.lazy.LazyService">
+        <sofa:binding.bolt/>
+        <sofa:binding.dubbo/>
+    </sofa:service>
+
+    <sofa:reference jvm-first="false" id="lazyServiceBolt" interface="com.alipay.sofa.rpc.boot.test.bean.lazy.LazyService">
+        <sofa:binding.bolt>
+            <sofa:global-attrs lazy="true"/>
+        </sofa:binding.bolt>
+    </sofa:reference>
+
+    <sofa:reference jvm-first="false" id="lazyServiceDubbo" interface="com.alipay.sofa.rpc.boot.test.bean.lazy.LazyService">
+        <sofa:binding.dubbo>
+            <sofa:global-attrs lazy="true"/>
+        </sofa:binding.dubbo>
+    </sofa:reference>
+
+    <!-- Annotation TestCase -->
+    <context:component-scan base-package="com.alipay.sofa.rpc.boot.test.bean.annotation"/>
+</beans>

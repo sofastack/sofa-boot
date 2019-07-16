@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Licensed to the Apache Software Foundation (ASF) under one or more
+  ~ contributor license agreements.  See the NOTICE file distributed with
+  ~ this work for additional information regarding copyright ownership.
+  ~ The ASF licenses this file to You under the Apache License, Version 2.0
+  ~ (the "License"); you may not use this file except in compliance with
+  ~ the License.  You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<configuration status="OFF">
+    <Properties>
+        <Property name="RUNTIME_LOG_LEVEL">${logging.level.test.space}</Property>
+        <Property name="RUNTIME_LOG_PATH">${logging.path}</Property>
+        <Property name="RUNTIME_FILE_ENCODING">${file.encoding}</Property>
+    </Properties>
+
+    <appenders>
+        <RollingFile name="ERROR-APPENDER" fileName="${RUNTIME_LOG_PATH}/test-space/log4j2-common-error.log" append="true"
+                     filePattern="${RUNTIME_LOG_PATH}/test-space/log4j2-common-error.log.%d{yyyy-MM-dd}">
+            <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout charset="${RUNTIME_FILE_ENCODING}">
+                <pattern>%d %-5p %-32t - %m%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+        </RollingFile>
+
+        <RollingFile name="SOFA-APPENDER" fileName="${RUNTIME_LOG_PATH}/test-space/logback-sofa-default.log" append="true"
+                     filePattern="${RUNTIME_LOG_PATH}/test-space/sofa-default.log.%d{yyyy-MM-dd}">
+            <ThresholdFilter level="${RUNTIME_LOG_LEVEL}" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout charset="${RUNTIME_FILE_ENCODING}">
+                <pattern>%d %-5p %-32t - %m%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+        </RollingFile>
+    </appenders>
+
+    <loggers>
+        <logger name="com.alipay.sofa.common.boot" level="${RUNTIME_LOG_LEVEL}" additivity="false">
+            <appender-ref ref="SOFA-APPENDER"/>
+            <appender-ref ref="ERROR-APPENDER"/>
+        </logger>
+
+        <root level="${RUNTIME_LOG_LEVEL}" additivity="false">
+            <appender-ref ref="SOFA-APPENDER"/>
+            <appender-ref ref="ERROR-APPENDER"/>
+        </root>
+    </loggers>
+</configuration>

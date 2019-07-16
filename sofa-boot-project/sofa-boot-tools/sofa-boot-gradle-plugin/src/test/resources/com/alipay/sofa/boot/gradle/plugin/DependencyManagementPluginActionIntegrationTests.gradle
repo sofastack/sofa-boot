@@ -1,0 +1,33 @@
+plugins {
+    id 'java'
+    id 'com.alipay.sofa.boot' version '{version}'
+}
+
+if (project.hasProperty('applyDependencyManagementPlugin')) {
+    apply plugin: 'io.spring.dependency-management'
+    dependencyManagement {
+        resolutionStrategy {
+            eachDependency {
+                if (it.requested.group == 'com.alipay.sofa') {
+                    it.useVersion project.bootVersion
+                }
+            }
+        }
+    }
+}
+
+repositories {
+    mavenLocal()
+}
+
+task hasDependencyManagement {
+    doLast {
+        if (!dependencyManagement.managedVersions) {
+            throw new GradleException('No managed versions have been configured')
+        } else {
+            if (!dependencyManagement.managedVersions["com.alipay.sofa:runtime-sofa-boot-starter"].equals(project.bootVersion)) {
+                throw new GradleException("runtime-sofa-boot-starter's version is not " + project.bootVersion)
+            }
+        }
+    }
+}

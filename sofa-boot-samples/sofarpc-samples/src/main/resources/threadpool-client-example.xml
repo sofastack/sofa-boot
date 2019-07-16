@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:sofa="http://sofastack.io/schema/sofaboot"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://sofastack.io/schema/sofaboot http://sofastack.io/schema/sofaboot.xsd"
+       default-autowire="byName">
+    <!-- thread pool -->
+    <bean id="customerThreadPool" class="com.alipay.sofa.rpc.server.UserThreadPool" init-method="init">
+        <property name="corePoolSize" value="10"/>
+        <property name="maximumPoolSize" value="10"/>
+        <property name="queueSize" value="5"/>
+        <property name="threadPoolName" value="customerThreadPool_name"/>
+    </bean>
+    <bean id="threadPoolServiceImpl" class="com.alipay.sofa.rpc.samples.threadpool.ThreadPoolServiceImpl"/>
+    <sofa:service ref="threadPoolServiceImpl" interface="com.alipay.sofa.rpc.samples.threadpool.ThreadPoolService">
+        <sofa:binding.bolt>
+            <sofa:global-attrs thread-pool-ref="customerThreadPool"/>
+        </sofa:binding.bolt>
+    </sofa:service>
+    <sofa:reference jvm-first="false" id="threadPoolServiceReference"
+                    interface="com.alipay.sofa.rpc.samples.threadpool.ThreadPoolService">
+        <sofa:binding.bolt/>
+    </sofa:reference>
+</beans>
