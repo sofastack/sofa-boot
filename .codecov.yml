@@ -4,4 +4,4 @@ coverage:
       default:
         threshold: 0.1%
     patch: off
-  range: "70...100"
+  range: "65...100"
