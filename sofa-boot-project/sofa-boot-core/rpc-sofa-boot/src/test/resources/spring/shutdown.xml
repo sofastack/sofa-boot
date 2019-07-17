@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:sofa="http://sofastack.io/schema/sofaboot"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://sofastack.io/schema/sofaboot http://sofastack.io/schema/sofaboot.xsd">
+
+    <bean class="com.alipay.sofa.rpc.boot.test.bean.SampleFacadeImpl" id="sampleFacadeBean"/>
+    <sofa:service ref="sampleFacadeBean" interface="com.alipay.sofa.rpc.boot.test.bean.SampleFacade">
+        <sofa:binding.bolt/>
+    </sofa:service>
+    <sofa:reference jvm-first="false" interface="com.alipay.sofa.rpc.boot.test.bean.SampleFacade" id="sampleFacade">
+        <sofa:binding.bolt/>
+    </sofa:reference>
+</beans>

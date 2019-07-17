@@ -1,0 +1,2 @@
+http\://sofastack.io/schema/sofaboot.xsd=/com/alipay/sofa/boot/spring/namespace/schema/sofaboot.xsd
+http\://sofastack.io/schema/rpc.xsd=/com/alipay/sofa/boot/spring/namespace/schema/rpc.xsd

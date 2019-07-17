@@ -1,2 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.alipay.sofa.isle.spring.configuration.SofaModuleAutoConfiguration

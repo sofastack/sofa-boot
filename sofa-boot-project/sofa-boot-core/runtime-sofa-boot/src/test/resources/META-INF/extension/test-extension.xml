@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:sofa="http://sofastack.io/schema/sofaboot"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://sofastack.io/schema/sofaboot   http://sofastack.io/schema/sofaboot.xsd
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd"
+       default-autowire="byName">
+
+
+    <bean id="iExtension" class="com.alipay.sofa.runtime.test.extension.bean.IExtensionImpl"/>
+
+    <sofa:extension-point name="simple" ref="iExtension">
+        <sofa:object class="com.alipay.sofa.runtime.test.extension.descriptor.SimpleExtensionDescriptor"/>
+    </sofa:extension-point>
+
+    <sofa:extension bean="iExtension" point="simple">
+        <sofa:content>
+            <simple>
+                <value>SOFABoot Extension Test</value>
+                <path>
+                    <value>value with path</value>
+                </path>
+                <intValue>10</intValue>
+                <longValue>20</longValue>
+                <floatValue>1.1</floatValue>
+                <doubleValue>2.2</doubleValue>
+                <booleanValue>true</booleanValue>
+                <dateValue>17-01-2019</dateValue>
+                <fileValue>file</fileValue>
+                <urlValue>http://test</urlValue>
+                <classValue>com.alipay.sofa.runtime.test.extension.descriptor.SimpleExtensionDescriptor</classValue>
+                <resourceValue>META-INF/extension/extension.xml</resourceValue>
+            </simple>
+        </sofa:content>
+    </sofa:extension>
+
+
+    <sofa:extension-point name="testList" ref="iExtension">
+        <sofa:object class="com.alipay.sofa.runtime.test.extension.descriptor.ListExtensionDescriptor"/>
+    </sofa:extension-point>
+
+    <sofa:extension bean="iExtension" point="testList">
+        <sofa:content>
+            <testList>
+                <value>test1</value>
+                <value>test2</value>
+                <attribute>
+                    <value id="listTest">attributeTest1</value>
+                    <value id="listTest">attributeTest2</value>
+                </attribute>
+                <intValue>1</intValue>
+                <intValue>2</intValue>
+                <longValue>11</longValue>
+                <longValue>22</longValue>
+                <floatValue>1.1</floatValue>
+                <floatValue>2.2</floatValue>
+                <doubleValue>11.11</doubleValue>
+                <doubleValue>22.22</doubleValue>
+                <booleanValue>true</booleanValue>
+                <booleanValue>false</booleanValue>
+                <charValue>a</charValue>
+                <charValue>b</charValue>
+                <shortValue>33</shortValue>
+                <shortValue>44</shortValue>
+                <byteValue>7</byteValue>
+                <byteValue>8</byteValue>
+            </testList>
+        </sofa:content>
+    </sofa:extension>
+
+
+    <sofa:extension-point name="testMap" ref="iExtension">
+        <sofa:object class="com.alipay.sofa.runtime.test.extension.descriptor.MapExtensionDescriptor"/>
+    </sofa:extension-point>
+
+    <sofa:extension bean="iExtension" point="testMap">
+        <sofa:content>
+            <testMap>
+                <value name="testMapKey1">testMapValue1</value>
+                <value name="testMapKey2">testMapValue2</value>
+                <simple key="simpleKey1">
+                    <simple>
+                        <value>test</value>
+                    </simple>
+                </simple>
+                <value>
+                    <attribute id="mapTest" name="mapTest1">value1</attribute>
+                    <attribute id="mapTest" name="mapTest2">value2</attribute>
+                </value>
+            </testMap>
+        </sofa:content>
+    </sofa:extension>
+
+
+    <sofa:extension-point name="simpleSpring" ref="iExtension">
+        <sofa:object class="com.alipay.sofa.runtime.test.extension.descriptor.SpringSimpleExtensionDescriptor"/>
+    </sofa:extension-point>
+
+    <bean id="simpleSpringBean" class="com.alipay.sofa.runtime.test.extension.bean.SimpleSpringBean"/>
+
+    <sofa:extension bean="iExtension" point="simpleSpring">
+        <sofa:content>
+            <simpleSpring>
+                <value>simpleSpringBean</value>
+            </simpleSpring>
+        </sofa:content>
+    </sofa:extension>
+
+
+    <sofa:extension-point name="testSpringList" ref="iExtension">
+        <sofa:object class="com.alipay.sofa.runtime.test.extension.descriptor.SpringListExtensionDescriptor"/>
+    </sofa:extension-point>
+
+    <bean id="simpleSpringListBean1" class="com.alipay.sofa.runtime.test.extension.bean.SimpleSpringListBean" />
+    <bean id="simpleSpringListBean2" class="com.alipay.sofa.runtime.test.extension.bean.SimpleSpringListBean" />
+
+    <sofa:extension bean="iExtension" point="testSpringList">
+        <sofa:content>
+            <testSpringList>
+                <value>simpleSpringListBean1</value>
+                <value>simpleSpringListBean2</value>
+            </testSpringList>
+        </sofa:content>
+    </sofa:extension>
+
+    <sofa:extension-point name="testSpringMap" ref="iExtension">
+        <sofa:object class="com.alipay.sofa.runtime.test.extension.descriptor.SpringMapExtensionDescriptor"/>
+    </sofa:extension-point>
+
+    <bean id="springMapBean1" class="com.alipay.sofa.runtime.test.extension.bean.SimpleSpringMapBean"/>
+    <bean id="springMapBean2" class="com.alipay.sofa.runtime.test.extension.bean.SimpleSpringMapBean"/>
+
+    <sofa:extension bean="iExtension" point="testSpringMap">
+        <sofa:content>
+            <testSpringMap>
+                <value name="testMapSpringKey1">springMapBean1</value>
+                <value name="testMapSpringKey2">springMapBean2</value>
+                <value>
+                    <attribute id="springMapTest" name="springMapTest1">value1</attribute>
+                    <attribute id="springMapTest" name="springMapTest2">value2</attribute>
+                </value>
+            </testSpringMap>
+        </sofa:content>
+    </sofa:extension>
+
+
+    <sofa:extension-point name="testContext" ref="iExtension">
+        <sofa:object class="com.alipay.sofa.runtime.test.extension.descriptor.ContextExtensionDescriptor"/>
+    </sofa:extension-point>
+
+    <sofa:extension bean="iExtension" point="testContext">
+        <sofa:content>
+            <testContext>
+                <value>testContextValue</value>
+            </testContext>
+        </sofa:content>
+    </sofa:extension>
+
+
+    <sofa:extension-point name="testParent" ref="iExtension">
+        <sofa:object class="com.alipay.sofa.runtime.test.extension.descriptor.ParentExtensionDescriptor"/>
+    </sofa:extension-point>
+
+    <sofa:extension bean="iExtension" point="testParent">
+        <sofa:content>
+            <testParent>
+                <value>testParentValue</value>
+                <testSub>
+                    <parentValue></parentValue>
+                </testSub>
+            </testParent>
+        </sofa:content>
+    </sofa:extension>
+
+
+    <sofa:extension-point name="bad" ref="iExtension">
+        <sofa:object class="com.alipay.sofa.runtime.test.extension.descriptor.SimpleExtensionDescriptor"/>
+    </sofa:extension-point>
+
+    <sofa:extension bean="iExtension" point="bad">
+        <sofa:content>
+            <bad>bad</bad>
+        </sofa:content>
+    </sofa:extension>
+
+
+</beans>
