@@ -24,6 +24,7 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 
 import com.alipay.sofa.ark.spi.replay.ReplayContext;
+import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import org.aopalliance.intercept.MethodInvocation;
 
 import com.alipay.sofa.ark.spi.model.Biz;
@@ -186,7 +187,8 @@ public class DynamicJvmServiceProxyFinder {
                     .debug(">> Start in Cross App JVM service invoke, the service interface is  - "
                            + getInterfaceType());
 
-                if (!serialize) {
+                // check whether skip serialize or not
+                if (!serialize || SofaRuntimeProperties.isSkipJvmSerialize(clientClassloader.get())) {
                     ClassLoader tcl = Thread.currentThread().getContextClassLoader();
                     try {
                         pushThreadContextClassLoader(getServiceClassLoader());

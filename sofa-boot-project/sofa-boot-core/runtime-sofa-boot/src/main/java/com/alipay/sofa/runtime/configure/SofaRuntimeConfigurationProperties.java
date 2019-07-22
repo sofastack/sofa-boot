@@ -44,4 +44,13 @@ public class SofaRuntimeConfigurationProperties {
     public boolean isDisableJvmFirst() {
         return SofaRuntimeProperties.isDisableJvmFirst(this.getClass().getClassLoader());
     }
+
+    public void setSkipJvmSerialize(boolean skipJvmSerialize) {
+        SofaRuntimeProperties.setSkipJvmSerialize(this.getClass().getClassLoader(),
+            skipJvmSerialize);
+    }
+
+    public boolean isSkipJvmSerialize() {
+        return SofaRuntimeProperties.isSkipJvmSerialize(this.getClass().getClassLoader());
+    }
 }

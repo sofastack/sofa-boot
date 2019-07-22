@@ -29,6 +29,8 @@ public class SofaRuntimeProperties {
     private static ConcurrentHashMap<ClassLoader, Boolean> skipJvmReferenceHealthCheckMap = new ConcurrentHashMap<>();
     private static ConcurrentHashMap<ClassLoader, Boolean> disableJvmFirstMap             = new ConcurrentHashMap<>();
 
+    private static ConcurrentHashMap<ClassLoader, Boolean> skipJvmSerializeMap            = new ConcurrentHashMap<>();
+
     public static boolean isSkipJvmReferenceHealthCheck(SofaRuntimeContext sofaRuntimeContext) {
         return isSkipJvmReferenceHealthCheck(sofaRuntimeContext.getAppClassLoader());
     }
@@ -58,6 +60,14 @@ public class SofaRuntimeProperties {
     public static void unRegisterProperties(ClassLoader classLoader) {
         skipJvmReferenceHealthCheckMap.remove(classLoader);
         disableJvmFirstMap.remove(classLoader);
+        skipJvmSerializeMap.remove(classLoader);
     }
 
+    public static Boolean isSkipJvmSerialize(ClassLoader classLoader) {
+        return skipJvmSerializeMap.get(classLoader) != null && skipJvmSerializeMap.get(classLoader);
+    }
+
+    public static void setSkipJvmSerialize(ClassLoader classLoader, boolean skipJvmSerialize) {
+        skipJvmSerializeMap.putIfAbsent(classLoader, skipJvmSerialize);
+    }
 }
