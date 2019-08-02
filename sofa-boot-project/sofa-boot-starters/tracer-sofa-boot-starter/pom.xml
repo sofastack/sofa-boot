@@ -30,31 +30,26 @@
         <dependency>
             <groupId>com.alipay.sofa</groupId>
             <artifactId>sofa-tracer-springmvc-plugin</artifactId>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>com.alipay.sofa</groupId>
             <artifactId>sofa-tracer-datasource-plugin</artifactId>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>com.alipay.sofa</groupId>
             <artifactId>sofa-tracer-spring-cloud-plugin</artifactId>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>com.alipay.sofa</groupId>
             <artifactId>sofa-tracer-zipkin-plugin</artifactId>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
