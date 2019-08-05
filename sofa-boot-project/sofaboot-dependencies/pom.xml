@@ -266,11 +266,6 @@
                 <version>${tracer.core.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-starter-openfeign</artifactId>
-                <version>${tracer.core.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>sofa-tracer-dubbo-plugin</artifactId>
                 <version>${tracer.core.version}</version>
