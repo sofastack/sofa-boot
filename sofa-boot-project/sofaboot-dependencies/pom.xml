@@ -30,7 +30,7 @@
 
         <!--core-->
         <tracer.core.version>3.0.5</tracer.core.version>
-        <rpc.core.version>5.5.7-SNAPSHOT</rpc.core.version>
+        <rpc.core.version>5.6.1-SNAPSHOT</rpc.core.version>
 
         <!--2rd lib dependency-->
         <sofa.common.tools.version>1.0.19</sofa.common.tools.version>
