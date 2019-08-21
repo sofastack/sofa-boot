@@ -30,11 +30,11 @@
 
         <!--core-->
         <tracer.core.version>3.0.5</tracer.core.version>
-        <rpc.core.version>5.5.7-SNAPSHOT</rpc.core.version>
+        <rpc.core.version>5.6.1-SNAPSHOT</rpc.core.version>
 
         <!--2rd lib dependency-->
         <sofa.common.tools.version>1.0.19</sofa.common.tools.version>
-        <sofa.bolt.version>1.4.6</sofa.bolt.version>
+        <sofa.bolt.version>1.5.6</sofa.bolt.version>
         <sofa.hessian.version>3.3.6</sofa.hessian.version>
 
         <!--3rd lib dependency-->
