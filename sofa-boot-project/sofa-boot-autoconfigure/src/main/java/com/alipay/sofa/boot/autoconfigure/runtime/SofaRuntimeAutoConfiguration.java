@@ -98,8 +98,8 @@ public class SofaRuntimeAutoConfiguration {
                                                         BindingConverterFactory bindingConverterFactory,
                                                         BindingAdapterFactory bindingAdapterFactory) {
         ClientFactoryInternal clientFactoryInternal = new ClientFactoryImpl();
-        SofaRuntimeManager sofaRuntimeManager = new StandardSofaRuntimeManager(appName,
-            SofaRuntimeAutoConfiguration.class.getClassLoader(), clientFactoryInternal);
+        SofaRuntimeManager sofaRuntimeManager = new StandardSofaRuntimeManager(appName, Thread
+            .currentThread().getContextClassLoader(), clientFactoryInternal);
         sofaRuntimeManager.getComponentManager().registerComponentClient(
             ReferenceClient.class,
             new ReferenceClientImpl(sofaRuntimeManager.getSofaRuntimeContext(),
