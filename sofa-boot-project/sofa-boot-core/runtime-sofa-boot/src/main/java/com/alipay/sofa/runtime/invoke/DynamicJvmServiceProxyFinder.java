@@ -23,6 +23,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
+import com.alipay.sofa.ark.spi.replay.ReplayContext;
+import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import org.aopalliance.intercept.MethodInvocation;
 
 import com.alipay.sofa.ark.spi.model.Biz;
@@ -63,25 +65,52 @@ public class DynamicJvmServiceProxyFinder {
     public ServiceProxy findServiceProxy(ClassLoader clientClassloader, Contract contract) {
         String interfaceType = contract.getInterfaceType().getCanonicalName();
         String uniqueId = contract.getUniqueId();
+        String version = ReplayContext.get();
+
+        if (ReplayContext.PLACEHOLDER.equals(version)) {
+            version = null;
+        }
+
         for (SofaRuntimeManager sofaRuntimeManager : SofaFramework.getRuntimeSet()) {
             if (sofaRuntimeManager.getAppClassLoader().equals(clientClassloader)) {
                 continue;
             }
+
             Biz biz = getBiz(sofaRuntimeManager);
-            if (biz != null && biz.getBizState() == BizState.ACTIVATED) {
-                ServiceComponent serviceComponent = findServiceComponent(uniqueId, interfaceType,
-                    sofaRuntimeManager.getComponentManager());
-                if (serviceComponent != null) {
-                    JvmBinding referenceJvmBinding = (JvmBinding) contract
-                        .getBinding(JvmBinding.JVM_BINDING_TYPE);
-                    JvmBinding serviceJvmBinding = (JvmBinding) serviceComponent.getService()
-                        .getBinding(JvmBinding.JVM_BINDING_TYPE);
-                    boolean serialize = referenceJvmBinding.getJvmBindingParam().isSerialize()
-                                        || serviceJvmBinding.getJvmBindingParam().isSerialize();
-                    return new DynamicJvmServiceInvoker(clientClassloader,
-                        sofaRuntimeManager.getAppClassLoader(), serviceComponent.getService()
-                            .getTarget(), contract, biz.getIdentity(), serialize);
-                }
+            // if null , check next
+            if (biz == null) {
+                continue;
+            }
+
+            // do not match state ,check next
+            if (biz.getBizState() != BizState.DEACTIVATED
+                && biz.getBizState() != BizState.ACTIVATED) {
+                continue;
+            }
+
+            // if specified version , but version do not match ,check next
+            if (version != null && !version.equals(biz.getBizVersion())) {
+                continue;
+            }
+
+            // if not specified version , but state do not match ,check next
+            if (version == null && biz.getBizState() != BizState.ACTIVATED) {
+                continue;
+            }
+
+            // match biz
+            ServiceComponent serviceComponent = findServiceComponent(uniqueId, interfaceType,
+                sofaRuntimeManager.getComponentManager());
+            if (serviceComponent != null) {
+                JvmBinding referenceJvmBinding = (JvmBinding) contract
+                    .getBinding(JvmBinding.JVM_BINDING_TYPE);
+                JvmBinding serviceJvmBinding = (JvmBinding) serviceComponent.getService()
+                    .getBinding(JvmBinding.JVM_BINDING_TYPE);
+                boolean serialize = referenceJvmBinding.getJvmBindingParam().isSerialize()
+                                    || serviceJvmBinding.getJvmBindingParam().isSerialize();
+                return new DynamicJvmServiceInvoker(clientClassloader,
+                    sofaRuntimeManager.getAppClassLoader(), serviceComponent.getService()
+                        .getTarget(), contract, biz.getIdentity(), serialize);
             }
         }
         return null;
@@ -158,7 +187,8 @@ public class DynamicJvmServiceProxyFinder {
                     .debug(">> Start in Cross App JVM service invoke, the service interface is  - "
                            + getInterfaceType());
 
-                if (!serialize) {
+                // check whether skip serialize or not
+                if (!serialize || SofaRuntimeProperties.isSkipJvmSerialize(clientClassloader.get())) {
                     ClassLoader tcl = Thread.currentThread().getContextClassLoader();
                     try {
                         pushThreadContextClassLoader(getServiceClassLoader());
@@ -167,6 +197,8 @@ public class DynamicJvmServiceProxyFinder {
                         pushThreadContextClassLoader(tcl);
                     }
                 }
+
+                ReplayContext.setPlaceHolder();
 
                 if (TOSTRING_METHOD.equalsIgnoreCase(targetMethod.getName())
                     && targetMethod.getParameterTypes().length == 0) {
@@ -191,6 +223,7 @@ public class DynamicJvmServiceProxyFinder {
             } catch (InvocationTargetException ex) {
                 throw ex.getTargetException();
             } finally {
+                ReplayContext.clearPlaceHolder();
                 setClientClassloader(null);
             }
         }
