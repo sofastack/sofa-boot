@@ -7,11 +7,11 @@ jdk:
 - oraclejdk8
 
 before_install:
-- echo "Install Zookeeper 3.4.11"
-  && wget http://archive.apache.org/dist/zookeeper/zookeeper-3.4.11/zookeeper-3.4.11.tar.gz
-  && tar -zxf zookeeper-3.4.11.tar.gz
-  && mv zookeeper-3.4.11/conf/zoo_sample.cfg zookeeper-3.4.11/conf/zoo.cfg
-  && /bin/bash zookeeper-3.4.11/bin/zkServer.sh start
+- echo "Install Zookeeper 3.5.5"
+  && wget http://archive.apache.org/dist/zookeeper/zookeeper-3.5.5/apache-zookeeper-3.5.5.tar.gz
+  && tar -zxf apache-zookeeper-3.5.5.tar.gz
+  && mv apache-zookeeper-3.5.5/conf/zoo_sample.cfg apache-zookeeper-3.5.5/conf/zoo.cfg
+  && /bin/bash apache-zookeeper-3.5.5/bin/zkServer.sh start
 
 install:
 - mvn clean install -DskipTests -B -V
