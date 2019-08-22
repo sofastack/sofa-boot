@@ -50,7 +50,7 @@ public abstract class AbstractTestBase {
      * 8080
      */
     @LocalServerPort
-    public int port;
+    public int                 port;
 
     @Before
     public void setUp() {
