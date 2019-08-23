@@ -20,6 +20,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+import com.alibaba.staticcompile.annotations.ContainReflection;
 import org.springframework.context.ApplicationContext;
 
 import com.alipay.sofa.common.xmap.XAnnotatedMember;
@@ -69,6 +70,7 @@ public class XMapSpring extends XMap {
      * @param xob XAnnotated Object
      */
     private void scan(XAnnotatedObject xob) {
+        @ContainReflection("com.alibaba.staticcompile.DummySVMConfig")
         Field[] fields = xob.klass.getDeclaredFields();
         for (Field field : fields) {
             Annotation anno = checkMemberAnnotation(field);
@@ -81,6 +83,7 @@ public class XMapSpring extends XMap {
             }
         }
 
+        @ContainReflection("com.alibaba.staticcompile.DummySVMConfig")
         Method[] methods = xob.klass.getDeclaredMethods();
         for (Method method : methods) {
             // we accept only methods with one parameter

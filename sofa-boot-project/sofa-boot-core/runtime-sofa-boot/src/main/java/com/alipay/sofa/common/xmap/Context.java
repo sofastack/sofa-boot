@@ -16,6 +16,8 @@
  */
 package com.alipay.sofa.common.xmap;
 
+import com.alibaba.staticcompile.annotations.ContainResource;
+
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -33,7 +35,9 @@ public class Context extends ArrayList<Object> {
     }
 
     public URL getResource(String name) {
-        return Thread.currentThread().getContextClassLoader().getResource(name);
+        @ContainResource("com.alibaba.staticcompile.DummySVMConfig")
+        URL url = Thread.currentThread().getContextClassLoader().getResource(name);
+        return url;
     }
 
     public Object getObject() {

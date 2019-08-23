@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.alibaba.staticcompile.annotations.ContainReflection;
 import org.w3c.dom.Attr;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.Document;
@@ -86,6 +87,7 @@ public class XAnnotatedList extends XAnnotatedMember {
                         .toArray((Object[]) Array.newInstance(componentType, values.size()));
                 }
             } else {
+                @ContainReflection("com.alibaba.staticcompile.DummySVMConfig")
                 Collection col = (Collection) type.newInstance();
                 col.addAll(values);
                 return col;

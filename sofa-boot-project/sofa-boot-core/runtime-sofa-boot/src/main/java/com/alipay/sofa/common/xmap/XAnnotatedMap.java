@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.alibaba.staticcompile.annotations.ContainReflection;
 import org.w3c.dom.Attr;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.Document;
@@ -62,6 +63,7 @@ public class XAnnotatedMap extends XAnnotatedList {
     @Override
     protected Object getValue(Context ctx, Element base) throws IllegalAccessException,
                                                         InstantiationException {
+        @ContainReflection("com.alibaba.staticcompile.DummySVMConfig")
         Map<String, Object> values = (Map) type.newInstance();
         if (xao != null) {
             DOMHelper.visitMapNodes(ctx, this, base, path, elementMapVisitor, values);

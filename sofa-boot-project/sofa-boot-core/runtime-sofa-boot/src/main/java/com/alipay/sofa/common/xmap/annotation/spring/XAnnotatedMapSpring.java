@@ -18,6 +18,7 @@ package com.alipay.sofa.common.xmap.annotation.spring;
 
 import java.util.Map;
 
+import com.alibaba.staticcompile.annotations.ContainReflection;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -62,6 +63,7 @@ public class XAnnotatedMapSpring extends XAnnotatedMap {
     @Override
     protected Object getValue(Context ctx, Element base) throws IllegalAccessException,
                                                         InstantiationException {
+        @ContainReflection("com.alibaba.staticcompile.DummySVMConfig")
         Map<String, Object> values = (Map) type.newInstance();
         if (path.attribute != null) {
             // attribute list

@@ -18,6 +18,7 @@ package com.alipay.sofa.isle.loader;
 
 import java.util.Map;
 
+import com.alibaba.staticcompile.annotations.ContainReflection;
 import org.springframework.beans.CachedIntrospectionResults;
 import org.springframework.beans.PropertyEditorRegistrar;
 import org.springframework.beans.PropertyEditorRegistry;
@@ -58,6 +59,7 @@ public class DynamicSpringContextLoader implements SpringContextLoader {
         SofaModuleProperties sofaModuleProperties = rootApplicationContext
             .getBean(SofaModuleProperties.class);
 
+        @ContainReflection(value = "com.alipay.sofa.isle.spring.factory.BeanLoadCostBeanFactory", method = "getModuleName")
         BeanLoadCostBeanFactory beanFactory = new BeanLoadCostBeanFactory(
             sofaModuleProperties.getBeanLoadCost(), deployment.getModuleName());
         beanFactory

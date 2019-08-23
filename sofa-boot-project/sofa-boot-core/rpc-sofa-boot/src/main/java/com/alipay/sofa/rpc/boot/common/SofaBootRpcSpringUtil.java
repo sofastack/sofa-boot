@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.rpc.boot.common;
 
+import com.alibaba.staticcompile.annotations.ContainReflection;
 import org.slf4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.StringUtils;
@@ -100,7 +101,10 @@ public class SofaBootRpcSpringUtil {
             return null;
         }
         try {
-            return Class.forName(clazz, true, loader).newInstance();
+            @ContainReflection("com.alibaba.staticcompile.DummySVMConfig")
+            Class svmClazz = Class.forName(clazz, true, loader);
+            Object object = svmClazz.newInstance();
+            return object;
         } catch (Exception e) {
             LOGGER.error("new instance failed. clazz[" + clazz + "];classLoader[" + loader
                          + "];appName[" + appName + "]", e);

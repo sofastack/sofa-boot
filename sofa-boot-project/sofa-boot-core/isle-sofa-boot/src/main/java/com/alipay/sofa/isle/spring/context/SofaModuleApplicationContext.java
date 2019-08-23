@@ -39,11 +39,13 @@ public class SofaModuleApplicationContext extends GenericApplicationContext {
     private static final Field  earlyApplicationEventsField;
     static {
         try {
-            getApplicationEventMulticasterMethod = AbstractApplicationContext.class
+            Method method = AbstractApplicationContext.class
                 .getDeclaredMethod("getApplicationEventMulticaster");
+            getApplicationEventMulticasterMethod = method;
             getApplicationEventMulticasterMethod.setAccessible(true);
-            earlyApplicationEventsField = AbstractApplicationContext.class
+            Field field = AbstractApplicationContext.class
                 .getDeclaredField("earlyApplicationEvents");
+            earlyApplicationEventsField = field;
             earlyApplicationEventsField.setAccessible(true);
         } catch (Throwable t) {
             throw new RuntimeException(t);

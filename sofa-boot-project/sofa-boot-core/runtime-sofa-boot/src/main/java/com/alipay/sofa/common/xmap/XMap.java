@@ -39,6 +39,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import com.alibaba.staticcompile.annotations.ContainReflection;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -204,6 +205,7 @@ public class XMap {
     }
 
     private void scan(XAnnotatedObject xob) {
+        @ContainReflection("com.alibaba.staticcompile.DummySVMConfig")
         Field[] fields = xob.klass.getDeclaredFields();
         for (Field field : fields) {
             Annotation anno = checkMemberAnnotation(field);
@@ -213,6 +215,7 @@ public class XMap {
             }
         }
 
+        @ContainReflection("com.alibaba.staticcompile.DummySVMConfig")
         Method[] methods = xob.klass.getDeclaredMethods();
         for (Method method : methods) {
             // we accept only methods with one parameter
@@ -232,7 +235,9 @@ public class XMap {
         Class scanClass = xob.klass;
 
         for (; scanClass != Object.class; scanClass = scanClass.getSuperclass()) {
-            for (Method method : scanClass.getDeclaredMethods()) {
+            @ContainReflection("com.alibaba.staticcompile.DummySVMConfig")
+            Method[] methods = scanClass.getDeclaredMethods();
+            for (Method method : methods) {
                 // we accept only methods with one parameter
                 Class[] paramTypes = method.getParameterTypes();
                 if (paramTypes.length != 1) {
@@ -245,7 +250,9 @@ public class XMap {
                 }
             }
 
-            for (Field field : scanClass.getDeclaredFields()) {
+            @ContainReflection("com.alibaba.staticcompile.DummySVMConfig")
+            Field[] fields = scanClass.getDeclaredFields();
+            for (Field field : fields) {
                 Annotation anno = checkMemberAnnotation(field);
                 if (anno != null) {
                     XAnnotatedMember member = createFieldMember(field, anno);
@@ -610,6 +617,7 @@ public class XMap {
     }
 
     public Method getGetterMethod(Class<?> clazz, String name) {
+        @ContainReflection("com.alibaba.staticcompile.DummySVMConfig")
         Method[] methods = clazz.getMethods();
         for (Method method : methods) {
             String methodName = method.getName();

@@ -27,6 +27,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.alibaba.staticcompile.annotations.ContainReflection;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
@@ -145,7 +146,9 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
         if (methodMetadata instanceof StandardMethodMetadata) {
            candidateMethods.add(((StandardMethodMetadata) methodMetadata).getIntrospectedMethod());
         } else {
-            for (Method m : declaringClass.getDeclaredMethods()) {
+            @ContainReflection("com.alibaba.staticcompile.DummySVMConfig")
+            Method[] methods = declaringClass.getDeclaredMethods();
+            for (Method m : methods) {
                 // check methodName and return type
                 if (!m.getName().equals(methodMetadata.getMethodName())
                         || !m.getReturnType().getTypeName().equals(methodMetadata.getReturnTypeName())) {

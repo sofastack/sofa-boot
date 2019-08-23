@@ -23,6 +23,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
+import com.alibaba.staticcompile.annotations.ContainReflection;
 import com.alipay.sofa.ark.spi.replay.ReplayContext;
 import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import org.aopalliance.intercept.MethodInvocation;
@@ -252,7 +253,10 @@ public class DynamicJvmServiceProxyFinder {
 
         private Method getTargetMethod(Method method, Class[] argumentTypes) {
             try {
-                return targetService.getClass().getMethod(method.getName(), argumentTypes);
+                @ContainReflection(value = "com.alibaba.staticcompile.DummySVMConfig", method = "dummyMethod")
+                Method resultMethod = targetService.getClass().getMethod(method.getName(),
+                    argumentTypes);
+                return resultMethod;
             } catch (NoSuchMethodException ex) {
                 throw new IllegalStateException(targetService + " in " + bizIdentity
                                                 + " don't have the method " + method);

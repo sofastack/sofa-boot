@@ -19,6 +19,7 @@ package com.alipay.sofa.rpc.boot.container;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import com.alibaba.staticcompile.annotations.ContainReflection;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.StringUtils;
 
@@ -105,7 +106,9 @@ public class RpcFilterContainer {
         for (String clazz : filterClasses) {
             Class filterClass;
             try {
-                filterClass = Class.forName(clazz);
+                @ContainReflection("com.alibaba.staticcompile.DummySVMConfig")
+                Class svmFilterClass = Class.forName(clazz);
+                filterClass = svmFilterClass;
             } catch (ClassNotFoundException e) {
                 throw new SofaBootRpcRuntimeException("Can not find filter class " + clazz + " ", e);
             }

@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.staticcompile.annotations.ContainReflection;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -67,6 +68,7 @@ public class XAnnotatedObject {
     }
 
     public Object newInstance(Context ctx, Element element) throws Exception {
+        @ContainReflection("com.alibaba.staticcompile.DummySVMConfig")
         Object ob = klass.newInstance();
         ctx.push(ob);
 
@@ -86,6 +88,7 @@ public class XAnnotatedObject {
 
     public Object newInstance(Context ctx, Map<String, Object> map, String keyPrefix)
                                                                                      throws Exception {
+        @ContainReflection("com.alibaba.staticcompile.DummySVMConfig")
         Object ob = klass.newInstance();
         ctx.push(ob);
 

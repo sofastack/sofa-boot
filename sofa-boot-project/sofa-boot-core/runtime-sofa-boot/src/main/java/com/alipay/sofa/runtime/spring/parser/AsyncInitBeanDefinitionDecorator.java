@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.runtime.spring.parser;
 
+import com.alibaba.staticcompile.annotations.ContainReflection;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
@@ -29,6 +30,8 @@ import org.w3c.dom.Node;
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.spring.namespace.spi.SofaBootTagNameSupport;
 import com.alipay.sofa.runtime.spring.async.AsyncInitBeanHolder;
+
+import java.lang.reflect.Method;
 
 /**
  * @author qilong.zql
@@ -94,7 +97,10 @@ public class AsyncInitBeanDefinitionDecorator implements BeanDefinitionDecorator
 
     public static String getModuleNameFromBeanFactory(Object factory) {
         try {
-            return (String) factory.getClass().getMethod(GET_MODULE_NAME_METHOD).invoke(factory);
+            @ContainReflection(value = "com.alibaba.staticcompile.DummySVMConfig", method = "dummyMethod")
+            Method method = factory.getClass().getMethod(GET_MODULE_NAME_METHOD);
+            String str = (String) method.invoke(factory);
+            return str;
         } catch (Throwable e) {
             return SofaBootConstants.ROOT_APPLICATION_CONTEXT;
         }

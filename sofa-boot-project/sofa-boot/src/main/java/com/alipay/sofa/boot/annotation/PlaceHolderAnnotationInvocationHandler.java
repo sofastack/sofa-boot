@@ -22,6 +22,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
+import com.alibaba.staticcompile.annotations.ContainProxy;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
 
@@ -102,8 +103,12 @@ public class PlaceHolderAnnotationInvocationHandler implements InvocationHandler
             if (delegate != null) {
                 ClassLoader cl = this.getClass().getClassLoader();
                 Class<?>[] exposedInterface = { delegate.annotationType(), WrapperAnnotation.class };
-                return (A) Proxy.newProxyInstance(cl, exposedInterface,
+                @ContainProxy({ "com.alipay.sofa.runtime.api.annotation.SofaService",
+                        "com.alipay.sofa.runtime.api.annotation.SofaReference",
+                        "com.alipay.sofa.boot.annotation.WrapperAnnotation" })
+                A instance = (A) Proxy.newProxyInstance(cl, exposedInterface,
                     new PlaceHolderAnnotationInvocationHandler(delegate, binder));
+                return instance;
             }
             return null;
         }

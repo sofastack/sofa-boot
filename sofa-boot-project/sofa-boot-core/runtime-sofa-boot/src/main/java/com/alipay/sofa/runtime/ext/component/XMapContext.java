@@ -18,6 +18,7 @@ package com.alipay.sofa.runtime.ext.component;
 
 import java.net.URL;
 
+import com.alibaba.staticcompile.annotations.ContainResource;
 import com.alipay.sofa.common.xmap.Context;
 
 /**
@@ -58,7 +59,9 @@ public class XMapContext extends Context {
      */
     @Override
     public URL getResource(String name) {
-        return appClassLoader.getResource(name);
+        @ContainResource("com.alibaba.staticcompile.DummySVMConfig")
+        URL url = appClassLoader.getResource(name);
+        return url;
     }
 
 }
