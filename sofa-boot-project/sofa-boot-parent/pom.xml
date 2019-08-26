@@ -44,14 +44,6 @@
         <junit.version>4.12</junit.version>
     </properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.alibaba.ajdk</groupId>
-            <artifactId>ajdk-native-api</artifactId>
-            <version>${ajdk.native.api.version}</version>
-        </dependency>
-    </dependencies>
-
     <dependencyManagement>
         <dependencies>
             <!--provided-->
@@ -67,6 +59,13 @@
                 <artifactId>javax.servlet-api</artifactId>
                 <version>${javax.servlet.version}</version>
                 <scope>provided</scope>
+            </dependency>
+
+            <!-- svm静态编译ajdk依赖 -->
+            <dependency>
+                <groupId>com.alibaba.ajdk</groupId>
+                <artifactId>ajdk-native-api</artifactId>
+                <version>${ajdk.native.api.version}</version>
             </dependency>
 
             <!--Test-->

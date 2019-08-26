@@ -35,7 +35,7 @@ import com.alipay.sofa.tracer.boot.properties.SofaTracerProperties;
  * @author yangguanchao
  * @since 2018/05/08
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(SofaTracerProperties.class)
 @ConditionalOnClass(SofaTracerProperties.class)
 public class SofaTracerAutoConfiguration {

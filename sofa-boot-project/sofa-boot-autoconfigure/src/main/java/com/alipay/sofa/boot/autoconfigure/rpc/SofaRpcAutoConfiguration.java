@@ -57,7 +57,7 @@ import com.alipay.sofa.rpc.boot.swagger.SwaggerServiceApplicationListener;
 /**
  * @author <a href="mailto:lw111072@antfin.com">LiWei</a>
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(SofaBootRpcProperties.class)
 @ConditionalOnClass(SofaBootRpcProperties.class)
 public class SofaRpcAutoConfiguration {
@@ -167,7 +167,7 @@ public class SofaRpcAutoConfiguration {
         return new SwaggerServiceApplicationListener();
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @ConditionalOnClass({ SofaBootRpcProperties.class, ReadinessCheckCallback.class, Health.class })
     public static class RpcAfterHealthCheckCallbackConfiguration {
         @Bean

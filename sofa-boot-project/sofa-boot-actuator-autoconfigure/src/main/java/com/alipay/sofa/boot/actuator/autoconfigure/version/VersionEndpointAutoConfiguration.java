@@ -27,7 +27,7 @@ import com.alipay.sofa.boot.actuator.version.SofaBootVersionEndpoint;
  * @author qilong.zql
  * @since 3.0.0
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class VersionEndpointAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean

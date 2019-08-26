@@ -34,7 +34,7 @@ import feign.Client;
  * @author: guolei.sgl (guolei.sgl@antfin.com) 2019/3/13 6:04 PM
  * @since:
  **/
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @ConditionalOnClass({ SofaTracerProperties.class, Client.class, SofaTracerFeignContext.class })
 @AutoConfigureBefore(FeignAutoConfiguration.class)
 @ConditionalOnProperty(name = "com.alipay.sofa.tracer.feign.enabled", havingValue = "true", matchIfMissing = true)

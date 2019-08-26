@@ -49,7 +49,7 @@ import com.alipay.sofa.runtime.spring.ServiceBeanFactoryPostProcessor;
  * @author qilong.zql
  * @since 3.2.0
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class RuntimeConfiguration {
     @Bean
     public static BindingConverterFactory bindingConverterFactory() {

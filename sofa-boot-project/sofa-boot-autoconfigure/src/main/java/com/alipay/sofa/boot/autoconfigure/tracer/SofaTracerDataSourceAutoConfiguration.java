@@ -33,7 +33,7 @@ import com.alipay.sofa.tracer.plugins.datasource.SmartDataSource;
  * @author qilong.zql
  * @since 2.2.0
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(SofaTracerDataSourceProperties.class)
 @ConditionalOnClass({ SofaTracerProperties.class, SmartDataSource.class })
 public class SofaTracerDataSourceAutoConfiguration {

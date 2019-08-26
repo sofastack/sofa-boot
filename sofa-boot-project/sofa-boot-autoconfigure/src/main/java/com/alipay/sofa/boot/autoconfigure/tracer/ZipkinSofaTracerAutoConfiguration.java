@@ -36,7 +36,7 @@ import com.alipay.sofa.tracer.plugins.zipkin.ZipkinSofaTracerSpanRemoteReporter;
  * @author yangguanchao
  * @since 2018/05/01
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(ZipkinSofaTracerProperties.class)
 @ConditionalOnProperty(value = "com.alipay.sofa.tracer.zipkin.enabled", matchIfMissing = true)
 @ConditionalOnClass({ SofaTracerProperties.class, zipkin2.Span.class,

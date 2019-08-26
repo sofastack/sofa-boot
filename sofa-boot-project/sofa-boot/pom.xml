@@ -29,6 +29,11 @@
             <artifactId>log-sofa-boot-starter</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.alibaba.ajdk</groupId>
+            <artifactId>ajdk-native-api</artifactId>
+        </dependency>
+
         <!-- Test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

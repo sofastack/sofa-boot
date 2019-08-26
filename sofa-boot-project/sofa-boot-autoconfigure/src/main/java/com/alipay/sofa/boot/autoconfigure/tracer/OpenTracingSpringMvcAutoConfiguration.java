@@ -43,7 +43,7 @@ import com.alipay.sofa.tracer.plugins.webflux.WebfluxSofaTracerFilter;
  * @author yangguanchao
  * @since 2018/05/01
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(OpenTracingSpringMvcProperties.class)
 @ConditionalOnWebApplication
 @ConditionalOnClass({ SofaTracerProperties.class, SpringMvcTracer.class })
@@ -53,7 +53,7 @@ public class OpenTracingSpringMvcAutoConfiguration {
     @Autowired
     private OpenTracingSpringMvcProperties openTracingSpringProperties;
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
     public class SpringMvcDelegatingFilterProxyConfiguration {
         @Bean
@@ -80,7 +80,7 @@ public class OpenTracingSpringMvcAutoConfiguration {
         }
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
     public class WebfluxSofaTracerFilterConfiguration {
         @Bean
