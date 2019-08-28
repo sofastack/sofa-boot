@@ -37,7 +37,8 @@ import com.alipay.sofa.runtime.configure.SofaRuntimeConfigurationProperties;
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @TestPropertySource(properties = { "com.alipay.sofa.boot.disableJvmFirst=true",
-                                  "com.alipay.sofa.boot.skipJvmReferenceHealthCheck=true" })
+                                  "com.alipay.sofa.boot.skipJvmReferenceHealthCheck=true",
+                                  "com.alipay.sofa.boot.skipJvmSerialize=true", })
 public class SofaRuntimePropertiesTest {
 
     @Autowired
@@ -60,6 +61,15 @@ public class SofaRuntimePropertiesTest {
         Assert
             .assertTrue(SofaRuntimeProperties.isSkipJvmReferenceHealthCheck(ctx.getClassLoader()));
         Assert.assertTrue(configurationProperties.isSkipJvmReferenceHealthCheck());
+    }
+
+    @Test
+    public void testSkipJvmSerializeProperty() {
+        SofaRuntimeConfigurationProperties configurationProperties = ctx
+            .getBean(SofaRuntimeConfigurationProperties.class);
+
+        Assert.assertTrue(SofaRuntimeProperties.isSkipJvmSerialize(ctx.getClassLoader()));
+        Assert.assertTrue(configurationProperties.isSkipJvmSerialize());
     }
 
     @Configuration

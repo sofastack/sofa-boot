@@ -27,8 +27,8 @@ import com.alipay.sofa.runtime.log.SofaLogger;
  * @author xuanbei 18/3/1
  */
 public abstract class AbstractPipelineStage implements PipelineStage {
-    protected final ClassLoader                appClassLoader = AbstractPipelineStage.class
-                                                                  .getClassLoader();
+    protected final ClassLoader                appClassLoader = Thread.currentThread()
+                                                                  .getContextClassLoader();
     protected final AbstractApplicationContext applicationContext;
     protected final String                     appName;
 

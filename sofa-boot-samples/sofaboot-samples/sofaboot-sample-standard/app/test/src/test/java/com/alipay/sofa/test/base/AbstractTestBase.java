@@ -36,7 +36,7 @@ import com.alipay.sofa.SOFABootWebApplication;
  * Created by yangguanchao on 16/11/9.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = SOFABootWebApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(classes = SOFABootWebApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class AbstractTestBase {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
@@ -50,10 +50,10 @@ public abstract class AbstractTestBase {
      * 8080
      */
     @LocalServerPort
-    public int                 definedPort;
+    public int                 port;
 
     @Before
     public void setUp() {
-        urlHttpPrefix = "http://localhost:" + definedPort;
+        urlHttpPrefix = "http://localhost:" + port;
     }
 }
