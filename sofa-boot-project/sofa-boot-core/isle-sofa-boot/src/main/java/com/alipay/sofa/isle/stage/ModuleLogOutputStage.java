@@ -16,24 +16,22 @@
  */
 package com.alipay.sofa.isle.stage;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.support.AbstractApplicationContext;
-import org.springframework.util.CollectionUtils;
-
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
 import com.alipay.sofa.isle.spring.factory.BeanLoadCostBeanFactory;
 import com.alipay.sofa.runtime.log.SofaLogger;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.util.CollectionUtils;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
 
 /**
- *
  * @author fengqi.lin
  * @author yangyanzhao
  * @version $Id: ModuleLogOutputStage.java, v 0.1 2012-3-16 18:17:48 fengqi.lin Exp $
@@ -55,7 +53,7 @@ public class ModuleLogOutputStage extends AbstractPipelineStage {
     @Override
     protected void doProcess() throws Exception {
         ApplicationRuntimeModel application = applicationContext.getBean(
-            SofaBootConstants.APPLICATION, ApplicationRuntimeModel.class);
+                SofaBootConstants.APPLICATION, ApplicationRuntimeModel.class);
 
         StringBuilder stringBuilder = new StringBuilder();
         logInstalledModules(stringBuilder, application.getInstalled());
@@ -70,9 +68,9 @@ public class ModuleLogOutputStage extends AbstractPipelineStage {
         long realStart = 0;
         long realEnd = 0;
         stringBuilder.append("\n").append("Spring context initialize success module list")
-            .append("(").append(deploys.size()).append(") >>>>>>>");
+                .append("(").append(deploys.size()).append(") >>>>>>>");
         StringBuilder sb = new StringBuilder();
-        for (Iterator<DeploymentDescriptor> i = deploys.iterator(); i.hasNext();) {
+        for (Iterator<DeploymentDescriptor> i = deploys.iterator(); i.hasNext(); ) {
             DeploymentDescriptor dd = i.next();
             String outTreeSymbol = SYMBOLIC1;
             String innerTreeSymbol1 = SYMBOLIC3;
@@ -84,10 +82,10 @@ public class ModuleLogOutputStage extends AbstractPipelineStage {
                 innerTreeSymbol2 = SYMBOLIC6;
             }
             sb.append(outTreeSymbol).append(dd.getName()).append(" [").append(dd.getElapsedTime())
-                .append(" ms]\n");
+                    .append(" ms]\n");
             totalTime += dd.getElapsedTime();
 
-            for (Iterator<String> j = dd.getInstalledSpringXml().iterator(); j.hasNext();) {
+            for (Iterator<String> j = dd.getInstalledSpringXml().iterator(); j.hasNext(); ) {
                 String xmlPath = j.next();
                 String innerTreeSymbol = innerTreeSymbol1;
                 if (!j.hasNext()) {
@@ -105,13 +103,13 @@ public class ModuleLogOutputStage extends AbstractPipelineStage {
             }
         }
         stringBuilder.append(" [totalTime = ").append(totalTime).append(" ms, realTime = ")
-            .append(realEnd - realStart).append(" ms]\n").append(sb);
+                .append(realEnd - realStart).append(" ms]\n").append(sb);
     }
 
     private void logFailedModules(StringBuilder stringBuilder, List<DeploymentDescriptor> deploys) {
         stringBuilder.append("\n").append("Spring context initialize failed module list")
-            .append("(").append(deploys.size()).append(") >>>>>>>\n");
-        for (Iterator<DeploymentDescriptor> i = deploys.iterator(); i.hasNext();) {
+                .append("(").append(deploys.size()).append(") >>>>>>>\n");
+        for (Iterator<DeploymentDescriptor> i = deploys.iterator(); i.hasNext(); ) {
             DeploymentDescriptor dd = i.next();
             String treeSymbol = SYMBOLIC1;
             if (!i.hasNext()) {
@@ -126,9 +124,9 @@ public class ModuleLogOutputStage extends AbstractPipelineStage {
         long realStart = 0;
         long realEnd = 0;
         stringBuilder.append("\n").append("Spring bean load time cost list").append("(")
-            .append(deploys.size()).append(") >>>>>>>");
+                .append(deploys.size()).append(") >>>>>>>");
         StringBuilder sb = new StringBuilder();
-        for (Iterator<DeploymentDescriptor> i = deploys.iterator(); i.hasNext();) {
+        for (Iterator<DeploymentDescriptor> i = deploys.iterator(); i.hasNext(); ) {
             DeploymentDescriptor dd = i.next();
             String outTreeSymbol = SYMBOLIC1;
             String innerTreeSymbol1 = SYMBOLIC3;
@@ -140,7 +138,7 @@ public class ModuleLogOutputStage extends AbstractPipelineStage {
                 innerTreeSymbol2 = SYMBOLIC6;
             }
             sb.append(outTreeSymbol).append(dd.getName()).append(" [").append(dd.getElapsedTime())
-                .append(" ms]\n");
+                    .append(" ms]\n");
             totalTime += dd.getElapsedTime();
 
             this.beanCostInfo(dd, sb, innerTreeSymbol1, innerTreeSymbol2);
@@ -154,13 +152,13 @@ public class ModuleLogOutputStage extends AbstractPipelineStage {
             }
         }
         stringBuilder.append(" [totalTime = ").append(totalTime).append(" ms, realTime = ")
-            .append(realEnd - realStart).append(" ms]\n").append(sb);
+                .append(realEnd - realStart).append(" ms]\n").append(sb);
     }
 
     private void beanCostInfo(DeploymentDescriptor dd, StringBuilder sb, String innerTreeSymbol1,
                               String innerTreeSymbol2) {
         BeanFactory beanFactory = ((ConfigurableApplicationContext) dd.getApplicationContext())
-            .getBeanFactory();
+                .getBeanFactory();
         if (!(beanFactory instanceof BeanLoadCostBeanFactory)) {
             return;
         }
@@ -174,12 +172,19 @@ public class ModuleLogOutputStage extends AbstractPipelineStage {
                 @Override
                 public int compare(BeanLoadCostBeanFactory.BeanNode o1,
                                    BeanLoadCostBeanFactory.BeanNode o2) {
+                    if (o1 == null && o2 == null) {
+                        return 0;
+                    } else if (o1 != null && o2 == null) {
+                        return 1;
+                    } else if (o1 == null && o2 != null) {
+                        return -1;
+                    }
                     return Long.compare(o2.costTime, o1.costTime);
                 }
             });
 
             for (Iterator<BeanLoadCostBeanFactory.BeanNode> beanNameNode = beanCosts.iterator(); beanNameNode
-                .hasNext();) {
+                    .hasNext(); ) {
                 BeanLoadCostBeanFactory.BeanNode node = beanNameNode.next();
                 String innerTreeSymbol = innerTreeSymbol1;
                 if (!beanNameNode.hasNext()) {
