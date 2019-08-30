@@ -16,24 +16,22 @@
  */
 package com.alipay.sofa.isle.stage;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.support.AbstractApplicationContext;
-import org.springframework.util.CollectionUtils;
-
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
 import com.alipay.sofa.isle.spring.factory.BeanLoadCostBeanFactory;
 import com.alipay.sofa.runtime.log.SofaLogger;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.util.CollectionUtils;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
 
 /**
- *
  * @author fengqi.lin
  * @author yangyanzhao
  * @version $Id: ModuleLogOutputStage.java, v 0.1 2012-3-16 18:17:48 fengqi.lin Exp $
@@ -174,6 +172,13 @@ public class ModuleLogOutputStage extends AbstractPipelineStage {
                 @Override
                 public int compare(BeanLoadCostBeanFactory.BeanNode o1,
                                    BeanLoadCostBeanFactory.BeanNode o2) {
+                    if (o1 == null && o2 == null) {
+                        return 0;
+                    } else if (o1 != null && o2 == null) {
+                        return 1;
+                    } else if (o1 == null && o2 != null) {
+                        return -1;
+                    }
                     return Long.compare(o2.costTime, o1.costTime);
                 }
             });
