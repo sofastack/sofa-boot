@@ -271,7 +271,8 @@ public class SofaBootRpcProperties {
 
     public String getAftRegulationEffective() {
         if (StringUtils.isEmpty(aftRegulationEffective)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getAftRegulationEffective")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -285,7 +286,8 @@ public class SofaBootRpcProperties {
 
     public String getAftDegradeEffective() {
         if (StringUtils.isEmpty(aftDegradeEffective)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getAftDegradeEffective")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -299,7 +301,8 @@ public class SofaBootRpcProperties {
 
     public String getAftTimeWindow() {
         if (StringUtils.isEmpty(aftTimeWindow)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getAftTimeWindow")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -313,7 +316,8 @@ public class SofaBootRpcProperties {
 
     public String getAftLeastWindowCount() {
         if (StringUtils.isEmpty(aftLeastWindowCount)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getAftLeastWindowCount")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -327,7 +331,8 @@ public class SofaBootRpcProperties {
 
     public String getAftLeastWindowExceptionRateMultiple() {
         if (StringUtils.isEmpty(aftLeastWindowExceptionRateMultiple)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getAftLeastWindowExceptionRateMultiple")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -341,7 +346,8 @@ public class SofaBootRpcProperties {
 
     public String getAftWeightDegradeRate() {
         if (StringUtils.isEmpty(aftWeightDegradeRate)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getAftWeightDegradeRate")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -355,7 +361,8 @@ public class SofaBootRpcProperties {
 
     public String getAftWeightRecoverRate() {
         if (StringUtils.isEmpty(aftWeightRecoverRate)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getAftWeightRecoverRate")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -369,7 +376,8 @@ public class SofaBootRpcProperties {
 
     public String getAftDegradeLeastWeight() {
         if (StringUtils.isEmpty(aftDegradeLeastWeight)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getAftDegradeLeastWeight")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -383,7 +391,8 @@ public class SofaBootRpcProperties {
 
     public String getAftDegradeMaxIpCount() {
         if (StringUtils.isEmpty(aftDegradeMaxIpCount)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getAftDegradeMaxIpCount")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -402,7 +411,8 @@ public class SofaBootRpcProperties {
         }
 
         if (StringUtils.isEmpty(boltPort)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getBoltPort")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -416,7 +426,8 @@ public class SofaBootRpcProperties {
 
     public String getDubboIoThreadSize() {
         if (StringUtils.isEmpty(dubboIoThreadSize)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getDubboIoThreadSize")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -435,7 +446,8 @@ public class SofaBootRpcProperties {
         }
 
         if (StringUtils.isEmpty(boltThreadPoolCoreSize)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getBoltThreadPoolCoreSize")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -454,7 +466,8 @@ public class SofaBootRpcProperties {
         }
 
         if (StringUtils.isEmpty(boltThreadPoolMaxSize)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getBoltThreadPoolMaxSize")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -468,7 +481,8 @@ public class SofaBootRpcProperties {
 
     public String getBoltAcceptsSize() {
         if (StringUtils.isEmpty(boltAcceptsSize)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getBoltAcceptsSize")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -482,7 +496,8 @@ public class SofaBootRpcProperties {
 
     public String getRestHostname() {
         if (StringUtils.isEmpty(restHostname)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getRestHostname")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -496,7 +511,8 @@ public class SofaBootRpcProperties {
 
     public String getRestPort() {
         if (StringUtils.isEmpty(restPort)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getRestPort")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -510,7 +526,8 @@ public class SofaBootRpcProperties {
 
     public String getRestIoThreadSize() {
         if (StringUtils.isEmpty(restIoThreadSize)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getRestIoThreadSize")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -524,7 +541,8 @@ public class SofaBootRpcProperties {
 
     public String getRestContextPath() {
         if (StringUtils.isEmpty(restContextPath)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getRestContextPath")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -538,7 +556,8 @@ public class SofaBootRpcProperties {
 
     public String getRestThreadPoolMaxSize() {
         if (StringUtils.isEmpty(restThreadPoolMaxSize)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getRestThreadPoolMaxSize")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -552,7 +571,8 @@ public class SofaBootRpcProperties {
 
     public String getRestMaxRequestSize() {
         if (StringUtils.isEmpty(restMaxRequestSize)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getRestMaxRequestSize")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -566,7 +586,8 @@ public class SofaBootRpcProperties {
 
     public String getRestTelnet() {
         if (StringUtils.isEmpty(restTelnet)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getRestTelnet")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -580,7 +601,8 @@ public class SofaBootRpcProperties {
 
     public String getRestDaemon() {
         if (StringUtils.isEmpty(restDaemon)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getRestDaemon")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -594,7 +616,8 @@ public class SofaBootRpcProperties {
 
     public String getDubboPort() {
         if (StringUtils.isEmpty(dubboPort)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getDubboPort")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -608,7 +631,8 @@ public class SofaBootRpcProperties {
 
     public String getDubboThreadPoolMaxSize() {
         if (StringUtils.isEmpty(dubboThreadPoolMaxSize)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getDubboThreadPoolMaxSize")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -622,7 +646,8 @@ public class SofaBootRpcProperties {
 
     public String getDubboAcceptsSize() {
         if (StringUtils.isEmpty(dubboAcceptsSize)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getDubboAcceptsSize")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -636,7 +661,8 @@ public class SofaBootRpcProperties {
 
     public String getRegistryAddress() {
         if (StringUtils.isEmpty(registryAddress)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getRegistryAddress")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -654,7 +680,8 @@ public class SofaBootRpcProperties {
             return environment.getProperty(SofaOptions.TR_QUEUE_SIZE);
         }
         if (StringUtils.isEmpty(boltThreadPoolQueueSize)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getBoltThreadPoolQueueSize")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -668,7 +695,8 @@ public class SofaBootRpcProperties {
 
     public String getDubboThreadPoolCoreSize() {
         if (StringUtils.isEmpty(dubboThreadPoolCoreSize)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getDubboThreadPoolCoreSize")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -682,7 +710,8 @@ public class SofaBootRpcProperties {
 
     public String getDubboThreadPoolQueueSize() {
         if (StringUtils.isEmpty(dubboThreadPoolQueueSize)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getDubboThreadPoolQueueSize")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -696,7 +725,8 @@ public class SofaBootRpcProperties {
 
     public String getRestThreadPoolCoreSize() {
         if (StringUtils.isEmpty(restThreadPoolCoreSize)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getRestThreadPoolCoreSize")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -710,7 +740,8 @@ public class SofaBootRpcProperties {
 
     public String getVirtualHost() {
         if (StringUtils.isEmpty(virtualHost)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getVirtualHost")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -724,7 +755,8 @@ public class SofaBootRpcProperties {
 
     public String getBoundHost() {
         if (StringUtils.isEmpty(boundHost)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getBoundHost")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -738,7 +770,8 @@ public class SofaBootRpcProperties {
 
     public String getVirtualPort() {
         if (StringUtils.isEmpty(virtualPort)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getVirtualPort")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -757,7 +790,8 @@ public class SofaBootRpcProperties {
         }
 
         if (StringUtils.isEmpty(enabledIpRange)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getEnabledIpRange")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -776,7 +810,8 @@ public class SofaBootRpcProperties {
         }
 
         if (StringUtils.isEmpty(bindNetworkInterface)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getBindNetworkInterface")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -790,7 +825,8 @@ public class SofaBootRpcProperties {
 
     public String getH2cPort() {
         if (StringUtils.isEmpty(h2cPort)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getH2cPort")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -804,7 +840,8 @@ public class SofaBootRpcProperties {
 
     public String getH2cThreadPoolCoreSize() {
         if (StringUtils.isEmpty(h2cThreadPoolCoreSize)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getH2cThreadPoolCoreSize")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -818,7 +855,8 @@ public class SofaBootRpcProperties {
 
     public String getH2cThreadPoolMaxSize() {
         if (StringUtils.isEmpty(h2cThreadPoolMaxSize)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getH2cThreadPoolMaxSize")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -832,7 +870,8 @@ public class SofaBootRpcProperties {
 
     public String getH2cThreadPoolQueueSize() {
         if (StringUtils.isEmpty(h2cThreadPoolQueueSize)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getH2cThreadPoolQueueSize")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -846,7 +885,8 @@ public class SofaBootRpcProperties {
 
     public String getH2cAcceptsSize() {
         if (StringUtils.isEmpty(h2cAcceptsSize)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getH2cAcceptsSize")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -860,7 +900,8 @@ public class SofaBootRpcProperties {
 
     public String getLookoutCollectDisable() {
         if (StringUtils.isEmpty(lookoutCollectDisable)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getLookoutCollectDisable")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -882,7 +923,8 @@ public class SofaBootRpcProperties {
 
     public String getEnableMesh() {
         if (StringUtils.isEmpty(enableMesh)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getEnableMesh")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -896,7 +938,8 @@ public class SofaBootRpcProperties {
 
     public String getConsumerRepeatedReferenceLimit() {
         if (StringUtils.isEmpty(consumerRepeatedReferenceLimit)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getConsumerRepeatedReferenceLimit")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -918,7 +961,8 @@ public class SofaBootRpcProperties {
 
     public String getHystrixEnable() {
         if (StringUtils.isEmpty(hystrixEnable)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getHystrixEnable")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
@@ -932,7 +976,8 @@ public class SofaBootRpcProperties {
 
     public String getRestAllowedOrigins() {
         if (StringUtils.isEmpty(restAllowedOrigins)) {
-            Object object = new Object();
+            Object object = new Object() {
+            };
             @ContainReflection(value = "com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties", method = "getRestAllowedOrigins")
             String str = object.getClass().getEnclosingMethod().getName();
             return getDotString(str);
