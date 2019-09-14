@@ -27,7 +27,7 @@ import com.alipay.sofa.runtime.spi.spring.RuntimeShutdownAware;
 /**
  * @author xuanbei
  * @author qilong.zql
- * @since 2.5.0
+ * @since 3.2.0
  */
 public class RuntimeShutdownAwarePostProcessor implements MergedBeanDefinitionPostProcessor,
                                               PriorityOrdered {

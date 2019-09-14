@@ -94,6 +94,7 @@
                                     <class>com.alipay.sofa.runtime.SofaRuntimeProperties</class>
                                     <class>com.alipay.sofa.runtime.service.binding.JvmBindingParam</class>
                                     <class>com.alipay.sofa.runtime.spi.service.ServiceProxy</class>
+                                    <class>com.alipay.sofa.runtime.spi.spring.RuntimeShutdownAware</class>
                                 </classes>
                             </exported>
 
