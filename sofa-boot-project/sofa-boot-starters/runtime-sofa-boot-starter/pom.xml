@@ -44,13 +44,6 @@
             <artifactId>sofa-boot-autoconfigure</artifactId>
         </dependency>
 
-        <!-- provided -->
-        <dependency>
-            <groupId>com.alipay.sofa</groupId>
-            <artifactId>sofa-ark-spi</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
         <!-- test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

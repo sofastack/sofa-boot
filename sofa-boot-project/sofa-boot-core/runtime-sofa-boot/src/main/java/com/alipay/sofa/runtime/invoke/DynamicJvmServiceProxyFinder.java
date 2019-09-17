@@ -66,15 +66,15 @@ public class DynamicJvmServiceProxyFinder {
     public ServiceProxy findServiceProxy(ClassLoader clientClassloader, Contract contract) {
         String interfaceType = contract.getInterfaceType().getCanonicalName();
         String uniqueId = contract.getUniqueId();
-        String version = ReplayContext.get();
-
-        if (ReplayContext.PLACEHOLDER.equals(version)) {
-            version = null;
-        }
-
         for (SofaRuntimeManager sofaRuntimeManager : SofaFramework.getRuntimeSet()) {
             if (sofaRuntimeManager.getAppClassLoader().equals(clientClassloader)) {
                 continue;
+            }
+
+            String version = ReplayContext.get();
+
+            if (ReplayContext.PLACEHOLDER.equals(version)) {
+                version = null;
             }
 
             Biz biz = getBiz(sofaRuntimeManager);
@@ -199,7 +199,9 @@ public class DynamicJvmServiceProxyFinder {
                     }
                 }
 
-                ReplayContext.setPlaceHolder();
+                if (getDynamicJvmServiceProxyFinder().bizManagerService != null) {
+                    ReplayContext.setPlaceHolder();
+                }
 
                 if (TOSTRING_METHOD.equalsIgnoreCase(targetMethod.getName())
                     && targetMethod.getParameterTypes().length == 0) {
@@ -224,7 +226,9 @@ public class DynamicJvmServiceProxyFinder {
             } catch (InvocationTargetException ex) {
                 throw ex.getTargetException();
             } finally {
-                ReplayContext.clearPlaceHolder();
+                if (getDynamicJvmServiceProxyFinder().bizManagerService != null) {
+                    ReplayContext.clearPlaceHolder();
+                }
                 setClientClassloader(null);
             }
         }
