@@ -41,7 +41,7 @@
         <dependency>
             <groupId>com.alipay.sofa</groupId>
             <artifactId>tracer-sample-with-dubbo-facade</artifactId>
-            <version>3.2.0</version>
+            <version>3.2.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
