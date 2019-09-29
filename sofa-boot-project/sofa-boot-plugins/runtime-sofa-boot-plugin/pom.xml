@@ -75,7 +75,6 @@
 
                             <exported>
                                 <packages>
-                                    <!--开源导出-->
                                     <package>com.alipay.sofa.runtime.api.component</package>
                                     <package>com.alipay.sofa.runtime.api.annotation</package>
                                     <package>com.alipay.sofa.runtime.api.aware</package>
