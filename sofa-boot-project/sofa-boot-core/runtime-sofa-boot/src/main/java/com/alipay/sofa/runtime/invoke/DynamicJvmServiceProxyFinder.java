@@ -187,6 +187,10 @@ public class DynamicJvmServiceProxyFinder {
                     .debug(">> Start in Cross App JVM service invoke, the service interface is  - "
                            + getInterfaceType());
 
+                if (getDynamicJvmServiceProxyFinder().bizManagerService != null) {
+                    ReplayContext.setPlaceHolder();
+                }
+
                 // check whether skip serialize or not
                 if (!serialize || SofaRuntimeProperties.isSkipJvmSerialize(clientClassloader.get())) {
                     ClassLoader tcl = Thread.currentThread().getContextClassLoader();
@@ -196,10 +200,6 @@ public class DynamicJvmServiceProxyFinder {
                     } finally {
                         pushThreadContextClassLoader(tcl);
                     }
-                }
-
-                if (getDynamicJvmServiceProxyFinder().bizManagerService != null) {
-                    ReplayContext.setPlaceHolder();
                 }
 
                 if (TOSTRING_METHOD.equalsIgnoreCase(targetMethod.getName())
