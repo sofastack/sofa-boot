@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>sofa-boot-plugins</artifactId>
+        <groupId>com.alipay.sofa</groupId>
+        <version>3.2.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>tracer-sofa-boot-plugin</artifactId>
+
+    <properties>
+        <main.user.dir>${basedir}/../../..</main.user.dir>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>tracer-sofa-boot-starter</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>sofa-ark-plugin-maven-plugin</artifactId>
+                <version>1.0.0</version>
+                <executions>
+                    <execution>
+                        <id>default-cli</id>
+                        <goals>
+                            <goal>ark-plugin</goal>
+                        </goals>
+
+                        <configuration>
+                            <priority>2000</priority>
+
+                            <exported>
+                                <packages>
+                                    <package>com.alipay.common.tracer.core.*</package>
+                                    <package>io.opentracing.*</package>
+                                </packages>
+                            </exported>
+
+                            <excludeGroupIds>
+                                <excludeGroupId>org.springframework</excludeGroupId>
+                                <excludeGroupId>org.springframework.boot</excludeGroupId>
+                            </excludeGroupIds>
+
+                            <excludeArtifactIds>
+                                <excludeArtifactId>tracer-sofa-boot-starter</excludeArtifactId>
+                                <excludeArtifactId>sofa-tracer-springmvc-plugin</excludeArtifactId>
+                                <excludeArtifactId>tracer-extensions</excludeArtifactId>
+                                <excludeArtifactId>slf4j-api</excludeArtifactId>
+                            </excludeArtifactIds>
+
+                        </configuration>
+                    </execution>
+
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+
+</project>

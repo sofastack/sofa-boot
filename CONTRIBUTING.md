@@ -16,7 +16,7 @@ the ability to merge pull requests.
 ### Code Conventions
 None of these is essential for a pull request, but they will all help.
 
-1. we provided a [code formatter file](./Formatter.xml), it will formatting
+1. we provided a [code formatter file](tools/Formatter.xml), it will formatting
 automatically your project when during process of building.
 
 2. Make sure all new `.java` files to have a simple Javadoc class comment

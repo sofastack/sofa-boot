@@ -1,0 +1,4 @@
+com.alipay.sofa.rpc.boot.runtime.converter.BoltBindingConverter
+com.alipay.sofa.rpc.boot.runtime.converter.RestBindingConverter
+com.alipay.sofa.rpc.boot.runtime.converter.DubboBindingConverter
+com.alipay.sofa.rpc.boot.runtime.converter.H2cBindingConverter

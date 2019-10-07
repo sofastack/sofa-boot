@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:sofa="http://sofastack.io/schema/sofaboot"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://sofastack.io/schema/sofaboot http://sofastack.io/schema/sofaboot.xsd"
+       default-autowire="byName">
+    <!-- rest -->
+    <bean id="restServiceImpl" class="com.alipay.sofa.rpc.samples.rest.RestServiceImpl"/>
+    <sofa:service ref="restServiceImpl" interface="com.alipay.sofa.rpc.samples.rest.RestService">
+        <sofa:binding.rest/>
+    </sofa:service>
+</beans>
