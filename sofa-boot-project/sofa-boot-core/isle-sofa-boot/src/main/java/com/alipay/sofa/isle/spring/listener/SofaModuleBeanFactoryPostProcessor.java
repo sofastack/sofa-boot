@@ -16,21 +16,22 @@
  */
 package com.alipay.sofa.isle.spring.listener;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import com.alipay.sofa.boot.util.BeanDefinitionUtil;
+import com.alipay.sofa.isle.spring.share.SofaModulePostProcessorShareManager;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.ConfigurationClassPostProcessor;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 
 import com.alipay.sofa.boot.constant.SofaBootConstants;
+import org.springframework.core.env.Environment;
 
 /**
  * get all the BeanPostProcessors and BeanFactoryPostProcessors of the root application context
@@ -38,32 +39,55 @@ import com.alipay.sofa.boot.constant.SofaBootConstants;
  * @author xuanbei 18/3/26
  */
 @Order(Ordered.LOWEST_PRECEDENCE)
-public class SofaModuleBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
+public class SofaModuleBeanFactoryPostProcessor implements BeanFactoryPostProcessor,
+                                               EnvironmentAware {
     /** spring will add automatically  **/
-    private final String[] whiteNameList = new String[] {
+    private final String[]                      whiteNameList = new String[] {
             ConfigurationClassPostProcessor.class.getName() + ".importAwareProcessor",
             ConfigurationClassPostProcessor.class.getName() + ".importRegistry",
             ConfigurationClassPostProcessor.class.getName() + ".enhancedConfigurationProcessor" };
 
+    private SofaModulePostProcessorShareManager sofaModulePostProcessorShareManager;
+
+    private Boolean                             isShareParentContextPostProcessors;
+
+    public SofaModuleBeanFactoryPostProcessor(SofaModulePostProcessorShareManager shareManager) {
+        this.sofaModulePostProcessorShareManager = shareManager;
+    }
+
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory)
                                                                                    throws BeansException {
-        Map<String, BeanDefinition> postProcessorDefinitions = getBeanDefinitionsForType(
-            beanFactory, BeanPostProcessor.class, BeanFactoryPostProcessor.class);
+        Map<String, BeanDefinition> postProcessorDefinitions = new HashMap<>();
         beanFactory.registerSingleton(SofaBootConstants.PROCESSORS_OF_ROOT_APPLICATION_CONTEXT,
             postProcessorDefinitions);
+        if (this.isShareParentContextPostProcessors) {
+            postProcessorDefinitions.putAll(getBeanDefinitionsForType(beanFactory,
+                BeanPostProcessor.class));
+            postProcessorDefinitions.putAll(getBeanDefinitionsForType(beanFactory,
+                BeanFactoryPostProcessor.class));
+        }
     }
 
     private Map<String, BeanDefinition> getBeanDefinitionsForType(ConfigurableListableBeanFactory beanFactory,
-                                                                  Class... types) {
+                                                                  Class type) {
         Map<String, BeanDefinition> map = new HashMap<>();
-        for (Class type : types) {
-            String[] beanNamesForType = beanFactory.getBeanNamesForType(type);
-            List<String> beanDefinitionNames = Arrays.asList(beanFactory.getBeanDefinitionNames());
-            for (String beanName : beanNamesForType) {
-                if (notInWhiteNameList(beanName) && beanDefinitionNames.contains(beanName)) {
-                    map.put(beanName, beanFactory.getBeanDefinition(beanName));
+
+        // get all beanDefinitionNames from parent context
+        Set<String> allBeanDefinitionNames = new HashSet<>(Arrays.asList(beanFactory
+            .getBeanDefinitionNames()));
+
+        String[] beanNamesForType = beanFactory.getBeanNamesForType(type);
+
+        for (String beanName : beanNamesForType) {
+            if (notInWhiteNameList(beanName) && allBeanDefinitionNames.contains(beanName)) {
+                BeanDefinition beanDefinition = beanFactory.getBeanDefinition(beanName);
+                Class cls = BeanDefinitionUtil.resolveBeanClassType(beanDefinition);
+                if (sofaModulePostProcessorShareManager.unableToShare(cls)
+                    || sofaModulePostProcessorShareManager.unableToShare(beanName)) {
+                    continue;
                 }
+                map.put(beanName, beanFactory.getBeanDefinition(beanName));
             }
         }
 
@@ -76,7 +100,13 @@ public class SofaModuleBeanFactoryPostProcessor implements BeanFactoryPostProces
                 return false;
             }
         }
-
         return true;
+    }
+
+    @Override
+    public void setEnvironment(Environment environment) {
+        this.isShareParentContextPostProcessors = environment.getProperty(
+            SofaBootConstants.SOFABOOT_SHARE_PARENT_CONTEXT_POST_PROCESSOR_ENABLED, Boolean.class,
+            SofaBootConstants.SOFABOOT_SHARE_PARENT_CONTEXT_POST_PROCESSOR_DEFAULT_ENABLED);
     }
 }
