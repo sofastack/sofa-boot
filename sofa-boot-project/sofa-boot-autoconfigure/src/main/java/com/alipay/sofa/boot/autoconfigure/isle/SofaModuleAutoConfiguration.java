@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.boot.autoconfigure.isle;
 
+import com.alipay.sofa.isle.spring.share.SofaModulePostProcessorShareManager;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -83,5 +84,11 @@ public class SofaModuleAutoConfiguration {
     @ConditionalOnMissingBean
     public SofaModuleProfileChecker sofaModuleProfileChecker() {
         return new DefaultSofaModuleProfileChecker();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public SofaModulePostProcessorShareManager sofaModulePostProcessorShareManager(ApplicationContext applicationContext) {
+        return new SofaModulePostProcessorShareManager((AbstractApplicationContext) applicationContext);
     }
 }

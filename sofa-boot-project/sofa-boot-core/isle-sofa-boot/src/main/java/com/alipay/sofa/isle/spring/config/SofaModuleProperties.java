@@ -34,6 +34,7 @@ public class SofaModuleProperties {
     private boolean     allowBeanDefinitionOverriding = false;
     private boolean     moduleStartUpParallel         = true;
     private boolean     publishEventToParent          = false;
+    private boolean     shareParentContextPostProcessors = true;
 
     public String getActiveProfiles() {
         return activeProfiles;
@@ -73,5 +74,13 @@ public class SofaModuleProperties {
 
     public void setPublishEventToParent(boolean publishEventToParent) {
         this.publishEventToParent = publishEventToParent;
+    }
+
+    public boolean enableShareParentContextPostProcessors() {
+        return shareParentContextPostProcessors;
+    }
+
+    public void setShareParentContextPostProcessors(boolean shareParentContextPostProcessors) {
+        this.shareParentContextPostProcessors = shareParentContextPostProcessors;
     }
 }
