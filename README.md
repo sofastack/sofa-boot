@@ -65,10 +65,10 @@ SOFA 的第一个版本是阿玺创造的，感谢阿玺给 SOFA 打下了坚实
 
 在此工程的 `sofaboot-samples` 目录下的是 SOFABoot 的示例工程，分别为：
 
-* [SOFABoot 示例工程](./sofaboot-samples/sofaboot-sample)
-* [SOFABoot 示例工程（包含类隔离能力）](./sofaboot-samples/sofaboot-sample-with-isolation)
-* [SOFABoot 示例工程（包含模块化开发能力）](./sofaboot-samples/sofaboot-sample-with-isle)
-* [SOFABoot 示例工程（使用 SOFARPC）](./sofaboot-samples/sofaboot-sample-with-rpc)
+* [SOFABoot 示例工程](./sofa-boot-samples/sofaboot-samples/sofaboot-sample)
+* [SOFABoot 示例工程（包含类隔离能力）](./sofa-boot-samples/sofaboot-samples/sofaboot-sample-with-isolation)
+* [SOFABoot 示例工程（包含模块化开发能力）](./sofa-boot-samples/sofaboot-samples/sofaboot-sample-with-isle)
+* [SOFABoot 示例工程（使用 SOFARPC）](./sofa-boot-samples/sofaboot-samples/sofaboot-sample-with-rpc)
  
 ## 七、文档
 
@@ -76,4 +76,4 @@ SOFA 的第一个版本是阿玺创造的，感谢阿玺给 SOFA 打下了坚实
 
 ## 八、开源许可
 
-SOFABoot 基于 Apache License 2.0 协议，SOFABoot 依赖了一些三方组件，它们的开源协议参见 [依赖组件版权说明](https://www.sofastack.tech/sofa-boot/docs/NOTICE)
+SOFABoot 基于 Apache License 2.0 协议，SOFABoot 依赖了一些三方组件，它们的开源协议参见 [依赖组件版权说明](https://www.sofastack.tech/projects/sofa-boot/notice/)

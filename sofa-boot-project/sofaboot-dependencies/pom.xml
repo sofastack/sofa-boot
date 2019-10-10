@@ -6,7 +6,7 @@
 
     <parent>
         <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-dependencies</artifactId>
+        <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.1.0.RELEASE</version>
     </parent>
 
@@ -38,7 +38,7 @@
         <sofa.hessian.version>3.3.6</sofa.hessian.version>
 
         <!--3rd lib dependency-->
-        <fastjson.version>1.2.47</fastjson.version>
+        <fastjson.version>1.2.61</fastjson.version>
         <grpc-all.version>1.0.3</grpc-all.version>
         <javassist.version>3.19.0-GA</javassist.version>
         <protobuf-java.version>2.6.1</protobuf-java.version>
@@ -46,6 +46,7 @@
         <guava.version>18.0</guava.version>
         <zipkin.version>2.11.3</zipkin.version>
         <zipkin.reporter.version>2.7.7</zipkin.reporter.version>
+        <jackson.version>2.9.10</jackson.version>
 
         <!--maven plugin-->
         <maven.staging.plugin>1.6.7</maven.staging.plugin>

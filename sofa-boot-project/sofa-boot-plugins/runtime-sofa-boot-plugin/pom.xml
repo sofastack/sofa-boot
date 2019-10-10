@@ -38,6 +38,11 @@
         </dependency>
 
         <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>hessian</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>aopalliance</groupId>
             <artifactId>aopalliance</artifactId>
             <version>1.0</version>
@@ -69,30 +74,48 @@
 
                             <exported>
                                 <packages>
-                                    <package>com.alipay.sofa.runtime.api.*</package>
-                                    <package>com.alipay.sofa.runtime.client.*</package>
-                                    <package>com.alipay.sofa.runtime.component.*</package>
-                                    <package>com.alipay.sofa.runtime.constants.*</package>
-                                    <package>com.alipay.sofa.runtime.test.*</package>
-                                    <package>com.alipay.sofa.runtime.model.*</package>
-                                    <package>com.alipay.sofa.runtime.service.component</package>
+                                    <package>com.alipay.sofa.runtime.api.component</package>
+                                    <package>com.alipay.sofa.runtime.api.annotation</package>
+                                    <package>com.alipay.sofa.runtime.api.aware</package>
+                                    <package>com.alipay.sofa.runtime.api.binding</package>
+                                    <package>com.alipay.sofa.runtime.api.component</package>
+                                    <package>com.alipay.sofa.runtime.api.client.*</package>
+
                                     <package>com.alipay.sofa.runtime.service.helper</package>
+                                    <package>com.alipay.sofa.runtime.service.component</package>
+
+                                    <package>com.alipay.sofa.runtime.spi.binding</package>
+                                    <package>com.alipay.sofa.runtime.spi.health</package>
+                                    <package>com.alipay.sofa.runtime.spi.util</package>
                                     <package>com.alipay.sofa.runtime.spi.client</package>
                                     <package>com.alipay.sofa.runtime.spi.component</package>
-                                    <package>com.alipay.sofa.runtime.spi.health</package>
-                                    <package>com.alipay.sofa.runtime.spi.log</package>
-                                    <package>com.alipay.sofa.runtime.spi.binding</package>
-                                    <package>com.alipay.sofa.runtime.spi.util</package>
+
+                                    <package>com.alipay.sofa.runtime.client.impl</package>
+                                    <package>com.alipay.sofa.runtime.component.impl</package>
+                                    <package>com.alipay.sofa.runtime.model.*</package>
+
                                     <package>org.aopalliance.aop</package>
                                     <package>org.aopalliance.intercept</package>
                                 </packages>
 
                                 <classes>
                                     <class>com.alipay.sofa.runtime.service.binding.JvmBinding</class>
+                                    <class>com.alipay.sofa.runtime.service.binding.JvmBindingParam</class>
                                     <class>com.alipay.sofa.runtime.SofaFramework</class>
                                     <class>com.alipay.sofa.runtime.SofaRuntimeProperties</class>
-                                    <class>com.alipay.sofa.runtime.service.binding.JvmBindingParam</class>
+
+                                    <class>com.alipay.sofa.runtime.api.ServiceRuntimeException</class>
+                                    <class>com.alipay.sofa.runtime.api.ServiceValidationException</class>
+
+                                    <class>com.alipay.sofa.runtime.component.impl.ComponentManagerImpl</class>
+                                    <class>com.alipay.sofa.runtime.component.impl.StandardSofaRuntimeManager</class>
+
+                                    <class>com.alipay.sofa.runtime.spi.spring.RuntimeShutdownAware</class>
+                                    <class>com.alipay.sofa.runtime.spi.spring.SofaRuntimeContextAware</class>
                                     <class>com.alipay.sofa.runtime.spi.service.ServiceProxy</class>
+
+                                    <class>com.alipay.sofa.runtime.invoke.DynamicJvmServiceProxyFinder</class>
+                                    <class>com.alipay.sofa.boot.health.RuntimeHealthChecker</class>
                                 </classes>
                             </exported>
 
@@ -116,7 +139,6 @@
                                 <excludeArtifactId>validation-api</excludeArtifactId>
                                 <excludeArtifactId>log-sofa-boot-starter</excludeArtifactId>
                             </excludeArtifactIds>
-
                         </configuration>
                     </execution>
                 </executions>
