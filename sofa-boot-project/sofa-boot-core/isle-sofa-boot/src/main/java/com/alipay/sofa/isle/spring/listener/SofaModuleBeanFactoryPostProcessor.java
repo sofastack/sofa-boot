@@ -21,6 +21,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.alipay.sofa.boot.util.BeanDefinitionUtil;
+import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
+import com.alipay.sofa.isle.spring.share.SofaModulePostProcessorShareManager;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
@@ -40,30 +43,53 @@ import com.alipay.sofa.boot.constant.SofaBootConstants;
 @Order(Ordered.LOWEST_PRECEDENCE)
 public class SofaModuleBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
     /** spring will add automatically  **/
-    private final String[] whiteNameList = new String[] {
+    private final String[]                      whiteNameList = new String[] {
             ConfigurationClassPostProcessor.class.getName() + ".importAwareProcessor",
             ConfigurationClassPostProcessor.class.getName() + ".importRegistry",
             ConfigurationClassPostProcessor.class.getName() + ".enhancedConfigurationProcessor" };
 
+    private SofaModulePostProcessorShareManager sofaModulePostProcessorShareManager;
+
+    private SofaModuleProperties                properties;
+
+    public SofaModuleBeanFactoryPostProcessor(SofaModulePostProcessorShareManager shareManager,
+                                              SofaModuleProperties moduleProperties) {
+        this.sofaModulePostProcessorShareManager = shareManager;
+        this.properties = moduleProperties;
+    }
+
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory)
                                                                                    throws BeansException {
-        Map<String, BeanDefinition> postProcessorDefinitions = getBeanDefinitionsForType(
-            beanFactory, BeanPostProcessor.class, BeanFactoryPostProcessor.class);
-        beanFactory.registerSingleton(SofaBootConstants.PROCESSORS_OF_ROOT_APPLICATION_CONTEXT,
-            postProcessorDefinitions);
+        if (this.properties.isShareParentContextPostProcessors()) {
+            Map<String, BeanDefinition> postProcessorDefinitions = new HashMap<>();
+            postProcessorDefinitions.putAll(getBeanDefinitionsForType(beanFactory,
+                BeanPostProcessor.class));
+            postProcessorDefinitions.putAll(getBeanDefinitionsForType(beanFactory,
+                BeanFactoryPostProcessor.class));
+            beanFactory.registerSingleton(SofaBootConstants.PROCESSORS_OF_ROOT_APPLICATION_CONTEXT,
+                postProcessorDefinitions);
+        }
     }
 
     private Map<String, BeanDefinition> getBeanDefinitionsForType(ConfigurableListableBeanFactory beanFactory,
-                                                                  Class... types) {
+                                                                  Class type) {
         Map<String, BeanDefinition> map = new HashMap<>();
-        for (Class type : types) {
-            String[] beanNamesForType = beanFactory.getBeanNamesForType(type);
-            List<String> beanDefinitionNames = Arrays.asList(beanFactory.getBeanDefinitionNames());
-            for (String beanName : beanNamesForType) {
-                if (notInWhiteNameList(beanName) && beanDefinitionNames.contains(beanName)) {
-                    map.put(beanName, beanFactory.getBeanDefinition(beanName));
+
+        // get all beanDefinitionNames from parent context
+        List<String> allBeanDefinitionNames = Arrays.asList(beanFactory.getBeanDefinitionNames());
+
+        String[] beanNamesForType = beanFactory.getBeanNamesForType(type);
+
+        for (String beanName : beanNamesForType) {
+            if (notInWhiteNameList(beanName) && allBeanDefinitionNames.contains(beanName)) {
+                BeanDefinition beanDefinition = beanFactory.getBeanDefinition(beanName);
+                Class cls = BeanDefinitionUtil.resolveBeanClassType(beanDefinition);
+                if (sofaModulePostProcessorShareManager.unableToShare(cls)
+                    || sofaModulePostProcessorShareManager.unableToShare(beanName)) {
+                    continue;
                 }
+                map.put(beanName, beanFactory.getBeanDefinition(beanName));
             }
         }
 

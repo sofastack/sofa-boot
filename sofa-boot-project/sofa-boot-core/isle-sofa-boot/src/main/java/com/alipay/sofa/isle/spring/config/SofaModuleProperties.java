@@ -27,13 +27,14 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @ConfigurationProperties(prefix = PREFIX)
 public class SofaModuleProperties {
-    static final String PREFIX                        = "com.alipay.sofa.boot";
+    static final String PREFIX                           = "com.alipay.sofa.boot";
 
     private String      activeProfiles;
-    private long        beanLoadCost                  = 100;
-    private boolean     allowBeanDefinitionOverriding = false;
-    private boolean     moduleStartUpParallel         = true;
-    private boolean     publishEventToParent          = false;
+    private long        beanLoadCost                     = 100;
+    private boolean     allowBeanDefinitionOverriding    = false;
+    private boolean     moduleStartUpParallel            = true;
+    private boolean     publishEventToParent             = false;
+    private boolean     shareParentContextPostProcessors = true;
 
     public String getActiveProfiles() {
         return activeProfiles;
@@ -73,5 +74,13 @@ public class SofaModuleProperties {
 
     public void setPublishEventToParent(boolean publishEventToParent) {
         this.publishEventToParent = publishEventToParent;
+    }
+
+    public boolean isShareParentContextPostProcessors() {
+        return shareParentContextPostProcessors;
+    }
+
+    public void setShareParentContextPostProcessors(boolean shareParentContextPostProcessors) {
+        this.shareParentContextPostProcessors = shareParentContextPostProcessors;
     }
 }

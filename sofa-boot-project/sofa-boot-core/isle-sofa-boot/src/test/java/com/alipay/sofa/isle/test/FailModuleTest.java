@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.isle.test;
 
+import com.alipay.sofa.isle.spring.share.SofaModulePostProcessorShareManager;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -77,8 +78,9 @@ public class FailModuleTest {
     @EnableConfigurationProperties(SofaModuleProperties.class)
     public static class FailModuleTestConfiguration {
         @Bean
-        public static SofaModuleBeanFactoryPostProcessor sofaModuleBeanFactoryPostProcessor() {
-            return new SofaModuleBeanFactoryPostProcessor();
+        public static SofaModuleBeanFactoryPostProcessor sofaModuleBeanFactoryPostProcessor(SofaModulePostProcessorShareManager shareManager,
+                                                                                            SofaModuleProperties properties) {
+            return new SofaModuleBeanFactoryPostProcessor(shareManager, properties);
         }
 
         @Bean
@@ -115,6 +117,13 @@ public class FailModuleTest {
         @ConditionalOnMissingBean
         public SofaModuleProfileChecker sofaModuleProfileChecker() {
             return new DefaultSofaModuleProfileChecker();
+        }
+
+        @Bean
+        @ConditionalOnMissingBean
+        public SofaModulePostProcessorShareManager sofaModulePostProcessorShareManager(ApplicationContext applicationContext) {
+            return new SofaModulePostProcessorShareManager(
+                (AbstractApplicationContext) applicationContext);
         }
     }
 }
