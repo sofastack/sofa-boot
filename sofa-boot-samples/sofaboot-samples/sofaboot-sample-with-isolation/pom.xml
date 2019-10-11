@@ -81,6 +81,7 @@
             <plugin>
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>sofa-ark-maven-plugin</artifactId>
+                <version>${sofa.ark.version}</version>
                 <executions>
                     <execution>
                         <!--goal executed to generate executable-ark-jar -->
