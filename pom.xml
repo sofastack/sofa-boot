@@ -40,7 +40,6 @@
 
     <modules>
         <module>sofa-boot-project</module>
-        <module>sofa-boot-samples</module>
     </modules>
 
     <build>
