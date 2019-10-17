@@ -14,6 +14,7 @@
 
     <properties>
         <main.user.dir>${basedir}/..</main.user.dir>
+        <sofa.ark.version>1.1.0-SNAPSHOT</sofa.ark.version>
     </properties>
 
     <modules>
