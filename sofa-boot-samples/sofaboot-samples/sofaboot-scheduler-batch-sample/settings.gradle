@@ -1,5 +1,0 @@
-include ':sofa-boot-scheduler'
-include ':batch-job-facade'
-include ':batch-task-facade'
-include ':batch-task-list-job-provider'
-include ':sofa-boot-rpc-batch-service'
