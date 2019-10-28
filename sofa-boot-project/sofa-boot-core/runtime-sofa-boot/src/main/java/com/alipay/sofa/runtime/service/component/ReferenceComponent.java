@@ -27,6 +27,7 @@ import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.client.ServiceClient;
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.api.component.Property;
+import com.alipay.sofa.runtime.invoke.DynamicJvmServiceProxyFinder;
 import com.alipay.sofa.runtime.log.SofaLogger;
 import com.alipay.sofa.runtime.model.ComponentType;
 import com.alipay.sofa.runtime.service.binding.JvmBinding;
@@ -40,6 +41,7 @@ import com.alipay.sofa.runtime.spi.component.DefaultImplementation;
 import com.alipay.sofa.runtime.spi.component.Implementation;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.health.HealthResult;
+import com.alipay.sofa.runtime.spi.service.ServiceProxy;
 import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
 
 /**
@@ -257,6 +259,11 @@ public class ReferenceComponent extends AbstractComponent {
 
         if (componentInfo != null) {
             serviceTarget = componentInfo.getImplementation().getTarget();
+        }
+
+        if (serviceTarget == null) {
+            serviceTarget = DynamicJvmServiceProxyFinder.getDynamicJvmServiceProxyFinder()
+                .findServiceProxy(sofaRuntimeContext.getAppClassLoader(), reference);
         }
         return serviceTarget;
     }
