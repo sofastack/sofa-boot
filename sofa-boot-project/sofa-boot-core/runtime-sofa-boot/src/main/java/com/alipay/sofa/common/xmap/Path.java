@@ -59,7 +59,7 @@ public class Path {
 
     private void parse(String path) {
         ArrayList<String> seg = new ArrayList<String>();
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         char[] chars = path.toCharArray();
         boolean attr = false;
         for (char c : chars) {
