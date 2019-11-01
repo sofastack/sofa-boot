@@ -22,13 +22,13 @@
             <artifactId>sofa-boot</artifactId>
         </dependency>
 
-        <!--Optional-->
         <dependency>
             <groupId>com.alipay.sofa</groupId>
             <artifactId>sofa-ark-spi</artifactId>
             <optional>true</optional>
         </dependency>
 
+        <!--Optional-->
         <dependency>
             <groupId>com.alipay.sofa</groupId>
             <artifactId>hessian</artifactId>
