@@ -16,9 +16,7 @@
  */
 package com.alipay.sofa.runtime;
 
-import com.alipay.sofa.ark.spi.constant.Constants;
-import com.alipay.sofa.ark.spi.event.ArkEvent;
-import com.alipay.sofa.ark.spi.event.BizEvent;
+import com.alipay.sofa.ark.spi.event.biz.BeforeBizStopEvent;
 import com.alipay.sofa.ark.spi.model.Biz;
 import com.alipay.sofa.ark.spi.service.PriorityOrdered;
 import com.alipay.sofa.ark.spi.service.event.EventHandler;
@@ -28,28 +26,18 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
  * @author qilong.zql
  * @since 2.5.0
  */
-public class SofaEventHandler implements EventHandler {
+public class SofaBizUninstallEventHandler implements EventHandler<BeforeBizStopEvent> {
+
     @Override
-    public void handleEvent(ArkEvent event) {
-        if (Constants.BIZ_EVENT_TOPIC_AFTER_INVOKE_BIZ_STOP.equals(event.getTopic())) {
-            doUninstallBiz((BizEvent) event);
-        } else if (Constants.BIZ_EVENT_TOPIC_AFTER_INVOKE_BIZ_START.equals(event.getTopic())) {
-            doHealthCheck((BizEvent) event);
-        }
+    public void handleEvent(BeforeBizStopEvent event) {
+        doUninstallBiz(event.getSource());
     }
 
-    private void doUninstallBiz(BizEvent event) {
-        SofaRuntimeProperties.unRegisterProperties(event.getBiz().getBizClassLoader());
-        SofaRuntimeManager sofaRuntimeManager = getSofaRuntimeManager(event.getBiz());
+    private void doUninstallBiz(Biz biz) {
+        SofaRuntimeProperties.unRegisterProperties(biz.getBizClassLoader());
+        SofaRuntimeManager sofaRuntimeManager = getSofaRuntimeManager(biz);
         SofaFramework.unRegisterSofaRuntimeManager(sofaRuntimeManager);
         sofaRuntimeManager.shutdown();
-    }
-
-    private void doHealthCheck(BizEvent event) {
-        SofaRuntimeManager sofaRuntimeManager = getSofaRuntimeManager(event.getBiz());
-        if (!sofaRuntimeManager.isReadinessHealth()) {
-            throw new RuntimeException("Health check failed.");
-        }
     }
 
     private SofaRuntimeManager getSofaRuntimeManager(Biz biz) {
