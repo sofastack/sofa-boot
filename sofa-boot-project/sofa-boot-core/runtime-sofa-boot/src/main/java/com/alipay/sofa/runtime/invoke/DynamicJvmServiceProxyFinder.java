@@ -180,27 +180,16 @@ public class DynamicJvmServiceProxyFinder {
         @Override
         protected Object doInvoke(MethodInvocation invocation) throws Throwable {
             try {
-                Method targetMethod = invocation.getMethod();
-                Object[] targetArguments = invocation.getArguments();
-
                 SofaLogger
                     .debug(">> Start in Cross App JVM service invoke, the service interface is  - "
                            + getInterfaceType());
 
-                // check whether skip serialize or not
-                if (!serialize || SofaRuntimeProperties.isSkipJvmSerialize(clientClassloader.get())) {
-                    ClassLoader tcl = Thread.currentThread().getContextClassLoader();
-                    try {
-                        pushThreadContextClassLoader(getServiceClassLoader());
-                        return targetMethod.invoke(targetService, targetArguments);
-                    } finally {
-                        pushThreadContextClassLoader(tcl);
-                    }
-                }
-
                 if (getDynamicJvmServiceProxyFinder().bizManagerService != null) {
                     ReplayContext.setPlaceHolder();
                 }
+
+                Method targetMethod = invocation.getMethod();
+                Object[] targetArguments = invocation.getArguments();
 
                 if (TOSTRING_METHOD.equalsIgnoreCase(targetMethod.getName())
                     && targetMethod.getParameterTypes().length == 0) {
@@ -214,14 +203,24 @@ public class DynamicJvmServiceProxyFinder {
                 }
 
                 Class[] oldArgumentTypes = targetMethod.getParameterTypes();
-
-                final Object[] arguments = (Object[]) hessianTransport(targetArguments, null);
-                final Class[] argumentTypes = (Class[]) hessianTransport(oldArgumentTypes, null);
-
-                Method transformMethod = getTargetMethod(targetMethod, argumentTypes);
-                Object retVal = transformMethod.invoke(targetService, arguments);
-
-                return hessianTransport(retVal, getClientClassloader());
+                Method transformMethod;
+                // check whether skip serialize or not
+                if (!serialize || SofaRuntimeProperties.isSkipJvmSerialize(clientClassloader.get())) {
+                    ClassLoader tcl = Thread.currentThread().getContextClassLoader();
+                    try {
+                        pushThreadContextClassLoader(getServiceClassLoader());
+                        transformMethod = getTargetMethod(targetMethod, oldArgumentTypes);
+                        return transformMethod.invoke(targetService, targetArguments);
+                    } finally {
+                        pushThreadContextClassLoader(tcl);
+                    }
+                } else {
+                    Object[] arguments = (Object[]) hessianTransport(targetArguments, null);
+                    Class[] argumentTypes = (Class[]) hessianTransport(oldArgumentTypes, null);
+                    transformMethod = getTargetMethod(targetMethod, argumentTypes);
+                    Object retVal = transformMethod.invoke(targetService, arguments);
+                    return hessianTransport(retVal, getClientClassloader());
+                }
             } catch (InvocationTargetException ex) {
                 throw ex.getTargetException();
             } finally {
