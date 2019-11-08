@@ -70,6 +70,12 @@ public class ServerConfigContainer {
     private volatile ServerConfig     h2cServerConfig;
     private final Object              H2C_LOCK            = new Object();
 
+    /**
+     * http ServerConfig
+     */
+    private volatile ServerConfig     httpServerConfig;
+    private final Object              HTTP_LOCK           = new Object();
+
     //custom server configs
     private Map<String, ServerConfig> customServerConfigs = new ConcurrentHashMap<String, ServerConfig>();
 
@@ -105,6 +111,12 @@ public class ServerConfigContainer {
 
         if (h2cServerConfig != null) {
             h2cServerConfig.buildIfAbsent().start();
+        }
+
+        if (httpServerConfig != null) {
+            httpServerConfig.buildIfAbsent().start();
+
+            // 加入线程监测？
         }
 
         for (Map.Entry<String, ServerConfig> entry : customServerConfigs.entrySet()) {
@@ -166,6 +178,17 @@ public class ServerConfigContainer {
             }
 
             return h2cServerConfig;
+        } else if (protocol.equalsIgnoreCase(SofaBootRpcConfigConstants.RPC_PROTOCOL_HTTP)) {
+
+            if (httpServerConfig == null) {
+                synchronized (HTTP_LOCK) {
+                    if (httpServerConfig == null) {
+                        httpServerConfig = createHttpServerConfig();
+                    }
+                }
+            }
+
+            return httpServerConfig;
         } else if (customServerConfigs.get(protocol) != null) {
             return customServerConfigs.get(protocol);
         } else {
@@ -411,6 +434,46 @@ public class ServerConfigContainer {
 
         return serverConfig;
 
+    }
+
+    /**
+     * 创建 http ServerConfig。rest 的 配置不需要外层 starter 设置默认值。
+     *
+     * @return H2c 的服务端配置信息
+     */
+    ServerConfig createHttpServerConfig() {
+        String portStr = sofaBootRpcProperties.getHttpPort();
+        String httpThreadPoolCoreSizeStr = sofaBootRpcProperties.getHttpThreadPoolCoreSize();
+        String httpThreadPoolMaxSizeStr = sofaBootRpcProperties.getHttpThreadPoolMaxSize();
+        String acceptsSizeStr = sofaBootRpcProperties.getHttpAcceptsSize();
+        String httpThreadPoolQueueSizeStr = sofaBootRpcProperties.getHttpThreadPoolQueueSize();
+
+        ServerConfig serverConfig = new ServerConfig();
+
+        if (StringUtils.hasText(portStr)) {
+            serverConfig.setPort(Integer.parseInt(portStr));
+        } else {
+            serverConfig.setPort(SofaBootRpcConfigConstants.HTTP_PORT_DEFAULT);
+        }
+
+        if (StringUtils.hasText(httpThreadPoolCoreSizeStr)) {
+            serverConfig.setMaxThreads(Integer.parseInt(httpThreadPoolCoreSizeStr));
+        }
+
+        if (StringUtils.hasText(httpThreadPoolMaxSizeStr)) {
+            serverConfig.setCoreThreads(Integer.parseInt(httpThreadPoolMaxSizeStr));
+        }
+
+        if (StringUtils.hasText(acceptsSizeStr)) {
+            serverConfig.setAccepts(Integer.parseInt(acceptsSizeStr));
+        }
+
+        if (StringUtils.hasText(httpThreadPoolQueueSizeStr)) {
+            serverConfig.setQueues(Integer.parseInt(httpThreadPoolQueueSizeStr));
+        }
+
+        serverConfig.setAutoStart(false);
+        return serverConfig.setProtocol(SofaBootRpcConfigConstants.RPC_PROTOCOL_HTTP);
     }
 
     /**
