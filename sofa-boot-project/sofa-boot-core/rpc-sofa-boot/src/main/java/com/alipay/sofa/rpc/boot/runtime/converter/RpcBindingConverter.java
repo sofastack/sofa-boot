@@ -16,19 +16,6 @@
  */
 package com.alipay.sofa.rpc.boot.runtime.converter;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.context.ApplicationContext;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
-import org.springframework.util.xml.DomUtils;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-
 import com.alipay.sofa.rpc.boot.common.SofaBootRpcParserUtil;
 import com.alipay.sofa.rpc.boot.common.SofaBootRpcRuntimeException;
 import com.alipay.sofa.rpc.boot.common.SofaBootRpcSpringUtil;
@@ -49,6 +36,18 @@ import com.alipay.sofa.runtime.api.annotation.SofaService;
 import com.alipay.sofa.runtime.api.annotation.SofaServiceBinding;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
+import org.springframework.context.ApplicationContext;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
+import org.springframework.util.xml.DomUtils;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 解析 XML配置或者 {@link RpcBindingParam} 为 {@link RpcBinding}
@@ -130,7 +129,7 @@ public abstract class RpcBindingConverter implements BindingConverter<RpcBinding
      */
     protected abstract RpcBindingParam createRpcBindingParam();
 
-    private void parseMethod(List<Element> elements, RpcBindingParam param) {
+    protected void parseMethod(List<Element> elements, RpcBindingParam param) {
 
         if (CollectionUtils.isEmpty(elements)) {
             return;
@@ -180,7 +179,7 @@ public abstract class RpcBindingConverter implements BindingConverter<RpcBinding
         param.setMethodInfos(boltBindingMethodInfos);
     }
 
-    private void parseParameter(List<Element> parameterElements, RpcBindingParam param) {
+    protected void parseParameter(List<Element> parameterElements, RpcBindingParam param) {
         if (CollectionUtils.isEmpty(parameterElements)) {
             return;
         }
@@ -196,8 +195,8 @@ public abstract class RpcBindingConverter implements BindingConverter<RpcBinding
         param.setParameters(parameters);
     }
 
-    private void parseGlobalAttrs(Element element, RpcBindingParam param,
-                                  BindingConverterContext bindingConverterContext) {
+    protected void parseGlobalAttrs(Element element, RpcBindingParam param,
+                                    BindingConverterContext bindingConverterContext) {
         if (element == null) {
             return;
         }
@@ -288,8 +287,8 @@ public abstract class RpcBindingConverter implements BindingConverter<RpcBinding
         }
     }
 
-    private void parseFilter(Element element, RpcBindingParam param,
-                             BindingConverterContext bindingConverterContext) {
+    protected void parseFilter(Element element, RpcBindingParam param,
+                               BindingConverterContext bindingConverterContext) {
         List<Filter> filters = new ArrayList<Filter>(RpcFilterContainer.getInstance().getFilters(
             bindingConverterContext.getApplicationContext()));
 
@@ -333,7 +332,7 @@ public abstract class RpcBindingConverter implements BindingConverter<RpcBinding
         param.setFilters(filters);
     }
 
-    private void parseRoute(Element routeElement, RpcBindingParam param) {
+    protected void parseRoute(Element routeElement, RpcBindingParam param) {
         if (routeElement == null) {
             return;
         }
@@ -345,8 +344,8 @@ public abstract class RpcBindingConverter implements BindingConverter<RpcBinding
 
     }
 
-    private void setCallback(RpcBindingParam bindingParam,
-                             BindingConverterContext bindingConverterContext) {
+    protected void setCallback(RpcBindingParam bindingParam,
+                               BindingConverterContext bindingConverterContext) {
         //global
         if (bindingParam.getCallbackHandler() == null) {
             Object globalCallbackHandler = SofaBootRpcSpringUtil.getSpringBean(
@@ -571,7 +570,7 @@ public abstract class RpcBindingConverter implements BindingConverter<RpcBinding
         return rpcBindingMethodInfos;
     }
 
-    private Map<String, String> parseSofaParameters(SofaParameter[] parameterAnnos) {
+    protected Map<String, String> parseSofaParameters(SofaParameter[] parameterAnnos) {
         Map<String, String> parameters = new LinkedHashMap<String, String>();
         for (SofaParameter parameter : parameterAnnos) {
             parameters.put(parameter.key(), parameter.value());
