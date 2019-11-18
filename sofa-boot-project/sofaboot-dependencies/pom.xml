@@ -35,7 +35,7 @@
         <!--2rd lib dependency-->
         <sofa.common.tools.version>1.0.19</sofa.common.tools.version>
         <sofa.bolt.version>1.5.6</sofa.bolt.version>
-        <sofa.hessian.version>3.3.6</sofa.hessian.version>
+        <sofa.hessian.version>3.3.7-SNAPSHOT</sofa.hessian.version>
 
         <!--3rd lib dependency-->
         <fastjson.version>1.2.61</fastjson.version>
