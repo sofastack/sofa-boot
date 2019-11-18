@@ -213,6 +213,33 @@ public class SofaBootRpcProperties {
     private String              dubboAcceptsSize;
     /* dubbo  end*/
 
+    /* http start*/
+    /**
+     * the port of http (http 端口)
+     */
+    private String              httpPort;
+
+    /**
+     * the core thread pool size of http （http 核心线程数）
+     */
+    private String              httpThreadPoolCoreSize;
+
+    /**
+     * the max thread pool size of http （http 最大线程数）
+     */
+    private String              httpThreadPoolMaxSize;
+
+    /**
+     * the queue size of http server（http 线程池队列）
+     */
+    private String              httpThreadPoolQueueSize;
+
+    /**
+     * the max accept size of http (http 服务端允许客户端建立的连接数)
+     */
+    private String              httpAcceptsSize;
+    /* http end*/
+
     /* registry */
     /**
      * registry address of rpc server （注册中心的地址）
@@ -656,6 +683,51 @@ public class SofaBootRpcProperties {
 
     public void setH2cAcceptsSize(String h2cAcceptsSize) {
         this.h2cAcceptsSize = h2cAcceptsSize;
+    }
+
+    public String getHttpPort() {
+        return StringUtils.isEmpty(httpPort) ? getDotString(new Object() {
+        }.getClass().getEnclosingMethod().getName()) : httpPort;
+    }
+
+    public void setHttpPort(String httpPort) {
+        this.httpPort = httpPort;
+    }
+
+    public String getHttpThreadPoolCoreSize() {
+        return StringUtils.isEmpty(httpThreadPoolCoreSize) ? getDotString(new Object() {
+        }.getClass().getEnclosingMethod().getName()) : httpThreadPoolCoreSize;
+    }
+
+    public void setHttpThreadPoolCoreSize(String httpThreadPoolCoreSize) {
+        this.httpThreadPoolCoreSize = httpThreadPoolCoreSize;
+    }
+
+    public String getHttpThreadPoolMaxSize() {
+        return StringUtils.isEmpty(httpThreadPoolMaxSize) ? getDotString(new Object() {
+        }.getClass().getEnclosingMethod().getName()) : httpThreadPoolMaxSize;
+    }
+
+    public void setHttpThreadPoolMaxSize(String httpThreadPoolMaxSize) {
+        this.httpThreadPoolMaxSize = httpThreadPoolMaxSize;
+    }
+
+    public String getHttpThreadPoolQueueSize() {
+        return StringUtils.isEmpty(httpThreadPoolQueueSize) ? getDotString(new Object() {
+        }.getClass().getEnclosingMethod().getName()) : httpThreadPoolQueueSize;
+    }
+
+    public void setHttpThreadPoolQueueSize(String httpThreadPoolQueueSize) {
+        this.httpThreadPoolQueueSize = httpThreadPoolQueueSize;
+    }
+
+    public String getHttpAcceptsSize() {
+        return StringUtils.isEmpty(httpAcceptsSize) ? getDotString(new Object() {
+        }.getClass().getEnclosingMethod().getName()) : httpAcceptsSize;
+    }
+
+    public void setHttpAcceptsSize(String httpAcceptsSize) {
+        this.httpAcceptsSize = httpAcceptsSize;
     }
 
     public String getLookoutCollectDisable() {

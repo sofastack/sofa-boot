@@ -14,24 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.rpc.boot.runtime.binding;
+package com.alipay.sofa.rpc.boot.runtime.adapter;
 
+import com.alipay.sofa.rpc.boot.runtime.binding.RpcBindingType;
 import com.alipay.sofa.runtime.api.binding.BindingType;
 
 /**
  *
- * @author <a href="mailto:lw111072@antfin.com">LiWei</a>
+ * @author HuangSheng
  */
-public class RpcBindingType {
+public class HttpBindingAdapter extends RpcBindingAdapter {
 
-    public static final BindingType BOLT_BINDING_TYPE  = new BindingType("bolt");
-
-    public static final BindingType REST_BINDING_TYPE  = new BindingType("rest");
-
-    public static final BindingType DUBBO_BINDING_TYPE = new BindingType("dubbo");
-
-    public static final BindingType H2C_BINDING_TYPE   = new BindingType("h2c");
-
-    public static final BindingType HTTP_BINDING_TYPE  = new BindingType("http");
+    @Override
+    public BindingType getBindingType() {
+        return RpcBindingType.HTTP_BINDING_TYPE;
+    }
 
 }
