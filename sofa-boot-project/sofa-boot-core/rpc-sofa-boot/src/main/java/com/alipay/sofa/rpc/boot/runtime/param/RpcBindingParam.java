@@ -16,15 +16,15 @@
  */
 package com.alipay.sofa.rpc.boot.runtime.param;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import com.alipay.sofa.rpc.boot.runtime.binding.RpcBindingMethodInfo;
 import com.alipay.sofa.rpc.filter.Filter;
 import com.alipay.sofa.rpc.server.UserThreadPool;
 import com.alipay.sofa.runtime.api.client.param.BindingParam;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * XML 元素和属性会被解析为 RpcBindingParam 。
@@ -78,6 +78,8 @@ public abstract class RpcBindingParam implements BindingParam {
     protected Map<String, String>        parameters = new ConcurrentHashMap<String, String>();
 
     protected List<String>               registrys  = new ArrayList<String>();
+
+    private Integer                      repeatReferLimit;
 
     /**
      * Getter method for property <tt>timeout</tt>.
@@ -534,4 +536,13 @@ public abstract class RpcBindingParam implements BindingParam {
         result = 31 * result + (registrys != null ? registrys.hashCode() : 0);
         return result;
     }
+
+    public Integer getRepeatReferLimit() {
+        return repeatReferLimit;
+    }
+
+    public void setRepeatReferLimit(Integer repeatReferLimit) {
+        this.repeatReferLimit = repeatReferLimit;
+    }
+
 }
