@@ -29,7 +29,7 @@
         <sofa.lookout.version>1.5.2</sofa.lookout.version>
 
         <!--core-->
-        <tracer.core.version>3.0.5</tracer.core.version>
+        <tracer.core.version>3.0.8</tracer.core.version>
         <rpc.core.version>5.6.3-SNAPSHOT</rpc.core.version>
 
         <!--2rd lib dependency-->
@@ -256,6 +256,13 @@
                 <artifactId>sofa-tracer-httpclient-plugin</artifactId>
                 <version>${tracer.core.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>sofa-tracer-okhttp-plugin</artifactId>
+                <version>${tracer.core.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>sofa-tracer-datasource-plugin</artifactId>
@@ -271,6 +278,25 @@
                 <artifactId>sofa-tracer-dubbo-plugin</artifactId>
                 <version>${tracer.core.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>sofa-tracer-dubbo-2.6.x-plugin</artifactId>
+                <version>${tracer.core.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>sofa-tracer-flexible-plugin</artifactId>
+                <version>${tracer.core.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>sofa-tracer-resttmplate-plugin</artifactId>
+                <version>${tracer.core.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>sofa-tracer-zipkin-plugin</artifactId>

@@ -16,18 +16,14 @@
  */
 package com.alipay.sofa.boot.autoconfigure.tracer;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import com.alipay.sofa.tracer.boot.datasource.processor.DataSourceBeanFactoryPostProcessor;
+import com.alipay.sofa.tracer.boot.datasource.processor.DataSourceBeanPostProcessor;
+import com.alipay.sofa.tracer.boot.datasource.properties.SofaTracerDataSourceProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import com.alipay.sofa.tracer.boot.datasource.processor.DataSourceBeanFactoryPostProcessor;
-import com.alipay.sofa.tracer.boot.datasource.processor.DataSourceBeanPostProcessor;
-import com.alipay.sofa.tracer.boot.datasource.properties.SofaTracerDataSourceProperties;
-import com.alipay.sofa.tracer.boot.properties.SofaTracerProperties;
-import com.alipay.sofa.tracer.plugins.datasource.SmartDataSource;
 
 /**
  * @author qilong.zql
@@ -35,19 +31,17 @@ import com.alipay.sofa.tracer.plugins.datasource.SmartDataSource;
  */
 @Configuration
 @EnableConfigurationProperties(SofaTracerDataSourceProperties.class)
-@ConditionalOnClass({ SofaTracerProperties.class, SmartDataSource.class })
+@ConditionalOnProperty(prefix = "com.alipay.sofa.tracer.datasource", value = "enable", matchIfMissing = true)
 public class SofaTracerDataSourceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    @ConditionalOnProperty(prefix = "com.alipay.sofa.tracer.datasource", value = "enable", matchIfMissing = true)
     public static DataSourceBeanFactoryPostProcessor DataSourceBeanFactoryPostProcessor() {
         return new DataSourceBeanFactoryPostProcessor();
     }
 
     @Bean
     @ConditionalOnMissingBean
-    @ConditionalOnProperty(prefix = "com.alipay.sofa.tracer.datasource", value = "enable", matchIfMissing = true)
     public static DataSourceBeanPostProcessor dataSourceBeanPostProcessor() {
         return new DataSourceBeanPostProcessor();
     }

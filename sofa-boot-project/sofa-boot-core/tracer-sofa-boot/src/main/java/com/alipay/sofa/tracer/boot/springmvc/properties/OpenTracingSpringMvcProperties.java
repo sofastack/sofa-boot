@@ -41,11 +41,6 @@ public class OpenTracingSpringMvcProperties {
      */
     private List<String> urlPatterns = new ArrayList<String>();
 
-    /**
-     * json output : com.alipay.sofa.tracer.springmvc.jsonOutput=true,
-     */
-    private boolean      jsonOutput  = true;
-
     public int getFilterOrder() {
         return filterOrder;
     }
@@ -60,13 +55,5 @@ public class OpenTracingSpringMvcProperties {
 
     public void setUrlPatterns(List<String> urlPatterns) {
         this.urlPatterns = urlPatterns;
-    }
-
-    public boolean isJsonOutput() {
-        return jsonOutput;
-    }
-
-    public void setJsonOutput(boolean jsonOutput) {
-        this.jsonOutput = jsonOutput;
     }
 }
