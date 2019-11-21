@@ -22,6 +22,7 @@ import com.alipay.sofa.tracer.plugins.springmvc.SpringMvcSofaTracerFilter;
 import com.alipay.sofa.tracer.plugins.webflux.WebfluxSofaTracerFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -42,9 +43,9 @@ import java.util.List;
  */
 @Configuration
 @EnableConfigurationProperties({ OpenTracingSpringMvcProperties.class, SofaTracerProperties.class })
-@ConditionalOnWebApplication
 @ConditionalOnProperty(prefix = "com.alipay.sofa.tracer.springmvc", value = "enable", matchIfMissing = true)
 @AutoConfigureAfter(SofaTracerAutoConfiguration.class)
+@ConditionalOnClass(SofaTracerProperties.class)
 public class OpenTracingSpringMvcAutoConfiguration {
 
     @Autowired
@@ -52,6 +53,7 @@ public class OpenTracingSpringMvcAutoConfiguration {
 
     @Configuration
     @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
+    @ConditionalOnClass(SpringMvcSofaTracerFilter.class)
     public class SpringMvcDelegatingFilterProxyConfiguration {
         @Bean
         public FilterRegistrationBean springMvcDelegatingFilterProxy() {
@@ -73,6 +75,7 @@ public class OpenTracingSpringMvcAutoConfiguration {
 
     @Configuration
     @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
+    @ConditionalOnClass(WebfluxSofaTracerFilter.class)
     public class WebfluxSofaTracerFilterConfiguration {
         @Bean
         @Order(Ordered.HIGHEST_PRECEDENCE + 10)

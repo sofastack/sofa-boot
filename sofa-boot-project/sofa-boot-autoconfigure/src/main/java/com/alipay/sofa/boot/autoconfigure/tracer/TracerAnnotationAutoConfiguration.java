@@ -23,6 +23,7 @@ import com.alipay.sofa.tracer.boot.flexible.processor.SofaTracerMethodInvocation
 import io.opentracing.Tracer;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -36,6 +37,7 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnProperty(prefix = "com.alipay.sofa.tracer.flexible", value = "enable", matchIfMissing = true)
 @AutoConfigureAfter(SofaTracerAutoConfiguration.class)
 @ConditionalOnBean(Tracer.class)
+@ConditionalOnClass(SofaTracerIntroductionInterceptor.class)
 public class TracerAnnotationAutoConfiguration {
 
     @Bean

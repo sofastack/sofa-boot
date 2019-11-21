@@ -17,6 +17,7 @@
 package com.alipay.sofa.boot.autoconfigure.tracer;
 
 import com.alipay.sofa.tracer.boot.springcloud.processor.SofaTracerFeignContextBeanPostProcessor;
+import com.alipay.sofa.tracer.plugins.springcloud.instruments.feign.SofaTracerFeignContext;
 import feign.Client;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
@@ -31,7 +32,8 @@ import org.springframework.context.annotation.Configuration;
  * @since:
  **/
 @Configuration
-@ConditionalOnClass(Client.class)
+@ConditionalOnClass({ Client.class, SofaTracerFeignContextBeanPostProcessor.class,
+                     SofaTracerFeignContext.class })
 @AutoConfigureBefore(FeignAutoConfiguration.class)
 @ConditionalOnProperty(name = "com.alipay.sofa.tracer.feign.enabled", havingValue = "true", matchIfMissing = true)
 public class SofaTracerFeignClientAutoConfiguration {
