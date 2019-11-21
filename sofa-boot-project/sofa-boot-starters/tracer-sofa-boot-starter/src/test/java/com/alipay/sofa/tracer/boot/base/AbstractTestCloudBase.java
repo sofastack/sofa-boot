@@ -47,7 +47,7 @@ public class AbstractTestCloudBase {
 
     @BeforeClass
     public static void beforeClass() throws IOException, NoSuchFieldException,
-            IllegalAccessException {
+                                    IllegalAccessException {
         cleanLogDirectory();
         clearSpringCloudMark();
     }

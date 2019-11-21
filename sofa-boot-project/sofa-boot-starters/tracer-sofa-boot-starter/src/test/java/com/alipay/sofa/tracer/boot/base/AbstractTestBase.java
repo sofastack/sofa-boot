@@ -65,7 +65,7 @@ public abstract class AbstractTestBase {
 
     @BeforeClass
     public static void beforeClass() throws IOException, NoSuchFieldException,
-            IllegalAccessException {
+                                    IllegalAccessException {
         cleanLogDirectory();
         clearSpringCloudMark();
     }
@@ -98,15 +98,15 @@ public abstract class AbstractTestBase {
         field.set(null, null);
         //clear digest
         Field fieldAsync = SofaTracerDigestReporterAsyncManager.class
-                .getDeclaredField("asyncCommonDigestAppenderManager");
+            .getDeclaredField("asyncCommonDigestAppenderManager");
         fieldAsync.setAccessible(true);
         fieldAsync.set(null, null);
 
         // clear stat
         SofaTracerStatisticReporterManager statReporterManager = SofaTracerStatisticReporterCycleTimesManager
-                .getSofaTracerStatisticReporterManager(1L);
+            .getSofaTracerStatisticReporterManager(1L);
         Field fieldStat = SofaTracerStatisticReporterManager.class
-                .getDeclaredField("statReporters");
+            .getDeclaredField("statReporters");
         fieldStat.setAccessible(true);
         fieldStat.set(statReporterManager, new ConcurrentHashMap<>());
     }
