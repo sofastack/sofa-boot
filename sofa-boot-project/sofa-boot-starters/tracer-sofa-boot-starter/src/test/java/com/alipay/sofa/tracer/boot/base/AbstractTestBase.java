@@ -65,7 +65,7 @@ public abstract class AbstractTestBase {
 
     @BeforeClass
     public static void beforeClass() throws IOException, NoSuchFieldException,
-                                    IllegalAccessException {
+            IllegalAccessException {
         cleanLogDirectory();
         clearSpringCloudMark();
     }
@@ -79,7 +79,7 @@ public abstract class AbstractTestBase {
     /**
      * clear directory
      *
-     * @throws IOException
+     * @throws java.io.IOException
      */
     public static void cleanLogDirectory() throws IOException {
         File file = new File(logDirectoryPath);
@@ -92,22 +92,21 @@ public abstract class AbstractTestBase {
         return new File(logDirectoryPath + File.separator + fileName);
     }
 
-    protected static void reflectSpringMVCClear() throws NoSuchFieldException,
-                                                 IllegalAccessException {
+    public static void reflectSpringMVCClear() throws NoSuchFieldException, IllegalAccessException {
         Field field = SpringMvcTracer.class.getDeclaredField("springMvcTracer");
         field.setAccessible(true);
         field.set(null, null);
         //clear digest
         Field fieldAsync = SofaTracerDigestReporterAsyncManager.class
-            .getDeclaredField("asyncCommonDigestAppenderManager");
+                .getDeclaredField("asyncCommonDigestAppenderManager");
         fieldAsync.setAccessible(true);
         fieldAsync.set(null, null);
 
         // clear stat
         SofaTracerStatisticReporterManager statReporterManager = SofaTracerStatisticReporterCycleTimesManager
-            .getSofaTracerStatisticReporterManager(1l);
+                .getSofaTracerStatisticReporterManager(1L);
         Field fieldStat = SofaTracerStatisticReporterManager.class
-            .getDeclaredField("statReporters");
+                .getDeclaredField("statReporters");
         fieldStat.setAccessible(true);
         fieldStat.set(statReporterManager, new ConcurrentHashMap<>());
     }
