@@ -16,16 +16,15 @@
  */
 package com.alipay.sofa.tracer.boot.properties;
 
-import static com.alipay.common.tracer.core.configuration.SofaTracerConfiguration.DEFAULT_LOG_RESERVE_DAY;
+import com.alipay.common.tracer.core.appender.file.TimedRollingFileAppender;
+import com.alipay.common.tracer.core.configuration.SofaTracerConfiguration;
+import com.alipay.common.tracer.core.reporter.stat.manager.SofaTracerStatisticReporterManager;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-
-import com.alipay.common.tracer.core.appender.file.TimedRollingFileAppender;
-import com.alipay.common.tracer.core.configuration.SofaTracerConfiguration;
-import com.alipay.common.tracer.core.reporter.stat.manager.SofaTracerStatisticReporterManager;
+import static com.alipay.common.tracer.core.configuration.SofaTracerConfiguration.DEFAULT_LOG_RESERVE_DAY;
 
 /**
  * OpenTracingSpringMvcProperties
@@ -76,6 +75,13 @@ public class SofaTracerProperties {
     private String              samplerName;
     private float               samplerPercentage                = 100;
     private String              samplerCustomRuleClassName;
+
+    private String              reporterName;
+
+    /**
+     * json output : com.alipay.sofa.tracer.jsonOutput=true,
+     */
+    private boolean             jsonOutput                       = true;
 
     public String getDisableDigestLog() {
         return disableDigestLog;
@@ -147,5 +153,21 @@ public class SofaTracerProperties {
 
     public void setSamplerCustomRuleClassName(String samplerCustomRuleClassName) {
         this.samplerCustomRuleClassName = samplerCustomRuleClassName;
+    }
+
+    public String getReporterName() {
+        return reporterName;
+    }
+
+    public void setReporterName(String reporterName) {
+        this.reporterName = reporterName;
+    }
+
+    public boolean isJsonOutput() {
+        return jsonOutput;
+    }
+
+    public void setJsonOutput(boolean jsonOutput) {
+        this.jsonOutput = jsonOutput;
     }
 }

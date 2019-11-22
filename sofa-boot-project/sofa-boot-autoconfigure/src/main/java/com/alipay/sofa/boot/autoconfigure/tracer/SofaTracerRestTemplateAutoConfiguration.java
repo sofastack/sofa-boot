@@ -16,29 +16,32 @@
  */
 package com.alipay.sofa.boot.autoconfigure.tracer;
 
-import com.alipay.sofa.tracer.boot.springcloud.processor.SofaTracerFeignContextBeanPostProcessor;
-import com.alipay.sofa.tracer.plugins.springcloud.instruments.feign.SofaTracerFeignContext;
-import feign.Client;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import com.alipay.sofa.tracer.boot.resttemplate.SofaTracerRestTemplateEnhance;
+import com.alipay.sofa.tracer.boot.resttemplate.processor.SofaTracerRestTemplateBeanPostProcessor;
+import com.sofa.alipay.tracer.plugins.rest.RestTemplateTracer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.cloud.openfeign.FeignAutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @author: guolei.sgl (guolei.sgl@antfin.com) 2019/3/13 6:04 PM
+ * @author: guolei.sgl (guolei.sgl@antfin.com) 2019/9/11 9:43 PM
  * @since:
  **/
 @Configuration
-@ConditionalOnClass({ Client.class, SofaTracerFeignContextBeanPostProcessor.class,
-                     SofaTracerFeignContext.class })
-@AutoConfigureBefore(FeignAutoConfiguration.class)
-@ConditionalOnProperty(name = "com.alipay.sofa.tracer.feign.enabled", havingValue = "true", matchIfMissing = true)
-public class SofaTracerFeignClientAutoConfiguration {
+@ConditionalOnWebApplication
+@ConditionalOnProperty(prefix = "com.alipay.sofa.tracer.resttemplate", value = "enable", matchIfMissing = true)
+@ConditionalOnClass({ RestTemplateTracer.class, SofaTracerRestTemplateEnhance.class })
+public class SofaTracerRestTemplateAutoConfiguration {
+
     @Bean
-    public SofaTracerFeignContextBeanPostProcessor feignContextBeanPostProcessor(BeanFactory beanFactory) {
-        return new SofaTracerFeignContextBeanPostProcessor(beanFactory);
+    public SofaTracerRestTemplateBeanPostProcessor sofaTracerRestTemplateBeanPostProcessor() {
+        return new SofaTracerRestTemplateBeanPostProcessor(sofaTracerRestTemplateEnhance());
+    }
+
+    @Bean
+    public SofaTracerRestTemplateEnhance sofaTracerRestTemplateEnhance() {
+        return new SofaTracerRestTemplateEnhance();
     }
 }

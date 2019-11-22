@@ -44,8 +44,8 @@ import com.alipay.sofa.tracer.plugins.springmvc.SpringMvcLogEnum;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = SpringBootWebApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {
                                                                                                                                     "spring.main.web-application-type=reactive",
-                                                                                                                                    "com.alipay.sofa.tracer.springmvc.jsonOutput=true" })
-@TestPropertySource(properties = "spring.application.name=webflux-test")
+                                                                                                                                    "com.alipay.sofa.tracer.springmvc.jsonOutput=true",
+                                                                                                                                    "spring.application.name=webflux-test" })
 public class WebFluxTracerTest extends AbstractTestBase {
 
     @Autowired

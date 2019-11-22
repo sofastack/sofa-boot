@@ -16,8 +16,15 @@
  */
 package com.alipay.sofa.boot.autoconfigure.tracer;
 
-import java.util.List;
-
+import com.alipay.common.tracer.core.listener.SpanReportListener;
+import com.alipay.common.tracer.core.listener.SpanReportListenerHolder;
+import com.alipay.common.tracer.core.reporter.facade.Reporter;
+import com.alipay.common.tracer.core.samplers.Sampler;
+import com.alipay.common.tracer.core.samplers.SamplerFactory;
+import com.alipay.common.tracer.core.utils.StringUtils;
+import com.alipay.sofa.tracer.boot.properties.SofaTracerProperties;
+import com.alipay.sofa.tracer.plugin.flexible.FlexibleTracer;
+import io.opentracing.Tracer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -25,9 +32,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.alipay.common.tracer.core.listener.SpanReportListener;
-import com.alipay.common.tracer.core.listener.SpanReportListenerHolder;
-import com.alipay.sofa.tracer.boot.properties.SofaTracerProperties;
+import java.util.List;
 
 /**
  * SofaTracerAutoConfiguration
@@ -37,7 +42,8 @@ import com.alipay.sofa.tracer.boot.properties.SofaTracerProperties;
  */
 @Configuration
 @EnableConfigurationProperties(SofaTracerProperties.class)
-@ConditionalOnClass(SofaTracerProperties.class)
+@ConditionalOnClass({ SpanReportListenerHolder.class, Tracer.class, SofaTracerProperties.class,
+                     FlexibleTracer.class })
 public class SofaTracerAutoConfiguration {
 
     @Autowired(required = false)
@@ -51,5 +57,18 @@ public class SofaTracerAutoConfiguration {
             SpanReportListenerHolder.addSpanReportListeners(spanReportListenerList);
         }
         return null;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public Tracer tracer(SofaTracerProperties sofaTracerProperties) throws Exception {
+        String reporterName = sofaTracerProperties.getReporterName();
+        if (StringUtils.isNotBlank(reporterName)) {
+            Reporter reporter = (Reporter) Class.forName(reporterName).newInstance();
+            Sampler sampler = SamplerFactory.getSampler();
+            return new FlexibleTracer(sampler, reporter);
+        }
+        Tracer tracer = new FlexibleTracer();
+        return tracer;
     }
 }
