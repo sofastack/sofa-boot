@@ -32,4 +32,6 @@ public class RpcBindingType {
 
     public static final BindingType H2C_BINDING_TYPE   = new BindingType("h2c");
 
+    public static final BindingType HTTP_BINDING_TYPE  = new BindingType("http");
+
 }

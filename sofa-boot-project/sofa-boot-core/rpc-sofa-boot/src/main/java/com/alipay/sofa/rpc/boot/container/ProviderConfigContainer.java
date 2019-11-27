@@ -202,7 +202,7 @@ public class ProviderConfigContainer {
             protocol = ":" + binding.getBindingType().getType();
         }
 
-        return new StringBuffer(contract.getInterfaceType().getName()).append(version)
+        return new StringBuilder(contract.getInterfaceType().getName()).append(version)
             .append(uniqueId).append(protocol).toString();
     }
 

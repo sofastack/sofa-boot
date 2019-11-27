@@ -16,21 +16,6 @@
  */
 package com.alipay.sofa.boot.autoconfigure.rpc;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.actuate.health.Health;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
-
 import com.alipay.sofa.healthcheck.startup.ReadinessCheckCallback;
 import com.alipay.sofa.rpc.boot.config.ConsulConfigurator;
 import com.alipay.sofa.rpc.boot.config.FaultToleranceConfigurator;
@@ -53,6 +38,21 @@ import com.alipay.sofa.rpc.boot.health.RpcAfterHealthCheckCallback;
 import com.alipay.sofa.rpc.boot.runtime.adapter.helper.ConsumerConfigHelper;
 import com.alipay.sofa.rpc.boot.runtime.adapter.helper.ProviderConfigHelper;
 import com.alipay.sofa.rpc.boot.swagger.SwaggerServiceApplicationListener;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.actuate.health.Health;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:lw111072@antfin.com">LiWei</a>
@@ -62,26 +62,31 @@ import com.alipay.sofa.rpc.boot.swagger.SwaggerServiceApplicationListener;
 @ConditionalOnClass(SofaBootRpcProperties.class)
 public class SofaRpcAutoConfiguration {
     @Bean
+    @ConditionalOnMissingBean
     public ProviderConfigContainer providerConfigContainer() {
         return new ProviderConfigContainer();
     }
 
     @Bean
+    @ConditionalOnMissingBean
     public FaultToleranceConfigurator faultToleranceConfigurator() {
         return new FaultToleranceConfigurator();
     }
 
     @Bean
+    @ConditionalOnMissingBean
     public ServerConfigContainer serverConfigContainer(SofaBootRpcProperties sofaBootRpcProperties) {
         return new ServerConfigContainer(sofaBootRpcProperties);
     }
 
     @Bean
+    @ConditionalOnMissingBean
     public RegistryConfigContainer registryConfigContainer() {
         return new RegistryConfigContainer();
     }
 
     @Bean
+    @ConditionalOnMissingBean
     public ConsumerConfigHelper consumerConfigHelper(SofaBootRpcProperties sofaBootRpcProperties,
                                                      @Lazy RegistryConfigContainer registryConfigContainer,
                                                      @Value("${"
@@ -91,31 +96,37 @@ public class SofaRpcAutoConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean
     public ProviderConfigHelper providerConfigHelper() {
         return new ProviderConfigHelper();
     }
 
     @Bean
+    @ConditionalOnMissingBean
     public ZookeeperConfigurator zookeeperConfigurator() {
         return new ZookeeperConfigurator();
     }
 
     @Bean
+    @ConditionalOnMissingBean
     public LocalFileConfigurator localFileConfigurator() {
         return new LocalFileConfigurator();
     }
 
     @Bean
+    @ConditionalOnMissingBean
     public MeshConfigurator meshConfigurator() {
         return new MeshConfigurator();
     }
 
     @Bean
+    @ConditionalOnMissingBean
     public RegistryConfigureProcessor nacosConfigurator() {
         return new NacosConfigurator();
     }
 
     @Bean
+    @ConditionalOnMissingBean
     public RegistryConfigureProcessor sofaRegistryConfigurator() {
         return new SofaRegistryConfigurator();
     }
@@ -130,16 +141,19 @@ public class SofaRpcAutoConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean
     public RegistryConfigureProcessor consulConfigurator() {
         return new ConsulConfigurator();
     }
 
     @Bean
+    @ConditionalOnMissingBean
     public ConsumerConfigContainer consumerConfigContainer() {
         return new ConsumerConfigContainer();
     }
 
     @Bean
+    @ConditionalOnMissingBean
     public ApplicationContextClosedListener applicationContextClosedListener(ProviderConfigContainer providerConfigContainer,
                                                                              ServerConfigContainer serverConfigContainer) {
         return new ApplicationContextClosedListener(providerConfigContainer, serverConfigContainer);
@@ -153,6 +167,7 @@ public class SofaRpcAutoConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean
     public SofaBootRpcStartListener sofaBootRpcStartListener(ProviderConfigContainer providerConfigContainer,
                                                              FaultToleranceConfigurator faultToleranceConfigurator,
                                                              ServerConfigContainer serverConfigContainer,

@@ -16,13 +16,13 @@
  */
 package com.alipay.sofa.tracer.boot.springmvc;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -65,6 +65,6 @@ public class SpringMvcFilterTest extends AbstractTestBase {
         assertTrue(contents.size() == 1);
 
         String logAppName = contents.get(0).split(",")[1];
-        assertEquals(appName, logAppName);
+        Assert.assertTrue(logAppName.contains(appName));
     }
 }
