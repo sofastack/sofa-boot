@@ -18,8 +18,9 @@ package com.alipay.sofa.runtime.ark.plugin;
 
 import com.alipay.sofa.ark.spi.model.PluginContext;
 import com.alipay.sofa.ark.spi.service.PluginActivator;
-import com.alipay.sofa.ark.spi.service.event.EventHandler;
-import com.alipay.sofa.runtime.SofaEventHandler;
+import com.alipay.sofa.ark.spi.service.event.EventAdminService;
+import com.alipay.sofa.runtime.SofaBizHealthCheckEventHandler;
+import com.alipay.sofa.runtime.SofaBizUninstallEventHandler;
 import com.alipay.sofa.runtime.invoke.DynamicJvmServiceProxyFinder;
 
 /**
@@ -29,9 +30,16 @@ import com.alipay.sofa.runtime.invoke.DynamicJvmServiceProxyFinder;
 public class SofaRuntimeActivator implements PluginActivator {
     @Override
     public void start(PluginContext context) {
-        context.publishService(EventHandler.class, new SofaEventHandler());
+        registerEventHandler(context);
         context.publishService(DynamicJvmServiceProxyFinder.class,
             DynamicJvmServiceProxyFinder.getDynamicJvmServiceProxyFinder());
+    }
+
+    private void registerEventHandler(final PluginContext context) {
+        EventAdminService eventAdminService = context.referenceService(EventAdminService.class)
+            .getService();
+        eventAdminService.register(new SofaBizUninstallEventHandler());
+        eventAdminService.register(new SofaBizHealthCheckEventHandler());
     }
 
     @Override
