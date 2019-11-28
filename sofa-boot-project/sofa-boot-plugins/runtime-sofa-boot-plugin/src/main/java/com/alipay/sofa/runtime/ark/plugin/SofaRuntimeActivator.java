@@ -22,6 +22,7 @@ import com.alipay.sofa.ark.spi.service.event.EventAdminService;
 import com.alipay.sofa.runtime.SofaBizHealthCheckEventHandler;
 import com.alipay.sofa.runtime.SofaBizUninstallEventHandler;
 import com.alipay.sofa.runtime.invoke.DynamicJvmServiceProxyFinder;
+import com.alipay.sofa.runtime.spring.FinishStartupEventHandler;
 
 /**
  * @author qilong.zql
@@ -40,6 +41,7 @@ public class SofaRuntimeActivator implements PluginActivator {
             .getService();
         eventAdminService.register(new SofaBizUninstallEventHandler());
         eventAdminService.register(new SofaBizHealthCheckEventHandler());
+        eventAdminService.register(new FinishStartupEventHandler());
     }
 
     @Override
