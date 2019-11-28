@@ -58,6 +58,8 @@ public class DynamicJvmServiceProxyFinder {
     @ArkInject
     private BizManagerService bizManagerService;
 
+    private boolean           hasFinishStartup = false;
+
     public static DynamicJvmServiceProxyFinder getDynamicJvmServiceProxyFinder() {
         return dynamicJvmServiceProxyFinder;
     }
@@ -82,8 +84,9 @@ public class DynamicJvmServiceProxyFinder {
                 continue;
             }
 
-            // do not match state ,check next
-            if (biz.getBizState() != BizState.DEACTIVATED
+            // do not match state, check next
+            // https://github.com/sofastack/sofa-boot/issues/532
+            if (hasFinishStartup && biz.getBizState() != BizState.DEACTIVATED
                 && biz.getBizState() != BizState.ACTIVATED) {
                 continue;
             }
@@ -152,6 +155,10 @@ public class DynamicJvmServiceProxyFinder {
             }
         }
         return null;
+    }
+
+    public void setHasFinishStartup(boolean hasFinishStartup) {
+        this.hasFinishStartup = hasFinishStartup;
     }
 
     static class DynamicJvmServiceInvoker extends ServiceProxy {
