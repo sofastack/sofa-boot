@@ -168,12 +168,8 @@ public class SofaRpcAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public SofaBootRpcStartListener sofaBootRpcStartListener(ProviderConfigContainer providerConfigContainer,
-                                                             FaultToleranceConfigurator faultToleranceConfigurator,
-                                                             ServerConfigContainer serverConfigContainer,
-                                                             RegistryConfigContainer registryConfigContainer) {
-        return new SofaBootRpcStartListener(providerConfigContainer, faultToleranceConfigurator,
-            serverConfigContainer, registryConfigContainer);
+    public SofaBootRpcStartListener sofaBootRpcStartListener() {
+        return new SofaBootRpcStartListener();
     }
 
     @Bean

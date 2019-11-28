@@ -16,21 +16,6 @@
  */
 package com.alipay.sofa.rpc.boot.test;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Lazy;
-
 import com.alipay.sofa.healthcheck.startup.ReadinessCheckCallback;
 import com.alipay.sofa.rpc.boot.config.ConsulConfigurator;
 import com.alipay.sofa.rpc.boot.config.FaultToleranceConfigurator;
@@ -53,6 +38,20 @@ import com.alipay.sofa.rpc.boot.health.RpcAfterHealthCheckCallback;
 import com.alipay.sofa.rpc.boot.runtime.adapter.helper.ConsumerConfigHelper;
 import com.alipay.sofa.rpc.boot.runtime.adapter.helper.ProviderConfigHelper;
 import com.alipay.sofa.rpc.boot.swagger.SwaggerServiceApplicationListener;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Lazy;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author qilong.zql
@@ -153,12 +152,8 @@ public class SofaRpcTestAutoConfiguration {
     }
 
     @Bean
-    public SofaBootRpcStartListener sofaBootRpcStartListener(ProviderConfigContainer providerConfigContainer,
-                                                             FaultToleranceConfigurator faultToleranceConfigurator,
-                                                             ServerConfigContainer serverConfigContainer,
-                                                             RegistryConfigContainer registryConfigContainer) {
-        return new SofaBootRpcStartListener(providerConfigContainer, faultToleranceConfigurator,
-            serverConfigContainer, registryConfigContainer);
+    public SofaBootRpcStartListener sofaBootRpcStartListener() {
+        return new SofaBootRpcStartListener();
     }
 
     @Bean
