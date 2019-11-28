@@ -160,6 +160,7 @@ public class SofaEventHandlerTest {
                 result = SampleService.class.getMethod("service");
             }
         };
+        DynamicJvmServiceProxyFinder.getDynamicJvmServiceProxyFinder().setHasFinishStartup(true);
         ServiceProxy serviceProxy = DynamicJvmServiceProxyFinder.getDynamicJvmServiceProxyFinder()
             .findServiceProxy(ctx.getClassLoader(), contract);
         try {
