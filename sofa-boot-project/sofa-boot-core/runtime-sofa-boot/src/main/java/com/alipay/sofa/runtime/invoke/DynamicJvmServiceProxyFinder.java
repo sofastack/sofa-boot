@@ -96,8 +96,9 @@ public class DynamicJvmServiceProxyFinder {
                 continue;
             }
 
-            // if not specified version , but state do not match ,check next
-            if (version == null && biz.getBizState() != BizState.ACTIVATED) {
+            // if not specified version, but state do not match, check next
+            // https://github.com/sofastack/sofa-boot/issues/532
+            if (hasFinishStartup && version == null && biz.getBizState() != BizState.ACTIVATED) {
                 continue;
             }
 
