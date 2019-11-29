@@ -57,10 +57,8 @@ public class ComponentHealthChecker implements HealthChecker {
         Health.Builder builder = new Health.Builder();
         for (ComponentInfo componentInfo : sofaRuntimeContext.getComponentManager().getComponents()) {
             HealthResult healthy = componentInfo.isHealthy();
-            if (healthy.isHealthy()) {
-                builder.withDetail(healthy.getHealthName(), "passed");
-            } else {
-                builder.withDetail(healthy.getHealthName(), healthy.getHealthReport());
+            builder.withDetail(healthy.getHealthName(), healthy.getHealthReport());
+            if (!healthy.isHealthy()) {
                 allPassed = false;
             }
         }
