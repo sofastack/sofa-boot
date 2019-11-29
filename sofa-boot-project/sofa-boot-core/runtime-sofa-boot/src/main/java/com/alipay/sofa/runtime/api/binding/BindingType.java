@@ -16,6 +16,8 @@
  */
 package com.alipay.sofa.runtime.api.binding;
 
+import java.util.Objects;
+
 /**
  * The type of the binding, used to distinguish different types of
  * {@link com.alipay.sofa.runtime.api.client.param.BindingParam}
@@ -64,7 +66,7 @@ public class BindingType {
 
         BindingType that = (BindingType) o;
 
-        return type != null ? type.equals(that.type) : that.type == null;
+        return Objects.equals(type, that.type);
     }
 
     @Override
