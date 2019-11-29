@@ -158,6 +158,7 @@ public class ServiceComponent extends AbstractComponent {
                         getContext());
                 } catch (Throwable t) {
                     allPassed = false;
+                    binding.setHealthy(false);
                     SofaLogger.error(t, " <<Out binding [{0}] for [{1}] occur exception.",
                         binding.getBindingType(), service);
                     continue;
@@ -306,17 +307,14 @@ public class ServiceComponent extends AbstractComponent {
 
     @Override
     public HealthResult isHealthy() {
-        if (!isActivated()) {
-            return super.isHealthy();
-        }
-
         HealthResult healthResult = new HealthResult(componentName.getRawName());
         if (this.e == null) {
             healthResult.setHealthy(true);
         } else {
             healthResult.setHealthy(false);
-            healthResult.setHealthReport(e.getMessage());
         }
+        healthResult.setHealthReport(aggregateBindingHealth(service.getBindings()));
+
         return healthResult;
     }
 }
