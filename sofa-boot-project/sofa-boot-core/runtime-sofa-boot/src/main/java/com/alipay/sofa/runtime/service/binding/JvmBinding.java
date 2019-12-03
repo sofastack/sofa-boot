@@ -36,6 +36,8 @@ public class JvmBinding extends AbstractBinding {
 
     private JvmBindingParam   jvmBindingParam  = new JvmBindingParam();
 
+    private HealthResult      healthResult     = new HealthResult(getName());
+
     public JvmBinding() {
     }
 
@@ -92,7 +94,6 @@ public class JvmBinding extends AbstractBinding {
 
     @Override
     public HealthResult healthCheck() {
-        HealthResult healthResult = new HealthResult(getName());
         healthResult.setHealthy(isHealthy);
         return healthResult;
     }

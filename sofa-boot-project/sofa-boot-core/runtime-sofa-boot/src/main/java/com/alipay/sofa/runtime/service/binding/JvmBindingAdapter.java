@@ -178,7 +178,7 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
                 }
             }
 
-            if ((targetObj == null || ((targetObj instanceof Proxy) && binding.hasBackupProxy()))) {
+            if (targetObj == null || ((targetObj instanceof Proxy) && binding.hasBackupProxy())) {
                 targetObj = binding.getBackupProxy();
                 SofaLogger.debug("<<{0}.{1} backup proxy invoke.", getInterfaceName().getName(),
                     invocation.getMethod().getName());
