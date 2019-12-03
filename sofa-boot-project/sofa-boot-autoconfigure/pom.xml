@@ -102,6 +102,12 @@
             <optional>true</optional>
         </dependency>
 
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>sofa-tracer-redis-plugin</artifactId>
+            <optional>true</optional>
+        </dependency>
+
         <!--provider-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -112,6 +118,12 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-redis</artifactId>
             <scope>provided</scope>
         </dependency>
 
