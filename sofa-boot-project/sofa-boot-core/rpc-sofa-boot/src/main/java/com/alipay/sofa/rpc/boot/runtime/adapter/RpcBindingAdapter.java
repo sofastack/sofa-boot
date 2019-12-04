@@ -73,6 +73,7 @@ public abstract class RpcBindingAdapter implements BindingAdapter<RpcBinding> {
      * @return binding result
      */
     @Override
+    @SuppressWarnings("unchecked")
     public Object outBinding(Object contract, RpcBinding binding, Object target,
                              SofaRuntimeContext sofaRuntimeContext) {
 
@@ -94,8 +95,8 @@ public abstract class RpcBindingAdapter implements BindingAdapter<RpcBinding> {
 
         if (SpringBridge.getProviderConfigContainer().isAllowPublish()) {
             providerConfig.setRegister(true);
-            List<RegistryConfig> registrys = providerConfig.getRegistry();
-            for (RegistryConfig registryConfig : registrys) {
+            List<RegistryConfig> registries = providerConfig.getRegistry();
+            for (RegistryConfig registryConfig : registries) {
                 Registry registry = RegistryFactory.getRegistry(registryConfig);
                 registry.init();
                 registry.start();
