@@ -146,8 +146,8 @@ public class ProviderConfigHelper {
         }
 
         if (param.getRegistrys() != null && param.getRegistrys().size() > 0) {
-            List<String> registrys = param.getRegistrys();
-            for (String registryAlias : registrys) {
+            List<String> registries = param.getRegistrys();
+            for (String registryAlias : registries) {
                 RegistryConfig registryConfig = registryConfigContainer
                     .getRegistryConfig(registryAlias);
                 providerConfig.setRegistry(registryConfig);
