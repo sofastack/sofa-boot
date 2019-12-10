@@ -154,6 +154,27 @@ public class ProviderConfigContainer {
     }
 
     /**
+     * export所有 Grpc 类型的 ProviderConfig
+     */
+    public void exportAllGrpcProvideConfig() {
+        for (ProviderConfig providerConfig : getAllProviderConfig()) {
+
+            ServerConfig serverConfig = (ServerConfig) providerConfig.getServer().get(0);
+            if (serverConfig.getProtocol().equalsIgnoreCase(
+                SofaBootRpcConfigConstants.RPC_PROTOCOL_GRPC)) {
+                providerConfig.setRegister(true);
+                providerConfig.export();
+
+                if (LOGGER.isInfoEnabled()) {
+                    LOGGER.info("service published.  interfaceId["
+                                + providerConfig.getInterfaceId() + "]; protocol["
+                                + serverConfig.getProtocol() + "]");
+                }
+            }
+        }
+    }
+
+    /**
      * unExport所有的 ProviderConfig
      */
     public void unExportAllProviderConfig() {

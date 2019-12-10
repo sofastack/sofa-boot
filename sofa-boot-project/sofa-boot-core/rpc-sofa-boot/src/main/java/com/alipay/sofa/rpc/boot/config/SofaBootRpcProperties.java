@@ -213,6 +213,10 @@ public class SofaBootRpcProperties {
     private String              dubboAcceptsSize;
     /* dubbo  end*/
 
+    /* grpc start */
+    private String              grpcPort;
+    /* grpc end */
+
     /* http start*/
     /**
      * the port of http (http 端口)
@@ -534,6 +538,15 @@ public class SofaBootRpcProperties {
 
     public void setDubboAcceptsSize(String dubboAcceptsSize) {
         this.dubboAcceptsSize = dubboAcceptsSize;
+    }
+
+    public String getGrpcPort() {
+        return StringUtils.isEmpty(grpcPort) ? getDotString(new Object() {
+        }.getClass().getEnclosingMethod().getName()) : grpcPort;
+    }
+
+    public void setGrpcPort(String grpcPort) {
+        this.grpcPort = grpcPort;
     }
 
     public String getRegistryAddress() {

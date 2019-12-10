@@ -43,6 +43,9 @@ public class SofaBootRpcConfigConstants {
     /* dubbo default configuration */
     public static final int     DUBBO_PORT_DEFAULT                 = 20880;
 
+    /* grpc default configuration */
+    public static final int     GRPC_PORT_DEFAULT                  = 50052;
+
     /* registry default configuration */
     public static final String  REGISTRY_FILE_PATH_DEFAULT         = System
                                                                        .getProperty("user.home")
@@ -73,6 +76,7 @@ public class SofaBootRpcConfigConstants {
     public static final String  RPC_PROTOCOL_DUBBO                 = "dubbo";
     public static final String  RPC_PROTOCOL_H2C                   = "h2c";
     public static final String  RPC_PROTOCOL_HTTP                  = "http";
+    public static final String  RPC_PROTOCOL_GRPC                  = "grpc";
 
     /** mesh **/
     public static final String  ENABLE_MESH_ALL                    = "all";

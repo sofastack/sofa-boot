@@ -16,24 +16,23 @@
  */
 package com.alipay.sofa.rpc.boot.runtime.binding;
 
+import com.alipay.sofa.rpc.boot.runtime.param.RpcBindingParam;
 import com.alipay.sofa.runtime.api.binding.BindingType;
+import org.springframework.context.ApplicationContext;
 
 /**
  *
- * @author <a href="mailto:lw111072@antfin.com">LiWei</a>
+ * @author <a href=mailto:yqluan@gmail.com>Yanqiang Oliver Luan (neokidd)</a>
  */
-public class RpcBindingType {
+public class GrpcBinding extends RpcBinding {
 
-    public static final BindingType BOLT_BINDING_TYPE  = new BindingType("bolt");
+    public GrpcBinding(RpcBindingParam bindingParam, ApplicationContext applicationContext,
+                       boolean inBinding) {
+        super(bindingParam, applicationContext, inBinding);
+    }
 
-    public static final BindingType REST_BINDING_TYPE  = new BindingType("rest");
-
-    public static final BindingType DUBBO_BINDING_TYPE = new BindingType("dubbo");
-
-    public static final BindingType H2C_BINDING_TYPE   = new BindingType("h2c");
-
-    public static final BindingType HTTP_BINDING_TYPE  = new BindingType("http");
-
-    public static final BindingType GRPC_BINDING_TYPE  = new BindingType("grpc");
-
+    @Override
+    public BindingType getBindingType() {
+        return RpcBindingType.GRPC_BINDING_TYPE;
+    }
 }

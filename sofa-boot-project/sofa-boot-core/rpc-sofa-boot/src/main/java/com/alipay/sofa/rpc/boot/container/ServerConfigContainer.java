@@ -65,6 +65,12 @@ public class ServerConfigContainer {
     private final Object              DUBBO_LOCK          = new Object();
 
     /**
+     * grpc ServerConfig
+     */
+    private volatile ServerConfig     grpcServerConfig;
+    private final Object              GRPC_LOCK           = new Object();
+
+    /**
      * h2c ServerConfig
      */
     private volatile ServerConfig     h2cServerConfig;
@@ -167,6 +173,17 @@ public class ServerConfigContainer {
             }
 
             return dubboServerConfig;
+        } else if (protocol.equalsIgnoreCase(SofaBootRpcConfigConstants.RPC_PROTOCOL_GRPC)) {
+
+            if (grpcServerConfig == null) {
+                synchronized (GRPC_LOCK) {
+                    if (grpcServerConfig == null) {
+                        grpcServerConfig = createGrpcServerConfig();
+                    }
+                }
+            }
+
+            return grpcServerConfig;
         } else if (protocol.equalsIgnoreCase(SofaBootRpcConfigConstants.RPC_PROTOCOL_H2C)) {
 
             if (h2cServerConfig == null) {
@@ -474,6 +491,48 @@ public class ServerConfigContainer {
 
         serverConfig.setAutoStart(false);
         return serverConfig.setProtocol(SofaBootRpcConfigConstants.RPC_PROTOCOL_HTTP);
+    }
+
+    /**
+     * 创建 grpc ServerConfig。会设置 Grpc 的默认端口，其余配置不会由外层 Starter 设置默认值。
+     *
+     * @return grpc ServerConfig
+     */
+    ServerConfig createGrpcServerConfig() {
+        // TODO: add configurable item later
+        // String portStr = sofaBootRpcProperties.getGrpcPort();
+        String portStr = "50052";
+        // String ioThreadSizeStr = sofaBootRpcProperties.getDubboIoThreadSize();
+        // String dubboThreadPoolMaxSizeStr = sofaBootRpcProperties.getDubboThreadPoolMaxSize();
+        // String dubboAcceptsSizeStr = sofaBootRpcProperties.getDubboAcceptsSize();
+
+        ServerConfig serverConfig = new ServerConfig();
+
+        if (StringUtils.hasText(portStr)) {
+            serverConfig.setPort(Integer.parseInt(portStr));
+        } else {
+            serverConfig.setPort(SofaBootRpcConfigConstants.GRPC_PORT_DEFAULT);
+        }
+
+        // if (StringUtils.hasText(ioThreadSizeStr)) {
+        //     serverConfig.setIoThreads(Integer.parseInt(ioThreadSizeStr));
+        // }
+
+        // if (StringUtils.hasText(dubboThreadPoolMaxSizeStr)) {
+        //     serverConfig.setMaxThreads(Integer.parseInt(dubboThreadPoolMaxSizeStr));
+        // }
+
+        // if (StringUtils.hasText(dubboAcceptsSizeStr)) {
+        //     serverConfig.setAccepts(Integer.parseInt(dubboAcceptsSizeStr));
+        // }
+
+        serverConfig.setAutoStart(false);
+        serverConfig.setProtocol(SofaBootRpcConfigConstants.RPC_PROTOCOL_GRPC);
+
+        addCommonServerConfig(serverConfig);
+
+        return serverConfig;
+
     }
 
     /**
