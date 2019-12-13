@@ -646,6 +646,13 @@
             <repositories>
                 <repository>
                     <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                    <id>release</id>
+                    <url>https://oss.sonatype.org/content/repositories/releases</url>
+                </repository>
+                <repository>
+                    <snapshots>
                         <enabled>true</enabled>
                     </snapshots>
                     <id>snapshot</id>
@@ -653,6 +660,13 @@
                 </repository>
             </repositories>
             <pluginRepositories>
+                <pluginRepository>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                    <id>releases</id>
+                    <url>https://oss.sonatype.org/content/repositories/releases</url>
+                </pluginRepository>
                 <pluginRepository>
                     <snapshots>
                         <enabled>true</enabled>
