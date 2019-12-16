@@ -13,7 +13,7 @@
     <groupId>com.alipay.sofa</groupId>
     <artifactId>sofaboot-dependencies</artifactId>
     <packaging>pom</packaging>
-    <version>3.2.1-SNAPSHOT</version>
+    <version>3.2.1</version>
 
     <properties>
         <!--project-->
@@ -22,7 +22,7 @@
         <project.build.encoding>UTF-8</project.build.encoding>
         <project.build.encoding>UTF-8</project.build.encoding>
 
-        <sofa.boot.version>3.2.1-SNAPSHOT</sofa.boot.version>
+        <sofa.boot.version>3.2.1</sofa.boot.version>
 
         <!--starter-->
         <sofa.ark.version>1.1.0</sofa.ark.version>
@@ -30,12 +30,12 @@
 
         <!--core-->
         <tracer.core.version>3.0.8</tracer.core.version>
-        <rpc.core.version>5.6.3-SNAPSHOT</rpc.core.version>
+        <rpc.core.version>5.6.3</rpc.core.version>
 
         <!--2rd lib dependency-->
         <sofa.common.tools.version>1.0.19</sofa.common.tools.version>
         <sofa.bolt.version>1.5.6</sofa.bolt.version>
-        <sofa.hessian.version>3.3.7-SNAPSHOT</sofa.hessian.version>
+        <sofa.hessian.version>3.3.7</sofa.hessian.version>
 
         <!--3rd lib dependency-->
         <fastjson.version>1.2.61</fastjson.version>
@@ -646,6 +646,13 @@
             <repositories>
                 <repository>
                     <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                    <id>release</id>
+                    <url>https://oss.sonatype.org/content/repositories/releases</url>
+                </repository>
+                <repository>
+                    <snapshots>
                         <enabled>true</enabled>
                     </snapshots>
                     <id>snapshot</id>
@@ -653,6 +660,13 @@
                 </repository>
             </repositories>
             <pluginRepositories>
+                <pluginRepository>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                    <id>releases</id>
+                    <url>https://oss.sonatype.org/content/repositories/releases</url>
+                </pluginRepository>
                 <pluginRepository>
                     <snapshots>
                         <enabled>true</enabled>
