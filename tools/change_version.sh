@@ -22,11 +22,13 @@ sed "/<project /,/<packaging/ s/<version>.*<\/version>/<version>$1<\/version>/" 
 echo "Change version in subproject pom ===>"
 for filename in $(find ./sofa-boot-project ! -path '*/sofaboot-dependencies/*' -name "pom.xml"); do
     echo "Dealing with ${filename:2}"
-    sed "/<parent>/,/<\/parent>/ s/<version>.*<\/version>/<version>$1<\/version>/" $filename
+    sed "/<parent>/,/<\/parent>/ s/<version>$currentVersion<\/version>/<version>$1<\/version>/" $filename
 done
+sed "/<packaging>/,/<properties>/ s/<version>$currentVersion<\/version>/<version>$1<\/version>/" \
+    sofa-boot-project/sofaboot-dependencies/pom.xml
 
 echo "Change version in gradle.properties"
 for filename in $(find . -name "gradle.properties" -mindepth 3); do
     echo "Dealing with $filename"
-    sed "s/sofaVersion=.*/sofaVersion=$1/g" $filename
+    sed "s/sofaVersion=$currentVersion/sofaVersion=$1/g" $filename
 done
