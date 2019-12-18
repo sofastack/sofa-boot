@@ -80,7 +80,7 @@
     <xsd:complexType name="BBindingTRRefMethod">
         <xsd:attribute name="name" type="xsd:string" use="required"/>
         <xsd:attribute name="type" type="BInvokeMode" use="optional"/>
-        <xsd:attribute name="timeout" type="xsd:int" use="optional"/>
+        <xsd:attribute name="timeout" type="xsd:string" use="optional"/>
         <xsd:attribute name="callback-class" type="xsd:string" use="optional"/>
         <xsd:attribute name="callback-ref" type="xsd:string" use="optional"/>
     </xsd:complexType>
@@ -92,15 +92,15 @@
 
     <!-- global-attrs in reference binding.bolt -->
     <xsd:complexType name="BBindingTRRefAttr">
-        <xsd:attribute name="timeout" type="xsd:int" use="optional"/>
+        <xsd:attribute name="timeout" type="xsd:string" use="optional"/>
         <xsd:attribute name="type" type="BInvokeMode" use="optional"/>
         <xsd:attribute name="address-wait-time" type="xsd:int" use="optional"/>
         <xsd:attribute name="callback-class" type="xsd:string" use="optional"/>
         <xsd:attribute name="callback-ref" type="xsd:string" use="optional"/>
-        <xsd:attribute name="connect.timeout" type="xsd:int" use="optional"/>
+        <xsd:attribute name="connect.timeout" type="xsd:string" use="optional"/>
         <xsd:attribute name="connect.num" type="xsd:int" use="optional"/>
-        <xsd:attribute name="idle.timeout" type="xsd:int" use="optional"/>
-        <xsd:attribute name="idle.timeout.read" type="xsd:int" use="optional"/>
+        <xsd:attribute name="idle.timeout" type="xsd:string" use="optional"/>
+        <xsd:attribute name="idle.timeout.read" type="xsd:string" use="optional"/>
         <xsd:attribute name="generic-interface" type="xsd:string" use="optional"/>
         <xsd:attribute name="filter" type="xsd:string" use="optional"/>
         <xsd:attribute name="retries" type="xsd:int" use="optional"/>
@@ -114,11 +114,11 @@
     <!-- method in service binding.bolt -->
     <xsd:complexType name="BBindingTRSerMethod">
         <xsd:attribute name="name" type="xsd:string" use="required"/>
-        <xsd:attribute name="timeout" type="xsd:int" use="optional"/>
+        <xsd:attribute name="timeout" type="xsd:string" use="optional"/>
     </xsd:complexType>
     <!-- global-attrs in service binding.bolt -->
     <xsd:complexType name="BBindingTRSerAttr">
-        <xsd:attribute name="timeout" type="xsd:int" use="optional"/>
+        <xsd:attribute name="timeout" type="xsd:string" use="optional"/>
         <xsd:attribute name="weight" type="xsd:int" use="optional" />
         <xsd:attribute name="warm-up-weight" type="xsd:int" use="optional" />
         <xsd:attribute name="warm-up-time" type="xsd:int" use="optional" />
@@ -147,7 +147,7 @@
     </xsd:complexType>
     <!--jvm service-->
     <xsd:complexType name="BBindingJvmService">
-         <xsd:attribute name="serialize" type="xsd:boolean" default="true" use="optional"/>
+        <xsd:attribute name="serialize" type="xsd:boolean" default="true" use="optional"/>
     </xsd:complexType>
     <!-- binding.bolt in service -->
     <xsd:complexType name="BBindingTRService">
@@ -222,7 +222,7 @@
     <xsd:complexType name="RestBindingTRRefMethod">
         <xsd:attribute name="name" type="xsd:string" use="required"/>
         <xsd:attribute name="type" type="RestInvokeMode" use="optional"/>
-        <xsd:attribute name="timeout" type="xsd:int" use="optional"/>
+        <xsd:attribute name="timeout" type="xsd:string" use="optional"/>
     </xsd:complexType>
 
     <!-- route in reference binding.rest-->
@@ -232,23 +232,23 @@
 
     <!-- global-attrs in reference binding.rest -->
     <xsd:complexType name="RestBindingTRRefAttr">
-        <xsd:attribute name="timeout" type="xsd:int" use="optional"/>
+        <xsd:attribute name="timeout" type="xsd:string" use="optional"/>
         <xsd:attribute name="type" type="RestInvokeMode" use="optional"/>
         <xsd:attribute name="address-wait-time" type="xsd:int" use="optional"/>
-        <xsd:attribute name="connect.timeout" type="xsd:int" use="optional"/>
+        <xsd:attribute name="connect.timeout" type="xsd:string" use="optional"/>
         <xsd:attribute name="connect.num" type="xsd:int" use="optional"/>
-        <xsd:attribute name="idle.timeout" type="xsd:int" use="optional"/>
-        <xsd:attribute name="idle.timeout.read" type="xsd:int" use="optional"/>
+        <xsd:attribute name="idle.timeout" type="xsd:string" use="optional"/>
+        <xsd:attribute name="idle.timeout.read" type="xsd:string" use="optional"/>
     </xsd:complexType>
 
     <!-- method in service binding.rest -->
     <xsd:complexType name="RestBindingTRSerMethod">
         <xsd:attribute name="name" type="xsd:string" use="required"/>
-        <xsd:attribute name="timeout" type="xsd:int" use="optional"/>
+        <xsd:attribute name="timeout" type="xsd:string" use="optional"/>
     </xsd:complexType>
     <!-- global-attrs in service binding.rest -->
     <xsd:complexType name="RestBindingTRSerAttr">
-        <xsd:attribute name="timeout" type="xsd:int" use="optional"/>
+        <xsd:attribute name="timeout" type="xsd:string" use="optional"/>
     </xsd:complexType>
     <!-- binding.rest in reference -->
     <xsd:complexType name="RestBindingTRReference">
@@ -340,7 +340,7 @@
     <xsd:complexType name="DubboBindingTRRefMethod">
         <xsd:attribute name="name" type="xsd:string" use="required"/>
         <xsd:attribute name="type" type="DubboInvokeMode" use="optional"/>
-        <xsd:attribute name="timeout" type="xsd:int" use="optional"/>
+        <xsd:attribute name="timeout" type="xsd:string" use="optional"/>
         <xsd:attribute name="callback-class" type="xsd:string" use="optional"/>
         <xsd:attribute name="callback-ref" type="xsd:string" use="optional"/>
     </xsd:complexType>
@@ -352,15 +352,15 @@
 
     <!-- global-attrs in reference binding.dubbo -->
     <xsd:complexType name="DubboBindingTRRefAttr">
-        <xsd:attribute name="timeout" type="xsd:int" use="optional"/>
+        <xsd:attribute name="timeout" type="xsd:string" use="optional"/>
         <xsd:attribute name="type" type="DubboInvokeMode" use="optional"/>
         <xsd:attribute name="address-wait-time" type="xsd:int" use="optional"/>
         <xsd:attribute name="callback-class" type="xsd:string" use="optional"/>
         <xsd:attribute name="callback-ref" type="xsd:string" use="optional"/>
-        <xsd:attribute name="connect.timeout" type="xsd:int" use="optional"/>
+        <xsd:attribute name="connect.timeout" type="xsd:string" use="optional"/>
         <xsd:attribute name="connect.num" type="xsd:int" use="optional"/>
-        <xsd:attribute name="idle.timeout" type="xsd:int" use="optional"/>
-        <xsd:attribute name="idle.timeout.read" type="xsd:int" use="optional"/>
+        <xsd:attribute name="idle.timeout" type="xsd:string" use="optional"/>
+        <xsd:attribute name="idle.timeout.read" type="xsd:string" use="optional"/>
         <xsd:attribute name="retries" type="xsd:int" use="optional"/>
         <xsd:attribute name="lazy" type="xsd:boolean" use="optional"/>
         <xsd:attribute name="check" type="xsd:boolean" use="optional"/>
@@ -370,11 +370,11 @@
     <!-- method in service binding.dubbo -->
     <xsd:complexType name="DubboBindingTRSerMethod">
         <xsd:attribute name="name" type="xsd:string" use="required"/>
-        <xsd:attribute name="timeout" type="xsd:int" use="optional"/>
+        <xsd:attribute name="timeout" type="xsd:string" use="optional"/>
     </xsd:complexType>
     <!-- global-attrs in service binding.dubbo -->
     <xsd:complexType name="DubboBindingTRSerAttr">
-        <xsd:attribute name="timeout" type="xsd:int" use="optional"/>
+        <xsd:attribute name="timeout" type="xsd:string" use="optional"/>
     </xsd:complexType>
     <!-- binding.dubbo in reference -->
     <xsd:complexType name="DubboBindingTRReference">
@@ -465,7 +465,7 @@
     <xsd:complexType name="H2cBindingRefMethod">
         <xsd:attribute name="name" type="xsd:string" use="required"/>
         <xsd:attribute name="type" type="H2cInvokeMode" use="optional"/>
-        <xsd:attribute name="timeout" type="xsd:int" use="optional"/>
+        <xsd:attribute name="timeout" type="xsd:string" use="optional"/>
         <xsd:attribute name="callback-class" type="xsd:string" use="optional"/>
         <xsd:attribute name="callback-ref" type="xsd:string" use="optional"/>
     </xsd:complexType>
@@ -477,12 +477,12 @@
 
     <!-- global-attrs in reference binding.h2c -->
     <xsd:complexType name="H2cBindingRefAttr">
-        <xsd:attribute name="timeout" type="xsd:int" use="optional"/>
+        <xsd:attribute name="timeout" type="xsd:string" use="optional"/>
         <xsd:attribute name="type" type="BInvokeMode" use="optional"/>
         <xsd:attribute name="address-wait-time" type="xsd:int" use="optional"/>
         <xsd:attribute name="callback-class" type="xsd:string" use="optional"/>
         <xsd:attribute name="callback-ref" type="xsd:string" use="optional"/>
-        <xsd:attribute name="connect.timeout" type="xsd:int" use="optional"/>
+        <xsd:attribute name="connect.timeout" type="xsd:string" use="optional"/>
         <xsd:attribute name="connect.num" type="xsd:int" use="optional"/>
         <xsd:attribute name="generic-interface" type="xsd:string" use="optional"/>
         <xsd:attribute name="filter" type="xsd:string" use="optional"/>
@@ -497,11 +497,11 @@
     <!-- method in service binding.h2c -->
     <xsd:complexType name="H2cBindingSerMethod">
         <xsd:attribute name="name" type="xsd:string" use="required"/>
-        <xsd:attribute name="timeout" type="xsd:int" use="optional"/>
+        <xsd:attribute name="timeout" type="xsd:string" use="optional"/>
     </xsd:complexType>
     <!-- global-attrs in service binding.h2c -->
     <xsd:complexType name="H2cBindingSerAttr">
-        <xsd:attribute name="timeout" type="xsd:int" use="optional"/>
+        <xsd:attribute name="timeout" type="xsd:string" use="optional"/>
         <xsd:attribute name="weight" type="xsd:int" use="optional" />
         <xsd:attribute name="warm-up-weight" type="xsd:int" use="optional" />
         <xsd:attribute name="warm-up-time" type="xsd:int" use="optional" />
