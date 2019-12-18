@@ -26,9 +26,11 @@ for filename in $(find ./sofa-boot-project ! -path '*/sofaboot-dependencies/*' -
 done
 sed "/<packaging>/,/<properties>/ s/<version>$currentVersion<\/version>/<version>$1<\/version>/" \
     sofa-boot-project/sofaboot-dependencies/pom.xml
+sed "/<properties>/,/<\/properties>/ s/<sofa.boot.version>$currentVersion<\/sofa.boot.version>/<sofa.boot.version>$1<\/sofa.boot.version>/" \
+    sofa-boot-project/sofaboot-dependencies/pom.xml
 
-echo "Change version in gradle.properties"
-for filename in $(find . -name "gradle.properties" -mindepth 3); do
+echo "Change version in build.gradle"
+for filename in $(find . -name "build.gradle" -mindepth 3); do
     echo "Dealing with $filename"
-    sed "s/sofaVersion=$currentVersion/sofaVersion=$1/g" $filename
+    sed "s/^version '$currentVersion'$/version '$1'/g" $filename
 done
