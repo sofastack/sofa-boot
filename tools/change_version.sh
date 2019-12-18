@@ -21,7 +21,7 @@ sed "/<project /,/<packaging/ s/<version>.*<\/version>/<version>$1<\/version>/" 
 
 echo "Change version in subproject pom ===>"
 for filename in $(find ./sofa-boot-project ! -path '*/sofaboot-dependencies/*' -name "pom.xml"); do
-    echo "Dealing with sofa-boot-project${filename:1}"
+    echo "Dealing with ${filename:2}"
     sed "/<parent>/,/<\/parent>/ s/<version>.*<\/version>/<version>$1<\/version>/" $filename
 done
 
