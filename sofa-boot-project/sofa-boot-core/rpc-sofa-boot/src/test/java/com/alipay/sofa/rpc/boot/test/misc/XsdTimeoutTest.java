@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.rpc.boot.test.xsd;
+package com.alipay.sofa.rpc.boot.test.misc;
 
 import com.alipay.sofa.rpc.boot.runtime.binding.RpcBinding;
 import com.alipay.sofa.rpc.boot.runtime.binding.RpcBindingType;
@@ -38,7 +38,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootApplication
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = XsdTimeoutTest.class, properties = { "timeout=10000" })
-@ImportResource("/spring/xsd.xml")
+@ImportResource("/spring/service_reference.xml")
 public class XsdTimeoutTest {
     @Autowired
     WhateverInterface  whatever;
