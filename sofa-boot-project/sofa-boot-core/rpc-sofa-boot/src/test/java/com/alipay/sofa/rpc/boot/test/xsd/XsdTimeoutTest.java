@@ -16,14 +16,11 @@
  */
 package com.alipay.sofa.rpc.boot.test.xsd;
 
-import com.alipay.sofa.rpc.boot.runtime.binding.BoltBinding;
 import com.alipay.sofa.rpc.boot.runtime.binding.RpcBinding;
 import com.alipay.sofa.rpc.boot.runtime.binding.RpcBindingType;
 import com.alipay.sofa.runtime.api.component.ComponentName;
-import com.alipay.sofa.runtime.service.component.Reference;
 import com.alipay.sofa.runtime.service.component.ReferenceComponent;
 import com.alipay.sofa.runtime.service.component.ServiceComponent;
-import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import org.junit.Assert;
 import org.junit.Test;
@@ -33,8 +30,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.util.Collection;
 
 /**
  * @author <a href="mailto:guaner.zzx@alipay.com">guaner.zzx</a>
