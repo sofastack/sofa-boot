@@ -16,14 +16,6 @@
  */
 package com.alipay.sofa.rpc.boot.container;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ThreadPoolExecutor;
-
-import org.slf4j.Logger;
-import org.springframework.util.StringUtils;
-
 import com.alipay.sofa.rpc.boot.common.NetworkAddressUtil;
 import com.alipay.sofa.rpc.boot.common.RpcThreadPoolMonitor;
 import com.alipay.sofa.rpc.boot.common.SofaBootRpcRuntimeException;
@@ -34,6 +26,13 @@ import com.alipay.sofa.rpc.common.RpcConstants;
 import com.alipay.sofa.rpc.config.ServerConfig;
 import com.alipay.sofa.rpc.server.Server;
 import com.alipay.sofa.rpc.server.bolt.BoltServer;
+import org.slf4j.Logger;
+import org.springframework.util.StringUtils;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * ServiceConfig 工厂
@@ -263,7 +262,10 @@ public class ServerConfigContainer {
         }
 
         serverConfig.setAutoStart(false);
-        return serverConfig.setProtocol(SofaBootRpcConfigConstants.RPC_PROTOCOL_H2C);
+        addCommonServerConfig(serverConfig);
+        serverConfig.setProtocol(SofaBootRpcConfigConstants.RPC_PROTOCOL_H2C);
+
+        return serverConfig;
     }
 
     /**
@@ -304,7 +306,6 @@ public class ServerConfigContainer {
 
         serverConfig.setAutoStart(false);
         serverConfig.setProtocol(SofaBootRpcConfigConstants.RPC_PROTOCOL_BOLT);
-
         addCommonServerConfig(serverConfig);
 
         return serverConfig;
@@ -473,7 +474,12 @@ public class ServerConfigContainer {
         }
 
         serverConfig.setAutoStart(false);
-        return serverConfig.setProtocol(SofaBootRpcConfigConstants.RPC_PROTOCOL_HTTP);
+
+        addCommonServerConfig(serverConfig);
+
+        serverConfig.setProtocol(SofaBootRpcConfigConstants.RPC_PROTOCOL_HTTP);
+
+        return serverConfig;
     }
 
     /**

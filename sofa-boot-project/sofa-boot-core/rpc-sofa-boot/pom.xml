@@ -5,7 +5,7 @@
     <parent>
         <artifactId>sofa-boot-core</artifactId>
         <groupId>com.alipay.sofa</groupId>
-        <version>3.2.2-SNAPSHOT</version>
+        <version>3.3.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -16,7 +16,7 @@
         <main.user.dir>${basedir}/../../..</main.user.dir>
         <swagger.version>2.0.0</swagger.version>
         <curator.version>4.0.1</curator.version>
-        <dubbo_version>2.4.10</dubbo_version>
+        <dubbo_version>2.6.7</dubbo_version>
         <zkclient.version>0.11</zkclient.version>
     </properties>
 
