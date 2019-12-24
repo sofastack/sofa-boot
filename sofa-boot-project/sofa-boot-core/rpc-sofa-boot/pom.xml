@@ -16,7 +16,7 @@
         <main.user.dir>${basedir}/../../..</main.user.dir>
         <swagger.version>2.0.0</swagger.version>
         <curator.version>4.0.1</curator.version>
-        <dubbo_version>2.4.10</dubbo_version>
+        <dubbo_version>2.6.7</dubbo_version>
         <zkclient.version>0.11</zkclient.version>
     </properties>
 
