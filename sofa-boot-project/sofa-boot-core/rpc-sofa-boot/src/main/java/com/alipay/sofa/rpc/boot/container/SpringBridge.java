@@ -52,6 +52,8 @@ public class SpringBridge {
     }
 
     public static void setApplicationContext(ApplicationContext applicationContext) {
-        SpringBridge.applicationContext = applicationContext;
+        if (SpringBridge.applicationContext == null) {
+            SpringBridge.applicationContext = applicationContext;
+        }
     }
 }
