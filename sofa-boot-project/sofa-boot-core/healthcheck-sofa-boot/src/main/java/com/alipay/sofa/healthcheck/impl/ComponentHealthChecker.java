@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.healthcheck.impl;
 
+import com.alipay.sofa.boot.util.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.Status;
@@ -57,10 +58,13 @@ public class ComponentHealthChecker implements HealthChecker {
         Health.Builder builder = new Health.Builder();
         for (ComponentInfo componentInfo : sofaRuntimeContext.getComponentManager().getComponents()) {
             HealthResult healthy = componentInfo.isHealthy();
-            if (healthy.isHealthy()) {
-                builder.withDetail(healthy.getHealthName(), "passed");
-            } else {
+            String healthReport = healthy.getHealthReport();
+            if (StringUtils.hasText(healthReport)) {
                 builder.withDetail(healthy.getHealthName(), healthy.getHealthReport());
+            } else {
+                builder.withDetail(healthy.getHealthName(), "passed");
+            }
+            if (!healthy.isHealthy()) {
                 allPassed = false;
             }
         }

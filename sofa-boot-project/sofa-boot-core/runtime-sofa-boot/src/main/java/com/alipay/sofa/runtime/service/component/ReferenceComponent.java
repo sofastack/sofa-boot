@@ -82,10 +82,6 @@ public class ReferenceComponent extends AbstractComponent {
 
     @Override
     public HealthResult isHealthy() {
-        if (!isActivated()) {
-            return super.isHealthy();
-        }
-
         HealthResult result = new HealthResult(componentName.getRawName());
         List<HealthResult> bindingHealth = new ArrayList<>();
 
@@ -122,14 +118,9 @@ public class ReferenceComponent extends AbstractComponent {
         if (failedBindingHealth.size() == 0) {
             result.setHealthy(true);
         } else {
-            StringBuilder healthReport = new StringBuilder("|");
-            for (HealthResult healthResult : failedBindingHealth) {
-                healthReport.append(healthResult.getHealthName()).append("#")
-                    .append(healthResult.getHealthReport());
-            }
-            result.setHealthReport(healthReport.substring(1, healthReport.length()));
             result.setHealthy(false);
         }
+        result.setHealthReport(aggregateBindingHealth(reference.getBindings()));
 
         return result;
     }
