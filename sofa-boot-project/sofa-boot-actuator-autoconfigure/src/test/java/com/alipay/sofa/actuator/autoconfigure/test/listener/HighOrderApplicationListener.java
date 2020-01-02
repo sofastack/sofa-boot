@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.actuator.autoconfigure.test.listener;
 
+import com.alipay.sofa.boot.constant.SofaBootConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -23,24 +24,27 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.PriorityOrdered;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.ResourceAccessException;
+
+import java.net.ConnectException;
 
 /**
- *
  * @author ruoshan
  * @since 2.6.0
  */
 public class HighOrderApplicationListener implements ApplicationListener<ContextRefreshedEvent>,
-                                         PriorityOrdered {
+        PriorityOrdered {
 
     @Autowired
-    private TestRestTemplate       testRestTemplate;
+    private TestRestTemplate testRestTemplate;
 
     @Value("${management.server.port}")
-    private String                 managementPort;
+    private String managementPort;
 
     @Autowired
-    private ApplicationContext     applicationContext;
+    private ApplicationContext applicationContext;
 
     private ResponseEntity<String> readinessCheckResponse;
 
@@ -54,14 +58,25 @@ public class HighOrderApplicationListener implements ApplicationListener<Context
         }
 
         System.out.println(contextRefreshedEvent.getApplicationContext().getEnvironment()
-            .getProperty("management.server.port"));
+                .getProperty("management.server.port"));
 
-        readinessCheckResponse = testRestTemplate.getForEntity("http://localhost:" + managementPort
-                                                               + "/actuator/readiness",
-            String.class);
+        try {
+            readinessCheckResponse = testRestTemplate.getForEntity("http://localhost:" + managementPort
+                            + "/actuator/readiness",
+                    String.class);
+        } catch (ResourceAccessException e) {
+            readinessCheckResponse = new ResponseEntity<>(SofaBootConstants.SOFABOOT_HEALTH_CHECK_NOT_READY_MSG,
+                    null, HttpStatus.INTERNAL_SERVER_ERROR);
 
-        livenessCheckResponse = testRestTemplate.getForEntity("http://localhost:" + managementPort
-                                                              + "/actuator/health", String.class);
+        }
+
+        try {
+            livenessCheckResponse = testRestTemplate.getForEntity("http://localhost:" + managementPort
+                    + "/actuator/health", String.class);
+        } catch (ResourceAccessException e) {
+            livenessCheckResponse = new ResponseEntity<>(SofaBootConstants.SOFABOOT_HEALTH_CHECK_NOT_READY_MSG,
+                    null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 
     }
 
