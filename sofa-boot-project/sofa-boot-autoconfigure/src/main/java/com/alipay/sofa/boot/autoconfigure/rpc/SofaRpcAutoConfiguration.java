@@ -121,13 +121,13 @@ public class SofaRpcAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public RegistryConfigureProcessor nacosConfigurator() {
+    public NacosConfigurator nacosConfigurator() {
         return new NacosConfigurator();
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public RegistryConfigureProcessor sofaRegistryConfigurator() {
+    public SofaRegistryConfigurator sofaRegistryConfigurator() {
         return new SofaRegistryConfigurator();
     }
 
@@ -142,7 +142,7 @@ public class SofaRpcAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public RegistryConfigureProcessor consulConfigurator() {
+    public ConsulConfigurator consulConfigurator() {
         return new ConsulConfigurator();
     }
 
