@@ -84,7 +84,7 @@ public class ReadinessCheckListener implements ApplicationContextAware, Priority
 
     @Override
     public int getOrder() {
-        return LOWEST_PRECEDENCE - 10;
+        return LOWEST_PRECEDENCE;
     }
 
     @Override
