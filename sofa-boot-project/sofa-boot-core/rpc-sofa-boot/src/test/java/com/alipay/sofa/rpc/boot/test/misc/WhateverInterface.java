@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.rpc.boot.test.xsd;
+package com.alipay.sofa.rpc.boot.test.misc;
 
 /**
  * @author <a href="mailto:guaner.zzx@alipay.com">guaner.zzx</a>

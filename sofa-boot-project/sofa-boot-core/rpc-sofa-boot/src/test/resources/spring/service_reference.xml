@@ -4,14 +4,14 @@
        xmlns:sofa="http://sofastack.io/schema/sofaboot"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
             http://sofastack.io/schema/sofaboot http://sofastack.io/schema/sofaboot.xsd">
-    <bean id="whateverBean" class="com.alipay.sofa.rpc.boot.test.xsd.WhateverClass" />
-    <sofa:service ref="whateverBean" interface="com.alipay.sofa.rpc.boot.test.xsd.WhateverInterface">
+    <bean id="whateverBean" class="com.alipay.sofa.rpc.boot.test.misc.WhateverClass" />
+    <sofa:service ref="whateverBean" interface="com.alipay.sofa.rpc.boot.test.misc.WhateverInterface">
         <sofa:binding.bolt>
             <sofa:global-attrs timeout="${timeout}" />
         </sofa:binding.bolt>
     </sofa:service>
 
-    <sofa:reference id="whatever" jvm-first="false" interface="com.alipay.sofa.rpc.boot.test.xsd.WhateverInterface">
+    <sofa:reference id="whatever" jvm-first="false" interface="com.alipay.sofa.rpc.boot.test.misc.WhateverInterface">
         <sofa:binding.bolt>
             <sofa:global-attrs timeout="${timeout}" />
         </sofa:binding.bolt>

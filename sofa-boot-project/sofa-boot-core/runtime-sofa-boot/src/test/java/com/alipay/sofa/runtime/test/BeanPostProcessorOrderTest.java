@@ -69,13 +69,6 @@ public class BeanPostProcessorOrderTest {
     }
 
     @Test
-    public void testShutDownHook() throws Exception {
-        List<RuntimeShutdownAware> applicationShutdownAwares = getApplicationShutdownAwares();
-        Assert.assertNotNull(applicationShutdownAwares);
-        Assert.assertTrue(applicationShutdownAwares.contains(highOrderBeanPostProcessor));
-    }
-
-    @Test
     @SuppressWarnings("unchecked")
     public void testShutDownHookReordered() throws Exception {
         List<RuntimeShutdownAware> applicationShutdownAwareList = getApplicationShutdownAwares();

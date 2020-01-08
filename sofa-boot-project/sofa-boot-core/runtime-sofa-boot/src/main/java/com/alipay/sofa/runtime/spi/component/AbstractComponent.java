@@ -20,7 +20,12 @@ import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.component.ComponentLifeCycle;
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.model.ComponentStatus;
+import com.alipay.sofa.runtime.spi.binding.Binding;
 import com.alipay.sofa.runtime.spi.health.HealthResult;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * abstract component implementation
@@ -168,6 +173,20 @@ public abstract class AbstractComponent implements ComponentInfo {
         }
 
         return healthResult;
+    }
+
+    protected String aggregateBindingHealth(Collection<Binding> bindings) {
+        List<String> healthResult = new ArrayList<>();
+        for (Binding binding : bindings) {
+            HealthResult result = binding.healthCheck();
+            String report = "["
+                            + result.getHealthName()
+                            + ","
+                            + (result.getHealthReport() == null ? (result.isHealthy() ? "passed"
+                                : "failed") : result.getHealthReport()) + "]";
+            healthResult.add(report);
+        }
+        return String.join(" ", healthResult);
     }
 
     @Override

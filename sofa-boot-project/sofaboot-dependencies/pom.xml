@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.0.RELEASE</version>
+        <version>2.1.11.RELEASE</version>
     </parent>
 
     <groupId>com.alipay.sofa</groupId>
@@ -47,6 +47,7 @@
         <zipkin.version>2.11.3</zipkin.version>
         <zipkin.reporter.version>2.7.7</zipkin.reporter.version>
         <jackson.version>2.9.10</jackson.version>
+        <jboss.jaxrs.api.version>1.0.2.Final</jboss.jaxrs.api.version>
 
         <resteasy.version>3.6.3.Final</resteasy.version>
         <curator.version>4.0.1</curator.version>
@@ -452,11 +453,6 @@
             <!-- resteasy -->
             <dependency>
                 <groupId>org.jboss.resteasy</groupId>
-                <artifactId>jaxrs-api</artifactId>
-                <version>${resteasy.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.resteasy</groupId>
                 <artifactId>resteasy-netty4</artifactId>
                 <version>${resteasy.version}</version>
             </dependency>
@@ -489,6 +485,13 @@
                 <groupId>org.jboss.resteasy</groupId>
                 <artifactId>resteasy-validator-provider-11</artifactId>
                 <version>${resteasy.version}</version>
+            </dependency>
+
+            <!-- jboss jaxrs api -->
+            <dependency>
+                <groupId>org.jboss.spec.javax.ws.rs</groupId>
+                <artifactId>jboss-jaxrs-api_2.1_spec</artifactId>
+                <version>${jboss.jaxrs.api.version}</version>
             </dependency>
 
             <!--dubbo-->
