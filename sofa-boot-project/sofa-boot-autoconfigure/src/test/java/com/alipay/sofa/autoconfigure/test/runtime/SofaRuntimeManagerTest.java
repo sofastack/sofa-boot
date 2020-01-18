@@ -23,6 +23,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -36,9 +37,14 @@ public class SofaRuntimeManagerTest {
     @Autowired
     private SofaRuntimeManager sofaRuntimeManager;
 
+    @Autowired
+    private ApplicationContext applicationContext;
+
     @Test
     public void testSofaRuntimeManagerHasCtx() {
         Assert.assertNotNull(sofaRuntimeManager.getSofaRuntimeContext());
+        System.out.println(applicationContext.getBean("sofaRuntimeContext"));
+        Assert.assertNotNull(applicationContext.getBean("sofaRuntimeContext"));
     }
 
     @Configuration
