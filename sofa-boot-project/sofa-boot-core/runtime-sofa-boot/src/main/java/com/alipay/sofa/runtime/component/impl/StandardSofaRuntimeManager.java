@@ -26,17 +26,21 @@ import com.alipay.sofa.runtime.spi.component.ComponentManager;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import com.alipay.sofa.runtime.spi.spring.RuntimeShutdownAware;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 
 /**
  * Default Sofa Runtime Manager
  *
  * @author xuanbei 18/3/1
  */
-public class StandardSofaRuntimeManager implements SofaRuntimeManager {
+public class StandardSofaRuntimeManager implements SofaRuntimeManager, ApplicationContextAware {
 
     private ComponentManager           componentManager;
     private ClientFactoryInternal      clientFactoryInternal;
     private SofaRuntimeContext         sofaRuntimeContext;
+    private ApplicationContext         rootApplicationContext;
     private String                     appName;
     private ClassLoader                appClassLoader;
     private List<RuntimeShutdownAware> runtimeShutdownAwares = new CopyOnWriteArrayList<RuntimeShutdownAware>();
@@ -126,6 +130,11 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager {
         runtimeHealthCheckers.add(runtimeHealthChecker);
     }
 
+    @Override
+    public ApplicationContext getRootApplicationContext() {
+        return rootApplicationContext;
+    }
+
     protected void clear() {
         componentManager = null;
         sofaRuntimeContext = null;
@@ -133,5 +142,10 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager {
         appClassLoader = null;
         runtimeShutdownAwares.clear();
         runtimeHealthCheckers.clear();
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        rootApplicationContext = applicationContext;
     }
 }
