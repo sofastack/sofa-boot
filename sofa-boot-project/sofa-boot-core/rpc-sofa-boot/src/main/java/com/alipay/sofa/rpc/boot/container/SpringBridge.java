@@ -24,6 +24,7 @@ import com.alipay.sofa.rpc.boot.runtime.adapter.helper.ProviderConfigHelper;
 /**
  * @author khotyn
  */
+@Deprecated
 public class SpringBridge {
     protected static ApplicationContext applicationContext;
 

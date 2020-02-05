@@ -20,6 +20,7 @@ import com.alipay.sofa.boot.health.RuntimeHealthChecker;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
 import com.alipay.sofa.runtime.spi.spring.RuntimeShutdownAware;
+import org.springframework.context.ApplicationContext;
 
 /**
  * @author xuanbei 18/2/28
@@ -80,4 +81,12 @@ public interface SofaRuntimeManager extends RuntimeHealthChecker {
      * @param runtimeHealthChecker
      */
     void registerRuntimeHealthChecker(RuntimeHealthChecker runtimeHealthChecker);
+
+    /**
+     * Get application's Spring context.
+     * The root Spring context is returned in multi-module application when isle is used.
+     *
+     * @return Spring context
+     */
+    public ApplicationContext getRootApplicationContext();
 }
