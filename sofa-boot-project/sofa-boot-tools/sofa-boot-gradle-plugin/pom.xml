@@ -168,6 +168,7 @@
             </activation>
             <properties>
                 <gradle.task>assemble</gradle.task>
+                <skip.gradle.build>true</skip.gradle.build>
             </properties>
         </profile>
     </profiles>

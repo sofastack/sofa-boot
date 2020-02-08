@@ -16,15 +16,6 @@
  */
 package com.alipay.sofa.runtime.test.configuration;
 
-import java.util.HashSet;
-import java.util.ServiceLoader;
-import java.util.Set;
-
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
-
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.runtime.SofaFramework;
 import com.alipay.sofa.runtime.api.client.ReferenceClient;
@@ -44,6 +35,14 @@ import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
 import com.alipay.sofa.runtime.spring.RuntimeContextBeanFactoryPostProcessor;
 import com.alipay.sofa.runtime.spring.ServiceBeanFactoryPostProcessor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
+
+import java.util.HashSet;
+import java.util.ServiceLoader;
+import java.util.Set;
 
 /**
  * @author qilong.zql
@@ -69,13 +68,13 @@ public class RuntimeConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public static SofaRuntimeContext sofaRuntimeContext(Environment environment,
+    public static SofaRuntimeManager sofaRuntimeManager(Environment environment,
                                                         BindingConverterFactory bindingConverterFactory,
                                                         BindingAdapterFactory bindingAdapterFactory) {
         String appName = environment.getProperty(SofaBootConstants.APP_NAME_KEY);
         ClientFactoryInternal clientFactoryInternal = new ClientFactoryImpl();
-        SofaRuntimeManager sofaRuntimeManager = new StandardSofaRuntimeManager(appName,
-            RuntimeConfiguration.class.getClassLoader(), clientFactoryInternal);
+        SofaRuntimeManager sofaRuntimeManager = new StandardSofaRuntimeManager(appName, Thread
+            .currentThread().getContextClassLoader(), clientFactoryInternal);
         sofaRuntimeManager.getComponentManager().registerComponentClient(
             ReferenceClient.class,
             new ReferenceClientImpl(sofaRuntimeManager.getSofaRuntimeContext(),
@@ -85,6 +84,12 @@ public class RuntimeConfiguration {
             new ServiceClientImpl(sofaRuntimeManager.getSofaRuntimeContext(),
                 bindingConverterFactory, bindingAdapterFactory));
         SofaFramework.registerSofaRuntimeManager(sofaRuntimeManager);
+        return sofaRuntimeManager;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public static SofaRuntimeContext sofaRuntimeContext(SofaRuntimeManager sofaRuntimeManager) {
         return sofaRuntimeManager.getSofaRuntimeContext();
     }
 
