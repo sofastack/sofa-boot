@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.rpc.boot.test.swagger;
 
-
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -48,6 +47,7 @@ public class SwaggerTest {
         HttpUriRequest request = new HttpGet("http://localhost:8341/swagger/bolt/api");
         HttpResponse response = httpClient.execute(request);
         Assert.assertEquals(200, response.getStatusLine().getStatusCode());
-        Assert.assertTrue(EntityUtils.toString(response.getEntity()).contains("/com.alipay.sofa.rpc.boot.test.bean.invoke.HelloSyncService/saySync"));
+        Assert.assertTrue(EntityUtils.toString(response.getEntity()).contains(
+            "/com.alipay.sofa.rpc.boot.test.bean.invoke.HelloSyncService/saySync"));
     }
 }

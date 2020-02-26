@@ -1,5 +1,3 @@
-org.springframework.context.ApplicationContextInitializer=\
-com.alipay.sofa.rpc.boot.SofaRpcInitializer
 org.springframework.context.ApplicationListener=\
 com.alipay.sofa.rpc.boot.context.ApplicationEnvironmentPreparedListener
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
