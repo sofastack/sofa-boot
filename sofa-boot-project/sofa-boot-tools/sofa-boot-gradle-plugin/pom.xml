@@ -169,7 +169,7 @@
             </activation>
             <properties>
                 <gradle.task>assemble</gradle.task>
-                <skip.gradle.test>false</skip.gradle.test>
+                <skip.gradle.test>true</skip.gradle.test>
             </properties>
         </profile>
     </profiles>
