@@ -16,6 +16,7 @@
         <gradle.executable>./gradlew</gradle.executable>
         <gradle.task>build</gradle.task>
         <skip.gradle.build>false</skip.gradle.build>
+        <skip.gradle.test>false</skip.gradle.test>
         <kotlin.version>1.2.20</kotlin.version>
     </properties>
     <dependencies>
@@ -89,7 +90,7 @@
                                 <argument>-Pdescription=${project.description}</argument>
                                 <argument>-S</argument>
                             </arguments>
-                            <skip>${skip.gradle.build}</skip>
+                            <skip>${skip.gradle.test}</skip>
                         </configuration>
                         <goals>
                             <goal>exec</goal>
@@ -168,7 +169,7 @@
             </activation>
             <properties>
                 <gradle.task>assemble</gradle.task>
-                <skip.gradle.build>true</skip.gradle.build>
+                <skip.gradle.test>true</skip.gradle.test>
             </properties>
         </profile>
     </profiles>
