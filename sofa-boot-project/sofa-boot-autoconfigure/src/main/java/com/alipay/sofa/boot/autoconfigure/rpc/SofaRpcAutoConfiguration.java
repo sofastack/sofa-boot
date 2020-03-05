@@ -21,6 +21,7 @@ import com.alipay.sofa.rpc.boot.config.ConsulConfigurator;
 import com.alipay.sofa.rpc.boot.config.FaultToleranceConfigurator;
 import com.alipay.sofa.rpc.boot.config.LocalFileConfigurator;
 import com.alipay.sofa.rpc.boot.config.MeshConfigurator;
+import com.alipay.sofa.rpc.boot.config.MulticastConfigurator;
 import com.alipay.sofa.rpc.boot.config.NacosConfigurator;
 import com.alipay.sofa.rpc.boot.config.RegistryConfigureProcessor;
 import com.alipay.sofa.rpc.boot.config.SofaBootRpcConfigConstants;
@@ -105,6 +106,12 @@ public class SofaRpcAutoConfiguration {
     @ConditionalOnMissingBean
     public ZookeeperConfigurator zookeeperConfigurator() {
         return new ZookeeperConfigurator();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public MulticastConfigurator multicastConfigurator() {
+        return new MulticastConfigurator();
     }
 
     @Bean
