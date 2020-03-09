@@ -150,6 +150,10 @@ public class DynamicJvmServiceProxyFinder {
      * @return
      */
     public static Biz getBiz(SofaRuntimeManager sofaRuntimeManager) {
+        if (getDynamicJvmServiceProxyFinder().bizManagerService == null) {
+            return null;
+        }
+
         for (Biz biz : getDynamicJvmServiceProxyFinder().bizManagerService.getBizInOrder()) {
             if (sofaRuntimeManager.getAppClassLoader().equals(biz.getBizClassLoader())) {
                 return biz;
