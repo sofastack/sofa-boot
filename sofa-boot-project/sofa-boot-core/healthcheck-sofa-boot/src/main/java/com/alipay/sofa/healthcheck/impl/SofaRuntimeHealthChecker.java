@@ -49,6 +49,10 @@ public class SofaRuntimeHealthChecker implements RuntimeHealthChecker {
     @Override
     public boolean isLivenessHealth() {
         for (HealthIndicator healthIndicator : healthIndicators) {
+            if (healthIndicator.getClass().getSimpleName()
+                .equals("MultiApplicationHealthIndicator")) {
+                continue;
+            }
             if (healthIndicator.health().getStatus().equals(Status.DOWN)) {
                 return false;
             }
