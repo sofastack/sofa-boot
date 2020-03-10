@@ -81,6 +81,10 @@ public abstract class RpcBindingParam implements BindingParam {
 
     private Integer                      repeatReferLimit;
 
+    protected String                     mockMode;
+
+    protected String                     mockBean;
+
     /**
      * Getter method for property <tt>timeout</tt>.
      *
@@ -545,4 +549,19 @@ public abstract class RpcBindingParam implements BindingParam {
         this.repeatReferLimit = repeatReferLimit;
     }
 
+    public String getMockMode() {
+        return mockMode;
+    }
+
+    public void setMockMode(String mockMode) {
+        this.mockMode = mockMode;
+    }
+
+    public String getMockBean() {
+        return mockBean;
+    }
+
+    public void setMockBean(String mockBean) {
+        this.mockBean = mockBean;
+    }
 }

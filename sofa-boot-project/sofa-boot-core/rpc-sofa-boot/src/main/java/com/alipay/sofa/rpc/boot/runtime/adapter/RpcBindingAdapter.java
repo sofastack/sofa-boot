@@ -22,6 +22,7 @@ import com.alipay.sofa.rpc.boot.runtime.adapter.helper.ConsumerConfigHelper;
 import com.alipay.sofa.rpc.boot.runtime.adapter.helper.ProviderConfigHelper;
 import com.alipay.sofa.rpc.boot.runtime.binding.RpcBinding;
 import com.alipay.sofa.rpc.boot.runtime.param.RpcBindingParam;
+import com.alipay.sofa.rpc.common.MockMode;
 import com.alipay.sofa.rpc.config.ConsumerConfig;
 import com.alipay.sofa.rpc.config.ProviderConfig;
 import com.alipay.sofa.rpc.config.RegistryConfig;
@@ -199,6 +200,11 @@ public abstract class RpcBindingAdapter implements BindingAdapter<RpcBinding> {
 
         ConsumerConfig consumerConfig = consumerConfigHelper.getConsumerConfig((Contract) contract,
             binding);
+
+        if (MockMode.LOCAL.equalsIgnoreCase(binding.getRpcBindingParam().getMockMode())) {
+            consumerConfig.setMockRef(consumerConfigHelper.getMockRef(binding, applicationContext));
+        }
+
         consumerConfigContainer.addConsumerConfig(binding, consumerConfig);
 
         try {
