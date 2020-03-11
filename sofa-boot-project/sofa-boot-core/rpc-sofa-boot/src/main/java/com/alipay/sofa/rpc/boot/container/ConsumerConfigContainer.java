@@ -59,4 +59,8 @@ public class ConsumerConfigContainer {
             }
         }
     }
+
+    public ConcurrentMap<Binding, ConsumerConfig> getConsumerConfigMap() {
+        return consumerConfigMap;
+    }
 }

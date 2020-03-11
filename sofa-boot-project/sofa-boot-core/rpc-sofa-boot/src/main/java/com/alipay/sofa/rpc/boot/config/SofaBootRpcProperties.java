@@ -103,6 +103,11 @@ public class SofaBootRpcProperties {
      * the max accept size of bolt (bolt 服务端允许客户端建立的连接数)
      */
     private String              boltAcceptsSize;
+
+    /**
+     * Location of remote mock server . If specified ,auto enable mock.
+     */
+    private String              mockUrl;
     /* Bolt end*/
 
     /* H2c start*/
@@ -294,6 +299,11 @@ public class SofaBootRpcProperties {
     private String              hystrixEnable;
 
     private String              defaultTracer;
+
+    /**
+     * dynamic config setting
+     */
+    private String              dynamicConfig;
 
     public String getAftRegulationEffective() {
         return StringUtils.isEmpty(aftRegulationEffective) ? getDotString(new Object() {
@@ -818,4 +828,21 @@ public class SofaBootRpcProperties {
     public void setRestSwagger(boolean restSwagger) {
         this.restSwagger = restSwagger;
     }
+
+    public String getMockUrl() {
+        return mockUrl;
+    }
+
+    public void setMockUrl(String mockUrl) {
+        this.mockUrl = mockUrl;
+    }
+
+    public String getDynamicConfig() {
+        return dynamicConfig;
+    }
+
+    public void setDynamicConfig(String dynamicConfig) {
+        this.dynamicConfig = dynamicConfig;
+    }
+
 }
