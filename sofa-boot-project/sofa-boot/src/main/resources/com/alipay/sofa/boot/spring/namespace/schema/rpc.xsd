@@ -109,6 +109,8 @@
         <xsd:attribute name="check" type="xsd:boolean" use="optional"/>
         <xsd:attribute name="registry" type="xsd:string" use="optional"/>
         <xsd:attribute name="serialize-type" type="xsd:string" use="optional"/>
+        <xsd:attribute name="mock-mode" type="xsd:string" use="optional"/>
+        <xsd:attribute name="mock-bean" type="xsd:string" use="optional"/>
     </xsd:complexType>
 
     <!-- method in service binding.bolt -->

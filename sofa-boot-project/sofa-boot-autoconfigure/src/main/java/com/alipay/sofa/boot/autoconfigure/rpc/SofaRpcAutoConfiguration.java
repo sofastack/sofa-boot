@@ -38,6 +38,11 @@ import com.alipay.sofa.rpc.boot.context.SofaBootRpcStartListener;
 import com.alipay.sofa.rpc.boot.health.RpcAfterHealthCheckCallback;
 import com.alipay.sofa.rpc.boot.runtime.adapter.helper.ConsumerConfigHelper;
 import com.alipay.sofa.rpc.boot.runtime.adapter.helper.ProviderConfigHelper;
+import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ConsumerConfigProcessor;
+import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ConsumerMockProcessor;
+import com.alipay.sofa.rpc.boot.runtime.adapter.processor.DynamicConfigProcessor;
+import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ProcessorContainer;
+import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ProviderConfigProcessor;
 import com.alipay.sofa.rpc.boot.swagger.BoltSwaggerServiceApplicationListener;
 import com.alipay.sofa.rpc.boot.swagger.SwaggerServiceApplicationListener;
 import org.springframework.beans.factory.annotation.Value;
@@ -200,4 +205,23 @@ public class SofaRpcAutoConfiguration {
             return new RpcAfterHealthCheckCallback();
         }
     }
+
+    @Bean
+    public ProcessorContainer processorContainer(List<ProviderConfigProcessor> providerConfigProcessors,
+                                                 List<ConsumerConfigProcessor> consumerConfigProcessors) {
+        return new ProcessorContainer(providerConfigProcessors, consumerConfigProcessors);
+    }
+
+    @Bean
+    @ConditionalOnProperty(name = "com.alipay.sofa.rpc.mock-url")
+    public ConsumerMockProcessor consumerMockProcessor() {
+        return new ConsumerMockProcessor();
+    }
+
+    @Bean
+    @ConditionalOnProperty(name = "com.alipay.sofa.rpc.dynamic-config")
+    public DynamicConfigProcessor dynamicConfigProcessor() {
+        return new DynamicConfigProcessor();
+    }
+
 }

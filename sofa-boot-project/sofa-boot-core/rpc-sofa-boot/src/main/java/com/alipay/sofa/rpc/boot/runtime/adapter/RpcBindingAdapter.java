@@ -20,8 +20,10 @@ import com.alipay.sofa.rpc.boot.container.ConsumerConfigContainer;
 import com.alipay.sofa.rpc.boot.container.ProviderConfigContainer;
 import com.alipay.sofa.rpc.boot.runtime.adapter.helper.ConsumerConfigHelper;
 import com.alipay.sofa.rpc.boot.runtime.adapter.helper.ProviderConfigHelper;
+import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ProcessorContainer;
 import com.alipay.sofa.rpc.boot.runtime.binding.RpcBinding;
 import com.alipay.sofa.rpc.boot.runtime.param.RpcBindingParam;
+import com.alipay.sofa.rpc.common.MockMode;
 import com.alipay.sofa.rpc.config.ConsumerConfig;
 import com.alipay.sofa.rpc.config.ProviderConfig;
 import com.alipay.sofa.rpc.config.RegistryConfig;
@@ -90,9 +92,12 @@ public abstract class RpcBindingAdapter implements BindingAdapter<RpcBinding> {
             .getRootApplicationContext();
         ProviderConfigContainer providerConfigContainer = applicationContext
             .getBean(ProviderConfigContainer.class);
+        ProcessorContainer processorContainer = applicationContext
+            .getBean(ProcessorContainer.class);
 
         String uniqueName = providerConfigContainer.createUniqueName((Contract) contract, binding);
         ProviderConfig providerConfig = providerConfigContainer.getProviderConfig(uniqueName);
+        processorContainer.processorProvider(providerConfig);
 
         if (providerConfig == null) {
             throw new ServiceRuntimeException(LogCodes.getLog(
@@ -196,9 +201,17 @@ public abstract class RpcBindingAdapter implements BindingAdapter<RpcBinding> {
             .getBean(ConsumerConfigHelper.class);
         ConsumerConfigContainer consumerConfigContainer = applicationContext
             .getBean(ConsumerConfigContainer.class);
+        ProcessorContainer processorContainer = applicationContext
+            .getBean(ProcessorContainer.class);
 
         ConsumerConfig consumerConfig = consumerConfigHelper.getConsumerConfig((Contract) contract,
             binding);
+        processorContainer.processorConsumer(consumerConfig);
+
+        if (MockMode.LOCAL.equalsIgnoreCase(binding.getRpcBindingParam().getMockMode())) {
+            consumerConfig.setMockRef(consumerConfigHelper.getMockRef(binding, applicationContext));
+        }
+
         consumerConfigContainer.addConsumerConfig(binding, consumerConfig);
 
         try {

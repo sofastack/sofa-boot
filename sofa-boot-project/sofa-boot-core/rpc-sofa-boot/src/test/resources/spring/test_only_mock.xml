@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:sofa="http://sofastack.io/schema/sofaboot"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://sofastack.io/schema/sofaboot   http://sofastack.io/schema/sofaboot.xsd">
+
+    <bean id="mockHello" class="com.alipay.sofa.rpc.boot.test.bean.invoke.HelloSyncServiceImpl"/>
+
+    <sofa:reference id="xmlLocalMock" interface="com.alipay.sofa.rpc.boot.test.bean.invoke.HelloSyncService" repeatReferLimit="10">
+        <sofa:binding.bolt>
+            <sofa:global-attrs mock-bean="mockHello" mock-mode="local"/>
+        </sofa:binding.bolt>
+    </sofa:reference>
+
+    <sofa:reference id="xmlRemoteMock" interface="com.alipay.sofa.rpc.boot.test.bean.invoke.HelloSyncService" repeatReferLimit="10">
+        <sofa:binding.bolt>
+            <sofa:global-attrs mock-mode="remote"/>
+            <sofa:parameter key="mockUrl" value="http://127.0.0.1:1236/"/>
+        </sofa:binding.bolt>
+    </sofa:reference>
+</beans>

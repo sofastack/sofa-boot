@@ -230,6 +230,8 @@ public abstract class RpcBindingConverter implements BindingConverter<RpcBinding
         Boolean check = SofaBootRpcParserUtil.parseBoolean(element
             .getAttribute(RpcBindingXmlConstants.TAG_CHECK));
         String registryAlias = element.getAttribute(RpcBindingXmlConstants.TAG_REGISTRY);
+        String mockMode = element.getAttribute(RpcBindingXmlConstants.TAG_MOCK_MODE);
+        String mockBean = element.getAttribute(RpcBindingXmlConstants.TAG_MOCK_BEAN);
 
         String serialization = element.getAttribute(RpcBindingXmlConstants.TAG_SERIALIZE_TYPE);
         if (timeout != null) {
@@ -284,6 +286,12 @@ public abstract class RpcBindingConverter implements BindingConverter<RpcBinding
         if (StringUtils.hasText(registryAlias)) {
             String[] registrys = registryAlias.split(",");
             param.setRegistrys(Arrays.asList(registrys));
+        }
+        if (StringUtils.hasText(mockMode)) {
+            param.setMockMode(mockMode);
+        }
+        if (StringUtils.hasText(mockBean)) {
+            param.setMockBean(mockBean);
         }
     }
 
@@ -503,6 +511,13 @@ public abstract class RpcBindingConverter implements BindingConverter<RpcBinding
         if (StringUtils.hasText(sofaReferenceBindingAnnotation.loadBalancer())) {
             bindingParam.setLoadBalancer(sofaReferenceBindingAnnotation.loadBalancer());
         }
+        if (StringUtils.hasText(sofaReferenceBindingAnnotation.mockMode())) {
+            bindingParam.setMockMode(sofaReferenceBindingAnnotation.mockMode());
+        }
+        if (StringUtils.hasText(sofaReferenceBindingAnnotation.mockBean())) {
+            bindingParam.setMockBean(sofaReferenceBindingAnnotation.mockBean());
+        }
+
         bindingParam.setType(sofaReferenceBindingAnnotation.invokeType());
 
         ApplicationContext applicationContext = bindingConverterContext.getApplicationContext();

@@ -52,6 +52,8 @@ public class RpcBindingXmlConstants {
     public static final String TAG_CHECK             = "check";
     public static final String TAG_PARAMETER_KEY     = "key";
     public static final String TAG_PARAMETER_VALUE   = "value";
+    public static final String TAG_MOCK_MODE         = "mock-mode";
+    public static final String TAG_MOCK_BEAN         = "mock-bean";
 
     public static final String TAG_NAME              = "name";
 
