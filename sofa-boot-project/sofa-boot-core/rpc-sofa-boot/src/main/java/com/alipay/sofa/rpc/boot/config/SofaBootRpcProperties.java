@@ -105,6 +105,11 @@ public class SofaBootRpcProperties {
     private String              boltAcceptsSize;
 
     /**
+     * export a port to show swagger
+     */
+    private Boolean             enableSwagger;
+
+    /**
      * Location of remote mock server . If specified ,auto enable mock.
      */
     private String              mockUrl;
@@ -845,4 +850,11 @@ public class SofaBootRpcProperties {
         this.dynamicConfig = dynamicConfig;
     }
 
+    public Boolean getEnableSwagger() {
+        return enableSwagger;
+    }
+
+    public void setEnableSwagger(Boolean enableswagger) {
+        this.enableSwagger = enableswagger;
+    }
 }

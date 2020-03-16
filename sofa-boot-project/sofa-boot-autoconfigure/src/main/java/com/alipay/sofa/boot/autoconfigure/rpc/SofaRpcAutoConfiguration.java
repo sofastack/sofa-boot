@@ -21,6 +21,7 @@ import com.alipay.sofa.rpc.boot.config.ConsulConfigurator;
 import com.alipay.sofa.rpc.boot.config.FaultToleranceConfigurator;
 import com.alipay.sofa.rpc.boot.config.LocalFileConfigurator;
 import com.alipay.sofa.rpc.boot.config.MeshConfigurator;
+import com.alipay.sofa.rpc.boot.config.MulticastConfigurator;
 import com.alipay.sofa.rpc.boot.config.NacosConfigurator;
 import com.alipay.sofa.rpc.boot.config.RegistryConfigureProcessor;
 import com.alipay.sofa.rpc.boot.config.SofaBootRpcConfigConstants;
@@ -42,6 +43,7 @@ import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ConsumerMockProcessor;
 import com.alipay.sofa.rpc.boot.runtime.adapter.processor.DynamicConfigProcessor;
 import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ProcessorContainer;
 import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ProviderConfigProcessor;
+import com.alipay.sofa.rpc.boot.swagger.BoltSwaggerServiceApplicationListener;
 import com.alipay.sofa.rpc.boot.swagger.SwaggerServiceApplicationListener;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.Health;
@@ -114,6 +116,12 @@ public class SofaRpcAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
+    public MulticastConfigurator multicastConfigurator() {
+        return new MulticastConfigurator();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
     public LocalFileConfigurator localFileConfigurator() {
         return new LocalFileConfigurator();
     }
@@ -181,6 +189,12 @@ public class SofaRpcAutoConfiguration {
     @ConditionalOnProperty(name = "com.alipay.sofa.rpc.rest-swagger", havingValue = "true")
     public ApplicationListener swaggerServiceApplicationListener() {
         return new SwaggerServiceApplicationListener();
+    }
+
+    @Bean
+    @ConditionalOnProperty(name = "com.alipay.sofa.rpc.enable-swagger", havingValue = "true")
+    public ApplicationListener boltSwaggerServiceApplicationListener() {
+        return new BoltSwaggerServiceApplicationListener();
     }
 
     @Configuration

@@ -42,6 +42,7 @@ import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ConsumerMockProcessor;
 import com.alipay.sofa.rpc.boot.runtime.adapter.processor.DynamicConfigProcessor;
 import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ProcessorContainer;
 import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ProviderConfigProcessor;
+import com.alipay.sofa.rpc.boot.swagger.BoltSwaggerServiceApplicationListener;
 import com.alipay.sofa.rpc.boot.swagger.SwaggerServiceApplicationListener;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -165,6 +166,12 @@ public class SofaRpcTestAutoConfiguration {
     @ConditionalOnProperty(name = "com.alipay.sofa.rpc.rest-swagger", havingValue = "true")
     public ApplicationListener swaggerServiceApplicationListener() {
         return new SwaggerServiceApplicationListener();
+    }
+
+    @Bean
+    @ConditionalOnProperty(name = "com.alipay.sofa.rpc.enable-swagger", havingValue = "true")
+    public ApplicationListener boltSwaggerServiceApplicationListener() {
+        return new BoltSwaggerServiceApplicationListener();
     }
 
     @Configuration

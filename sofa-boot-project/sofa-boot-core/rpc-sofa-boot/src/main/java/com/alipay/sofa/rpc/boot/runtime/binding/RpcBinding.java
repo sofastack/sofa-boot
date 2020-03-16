@@ -16,14 +16,13 @@
  */
 package com.alipay.sofa.rpc.boot.runtime.binding;
 
-import org.springframework.context.ApplicationContext;
-import org.w3c.dom.Element;
-
 import com.alipay.sofa.rpc.boot.config.SofaBootRpcConfigConstants;
 import com.alipay.sofa.rpc.boot.runtime.param.RpcBindingParam;
 import com.alipay.sofa.rpc.config.ConsumerConfig;
 import com.alipay.sofa.runtime.spi.binding.AbstractBinding;
 import com.alipay.sofa.runtime.spi.health.HealthResult;
+import org.springframework.context.ApplicationContext;
+import org.w3c.dom.Element;
 
 /**
  * rpc binding implementation
@@ -87,6 +86,7 @@ public abstract class RpcBinding extends AbstractBinding {
 
     /**
      * 健康检查
+     *
      * @return 健康检查结果
      */
     @Override
@@ -96,6 +96,8 @@ public abstract class RpcBinding extends AbstractBinding {
         // health check when reference
         if (inBinding && consumerConfig != null) {
             if (consumerConfig.getConsumerBootstrap().isSubscribed()) {
+                result.setHealthy(true);
+            } else if (getRpcBindingParam().isHealthyDestine(getAppName())) {
                 result.setHealthy(true);
             } else {
                 result.setHealthy(false);
