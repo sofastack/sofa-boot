@@ -103,6 +103,11 @@ public class SofaBootRpcProperties {
      * the max accept size of bolt (bolt 服务端允许客户端建立的连接数)
      */
     private String              boltAcceptsSize;
+
+    /**
+     * export a port to show swagger
+     */
+    private Boolean             enableSwagger;
     /* Bolt end*/
 
     /* H2c start*/
@@ -817,5 +822,13 @@ public class SofaBootRpcProperties {
 
     public void setRestSwagger(boolean restSwagger) {
         this.restSwagger = restSwagger;
+    }
+
+    public Boolean getEnableSwagger() {
+        return enableSwagger;
+    }
+
+    public void setEnableSwagger(Boolean enableswagger) {
+        this.enableSwagger = enableswagger;
     }
 }
