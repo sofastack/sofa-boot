@@ -183,6 +183,36 @@
 
     <!-- Bolt End -->
 
+    <!-- binding.grpc in service start -->
+    <xsd:complexType name="GrpcBindingService">
+        <xsd:complexContent>
+            <xsd:extension base="BBinding">
+                <xsd:sequence minOccurs="0">
+                    <xsd:element name="global-attrs" type="BBindingTRSerAttr" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="method" type="BBindingTRSerMethod" minOccurs="0" maxOccurs="unbounded"/>
+                    <xsd:element name="parameter" type="TParameter" minOccurs="0" maxOccurs="unbounded"/>
+                    <xsd:any minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+    <!-- binding.grpc in service end -->
+    <!-- binding.grpc in reference start-->
+    <xsd:complexType name="GrpcBindingReference">
+        <xsd:complexContent>
+            <xsd:extension base="BBinding">
+                <xsd:sequence minOccurs="0">
+                    <xsd:element name="global-attrs" type="BBindingTRRefAttr" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="route" type="BBindingTRRefRoute" minOccurs="0" maxOccurs="1"/>
+                    <xsd:element name="method" type="BBindingTRRefMethod" minOccurs="0" maxOccurs="unbounded"/>
+                    <xsd:element name="parameter" type="TParameter" minOccurs="0" maxOccurs="unbounded"/>
+                    <xsd:any minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+    <!-- binding.grpc in reference end-->
+
     <!-- Rest Start -->
 
     <xsd:simpleType name="RestInvokeMode">
@@ -580,6 +610,8 @@
                     <xsd:element name="binding.rest" type="RestBindingTRReference" minOccurs="0"/>
                     <xsd:element name="binding.dubbo" type="DubboBindingTRReference" minOccurs="0"/>
                     <xsd:element name="binding.h2c" type="H2cBindingReference" minOccurs="0"/>
+                    <xsd:element name="binding.grpc" type="GrpcBindingReference" minOccurs="0"/>
+
                 </xsd:all>
                 <xsd:attribute name="jvm-first" use="optional" type="xsd:boolean" default="true"/>
                 <xsd:attribute name="interface" type="xsd:string" use="required"/>
@@ -603,6 +635,7 @@
                     <xsd:element name="binding.rest" type="RestBindingTRService" minOccurs="0"/>
                     <xsd:element name="binding.dubbo" type="DubboBindingTRService" minOccurs="0"/>
                     <xsd:element name="binding.h2c" type="H2cBindingService" minOccurs="0"/>
+                    <xsd:element name="binding.grpc" type="GrpcBindingService" minOccurs="0"/>
                 </xsd:all>
                 <xsd:attribute name="ref" type="xsd:string" use="required"/>
                 <xsd:attribute name="interface" type="xsd:string" use="required"/>

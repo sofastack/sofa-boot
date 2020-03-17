@@ -14,26 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.rpc.boot.runtime.binding;
+package com.alipay.sofa.rpc.boot.test.bean.grpc;
 
-import com.alipay.sofa.runtime.api.binding.BindingType;
+import io.grpc.examples.helloworld.HelloReply;
+import io.grpc.examples.helloworld.HelloRequest;
+import io.grpc.examples.helloworld.SofaGreeterGrpc;
+import io.grpc.stub.StreamObserver;
 
-/**
- *
- * @author <a href="mailto:lw111072@antfin.com">LiWei</a>
- */
-public class RpcBindingType {
+public class GrpcGreeterImpl extends SofaGreeterGrpc.GreeterImplBase {
 
-    public static final BindingType BOLT_BINDING_TYPE  = new BindingType("bolt");
-
-    public static final BindingType REST_BINDING_TYPE  = new BindingType("rest");
-
-    public static final BindingType DUBBO_BINDING_TYPE = new BindingType("dubbo");
-
-    public static final BindingType H2C_BINDING_TYPE   = new BindingType("h2c");
-
-    public static final BindingType HTTP_BINDING_TYPE  = new BindingType("http");
-
-    public static final BindingType GRPC_BINDING_TYPE  = new BindingType("grpc");
+    @Override
+    public void sayHello(HelloRequest request, StreamObserver<HelloReply> responseObserver) {
+        System.out.println("Executing thread is " + Thread.currentThread().getName());
+        HelloReply reply = HelloReply.newBuilder().setMessage("Hello " + request.getName()).build();
+        responseObserver.onNext(reply);
+        responseObserver.onCompleted();
+        // responseObserver.onError(new RuntimeException("fuck"));
+        //  throw new RuntimeException("xx");
+    }
 
 }

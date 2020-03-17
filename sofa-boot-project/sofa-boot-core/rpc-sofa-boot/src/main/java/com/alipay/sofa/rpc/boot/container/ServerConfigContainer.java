@@ -75,6 +75,12 @@ public class ServerConfigContainer {
     private volatile ServerConfig     httpServerConfig;
     private final Object              HTTP_LOCK           = new Object();
 
+    /**
+     * http ServerConfig
+     */
+    private volatile ServerConfig     grpcServerConfig;
+    private final Object              GRPC_LOCK           = new Object();
+
     //custom server configs
     private Map<String, ServerConfig> customServerConfigs = new ConcurrentHashMap<String, ServerConfig>();
 
@@ -114,6 +120,12 @@ public class ServerConfigContainer {
 
         if (httpServerConfig != null) {
             httpServerConfig.buildIfAbsent().start();
+
+            // 加入线程监测？
+        }
+
+        if (grpcServerConfig != null) {
+            grpcServerConfig.buildIfAbsent().start();
 
             // 加入线程监测？
         }
@@ -188,6 +200,15 @@ public class ServerConfigContainer {
             }
 
             return httpServerConfig;
+        } else if (protocol.equalsIgnoreCase(SofaBootRpcConfigConstants.RPC_PROTOCOL_GRPC)) {
+            if (grpcServerConfig == null) {
+                synchronized (GRPC_LOCK) {
+                    if (grpcServerConfig == null) {
+                        grpcServerConfig = createGrpcServerConfig();
+                    }
+                }
+            }
+            return grpcServerConfig;
         } else if (customServerConfigs.get(protocol) != null) {
             return customServerConfigs.get(protocol);
         } else {
@@ -480,6 +501,50 @@ public class ServerConfigContainer {
         serverConfig.setProtocol(SofaBootRpcConfigConstants.RPC_PROTOCOL_HTTP);
 
         return serverConfig;
+    }
+
+    /**
+     * grpc server
+     *
+     * @return server
+     */
+    private ServerConfig createGrpcServerConfig() {
+        String portStr = sofaBootRpcProperties.getGrpcPort();
+        String threadPoolCoreSizeStr = sofaBootRpcProperties.getGrpcThreadPoolCoreSize();
+        String threadPoolMaxSizeStr = sofaBootRpcProperties.getGrpcThreadPoolMaxSize();
+        String acceptsSizeStr = sofaBootRpcProperties.getGrpcAcceptsSize();
+        String threadPoolQueueSizeStr = sofaBootRpcProperties.getGrpcThreadPoolQueueSize();
+
+        ServerConfig serverConfig = new ServerConfig();
+
+        if (StringUtils.hasText(portStr)) {
+            serverConfig.setPort(Integer.parseInt(portStr));
+        } else {
+            serverConfig.setPort(SofaBootRpcConfigConstants.GRPC_PORT_DEFAULT);
+        }
+
+        if (StringUtils.hasText(threadPoolMaxSizeStr)) {
+            serverConfig.setMaxThreads(Integer.parseInt(threadPoolMaxSizeStr));
+        }
+
+        if (StringUtils.hasText(threadPoolCoreSizeStr)) {
+            serverConfig.setCoreThreads(Integer.parseInt(threadPoolCoreSizeStr));
+        }
+
+        if (StringUtils.hasText(acceptsSizeStr)) {
+            serverConfig.setAccepts(Integer.parseInt(acceptsSizeStr));
+        }
+
+        if (StringUtils.hasText(threadPoolQueueSizeStr)) {
+            serverConfig.setQueues(Integer.parseInt(threadPoolQueueSizeStr));
+        }
+
+        serverConfig.setAutoStart(false);
+        serverConfig.setProtocol(SofaBootRpcConfigConstants.RPC_PROTOCOL_GRPC);
+        addCommonServerConfig(serverConfig);
+
+        return serverConfig;
+
     }
 
     /**

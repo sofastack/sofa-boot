@@ -16,16 +16,15 @@
  */
 package com.alipay.sofa.rpc.boot.config;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import com.alipay.sofa.rpc.common.SofaOptions;
+import com.google.common.base.CaseFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.core.env.Environment;
 import org.springframework.util.StringUtils;
 
-import com.alipay.sofa.rpc.common.SofaOptions;
-import com.google.common.base.CaseFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author khotyn
@@ -239,6 +238,34 @@ public class SofaBootRpcProperties {
      */
     private String              httpAcceptsSize;
     /* http end*/
+
+    /* Grpc start*/
+
+    /**
+     * the port of grpc (grpc 端口)
+     */
+    private String              grpcPort;
+
+    /**
+     * the core thread pool size of grpc （grpc 核心线程数）
+     */
+    private String              grpcThreadPoolCoreSize;
+
+    /**
+     * the max thread pool size of grpc （grpc 最大线程数）
+     */
+    private String              grpcThreadPoolMaxSize;
+
+    /**
+     * the queue size of grpc server（grpc 线程池队列）
+     */
+    private String              grpcThreadPoolQueueSize;
+
+    /**
+     * the max accept size of grpc (grpc 服务端允许客户端建立的连接数)
+     */
+    private String              grpcAcceptsSize;
+    /* Grpc end*/
 
     /* registry */
     /**
@@ -785,6 +812,51 @@ public class SofaBootRpcProperties {
     public String getRestAllowedOrigins() {
         return StringUtils.isEmpty(restAllowedOrigins) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : restAllowedOrigins;
+    }
+
+    public String getGrpcPort() {
+        return StringUtils.isEmpty(grpcPort) ? getDotString(new Object() {
+        }.getClass().getEnclosingMethod().getName()) : grpcPort;
+    }
+
+    public void setGrpcPort(String grpcPort) {
+        this.grpcPort = grpcPort;
+    }
+
+    public String getGrpcThreadPoolCoreSize() {
+        return StringUtils.isEmpty(grpcThreadPoolCoreSize) ? getDotString(new Object() {
+        }.getClass().getEnclosingMethod().getName()) : grpcThreadPoolCoreSize;
+    }
+
+    public void setGrpcThreadPoolCoreSize(String grpcThreadPoolCoreSize) {
+        this.grpcThreadPoolCoreSize = grpcThreadPoolCoreSize;
+    }
+
+    public String getGrpcThreadPoolMaxSize() {
+        return StringUtils.isEmpty(grpcThreadPoolMaxSize) ? getDotString(new Object() {
+        }.getClass().getEnclosingMethod().getName()) : grpcThreadPoolMaxSize;
+    }
+
+    public void setGrpcThreadPoolMaxSize(String grpcThreadPoolMaxSize) {
+        this.grpcThreadPoolMaxSize = grpcThreadPoolMaxSize;
+    }
+
+    public String getGrpcThreadPoolQueueSize() {
+        return StringUtils.isEmpty(grpcThreadPoolQueueSize) ? getDotString(new Object() {
+        }.getClass().getEnclosingMethod().getName()) : grpcThreadPoolQueueSize;
+    }
+
+    public void setGrpcThreadPoolQueueSize(String grpcThreadPoolQueueSize) {
+        this.grpcThreadPoolQueueSize = grpcThreadPoolQueueSize;
+    }
+
+    public String getGrpcAcceptsSize() {
+        return StringUtils.isEmpty(grpcAcceptsSize) ? getDotString(new Object() {
+        }.getClass().getEnclosingMethod().getName()) : grpcAcceptsSize;
+    }
+
+    public void setGrpcAcceptsSize(String grpcAcceptsSize) {
+        this.grpcAcceptsSize = grpcAcceptsSize;
     }
 
     public void setRestAllowedOrigins(String restAllowedOrigins) {
