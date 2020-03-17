@@ -284,6 +284,7 @@ public class SofaBootRpcAllTest {
 
     @Test
     public void testGrpcSync() throws InterruptedException {
+        Thread.sleep(5000);
         HelloReply reply = null;
         HelloRequest request = HelloRequest.newBuilder().setName("world").build();
         reply = sofaGreeterGrpcRef.sayHello(request);

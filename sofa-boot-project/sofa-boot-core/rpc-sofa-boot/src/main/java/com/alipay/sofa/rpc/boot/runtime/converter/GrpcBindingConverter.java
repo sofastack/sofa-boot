@@ -20,7 +20,6 @@ import com.alipay.sofa.rpc.boot.config.SofaBootRpcConfigConstants;
 import com.alipay.sofa.rpc.boot.runtime.binding.GrpcBinding;
 import com.alipay.sofa.rpc.boot.runtime.binding.RpcBinding;
 import com.alipay.sofa.rpc.boot.runtime.binding.RpcBindingType;
-import com.alipay.sofa.rpc.boot.runtime.param.BoltBindingParam;
 import com.alipay.sofa.rpc.boot.runtime.param.GrpcBindingParam;
 import com.alipay.sofa.rpc.boot.runtime.param.RpcBindingParam;
 import com.alipay.sofa.runtime.api.annotation.SofaReference;
@@ -50,7 +49,7 @@ public class GrpcBindingConverter extends RpcBindingConverter {
     public RpcBinding convert(SofaService sofaServiceAnnotation,
                               SofaServiceBinding sofaServiceBindingAnnotation,
                               BindingConverterContext bindingConverterContext) {
-        RpcBindingParam bindingParam = new BoltBindingParam();
+        RpcBindingParam bindingParam = new GrpcBindingParam();
         convertServiceAnnotation(bindingParam, sofaServiceAnnotation, sofaServiceBindingAnnotation,
             bindingConverterContext);
         return new GrpcBinding(bindingParam, bindingConverterContext.getApplicationContext(),
