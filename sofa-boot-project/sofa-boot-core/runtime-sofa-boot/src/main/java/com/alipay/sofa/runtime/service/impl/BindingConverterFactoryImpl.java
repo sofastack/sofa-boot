@@ -16,13 +16,17 @@
  */
 package com.alipay.sofa.runtime.service.impl;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
 import com.alipay.sofa.runtime.api.binding.BindingType;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
+import org.springframework.core.OrderComparator;
+import org.springframework.core.annotation.AnnotationAwareOrderComparator;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author xuanbei 18/2/28
@@ -46,10 +50,14 @@ public class BindingConverterFactoryImpl implements BindingConverterFactory {
         if (bindingConverters == null || bindingConverters.size() == 0) {
             return;
         }
-        for (BindingConverter bindingConverter : bindingConverters) {
-            bindingTypeBindingConverterMap.put(bindingConverter.supportBindingType(),
+
+        List<BindingConverter> sortedBindingConverter = new ArrayList<>(bindingConverters);
+        sortedBindingConverter.sort(AnnotationAwareOrderComparator.INSTANCE);
+
+        for (BindingConverter bindingConverter : sortedBindingConverter) {
+            bindingTypeBindingConverterMap.putIfAbsent(bindingConverter.supportBindingType(),
                 bindingConverter);
-            tagBindingConverterMap.put(bindingConverter.supportTagName(), bindingConverter);
+            tagBindingConverterMap.putIfAbsent(bindingConverter.supportTagName(), bindingConverter);
         }
     }
 }

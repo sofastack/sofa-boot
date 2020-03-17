@@ -7,13 +7,13 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.11.RELEASE</version>
+        <version>2.1.13.RELEASE</version>
     </parent>
 
     <groupId>com.alipay.sofa</groupId>
     <artifactId>sofaboot-dependencies</artifactId>
     <packaging>pom</packaging>
-    <version>3.3.0</version>
+    <version>3.3.2-SNAPSHOT</version>
 
     <properties>
         <!--project-->
@@ -22,7 +22,7 @@
         <project.build.encoding>UTF-8</project.build.encoding>
         <project.build.encoding>UTF-8</project.build.encoding>
 
-        <sofa.boot.version>3.3.0</sofa.boot.version>
+        <sofa.boot.version>3.3.2-SNAPSHOT</sofa.boot.version>
 
         <!--starter-->
         <sofa.ark.version>1.1.0</sofa.ark.version>
@@ -30,7 +30,7 @@
 
         <!--core-->
         <tracer.core.version>3.0.8</tracer.core.version>
-        <rpc.core.version>5.6.5-SNAPSHOT</rpc.core.version>
+        <rpc.core.version>5.6.5</rpc.core.version>
 
         <!--2rd lib dependency-->
         <sofa.common.tools.version>1.0.21</sofa.common.tools.version>

@@ -19,6 +19,7 @@ package com.alipay.sofa.rpc.boot.runtime.adapter.helper;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.context.ApplicationContext;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -78,6 +79,7 @@ public class ConsumerConfigHelper {
         String loadBalancer = param.getLoadBalancer();
         Boolean lazy = param.getLazy();
         Boolean check = param.getCheck();
+        String mockMode = param.getMockMode();
 
         String serialization = param.getSerialization();
         List<Filter> filters = param.getFilters();
@@ -122,6 +124,9 @@ public class ConsumerConfigHelper {
         }
         if (check != null) {
             consumerConfig.setCheck(check);
+        }
+        if (mockMode != null) {
+            consumerConfig.setMockMode(mockMode);
         }
         if (callbackHandler != null) {
             if (callbackHandler instanceof SofaResponseCallback) {
@@ -230,5 +235,16 @@ public class ConsumerConfigHelper {
         }
 
         return methodConfigs;
+    }
+
+    public Object getMockRef(RpcBinding binding, ApplicationContext applicationContext) {
+        RpcBindingParam rpcBindingParam = binding.getRpcBindingParam();
+        String mockBean = rpcBindingParam.getMockBean();
+
+        if (StringUtils.hasText(mockBean)) {
+            return applicationContext.getBean(mockBean);
+        } else {
+            throw new IllegalArgumentException("Mock mode is open, mock bean can't be empty.");
+        }
     }
 }

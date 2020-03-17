@@ -18,6 +18,12 @@ package com.alipay.sofa.rpc.boot.test.converter;
 
 import java.util.List;
 
+import com.alipay.sofa.rpc.boot.test.RuntimeTestConfiguration;
+import com.alipay.sofa.runtime.service.impl.BindingConverterFactoryImpl;
+import com.alipay.sofa.runtime.spi.binding.BindingAdapter;
+import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
+import com.alipay.sofa.runtime.spi.service.BindingConverter;
+import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -63,4 +69,18 @@ public class RpcBindingConverterTest {
         Assert.assertEquals(2000, rpcBindingMethodInfo.getTimeout().intValue());
 
     }
+
+    @Test
+    public void testOrder() {
+        BindingConverterFactory factory = new BindingConverterFactoryImpl();
+        factory.addBindingConverters(RuntimeTestConfiguration
+            .getClassesByServiceLoader(BindingConverter.class));
+        BindingConverter bindingConverter = factory.getBindingConverter(TestBindingConverter.TEST);
+        BindingConverter bindingConverterByTagName = factory
+            .getBindingConverterByTagName(TestBindingConverter.TARGET_NAME);
+
+        Assert.assertTrue(bindingConverter instanceof TestBindingConverter2);
+        Assert.assertTrue(bindingConverterByTagName instanceof TestBindingConverter2);
+    }
+
 }
