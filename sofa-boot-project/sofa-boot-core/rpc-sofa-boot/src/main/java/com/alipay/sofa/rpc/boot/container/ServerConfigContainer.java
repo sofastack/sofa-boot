@@ -24,6 +24,7 @@ import com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties;
 import com.alipay.sofa.rpc.boot.log.SofaBootRpcLoggerFactory;
 import com.alipay.sofa.rpc.common.RpcConstants;
 import com.alipay.sofa.rpc.config.ServerConfig;
+import com.alipay.sofa.rpc.log.LogCodes;
 import com.alipay.sofa.rpc.server.Server;
 import com.alipay.sofa.rpc.server.bolt.BoltServer;
 import org.slf4j.Logger;
@@ -191,7 +192,8 @@ public class ServerConfigContainer {
         } else if (customServerConfigs.get(protocol) != null) {
             return customServerConfigs.get(protocol);
         } else {
-            throw new SofaBootRpcRuntimeException("protocol [" + protocol + "] is not supported");
+            throw new SofaBootRpcRuntimeException(LogCodes.getLog(
+                LogCodes.ERROR_SERVER_PROTOCOL_NOT_SUPPORT, protocol));
         }
 
     }
