@@ -45,6 +45,7 @@ import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ProcessorContainer;
 import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ProviderConfigProcessor;
 import com.alipay.sofa.rpc.boot.swagger.BoltSwaggerServiceApplicationListener;
 import com.alipay.sofa.rpc.boot.swagger.SwaggerServiceApplicationListener;
+import com.alipay.sofa.rpc.config.JAXRSProviderManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -57,6 +58,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 
+import javax.ws.rs.client.ClientRequestFilter;
+import javax.ws.rs.client.ClientResponseFilter;
+import javax.ws.rs.container.ContainerRequestFilter;
+import javax.ws.rs.container.ContainerResponseFilter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -207,6 +212,47 @@ public class SofaRpcAutoConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean
+    public List<ContainerRequestFilter> containerRequestFilters(List<ContainerRequestFilter> containerRequestFilters) {
+
+        for (ContainerRequestFilter filter : containerRequestFilters) {
+            JAXRSProviderManager.registerCustomProviderInstance(filter);
+        }
+        return containerRequestFilters;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public List<ContainerResponseFilter> containerResponseFilters(List<ContainerResponseFilter> containerResponseFilters) {
+
+        for (ContainerResponseFilter filter : containerResponseFilters) {
+            JAXRSProviderManager.registerCustomProviderInstance(filter);
+        }
+        return containerResponseFilters;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public List<ClientRequestFilter> clientRequestFilters(List<ClientRequestFilter> clientRequestFilters) {
+
+        for (ClientRequestFilter filter : clientRequestFilters) {
+            JAXRSProviderManager.registerCustomProviderInstance(filter);
+        }
+        return clientRequestFilters;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public List<ClientResponseFilter> clientResponseFilters(List<ClientResponseFilter> clientResponseFilters) {
+
+        for (ClientResponseFilter filter : clientResponseFilters) {
+            JAXRSProviderManager.registerCustomProviderInstance(filter);
+        }
+        return clientResponseFilters;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
     public ProcessorContainer processorContainer(List<ProviderConfigProcessor> providerConfigProcessors,
                                                  List<ConsumerConfigProcessor> consumerConfigProcessors) {
         return new ProcessorContainer(providerConfigProcessors, consumerConfigProcessors);
@@ -223,5 +269,4 @@ public class SofaRpcAutoConfiguration {
     public DynamicConfigProcessor dynamicConfigProcessor() {
         return new DynamicConfigProcessor();
     }
-
 }
