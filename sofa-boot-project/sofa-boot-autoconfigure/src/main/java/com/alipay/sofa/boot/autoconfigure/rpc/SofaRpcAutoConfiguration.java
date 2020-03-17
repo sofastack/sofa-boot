@@ -21,6 +21,7 @@ import com.alipay.sofa.rpc.boot.config.ConsulConfigurator;
 import com.alipay.sofa.rpc.boot.config.FaultToleranceConfigurator;
 import com.alipay.sofa.rpc.boot.config.LocalFileConfigurator;
 import com.alipay.sofa.rpc.boot.config.MeshConfigurator;
+import com.alipay.sofa.rpc.boot.config.MulticastConfigurator;
 import com.alipay.sofa.rpc.boot.config.NacosConfigurator;
 import com.alipay.sofa.rpc.boot.config.RegistryConfigureProcessor;
 import com.alipay.sofa.rpc.boot.config.SofaBootRpcConfigConstants;
@@ -37,6 +38,12 @@ import com.alipay.sofa.rpc.boot.context.SofaBootRpcStartListener;
 import com.alipay.sofa.rpc.boot.health.RpcAfterHealthCheckCallback;
 import com.alipay.sofa.rpc.boot.runtime.adapter.helper.ConsumerConfigHelper;
 import com.alipay.sofa.rpc.boot.runtime.adapter.helper.ProviderConfigHelper;
+import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ConsumerConfigProcessor;
+import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ConsumerMockProcessor;
+import com.alipay.sofa.rpc.boot.runtime.adapter.processor.DynamicConfigProcessor;
+import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ProcessorContainer;
+import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ProviderConfigProcessor;
+import com.alipay.sofa.rpc.boot.swagger.BoltSwaggerServiceApplicationListener;
 import com.alipay.sofa.rpc.boot.swagger.SwaggerServiceApplicationListener;
 import com.alipay.sofa.rpc.config.JAXRSProviderManager;
 import org.springframework.beans.factory.annotation.Value;
@@ -114,6 +121,12 @@ public class SofaRpcAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
+    public MulticastConfigurator multicastConfigurator() {
+        return new MulticastConfigurator();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
     public LocalFileConfigurator localFileConfigurator() {
         return new LocalFileConfigurator();
     }
@@ -183,6 +196,12 @@ public class SofaRpcAutoConfiguration {
         return new SwaggerServiceApplicationListener();
     }
 
+    @Bean
+    @ConditionalOnProperty(name = "com.alipay.sofa.rpc.enable-swagger", havingValue = "true")
+    public ApplicationListener boltSwaggerServiceApplicationListener() {
+        return new BoltSwaggerServiceApplicationListener();
+    }
+
     @Configuration
     @ConditionalOnClass({ SofaBootRpcProperties.class, ReadinessCheckCallback.class, Health.class })
     public static class RpcAfterHealthCheckCallbackConfiguration {
@@ -230,5 +249,24 @@ public class SofaRpcAutoConfiguration {
             JAXRSProviderManager.registerCustomProviderInstance(filter);
         }
         return clientResponseFilters;
+    }
+    
+    @Bean
+    @ConditionalOnMissingBean
+    public ProcessorContainer processorContainer(List<ProviderConfigProcessor> providerConfigProcessors,
+                                                 List<ConsumerConfigProcessor> consumerConfigProcessors) {
+        return new ProcessorContainer(providerConfigProcessors, consumerConfigProcessors);
+    }
+
+    @Bean
+    @ConditionalOnProperty(name = "com.alipay.sofa.rpc.mock-url")
+    public ConsumerMockProcessor consumerMockProcessor() {
+        return new ConsumerMockProcessor();
+    }
+
+    @Bean
+    @ConditionalOnProperty(name = "com.alipay.sofa.rpc.dynamic-config")
+    public DynamicConfigProcessor dynamicConfigProcessor() {
+        return new DynamicConfigProcessor();
     }
 }
