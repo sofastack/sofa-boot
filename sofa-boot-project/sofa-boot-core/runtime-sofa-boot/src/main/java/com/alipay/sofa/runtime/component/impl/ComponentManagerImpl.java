@@ -205,9 +205,9 @@ public class ComponentManagerImpl implements ComponentManager {
             typeRegistry(componentInfo);
             try {
                 componentInfo.activate();
-            } catch (Throwable e) {
-                componentInfo.exception(new Exception(e));
-                SofaLogger.error("Failed to create the component {}.", componentInfo.getName(), e);
+            } catch (Throwable t) {
+                componentInfo.exception(new Exception(t));
+                SofaLogger.error("Failed to create the component {}.", componentInfo.getName(), t);
             }
         }
     }

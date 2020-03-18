@@ -133,7 +133,7 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
             declaringClass = ClassUtils.forName(methodMetadata.getDeclaringClassName(), null);
         } catch (Throwable throwable) {
             // it's impossible to catch throwable here
-            SofaLogger.error("Failed to parse factoryBeanMethod of BeanDefinition( {0} )", beanId, throwable);
+            SofaLogger.error("Failed to parse factoryBeanMethod of BeanDefinition( {} )", beanId, throwable);
             return;
         }
         if (methodMetadata instanceof StandardMethodMetadata) {

@@ -263,7 +263,7 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
                     }
                 } catch (Throwable t) {
                     SofaLogger.error(
-                        "Refreshing Spring Application Context of module {0} got an error."
+                        "Refreshing Spring Application Context of module {} got an error."
                                 + deployment.getName(), t);
                     throw new RuntimeException("Refreshing Spring Application Context of module "
                                                + deployment.getName() + " got an error.", t);
