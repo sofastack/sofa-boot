@@ -171,12 +171,12 @@ public class ReferenceComponent extends AbstractComponent {
                                                       + binding.getBindingType()
                                                       + " for reference " + reference + ".");
                 }
-                SofaLogger.info(" >>Un-in Binding [{0}] Begins - {1}.", binding.getBindingType(),
+                SofaLogger.info(" >>Un-in Binding [{}] Begins - {}.", binding.getBindingType(),
                     reference);
                 try {
                     bindingAdapter.unInBinding(reference, binding, sofaRuntimeContext);
                 } finally {
-                    SofaLogger.info(" >>Un-in Binding [{0}] Ends - {1}.", binding.getBindingType(),
+                    SofaLogger.info(" >>Un-in Binding [{}] Ends - {}.", binding.getBindingType(),
                         reference);
                 }
             }
@@ -219,12 +219,12 @@ public class ReferenceComponent extends AbstractComponent {
                                               + binding.getBindingType() + " for reference "
                                               + reference + ".");
         }
-        SofaLogger.info(" >>In Binding [{0}] Begins - {1}.", binding.getBindingType(), reference);
+        SofaLogger.info(" >>In Binding [{}] Begins - {}.", binding.getBindingType(), reference);
         Object proxy;
         try {
             proxy = bindingAdapter.inBinding(reference, binding, sofaRuntimeContext);
         } finally {
-            SofaLogger.info(" >>In Binding [{0}] Ends - {1}.", binding.getBindingType(), reference);
+            SofaLogger.info(" >>In Binding [{}] Ends - {}.", binding.getBindingType(), reference);
         }
         return proxy;
     }

@@ -66,7 +66,7 @@ public class ExtensionFactoryBean extends AbstractExtFactoryBean {
         try {
             publishAsNuxeoExtension();
         } catch (Exception e) {
-            SofaLogger.error(e, "failed to publish extension");
+            SofaLogger.error("failed to publish extension", e);
             throw e;
         }
     }

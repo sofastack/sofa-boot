@@ -16,8 +16,6 @@
  */
 package com.alipay.sofa.runtime.log;
 
-import java.text.MessageFormat;
-
 import org.slf4j.Logger;
 
 /**
@@ -27,41 +25,139 @@ public class SofaLogger {
     /** SOFA Default Logger */
     private static final Logger DEFAULT_LOG = RuntimeLoggerFactory.getLogger("com.alipay.sofa");
 
-    public static void debug(String format, Object... args) {
-        if (DEFAULT_LOG.isDebugEnabled()) {
-            DEFAULT_LOG.debug(getMessage(format, args));
-        }
-    }
-
-    public static void info(String format, Object... args) {
-        if (DEFAULT_LOG.isInfoEnabled()) {
-            DEFAULT_LOG.info(getMessage(format, args));
-        }
-    }
-
-    public static void warn(String format, Object... args) {
-        if (DEFAULT_LOG.isWarnEnabled()) {
-            DEFAULT_LOG.warn(getMessage(format, args));
-        }
-    }
-
-    public static void error(String msg, Throwable throwable) {
-        DEFAULT_LOG.error(msg, throwable);
-    }
-
-    public static void error(String format, Object... args) {
-        DEFAULT_LOG.error(getMessage(format, args));
-    }
-
-    public static void error(Throwable t, String format, Object... args) {
-        DEFAULT_LOG.error(getMessage(format, args), t);
-    }
-
-    private static String getMessage(String format, Object... args) {
-        return MessageFormat.format(format, args);
-    }
-
     public static boolean isDebugEnabled() {
         return DEFAULT_LOG.isDebugEnabled();
+    }
+
+    public static void debug(String msg) {
+        if (DEFAULT_LOG.isDebugEnabled()) {
+            DEFAULT_LOG.debug(msg);
+        }
+    }
+
+    public static void debug(String format, Object arg) {
+        if (DEFAULT_LOG.isDebugEnabled()) {
+            DEFAULT_LOG.debug(format, arg);
+        }
+    }
+
+    public static void debug(String format, Object arg1, Object arg2) {
+        if (DEFAULT_LOG.isDebugEnabled()) {
+            DEFAULT_LOG.debug(format, arg1, arg2);
+        }
+    }
+
+    public static void debug(String format, Object... arguments) {
+        if (DEFAULT_LOG.isDebugEnabled()) {
+            DEFAULT_LOG.debug(format, arguments);
+        }
+    }
+
+    public static void debug(String msg, Throwable t) {
+        if (DEFAULT_LOG.isDebugEnabled()) {
+            DEFAULT_LOG.debug(msg, t);
+        }
+    }
+
+    public static boolean isInfoEnabled() {
+        return DEFAULT_LOG.isInfoEnabled();
+    }
+
+    public static void info(String msg) {
+        if (DEFAULT_LOG.isInfoEnabled()) {
+            DEFAULT_LOG.info(msg);
+        }
+    }
+
+    public static void info(String format, Object arg) {
+        if (DEFAULT_LOG.isInfoEnabled()) {
+            DEFAULT_LOG.info(format, arg);
+        }
+    }
+
+    public static void info(String format, Object arg1, Object arg2) {
+        if (DEFAULT_LOG.isInfoEnabled()) {
+            DEFAULT_LOG.info(format, arg1, arg2);
+        }
+    }
+
+    public static void info(String format, Object... arguments) {
+        if (DEFAULT_LOG.isInfoEnabled()) {
+            DEFAULT_LOG.info(format, arguments);
+        }
+    }
+
+    public static void info(String msg, Throwable t) {
+        if (DEFAULT_LOG.isInfoEnabled()) {
+            DEFAULT_LOG.info(msg, t);
+        }
+    }
+
+    public static boolean isWarnEnabled() {
+        return DEFAULT_LOG.isWarnEnabled();
+    }
+
+    public static void warn(String msg) {
+        if (DEFAULT_LOG.isWarnEnabled()) {
+            DEFAULT_LOG.warn(msg);
+        }
+    }
+
+    public static void warn(String format, Object arg) {
+        if (DEFAULT_LOG.isWarnEnabled()) {
+            DEFAULT_LOG.warn(format, arg);
+        }
+    }
+
+    public static void warn(String format, Object... arguments) {
+        if (DEFAULT_LOG.isWarnEnabled()) {
+            DEFAULT_LOG.warn(format, arguments);
+        }
+    }
+
+    public static void warn(String format, Object arg1, Object arg2) {
+        if (DEFAULT_LOG.isWarnEnabled()) {
+            DEFAULT_LOG.warn(format, arg1, arg2);
+        }
+    }
+
+    public static void warn(String msg, Throwable t) {
+        if (DEFAULT_LOG.isWarnEnabled()) {
+            DEFAULT_LOG.warn(msg, t);
+        }
+    }
+
+    public static boolean isErrorEnabled() {
+        return DEFAULT_LOG.isErrorEnabled();
+    }
+
+    public static void error(String msg) {
+        if (DEFAULT_LOG.isErrorEnabled()) {
+            DEFAULT_LOG.error(msg);
+        }
+    }
+
+    public static void error(String format, Object arg) {
+        if (DEFAULT_LOG.isErrorEnabled()) {
+            DEFAULT_LOG.error(format, arg);
+        }
+    }
+
+    public static void error(String format, Object arg1, Object arg2) {
+        if (DEFAULT_LOG.isErrorEnabled()) {
+            DEFAULT_LOG.error(format, arg1, arg2);
+        }
+    }
+
+    public static void error(String format, Object... arguments) {
+        if (DEFAULT_LOG.isErrorEnabled()) {
+            DEFAULT_LOG.error(format, arguments);
+        }
+    }
+
+    public static void error(String msg, Throwable t) {
+        if (DEFAULT_LOG.isErrorEnabled()) {
+            DEFAULT_LOG.error(msg, t);
+        }
     }
 }
