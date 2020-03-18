@@ -80,7 +80,7 @@ public class ExtensionPointFactoryBean extends AbstractExtFactoryBean {
         try {
             publishAsNuxeoExtensionPoint(extensionPointClass);
         } catch (Exception e) {
-            SofaLogger.error(e, "Failed to publish extension point.");
+            SofaLogger.error("Failed to publish extension point.", e);
             throw e;
         }
     }
