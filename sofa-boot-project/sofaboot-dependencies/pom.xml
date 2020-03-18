@@ -340,6 +340,11 @@
                 <version>${sofa.ark.version}</version>
             </dependency>
             <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>sofa-ark-archive</artifactId>
+                <version>${sofa.ark.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>com.alipay.sofa.lookout</groupId>
                 <artifactId>lookout-api</artifactId>
                 <version>${sofa.lookout.version}</version>
