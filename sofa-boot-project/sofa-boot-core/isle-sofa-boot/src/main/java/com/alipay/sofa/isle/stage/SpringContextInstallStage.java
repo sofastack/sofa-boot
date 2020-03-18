@@ -68,9 +68,9 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
 
         try {
             doProcess(application);
-        } catch (Throwable e) {
-            SofaLogger.error("Install Spring Context got an error.", e);
-            throw new DeploymentException("Install Spring Context got an error.", e);
+        } catch (Throwable t) {
+            SofaLogger.error("Install Spring Context got an error.", t);
+            throw new DeploymentException("Install Spring Context got an error.", t);
         }
     }
 
@@ -101,8 +101,8 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
                 try {
                     Thread.currentThread().setContextClassLoader(deployment.getClassLoader());
                     springContextLoader.loadSpringContext(deployment, application);
-                } catch (Throwable e) {
-                    SofaLogger.error("Install module {} got an error!", deployment.getName(), e);
+                } catch (Throwable t) {
+                    SofaLogger.error("Install module {} got an error!", deployment.getName(), t);
                     application.addFailed(deployment);
                 } finally {
                     Thread.currentThread().setContextClassLoader(oldClassLoader);
@@ -263,8 +263,8 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
                     }
                 } catch (Throwable t) {
                     SofaLogger.error(
-                        "Refreshing Spring Application Context of module {} got an error."
-                                + deployment.getName(), t);
+                        "Refreshing Spring Application Context of module {} got an error.",
+                        deployment.getName(), t);
                     throw new RuntimeException("Refreshing Spring Application Context of module "
                                                + deployment.getName() + " got an error.", t);
                 } finally {
@@ -295,9 +295,10 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
                 deployment.deployFinish();
             }
         } else {
+            String errorMsg = "Spring Application Context of module " + deployment.getName()
+                              + " is null!";
             application.addFailed(deployment);
-            SofaLogger.error("", new RuntimeException("Spring Application Context of module "
-                                                      + deployment.getName() + " is null!"));
+            SofaLogger.error(errorMsg, new RuntimeException(errorMsg));
         }
     }
 

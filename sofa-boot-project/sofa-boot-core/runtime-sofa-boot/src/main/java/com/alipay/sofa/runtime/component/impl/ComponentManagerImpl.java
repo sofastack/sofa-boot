@@ -90,8 +90,8 @@ public class ComponentManagerImpl implements ComponentManager {
         for (ComponentInfo ri : elems) {
             try {
                 unregister(ri);
-            } catch (Throwable e) {
-                SofaLogger.error("failed to shutdown component manager", e);
+            } catch (Throwable t) {
+                SofaLogger.error("failed to shutdown component manager", t);
             }
         }
 
@@ -137,8 +137,8 @@ public class ComponentManagerImpl implements ComponentManager {
 
         try {
             ci.register();
-        } catch (Throwable e) {
-            SofaLogger.error("Failed to register component: {}", ci.getName(), e);
+        } catch (Throwable t) {
+            SofaLogger.error("Failed to register component: {}", ci.getName(), t);
             return null;
         }
 
