@@ -25,7 +25,7 @@
         <sofa.boot.version>3.3.2-SNAPSHOT</sofa.boot.version>
 
         <!--starter-->
-        <sofa.ark.version>1.1.0</sofa.ark.version>
+        <sofa.ark.version>1.1.1</sofa.ark.version>
         <sofa.lookout.version>1.5.2</sofa.lookout.version>
 
         <!--core-->
@@ -337,6 +337,11 @@
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>sofa-ark-spi</artifactId>
+                <version>${sofa.ark.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>sofa-ark-archive</artifactId>
                 <version>${sofa.ark.version}</version>
             </dependency>
             <dependency>
