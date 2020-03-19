@@ -533,6 +533,12 @@ public abstract class RpcBindingConverter implements BindingConverter<RpcBinding
         if (StringUtils.hasText(callbackRef)) {
             bindingParam.setCallbackHandler(applicationContext.getBean(callbackRef));
         }
+        //相当于callbackRef优先，因为会覆盖前面的
+        callbackRef = sofaReferenceBindingAnnotation.callbackRef();
+        if (StringUtils.hasText(callbackRef)) {
+            bindingParam.setCallbackHandler(applicationContext.getBean(callbackRef));
+        }
+
         bindingParam.setLazy(sofaReferenceBindingAnnotation.lazy());
 
         String registryAlias = sofaReferenceBindingAnnotation.registry();
