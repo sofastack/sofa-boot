@@ -18,10 +18,10 @@ package com.alipay.sofa.rpc.boot.test.bean.grpc;
 
 import io.grpc.examples.helloworld.HelloReply;
 import io.grpc.examples.helloworld.HelloRequest;
-import io.grpc.examples.helloworld.SofaGreeterGrpc;
+import io.grpc.examples.helloworld.SofaGreeterTriple;
 import io.grpc.stub.StreamObserver;
 
-public class GrpcGreeterImpl extends SofaGreeterGrpc.GreeterImplBase {
+public class GrpcGreeterImpl extends SofaGreeterTriple.GreeterImplBase {
 
     @Override
     public void sayHello(HelloRequest request, StreamObserver<HelloReply> responseObserver) {
