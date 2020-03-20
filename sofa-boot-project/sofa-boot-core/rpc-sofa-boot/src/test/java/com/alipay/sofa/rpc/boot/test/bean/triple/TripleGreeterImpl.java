@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.rpc.boot.test.bean.grpc;
+package com.alipay.sofa.rpc.boot.test.bean.triple;
 
 import io.grpc.examples.helloworld.HelloReply;
 import io.grpc.examples.helloworld.HelloRequest;
 import io.grpc.examples.helloworld.SofaGreeterTriple;
 import io.grpc.stub.StreamObserver;
 
-public class GrpcGreeterImpl extends SofaGreeterTriple.GreeterImplBase {
+public class TripleGreeterImpl extends SofaGreeterTriple.GreeterImplBase {
 
     @Override
     public void sayHello(HelloRequest request, StreamObserver<HelloReply> responseObserver) {

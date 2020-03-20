@@ -164,7 +164,7 @@
 
 
     <!-- invoke sync-->
-    <bean id="sofaGreeterTripleImpl" class="com.alipay.sofa.rpc.boot.test.bean.grpc.GrpcGreeterImpl"/>
+    <bean id="sofaGreeterTripleImpl" class="com.alipay.sofa.rpc.boot.test.bean.triple.TripleGreeterImpl"/>
     <sofa:service ref="sofaGreeterTripleImpl" interface="io.grpc.examples.helloworld.SofaGreeterTriple$IGreeter">
         <sofa:binding.tri/>
     </sofa:service>
