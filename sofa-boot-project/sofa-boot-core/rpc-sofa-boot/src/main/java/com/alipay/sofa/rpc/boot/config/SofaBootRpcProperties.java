@@ -244,27 +244,27 @@ public class SofaBootRpcProperties {
     /**
      * the port of triple (triple 端口)
      */
-    private String triplePort;
+    private String              triplePort;
 
     /**
      * the core thread pool size of triple （triple 核心线程数）
      */
-    private String tripleThreadPoolCoreSize;
+    private String              tripleThreadPoolCoreSize;
 
     /**
      * the max thread pool size of triple （triple 最大线程数）
      */
-    private String tripleThreadPoolMaxSize;
+    private String              tripleThreadPoolMaxSize;
 
     /**
      * the queue size of triple server（triple 线程池队列）
      */
-    private String tripleThreadPoolQueueSize;
+    private String              tripleThreadPoolQueueSize;
 
     /**
      * the max accept size of triple (triple 服务端允许客户端建立的连接数)
      */
-    private String tripleAcceptsSize;
+    private String              tripleAcceptsSize;
     /* triple end*/
 
     /* registry */

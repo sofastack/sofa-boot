@@ -78,8 +78,8 @@ public class ServerConfigContainer {
     /**
      * http ServerConfig
      */
-    private volatile ServerConfig tripleServerConfig;
-    private final Object          TRIPLE_LOCK = new Object();
+    private volatile ServerConfig     tripleServerConfig;
+    private final Object              TRIPLE_LOCK         = new Object();
 
     //custom server configs
     private Map<String, ServerConfig> customServerConfigs = new ConcurrentHashMap<String, ServerConfig>();
