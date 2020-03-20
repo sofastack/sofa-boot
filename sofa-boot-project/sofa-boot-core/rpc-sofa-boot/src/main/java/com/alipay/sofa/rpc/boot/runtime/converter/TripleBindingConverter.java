@@ -17,10 +17,10 @@
 package com.alipay.sofa.rpc.boot.runtime.converter;
 
 import com.alipay.sofa.rpc.boot.config.SofaBootRpcConfigConstants;
-import com.alipay.sofa.rpc.boot.runtime.binding.GrpcBinding;
+import com.alipay.sofa.rpc.boot.runtime.binding.TripleBinding;
 import com.alipay.sofa.rpc.boot.runtime.binding.RpcBinding;
 import com.alipay.sofa.rpc.boot.runtime.binding.RpcBindingType;
-import com.alipay.sofa.rpc.boot.runtime.param.GrpcBindingParam;
+import com.alipay.sofa.rpc.boot.runtime.param.TripleBindingParam;
 import com.alipay.sofa.rpc.boot.runtime.param.RpcBindingParam;
 import com.alipay.sofa.runtime.api.annotation.SofaReference;
 import com.alipay.sofa.runtime.api.annotation.SofaReferenceBinding;
@@ -33,26 +33,26 @@ import org.springframework.context.ApplicationContext;
 /**
  * @author <a href="mailto:zhiyuan.lzy@antfin.com">zhiyuan.lzy</a>
  */
-public class GrpcBindingConverter extends RpcBindingConverter {
+public class TripleBindingConverter extends RpcBindingConverter {
     @Override
     protected RpcBinding createRpcBinding(RpcBindingParam bindingParam,
                                           ApplicationContext applicationContext, boolean inBinding) {
-        return new GrpcBinding(bindingParam, applicationContext, inBinding);
+        return new TripleBinding(bindingParam, applicationContext, inBinding);
     }
 
     @Override
     protected RpcBindingParam createRpcBindingParam() {
-        return new GrpcBindingParam();
+        return new TripleBindingParam();
     }
 
     @Override
     public RpcBinding convert(SofaService sofaServiceAnnotation,
                               SofaServiceBinding sofaServiceBindingAnnotation,
                               BindingConverterContext bindingConverterContext) {
-        RpcBindingParam bindingParam = new GrpcBindingParam();
+        RpcBindingParam bindingParam = new TripleBindingParam();
         convertServiceAnnotation(bindingParam, sofaServiceAnnotation, sofaServiceBindingAnnotation,
             bindingConverterContext);
-        return new GrpcBinding(bindingParam, bindingConverterContext.getApplicationContext(),
+        return new TripleBinding(bindingParam, bindingConverterContext.getApplicationContext(),
             bindingConverterContext.isInBinding());
     }
 
@@ -60,21 +60,21 @@ public class GrpcBindingConverter extends RpcBindingConverter {
     public RpcBinding convert(SofaReference sofaReferenceAnnotation,
                               SofaReferenceBinding sofaReferenceBindingAnnotation,
                               BindingConverterContext bindingConverterContext) {
-        RpcBindingParam bindingParam = new GrpcBindingParam();
+        RpcBindingParam bindingParam = new TripleBindingParam();
         convertReferenceAnnotation(bindingParam, sofaReferenceBindingAnnotation,
             bindingConverterContext);
 
-        return new GrpcBinding(bindingParam, bindingConverterContext.getApplicationContext(),
+        return new TripleBinding(bindingParam, bindingConverterContext.getApplicationContext(),
             bindingConverterContext.isInBinding());
     }
 
     @Override
     public BindingType supportBindingType() {
-        return RpcBindingType.GRPC_BINDING_TYPE;
+        return RpcBindingType.TRIPLE_BINDING_TYPE;
     }
 
     @Override
     public String supportTagName() {
-        return "binding." + SofaBootRpcConfigConstants.RPC_PROTOCOL_GRPC;
+        return "binding." + SofaBootRpcConfigConstants.RPC_PROTOCOL_TRIPLE;
     }
 }
