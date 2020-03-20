@@ -34,6 +34,6 @@ public class RpcBindingType {
 
     public static final BindingType HTTP_BINDING_TYPE  = new BindingType("http");
 
-    public static final BindingType GRPC_BINDING_TYPE  = new BindingType("grpc");
+    public static final BindingType TRIPLE_BINDING_TYPE = new BindingType("tri");
 
 }

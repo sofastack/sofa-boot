@@ -239,33 +239,33 @@ public class SofaBootRpcProperties {
     private String              httpAcceptsSize;
     /* http end*/
 
-    /* Grpc start*/
+    /* triple start*/
 
     /**
-     * the port of grpc (grpc 端口)
+     * the port of triple (triple 端口)
      */
-    private String              grpcPort;
+    private String triplePort;
 
     /**
-     * the core thread pool size of grpc （grpc 核心线程数）
+     * the core thread pool size of triple （triple 核心线程数）
      */
-    private String              grpcThreadPoolCoreSize;
+    private String tripleThreadPoolCoreSize;
 
     /**
-     * the max thread pool size of grpc （grpc 最大线程数）
+     * the max thread pool size of triple （triple 最大线程数）
      */
-    private String              grpcThreadPoolMaxSize;
+    private String tripleThreadPoolMaxSize;
 
     /**
-     * the queue size of grpc server（grpc 线程池队列）
+     * the queue size of triple server（triple 线程池队列）
      */
-    private String              grpcThreadPoolQueueSize;
+    private String tripleThreadPoolQueueSize;
 
     /**
-     * the max accept size of grpc (grpc 服务端允许客户端建立的连接数)
+     * the max accept size of triple (triple 服务端允许客户端建立的连接数)
      */
-    private String              grpcAcceptsSize;
-    /* Grpc end*/
+    private String tripleAcceptsSize;
+    /* triple end*/
 
     /* registry */
     /**
@@ -814,49 +814,49 @@ public class SofaBootRpcProperties {
         }.getClass().getEnclosingMethod().getName()) : restAllowedOrigins;
     }
 
-    public String getGrpcPort() {
-        return StringUtils.isEmpty(grpcPort) ? getDotString(new Object() {
-        }.getClass().getEnclosingMethod().getName()) : grpcPort;
+    public String getTriplePort() {
+        return StringUtils.isEmpty(triplePort) ? getDotString(new Object() {
+        }.getClass().getEnclosingMethod().getName()) : triplePort;
     }
 
-    public void setGrpcPort(String grpcPort) {
-        this.grpcPort = grpcPort;
+    public void setTriplePort(String triplePort) {
+        this.triplePort = triplePort;
     }
 
-    public String getGrpcThreadPoolCoreSize() {
-        return StringUtils.isEmpty(grpcThreadPoolCoreSize) ? getDotString(new Object() {
-        }.getClass().getEnclosingMethod().getName()) : grpcThreadPoolCoreSize;
+    public String getTripleThreadPoolCoreSize() {
+        return StringUtils.isEmpty(tripleThreadPoolCoreSize) ? getDotString(new Object() {
+        }.getClass().getEnclosingMethod().getName()) : tripleThreadPoolCoreSize;
     }
 
-    public void setGrpcThreadPoolCoreSize(String grpcThreadPoolCoreSize) {
-        this.grpcThreadPoolCoreSize = grpcThreadPoolCoreSize;
+    public void setTripleThreadPoolCoreSize(String tripleThreadPoolCoreSize) {
+        this.tripleThreadPoolCoreSize = tripleThreadPoolCoreSize;
     }
 
-    public String getGrpcThreadPoolMaxSize() {
-        return StringUtils.isEmpty(grpcThreadPoolMaxSize) ? getDotString(new Object() {
-        }.getClass().getEnclosingMethod().getName()) : grpcThreadPoolMaxSize;
+    public String getTripleThreadPoolMaxSize() {
+        return StringUtils.isEmpty(tripleThreadPoolMaxSize) ? getDotString(new Object() {
+        }.getClass().getEnclosingMethod().getName()) : tripleThreadPoolMaxSize;
     }
 
-    public void setGrpcThreadPoolMaxSize(String grpcThreadPoolMaxSize) {
-        this.grpcThreadPoolMaxSize = grpcThreadPoolMaxSize;
+    public void setTripleThreadPoolMaxSize(String tripleThreadPoolMaxSize) {
+        this.tripleThreadPoolMaxSize = tripleThreadPoolMaxSize;
     }
 
-    public String getGrpcThreadPoolQueueSize() {
-        return StringUtils.isEmpty(grpcThreadPoolQueueSize) ? getDotString(new Object() {
-        }.getClass().getEnclosingMethod().getName()) : grpcThreadPoolQueueSize;
+    public String getTripleThreadPoolQueueSize() {
+        return StringUtils.isEmpty(tripleThreadPoolQueueSize) ? getDotString(new Object() {
+        }.getClass().getEnclosingMethod().getName()) : tripleThreadPoolQueueSize;
     }
 
-    public void setGrpcThreadPoolQueueSize(String grpcThreadPoolQueueSize) {
-        this.grpcThreadPoolQueueSize = grpcThreadPoolQueueSize;
+    public void setTripleThreadPoolQueueSize(String tripleThreadPoolQueueSize) {
+        this.tripleThreadPoolQueueSize = tripleThreadPoolQueueSize;
     }
 
-    public String getGrpcAcceptsSize() {
-        return StringUtils.isEmpty(grpcAcceptsSize) ? getDotString(new Object() {
-        }.getClass().getEnclosingMethod().getName()) : grpcAcceptsSize;
+    public String getTripleAcceptsSize() {
+        return StringUtils.isEmpty(tripleAcceptsSize) ? getDotString(new Object() {
+        }.getClass().getEnclosingMethod().getName()) : tripleAcceptsSize;
     }
 
-    public void setGrpcAcceptsSize(String grpcAcceptsSize) {
-        this.grpcAcceptsSize = grpcAcceptsSize;
+    public void setTripleAcceptsSize(String tripleAcceptsSize) {
+        this.tripleAcceptsSize = tripleAcceptsSize;
     }
 
     public void setRestAllowedOrigins(String restAllowedOrigins) {
