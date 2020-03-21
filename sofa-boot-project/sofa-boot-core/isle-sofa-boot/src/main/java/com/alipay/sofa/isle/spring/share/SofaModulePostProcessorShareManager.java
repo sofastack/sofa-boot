@@ -44,8 +44,9 @@ public class SofaModulePostProcessorShareManager {
     }
 
     public boolean unableToShare(Class<?> cls) {
-        return this.filterClassList.contains(cls)
-               || cls.isAnnotationPresent(UnshareSofaModulePostProcessor.class);
+        return cls != null
+               && (this.filterClassList.contains(cls) || cls
+                   .isAnnotationPresent(UnshareSofaModulePostProcessor.class));
     }
 
     public boolean unableToShare(String beanName) {
