@@ -14,23 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.rpc.boot.test.bean.grpc;
+package com.alipay.sofa.rpc.boot.runtime.adapter;
 
-import io.grpc.examples.helloworld.HelloReply;
-import io.grpc.examples.helloworld.HelloRequest;
-import io.grpc.examples.helloworld.SofaGreeterGrpc;
-import io.grpc.stub.StreamObserver;
+import com.alipay.sofa.rpc.boot.runtime.binding.RpcBindingType;
+import com.alipay.sofa.runtime.api.binding.BindingType;
 
-public class GrpcGreeterImpl extends SofaGreeterGrpc.GreeterImplBase {
+/**
+ *
+ * @author <a href="mailto:zhiyuan.lzy@antfin.com">zhiyuan.lzy</a>
+ */
+public class TripleBindingAdapter extends RpcBindingAdapter {
 
     @Override
-    public void sayHello(HelloRequest request, StreamObserver<HelloReply> responseObserver) {
-        System.out.println("Executing thread is " + Thread.currentThread().getName());
-        HelloReply reply = HelloReply.newBuilder().setMessage("Hello " + request.getName()).build();
-        responseObserver.onNext(reply);
-        responseObserver.onCompleted();
-        // responseObserver.onError(new RuntimeException("fuck"));
-        //  throw new RuntimeException("xx");
+    public BindingType getBindingType() {
+        return RpcBindingType.TRIPLE_BINDING_TYPE;
     }
 
 }

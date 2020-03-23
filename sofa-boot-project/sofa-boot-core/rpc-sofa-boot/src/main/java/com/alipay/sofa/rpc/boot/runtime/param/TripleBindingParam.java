@@ -14,26 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.rpc.boot.runtime.binding;
+package com.alipay.sofa.rpc.boot.runtime.param;
 
-import com.alipay.sofa.rpc.boot.runtime.param.RpcBindingParam;
+import com.alipay.sofa.rpc.boot.runtime.binding.RpcBindingType;
 import com.alipay.sofa.runtime.api.binding.BindingType;
-import org.springframework.context.ApplicationContext;
 
 /**
  *
  * @author <a href="mailto:zhiyuan.lzy@antfin.com">zhiyuan.lzy</a>
  */
-public class GrpcBinding extends RpcBinding {
-
-    public GrpcBinding(RpcBindingParam bindingParam, ApplicationContext applicationContext,
-                       boolean inBinding) {
-        super(bindingParam, applicationContext, inBinding);
-    }
+public class TripleBindingParam extends RpcBindingParam {
 
     @Override
     public BindingType getBindingType() {
-        return RpcBindingType.GRPC_BINDING_TYPE;
+        return RpcBindingType.TRIPLE_BINDING_TYPE;
     }
 
 }

@@ -75,7 +75,7 @@ public class SofaBootRpcConfigConstants {
     public static final String  RPC_PROTOCOL_DUBBO                 = "dubbo";
     public static final String  RPC_PROTOCOL_H2C                   = "h2c";
     public static final String  RPC_PROTOCOL_HTTP                  = "http";
-    public static final String  RPC_PROTOCOL_GRPC                  = "grpc";
+    public static final String  RPC_PROTOCOL_TRIPLE                = "tri";
 
     /** mesh **/
     public static final String  ENABLE_MESH_ALL                    = "all";

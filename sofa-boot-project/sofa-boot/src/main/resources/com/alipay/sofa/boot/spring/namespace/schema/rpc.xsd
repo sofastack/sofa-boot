@@ -185,8 +185,8 @@
 
     <!-- Bolt End -->
 
-    <!-- binding.grpc in service start -->
-    <xsd:complexType name="GrpcBindingService">
+    <!-- binding.tri in service start -->
+    <xsd:complexType name="TriBindingService">
         <xsd:complexContent>
             <xsd:extension base="BBinding">
                 <xsd:sequence minOccurs="0">
@@ -198,9 +198,9 @@
             </xsd:extension>
         </xsd:complexContent>
     </xsd:complexType>
-    <!-- binding.grpc in service end -->
-    <!-- binding.grpc in reference start-->
-    <xsd:complexType name="GrpcBindingReference">
+    <!-- binding.tri in service end -->
+    <!-- binding.tri in reference start-->
+    <xsd:complexType name="TriBindingReference">
         <xsd:complexContent>
             <xsd:extension base="BBinding">
                 <xsd:sequence minOccurs="0">
@@ -213,7 +213,7 @@
             </xsd:extension>
         </xsd:complexContent>
     </xsd:complexType>
-    <!-- binding.grpc in reference end-->
+    <!-- binding.tri in reference end-->
 
     <!-- Rest Start -->
 
@@ -612,7 +612,7 @@
                     <xsd:element name="binding.rest" type="RestBindingTRReference" minOccurs="0"/>
                     <xsd:element name="binding.dubbo" type="DubboBindingTRReference" minOccurs="0"/>
                     <xsd:element name="binding.h2c" type="H2cBindingReference" minOccurs="0"/>
-                    <xsd:element name="binding.grpc" type="GrpcBindingReference" minOccurs="0"/>
+                    <xsd:element name="binding.tri" type="TriBindingReference" minOccurs="0"/>
 
                 </xsd:all>
                 <xsd:attribute name="jvm-first" use="optional" type="xsd:boolean" default="true"/>
@@ -637,7 +637,7 @@
                     <xsd:element name="binding.rest" type="RestBindingTRService" minOccurs="0"/>
                     <xsd:element name="binding.dubbo" type="DubboBindingTRService" minOccurs="0"/>
                     <xsd:element name="binding.h2c" type="H2cBindingService" minOccurs="0"/>
-                    <xsd:element name="binding.grpc" type="GrpcBindingService" minOccurs="0"/>
+                    <xsd:element name="binding.tri" type="TriBindingService" minOccurs="0"/>
                 </xsd:all>
                 <xsd:attribute name="ref" type="xsd:string" use="required"/>
                 <xsd:attribute name="interface" type="xsd:string" use="required"/>

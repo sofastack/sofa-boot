@@ -193,7 +193,7 @@
                             <groupId>com.alipay.sofa</groupId>
                             <artifactId>sofa-rpc-compiler</artifactId>
                             <version>${sofa.rpc.compiler.version}</version>
-                            <mainClass>com.alipay.sofa.gen.grpc.SofaGrpcGenerator</mainClass>
+                            <mainClass>com.alipay.sofa.gen.triple.SofaTripleGenerator</mainClass>
                         </protocPlugin>
                     </protocPlugins>
                 </configuration>
