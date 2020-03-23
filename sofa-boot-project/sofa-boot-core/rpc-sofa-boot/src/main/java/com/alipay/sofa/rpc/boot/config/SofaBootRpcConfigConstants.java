@@ -60,6 +60,7 @@ public class SofaBootRpcConfigConstants {
     public static final String  REGISTRY_PROTOCOL_LOCAL            = "local";
     public static final String  REGISTRY_PROTOCOL_ZOOKEEPER        = "zookeeper";
     public static final String  REGISTRY_PROTOCOL_MESH             = "mesh";
+    public static final String  REGISTRY_PROTOCOL_MULTICAST        = "multicast";
 
     //@since 5.5.0
     public static final String  REGISTRY_PROTOCOL_CONSUL           = "consul";

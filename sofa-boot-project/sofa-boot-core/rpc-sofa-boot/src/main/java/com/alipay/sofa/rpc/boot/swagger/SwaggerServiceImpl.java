@@ -37,8 +37,8 @@ import io.swagger.v3.oas.models.OpenAPI;
  * @author khotyn
  */
 public class SwaggerServiceImpl implements SwaggerService {
-    private OpenAPI     openapi;
-    private Set<String> restfulServices;
+    private volatile OpenAPI openapi;
+    private Set<String>      restfulServices;
 
     @Override
     public String openapi() {

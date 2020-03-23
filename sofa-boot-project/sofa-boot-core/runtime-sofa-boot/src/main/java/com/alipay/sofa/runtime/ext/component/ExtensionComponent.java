@@ -141,7 +141,7 @@ public class ExtensionComponent extends AbstractComponent {
                     .loadContributions((ExtensionInternal) extension);
                 ((ExtensionInternal) extension).setContributions(contribs);
             } catch (Exception e) {
-                SofaLogger.error(e, "Failed to create contribution objects");
+                SofaLogger.error("Failed to create contribution objects", e);
             }
         }
     }

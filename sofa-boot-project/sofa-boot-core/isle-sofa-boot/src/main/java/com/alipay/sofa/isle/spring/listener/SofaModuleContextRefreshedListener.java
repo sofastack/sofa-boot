@@ -49,7 +49,7 @@ public class SofaModuleContextRefreshedListener implements PriorityOrdered,
             try {
                 pipelineContext.process();
             } catch (Throwable t) {
-                SofaLogger.error(t, "process pipeline error");
+                SofaLogger.error("process pipeline error", t);
                 throw new RuntimeException(t);
             }
         }
