@@ -118,8 +118,11 @@ public class ReadinessCheckListener implements ApplicationContextAware, Priority
                     .readinessHealthCheck(healthIndicatorDetails);
             }
         }
-        healthCallbackStatus = afterReadinessCheckCallbackProcessor
-            .afterReadinessCheckCallback(healthCallbackDetails);
+
+        if (healthCheckerStatus && healthIndicatorStatus) {
+            healthCallbackStatus = afterReadinessCheckCallbackProcessor
+                .afterReadinessCheckCallback(healthCallbackDetails);
+        }
         if (healthCheckerStatus && healthIndicatorStatus && healthCallbackStatus) {
             logger.info("Readiness check result: success");
         } else {
