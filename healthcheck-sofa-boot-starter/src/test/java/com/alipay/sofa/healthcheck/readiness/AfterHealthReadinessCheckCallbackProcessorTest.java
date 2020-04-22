@@ -21,6 +21,7 @@ import com.alipay.sofa.healthcheck.bean.ApplicationHealthCheckCallback;
 import com.alipay.sofa.healthcheck.base.BaseHealthCheckTest;
 import com.alipay.sofa.healthcheck.configuration.SofaBootHealthCheckAutoConfiguration;
 import com.alipay.sofa.healthcheck.core.AfterHealthCheckCallbackProcessor;
+import com.alipay.sofa.healthcheck.core.HealthChecker;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Value;
@@ -54,9 +55,77 @@ public class AfterHealthReadinessCheckCallbackProcessorTest extends BaseHealthCh
         }
     }
 
+    @Configuration
+    static class ReadinessCheckFailedTestConfiguration extends
+                                                      AfterReadinessCheckCallbackConfiguration {
+        @Bean
+        public HealthChecker failedHealthCheck() {
+            return new HealthChecker() {
+                @Override
+                public Health isHealthy() {
+                    return Health.down().withDetail("server", "server is bad").build();
+                }
+
+                @Override
+                public String getComponentName() {
+                    return "failedHealthCheck";
+                }
+
+                @Override
+                public int getRetryCount() {
+                    return 0;
+                }
+
+                @Override
+                public long getRetryTimeInterval() {
+                    return 0;
+                }
+
+                @Override
+                public boolean isStrictCheck() {
+                    return true;
+                }
+            };
+        }
+    }
+
+    @Configuration
+    static class ReadinessCheckSuccessTestConfiguration extends
+                                                       AfterReadinessCheckCallbackConfiguration {
+        @Bean
+        public HealthChecker successHealthCheck() {
+            return new HealthChecker() {
+                @Override
+                public Health isHealthy() {
+                    return Health.up().withDetail("server", "server is ok").build();
+                }
+
+                @Override
+                public String getComponentName() {
+                    return "successHealthCheck";
+                }
+
+                @Override
+                public int getRetryCount() {
+                    return 0;
+                }
+
+                @Override
+                public long getRetryTimeInterval() {
+                    return 0;
+                }
+
+                @Override
+                public boolean isStrictCheck() {
+                    return true;
+                }
+            };
+        }
+    }
+
     @Test
     public void testAfterHealthCheckCallbackMarked() {
-        initApplicationContext(true, false);
+        initApplicationContext(true, false, AfterReadinessCheckCallbackConfiguration.class);
         AfterHealthCheckCallbackProcessor afterHealthCheckCallbackProcessor = applicationContext
             .getBean(AfterHealthCheckCallbackProcessor.class);
         ApplicationHealthCheckCallback applicationHealthCheckCallback = applicationContext
@@ -80,7 +149,7 @@ public class AfterHealthReadinessCheckCallbackProcessorTest extends BaseHealthCh
 
     @Test
     public void testAfterHealthCheckCallbackUnMarked() {
-        initApplicationContext(false, false);
+        initApplicationContext(false, false, AfterReadinessCheckCallbackConfiguration.class);
         AfterHealthCheckCallbackProcessor afterHealthCheckCallbackProcessor = applicationContext
             .getBean(AfterHealthCheckCallbackProcessor.class);
         ApplicationHealthCheckCallback applicationHealthCheckCallback = applicationContext
@@ -102,11 +171,26 @@ public class AfterHealthReadinessCheckCallbackProcessorTest extends BaseHealthCh
 
     }
 
-    private void initApplicationContext(boolean health, boolean mark) {
+    @Test
+    public void testReadinessCheckFailedAndCallbackNotRun() {
+        initApplicationContext(false, false, ReadinessCheckFailedTestConfiguration.class);
+        ApplicationHealthCheckCallback applicationHealthCheckCallback = applicationContext
+            .getBean(ApplicationHealthCheckCallback.class);
+        Assert.assertFalse(applicationHealthCheckCallback.isMark());
+    }
+
+    @Test
+    public void testReadinessCheckSuccessAndCallbackRun() {
+        initApplicationContext(false, false, ReadinessCheckSuccessTestConfiguration.class);
+        ApplicationHealthCheckCallback applicationHealthCheckCallback = applicationContext
+            .getBean(ApplicationHealthCheckCallback.class);
+        Assert.assertTrue(applicationHealthCheckCallback.isMark());
+    }
+
+    private void initApplicationContext(boolean health, boolean mark, Class clazz) {
         Map<String, Object> properties = new LinkedHashMap<>();
         properties.put("after-readiness-check-callback-a.health", health);
         properties.put("after-readiness-check-callback-b.mark", mark);
-        initApplicationContext(properties, AfterReadinessCheckCallbackConfiguration.class,
-            SofaBootHealthCheckAutoConfiguration.class);
+        initApplicationContext(properties, clazz, SofaBootHealthCheckAutoConfiguration.class);
     }
 }
