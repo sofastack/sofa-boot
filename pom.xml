@@ -29,7 +29,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>sofa-boot-runtime</artifactId>
     <packaging>pom</packaging>
-    <version>2.6.3</version>
+    <version>2.6.4-SNAPSHOT</version>
 
     <name>SOFABoot Runtime</name>
     <description>SOFABoot Runtime</description>
