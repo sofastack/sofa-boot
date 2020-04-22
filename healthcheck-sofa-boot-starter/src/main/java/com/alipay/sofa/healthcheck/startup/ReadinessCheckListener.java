@@ -128,8 +128,10 @@ public class ReadinessCheckListener implements ApplicationContextAware, Environm
                     .readinessHealthCheck(healthIndicatorDetails);
             }
         }
-        healthCallbackStatus = afterHealthCheckCallbackProcessor
-            .afterReadinessCheckCallback(healthCallbackDetails);
+        if (healthCheckerStatus && healthIndicatorStatus) {
+            healthCallbackStatus = afterHealthCheckCallbackProcessor
+                .afterReadinessCheckCallback(healthCallbackDetails);
+        }
         if (healthCheckerStatus && healthIndicatorStatus && healthCallbackStatus) {
             logger.info("Readiness check result: success");
         } else {
