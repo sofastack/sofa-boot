@@ -31,6 +31,7 @@ public class SofaBootRpcConfigConstants {
     public static final int     BOLT_PORT_DEFAULT                  = 12200;
     public static final int     H2C_PORT_DEFAULT                   = 12300;
     public static final int     HTTP_PORT_DEFAULT                  = 12400;
+    public static final int     GRPC_PORT_DEFAULT                  = 50051;
 
     /* rest default configuration */
     public static final int     REST_PORT_DEFAULT                  = 8341;
@@ -74,6 +75,7 @@ public class SofaBootRpcConfigConstants {
     public static final String  RPC_PROTOCOL_DUBBO                 = "dubbo";
     public static final String  RPC_PROTOCOL_H2C                   = "h2c";
     public static final String  RPC_PROTOCOL_HTTP                  = "http";
+    public static final String  RPC_PROTOCOL_TRIPLE                = "tri";
 
     /** mesh **/
     public static final String  ENABLE_MESH_ALL                    = "all";

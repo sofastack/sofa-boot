@@ -23,7 +23,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.alipay.sofa</groupId>
     <artifactId>sofa-boot-build</artifactId>
-    <version>3.3.2</version>
+    <version>3.4.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>SOFABoot Build</name>
     <description>SOFABoot Build</description>

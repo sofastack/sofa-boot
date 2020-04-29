@@ -46,6 +46,9 @@ import com.alipay.sofa.runtime.api.client.ServiceClient;
 import com.alipay.sofa.runtime.api.client.param.BindingParam;
 import com.alipay.sofa.runtime.api.client.param.ServiceParam;
 import com.alipay.sofa.runtime.spi.binding.Binding;
+import io.grpc.examples.helloworld.HelloReply;
+import io.grpc.examples.helloworld.HelloRequest;
+import io.grpc.examples.helloworld.SofaGreeterTriple;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -75,64 +78,67 @@ import java.util.concurrent.ConcurrentMap;
 @ImportResource("/spring/test_all.xml")
 public class SofaBootRpcAllTest {
     @Rule
-    public ExpectedException        thrown = ExpectedException.none();
+    public ExpectedException           thrown = ExpectedException.none();
 
     @Autowired
-    private HelloSyncService        helloSyncService;
+    private HelloSyncService           helloSyncService;
 
     @Autowired
-    private HelloFutureService      helloFutureService;
+    private HelloFutureService         helloFutureService;
 
     @Autowired
-    private HelloCallbackService    helloCallbackService;
+    private HelloCallbackService       helloCallbackService;
 
     @Autowired
-    private FilterService           filterService;
+    private FilterService              filterService;
 
     @Autowired
-    private GlobalFilterService     globalFilterService;
+    private GlobalFilterService        globalFilterService;
 
     @Autowired
-    private DirectService           directService;
+    private DirectService              directService;
 
     @Autowired
-    private GenericService          genericService;
+    private GenericService             genericService;
 
     @Autowired
-    private ThreadPoolService       threadPoolService;
+    private ThreadPoolService          threadPoolService;
 
     @Autowired
-    private RestService             restService;
+    private RestService                restService;
 
     @Autowired
-    private DubboService            dubboService;
+    private DubboService               dubboService;
 
     @Autowired
-    private RetriesService          retriesServiceBolt;
+    private RetriesService             retriesServiceBolt;
 
     @Autowired
-    private RetriesService          retriesServiceDubbo;
+    private RetriesService             retriesServiceDubbo;
 
     @Autowired
-    private LazyService             lazyServiceBolt;
+    private LazyService                lazyServiceBolt;
 
     @Autowired
-    private LazyService             lazyServiceDubbo;
+    private LazyService                lazyServiceDubbo;
+
+    @Autowired
+    private SofaGreeterTriple.IGreeter sofaGreeterTripleRef;
 
     @SofaReference(binding = @SofaReferenceBinding(bindingType = "bolt"), jvmFirst = false, uniqueId = "bolt")
-    private AnnotationService       annotationService;
+    private AnnotationService          annotationService;
 
     @SofaReference(binding = @SofaReferenceBinding(bindingType = "bolt", serializeType = "protobuf"), jvmFirst = false, uniqueId = "pb")
-    private AnnotationService       annotationServicePb;
+    private AnnotationService          annotationServicePb;
 
     @SofaReference(binding = @SofaReferenceBinding(bindingType = "bolt", loadBalancer = "roundRobin"), uniqueId = "loadbalancer")
-    private AnnotationService       annotationLoadBalancerService;
+    private AnnotationService          annotationLoadBalancerService;
 
     @SofaClientFactory
-    private ClientFactory           clientFactory;
+    private ClientFactory              clientFactory;
 
     @Autowired
-    private ConsumerConfigContainer consumerConfigContainer;
+    private ConsumerConfigContainer    consumerConfigContainer;
 
     @Test
     public void testInvoke() throws InterruptedException {
@@ -275,4 +281,14 @@ public class SofaBootRpcAllTest {
         Assert.assertEquals(200, response.getStatusLine().getStatusCode());
         Assert.assertTrue(EntityUtils.toString(response.getEntity()).contains("/webapi/add_service"));
     }
+
+    @Test
+    public void testGrpcSync() throws InterruptedException {
+        Thread.sleep(5000);
+        HelloReply reply = null;
+        HelloRequest request = HelloRequest.newBuilder().setName("world").build();
+        reply = sofaGreeterTripleRef.sayHello(request);
+        Assert.assertEquals("Hello world", reply.getMessage());
+    }
+
 }

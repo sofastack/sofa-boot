@@ -76,6 +76,12 @@ public class ServerConfigContainer {
     private volatile ServerConfig     httpServerConfig;
     private final Object              HTTP_LOCK           = new Object();
 
+    /**
+     * http ServerConfig
+     */
+    private volatile ServerConfig     tripleServerConfig;
+    private final Object              TRIPLE_LOCK         = new Object();
+
     //custom server configs
     private Map<String, ServerConfig> customServerConfigs = new ConcurrentHashMap<String, ServerConfig>();
 
@@ -115,6 +121,12 @@ public class ServerConfigContainer {
 
         if (httpServerConfig != null) {
             httpServerConfig.buildIfAbsent().start();
+
+            // 加入线程监测？
+        }
+
+        if (tripleServerConfig != null) {
+            tripleServerConfig.buildIfAbsent().start();
 
             // 加入线程监测？
         }
@@ -189,6 +201,15 @@ public class ServerConfigContainer {
             }
 
             return httpServerConfig;
+        } else if (protocol.equalsIgnoreCase(SofaBootRpcConfigConstants.RPC_PROTOCOL_TRIPLE)) {
+            if (tripleServerConfig == null) {
+                synchronized (TRIPLE_LOCK) {
+                    if (tripleServerConfig == null) {
+                        tripleServerConfig = createTripleServerConfig();
+                    }
+                }
+            }
+            return tripleServerConfig;
         } else if (customServerConfigs.get(protocol) != null) {
             return customServerConfigs.get(protocol);
         } else {
@@ -485,6 +506,50 @@ public class ServerConfigContainer {
     }
 
     /**
+     * grpc server
+     *
+     * @return server
+     */
+    private ServerConfig createTripleServerConfig() {
+        String portStr = sofaBootRpcProperties.getTriplePort();
+        String threadPoolCoreSizeStr = sofaBootRpcProperties.getTripleThreadPoolCoreSize();
+        String threadPoolMaxSizeStr = sofaBootRpcProperties.getTripleThreadPoolMaxSize();
+        String acceptsSizeStr = sofaBootRpcProperties.getTripleAcceptsSize();
+        String threadPoolQueueSizeStr = sofaBootRpcProperties.getTripleThreadPoolQueueSize();
+
+        ServerConfig serverConfig = new ServerConfig();
+
+        if (StringUtils.hasText(portStr)) {
+            serverConfig.setPort(Integer.parseInt(portStr));
+        } else {
+            serverConfig.setPort(SofaBootRpcConfigConstants.GRPC_PORT_DEFAULT);
+        }
+
+        if (StringUtils.hasText(threadPoolMaxSizeStr)) {
+            serverConfig.setMaxThreads(Integer.parseInt(threadPoolMaxSizeStr));
+        }
+
+        if (StringUtils.hasText(threadPoolCoreSizeStr)) {
+            serverConfig.setCoreThreads(Integer.parseInt(threadPoolCoreSizeStr));
+        }
+
+        if (StringUtils.hasText(acceptsSizeStr)) {
+            serverConfig.setAccepts(Integer.parseInt(acceptsSizeStr));
+        }
+
+        if (StringUtils.hasText(threadPoolQueueSizeStr)) {
+            serverConfig.setQueues(Integer.parseInt(threadPoolQueueSizeStr));
+        }
+
+        serverConfig.setAutoStart(false);
+        serverConfig.setProtocol(SofaBootRpcConfigConstants.RPC_PROTOCOL_TRIPLE);
+        addCommonServerConfig(serverConfig);
+
+        return serverConfig;
+
+    }
+
+    /**
      * 释放所有 ServerConfig 对应的资源，并移除所有的 ServerConfig。
      */
     public void closeAllServer() {
@@ -492,7 +557,7 @@ public class ServerConfigContainer {
         destroyServerConfig(restServerConfig);
         destroyServerConfig(dubboServerConfig);
         destroyServerConfig(h2cServerConfig);
-
+        destroyServerConfig(tripleServerConfig);
         for (Map.Entry<String, ServerConfig> entry : customServerConfigs.entrySet()) {
             final ServerConfig serverConfig = entry.getValue();
             destroyServerConfig(serverConfig);
@@ -502,6 +567,7 @@ public class ServerConfigContainer {
         restServerConfig = null;
         dubboServerConfig = null;
         h2cServerConfig = null;
+        tripleServerConfig = null;
         customServerConfigs.clear();
     }
 

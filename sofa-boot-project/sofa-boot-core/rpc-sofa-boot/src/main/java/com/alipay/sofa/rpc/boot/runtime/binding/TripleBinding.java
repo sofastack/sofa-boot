@@ -16,24 +16,24 @@
  */
 package com.alipay.sofa.rpc.boot.runtime.binding;
 
+import com.alipay.sofa.rpc.boot.runtime.param.RpcBindingParam;
 import com.alipay.sofa.runtime.api.binding.BindingType;
+import org.springframework.context.ApplicationContext;
 
 /**
  *
- * @author <a href="mailto:lw111072@antfin.com">LiWei</a>
+ * @author <a href="mailto:zhiyuan.lzy@antfin.com">zhiyuan.lzy</a>
  */
-public class RpcBindingType {
+public class TripleBinding extends RpcBinding {
 
-    public static final BindingType BOLT_BINDING_TYPE   = new BindingType("bolt");
+    public TripleBinding(RpcBindingParam bindingParam, ApplicationContext applicationContext,
+                         boolean inBinding) {
+        super(bindingParam, applicationContext, inBinding);
+    }
 
-    public static final BindingType REST_BINDING_TYPE   = new BindingType("rest");
-
-    public static final BindingType DUBBO_BINDING_TYPE  = new BindingType("dubbo");
-
-    public static final BindingType H2C_BINDING_TYPE    = new BindingType("h2c");
-
-    public static final BindingType HTTP_BINDING_TYPE   = new BindingType("http");
-
-    public static final BindingType TRIPLE_BINDING_TYPE = new BindingType("tri");
+    @Override
+    public BindingType getBindingType() {
+        return RpcBindingType.TRIPLE_BINDING_TYPE;
+    }
 
 }

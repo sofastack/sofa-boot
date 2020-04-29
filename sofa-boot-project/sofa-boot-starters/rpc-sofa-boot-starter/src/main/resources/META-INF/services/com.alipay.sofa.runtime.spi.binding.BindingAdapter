@@ -3,3 +3,4 @@ com.alipay.sofa.rpc.boot.runtime.adapter.RestBindingAdapter
 com.alipay.sofa.rpc.boot.runtime.adapter.DubboBindingAdapter
 com.alipay.sofa.rpc.boot.runtime.adapter.H2cBindingAdapter
 com.alipay.sofa.rpc.boot.runtime.adapter.HttpBindingAdapter
+com.alipay.sofa.rpc.boot.runtime.adapter.TripleBindingAdapter

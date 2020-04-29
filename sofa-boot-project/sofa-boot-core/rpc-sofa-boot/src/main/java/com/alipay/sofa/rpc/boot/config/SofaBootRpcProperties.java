@@ -16,16 +16,15 @@
  */
 package com.alipay.sofa.rpc.boot.config;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import com.alipay.sofa.rpc.common.SofaOptions;
+import com.google.common.base.CaseFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.core.env.Environment;
 import org.springframework.util.StringUtils;
 
-import com.alipay.sofa.rpc.common.SofaOptions;
-import com.google.common.base.CaseFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author khotyn
@@ -249,6 +248,34 @@ public class SofaBootRpcProperties {
      */
     private String              httpAcceptsSize;
     /* http end*/
+
+    /* triple start*/
+
+    /**
+     * the port of triple (triple 端口)
+     */
+    private String              triplePort;
+
+    /**
+     * the core thread pool size of triple （triple 核心线程数）
+     */
+    private String              tripleThreadPoolCoreSize;
+
+    /**
+     * the max thread pool size of triple （triple 最大线程数）
+     */
+    private String              tripleThreadPoolMaxSize;
+
+    /**
+     * the queue size of triple server（triple 线程池队列）
+     */
+    private String              tripleThreadPoolQueueSize;
+
+    /**
+     * the max accept size of triple (triple 服务端允许客户端建立的连接数)
+     */
+    private String              tripleAcceptsSize;
+    /* triple end*/
 
     /* registry */
     /**
@@ -800,6 +827,51 @@ public class SofaBootRpcProperties {
     public String getRestAllowedOrigins() {
         return StringUtils.isEmpty(restAllowedOrigins) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : restAllowedOrigins;
+    }
+
+    public String getTriplePort() {
+        return StringUtils.isEmpty(triplePort) ? getDotString(new Object() {
+        }.getClass().getEnclosingMethod().getName()) : triplePort;
+    }
+
+    public void setTriplePort(String triplePort) {
+        this.triplePort = triplePort;
+    }
+
+    public String getTripleThreadPoolCoreSize() {
+        return StringUtils.isEmpty(tripleThreadPoolCoreSize) ? getDotString(new Object() {
+        }.getClass().getEnclosingMethod().getName()) : tripleThreadPoolCoreSize;
+    }
+
+    public void setTripleThreadPoolCoreSize(String tripleThreadPoolCoreSize) {
+        this.tripleThreadPoolCoreSize = tripleThreadPoolCoreSize;
+    }
+
+    public String getTripleThreadPoolMaxSize() {
+        return StringUtils.isEmpty(tripleThreadPoolMaxSize) ? getDotString(new Object() {
+        }.getClass().getEnclosingMethod().getName()) : tripleThreadPoolMaxSize;
+    }
+
+    public void setTripleThreadPoolMaxSize(String tripleThreadPoolMaxSize) {
+        this.tripleThreadPoolMaxSize = tripleThreadPoolMaxSize;
+    }
+
+    public String getTripleThreadPoolQueueSize() {
+        return StringUtils.isEmpty(tripleThreadPoolQueueSize) ? getDotString(new Object() {
+        }.getClass().getEnclosingMethod().getName()) : tripleThreadPoolQueueSize;
+    }
+
+    public void setTripleThreadPoolQueueSize(String tripleThreadPoolQueueSize) {
+        this.tripleThreadPoolQueueSize = tripleThreadPoolQueueSize;
+    }
+
+    public String getTripleAcceptsSize() {
+        return StringUtils.isEmpty(tripleAcceptsSize) ? getDotString(new Object() {
+        }.getClass().getEnclosingMethod().getName()) : tripleAcceptsSize;
+    }
+
+    public void setTripleAcceptsSize(String tripleAcceptsSize) {
+        this.tripleAcceptsSize = tripleAcceptsSize;
     }
 
     public void setRestAllowedOrigins(String restAllowedOrigins) {

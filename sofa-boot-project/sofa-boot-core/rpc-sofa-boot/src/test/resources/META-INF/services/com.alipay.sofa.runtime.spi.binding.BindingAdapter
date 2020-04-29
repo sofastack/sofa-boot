@@ -6,3 +6,4 @@ com.alipay.sofa.rpc.boot.runtime.adapter.HttpBindingAdapter
 com.alipay.sofa.rpc.boot.test.adapter.XBindingAdapter
 com.alipay.sofa.rpc.boot.test.adapter.XBindingAdapter2
 com.alipay.sofa.rpc.boot.test.adapter.XBindingAdapter3
+com.alipay.sofa.rpc.boot.runtime.adapter.TripleBindingAdapter
