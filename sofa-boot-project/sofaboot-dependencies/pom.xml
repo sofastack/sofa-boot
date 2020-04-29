@@ -33,7 +33,7 @@
         <rpc.core.version>5.7.0-SNAPSHOT</rpc.core.version>
 
         <!--2rd lib dependency-->
-        <sofa.common.tools.version>1.0.22-SNAPSHOT</sofa.common.tools.version>
+        <sofa.common.tools.version>1.0.22</sofa.common.tools.version>
         <sofa.bolt.version>1.5.6</sofa.bolt.version>
         <sofa.hessian.version>3.3.7</sofa.hessian.version>
 
