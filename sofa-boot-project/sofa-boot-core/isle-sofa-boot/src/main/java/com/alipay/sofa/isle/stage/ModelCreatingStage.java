@@ -49,7 +49,7 @@ public class ModelCreatingStage extends AbstractPipelineStage {
         super(applicationContext);
     }
 
-    protected void doProcess() throws Exception {
+    protected void runApplication() throws Exception {
         ApplicationRuntimeModel application = new ApplicationRuntimeModel();
         application.setAppName(appName);
         application.setModuleDeploymentValidator(new DefaultModuleDeploymentValidator());
