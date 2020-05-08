@@ -16,14 +16,20 @@
  */
 package com.alipay.sofa.rpc.boot.ext;
 
+import com.alipay.sofa.rpc.ext.Extensible;
 import com.alipay.sofa.rpc.ext.Extension;
 import com.alipay.sofa.rpc.ext.ExtensionLoader;
 import com.alipay.sofa.rpc.ext.ExtensionLoaderFactory;
 import com.alipay.sofa.rpc.log.Logger;
 import com.alipay.sofa.rpc.log.LoggerFactory;
+import org.apache.commons.lang3.ClassUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.core.annotation.AnnotationUtils;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author zhaowang
@@ -36,19 +42,28 @@ public class RpcExtensionBeanPostProcessor implements BeanPostProcessor {
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName)
-                                                                               throws BeansException {
+            throws BeansException {
         Class<?> extensionClass = bean.getClass();
         Extension extension = AnnotationUtils.findAnnotation(extensionClass, Extension.class);
         if (extension != null) {
-            Class<?> extensionPoint = extension.extensionPoint();
-            if (extensionPoint == null || extensionPoint == void.class) {
-                throw new IllegalStateException(
-                    "Can not load extension which doesn't specify extensionPoint");
+            List<Class<?>> candidateExtensibleClasses;
+            candidateExtensibleClasses = ClassUtils.getAllInterfaces(extensionClass);
+            candidateExtensibleClasses.addAll(ClassUtils.getAllSuperclasses(extensionClass));
+            Set<Class<?>> extensibleClasses = candidateExtensibleClasses.stream()
+                    .filter(RpcExtensionBeanPostProcessor::isExtensible).collect(Collectors.toSet());
+            for (Class<?> extensibleClass : extensibleClasses) {
+                ExtensionLoader<?> extensionLoader = ExtensionLoaderFactory
+                        .getExtensionLoader(extensibleClass);
+                extensionLoader.loadExtension(extensionClass);
             }
-            ExtensionLoader<?> extensionLoader = ExtensionLoaderFactory
-                .getExtensionLoader(extensionPoint);
-            extensionLoader.loadExtension(extensionClass);
         }
         return bean;
     }
+
+    private static boolean isExtensible(Class<?> clazz) {
+        Extensible annotation = AnnotationUtils.findAnnotation(clazz, Extensible.class);
+        return annotation != null;
+
+    }
+
 }
