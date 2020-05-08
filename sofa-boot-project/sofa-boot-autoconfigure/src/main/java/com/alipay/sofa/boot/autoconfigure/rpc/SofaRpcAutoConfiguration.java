@@ -35,6 +35,7 @@ import com.alipay.sofa.rpc.boot.container.ServerConfigContainer;
 import com.alipay.sofa.rpc.boot.context.ApplicationContextClosedListener;
 import com.alipay.sofa.rpc.boot.context.ApplicationContextRefreshedListener;
 import com.alipay.sofa.rpc.boot.context.SofaBootRpcStartListener;
+import com.alipay.sofa.rpc.boot.ext.RpcExtensionBeanPostProcessor;
 import com.alipay.sofa.rpc.boot.health.RpcAfterHealthCheckCallback;
 import com.alipay.sofa.rpc.boot.runtime.adapter.helper.ConsumerConfigHelper;
 import com.alipay.sofa.rpc.boot.runtime.adapter.helper.ProviderConfigHelper;
@@ -268,5 +269,11 @@ public class SofaRpcAutoConfiguration {
     @ConditionalOnProperty(name = "com.alipay.sofa.rpc.dynamic-config")
     public DynamicConfigProcessor dynamicConfigProcessor() {
         return new DynamicConfigProcessor();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public RpcExtensionBeanPostProcessor rpcExtensionBeanPostProcessor() {
+        return new RpcExtensionBeanPostProcessor();
     }
 }
