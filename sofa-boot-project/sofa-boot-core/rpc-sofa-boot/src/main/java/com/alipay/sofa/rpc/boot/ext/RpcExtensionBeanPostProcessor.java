@@ -61,7 +61,7 @@ public class RpcExtensionBeanPostProcessor implements BeanPostProcessor {
     }
 
     private static boolean isExtensible(Class<?> clazz) {
-        Extensible annotation = AnnotationUtils.findAnnotation(clazz, Extensible.class);
+        Extensible annotation = clazz.getAnnotation(Extensible.class);
         return annotation != null;
 
     }
