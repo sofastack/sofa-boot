@@ -181,7 +181,6 @@ public class ReferenceComponent extends AbstractComponent {
                 }
             }
         }
-        removeService();
     }
 
     @Override
@@ -227,11 +226,6 @@ public class ReferenceComponent extends AbstractComponent {
             SofaLogger.info(" >>In Binding [{}] Ends - {}.", binding.getBindingType(), reference);
         }
         return proxy;
-    }
-
-    private void removeService() {
-        sofaRuntimeContext.getClientFactory().getClient(ServiceClient.class)
-            .removeService(reference.getInterfaceType(), 0);
     }
 
     /**
