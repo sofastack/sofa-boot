@@ -45,10 +45,10 @@ import com.alipay.sofa.healthcheck.log.HealthCheckLoggerFactory;
  */
 public class ReadinessCheckListener implements ApplicationContextAware, PriorityOrdered,
                                    ApplicationListener<ContextRefreshedEvent>, InitializingBean {
-    private static Logger                        logger                   = HealthCheckLoggerFactory
-                                                                              .getLogger(ReadinessCheckListener.class);
+    private static Logger                        logger                 = HealthCheckLoggerFactory
+                                                                            .getLogger(ReadinessCheckListener.class);
 
-    private final HealthAggregator               healthAggregator         = new OrderedHealthAggregator();
+    private final HealthAggregator               healthAggregator       = new OrderedHealthAggregator();
 
     private ApplicationContext                   applicationContext;
 
@@ -64,23 +64,23 @@ public class ReadinessCheckListener implements ApplicationContextAware, Priority
     @Autowired
     private AfterReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor;
 
-    private boolean                              healthCheckerStatus      = true;
+    private boolean                              healthCheckerStatus    = true;
 
-    private Map<String, Health>                  healthCheckerDetails     = new HashMap<>();
+    private Map<String, Health>                  healthCheckerDetails   = new HashMap<>();
 
-    private boolean                              healthIndicatorStatus    = true;
+    private boolean                              healthIndicatorStatus  = true;
 
-    private Map<String, Health>                  healthIndicatorDetails   = new HashMap<>();
+    private Map<String, Health>                  healthIndicatorDetails = new HashMap<>();
 
-    private boolean                              healthCallbackStatus     = true;
-    private boolean                              readinessCheckFinish     = false;
-    private boolean                              health_checker_insulator = false;
+    private boolean                              healthCallbackStatus   = true;
+    private boolean                              readinessCheckFinish   = false;
+    private boolean                              healthCheckerInsulator = false;
 
     @Override
     public void afterPropertiesSet() throws Exception {
         HealthCheckProperties healthCheckProperties = applicationContext
             .getBean(HealthCheckProperties.class);
-        health_checker_insulator = healthCheckProperties.isHealthCheckInsulator();
+        healthCheckerInsulator = healthCheckProperties.isHealthCheckInsulator();
     }
 
     @Override
@@ -135,7 +135,7 @@ public class ReadinessCheckListener implements ApplicationContextAware, Priority
             logger.info("Readiness check result: success");
         } else {
             logger.error("Readiness check result: fail");
-            if (health_checker_insulator) {
+            if (healthCheckerInsulator) {
                 throw new HealthCheckException(
                     "Application health check is failed and health check insulator switch is turned on!");
             }

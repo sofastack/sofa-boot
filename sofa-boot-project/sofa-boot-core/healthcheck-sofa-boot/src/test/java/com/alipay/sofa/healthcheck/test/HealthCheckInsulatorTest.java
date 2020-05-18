@@ -77,13 +77,9 @@ public class HealthCheckInsulatorTest {
         }
     }
 
-    @Test
+    @Test(expected = HealthCheckException.class)
     public void test() {
-        try {
-            SpringApplication application = new SpringApplication(HealthCheckConfiguration.class);
-            application.run("--spring.profiles.active=health");
-        } catch (Exception e) {
-            Assert.assertTrue(e instanceof HealthCheckException);
-        }
+        SpringApplication application = new SpringApplication(HealthCheckConfiguration.class);
+        application.run("--spring.profiles.active=health");
     }
 }
