@@ -74,16 +74,13 @@ public class ReadinessCheckListener implements ApplicationContextAware, Priority
 
     private boolean                              healthCallbackStatus     = true;
     private boolean                              readinessCheckFinish     = false;
-    private String                               health_checker_insulator = "";
+    private boolean                              health_checker_insulator = false;
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        health_checker_insulator = System.getProperty("health_check_insulator");
-        if (StringUtils.isEmpty(health_checker_insulator)) {
-            HealthCheckProperties healthCheckProperties = applicationContext
-                .getBean(HealthCheckProperties.class);
-            health_checker_insulator = healthCheckProperties.getInsulator();
-        }
+        HealthCheckProperties healthCheckProperties = applicationContext
+            .getBean(HealthCheckProperties.class);
+        health_checker_insulator = healthCheckProperties.isHealthCheckInsulator();
     }
 
     @Override
@@ -138,7 +135,7 @@ public class ReadinessCheckListener implements ApplicationContextAware, Priority
             logger.info("Readiness check result: success");
         } else {
             logger.error("Readiness check result: fail");
-            if (Boolean.TRUE.toString().equalsIgnoreCase(health_checker_insulator)) {
+            if (health_checker_insulator) {
                 throw new HealthCheckException(
                     "Application health check is failed and health check insulator switch is turned on!");
             }

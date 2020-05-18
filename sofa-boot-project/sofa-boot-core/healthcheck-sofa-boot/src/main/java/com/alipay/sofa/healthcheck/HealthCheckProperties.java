@@ -22,15 +22,15 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 2020/5/18
  */
-@ConfigurationProperties(prefix = "sofaboot.health.check")
+@ConfigurationProperties(prefix = "com.alipay.sofa.boot")
 public class HealthCheckProperties {
-    private String insulator = "";
+    private boolean healthCheckInsulator = false;
 
-    public String getInsulator() {
-        return insulator;
+    public boolean isHealthCheckInsulator() {
+        return healthCheckInsulator;
     }
 
-    public void setInsulator(String insulator) {
-        this.insulator = insulator;
+    public void setHealthCheckInsulator(boolean healthCheckInsulator) {
+        this.healthCheckInsulator = healthCheckInsulator;
     }
 }
