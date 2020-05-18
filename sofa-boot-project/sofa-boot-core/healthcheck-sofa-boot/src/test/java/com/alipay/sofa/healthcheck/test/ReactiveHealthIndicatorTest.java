@@ -19,6 +19,7 @@ package com.alipay.sofa.healthcheck.test;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.alipay.sofa.healthcheck.HealthCheckProperties;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.ReactiveHealthIndicator;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -70,6 +72,7 @@ public class ReactiveHealthIndicatorTest {
     }
 
     @Configuration
+    @EnableConfigurationProperties(HealthCheckProperties.class)
     static class ReactiveHealthIndicatorTestConfiguration {
         @Bean
         public AfterReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor() {

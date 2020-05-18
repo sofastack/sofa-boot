@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.alipay.sofa.healthcheck.HealthCheckProperties;
 import com.alipay.sofa.healthcheck.core.HealthChecker;
 import com.alipay.sofa.healthcheck.test.bean.FailedHealthCheck;
 import com.alipay.sofa.healthcheck.test.bean.SuccessHealthCheck;
@@ -30,6 +31,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.Status;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -127,6 +129,7 @@ public class AfterHealthReadinessCheckCallbackTest {
     }
 
     @Configuration
+    @EnableConfigurationProperties(HealthCheckProperties.class)
     static class AfterHealthReadinessCheckCallbackTestConfiguration {
         @Bean
         public MiddlewareHealthCheckCallback middlewareHealthCheckCallback(@Value("${after-readiness-check-callback-a.health:false}") boolean health) {
