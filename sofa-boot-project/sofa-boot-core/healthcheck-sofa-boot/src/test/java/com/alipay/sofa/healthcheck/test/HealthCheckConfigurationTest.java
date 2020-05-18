@@ -19,9 +19,11 @@ package com.alipay.sofa.healthcheck.test;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.alipay.sofa.healthcheck.HealthCheckProperties;
 import org.junit.Test;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -82,6 +84,7 @@ public class HealthCheckConfigurationTest {
     }
 
     @Configuration
+    @EnableConfigurationProperties(HealthCheckProperties.class)
     static class HealthCheckConfigurationTestConfiguration {
         @Bean
         public AfterReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor() {
