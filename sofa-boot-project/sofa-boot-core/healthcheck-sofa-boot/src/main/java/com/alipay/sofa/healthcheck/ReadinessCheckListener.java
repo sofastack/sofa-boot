@@ -21,6 +21,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthAggregator;
@@ -43,12 +44,11 @@ import com.alipay.sofa.healthcheck.log.HealthCheckLoggerFactory;
  * @author qilong.zql
  */
 public class ReadinessCheckListener implements ApplicationContextAware, PriorityOrdered,
-                                   ApplicationListener<ContextRefreshedEvent> {
+                                   ApplicationListener<ContextRefreshedEvent>, InitializingBean {
+    private static Logger                        logger                   = HealthCheckLoggerFactory
+                                                                              .getLogger(ReadinessCheckListener.class);
 
-    private static Logger                        logger                 = HealthCheckLoggerFactory
-                                                                            .getLogger(ReadinessCheckListener.class);
-
-    private final HealthAggregator               healthAggregator       = new OrderedHealthAggregator();
+    private final HealthAggregator               healthAggregator         = new OrderedHealthAggregator();
 
     private ApplicationContext                   applicationContext;
 
@@ -64,20 +64,31 @@ public class ReadinessCheckListener implements ApplicationContextAware, Priority
     @Autowired
     private AfterReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor;
 
-    private boolean                              healthCheckerStatus    = true;
+    private boolean                              healthCheckerStatus      = true;
 
-    private Map<String, Health>                  healthCheckerDetails   = new HashMap<>();
+    private Map<String, Health>                  healthCheckerDetails     = new HashMap<>();
 
-    private boolean                              healthIndicatorStatus  = true;
+    private boolean                              healthIndicatorStatus    = true;
 
-    private Map<String, Health>                  healthIndicatorDetails = new HashMap<>();
+    private Map<String, Health>                  healthIndicatorDetails   = new HashMap<>();
 
-    private boolean                              healthCallbackStatus   = true;
-    private boolean                              readinessCheckFinish   = false;
+    private boolean                              healthCallbackStatus     = true;
+    private boolean                              readinessCheckFinish     = false;
+    private String                               health_checker_insulator = "";
 
     @Override
-    public void setApplicationContext(ApplicationContext cxt) throws BeansException {
-        applicationContext = cxt;
+    public void afterPropertiesSet() throws Exception {
+        health_checker_insulator = System.getProperty("health_check_insulator");
+        if (StringUtils.isEmpty(health_checker_insulator)) {
+            HealthCheckProperties healthCheckProperties = applicationContext
+                .getBean(HealthCheckProperties.class);
+            health_checker_insulator = healthCheckProperties.getInsulator();
+        }
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext ctx) throws BeansException {
+        applicationContext = ctx;
     }
 
     private Map<String, Health> healthCallbackDetails = new HashMap<>();
@@ -127,6 +138,10 @@ public class ReadinessCheckListener implements ApplicationContextAware, Priority
             logger.info("Readiness check result: success");
         } else {
             logger.error("Readiness check result: fail");
+            if (Boolean.TRUE.toString().equalsIgnoreCase(health_checker_insulator)) {
+                throw new HealthCheckException(
+                    "Application health check is failed and health check insulator switch is turned on!");
+            }
         }
     }
 
