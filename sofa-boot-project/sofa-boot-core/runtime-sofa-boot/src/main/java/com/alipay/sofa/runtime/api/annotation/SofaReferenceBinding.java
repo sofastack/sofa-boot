@@ -145,4 +145,16 @@ public @interface SofaReferenceBinding {
      * @since 2.6.4
      */
     SofaMethod[] methodInfos() default {};
+
+    /**
+     * mock mode of reference
+     * @return "local", "remote" or empty
+     */
+    String mockMode() default "";
+
+    /**
+     * get mock from spring beans
+     * @return bean name
+     */
+    String mockBean() default "";
 }

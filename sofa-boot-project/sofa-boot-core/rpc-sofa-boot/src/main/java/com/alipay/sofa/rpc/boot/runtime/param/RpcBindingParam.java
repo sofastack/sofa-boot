@@ -17,6 +17,7 @@
 package com.alipay.sofa.rpc.boot.runtime.param;
 
 import com.alipay.sofa.rpc.boot.runtime.binding.RpcBindingMethodInfo;
+import com.alipay.sofa.rpc.common.utils.StringUtils;
 import com.alipay.sofa.rpc.filter.Filter;
 import com.alipay.sofa.rpc.server.UserThreadPool;
 import com.alipay.sofa.runtime.api.client.param.BindingParam;
@@ -33,7 +34,9 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public abstract class RpcBindingParam implements BindingParam {
 
-    /** global attr */
+    /**
+     * global attr
+     */
     protected Integer                    timeout;
 
     protected Integer                    addressWaitTime;
@@ -66,7 +69,9 @@ public abstract class RpcBindingParam implements BindingParam {
 
     protected Boolean                    check;
 
-    /** other */
+    /**
+     * other
+     */
     protected List<Filter>               filters;
 
     protected List<RpcBindingMethodInfo> methodInfos;
@@ -80,6 +85,10 @@ public abstract class RpcBindingParam implements BindingParam {
     protected List<String>               registrys  = new ArrayList<String>();
 
     private Integer                      repeatReferLimit;
+
+    protected String                     mockMode;
+
+    protected String                     mockBean;
 
     /**
      * Getter method for property <tt>timeout</tt>.
@@ -381,7 +390,7 @@ public abstract class RpcBindingParam implements BindingParam {
     /**
      * Setter method for property <tt>loadBalancer</tt>.
      *
-     * @param loadBalancer  value to be assigned to property loadBalancer
+     * @param loadBalancer value to be assigned to property loadBalancer
      */
     public void setLoadBalancer(String loadBalancer) {
         this.loadBalancer = loadBalancer;
@@ -399,7 +408,7 @@ public abstract class RpcBindingParam implements BindingParam {
     /**
      * Setter method for property <tt>lazy</tt>.
      *
-     * @param lazy  value to be assigned to property lazy
+     * @param lazy value to be assigned to property lazy
      */
     public void setLazy(Boolean lazy) {
         this.lazy = lazy;
@@ -417,7 +426,7 @@ public abstract class RpcBindingParam implements BindingParam {
     /**
      * Setter method for property <tt>check</tt>.
      *
-     * @param check  value to be assigned to property check
+     * @param check value to be assigned to property check
      */
     public void setCheck(Boolean check) {
         this.check = check;
@@ -447,66 +456,99 @@ public abstract class RpcBindingParam implements BindingParam {
         this.registrys = registrys;
     }
 
+    /**
+     * @return rpc binding is healthy or not
+     */
+    public boolean isHealthyDestine(String appName) {
+        if (StringUtils.isNotBlank(targetUrl)) {
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o)
+        if (this == o) {
             return true;
-        if (!(o instanceof RpcBindingParam))
+        }
+        if (!(o instanceof RpcBindingParam)) {
             return false;
+        }
 
         RpcBindingParam that = (RpcBindingParam) o;
 
-        if (timeout != null ? !timeout.equals(that.timeout) : that.timeout != null)
+        if (timeout != null ? !timeout.equals(that.timeout) : that.timeout != null) {
             return false;
+        }
         if (addressWaitTime != null ? !addressWaitTime.equals(that.addressWaitTime)
-            : that.addressWaitTime != null)
+            : that.addressWaitTime != null) {
             return false;
+        }
         if (connectTimeout != null ? !connectTimeout.equals(that.connectTimeout)
-            : that.connectTimeout != null)
+            : that.connectTimeout != null) {
             return false;
-        if (retries != null ? !retries.equals(that.retries) : that.retries != null)
+        }
+        if (retries != null ? !retries.equals(that.retries) : that.retries != null) {
             return false;
-        if (type != null ? !type.equals(that.type) : that.type != null)
+        }
+        if (type != null ? !type.equals(that.type) : that.type != null) {
             return false;
+        }
         if (callbackClass != null ? !callbackClass.equals(that.callbackClass)
-            : that.callbackClass != null)
+            : that.callbackClass != null) {
             return false;
-        if (callbackRef != null ? !callbackRef.equals(that.callbackRef) : that.callbackRef != null)
+        }
+        if (callbackRef != null ? !callbackRef.equals(that.callbackRef) : that.callbackRef != null) {
             return false;
+        }
         if (callbackHandler != null ? !callbackHandler.equals(that.callbackHandler)
-            : that.callbackHandler != null)
+            : that.callbackHandler != null) {
             return false;
-        if (weight != null ? !weight.equals(that.weight) : that.weight != null)
+        }
+        if (weight != null ? !weight.equals(that.weight) : that.weight != null) {
             return false;
-        if (warmUpTime != null ? !warmUpTime.equals(that.warmUpTime) : that.warmUpTime != null)
+        }
+        if (warmUpTime != null ? !warmUpTime.equals(that.warmUpTime) : that.warmUpTime != null) {
             return false;
+        }
         if (warmUpWeight != null ? !warmUpWeight.equals(that.warmUpWeight)
-            : that.warmUpWeight != null)
+            : that.warmUpWeight != null) {
             return false;
+        }
         if (userThreadPool != null ? !userThreadPool.equals(that.userThreadPool)
-            : that.userThreadPool != null)
+            : that.userThreadPool != null) {
             return false;
+        }
         if (genericInterface != null ? !genericInterface.equals(that.genericInterface)
-            : that.genericInterface != null)
+            : that.genericInterface != null) {
             return false;
+        }
         if (loadBalancer != null ? !loadBalancer.equals(that.loadBalancer)
-            : that.loadBalancer != null)
+            : that.loadBalancer != null) {
             return false;
-        if (lazy != null ? !lazy.equals(that.lazy) : that.lazy != null)
+        }
+        if (lazy != null ? !lazy.equals(that.lazy) : that.lazy != null) {
             return false;
-        if (check != null ? !check.equals(that.check) : that.check != null)
+        }
+        if (check != null ? !check.equals(that.check) : that.check != null) {
             return false;
-        if (filters != null ? !filters.equals(that.filters) : that.filters != null)
+        }
+        if (filters != null ? !filters.equals(that.filters) : that.filters != null) {
             return false;
-        if (methodInfos != null ? !methodInfos.equals(that.methodInfos) : that.methodInfos != null)
+        }
+        if (methodInfos != null ? !methodInfos.equals(that.methodInfos) : that.methodInfos != null) {
             return false;
-        if (targetUrl != null ? !targetUrl.equals(that.targetUrl) : that.targetUrl != null)
+        }
+        if (targetUrl != null ? !targetUrl.equals(that.targetUrl) : that.targetUrl != null) {
             return false;
+        }
         if (serialization != null ? !serialization.equals(that.serialization)
-            : that.serialization != null)
+            : that.serialization != null) {
             return false;
-        if (parameters != null ? !parameters.equals(that.parameters) : that.parameters != null)
+        }
+        if (parameters != null ? !parameters.equals(that.parameters) : that.parameters != null) {
             return false;
+        }
         return registrys != null ? registrys.equals(that.registrys) : that.registrys == null;
     }
 
@@ -545,4 +587,19 @@ public abstract class RpcBindingParam implements BindingParam {
         this.repeatReferLimit = repeatReferLimit;
     }
 
+    public String getMockMode() {
+        return mockMode;
+    }
+
+    public void setMockMode(String mockMode) {
+        this.mockMode = mockMode;
+    }
+
+    public String getMockBean() {
+        return mockBean;
+    }
+
+    public void setMockBean(String mockBean) {
+        this.mockBean = mockBean;
+    }
 }

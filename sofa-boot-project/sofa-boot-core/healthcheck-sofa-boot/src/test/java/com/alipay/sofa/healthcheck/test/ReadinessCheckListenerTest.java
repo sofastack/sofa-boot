@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.healthcheck.test;
 
+import com.alipay.sofa.healthcheck.HealthCheckProperties;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,6 +24,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.Health;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -51,6 +53,7 @@ public class ReadinessCheckListenerTest {
     private ApplicationContext applicationContext;
 
     @Configuration
+    @EnableConfigurationProperties(HealthCheckProperties.class)
     static class HealthCheckConfiguration {
         @Bean
         public MemoryHealthChecker memoryHealthChecker(@Value("${memory-health-checker.count:0}") int count,

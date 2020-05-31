@@ -156,7 +156,7 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
                                                 + "] has already been destroyed.");
             }
 
-            SofaLogger.debug(">> Start in JVM service invoke, the service interface is  - {0}",
+            SofaLogger.debug(">> Start in JVM service invoke, the service interface is  - {}",
                 getInterfaceName());
 
             Object retVal;
@@ -172,7 +172,7 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
                         return serviceProxy.invoke(invocation);
                     } finally {
                         SofaLogger.debug(
-                            "<< Finish Cross App JVM service invoke, the service is  - {0}]",
+                            "<< Finish Cross App JVM service invoke, the service is  - {}]",
                             (getInterfaceName() + "#" + getUniqueId()));
                     }
                 }
@@ -180,7 +180,7 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
 
             if (targetObj == null || ((targetObj instanceof Proxy) && binding.hasBackupProxy())) {
                 targetObj = binding.getBackupProxy();
-                SofaLogger.debug("<<{0}.{1} backup proxy invoke.", getInterfaceName().getName(),
+                SofaLogger.debug("<<{}.{} backup proxy invoke.", getInterfaceName().getName(),
                     invocation.getMethod().getName());
             }
 
@@ -203,7 +203,7 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
                 throw ex.getTargetException();
             } finally {
                 SofaLogger.debug(
-                    "<< Finish JVM service invoke, the service implementation is  - {0}]",
+                    "<< Finish JVM service invoke, the service implementation is  - {}]",
                     (this.target == null ? "null" : this.target.getClass().getName()));
 
                 popThreadContextClassLoader(tcl);

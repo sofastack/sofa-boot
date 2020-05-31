@@ -113,7 +113,7 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
         } else {
             Class<?> beanClassType = BeanDefinitionUtil.resolveBeanClassType(beanDefinition);
             if (beanClassType == null) {
-                SofaLogger.warn("Bean class type cant be resolved from bean of {0}", beanId);
+                SofaLogger.warn("Bean class type cant be resolved from bean of {}", beanId);
                 return;
             }
             generateSofaServiceDefinitionOnClass(beanId, beanClassType, beanDefinition, beanFactory);
@@ -133,8 +133,7 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
             declaringClass = ClassUtils.forName(methodMetadata.getDeclaringClassName(), null);
         } catch (Throwable throwable) {
             // it's impossible to catch throwable here
-            SofaLogger.error(throwable,
-                "Failed to parse factoryBeanMethod of BeanDefinition( {0} )", beanId);
+            SofaLogger.error("Failed to parse factoryBeanMethod of BeanDefinition( {} )", beanId, throwable);
             return;
         }
         if (methodMetadata instanceof StandardMethodMetadata) {
@@ -311,7 +310,7 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
             ((BeanDefinitionRegistry) beanFactory).registerBeanDefinition(serviceId,
                 builder.getBeanDefinition());
         } else {
-            SofaLogger.error("SofaService was already registered: {0}", serviceId);
+            SofaLogger.error("SofaService was already registered: {}", serviceId);
         }
     }
 

@@ -16,13 +16,16 @@
  */
 package com.alipay.sofa.runtime.service.impl;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
 import com.alipay.sofa.runtime.api.binding.BindingType;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapter;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
+import org.springframework.core.annotation.AnnotationAwareOrderComparator;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author xuanbei 18/2/28
@@ -40,8 +43,12 @@ public class BindingAdapterFactoryImpl implements BindingAdapterFactory {
         if (bindingAdapters == null || bindingAdapters.size() == 0) {
             return;
         }
-        for (BindingAdapter bindingAdapter : bindingAdapters) {
-            bindingTypeBindingAdapterMap.put(bindingAdapter.getBindingType(), bindingAdapter);
+        List<BindingAdapter> sortedBindingAdapters = new ArrayList<>(bindingAdapters);
+        sortedBindingAdapters.sort(AnnotationAwareOrderComparator.INSTANCE);
+
+        for (BindingAdapter bindingAdapter : sortedBindingAdapters) {
+            bindingTypeBindingAdapterMap.putIfAbsent(bindingAdapter.getBindingType(),
+                bindingAdapter);
         }
     }
 }

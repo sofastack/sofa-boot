@@ -3,3 +3,7 @@ com.alipay.sofa.rpc.boot.runtime.converter.RestBindingConverter
 com.alipay.sofa.rpc.boot.runtime.converter.DubboBindingConverter
 com.alipay.sofa.rpc.boot.runtime.converter.H2cBindingConverter
 com.alipay.sofa.rpc.boot.runtime.converter.HttpBindingConverter
+com.alipay.sofa.rpc.boot.runtime.converter.TripleBindingConverter
+com.alipay.sofa.rpc.boot.test.converter.TestBindingConverter
+com.alipay.sofa.rpc.boot.test.converter.TestBindingConverter2
+com.alipay.sofa.rpc.boot.test.converter.TestBindingConverter3

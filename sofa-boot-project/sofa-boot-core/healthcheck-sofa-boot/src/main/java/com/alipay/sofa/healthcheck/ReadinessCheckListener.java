@@ -21,6 +21,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthAggregator;
@@ -43,8 +44,7 @@ import com.alipay.sofa.healthcheck.log.HealthCheckLoggerFactory;
  * @author qilong.zql
  */
 public class ReadinessCheckListener implements ApplicationContextAware, PriorityOrdered,
-                                   ApplicationListener<ContextRefreshedEvent> {
-
+                                   ApplicationListener<ContextRefreshedEvent>, InitializingBean {
     private static Logger                        logger                 = HealthCheckLoggerFactory
                                                                             .getLogger(ReadinessCheckListener.class);
 
@@ -74,10 +74,18 @@ public class ReadinessCheckListener implements ApplicationContextAware, Priority
 
     private boolean                              healthCallbackStatus   = true;
     private boolean                              readinessCheckFinish   = false;
+    private boolean                              healthCheckerInsulator = false;
 
     @Override
-    public void setApplicationContext(ApplicationContext cxt) throws BeansException {
-        applicationContext = cxt;
+    public void afterPropertiesSet() throws Exception {
+        HealthCheckProperties healthCheckProperties = applicationContext
+            .getBean(HealthCheckProperties.class);
+        healthCheckerInsulator = healthCheckProperties.isHealthCheckInsulator();
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext ctx) throws BeansException {
+        applicationContext = ctx;
     }
 
     private Map<String, Health> healthCallbackDetails = new HashMap<>();
@@ -118,12 +126,19 @@ public class ReadinessCheckListener implements ApplicationContextAware, Priority
                     .readinessHealthCheck(healthIndicatorDetails);
             }
         }
-        healthCallbackStatus = afterReadinessCheckCallbackProcessor
-            .afterReadinessCheckCallback(healthCallbackDetails);
+
+        if (healthCheckerStatus && healthIndicatorStatus) {
+            healthCallbackStatus = afterReadinessCheckCallbackProcessor
+                .afterReadinessCheckCallback(healthCallbackDetails);
+        }
         if (healthCheckerStatus && healthIndicatorStatus && healthCallbackStatus) {
             logger.info("Readiness check result: success");
         } else {
             logger.error("Readiness check result: fail");
+            if (healthCheckerInsulator) {
+                throw new HealthCheckException(
+                    "Application health check is failed and health check insulator switch is turned on!");
+            }
         }
     }
 

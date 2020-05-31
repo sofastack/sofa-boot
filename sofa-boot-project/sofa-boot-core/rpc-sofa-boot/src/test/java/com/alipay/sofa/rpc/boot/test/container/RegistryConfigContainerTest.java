@@ -16,9 +16,13 @@
  */
 package com.alipay.sofa.rpc.boot.test.container;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import com.alipay.sofa.rpc.boot.common.SofaBootRpcRuntimeException;
+import com.alipay.sofa.rpc.boot.config.LocalFileConfigurator;
+import com.alipay.sofa.rpc.boot.config.RegistryConfigureProcessor;
+import com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties;
+import com.alipay.sofa.rpc.boot.config.ZookeeperConfigurator;
+import com.alipay.sofa.rpc.boot.container.RegistryConfigContainer;
+import com.alipay.sofa.rpc.config.RegistryConfig;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -28,13 +32,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.alipay.sofa.rpc.boot.common.SofaBootRpcRuntimeException;
-import com.alipay.sofa.rpc.boot.config.LocalFileConfigurator;
-import com.alipay.sofa.rpc.boot.config.RegistryConfigureProcessor;
-import com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties;
-import com.alipay.sofa.rpc.boot.config.ZookeeperConfigurator;
-import com.alipay.sofa.rpc.boot.container.RegistryConfigContainer;
-import com.alipay.sofa.rpc.config.RegistryConfig;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:lw111072@antfin.com">LiWei</a>
@@ -73,7 +72,7 @@ public class RegistryConfigContainerTest {
     @Test
     public void testWrongRegistryConfig() {
         thrown.expect(SofaBootRpcRuntimeException.class);
-        thrown.expectMessage("registry config [no] is not supported");
+        thrown.expectMessage("RPC-010060028: Registry config [no] is not supported ");
         sofaBootRpcProperties.setRegistryAddress("no");
         //Test case will init by other xmls.
         registryConfigContainer.getRegistryConfigs().clear();

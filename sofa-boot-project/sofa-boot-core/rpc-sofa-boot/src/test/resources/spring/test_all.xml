@@ -162,6 +162,17 @@
         </sofa:binding.dubbo>
     </sofa:reference>
 
+
+    <!-- invoke sync-->
+    <bean id="sofaGreeterTripleImpl" class="com.alipay.sofa.rpc.boot.test.bean.triple.TripleGreeterImpl"/>
+    <sofa:service ref="sofaGreeterTripleImpl" interface="io.grpc.examples.helloworld.SofaGreeterTriple$IGreeter">
+        <sofa:binding.tri/>
+    </sofa:service>
+    <sofa:reference jvm-first="false" id="SofaGreeterTripleRef"
+                    interface="io.grpc.examples.helloworld.SofaGreeterTriple$IGreeter">
+        <sofa:binding.tri/>
+    </sofa:reference>
+
     <!-- Annotation TestCase -->
     <context:component-scan base-package="com.alipay.sofa.rpc.boot.test.bean.annotation"/>
 </beans>

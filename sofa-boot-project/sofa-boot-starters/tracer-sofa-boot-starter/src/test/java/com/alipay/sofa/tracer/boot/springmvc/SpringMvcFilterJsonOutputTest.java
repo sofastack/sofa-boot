@@ -25,6 +25,7 @@ import java.util.Map;
 import com.alipay.sofa.tracer.boot.base.SpringBootWebApplication;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -61,6 +62,7 @@ public class SpringMvcFilterJsonOutputTest extends AbstractTestBase {
     }
 
     @Test
+    @Ignore
     public void testSofaRestGet() throws Exception {
         String restUrl = urlHttpPrefix + "/greeting";
         int countTimes = 5;

@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.boot.actuator.autoconfigure.health;
 
+import com.alipay.sofa.healthcheck.HealthCheckProperties;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnEnabledEndpoint;
 import org.springframework.boot.actuate.autoconfigure.health.HealthEndpointAutoConfiguration;
 import org.springframework.boot.actuate.autoconfigure.health.HealthIndicatorProperties;
@@ -25,6 +26,7 @@ import org.springframework.boot.actuate.health.Status;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -50,6 +52,7 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
  * @since 2.5.0
  */
 @Configuration
+@EnableConfigurationProperties(HealthCheckProperties.class)
 @ConditionalOnClass(HealthChecker.class)
 public class SofaBootHealthCheckAutoConfiguration {
 

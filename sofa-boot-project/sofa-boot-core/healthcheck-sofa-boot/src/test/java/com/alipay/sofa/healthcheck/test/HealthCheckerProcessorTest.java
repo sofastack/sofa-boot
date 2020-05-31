@@ -22,6 +22,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.alipay.sofa.healthcheck.HealthCheckProperties;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,6 +30,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.Status;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -54,6 +56,7 @@ public class HealthCheckerProcessorTest {
     private ApplicationContext applicationContext;
 
     @Configuration
+    @EnableConfigurationProperties(HealthCheckProperties.class)
     static class HealthCheckerProcessorTestConfiguration {
         @Bean
         public DiskHealthChecker diskHealthChecker() {

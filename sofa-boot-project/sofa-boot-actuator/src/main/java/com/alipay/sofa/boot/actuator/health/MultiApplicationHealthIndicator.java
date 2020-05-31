@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.boot.actuator.health;
 
+import com.alipay.sofa.ark.spi.model.Biz;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 
@@ -35,16 +36,17 @@ public class MultiApplicationHealthIndicator implements HealthIndicator, NonRead
         boolean allPassed = true;
         Health.Builder builder = new Health.Builder();
         for (SofaRuntimeManager sofaRuntimeManager : SofaFramework.getRuntimeSet()) {
+            Biz biz = DynamicJvmServiceProxyFinder.getBiz(sofaRuntimeManager);
+            if (biz == null) {
+                continue;
+            }
+
             if (!sofaRuntimeManager.isLivenessHealth()) {
                 allPassed = false;
-                builder.withDetail(
-                    String.format("Biz: %s health check",
-                        DynamicJvmServiceProxyFinder.getBiz(sofaRuntimeManager).getIdentity()),
+                builder.withDetail(String.format("Biz: %s health check", biz.getIdentity()),
                     "failed");
             } else {
-                builder.withDetail(
-                    String.format("Biz: %s health check",
-                        DynamicJvmServiceProxyFinder.getBiz(sofaRuntimeManager).getIdentity()),
+                builder.withDetail(String.format("Biz: %s health check", biz.getIdentity()),
                     "passed");
             }
         }
