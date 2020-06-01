@@ -27,7 +27,6 @@ import com.alipay.sofa.rpc.common.MockMode;
 import com.alipay.sofa.rpc.config.ConsumerConfig;
 import com.alipay.sofa.rpc.config.ProviderConfig;
 import com.alipay.sofa.rpc.config.RegistryConfig;
-import com.alipay.sofa.rpc.config.ServerConfig;
 import com.alipay.sofa.rpc.log.LogCodes;
 import com.alipay.sofa.rpc.registry.Registry;
 import com.alipay.sofa.rpc.registry.RegistryFactory;
@@ -137,11 +136,11 @@ public abstract class RpcBindingAdapter implements BindingAdapter<RpcBinding> {
 
         ApplicationContext applicationContext = sofaRuntimeContext.getSofaRuntimeManager()
             .getRootApplicationContext();
-        ProviderConfigHelper providerConfigHelper = applicationContext
-            .getBean(ProviderConfigHelper.class);
 
-        ProviderConfig providerConfig = providerConfigHelper.getProviderConfig((Contract) contract,
-            binding, target);
+        ProviderConfigContainer providerConfigContainer = applicationContext
+            .getBean(ProviderConfigContainer.class);
+        String key = providerConfigContainer.createUniqueName((Contract) contract, binding);
+        ProviderConfig providerConfig = providerConfigContainer.getProviderConfig(key);
         try {
             providerConfig.unExport();
         } catch (Exception e) {
@@ -164,19 +163,10 @@ public abstract class RpcBindingAdapter implements BindingAdapter<RpcBinding> {
 
         ApplicationContext applicationContext = sofaRuntimeContext.getSofaRuntimeManager()
             .getRootApplicationContext();
-        ProviderConfigHelper providerConfigHelper = applicationContext
-            .getBean(ProviderConfigHelper.class);
         ProviderConfigContainer providerConfigContainer = applicationContext
             .getBean(ProviderConfigContainer.class);
-
-        ProviderConfig metadata = providerConfigHelper.getProviderConfig((Contract) contract,
-            binding, target);
+        String key = providerConfigContainer.createUniqueName((Contract) contract, binding);
         try {
-            String key = providerConfigContainer.createUniqueName((Contract) contract, binding);
-            List<ServerConfig> servers = providerConfigContainer.getProviderConfig(key).getServer();
-            for (ServerConfig server : servers) {
-                server.getServer().unRegisterProcessor(metadata, false);
-            }
             providerConfigContainer.removeProviderConfig(key);
         } catch (Exception e) {
             throw new ServiceRuntimeException(
