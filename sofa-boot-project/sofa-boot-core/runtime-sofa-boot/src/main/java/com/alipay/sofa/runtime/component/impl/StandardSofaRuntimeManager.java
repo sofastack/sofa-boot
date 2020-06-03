@@ -26,6 +26,7 @@ import com.alipay.sofa.runtime.spi.component.ComponentManager;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import com.alipay.sofa.runtime.spi.spring.RuntimeShutdownAware;
+import com.alipay.sofa.runtime.spring.aware.DefaultRuntimeShutdownAware;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -106,14 +107,26 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager, Applicati
      *
      * @throws ServiceRuntimeException exception occur
      */
+    @Override
     public void shutdown() throws ServiceRuntimeException {
         try {
+
             for (RuntimeShutdownAware shutdownAware : runtimeShutdownAwares) {
-                shutdownAware.shutdown();
+                if (!(shutdownAware instanceof DefaultRuntimeShutdownAware)) {
+                    shutdownAware.shutdown();
+                }
             }
+
             if (componentManager != null) {
                 componentManager.shutdown();
             }
+
+            for (RuntimeShutdownAware shutdownAware : runtimeShutdownAwares) {
+                if (shutdownAware instanceof DefaultRuntimeShutdownAware) {
+                    shutdownAware.shutdown();
+                }
+            }
+
             clear();
         } catch (Throwable throwable) {
             throw new ServiceRuntimeException(throwable);
