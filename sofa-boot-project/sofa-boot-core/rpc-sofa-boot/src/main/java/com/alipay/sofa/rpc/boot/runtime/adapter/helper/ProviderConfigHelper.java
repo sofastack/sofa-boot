@@ -132,7 +132,10 @@ public class ProviderConfigHelper {
         providerConfig.setServer(serverConfig);
 
         String protocol = binding.getBindingType().getType();
-        providerConfig.setBootstrap(protocol);
+        // http protocol use default protocol
+        if (!SofaBootRpcConfigConstants.RPC_PROTOCOL_HTTP.equals(protocol)) {
+            providerConfig.setBootstrap(protocol);
+        }
 
         if (StringUtils.hasText(serialization)) {
             providerConfig.setSerialization(serialization);

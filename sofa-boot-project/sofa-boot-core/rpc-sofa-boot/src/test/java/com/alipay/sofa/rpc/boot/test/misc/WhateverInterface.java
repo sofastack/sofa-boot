@@ -14,21 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.rpc.boot;
-
-import org.springframework.context.ApplicationContextInitializer;
-import org.springframework.context.ConfigurableApplicationContext;
-
-import com.alipay.sofa.rpc.boot.container.SpringBridge;
+package com.alipay.sofa.rpc.boot.test.misc;
 
 /**
- * @author qilong.zql
- * @since 3.2.0
+ * @author <a href="mailto:guaner.zzx@alipay.com">guaner.zzx</a>
+ * Created on 2019/12/18
  */
-public class SofaRpcInitializer implements
-                               ApplicationContextInitializer<ConfigurableApplicationContext> {
-    @Override
-    public void initialize(ConfigurableApplicationContext applicationContext) {
-        SpringBridge.setApplicationContext(applicationContext);
-    }
+public interface WhateverInterface {
+    String say();
 }

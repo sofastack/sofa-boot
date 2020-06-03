@@ -90,8 +90,8 @@ public class ComponentManagerImpl implements ComponentManager {
         for (ComponentInfo ri : elems) {
             try {
                 unregister(ri);
-            } catch (Throwable e) {
-                SofaLogger.error(e, "failed to shutdown component manager");
+            } catch (Throwable t) {
+                SofaLogger.error("failed to shutdown component manager", t);
             }
         }
 
@@ -101,8 +101,8 @@ public class ComponentManagerImpl implements ComponentManager {
             resolvedRegistry.clear();
             resolvedRegistry = null;
             clientFactoryInternal = null;
-        } catch (Throwable e) {
-            SofaLogger.error(e, "Failed to shutdown registry manager");
+        } catch (Throwable t) {
+            SofaLogger.error("Failed to shutdown registry manager", t);
         }
     }
 
@@ -128,7 +128,7 @@ public class ComponentManagerImpl implements ComponentManager {
     private ComponentInfo doRegister(ComponentInfo ci) {
         ComponentName name = ci.getName();
         if (isRegistered(name)) {
-            SofaLogger.error("Component was already registered: {0}", name);
+            SofaLogger.error("Component was already registered: {}", name);
             if (ci.canBeDuplicate()) {
                 return getComponentInfo(name);
             }
@@ -137,17 +137,17 @@ public class ComponentManagerImpl implements ComponentManager {
 
         try {
             ci.register();
-        } catch (Throwable e) {
-            SofaLogger.error(e, "Failed to register component: {0}", ci.getName());
+        } catch (Throwable t) {
+            SofaLogger.error("Failed to register component: {}", ci.getName(), t);
             return null;
         }
 
-        SofaLogger.info("Registering component: {0}", ci.getName());
+        SofaLogger.info("Registering component: {}", ci.getName());
 
         try {
             ComponentInfo old = registry.putIfAbsent(ci.getName(), ci);
             if (old != null) {
-                SofaLogger.error("Component was already registered: {0}", name);
+                SofaLogger.error("Component was already registered: {}", name);
                 if (ci.canBeDuplicate()) {
                     return old;
                 }
@@ -159,9 +159,9 @@ public class ComponentManagerImpl implements ComponentManager {
                 typeRegistry(ci);
                 ci.activate();
             }
-        } catch (Throwable e) {
-            ci.exception(new Exception(e));
-            SofaLogger.error(e, "Failed to create the component {0}", ci.getName());
+        } catch (Throwable t) {
+            ci.exception(new Exception(t));
+            SofaLogger.error("Failed to create the component {}", ci.getName(), t);
         }
 
         return ci;
@@ -205,9 +205,9 @@ public class ComponentManagerImpl implements ComponentManager {
             typeRegistry(componentInfo);
             try {
                 componentInfo.activate();
-            } catch (Throwable e) {
-                componentInfo.exception(new Exception(e));
-                SofaLogger.error(e, "Failed to create the component " + componentInfo.getName());
+            } catch (Throwable t) {
+                componentInfo.exception(new Exception(t));
+                SofaLogger.error("Failed to create the component {}.", componentInfo.getName(), t);
             }
         }
     }

@@ -42,7 +42,7 @@ import com.alipay.sofa.boot.listener.SofaBootstrapRunListener;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = SpringBootWebApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @TestPropertySource(locations = "classpath:application.properties")
-public abstract class AbstractTestCloudBase {
+public class AbstractTestCloudBase {
     protected static String logDirectoryPath = TracerLogRootDaemon.LOG_FILE_DIR;
 
     @BeforeClass
@@ -55,7 +55,7 @@ public abstract class AbstractTestCloudBase {
     /**
      * clear directory
      *
-     * @throws IOException
+     * @throws java.io.IOException
      */
     public static void cleanLogDirectory() throws IOException {
         File file = new File(logDirectoryPath);

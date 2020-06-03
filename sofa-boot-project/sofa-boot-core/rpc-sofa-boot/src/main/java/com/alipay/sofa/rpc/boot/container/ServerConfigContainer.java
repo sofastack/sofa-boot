@@ -16,14 +16,6 @@
  */
 package com.alipay.sofa.rpc.boot.container;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ThreadPoolExecutor;
-
-import org.slf4j.Logger;
-import org.springframework.util.StringUtils;
-
 import com.alipay.sofa.rpc.boot.common.NetworkAddressUtil;
 import com.alipay.sofa.rpc.boot.common.RpcThreadPoolMonitor;
 import com.alipay.sofa.rpc.boot.common.SofaBootRpcRuntimeException;
@@ -32,8 +24,16 @@ import com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties;
 import com.alipay.sofa.rpc.boot.log.SofaBootRpcLoggerFactory;
 import com.alipay.sofa.rpc.common.RpcConstants;
 import com.alipay.sofa.rpc.config.ServerConfig;
+import com.alipay.sofa.rpc.log.LogCodes;
 import com.alipay.sofa.rpc.server.Server;
 import com.alipay.sofa.rpc.server.bolt.BoltServer;
+import org.slf4j.Logger;
+import org.springframework.util.StringUtils;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * ServiceConfig 工厂
@@ -70,6 +70,18 @@ public class ServerConfigContainer {
     private volatile ServerConfig     h2cServerConfig;
     private final Object              H2C_LOCK            = new Object();
 
+    /**
+     * http ServerConfig
+     */
+    private volatile ServerConfig     httpServerConfig;
+    private final Object              HTTP_LOCK           = new Object();
+
+    /**
+     * http ServerConfig
+     */
+    private volatile ServerConfig     tripleServerConfig;
+    private final Object              TRIPLE_LOCK         = new Object();
+
     //custom server configs
     private Map<String, ServerConfig> customServerConfigs = new ConcurrentHashMap<String, ServerConfig>();
 
@@ -105,6 +117,18 @@ public class ServerConfigContainer {
 
         if (h2cServerConfig != null) {
             h2cServerConfig.buildIfAbsent().start();
+        }
+
+        if (httpServerConfig != null) {
+            httpServerConfig.buildIfAbsent().start();
+
+            // 加入线程监测？
+        }
+
+        if (tripleServerConfig != null) {
+            tripleServerConfig.buildIfAbsent().start();
+
+            // 加入线程监测？
         }
 
         for (Map.Entry<String, ServerConfig> entry : customServerConfigs.entrySet()) {
@@ -166,10 +190,31 @@ public class ServerConfigContainer {
             }
 
             return h2cServerConfig;
+        } else if (protocol.equalsIgnoreCase(SofaBootRpcConfigConstants.RPC_PROTOCOL_HTTP)) {
+
+            if (httpServerConfig == null) {
+                synchronized (HTTP_LOCK) {
+                    if (httpServerConfig == null) {
+                        httpServerConfig = createHttpServerConfig();
+                    }
+                }
+            }
+
+            return httpServerConfig;
+        } else if (protocol.equalsIgnoreCase(SofaBootRpcConfigConstants.RPC_PROTOCOL_TRIPLE)) {
+            if (tripleServerConfig == null) {
+                synchronized (TRIPLE_LOCK) {
+                    if (tripleServerConfig == null) {
+                        tripleServerConfig = createTripleServerConfig();
+                    }
+                }
+            }
+            return tripleServerConfig;
         } else if (customServerConfigs.get(protocol) != null) {
             return customServerConfigs.get(protocol);
         } else {
-            throw new SofaBootRpcRuntimeException("protocol [" + protocol + "] is not supported");
+            throw new SofaBootRpcRuntimeException(LogCodes.getLog(
+                LogCodes.ERROR_SERVER_PROTOCOL_NOT_SUPPORT, protocol));
         }
 
     }
@@ -240,7 +285,10 @@ public class ServerConfigContainer {
         }
 
         serverConfig.setAutoStart(false);
-        return serverConfig.setProtocol(SofaBootRpcConfigConstants.RPC_PROTOCOL_H2C);
+        addCommonServerConfig(serverConfig);
+        serverConfig.setProtocol(SofaBootRpcConfigConstants.RPC_PROTOCOL_H2C);
+
+        return serverConfig;
     }
 
     /**
@@ -281,7 +329,6 @@ public class ServerConfigContainer {
 
         serverConfig.setAutoStart(false);
         serverConfig.setProtocol(SofaBootRpcConfigConstants.RPC_PROTOCOL_BOLT);
-
         addCommonServerConfig(serverConfig);
 
         return serverConfig;
@@ -414,6 +461,95 @@ public class ServerConfigContainer {
     }
 
     /**
+     * 创建 http ServerConfig。rest 的 配置不需要外层 starter 设置默认值。
+     *
+     * @return H2c 的服务端配置信息
+     */
+    ServerConfig createHttpServerConfig() {
+        String portStr = sofaBootRpcProperties.getHttpPort();
+        String httpThreadPoolCoreSizeStr = sofaBootRpcProperties.getHttpThreadPoolCoreSize();
+        String httpThreadPoolMaxSizeStr = sofaBootRpcProperties.getHttpThreadPoolMaxSize();
+        String acceptsSizeStr = sofaBootRpcProperties.getHttpAcceptsSize();
+        String httpThreadPoolQueueSizeStr = sofaBootRpcProperties.getHttpThreadPoolQueueSize();
+
+        ServerConfig serverConfig = new ServerConfig();
+
+        if (StringUtils.hasText(portStr)) {
+            serverConfig.setPort(Integer.parseInt(portStr));
+        } else {
+            serverConfig.setPort(SofaBootRpcConfigConstants.HTTP_PORT_DEFAULT);
+        }
+
+        if (StringUtils.hasText(httpThreadPoolCoreSizeStr)) {
+            serverConfig.setMaxThreads(Integer.parseInt(httpThreadPoolCoreSizeStr));
+        }
+
+        if (StringUtils.hasText(httpThreadPoolMaxSizeStr)) {
+            serverConfig.setCoreThreads(Integer.parseInt(httpThreadPoolMaxSizeStr));
+        }
+
+        if (StringUtils.hasText(acceptsSizeStr)) {
+            serverConfig.setAccepts(Integer.parseInt(acceptsSizeStr));
+        }
+
+        if (StringUtils.hasText(httpThreadPoolQueueSizeStr)) {
+            serverConfig.setQueues(Integer.parseInt(httpThreadPoolQueueSizeStr));
+        }
+
+        serverConfig.setAutoStart(false);
+
+        addCommonServerConfig(serverConfig);
+
+        serverConfig.setProtocol(SofaBootRpcConfigConstants.RPC_PROTOCOL_HTTP);
+
+        return serverConfig;
+    }
+
+    /**
+     * grpc server
+     *
+     * @return server
+     */
+    private ServerConfig createTripleServerConfig() {
+        String portStr = sofaBootRpcProperties.getTriplePort();
+        String threadPoolCoreSizeStr = sofaBootRpcProperties.getTripleThreadPoolCoreSize();
+        String threadPoolMaxSizeStr = sofaBootRpcProperties.getTripleThreadPoolMaxSize();
+        String acceptsSizeStr = sofaBootRpcProperties.getTripleAcceptsSize();
+        String threadPoolQueueSizeStr = sofaBootRpcProperties.getTripleThreadPoolQueueSize();
+
+        ServerConfig serverConfig = new ServerConfig();
+
+        if (StringUtils.hasText(portStr)) {
+            serverConfig.setPort(Integer.parseInt(portStr));
+        } else {
+            serverConfig.setPort(SofaBootRpcConfigConstants.GRPC_PORT_DEFAULT);
+        }
+
+        if (StringUtils.hasText(threadPoolMaxSizeStr)) {
+            serverConfig.setMaxThreads(Integer.parseInt(threadPoolMaxSizeStr));
+        }
+
+        if (StringUtils.hasText(threadPoolCoreSizeStr)) {
+            serverConfig.setCoreThreads(Integer.parseInt(threadPoolCoreSizeStr));
+        }
+
+        if (StringUtils.hasText(acceptsSizeStr)) {
+            serverConfig.setAccepts(Integer.parseInt(acceptsSizeStr));
+        }
+
+        if (StringUtils.hasText(threadPoolQueueSizeStr)) {
+            serverConfig.setQueues(Integer.parseInt(threadPoolQueueSizeStr));
+        }
+
+        serverConfig.setAutoStart(false);
+        serverConfig.setProtocol(SofaBootRpcConfigConstants.RPC_PROTOCOL_TRIPLE);
+        addCommonServerConfig(serverConfig);
+
+        return serverConfig;
+
+    }
+
+    /**
      * 释放所有 ServerConfig 对应的资源，并移除所有的 ServerConfig。
      */
     public void closeAllServer() {
@@ -421,7 +557,7 @@ public class ServerConfigContainer {
         destroyServerConfig(restServerConfig);
         destroyServerConfig(dubboServerConfig);
         destroyServerConfig(h2cServerConfig);
-
+        destroyServerConfig(tripleServerConfig);
         for (Map.Entry<String, ServerConfig> entry : customServerConfigs.entrySet()) {
             final ServerConfig serverConfig = entry.getValue();
             destroyServerConfig(serverConfig);
@@ -431,6 +567,7 @@ public class ServerConfigContainer {
         restServerConfig = null;
         dubboServerConfig = null;
         h2cServerConfig = null;
+        tripleServerConfig = null;
         customServerConfigs.clear();
     }
 

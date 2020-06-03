@@ -18,6 +18,10 @@ package com.alipay.sofa.runtime.test;
 
 import java.util.Properties;
 
+import com.alipay.sofa.ark.spi.event.biz.AfterBizStartupEvent;
+import com.alipay.sofa.ark.spi.event.biz.BeforeBizStopEvent;
+import com.alipay.sofa.runtime.SofaBizHealthCheckEventHandler;
+import com.alipay.sofa.runtime.SofaBizUninstallEventHandler;
 import org.aopalliance.intercept.MethodInvocation;
 import org.junit.Assert;
 import org.junit.Before;
@@ -29,11 +33,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import com.alipay.sofa.ark.spi.constant.Constants;
-import com.alipay.sofa.ark.spi.event.BizEvent;
 import com.alipay.sofa.ark.spi.model.Biz;
 import com.alipay.sofa.ark.spi.model.BizState;
-import com.alipay.sofa.runtime.SofaEventHandler;
 import com.alipay.sofa.runtime.SofaFramework;
 import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import com.alipay.sofa.runtime.api.annotation.SofaService;
@@ -95,9 +96,8 @@ public class SofaEventHandlerTest {
         Assert.assertFalse(SofaFramework.getRuntimeSet().isEmpty());
         Assert.assertTrue(ctx.isActive());
 
-        SofaEventHandler sofaEventHandler = new SofaEventHandler();
-        sofaEventHandler.handleEvent(new BizEvent(biz,
-            Constants.BIZ_EVENT_TOPIC_AFTER_INVOKE_BIZ_STOP));
+        SofaBizUninstallEventHandler sofaEventHandler = new SofaBizUninstallEventHandler();
+        sofaEventHandler.handleEvent(new BeforeBizStopEvent(biz));
 
         Assert.assertFalse(SofaRuntimeProperties.isDisableJvmFirst(ctx.getClassLoader()));
         Assert
@@ -115,9 +115,8 @@ public class SofaEventHandlerTest {
                 result = this.getClass().getClassLoader();
             }
         };
-        SofaEventHandler sofaEventHandler = new SofaEventHandler();
-        sofaEventHandler.handleEvent(new BizEvent(biz,
-            Constants.BIZ_EVENT_TOPIC_AFTER_INVOKE_BIZ_START));
+        SofaBizHealthCheckEventHandler sofaEventHandler = new SofaBizHealthCheckEventHandler();
+        sofaEventHandler.handleEvent(new AfterBizStartupEvent(biz));
     }
 
     @Test
@@ -161,6 +160,7 @@ public class SofaEventHandlerTest {
                 result = SampleService.class.getMethod("service");
             }
         };
+        DynamicJvmServiceProxyFinder.getDynamicJvmServiceProxyFinder().setHasFinishStartup(true);
         ServiceProxy serviceProxy = DynamicJvmServiceProxyFinder.getDynamicJvmServiceProxyFinder()
             .findServiceProxy(ctx.getClassLoader(), contract);
         try {

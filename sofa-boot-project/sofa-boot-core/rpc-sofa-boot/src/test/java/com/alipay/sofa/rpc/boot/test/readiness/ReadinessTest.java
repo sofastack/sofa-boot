@@ -54,7 +54,7 @@ public class ReadinessTest extends ActivelyDestroyTest {
     @Test
     public void testCannotFoundAddress() throws InterruptedException {
         thrown.expect(SofaRouteException.class);
-        thrown.expectMessage("RPC-02306");
+        thrown.expectMessage("RPC-020060001");
         TimeUnit.SECONDS.sleep(1);
         Assert.assertEquals("hi World!", sampleFacade.sayHi("World"));
     }

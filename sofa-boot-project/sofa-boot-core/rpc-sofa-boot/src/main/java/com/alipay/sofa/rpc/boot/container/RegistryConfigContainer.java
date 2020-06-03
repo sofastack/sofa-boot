@@ -16,17 +16,6 @@
  */
 package com.alipay.sofa.rpc.boot.container;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import javax.annotation.Resource;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
-
 import com.alipay.sofa.rpc.boot.common.SofaBootRpcRuntimeException;
 import com.alipay.sofa.rpc.boot.config.RegistryConfigureProcessor;
 import com.alipay.sofa.rpc.boot.config.SofaBootRpcConfigConstants;
@@ -34,6 +23,16 @@ import com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties;
 import com.alipay.sofa.rpc.common.SofaOptions;
 import com.alipay.sofa.rpc.common.utils.StringUtils;
 import com.alipay.sofa.rpc.config.RegistryConfig;
+import com.alipay.sofa.rpc.log.LogCodes;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+
+import javax.annotation.Resource;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * RegistryConfig 工厂
@@ -138,8 +137,8 @@ public class RegistryConfigContainer {
             }
             return registryConfig;
         } else {
-            throw new SofaBootRpcRuntimeException("registry config [" + registryAddress
-                                                  + "] is not supported");
+            throw new SofaBootRpcRuntimeException(LogCodes.getLog(
+                LogCodes.ERROR_REGISTRY_NOT_SUPPORT, registryAddress));
         }
     }
 

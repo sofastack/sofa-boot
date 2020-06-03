@@ -131,7 +131,7 @@ public class DynamicSpringContextLoader implements SpringContextLoader {
                     parentSpringContext = (ConfigurableApplicationContext) parent
                         .getApplicationContext();
                     if (parentSpringContext == null) {
-                        SofaLogger.warn("Module [{0}]'s Spring-Parent [{1}] is Null!",
+                        SofaLogger.warn("Module [{}]'s Spring-Parent [{}] is Null!",
                             deployment.getModuleName(), springParent);
                     }
                 }

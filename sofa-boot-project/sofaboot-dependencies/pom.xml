@@ -7,13 +7,13 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.0.RELEASE</version>
+        <version>2.1.13.RELEASE</version>
     </parent>
 
     <groupId>com.alipay.sofa</groupId>
     <artifactId>sofaboot-dependencies</artifactId>
     <packaging>pom</packaging>
-    <version>3.2.1-SNAPSHOT</version>
+    <version>3.4.1-SNAPSHOT</version>
 
     <properties>
         <!--project-->
@@ -22,31 +22,38 @@
         <project.build.encoding>UTF-8</project.build.encoding>
         <project.build.encoding>UTF-8</project.build.encoding>
 
-        <sofa.boot.version>3.2.1-SNAPSHOT</sofa.boot.version>
+        <sofa.boot.version>3.4.1-SNAPSHOT</sofa.boot.version>
 
         <!--starter-->
-        <sofa.ark.version>1.1.0-SNAPSHOT</sofa.ark.version>
+        <sofa.ark.version>1.1.1</sofa.ark.version>
         <sofa.lookout.version>1.5.2</sofa.lookout.version>
 
         <!--core-->
-        <tracer.core.version>3.0.5</tracer.core.version>
-        <rpc.core.version>5.6.1</rpc.core.version>
+        <tracer.core.version>3.0.8</tracer.core.version>
+        <rpc.core.version>5.7.0</rpc.core.version>
 
         <!--2rd lib dependency-->
-        <sofa.common.tools.version>1.0.19</sofa.common.tools.version>
+        <sofa.common.tools.version>1.0.22</sofa.common.tools.version>
         <sofa.bolt.version>1.5.6</sofa.bolt.version>
-        <sofa.hessian.version>3.3.6</sofa.hessian.version>
+        <sofa.hessian.version>3.3.7</sofa.hessian.version>
 
         <!--3rd lib dependency-->
         <fastjson.version>1.2.61</fastjson.version>
         <grpc-all.version>1.0.3</grpc-all.version>
         <javassist.version>3.19.0-GA</javassist.version>
-        <protobuf-java.version>2.6.1</protobuf-java.version>
+        <protobuf-java.version>3.5.1</protobuf-java.version>
         <guice.version>3.0</guice.version>
-        <guava.version>18.0</guava.version>
+        <guava.version>28.2-jre</guava.version>
         <zipkin.version>2.11.3</zipkin.version>
         <zipkin.reporter.version>2.7.7</zipkin.reporter.version>
         <jackson.version>2.9.10</jackson.version>
+        <jboss.jaxrs.api.version>1.0.2.Final</jboss.jaxrs.api.version>
+
+        <resteasy.version>3.6.3.Final</resteasy.version>
+        <curator.version>4.0.1</curator.version>
+        <dubbo_version>2.6.7</dubbo_version>
+        <zkclient.version>0.11</zkclient.version>
+        <nacos.version>1.0.0</nacos.version>
 
         <!--maven plugin-->
         <maven.staging.plugin>1.6.7</maven.staging.plugin>
@@ -256,6 +263,13 @@
                 <artifactId>sofa-tracer-httpclient-plugin</artifactId>
                 <version>${tracer.core.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>sofa-tracer-okhttp-plugin</artifactId>
+                <version>${tracer.core.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>sofa-tracer-datasource-plugin</artifactId>
@@ -271,6 +285,25 @@
                 <artifactId>sofa-tracer-dubbo-plugin</artifactId>
                 <version>${tracer.core.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>sofa-tracer-dubbo-2.6.x-plugin</artifactId>
+                <version>${tracer.core.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>sofa-tracer-flexible-plugin</artifactId>
+                <version>${tracer.core.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>sofa-tracer-resttmplate-plugin</artifactId>
+                <version>${tracer.core.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>sofa-tracer-zipkin-plugin</artifactId>
@@ -304,6 +337,11 @@
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>sofa-ark-spi</artifactId>
+                <version>${sofa.ark.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>sofa-ark-archive</artifactId>
                 <version>${sofa.ark.version}</version>
             </dependency>
             <dependency>
@@ -398,6 +436,115 @@
                 <groupId>io.zipkin.reporter2</groupId>
                 <artifactId>zipkin-reporter</artifactId>
                 <version>${zipkin.reporter.version}</version>
+            </dependency>
+
+            <!--extension dependency -->
+            <dependency>
+                <groupId>org.apache.curator</groupId>
+                <artifactId>curator-client</artifactId>
+                <version>${curator.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.curator</groupId>
+                <artifactId>curator-framework</artifactId>
+                <version>${curator.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.curator</groupId>
+                <artifactId>curator-recipes</artifactId>
+                <version>${curator.version}</version>
+            </dependency>
+
+            <!-- resteasy -->
+            <dependency>
+                <groupId>org.jboss.resteasy</groupId>
+                <artifactId>resteasy-netty4</artifactId>
+                <version>${resteasy.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.resteasy</groupId>
+                <artifactId>resteasy-client</artifactId>
+                <version>${resteasy.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.resteasy</groupId>
+                <artifactId>resteasy-jackson2-provider</artifactId>
+                <version>${resteasy.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.resteasy</groupId>
+                <artifactId>resteasy-jaxb-provider</artifactId>
+                <version>${resteasy.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.resteasy</groupId>
+                <artifactId>resteasy-jaxrs</artifactId>
+                <version>${resteasy.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.resteasy</groupId>
+                <artifactId>resteasy-multipart-provider</artifactId>
+                <version>${resteasy.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.resteasy</groupId>
+                <artifactId>resteasy-validator-provider-11</artifactId>
+                <version>${resteasy.version}</version>
+            </dependency>
+
+            <!-- jboss jaxrs api -->
+            <dependency>
+                <groupId>org.jboss.spec.javax.ws.rs</groupId>
+                <artifactId>jboss-jaxrs-api_2.1_spec</artifactId>
+                <version>${jboss.jaxrs.api.version}</version>
+            </dependency>
+
+            <!--dubbo-->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>dubbo</artifactId>
+                <version>${dubbo_version}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>javassist</artifactId>
+                        <groupId>org.javassist</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>spring</artifactId>
+                        <groupId>org.springframework</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>com.101tec</groupId>
+                <artifactId>zkclient</artifactId>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-log4j12</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.zookeeper</groupId>
+                        <artifactId>zookeeper</artifactId>
+                    </exclusion>
+                </exclusions>
+                <version>${zkclient.version}</version>
+            </dependency>
+
+            <!--nacos-->
+            <dependency>
+                <groupId>com.alibaba.nacos</groupId>
+                <artifactId>nacos-api</artifactId>
+                <version>${nacos.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba.nacos</groupId>
+                <artifactId>nacos-client</artifactId>
+                <version>${nacos.version}</version>
             </dependency>
             <!-- 3rd lib dependency end -->
         </dependencies>
@@ -507,6 +654,13 @@
             <repositories>
                 <repository>
                     <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                    <id>release</id>
+                    <url>https://oss.sonatype.org/content/repositories/releases</url>
+                </repository>
+                <repository>
+                    <snapshots>
                         <enabled>true</enabled>
                     </snapshots>
                     <id>snapshot</id>
@@ -514,6 +668,13 @@
                 </repository>
             </repositories>
             <pluginRepositories>
+                <pluginRepository>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                    <id>releases</id>
+                    <url>https://oss.sonatype.org/content/repositories/releases</url>
+                </pluginRepository>
                 <pluginRepository>
                     <snapshots>
                         <enabled>true</enabled>

@@ -26,7 +26,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
+import com.alipay.sofa.boot.util.BeanDefinitionUtil;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
@@ -34,7 +34,6 @@ import org.springframework.beans.factory.annotation.AnnotatedGenericBeanDefiniti
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
@@ -47,14 +46,11 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
-import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.core.type.MethodMetadata;
 import org.springframework.core.type.StandardMethodMetadata;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
-
 import com.alipay.sofa.boot.annotation.PlaceHolderAnnotationInvocationHandler.AnnotationWrapperBuilder;
 import com.alipay.sofa.boot.annotation.PlaceHolderBinder;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
@@ -108,17 +104,16 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
      * {@link GenericBeanDefinition}
      * {@link org.springframework.beans.factory.support.ChildBeanDefinition}
      * {@link org.springframework.beans.factory.support.RootBeanDefinition}
-     * {@link org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.ConfigurationClassBeanDefinition}
      */
     private void transformSofaBeanDefinition(String beanId, BeanDefinition beanDefinition,
                                              ConfigurableListableBeanFactory beanFactory) {
-        if (isFromConfigurationSource(beanDefinition)) {
+        if (BeanDefinitionUtil.isFromConfigurationSource(beanDefinition)) {
             generateSofaServiceDefinitionOnMethod(beanId, (AnnotatedBeanDefinition) beanDefinition,
                 beanFactory);
         } else {
-            Class<?> beanClassType = resolveBeanClassType(beanDefinition);
+            Class<?> beanClassType = BeanDefinitionUtil.resolveBeanClassType(beanDefinition);
             if (beanClassType == null) {
-                SofaLogger.warn("Bean class type cant be resolved from bean of {0}", beanId);
+                SofaLogger.warn("Bean class type cant be resolved from bean of {}", beanId);
                 return;
             }
             generateSofaServiceDefinitionOnClass(beanId, beanClassType, beanDefinition, beanFactory);
@@ -138,8 +133,7 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
             declaringClass = ClassUtils.forName(methodMetadata.getDeclaringClassName(), null);
         } catch (Throwable throwable) {
             // it's impossible to catch throwable here
-            SofaLogger.error(throwable,
-                "Failed to parse factoryBeanMethod of BeanDefinition( {0} )", beanId);
+            SofaLogger.error("Failed to parse factoryBeanMethod of BeanDefinition( {} )", beanId, throwable);
             return;
         }
         if (methodMetadata instanceof StandardMethodMetadata) {
@@ -316,7 +310,7 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
             ((BeanDefinitionRegistry) beanFactory).registerBeanDefinition(serviceId,
                 builder.getBeanDefinition());
         } else {
-            SofaLogger.error("SofaService was already registered: {0}", serviceId);
+            SofaLogger.error("SofaService was already registered: {}", serviceId);
         }
     }
 
@@ -371,66 +365,6 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
             bindingConverterContext);
         bindings.add(binding);
         return bindings;
-    }
-
-    /**
-     * {@link org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.ConfigurationClassBeanDefinition}
-     *
-     * @param beanDefinition Check whether it is a bean definition created from a configuration class
-     *                       as opposed to any other configuration source.
-     * @return
-     */
-    private boolean isFromConfigurationSource(BeanDefinition beanDefinition) {
-        return beanDefinition
-            .getClass()
-            .getCanonicalName()
-            .startsWith(
-                "org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader");
-    }
-
-    /**
-     * {@link AnnotatedGenericBeanDefinition}
-     * {@link ScannedGenericBeanDefinition}
-     * {@link GenericBeanDefinition}
-     * {@link org.springframework.beans.factory.support.ChildBeanDefinition}
-     * {@link org.springframework.beans.factory.support.RootBeanDefinition}
-     *
-     * @param beanDefinition resolve bean class type from bean definition
-     * @return
-     */
-    private Class<?> resolveBeanClassType(BeanDefinition beanDefinition) {
-        Class<?> clazz = null;
-
-        if (beanDefinition instanceof AnnotatedBeanDefinition) {
-            AnnotationMetadata annotationMetadata = ((AnnotatedBeanDefinition) beanDefinition)
-                .getMetadata();
-            try {
-                String className = annotationMetadata.getClassName();
-                clazz = StringUtils.isEmpty(className) ? null : ClassUtils.forName(className, null);
-            } catch (Throwable throwable) {
-                // ignore
-            }
-        }
-
-        if (clazz == null) {
-            try {
-                clazz = ((AbstractBeanDefinition) beanDefinition).getBeanClass();
-            } catch (IllegalStateException ex) {
-                try {
-                    String className = beanDefinition.getBeanClassName();
-                    clazz = StringUtils.isEmpty(className) ? null : ClassUtils.forName(className,
-                        null);
-                } catch (Throwable throwable) {
-                    // ignore
-                }
-            }
-        }
-
-        if (ClassUtils.isCglibProxyClass(clazz)) {
-            return clazz.getSuperclass();
-        } else {
-            return clazz;
-        }
     }
 
     @Override

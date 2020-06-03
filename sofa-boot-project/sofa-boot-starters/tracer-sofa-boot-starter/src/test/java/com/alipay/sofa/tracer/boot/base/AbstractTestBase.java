@@ -79,7 +79,7 @@ public abstract class AbstractTestBase {
     /**
      * clear directory
      *
-     * @throws IOException
+     * @throws java.io.IOException
      */
     public static void cleanLogDirectory() throws IOException {
         File file = new File(logDirectoryPath);
@@ -92,8 +92,7 @@ public abstract class AbstractTestBase {
         return new File(logDirectoryPath + File.separator + fileName);
     }
 
-    protected static void reflectSpringMVCClear() throws NoSuchFieldException,
-                                                 IllegalAccessException {
+    public static void reflectSpringMVCClear() throws NoSuchFieldException, IllegalAccessException {
         Field field = SpringMvcTracer.class.getDeclaredField("springMvcTracer");
         field.setAccessible(true);
         field.set(null, null);
@@ -105,7 +104,7 @@ public abstract class AbstractTestBase {
 
         // clear stat
         SofaTracerStatisticReporterManager statReporterManager = SofaTracerStatisticReporterCycleTimesManager
-            .getSofaTracerStatisticReporterManager(1l);
+            .getSofaTracerStatisticReporterManager(1L);
         Field fieldStat = SofaTracerStatisticReporterManager.class
             .getDeclaredField("statReporters");
         fieldStat.setAccessible(true);

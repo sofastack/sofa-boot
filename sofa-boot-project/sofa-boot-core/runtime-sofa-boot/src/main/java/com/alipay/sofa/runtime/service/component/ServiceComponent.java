@@ -99,17 +99,17 @@ public class ServiceComponent extends AbstractComponent {
                                                       + ".");
                 }
 
-                SofaLogger.info(" <<PreOut Binding [{0}] Begins - {1}.", binding.getBindingType(),
+                SofaLogger.info(" <<PreOut Binding [{}] Begins - {}.", binding.getBindingType(),
                     service);
                 try {
                     bindingAdapter.preOutBinding(service, binding, target, getContext());
                 } catch (Throwable t) {
                     allPassed = false;
-                    SofaLogger.error(t, " <<PreOut Binding [{0}] for [{1}] occur exception.",
-                        binding.getBindingType(), service);
+                    SofaLogger.error(" <<PreOut Binding [{}] for [{}] occur exception.",
+                        binding.getBindingType(), service, t);
                     continue;
                 }
-                SofaLogger.info(" <<PreOut Binding [{0}] Ends - {1}.", binding.getBindingType(),
+                SofaLogger.info(" <<PreOut Binding [{}] Ends - {}.", binding.getBindingType(),
                     service);
             }
 
@@ -151,23 +151,24 @@ public class ServiceComponent extends AbstractComponent {
                 }
 
                 Object outBindingResult;
-                SofaLogger.info(" <<Out Binding [{0}] Begins - {1}.", binding.getBindingType(),
+                SofaLogger.info(" <<Out Binding [{}] Begins - {}.", binding.getBindingType(),
                     service);
                 try {
                     outBindingResult = bindingAdapter.outBinding(service, binding, target,
                         getContext());
                 } catch (Throwable t) {
                     allPassed = false;
-                    SofaLogger.error(t, " <<Out binding [{0}] for [{1}] occur exception.",
-                        binding.getBindingType(), service);
+                    binding.setHealthy(false);
+                    SofaLogger.error(" <<Out binding [{}] for [{}] occur exception.",
+                        binding.getBindingType(), service, t);
                     continue;
                 }
                 if (!Boolean.FALSE.equals(outBindingResult)) {
-                    SofaLogger.info(" <<Out Binding [{0}] Ends - {1}.", binding.getBindingType(),
+                    SofaLogger.info(" <<Out Binding [{}] Ends - {}.", binding.getBindingType(),
                         service);
                 } else {
                     binding.setHealthy(false);
-                    SofaLogger.info(" <<Out Binding [{0}] Fails, Don't publish service - {1}.",
+                    SofaLogger.info(" <<Out Binding [{}] Fails, Don't publish service - {}.",
                         binding.getBindingType(), service);
                 }
             }
@@ -178,7 +179,7 @@ public class ServiceComponent extends AbstractComponent {
             }
         }
 
-        SofaLogger.info("Register Service - {0}", service);
+        SofaLogger.info("Register Service - {}", service);
     }
 
     @Override
@@ -204,18 +205,18 @@ public class ServiceComponent extends AbstractComponent {
                                                       + ".");
                 }
 
-                SofaLogger.info(" <<Pre un-out Binding [{0}] Begins - {1}.",
+                SofaLogger.info(" <<Pre un-out Binding [{}] Begins - {}.",
                     binding.getBindingType(), service);
                 try {
                     bindingAdapter.preUnoutBinding(service, binding, target, getContext());
                 } catch (Throwable t) {
                     allPassed = false;
-                    SofaLogger.error(t, " <<Pre un-out Binding [{0}] for [{1}] occur exception.",
-                        binding.getBindingType(), service);
+                    SofaLogger.error(" <<Pre un-out Binding [{}] for [{}] occur exception.",
+                        binding.getBindingType(), service, t);
                     continue;
                 }
-                SofaLogger.info(" <<Pre un-out Binding [{0}] Ends - {1}.",
-                    binding.getBindingType(), service);
+                SofaLogger.info(" <<Pre un-out Binding [{}] Ends - {}.", binding.getBindingType(),
+                    service);
             }
 
             if (!allPassed) {
@@ -266,18 +267,18 @@ public class ServiceComponent extends AbstractComponent {
                                                       + ".");
                 }
 
-                SofaLogger.info(" <<Post un-out Binding [{0}] Begins - {1}.",
+                SofaLogger.info(" <<Post un-out Binding [{}] Begins - {}.",
                     binding.getBindingType(), service);
                 try {
                     bindingAdapter.postUnoutBinding(service, binding, target, getContext());
                 } catch (Throwable t) {
                     allPassed = false;
-                    SofaLogger.error(t, " <<Post un-out Binding [{0}] for [{1}] occur exception.",
-                        binding.getBindingType(), service);
+                    SofaLogger.error(" <<Post un-out Binding [{}] for [{}] occur exception.",
+                        binding.getBindingType(), service, t);
                     continue;
                 }
-                SofaLogger.info(" <<Post un-out Binding [{0}] Ends - {1}.",
-                    binding.getBindingType(), service);
+                SofaLogger.info(" <<Post un-out Binding [{}] Ends - {}.", binding.getBindingType(),
+                    service);
             }
 
             if (!allPassed) {
@@ -306,17 +307,14 @@ public class ServiceComponent extends AbstractComponent {
 
     @Override
     public HealthResult isHealthy() {
-        if (!isActivated()) {
-            return super.isHealthy();
-        }
-
         HealthResult healthResult = new HealthResult(componentName.getRawName());
         if (this.e == null) {
             healthResult.setHealthy(true);
         } else {
             healthResult.setHealthy(false);
-            healthResult.setHealthReport(e.getMessage());
         }
+        healthResult.setHealthReport(aggregateBindingHealth(service.getBindings()));
+
         return healthResult;
     }
 }

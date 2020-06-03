@@ -58,6 +58,8 @@ public class DynamicJvmServiceProxyFinder {
     @ArkInject
     private BizManagerService bizManagerService;
 
+    private boolean           hasFinishStartup = false;
+
     public static DynamicJvmServiceProxyFinder getDynamicJvmServiceProxyFinder() {
         return dynamicJvmServiceProxyFinder;
     }
@@ -82,8 +84,9 @@ public class DynamicJvmServiceProxyFinder {
                 continue;
             }
 
-            // do not match state ,check next
-            if (biz.getBizState() != BizState.DEACTIVATED
+            // do not match state, check next
+            // https://github.com/sofastack/sofa-boot/issues/532
+            if (hasFinishStartup && biz.getBizState() != BizState.DEACTIVATED
                 && biz.getBizState() != BizState.ACTIVATED) {
                 continue;
             }
@@ -93,8 +96,9 @@ public class DynamicJvmServiceProxyFinder {
                 continue;
             }
 
-            // if not specified version , but state do not match ,check next
-            if (version == null && biz.getBizState() != BizState.ACTIVATED) {
+            // if not specified version, but state do not match, check next
+            // https://github.com/sofastack/sofa-boot/issues/532
+            if (hasFinishStartup && version == null && biz.getBizState() != BizState.ACTIVATED) {
                 continue;
             }
 
@@ -146,12 +150,20 @@ public class DynamicJvmServiceProxyFinder {
      * @return
      */
     public static Biz getBiz(SofaRuntimeManager sofaRuntimeManager) {
+        if (getDynamicJvmServiceProxyFinder().bizManagerService == null) {
+            return null;
+        }
+
         for (Biz biz : getDynamicJvmServiceProxyFinder().bizManagerService.getBizInOrder()) {
             if (sofaRuntimeManager.getAppClassLoader().equals(biz.getBizClassLoader())) {
                 return biz;
             }
         }
         return null;
+    }
+
+    public void setHasFinishStartup(boolean hasFinishStartup) {
+        this.hasFinishStartup = hasFinishStartup;
     }
 
     static class DynamicJvmServiceInvoker extends ServiceProxy {

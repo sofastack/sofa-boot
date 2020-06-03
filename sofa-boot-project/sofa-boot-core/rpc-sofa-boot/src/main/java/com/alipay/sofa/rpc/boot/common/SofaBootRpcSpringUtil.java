@@ -16,16 +16,15 @@
  */
 package com.alipay.sofa.rpc.boot.common;
 
+import com.alipay.sofa.rpc.boot.log.SofaBootRpcLoggerFactory;
+import com.alipay.sofa.rpc.log.LogCodes;
 import org.slf4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.StringUtils;
 
-import com.alipay.sofa.rpc.boot.log.SofaBootRpcLoggerFactory;
-import com.alipay.sofa.rpc.log.LogCodes;
-
 /**
- *
  * Spring工具
+ *
  * @author <a href="mailto:lw111072@antfin.com">LiWei</a>
  * @author <a href="mailto:caojie.cj@antfin.com">CaoJie</a>
  */
@@ -48,15 +47,8 @@ public class SofaBootRpcSpringUtil {
                                        ApplicationContext applicationContext,
                                        ClassLoader appClassLoader, String appName) {
         Object callbackHandler = null;
-
-        if (StringUtils.hasText(beanRef)) {
-            if (applicationContext == null) {
-                LOGGER.error("get bean from spring failed. beanRef[" + beanRef + "];classLoader["
-                             + appClassLoader + "];appName[" + appName + "]");
-            } else {
-                callbackHandler = applicationContext.getBean(beanRef);
-            }
-        } else if (StringUtils.hasText(beanClass)) {
+        callbackHandler = getSpringBean(beanRef, applicationContext, appClassLoader, appName);
+        if (callbackHandler == null && StringUtils.hasText(beanClass)) {
             callbackHandler = newInstance(beanClass, appClassLoader, appName);
         }
 
@@ -65,7 +57,6 @@ public class SofaBootRpcSpringUtil {
 
     /**
      * 根据配置的ref获得真正的spring bean
-     *
      *
      * @param beanRef            spring ref
      * @param applicationContext spring上下文
@@ -91,7 +82,7 @@ public class SofaBootRpcSpringUtil {
     /**
      * 使用指定的classloader实例化某个类
      *
-     * @param clazz 全类名
+     * @param clazz  全类名
      * @param loader 类加载器
      * @return 类实例
      */

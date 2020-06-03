@@ -5,7 +5,7 @@
     <parent>
         <artifactId>sofa-boot-starters</artifactId>
         <groupId>com.alipay.sofa</groupId>
-        <version>3.2.1-SNAPSHOT</version>
+        <version>3.4.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -26,6 +26,11 @@
             <artifactId>sofa-boot-autoconfigure</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+
         <!--Test-->
         <dependency>
             <groupId>com.alipay.sofa</groupId>
@@ -38,11 +43,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>com.alipay.sofa</groupId>
             <artifactId>sofa-tracer-spring-cloud-plugin</artifactId>
         </dependency>
@@ -50,6 +50,28 @@
         <dependency>
             <groupId>com.alipay.sofa</groupId>
             <artifactId>sofa-tracer-zipkin-plugin</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>sofa-tracer-flexible-plugin</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>sofa-tracer-resttmplate-plugin</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
+        <!-- optional -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <optional>true</optional>
         </dependency>
 
         <dependency>
