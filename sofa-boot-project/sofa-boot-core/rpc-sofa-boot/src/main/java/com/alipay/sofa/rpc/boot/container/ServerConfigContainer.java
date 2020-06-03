@@ -302,7 +302,7 @@ public class ServerConfigContainer {
         String boltThreadPoolMaxSizeStr = sofaBootRpcProperties.getBoltThreadPoolMaxSize();
         String acceptsSizeStr = sofaBootRpcProperties.getBoltAcceptsSize();
         String boltThreadPoolQueueSizeStr = sofaBootRpcProperties.getBoltThreadPoolQueueSize();
-
+        Boolean boltProcessInIoThread = sofaBootRpcProperties.getBoltProcessInIoThread();
         ServerConfig serverConfig = new ServerConfig();
 
         if (StringUtils.hasText(portStr)) {
@@ -326,6 +326,12 @@ public class ServerConfigContainer {
         if (StringUtils.hasText(boltThreadPoolQueueSizeStr)) {
             serverConfig.setQueues(Integer.parseInt(boltThreadPoolQueueSizeStr));
         }
+
+        Map<String, String> parameters = new HashMap<>();
+        if (boltProcessInIoThread != null) {
+            parameters.put(RpcConstants.PROCESS_IN_IOTHREAD, boltProcessInIoThread.toString());
+        }
+        serverConfig.setParameters(parameters);
 
         serverConfig.setAutoStart(false);
         serverConfig.setProtocol(SofaBootRpcConfigConstants.RPC_PROTOCOL_BOLT);
