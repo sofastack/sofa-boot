@@ -17,7 +17,6 @@
 package com.alipay.sofa.healthcheck.test;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -26,7 +25,6 @@ import java.util.Map;
 import com.alipay.sofa.healthcheck.HealthCheckProperties;
 import com.alipay.sofa.healthcheck.impl.ComponentHealthChecker;
 import com.alipay.sofa.runtime.component.impl.StandardSofaRuntimeManager;
-import com.alipay.sofa.runtime.service.component.ServiceComponent;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import org.junit.Assert;
@@ -207,15 +205,19 @@ public class HealthCheckerProcessorTest {
 
     @Test
     public void testComponentHealthCheckerFailedFirst() {
-        SofaRuntimeManager manager = new StandardSofaRuntimeManager("testComponentHealthCheckerFailedFirst", Thread.currentThread().getContextClassLoader(), null);
+        SofaRuntimeManager manager = new StandardSofaRuntimeManager(
+            "testComponentHealthCheckerFailedFirst",
+            Thread.currentThread().getContextClassLoader(), null);
         manager.getComponentManager().register(new TestComponent("component1", true));
         manager.getComponentManager().register(new TestComponent("component2", true));
         manager.getComponentManager().register(new TestComponent("component3", false));
         manager.getComponentManager().register(new TestComponent("component4", true));
         manager.getComponentManager().register(new TestComponent("component5", false));
-        ComponentHealthChecker componentHealthChecker = new ComponentHealthChecker(new SofaRuntimeContext(manager, manager.getComponentManager(), null));
+        ComponentHealthChecker componentHealthChecker = new ComponentHealthChecker(
+            new SofaRuntimeContext(manager, manager.getComponentManager(), null));
         int i = 0;
-        for (Map.Entry<String, Object> entry: componentHealthChecker.isHealthy().getDetails().entrySet()) {
+        for (Map.Entry<String, Object> entry : componentHealthChecker.isHealthy().getDetails()
+            .entrySet()) {
             if (i < 2) {
                 Assert.assertEquals(entry.getValue().toString(), "failed");
             } else {
