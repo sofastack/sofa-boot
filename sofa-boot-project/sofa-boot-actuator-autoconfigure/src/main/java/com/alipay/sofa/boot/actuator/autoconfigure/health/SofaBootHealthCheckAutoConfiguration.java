@@ -102,12 +102,6 @@ public class SofaBootHealthCheckAutoConfiguration {
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Bean
-    public ComponentHealthIndicator sofaComponentHealthIndicator() {
-        return new ComponentHealthIndicator();
-    }
-
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
-    @Bean
     public ComponentHealthChecker sofaComponentHealthChecker(SofaRuntimeContext sofaRuntimeContext) {
         return new ComponentHealthChecker(sofaRuntimeContext);
     }
