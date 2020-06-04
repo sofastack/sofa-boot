@@ -28,6 +28,7 @@ import com.alipay.sofa.healthcheck.impl.ComponentHealthChecker;
  *
  * @author xuanbei 18/5/15
  */
+@Deprecated
 public class ComponentHealthIndicator implements HealthIndicator, NonReadinessCheck {
 
     @Autowired

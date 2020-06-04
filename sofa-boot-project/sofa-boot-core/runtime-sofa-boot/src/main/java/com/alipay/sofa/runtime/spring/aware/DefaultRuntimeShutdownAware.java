@@ -28,20 +28,20 @@ import com.alipay.sofa.runtime.spi.spring.RuntimeShutdownAware;
  * @since 2.5.0
  */
 public class DefaultRuntimeShutdownAware implements RuntimeShutdownAware, ApplicationContextAware {
-    private ApplicationContext cxt;
+    private ApplicationContext ctx;
 
     @Override
     public void shutdown() {
-        if (cxt instanceof AbstractApplicationContext) {
-            ((AbstractApplicationContext) cxt).close();
+        if (ctx instanceof AbstractApplicationContext) {
+            ((AbstractApplicationContext) ctx).close();
         } else {
             throw new RuntimeException(String.format("%s is not instanceof %s, can not be closed.",
-                cxt.getClass(), AbstractApplicationContext.class));
+                ctx.getClass(), AbstractApplicationContext.class));
         }
     }
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        cxt = applicationContext;
+        ctx = applicationContext;
     }
 }

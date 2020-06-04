@@ -23,6 +23,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.alipay.sofa.healthcheck.HealthCheckProperties;
+import com.alipay.sofa.healthcheck.impl.ComponentHealthChecker;
+import com.alipay.sofa.runtime.component.impl.StandardSofaRuntimeManager;
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Value;
@@ -122,14 +126,14 @@ public class HealthCheckerProcessorTest {
         Health memoryHealth = hashMap.get("memoryHealthChecker");
         Health networkHealth = hashMap.get("networkHealthChecker");
         Assert.assertTrue(result);
-        Assert.assertTrue(memoryHealthChecker.getCount() == 6);
-        Assert.assertTrue(hashMap.size() == 3);
+        Assert.assertEquals(6, memoryHealthChecker.getCount());
+        Assert.assertEquals(3, hashMap.size());
         Assert.assertNotNull(memoryHealth);
         Assert.assertNotNull(networkHealth);
-        Assert.assertTrue(memoryHealth.getStatus().equals(Status.UP));
-        Assert.assertTrue(networkHealth.getStatus().equals(Status.UP));
-        Assert.assertTrue("memory is ok".equals(memoryHealth.getDetails().get("memory")));
-        Assert.assertTrue("network is ok".equals(networkHealth.getDetails().get("network")));
+        Assert.assertEquals(memoryHealth.getStatus(), Status.UP);
+        Assert.assertEquals(networkHealth.getStatus(), Status.UP);
+        Assert.assertEquals("memory is ok", memoryHealth.getDetails().get("memory"));
+        Assert.assertEquals("network is ok", networkHealth.getDetails().get("network"));
     }
 
     @Test
@@ -144,14 +148,14 @@ public class HealthCheckerProcessorTest {
         Health memoryHealth = hashMap.get("memoryHealthChecker");
         Health networkHealth = hashMap.get("networkHealthChecker");
         Assert.assertFalse(result);
-        Assert.assertTrue(memoryHealthChecker.getCount() == 4);
-        Assert.assertTrue(hashMap.size() == 3);
+        Assert.assertEquals(4, memoryHealthChecker.getCount());
+        Assert.assertEquals(3, hashMap.size());
         Assert.assertNotNull(memoryHealth);
         Assert.assertNotNull(networkHealth);
-        Assert.assertTrue(memoryHealth.getStatus().equals(Status.DOWN));
-        Assert.assertTrue(networkHealth.getStatus().equals(Status.UP));
-        Assert.assertTrue("memory is bad".equals(memoryHealth.getDetails().get("memory")));
-        Assert.assertTrue("network is ok".equals(networkHealth.getDetails().get("network")));
+        Assert.assertEquals(memoryHealth.getStatus(), Status.DOWN);
+        Assert.assertEquals(networkHealth.getStatus(), Status.UP);
+        Assert.assertEquals("memory is bad", memoryHealth.getDetails().get("memory"));
+        Assert.assertEquals("network is ok", networkHealth.getDetails().get("network"));
     }
 
     @Test
@@ -166,14 +170,14 @@ public class HealthCheckerProcessorTest {
         Health memoryHealth = hashMap.get("memoryHealthChecker");
         Health networkHealth = hashMap.get("networkHealthChecker");
         Assert.assertTrue(result);
-        Assert.assertTrue(memoryHealthChecker.getCount() == 4);
-        Assert.assertTrue(hashMap.size() == 3);
+        Assert.assertEquals(4, memoryHealthChecker.getCount());
+        Assert.assertEquals(3, hashMap.size());
         Assert.assertNotNull(memoryHealth);
         Assert.assertNotNull(networkHealth);
-        Assert.assertTrue(memoryHealth.getStatus().equals(Status.DOWN));
-        Assert.assertTrue(networkHealth.getStatus().equals(Status.UP));
-        Assert.assertTrue("memory is bad".equals(memoryHealth.getDetails().get("memory")));
-        Assert.assertTrue("network is ok".equals(networkHealth.getDetails().get("network")));
+        Assert.assertEquals(memoryHealth.getStatus(), Status.DOWN);
+        Assert.assertEquals(networkHealth.getStatus(), Status.UP);
+        Assert.assertEquals("memory is bad", memoryHealth.getDetails().get("memory"));
+        Assert.assertEquals("network is ok", networkHealth.getDetails().get("network"));
     }
 
     @Test
@@ -189,14 +193,38 @@ public class HealthCheckerProcessorTest {
         Health memoryHealth = hashMap.get("memoryHealthChecker");
         Health networkHealth = hashMap.get("networkHealthChecker");
         Assert.assertTrue(true);
-        Assert.assertTrue(memoryHealthChecker.getCount() == 5);
-        Assert.assertTrue(hashMap.size() == 3);
+        Assert.assertEquals(5, memoryHealthChecker.getCount());
+        Assert.assertEquals(3, hashMap.size());
         Assert.assertNotNull(memoryHealth);
         Assert.assertNotNull(networkHealth);
-        Assert.assertTrue(memoryHealth.getStatus().equals(Status.DOWN));
-        Assert.assertTrue(networkHealth.getStatus().equals(Status.UP));
-        Assert.assertTrue("memory is bad".equals(memoryHealth.getDetails().get("memory")));
-        Assert.assertTrue("network is ok".equals(networkHealth.getDetails().get("network")));
+        Assert.assertEquals(memoryHealth.getStatus(), Status.DOWN);
+        Assert.assertEquals(networkHealth.getStatus(), Status.UP);
+        Assert.assertEquals("memory is bad", memoryHealth.getDetails().get("memory"));
+        Assert.assertEquals("network is ok", networkHealth.getDetails().get("network"));
+    }
+
+    @Test
+    public void testComponentHealthCheckerFailedFirst() {
+        SofaRuntimeManager manager = new StandardSofaRuntimeManager(
+            "testComponentHealthCheckerFailedFirst",
+            Thread.currentThread().getContextClassLoader(), null);
+        manager.getComponentManager().register(new TestComponent("component1", true));
+        manager.getComponentManager().register(new TestComponent("component2", true));
+        manager.getComponentManager().register(new TestComponent("component3", false));
+        manager.getComponentManager().register(new TestComponent("component4", true));
+        manager.getComponentManager().register(new TestComponent("component5", false));
+        ComponentHealthChecker componentHealthChecker = new ComponentHealthChecker(
+            new SofaRuntimeContext(manager, manager.getComponentManager(), null));
+        int i = 0;
+        for (Map.Entry<String, Object> entry : componentHealthChecker.isHealthy().getDetails()
+            .entrySet()) {
+            if (i < 2) {
+                Assert.assertEquals(entry.getValue().toString(), "failed");
+            } else {
+                Assert.assertEquals(entry.getValue().toString(), "passed");
+            }
+            ++i;
+        }
     }
 
     private void initApplicationContext(int count, boolean strict, int retryCount) {
