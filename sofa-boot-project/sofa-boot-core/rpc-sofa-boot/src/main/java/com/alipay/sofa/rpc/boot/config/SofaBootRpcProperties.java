@@ -104,6 +104,11 @@ public class SofaBootRpcProperties {
     private String              boltAcceptsSize;
 
     /**
+     * process in bolt io worker thread (bolt 服务端业务处理是否直接在worker中处理)
+     */
+    private Boolean             boltProcessInIoThread;
+
+    /**
      * export a port to show swagger
      */
     private Boolean             enableSwagger;
@@ -928,5 +933,13 @@ public class SofaBootRpcProperties {
 
     public void setEnableSwagger(Boolean enableswagger) {
         this.enableSwagger = enableswagger;
+    }
+
+    public Boolean getBoltProcessInIoThread() {
+        return boltProcessInIoThread;
+    }
+
+    public void setBoltProcessInIoThread(Boolean boltProcessInIoThread) {
+        this.boltProcessInIoThread = boltProcessInIoThread;
     }
 }
