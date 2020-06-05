@@ -17,7 +17,6 @@
 package com.alipay.sofa.healthcheck.impl;
 
 import com.alipay.sofa.boot.util.StringUtils;
-import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.Status;
@@ -60,27 +59,23 @@ public class ComponentHealthChecker implements HealthChecker {
     public Health isHealthy() {
         boolean allPassed = true;
         Health.Builder builder = new Health.Builder();
-        List<Pair<String, String>> failedComponent = new ArrayList<>();
-        List<Pair<String, String>> passedComponent = new ArrayList<>();
+        List<Pair> passedComponent = new ArrayList<>();
 
         for (ComponentInfo componentInfo : sofaRuntimeContext.getComponentManager().getComponents()) {
             HealthResult healthy = componentInfo.isHealthy();
             String healthReport = healthy.getHealthReport();
             if (healthy.isHealthy()) {
-                passedComponent.add(new Pair<>(healthy.getHealthName(), StringUtils
+                passedComponent.add(new Pair(healthy.getHealthName(), StringUtils
                     .hasText(healthReport) ? healthReport : "passed"));
             } else {
                 allPassed = false;
-                failedComponent.add(new Pair<>(healthy.getHealthName(), StringUtils
-                    .hasText(healthReport) ? healthReport : "failed"));
+                builder.withDetail(healthy.getHealthName(),
+                    StringUtils.hasText(healthReport) ? healthReport : "failed");
             }
         }
 
-        for (Pair<String, String> pair : failedComponent) {
-            builder.withDetail(pair.getKey(), pair.getValue());
-        }
-        for (Pair<String, String> pair : passedComponent) {
-            builder.withDetail(pair.getKey(), pair.getValue());
+        for (Pair pair : passedComponent) {
+            builder.withDetail(pair.key, pair.value);
         }
 
         if (allPassed) {
@@ -108,5 +103,15 @@ public class ComponentHealthChecker implements HealthChecker {
     @Override
     public boolean isStrictCheck() {
         return strictCheck;
+    }
+
+    private static class Pair {
+        public String key;
+        public String value;
+
+        public Pair(String key, String value) {
+            this.key = key;
+            this.value = value;
+        }
     }
 }
