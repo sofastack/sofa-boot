@@ -41,7 +41,7 @@
         <fastjson.version>1.2.61</fastjson.version>
         <grpc-all.version>1.0.3</grpc-all.version>
         <javassist.version>3.19.0-GA</javassist.version>
-        <protobuf-java.version>3.5.1</protobuf-java.version>
+        <protobuf-java.version>3.11.0</protobuf-java.version>
         <guice.version>3.0</guice.version>
         <guava.version>28.2-jre</guava.version>
         <zipkin.version>2.11.3</zipkin.version>
