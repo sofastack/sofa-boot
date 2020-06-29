@@ -43,6 +43,7 @@ public class NamedThreadFactory implements ThreadFactory {
         isDaemon = daemon;
     }
 
+    @Override
     public Thread newThread(Runnable r) {
         Thread t = new Thread(group, r, namePrefix + threadNumber.getAndIncrement(), 0);
         t.setDaemon(isDaemon);
