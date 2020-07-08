@@ -16,21 +16,6 @@
  */
 package com.alipay.sofa.isle.stage;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Future;
-import java.util.concurrent.SynchronousQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.support.AbstractApplicationContext;
-import org.springframework.util.StringUtils;
-
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.util.NamedThreadFactory;
 import com.alipay.sofa.isle.ApplicationRuntimeModel;
@@ -41,6 +26,15 @@ import com.alipay.sofa.isle.loader.DynamicSpringContextLoader;
 import com.alipay.sofa.isle.loader.SpringContextLoader;
 import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
 import com.alipay.sofa.runtime.log.SofaLogger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.util.StringUtils;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.*;
 
 /**
  * @author linfengqi
@@ -52,7 +46,7 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
     private static final String  SYMBOLIC1 = "  ├─ ";
     private static final String  SYMBOLIC2 = "  └─ ";
 
-    private static final int     CPU_COUNT = Runtime.getRuntime().availableProcessors();
+    private static final int     CPU_COUNT = Runtime.getRuntime().availableProcessors(); ;
 
     @Autowired
     private SofaModuleProperties sofaModuleProperties;
@@ -90,8 +84,8 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
         return new DynamicSpringContextLoader(applicationContext);
     }
 
-    private void installSpringContext(ApplicationRuntimeModel application,
-                                      SpringContextLoader springContextLoader) {
+    protected void installSpringContext(ApplicationRuntimeModel application,
+                                        SpringContextLoader springContextLoader) {
         ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
 
         for (DeploymentDescriptor deployment : application.getResolvedDeployments()) {

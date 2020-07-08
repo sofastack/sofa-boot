@@ -16,13 +16,13 @@
  */
 package com.alipay.sofa.runtime.spi.component;
 
-import java.util.Map;
-
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.api.component.Property;
 import com.alipay.sofa.runtime.model.ComponentStatus;
 import com.alipay.sofa.runtime.model.ComponentType;
 import com.alipay.sofa.runtime.spi.health.HealthResult;
+
+import java.util.Map;
 
 /**
  * Component info interface

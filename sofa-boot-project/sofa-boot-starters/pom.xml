@@ -22,6 +22,7 @@
         <module>rpc-sofa-boot-starter</module>
         <module>tracer-sofa-boot-starter</module>
         <module>log-sofa-boot-starter</module>
+        <module>startup-sofa-boot-starter</module>
     </modules>
 
 </project>

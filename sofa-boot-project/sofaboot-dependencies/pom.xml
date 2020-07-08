@@ -168,6 +168,12 @@
                 <version>${sofa.boot.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>startup-sofa-boot</artifactId>
+                <version>${sofa.boot.version}</version>
+            </dependency>
+
             <!-- starter management begin -->
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
@@ -177,6 +183,11 @@
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>healthcheck-sofa-boot-starter</artifactId>
+                <version>${sofa.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>startup-sofa-boot-starter</artifactId>
                 <version>${sofa.boot.version}</version>
             </dependency>
             <dependency>
