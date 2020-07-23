@@ -16,36 +16,30 @@
  */
 package com.alipay.sofa.healthcheck.test.bean;
 
+import com.alipay.sofa.healthcheck.startup.ReadinessCheckCallback;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.context.ApplicationContext;
-
-import com.alipay.sofa.healthcheck.startup.ReadinessCheckCallback;
 import org.springframework.core.PriorityOrdered;
 
 /**
- * @author liangen
- * @author qilong.zql
- * @version 2.3.0
+ * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
+ * Created on 2020/7/23
  */
-public class MiddlewareHealthCheckCallback implements ReadinessCheckCallback, PriorityOrdered {
+public class LowestOrderReadinessCheckCallback implements ReadinessCheckCallback, PriorityOrdered {
+    private boolean mark = false;
 
-    private boolean health;
-
-    public MiddlewareHealthCheckCallback(boolean health) {
-        this.health = health;
+    public boolean getMark() {
+        return mark;
     }
 
     @Override
     public Health onHealthy(ApplicationContext applicationContext) {
-        if (health) {
-            return Health.up().withDetail("server", "server is ok").build();
-        } else {
-            return Health.down().withDetail("server", "server is bad").build();
-        }
+        mark = true;
+        return Health.up().build();
     }
 
     @Override
     public int getOrder() {
-        return PriorityOrdered.HIGHEST_PRECEDENCE;
+        return PriorityOrdered.LOWEST_PRECEDENCE;
     }
 }

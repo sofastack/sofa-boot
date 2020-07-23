@@ -22,7 +22,11 @@ import java.util.Map;
 
 import com.alipay.sofa.healthcheck.HealthCheckProperties;
 import com.alipay.sofa.healthcheck.core.HealthChecker;
+import com.alipay.sofa.healthcheck.test.bean.ApplicationHealthCheckCallback;
 import com.alipay.sofa.healthcheck.test.bean.FailedHealthCheck;
+import com.alipay.sofa.healthcheck.test.bean.HighestOrderReadinessCheckCallback;
+import com.alipay.sofa.healthcheck.test.bean.LowestOrderReadinessCheckCallback;
+import com.alipay.sofa.healthcheck.test.bean.MiddlewareHealthCheckCallback;
 import com.alipay.sofa.healthcheck.test.bean.SuccessHealthCheck;
 import org.junit.Assert;
 import org.junit.Test;
@@ -40,8 +44,6 @@ import com.alipay.sofa.healthcheck.AfterReadinessCheckCallbackProcessor;
 import com.alipay.sofa.healthcheck.HealthCheckerProcessor;
 import com.alipay.sofa.healthcheck.HealthIndicatorProcessor;
 import com.alipay.sofa.healthcheck.ReadinessCheckListener;
-import com.alipay.sofa.healthcheck.test.bean.ApplicationHealthCheckCallback;
-import com.alipay.sofa.healthcheck.test.bean.MiddlewareHealthCheckCallback;
 
 /**
  * @author liangen
@@ -64,17 +66,17 @@ public class AfterHealthReadinessCheckCallbackTest {
         boolean result = afterReadinessCheckCallbackProcessor.afterReadinessCheckCallback(hashMap);
         Assert.assertTrue(result);
         Assert.assertTrue(applicationHealthCheckCallback.isMark());
-        Assert.assertTrue(hashMap.size() == 2);
+        Assert.assertEquals(2, hashMap.size());
         Health middleHealth = hashMap.get("middlewareHealthCheckCallback");
         Health applicationHealth = hashMap.get("applicationHealthCheckCallback");
         Assert.assertNotNull(middleHealth);
         Assert.assertNotNull(applicationHealth);
-        Assert.assertTrue(middleHealth.getStatus().equals(Status.UP));
-        Assert.assertTrue(applicationHealth.getStatus().equals(Status.UP));
-        Assert.assertTrue(middleHealth.getDetails().size() == 1);
-        Assert.assertTrue(applicationHealth.getDetails().size() == 1);
-        Assert.assertTrue("server is ok".equals(middleHealth.getDetails().get("server")));
-        Assert.assertTrue("port is ok".equals(applicationHealth.getDetails().get("port")));
+        Assert.assertEquals(middleHealth.getStatus(), Status.UP);
+        Assert.assertEquals(applicationHealth.getStatus(), Status.UP);
+        Assert.assertEquals(1, middleHealth.getDetails().size());
+        Assert.assertEquals(1, applicationHealth.getDetails().size());
+        Assert.assertEquals("server is ok", middleHealth.getDetails().get("server"));
+        Assert.assertEquals("port is ok", applicationHealth.getDetails().get("port"));
     }
 
     @Test
@@ -88,17 +90,17 @@ public class AfterHealthReadinessCheckCallbackTest {
         HashMap<String, Health> hashMap = new HashMap<>();
         boolean result = afterReadinessCheckCallbackProcessor.afterReadinessCheckCallback(hashMap);
         Assert.assertFalse(result);
-        Assert.assertTrue(applicationHealthCheckCallback.isMark());
-        Assert.assertTrue(hashMap.size() == 2);
+        Assert.assertFalse(applicationHealthCheckCallback.isMark());
+        Assert.assertEquals(2, hashMap.size());
         Health middleHealth = hashMap.get("middlewareHealthCheckCallback");
         Health applicationHealth = hashMap.get("applicationHealthCheckCallback");
         Assert.assertNotNull(middleHealth);
         Assert.assertNotNull(applicationHealth);
-        Assert.assertTrue(middleHealth.getStatus().equals(Status.DOWN));
-        Assert.assertTrue(applicationHealth.getStatus().equals(Status.UP));
-        Assert.assertTrue(middleHealth.getDetails().size() == 1);
-        Assert.assertTrue("server is bad".equals(middleHealth.getDetails().get("server")));
-        Assert.assertTrue("port is ok".equals(applicationHealth.getDetails().get("port")));
+        Assert.assertEquals(middleHealth.getStatus(), Status.DOWN);
+        Assert.assertEquals(applicationHealth.getStatus(), Status.DOWN);
+        Assert.assertEquals(1, middleHealth.getDetails().size());
+        Assert.assertEquals("server is bad", middleHealth.getDetails().get("server"));
+        Assert.assertEquals("skipped", applicationHealth.getDetails().get("invoking"));
     }
 
     @Test
@@ -110,11 +112,11 @@ public class AfterHealthReadinessCheckCallbackTest {
     }
 
     @Test
-    public void testReadinessCheckSuccessAndCallbackRun() {
-        initApplicationContext(false, false, ReadinessCheckSuccessTestConfiguration.class);
-        ApplicationHealthCheckCallback applicationHealthCheckCallback = ctx
-            .getBean(ApplicationHealthCheckCallback.class);
-        Assert.assertTrue(applicationHealthCheckCallback.isMark());
+    public void testBreakingReadinessCheckCallback() {
+        initApplicationContext(false, false, ReadinessCheckCallbackBreakTestConfiguration.class);
+        LowestOrderReadinessCheckCallback callback = ctx
+            .getBean(LowestOrderReadinessCheckCallback.class);
+        Assert.assertFalse(callback.getMark());
     }
 
     private void initApplicationContext(boolean health, boolean mark, Class clazz) {
@@ -126,6 +128,20 @@ public class AfterHealthReadinessCheckCallbackTest {
         springApplication.setDefaultProperties(properties);
         springApplication.setWebApplicationType(WebApplicationType.NONE);
         ctx = springApplication.run();
+    }
+
+    @Configuration
+    static class ReadinessCheckCallbackBreakTestConfiguration extends
+                                                             AfterHealthReadinessCheckCallbackTestConfiguration {
+        @Bean
+        public HighestOrderReadinessCheckCallback highestOrderReadinessCheckCallback() {
+            return new HighestOrderReadinessCheckCallback();
+        }
+
+        @Bean
+        public LowestOrderReadinessCheckCallback lowestOrderReadinessCheckCallback() {
+            return new LowestOrderReadinessCheckCallback();
+        }
     }
 
     @Configuration
