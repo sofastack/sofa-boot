@@ -76,10 +76,13 @@ public class AfterReadinessCheckCallbackProcessor {
 
         boolean allResult = true;
         for (Map.Entry<String, ReadinessCheckCallback> entry : readinessCheckCallbacks.entrySet()) {
-            boolean result = doHealthCheckCallback(entry.getKey(), entry.getValue(), healthMap);
-            if (!result) {
-                allResult = false;
-                break;
+            String beanId = entry.getKey();
+            if (allResult) {
+                if (!doHealthCheckCallback(beanId, entry.getValue(), healthMap)) {
+                    allResult = false;
+                }
+            } else {
+                healthMap.put(beanId, Health.down().withDetail("invoking", "skipped").build());
             }
         }
 
