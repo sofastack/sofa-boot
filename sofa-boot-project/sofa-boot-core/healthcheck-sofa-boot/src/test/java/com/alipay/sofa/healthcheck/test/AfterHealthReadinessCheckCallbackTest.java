@@ -22,7 +22,11 @@ import java.util.Map;
 
 import com.alipay.sofa.healthcheck.HealthCheckProperties;
 import com.alipay.sofa.healthcheck.core.HealthChecker;
+import com.alipay.sofa.healthcheck.test.bean.ApplicationHealthCheckCallback;
 import com.alipay.sofa.healthcheck.test.bean.FailedHealthCheck;
+import com.alipay.sofa.healthcheck.test.bean.HighestOrderReadinessCheckCallback;
+import com.alipay.sofa.healthcheck.test.bean.LowestOrderReadinessCheckCallback;
+import com.alipay.sofa.healthcheck.test.bean.MiddlewareHealthCheckCallback;
 import com.alipay.sofa.healthcheck.test.bean.SuccessHealthCheck;
 import org.junit.Assert;
 import org.junit.Test;
@@ -40,8 +44,6 @@ import com.alipay.sofa.healthcheck.AfterReadinessCheckCallbackProcessor;
 import com.alipay.sofa.healthcheck.HealthCheckerProcessor;
 import com.alipay.sofa.healthcheck.HealthIndicatorProcessor;
 import com.alipay.sofa.healthcheck.ReadinessCheckListener;
-import com.alipay.sofa.healthcheck.test.bean.ApplicationHealthCheckCallback;
-import com.alipay.sofa.healthcheck.test.bean.MiddlewareHealthCheckCallback;
 
 /**
  * @author liangen
@@ -117,6 +119,14 @@ public class AfterHealthReadinessCheckCallbackTest {
         Assert.assertTrue(applicationHealthCheckCallback.isMark());
     }
 
+    @Test
+    public void testBreakingReadinessCheckCallback() {
+        initApplicationContext(false, false, ReadinessCheckCallbackBreakTestConfiguration.class);
+        LowestOrderReadinessCheckCallback callback = ctx
+            .getBean(LowestOrderReadinessCheckCallback.class);
+        Assert.assertFalse(callback.getMark());
+    }
+
     private void initApplicationContext(boolean health, boolean mark, Class clazz) {
         Map<String, Object> properties = new LinkedHashMap<>();
         properties.put("after-readiness-check-callback-a.health", health);
@@ -126,6 +136,20 @@ public class AfterHealthReadinessCheckCallbackTest {
         springApplication.setDefaultProperties(properties);
         springApplication.setWebApplicationType(WebApplicationType.NONE);
         ctx = springApplication.run();
+    }
+
+    @Configuration
+    static class ReadinessCheckCallbackBreakTestConfiguration extends
+                                                             AfterHealthReadinessCheckCallbackTestConfiguration {
+        @Bean
+        public HighestOrderReadinessCheckCallback highestOrderReadinessCheckCallback() {
+            return new HighestOrderReadinessCheckCallback();
+        }
+
+        @Bean
+        public LowestOrderReadinessCheckCallback lowestOrderReadinessCheckCallback() {
+            return new LowestOrderReadinessCheckCallback();
+        }
     }
 
     @Configuration
