@@ -20,13 +20,14 @@ import org.springframework.boot.actuate.health.Health;
 import org.springframework.context.ApplicationContext;
 
 import com.alipay.sofa.healthcheck.startup.ReadinessCheckCallback;
+import org.springframework.core.PriorityOrdered;
 
 /**
  * @author liangen
  * @author qilong.zql
  * @version 2.3.0
  */
-public class MiddlewareHealthCheckCallback implements ReadinessCheckCallback {
+public class MiddlewareHealthCheckCallback implements ReadinessCheckCallback, PriorityOrdered {
 
     private boolean health;
 
@@ -41,5 +42,10 @@ public class MiddlewareHealthCheckCallback implements ReadinessCheckCallback {
         } else {
             return Health.down().withDetail("server", "server is bad").build();
         }
+    }
+
+    @Override
+    public int getOrder() {
+        return PriorityOrdered.HIGHEST_PRECEDENCE;
     }
 }
