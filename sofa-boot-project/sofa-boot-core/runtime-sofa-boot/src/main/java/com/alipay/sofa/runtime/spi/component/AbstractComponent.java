@@ -168,6 +168,9 @@ public abstract class AbstractComponent implements ComponentInfo {
         if (!isActivated()) {
             healthResult.setHealthy(false);
             healthResult.setHealthReport("Status: " + this.getState().toString());
+        } else if (e != null) {
+            healthResult.setHealthy(false);
+            healthResult.setHealthReport(e.getMessage());
         } else {
             healthResult.setHealthy(true);
         }

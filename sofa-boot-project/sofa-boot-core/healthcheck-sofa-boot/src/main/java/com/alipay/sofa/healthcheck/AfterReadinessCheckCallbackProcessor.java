@@ -75,14 +75,21 @@ public class AfterReadinessCheckCallbackProcessor {
         Assert.notNull(readinessCheckCallbacks, "ReadinessCheckCallbacks must not be null.");
 
         boolean allResult = true;
+        String failedBeanId = "";
         for (Map.Entry<String, ReadinessCheckCallback> entry : readinessCheckCallbacks.entrySet()) {
             String beanId = entry.getKey();
             if (allResult) {
                 if (!doHealthCheckCallback(beanId, entry.getValue(), healthMap)) {
+                    failedBeanId = beanId;
                     allResult = false;
                 }
             } else {
-                healthMap.put(beanId, Health.down().withDetail("invoking", "skipped").build());
+                logger.warn(beanId + " is skipped due to the failure of " + failedBeanId);
+                healthMap.put(
+                    beanId,
+                    Health.down()
+                        .withDetail("invoking", "skipped due to the failure of " + failedBeanId)
+                        .build());
             }
         }
 

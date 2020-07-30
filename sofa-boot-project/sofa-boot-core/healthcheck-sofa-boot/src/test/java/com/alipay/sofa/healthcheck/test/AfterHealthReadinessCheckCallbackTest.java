@@ -100,7 +100,8 @@ public class AfterHealthReadinessCheckCallbackTest {
         Assert.assertEquals(applicationHealth.getStatus(), Status.DOWN);
         Assert.assertEquals(1, middleHealth.getDetails().size());
         Assert.assertEquals("server is bad", middleHealth.getDetails().get("server"));
-        Assert.assertEquals("skipped", applicationHealth.getDetails().get("invoking"));
+        Assert.assertTrue(applicationHealth.getDetails().get("invoking").toString()
+            .contains("skipped"));
     }
 
     @Test
