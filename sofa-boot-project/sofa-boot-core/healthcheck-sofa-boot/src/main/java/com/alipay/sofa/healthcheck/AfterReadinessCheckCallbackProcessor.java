@@ -85,7 +85,11 @@ public class AfterReadinessCheckCallbackProcessor {
                 }
             } else {
                 logger.warn(beanId + " is skipped due to the failure of " + failedBeanId);
-                healthMap.put(beanId, Health.down().withDetail("invoking", "skipped due to the failure of " + failedBeanId).build());
+                healthMap.put(
+                    beanId,
+                    Health.down()
+                        .withDetail("invoking", "skipped due to the failure of " + failedBeanId)
+                        .build());
             }
         }
 
