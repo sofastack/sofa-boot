@@ -309,8 +309,13 @@ public class ServiceComponent extends AbstractComponent {
     public HealthResult isHealthy() {
         HealthResult healthResult = new HealthResult(componentName.getRawName());
         healthResult.setHealthy(this.e == null);
-        healthResult.setHealthReport(aggregateBindingHealth(service.getBindings()));
 
+        String report = aggregateBindingHealth(service.getBindings());
+        if (e != null) {
+            report += " [" + e.getMessage() + "]";
+        }
+
+        healthResult.setHealthReport(report);
         return healthResult;
     }
 }
