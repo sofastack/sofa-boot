@@ -24,6 +24,7 @@ import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.web.servlet.ServletWebServerFactoryAutoConfiguration;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -35,6 +36,7 @@ import org.springframework.context.annotation.Import;
 @Configuration
 @AutoConfigureBefore(ServletWebServerFactoryAutoConfiguration.class)
 @ConditionalOnClass(SofaStartupContext.class)
+@EnableConfigurationProperties(SofaStartupProperties.class)
 @Import({ SofaStartupConfiguration.StartupTomcat.class,
          SofaStartupConfiguration.StartupJetty.class,
          SofaStartupConfiguration.StartupUndertow.class,

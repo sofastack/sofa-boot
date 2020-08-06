@@ -60,7 +60,7 @@ public class BeanInitCostTest {
     private ApplicationContext initApplicationContext(long cost) {
         Map<String, Object> properties = new LinkedHashMap<>();
         properties.put("spring.application.name", "SofaStartupContextBeanCostTest");
-        properties.put("com.alipay.sofa.boot.bean-init-cost", cost);
+        properties.put("com.alipay.sofa.boot.startup.bean-init-cost", cost);
         SpringApplication springApplication = new SpringApplication(
             SofaStartupContextBeanCostTestConfiguration.class);
         springApplication.setDefaultProperties(properties);

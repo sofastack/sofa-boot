@@ -30,7 +30,6 @@ import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactor
 import org.springframework.boot.web.embedded.undertow.UndertowServletWebServerFactory;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 
-import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -46,20 +45,18 @@ import java.util.stream.Collectors;
  */
 public class SofaStartupContext implements BeanPostProcessor, SofaRuntimeContextAware {
 
-    private final static String                     SOFA_CLASS_NAME_PREFIX = "com.alipay.sofa.runtime";
-    protected static long                           jvmStartupTime;
-    protected static long                           appStartupTime;
-    protected static List<CommonStartupCost>        initializerCostList    = new ArrayList<>();
-    protected static List<CommonStartupCost>        beanInitCostList       = new ArrayList<>();
-    protected static Map<String, CommonStartupCost> beanInitCostMap        = new ConcurrentHashMap<>();
-    private final SpringContextAwarer               springContextAwarer;
-    private final long                              beanLoadCost;
-    protected SofaRuntimeContext                    sofaRuntimeContext;
+    private final static String              SOFA_CLASS_NAME_PREFIX = "com.alipay.sofa.runtime";
+    protected long                           appStartupTime;
+    protected List<CommonStartupCost>        beanInitCostList       = new ArrayList<>();
+    protected Map<String, CommonStartupCost> beanInitCostMap        = new ConcurrentHashMap<>();
+    private final SpringContextAwarer        springContextAwarer;
+    private final long                       beanLoadCost;
+    protected SofaRuntimeContext             sofaRuntimeContext;
 
     public SofaStartupContext(SpringContextAwarer springContextAwarer,
                               SofaStartupProperties sofaStartupProperties) {
         this.springContextAwarer = springContextAwarer;
-        beanLoadCost = sofaStartupProperties.getBeanInitCost();
+        this.beanLoadCost = sofaStartupProperties.getBeanInitCost();
     }
 
     @Override
@@ -126,18 +123,6 @@ public class SofaStartupContext implements BeanPostProcessor, SofaRuntimeContext
         return -1L;
     }
 
-    public long getInitializerCost() {
-        return initializerCostList.stream()
-                .mapToLong(commonStartupCost -> commonStartupCost.getEndTime() - commonStartupCost.getBeginTime()).sum();
-    }
-
-    public Map<String, Long> getInitializerDetail() {
-        return initializerCostList.stream()
-                .collect(Collectors.toMap(CommonStartupCost::getName,
-                        commonStartupCost -> commonStartupCost.getEndTime() - commonStartupCost.getBeginTime(),
-                        (oldValue, newValue) -> oldValue, TreeMap::new));
-    }
-
     public long getBeanInitCost() {
         return beanInitCostList.stream()
                 .filter(commonStartupCost -> commonStartupCost.getEndTime() != -1L)
@@ -161,23 +146,11 @@ public class SofaStartupContext implements BeanPostProcessor, SofaRuntimeContext
         return !bean.getClass().getName().contains(SOFA_CLASS_NAME_PREFIX);
     }
 
-    public static void setJvmStartupTime() {
-        jvmStartupTime = ManagementFactory.getRuntimeMXBean().getUptime();
+    public void setAppStartupTime(long appStartupTime) {
+        this.appStartupTime = appStartupTime;
     }
 
-    public static void setAppStartupTime() {
-        appStartupTime = ManagementFactory.getRuntimeMXBean().getUptime();
-    }
-
-    public static void addInitializer(CommonStartupCost commonStartupCost) {
-        initializerCostList.add(commonStartupCost);
-    }
-
-    public static long getJvmStartupTime() {
-        return jvmStartupTime;
-    }
-
-    public static long getAppStartupTime() {
-        return appStartupTime;
+    public long getAppStartupTime() {
+        return this.appStartupTime;
     }
 }

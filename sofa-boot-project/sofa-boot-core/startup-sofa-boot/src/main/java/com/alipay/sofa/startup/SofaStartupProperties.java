@@ -22,7 +22,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @Author: Zhijie
  * @Date: 2020/7/13
  */
-@ConfigurationProperties(prefix = "com.alipay.sofa.boot")
+@ConfigurationProperties(prefix = "com.alipay.sofa.boot.startup")
 public class SofaStartupProperties {
     private long beanInitCost = 100;
 

@@ -39,11 +39,9 @@ public class SofaStartupReporter {
      */
     public SofaStartupCostModel report() {
         SofaStartupCostModel sofaStartupCostModel = new SofaStartupCostModel();
-        sofaStartupCostModel.setTotalCost(SofaStartupContext.getAppStartupTime());
+        sofaStartupCostModel.setTotalCost(sofaStartupContext.getAppStartupTime());
 
         Map<String, Long> baseCosts = new LinkedHashMap<>();
-        baseCosts.put("jvm_start_up_cost", SofaStartupContext.getJvmStartupTime());
-        baseCosts.put("initializer_start_up_total_cost", sofaStartupContext.getInitializerCost());
         baseCosts.put("web_server_init_start_up_cost", sofaStartupContext.getWebServerInitCost());
         baseCosts.put("isle_install_stage_start_up_cost", sofaStartupContext.getIsleInstallCost());
         baseCosts.put("component_start_up_total_cost", sofaStartupContext.getComponentCost());
@@ -51,7 +49,6 @@ public class SofaStartupReporter {
         sofaStartupCostModel.setBaseCosts(baseCosts);
 
         Map<String, Map<String, Long>> detailCosts = new TreeMap<>();
-        detailCosts.put("initializer_start_up_costs", sofaStartupContext.getInitializerDetail());
         detailCosts.put("component_start_up_costs", sofaStartupContext.getComponentDetail());
         detailCosts.put("bean_init_start_up_costs", sofaStartupContext.getBeanInitDetail());
         sofaStartupCostModel.setDetailCosts(detailCosts);

@@ -39,15 +39,13 @@ public class SofaStartupReporterTest {
     @Before
     public void init() {
         sofaStartupContext = Mockito.mock(SofaStartupContext.class);
+        when(sofaStartupContext.getAppStartupTime()).thenReturn(1L);
         when(sofaStartupContext.getBeanInitCost()).thenReturn(1L);
         when(sofaStartupContext.getComponentCost()).thenReturn(1L);
-        when(sofaStartupContext.getInitializerCost()).thenReturn(1L);
         when(sofaStartupContext.getIsleInstallCost()).thenReturn(1L);
         when(sofaStartupContext.getWebServerInitCost()).thenReturn(1L);
         when(sofaStartupContext.getBeanInitDetail()).thenReturn(new HashMap<>());
         when(sofaStartupContext.getComponentDetail()).thenReturn(new HashMap<>());
-        when(sofaStartupContext.getInitializerDetail()).thenReturn(new HashMap<>());
-        SofaStartupContext.setAppStartupTime();
     }
 
     @Test
@@ -58,8 +56,8 @@ public class SofaStartupReporterTest {
         Assert.assertNotNull(sofaStartupCostModel);
         Assert.assertTrue(sofaStartupCostModel.getTotalCost() > 0);
         Assert.assertNotNull(sofaStartupCostModel.getBaseCosts());
-        Assert.assertTrue(sofaStartupCostModel.getBaseCosts().size() >= 6);
+        Assert.assertTrue(sofaStartupCostModel.getBaseCosts().size() >= 4);
         Assert.assertNotNull(sofaStartupCostModel.getDetailCosts());
-        Assert.assertTrue(sofaStartupCostModel.getDetailCosts().size() >= 3);
+        Assert.assertTrue(sofaStartupCostModel.getDetailCosts().size() >= 2);
     }
 }

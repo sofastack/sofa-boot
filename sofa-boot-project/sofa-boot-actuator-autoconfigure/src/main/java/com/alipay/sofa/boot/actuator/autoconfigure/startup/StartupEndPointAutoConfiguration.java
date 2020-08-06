@@ -18,11 +18,9 @@ package com.alipay.sofa.boot.actuator.autoconfigure.startup;
 
 import com.alipay.sofa.boot.actuator.startup.SofaBootStartupEndPoint;
 import com.alipay.sofa.startup.SofaStartupContext;
-import com.alipay.sofa.startup.SofaStartupProperties;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnEnabledEndpoint;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -31,7 +29,6 @@ import org.springframework.context.annotation.Configuration;
  * @Date: 2020/7/7
  */
 @Configuration
-@EnableConfigurationProperties(SofaStartupProperties.class)
 @ConditionalOnClass(SofaStartupContext.class)
 public class StartupEndPointAutoConfiguration {
 
