@@ -24,13 +24,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @ConfigurationProperties(prefix = "com.alipay.sofa.boot.startup")
 public class SofaStartupProperties {
-    private long beanInitCost = 100;
+    private long beanInitCostThreshold = 100;
 
-    public long getBeanInitCost() {
-        return beanInitCost;
+    public long getBeanInitCostThreshold() {
+        return beanInitCostThreshold;
     }
 
-    public void setBeanInitCost(long beanInitCost) {
-        this.beanInitCost = beanInitCost;
+    public void setBeanInitCostThreshold(long beanInitCostThreshold) {
+        this.beanInitCostThreshold = beanInitCostThreshold;
     }
 }

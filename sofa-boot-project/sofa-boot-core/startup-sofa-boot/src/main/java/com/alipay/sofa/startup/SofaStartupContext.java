@@ -56,7 +56,7 @@ public class SofaStartupContext implements BeanPostProcessor, SofaRuntimeContext
     public SofaStartupContext(SpringContextAwarer springContextAwarer,
                               SofaStartupProperties sofaStartupProperties) {
         this.springContextAwarer = springContextAwarer;
-        this.beanLoadCost = sofaStartupProperties.getBeanInitCost();
+        this.beanLoadCost = sofaStartupProperties.getBeanInitCostThreshold();
     }
 
     @Override
