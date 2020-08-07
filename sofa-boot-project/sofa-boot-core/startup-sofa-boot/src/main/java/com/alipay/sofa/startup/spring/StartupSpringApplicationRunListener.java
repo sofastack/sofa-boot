@@ -29,8 +29,8 @@ import java.lang.management.ManagementFactory;
 /**
  * SpringApplicationRunListener to record application startup time
  *
- * @Author: Zhijie
- * @Date: 2020/7/20
+ * @author: Zhijie
+ * @since: 2020/7/20
  */
 public class StartupSpringApplicationRunListener implements SpringApplicationRunListener, Ordered {
     private final SpringApplication application;

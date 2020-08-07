@@ -26,8 +26,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @Author: Zhijie
- * @Date: 2020/7/8
+ * @author: Zhijie
+ * @since: 2020/7/8
  */
 @Configuration
 @EnableConfigurationProperties(SofaStartupProperties.class)

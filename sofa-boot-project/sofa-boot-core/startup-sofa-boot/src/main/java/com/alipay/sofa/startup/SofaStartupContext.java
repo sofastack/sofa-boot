@@ -40,8 +40,8 @@ import java.util.stream.Collectors;
 /**
  * The context to store the startup time costs
  *
- * @Author: Zhijie
- * @Date: 2020/7/7
+ * @author: Zhijie
+ * @since: 2020/7/7
  */
 public class SofaStartupContext implements BeanPostProcessor, SofaRuntimeContextAware {
 

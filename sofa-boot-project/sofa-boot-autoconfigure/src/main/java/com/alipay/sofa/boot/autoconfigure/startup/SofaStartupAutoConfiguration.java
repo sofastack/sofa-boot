@@ -30,8 +30,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 /**
- * @Author: Zhijie
- * @Date: 2020/7/8
+ * @author: Zhijie
+ * @since: 2020/7/8
  */
 @Configuration
 @AutoConfigureBefore(ServletWebServerFactoryAutoConfiguration.class)

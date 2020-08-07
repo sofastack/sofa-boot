@@ -19,8 +19,8 @@ package com.alipay.sofa.startup;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * @Author: Zhijie
- * @Date: 2020/7/13
+ * @author: Zhijie
+ * @since: 2020/7/13
  */
 @ConfigurationProperties(prefix = "com.alipay.sofa.boot.startup")
 public class SofaStartupProperties {

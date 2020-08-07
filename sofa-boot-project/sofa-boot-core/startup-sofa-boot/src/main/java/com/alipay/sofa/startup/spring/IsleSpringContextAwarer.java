@@ -22,8 +22,8 @@ import com.alipay.sofa.startup.stage.StartupSpringContextInstallStage;
 /**
  * Support class to aware present bean factory in isle model
  *
- * @Author: Zhijie
- * @Date: 2020/7/10
+ * @author: Zhijie
+ * @since: 2020/7/10
  */
 public class IsleSpringContextAwarer extends SpringContextAwarer {
     private final StartupSpringContextInstallStage startupSpringContextInstallStage;

@@ -23,8 +23,8 @@ import org.springframework.boot.web.servlet.ServletContextInitializer;
 /**
  * Wrapper for UndertowServletWebServerFactory to calculate WebServer start time cost
  *
- * @Author: Zhijie
- * @Date: 2020/7/8
+ * @author: Zhijie
+ * @since: 2020/7/8
  */
 public class StartupUndertowServletWebServerFactory extends UndertowServletWebServerFactory {
     private static long beginTime = -1L;

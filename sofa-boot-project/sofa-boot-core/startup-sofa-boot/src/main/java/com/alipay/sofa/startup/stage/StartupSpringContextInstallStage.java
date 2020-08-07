@@ -24,8 +24,8 @@ import org.springframework.context.support.AbstractApplicationContext;
 /**
  * Wrapper for SpringContextInstallStage to calculate time cost by install spring context
  *
- * @Author: Zhijie
- * @Date: 2020/7/8
+ * @author: Zhijie
+ * @since: 2020/7/8
  */
 public class StartupSpringContextInstallStage extends SpringContextInstallStage {
     private long startTime = -1L;

@@ -23,8 +23,8 @@ import java.util.TreeMap;
 /**
  * Collect and report the costs
  *
- * @Author: Zhijie
- * @Date: 2020/7/8
+ * @author: Zhijie
+ * @since: 2020/7/8
  */
 public class SofaStartupReporter {
     protected final SofaStartupContext sofaStartupContext;

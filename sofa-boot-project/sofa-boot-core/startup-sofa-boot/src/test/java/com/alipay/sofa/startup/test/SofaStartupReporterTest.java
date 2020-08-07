@@ -29,8 +29,8 @@ import java.util.HashMap;
 import static org.mockito.Mockito.when;
 
 /**
- * @Author: Zhijie
- * @Date: 2020/7/13
+ * @author: Zhijie
+ * @since: 2020/7/13
  */
 public class SofaStartupReporterTest {
     @Mock

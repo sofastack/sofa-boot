@@ -30,8 +30,8 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 /**
- * @Author: Zhijie
- * @Date: 2020/7/13
+ * @author: Zhijie
+ * @since: 2020/7/13
  */
 @SpringBootTest
 @RunWith(SpringRunner.class)

@@ -23,8 +23,8 @@ import org.springframework.boot.web.servlet.ServletContextInitializer;
 /**
  * Wrapper for JettyServletWebServerFactory to calculate WebServer start time cost
  *
- * @Author: Zhijie
- * @Date: 2020/7/8
+ * @author: Zhijie
+ * @since: 2020/7/8
  */
 public class StartupJettyServletWebServerFactory extends JettyServletWebServerFactory {
     private static long beginTime = -1L;

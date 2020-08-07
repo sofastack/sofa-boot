@@ -27,8 +27,8 @@ import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 /**
  * Support class to aware present bean factory
  *
- * @Author: Zhijie
- * @Date: 2020/7/10
+ * @author: Zhijie
+ * @since: 2020/7/10
  */
 public class SpringContextAwarer implements BeanFactoryAware, BeanPostProcessor {
     protected BeanFactory beanFactory;

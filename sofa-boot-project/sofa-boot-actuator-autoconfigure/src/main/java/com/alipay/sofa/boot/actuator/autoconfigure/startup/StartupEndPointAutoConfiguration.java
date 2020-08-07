@@ -25,8 +25,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @Author: Zhijie
- * @Date: 2020/7/7
+ * @author: Zhijie
+ * @since: 2020/7/7
  */
 @Configuration
 @ConditionalOnClass(SofaStartupContext.class)
