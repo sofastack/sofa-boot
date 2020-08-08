@@ -45,7 +45,7 @@ public class WebServerCostTest {
     }
 
     @SpringBootApplication
-    @Import({SofaStartupAutoConfiguration.class})
+    @Import({ SofaStartupAutoConfiguration.class })
     static class SofaStartupContextWebServerCostTestConfiguration {
         @Bean
         public StartupTomcatServletWebServerFactory startupTomcatServletWebServerFactory() {
