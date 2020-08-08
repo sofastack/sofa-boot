@@ -33,7 +33,7 @@ import org.springframework.test.context.junit4.SpringRunner;
  * @author: Zhijie
  * @since: 2020/7/13
  */
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @RunWith(SpringRunner.class)
 public class ComponentCostTest {
     @Autowired
