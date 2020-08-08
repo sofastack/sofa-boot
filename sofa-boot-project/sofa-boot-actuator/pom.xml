@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.alipay.sofa</groupId>
         <artifactId>sofa-boot-parent</artifactId>
-        <version>3.4.2</version>
+        <version>3.4.3-SNAPSHOT</version>
         <relativePath>../sofa-boot-parent</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -34,6 +34,12 @@
         <dependency>
             <groupId>com.alipay.sofa</groupId>
             <artifactId>healthcheck-sofa-boot</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>startup-sofa-boot</artifactId>
             <optional>true</optional>
         </dependency>
 
