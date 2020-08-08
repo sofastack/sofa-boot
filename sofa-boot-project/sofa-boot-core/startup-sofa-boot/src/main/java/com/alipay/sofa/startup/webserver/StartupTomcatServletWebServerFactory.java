@@ -27,7 +27,7 @@ import org.springframework.boot.web.servlet.ServletContextInitializer;
  * @since: 2020/7/8
  */
 public class StartupTomcatServletWebServerFactory extends TomcatServletWebServerFactory {
-    private static long beginTime = -1L;
+    private static long beginTime = 0L;
     private static long endTime   = -1L;
 
     @Override

@@ -23,9 +23,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -44,8 +44,8 @@ public class WebServerCostTest {
         Assert.assertTrue(sofaStartupContext.getWebServerInitCost() >= 0);
     }
 
-    @Configuration
-    @Import({ SofaStartupAutoConfiguration.class })
+    @SpringBootApplication
+    @Import({SofaStartupAutoConfiguration.class})
     static class SofaStartupContextWebServerCostTestConfiguration {
         @Bean
         public StartupTomcatServletWebServerFactory startupTomcatServletWebServerFactory() {
