@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.alipay.sofa</groupId>
         <artifactId>sofa-boot-parent</artifactId>
-        <version>3.4.1</version>
+        <version>3.4.3-SNAPSHOT</version>
         <relativePath>../sofa-boot-parent</relativePath>
     </parent>
 
@@ -57,6 +57,12 @@
         <dependency>
             <groupId>com.alipay.sofa</groupId>
             <artifactId>healthcheck-sofa-boot</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>startup-sofa-boot</artifactId>
             <optional>true</optional>
         </dependency>
 
@@ -150,6 +156,30 @@
             <groupId>com.alipay.sofa</groupId>
             <artifactId>hessian</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-core</artifactId>
+            <version>8.5.6</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+            <version>9.2.18.v20160721</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-webapp</artifactId>
+            <version>9.2.18.v20160721</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.undertow</groupId>
+            <artifactId>undertow-core</artifactId>
+            <version>2.1.3.Final</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
