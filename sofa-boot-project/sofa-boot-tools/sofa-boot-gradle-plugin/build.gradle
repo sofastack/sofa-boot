@@ -11,7 +11,7 @@ plugins {
 }
 
 group 'com.alipay.sofa'
-version '3.4.3-SNAPSHOT'
+version '3.4.3'
 
 sourceCompatibility = 1.8
 
