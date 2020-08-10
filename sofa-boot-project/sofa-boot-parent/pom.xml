@@ -30,7 +30,7 @@
         <!-- for dependencyManagement -->
         <spring.cloud.starter.openfeign.version>2.1.0.RELEASE</spring.cloud.starter.openfeign.version>
         <javax.servlet.version>3.1.0</javax.servlet.version>
-        <tomcat.version>9.0.31</tomcat.version>
+        <tomcat.version>9.0.36</tomcat.version>
         <jetty.version>9.4.26.v20200117</jetty.version>
         <undertow-core>2.1.3.Final</undertow-core>
         <commons.io.version>2.4</commons.io.version>
