@@ -313,7 +313,6 @@ public class ServiceComponent extends AbstractComponent {
         String report = aggregateBindingHealth(service.getBindings());
         if (e != null) {
             report += " [" + e.getMessage() + "]";
-            healthResult.setHealthy(false);
         }
 
         healthResult.setHealthReport(report);
