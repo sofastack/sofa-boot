@@ -60,6 +60,14 @@
         <maven.gpg.pluign>1.5</maven.gpg.pluign>
     </properties>
 
+    <distributionManagement>
+        <repository>
+            <id>nexus-server@alipay-dev</id>
+            <name>alipay dev Repository</name>
+            <url>http://mvn.dev.alipay.net/artifactory/content/repositories/Alipay-Snapshot/</url>
+        </repository>
+    </distributionManagement>
+
     <licenses>
         <license>
             <name>The Apache License, Version 2.0</name>

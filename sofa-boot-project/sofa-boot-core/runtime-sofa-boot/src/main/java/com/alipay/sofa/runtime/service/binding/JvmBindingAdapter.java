@@ -198,12 +198,13 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
             }
 
             ClassLoader tcl = Thread.currentThread().getContextClassLoader();
-            Context context = new Context(targetObj, invocation.getArguments());
+            Context context = new Context(targetObj, invocation);
             try {
                 pushThreadContextClassLoader(sofaRuntimeContext.getAppClassLoader());
-                FilterHolder.beforeInvoking(context);
-                retVal = invocation.getMethod().invoke(targetObj, invocation.getArguments());
-                context.setInvokeResult(retVal);
+                if (FilterHolder.beforeInvoking(context)) {
+                    retVal = invocation.getMethod().invoke(targetObj, invocation.getArguments());
+                    context.setInvokeResult(retVal);
+                }
                 FilterHolder.afterInvoking(context);
                 retVal = context.getInvokeResult();
             } catch (InvocationTargetException ex) {

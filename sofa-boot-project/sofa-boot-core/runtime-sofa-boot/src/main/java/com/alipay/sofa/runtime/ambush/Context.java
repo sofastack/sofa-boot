@@ -23,9 +23,9 @@ import org.aopalliance.intercept.MethodInvocation;
  * Created on 2020/8/18
  */
 public class Context {
-    private Object   invokeResult;
+    private Object           invokeResult;
 
-    private Object   targetObj;
+    private Object           targetObj;
 
     private MethodInvocation methodInvocation;
 

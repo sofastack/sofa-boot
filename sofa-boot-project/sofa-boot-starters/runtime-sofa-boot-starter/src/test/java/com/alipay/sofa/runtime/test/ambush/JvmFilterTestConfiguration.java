@@ -17,7 +17,8 @@
 package com.alipay.sofa.runtime.test.ambush;
 
 import com.alipay.sofa.runtime.ambush.Context;
-import com.alipay.sofa.runtime.ambush.Filter;
+import com.alipay.sofa.runtime.ambush.EgressFilter;
+import com.alipay.sofa.runtime.ambush.IngressFilter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ImportResource;
@@ -33,17 +34,12 @@ public class JvmFilterTestConfiguration {
     public static int afterCount  = 0;
 
     @Bean
-    public Filter filter1() {
-        return new Filter() {
+    public IngressFilter ingressFilter1() {
+        return new IngressFilter() {
             @Override
-            public void before(Context context) {
+            public boolean before(Context context) {
                 ++beforeCount;
-            }
-
-            @Override
-            public void after(Context context) {
-                ++afterCount;
-                context.setInvokeResult("filter1");
+                return true;
             }
 
             @Override
@@ -54,17 +50,12 @@ public class JvmFilterTestConfiguration {
     }
 
     @Bean
-    public Filter filter2() {
-        return new Filter() {
+    public IngressFilter ingressFilter2() {
+        return new IngressFilter() {
             @Override
-            public void before(Context context) {
+            public boolean before(Context context) {
                 ++beforeCount;
-            }
-
-            @Override
-            public void after(Context context) {
-                ++afterCount;
-                context.setInvokeResult("filter2");
+                return true;
             }
 
             @Override
@@ -75,17 +66,45 @@ public class JvmFilterTestConfiguration {
     }
 
     @Bean
-    public Filter filter3() {
-        return new Filter() {
+    public IngressFilter ingressFilter3() {
+        return new IngressFilter() {
             @Override
-            public void before(Context context) {
+            public boolean before(Context context) {
                 ++beforeCount;
+                return true;
             }
 
             @Override
-            public void after(Context context) {
+            public int getOrder() {
+                return -100;
+            }
+        };
+    }
+
+    @Bean
+    public EgressFilter egressFilter1() {
+        return new EgressFilter() {
+            @Override
+            public boolean after(Context context) {
                 ++afterCount;
-                context.setInvokeResult("filter3");
+                return true;
+            }
+
+            @Override
+            public int getOrder() {
+                return 0;
+            }
+        };
+    }
+
+    @Bean
+    public EgressFilter egressFilter2() {
+        return new EgressFilter() {
+            @Override
+            public boolean after(Context context) {
+                ++afterCount;
+                context.setInvokeResult("egressFilter2");
+                return false;
             }
 
             @Override
