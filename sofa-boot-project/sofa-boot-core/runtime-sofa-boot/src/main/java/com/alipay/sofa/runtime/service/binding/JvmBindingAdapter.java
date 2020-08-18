@@ -18,7 +18,12 @@ package com.alipay.sofa.runtime.service.binding;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Proxy;
+import java.util.Collection;
+import java.util.List;
 
+import com.alipay.sofa.runtime.ambush.Context;
+import com.alipay.sofa.runtime.ambush.Filter;
+import com.alipay.sofa.runtime.ambush.FilterHolder;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.aop.framework.ProxyFactory;
 
@@ -196,9 +201,14 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
             }
 
             ClassLoader tcl = Thread.currentThread().getContextClassLoader();
+            Context context = new Context();
             try {
                 pushThreadContextClassLoader(sofaRuntimeContext.getAppClassLoader());
+                FilterHolder.beforeInvoking(context);
                 retVal = invocation.getMethod().invoke(targetObj, invocation.getArguments());
+                context.setInvokeResult(retVal);
+                FilterHolder.afterInvoking(context);
+                retVal = context.getInvokeResult();
             } catch (InvocationTargetException ex) {
                 throw ex.getTargetException();
             } finally {
