@@ -29,6 +29,8 @@ public class Context {
 
     private MethodInvocation methodInvocation;
 
+    private Throwable e;
+
     public Context() {
     }
 
@@ -59,5 +61,13 @@ public class Context {
 
     public void setMethodInvocation(MethodInvocation methodInvocation) {
         this.methodInvocation = methodInvocation;
+    }
+
+    public Throwable getE() {
+        return e;
+    }
+
+    public void setE(Throwable e) {
+        this.e = e;
     }
 }

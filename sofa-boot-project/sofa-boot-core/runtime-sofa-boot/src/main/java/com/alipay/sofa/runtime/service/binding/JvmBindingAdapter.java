@@ -205,11 +205,14 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
                     retVal = invocation.getMethod().invoke(targetObj, invocation.getArguments());
                     context.setInvokeResult(retVal);
                 }
+            } catch (InvocationTargetException ex) {
+                context.setE(ex);
+                throw ex.getTargetException();
+            } catch (Throwable e) {
+                context.setE(e);
+            } finally {
                 FilterHolder.afterInvoking(context);
                 retVal = context.getInvokeResult();
-            } catch (InvocationTargetException ex) {
-                throw ex.getTargetException();
-            } finally {
                 SofaLogger.debug(
                     "<< Finish JVM service invoke, the service implementation is  - {}]",
                     (this.target == null ? "null" : this.target.getClass().getName()));
