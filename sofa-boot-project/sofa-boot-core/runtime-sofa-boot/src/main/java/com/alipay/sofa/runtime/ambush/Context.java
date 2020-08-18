@@ -21,13 +21,18 @@ package com.alipay.sofa.runtime.ambush;
  * Created on 2020/8/18
  */
 public class Context {
-    private Object invokeResult;
+    private Object   invokeResult;
+
+    private Object   targetObj;
+
+    private Object[] arguments;
 
     public Context() {
     }
 
-    public Context(Object invokeResult) {
-        this.invokeResult = invokeResult;
+    public Context(Object targetObj, Object[] arguments) {
+        this.targetObj = targetObj;
+        this.arguments = arguments;
     }
 
     public Object getInvokeResult() {
@@ -36,5 +41,21 @@ public class Context {
 
     public void setInvokeResult(Object invokeResult) {
         this.invokeResult = invokeResult;
+    }
+
+    public Object getTargetObj() {
+        return targetObj;
+    }
+
+    public void setTargetObj(Object targetObj) {
+        this.targetObj = targetObj;
+    }
+
+    public Object[] getArguments() {
+        return arguments;
+    }
+
+    public void setArguments(Object[] arguments) {
+        this.arguments = arguments;
     }
 }

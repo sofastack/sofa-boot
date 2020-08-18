@@ -201,7 +201,7 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
             }
 
             ClassLoader tcl = Thread.currentThread().getContextClassLoader();
-            Context context = new Context();
+            Context context = new Context(targetObj, invocation.getArguments());
             try {
                 pushThreadContextClassLoader(sofaRuntimeContext.getAppClassLoader());
                 FilterHolder.beforeInvoking(context);
