@@ -18,11 +18,8 @@ package com.alipay.sofa.runtime.service.binding;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Proxy;
-import java.util.Collection;
-import java.util.List;
 
 import com.alipay.sofa.runtime.ambush.Context;
-import com.alipay.sofa.runtime.ambush.Filter;
 import com.alipay.sofa.runtime.ambush.FilterHolder;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.aop.framework.ProxyFactory;

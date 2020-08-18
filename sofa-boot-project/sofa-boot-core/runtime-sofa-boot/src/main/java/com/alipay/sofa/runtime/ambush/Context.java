@@ -16,6 +16,8 @@
  */
 package com.alipay.sofa.runtime.ambush;
 
+import org.aopalliance.intercept.MethodInvocation;
+
 /**
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 2020/8/18
@@ -25,14 +27,14 @@ public class Context {
 
     private Object   targetObj;
 
-    private Object[] arguments;
+    private MethodInvocation methodInvocation;
 
     public Context() {
     }
 
-    public Context(Object targetObj, Object[] arguments) {
+    public Context(Object targetObj, MethodInvocation methodInvocation) {
         this.targetObj = targetObj;
-        this.arguments = arguments;
+        this.methodInvocation = methodInvocation;
     }
 
     public Object getInvokeResult() {
@@ -51,11 +53,11 @@ public class Context {
         this.targetObj = targetObj;
     }
 
-    public Object[] getArguments() {
-        return arguments;
+    public MethodInvocation getMethodInvocation() {
+        return methodInvocation;
     }
 
-    public void setArguments(Object[] arguments) {
-        this.arguments = arguments;
+    public void setMethodInvocation(MethodInvocation methodInvocation) {
+        this.methodInvocation = methodInvocation;
     }
 }
