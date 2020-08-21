@@ -192,9 +192,12 @@ public class DynamicJvmServiceProxyFinder {
         @Override
         protected Object doInvoke(MethodInvocation invocation) throws Throwable {
             try {
-                SofaLogger
-                    .debug(">> Start in Cross App JVM service invoke, the service interface is  - "
-                           + getInterfaceType());
+
+                if (SofaLogger.isDebugEnabled()) {
+                    SofaLogger
+                        .debug(">> Start in Cross App JVM service invoke, the service interface is  - "
+                               + getInterfaceType());
+                }
 
                 if (getDynamicJvmServiceProxyFinder().bizManagerService != null) {
                     ReplayContext.setPlaceHolder();
@@ -245,12 +248,16 @@ public class DynamicJvmServiceProxyFinder {
 
         @Override
         protected void doCatch(MethodInvocation invocation, Throwable e, long startTime) {
-            SofaLogger.debug(getCommonInvocationLog("Exception", invocation, startTime));
+            if (SofaLogger.isDebugEnabled()) {
+                SofaLogger.debug(getCommonInvocationLog("Exception", invocation, startTime));
+            }
         }
 
         @Override
         protected void doFinally(MethodInvocation invocation, long startTime) {
-            SofaLogger.debug(getCommonInvocationLog("Finally", invocation, startTime));
+            if (SofaLogger.isDebugEnabled()) {
+                SofaLogger.debug(getCommonInvocationLog("Finally", invocation, startTime));
+            }
         }
 
         private Class getInterfaceType() {
