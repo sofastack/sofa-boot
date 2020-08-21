@@ -5,7 +5,7 @@
     <parent>
         <artifactId>sofa-boot-parent</artifactId>
         <groupId>com.alipay.sofa</groupId>
-        <version>3.4.1-SNAPSHOT</version>
+        <version>3.4.3</version>
         <relativePath>../sofa-boot-parent</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -22,6 +22,7 @@
         <module>rpc-sofa-boot-starter</module>
         <module>tracer-sofa-boot-starter</module>
         <module>log-sofa-boot-starter</module>
+        <module>startup-sofa-boot-starter</module>
     </modules>
 
 </project>

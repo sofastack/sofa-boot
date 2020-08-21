@@ -115,13 +115,15 @@ public class ReferenceComponent extends AbstractComponent {
             }
         }
 
-        if (failedBindingHealth.size() == 0) {
-            result.setHealthy(true);
-        } else {
+        result.setHealthy(failedBindingHealth.size() == 0);
+
+        String report = aggregateBindingHealth(reference.getBindings());
+        if (e != null) {
+            report += " [" + e.getMessage() + "]";
             result.setHealthy(false);
         }
-        result.setHealthReport(aggregateBindingHealth(reference.getBindings()));
 
+        result.setHealthReport(report);
         return result;
     }
 

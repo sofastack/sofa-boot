@@ -308,13 +308,14 @@ public class ServiceComponent extends AbstractComponent {
     @Override
     public HealthResult isHealthy() {
         HealthResult healthResult = new HealthResult(componentName.getRawName());
-        if (this.e == null) {
-            healthResult.setHealthy(true);
-        } else {
-            healthResult.setHealthy(false);
-        }
-        healthResult.setHealthReport(aggregateBindingHealth(service.getBindings()));
+        healthResult.setHealthy(this.e == null);
 
+        String report = aggregateBindingHealth(service.getBindings());
+        if (e != null) {
+            report += " [" + e.getMessage() + "]";
+        }
+
+        healthResult.setHealthReport(report);
         return healthResult;
     }
 }

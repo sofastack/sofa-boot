@@ -16,17 +16,6 @@
  */
 package com.alipay.sofa.boot.autoconfigure.runtime;
 
-import java.util.HashSet;
-import java.util.ServiceLoader;
-import java.util.Set;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
 import com.alipay.sofa.runtime.SofaFramework;
 import com.alipay.sofa.runtime.api.client.ReferenceClient;
 import com.alipay.sofa.runtime.api.client.ServiceClient;
@@ -49,6 +38,16 @@ import com.alipay.sofa.runtime.spring.RuntimeContextBeanFactoryPostProcessor;
 import com.alipay.sofa.runtime.spring.ServiceBeanFactoryPostProcessor;
 import com.alipay.sofa.runtime.spring.async.AsyncTaskExecutionListener;
 import com.alipay.sofa.runtime.spring.aware.DefaultRuntimeShutdownAware;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import java.util.HashSet;
+import java.util.ServiceLoader;
+import java.util.Set;
 
 /**
  * @author xuanbei 18/3/17
