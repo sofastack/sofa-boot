@@ -25,6 +25,7 @@
         <dependency>
             <groupId>com.alipay.sofa</groupId>
             <artifactId>sofa-ark-spi</artifactId>
+            <optional>true</optional>
         </dependency>
 
         <!--Optional-->
