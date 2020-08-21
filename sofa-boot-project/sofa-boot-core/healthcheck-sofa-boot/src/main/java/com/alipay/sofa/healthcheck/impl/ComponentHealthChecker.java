@@ -27,6 +27,9 @@ import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.health.HealthResult;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * ComponentInfo Health Checker
  * {@link ComponentInfo}
@@ -56,17 +59,23 @@ public class ComponentHealthChecker implements HealthChecker {
     public Health isHealthy() {
         boolean allPassed = true;
         Health.Builder builder = new Health.Builder();
+        List<Pair> passedComponent = new ArrayList<>();
+
         for (ComponentInfo componentInfo : sofaRuntimeContext.getComponentManager().getComponents()) {
             HealthResult healthy = componentInfo.isHealthy();
             String healthReport = healthy.getHealthReport();
-            if (StringUtils.hasText(healthReport)) {
-                builder.withDetail(healthy.getHealthName(), healthy.getHealthReport());
+            if (healthy.isHealthy()) {
+                passedComponent.add(new Pair(healthy.getHealthName(), StringUtils
+                    .hasText(healthReport) ? healthReport : "passed"));
             } else {
-                builder.withDetail(healthy.getHealthName(), "passed");
-            }
-            if (!healthy.isHealthy()) {
                 allPassed = false;
+                builder.withDetail(healthy.getHealthName(),
+                    StringUtils.hasText(healthReport) ? healthReport : "failed");
             }
+        }
+
+        for (Pair pair : passedComponent) {
+            builder.withDetail(pair.key, pair.value);
         }
 
         if (allPassed) {
@@ -94,5 +103,15 @@ public class ComponentHealthChecker implements HealthChecker {
     @Override
     public boolean isStrictCheck() {
         return strictCheck;
+    }
+
+    private static class Pair {
+        public String key;
+        public String value;
+
+        public Pair(String key, String value) {
+            this.key = key;
+            this.value = value;
+        }
     }
 }

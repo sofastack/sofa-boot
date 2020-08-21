@@ -13,7 +13,7 @@
     <groupId>com.alipay.sofa</groupId>
     <artifactId>sofaboot-dependencies</artifactId>
     <packaging>pom</packaging>
-    <version>3.4.1-SNAPSHOT</version>
+    <version>3.4.3</version>
 
     <properties>
         <!--project-->
@@ -22,7 +22,7 @@
         <project.build.encoding>UTF-8</project.build.encoding>
         <project.build.encoding>UTF-8</project.build.encoding>
 
-        <sofa.boot.version>3.4.1-SNAPSHOT</sofa.boot.version>
+        <sofa.boot.version>3.4.3</sofa.boot.version>
 
         <!--starter-->
         <sofa.ark.version>1.1.1</sofa.ark.version>
@@ -30,7 +30,7 @@
 
         <!--core-->
         <tracer.core.version>3.0.8</tracer.core.version>
-        <rpc.core.version>5.7.0</rpc.core.version>
+        <rpc.core.version>5.7.3</rpc.core.version>
 
         <!--2rd lib dependency-->
         <sofa.common.tools.version>1.0.22</sofa.common.tools.version>
@@ -38,10 +38,10 @@
         <sofa.hessian.version>3.3.7</sofa.hessian.version>
 
         <!--3rd lib dependency-->
-        <fastjson.version>1.2.61</fastjson.version>
+        <fastjson.version>1.2.69</fastjson.version>
         <grpc-all.version>1.0.3</grpc-all.version>
         <javassist.version>3.19.0-GA</javassist.version>
-        <protobuf-java.version>3.5.1</protobuf-java.version>
+        <protobuf-java.version>3.11.0</protobuf-java.version>
         <guice.version>3.0</guice.version>
         <guava.version>28.2-jre</guava.version>
         <zipkin.version>2.11.3</zipkin.version>
@@ -168,6 +168,12 @@
                 <version>${sofa.boot.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>startup-sofa-boot</artifactId>
+                <version>${sofa.boot.version}</version>
+            </dependency>
+
             <!-- starter management begin -->
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
@@ -177,6 +183,11 @@
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>healthcheck-sofa-boot-starter</artifactId>
+                <version>${sofa.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>startup-sofa-boot-starter</artifactId>
                 <version>${sofa.boot.version}</version>
             </dependency>
             <dependency>

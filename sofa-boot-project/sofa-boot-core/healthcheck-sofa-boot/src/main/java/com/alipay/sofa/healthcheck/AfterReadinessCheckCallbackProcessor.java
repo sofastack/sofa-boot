@@ -74,16 +74,31 @@ public class AfterReadinessCheckCallbackProcessor {
         logger.info("Begin ReadinessCheckCallback readiness check");
         Assert.notNull(readinessCheckCallbacks, "ReadinessCheckCallbacks must not be null.");
 
-        boolean result = readinessCheckCallbacks.entrySet().stream()
-                .map(entry -> doHealthCheckCallback(entry.getKey(), entry.getValue(), healthMap))
-                .reduce(true, BinaryOperators.andBoolean());
+        boolean allResult = true;
+        String failedBeanId = "";
+        for (Map.Entry<String, ReadinessCheckCallback> entry : readinessCheckCallbacks.entrySet()) {
+            String beanId = entry.getKey();
+            if (allResult) {
+                if (!doHealthCheckCallback(beanId, entry.getValue(), healthMap)) {
+                    failedBeanId = beanId;
+                    allResult = false;
+                }
+            } else {
+                logger.warn(beanId + " is skipped due to the failure of " + failedBeanId);
+                healthMap.put(
+                    beanId,
+                    Health.down()
+                        .withDetail("invoking", "skipped due to the failure of " + failedBeanId)
+                        .build());
+            }
+        }
 
-        if (result) {
+        if (allResult) {
             logger.info("ReadinessCheckCallback readiness check result: success.");
         } else {
             logger.error("ReadinessCheckCallback readiness check result: failed.");
         }
-        return result;
+        return allResult;
     }
 
     private boolean doHealthCheckCallback(String beanId,

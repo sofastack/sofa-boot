@@ -1,3 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 com.alipay.sofa.boot.actuator.autoconfigure.version.VersionEndpointAutoConfiguration,\
-com.alipay.sofa.boot.actuator.autoconfigure.health.SofaBootHealthCheckAutoConfiguration
+com.alipay.sofa.boot.actuator.autoconfigure.health.SofaBootHealthCheckAutoConfiguration,\
+com.alipay.sofa.boot.actuator.autoconfigure.startup.StartupEndPointAutoConfiguration
