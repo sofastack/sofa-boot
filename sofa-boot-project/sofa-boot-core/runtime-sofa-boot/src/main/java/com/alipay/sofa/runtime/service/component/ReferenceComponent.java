@@ -120,6 +120,7 @@ public class ReferenceComponent extends AbstractComponent {
         String report = aggregateBindingHealth(reference.getBindings());
         if (e != null) {
             report += " [" + e.getMessage() + "]";
+            result.setHealthy(false);
         }
 
         result.setHealthReport(report);

@@ -13,7 +13,7 @@
     <groupId>com.alipay.sofa</groupId>
     <artifactId>sofaboot-dependencies</artifactId>
     <packaging>pom</packaging>
-    <version>3.4.3</version>
+    <version>3.4.4-SNAPSHOT</version>
 
     <properties>
         <!--project-->
@@ -22,7 +22,7 @@
         <project.build.encoding>UTF-8</project.build.encoding>
         <project.build.encoding>UTF-8</project.build.encoding>
 
-        <sofa.boot.version>3.4.3</sofa.boot.version>
+        <sofa.boot.version>3.4.4-SNAPSHOT</sofa.boot.version>
 
         <!--starter-->
         <sofa.ark.version>1.1.1</sofa.ark.version>
