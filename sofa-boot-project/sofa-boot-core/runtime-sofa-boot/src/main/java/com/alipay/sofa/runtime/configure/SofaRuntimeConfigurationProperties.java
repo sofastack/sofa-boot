@@ -53,4 +53,14 @@ public class SofaRuntimeConfigurationProperties {
     public boolean isSkipJvmSerialize() {
         return SofaRuntimeProperties.isSkipJvmSerialize(this.getClass().getClassLoader());
     }
+
+    public void setSkipExtensionHealthCheck(boolean skipExtensionHealthCheck) {
+        SofaRuntimeProperties.setSkipExtensionHealthCheck(this.getClass().getClassLoader(),
+            skipExtensionHealthCheck);
+    }
+
+    public boolean isSkipExtensionHealthCheck() {
+        return SofaRuntimeProperties.isSkipExtensionHealthCheck(this.getClass().getClassLoader());
+    }
+
 }
