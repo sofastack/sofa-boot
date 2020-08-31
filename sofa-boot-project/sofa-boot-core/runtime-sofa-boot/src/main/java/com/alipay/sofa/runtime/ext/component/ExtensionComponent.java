@@ -19,6 +19,7 @@ package com.alipay.sofa.runtime.ext.component;
 import java.lang.reflect.Method;
 import java.util.Map;
 
+import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.ReflectionUtils;
 
@@ -125,9 +126,12 @@ public class ExtensionComponent extends AbstractComponent {
 
     @Override
     public HealthResult isHealthy() {
-        HealthResult healthResult = new HealthResult(componentName.getRawName());
-        healthResult.setHealthy(true);
-        return healthResult;
+        if (SofaRuntimeProperties.isSkipExtensionHealthCheck(sofaRuntimeContext)) {
+            HealthResult healthResult = new HealthResult(componentName.getRawName());
+            healthResult.setHealthy(true);
+            return healthResult;
+        }
+        return super.isHealthy();
     }
 
     public Extension getExtension() {

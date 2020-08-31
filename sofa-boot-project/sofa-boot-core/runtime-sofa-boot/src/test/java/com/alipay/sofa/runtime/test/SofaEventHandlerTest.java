@@ -75,6 +75,7 @@ public class SofaEventHandlerTest {
         Properties properties = new Properties();
         properties.setProperty("com.alipay.sofa.boot.disableJvmFirst", "true");
         properties.setProperty("com.alipay.sofa.boot.skipJvmReferenceHealthCheck", "true");
+        properties.setProperty("com.alipay.sofa.boot.skipExtensionHealthCheck", "true");
         properties.setProperty("com.alipay.sofa.boot.skipJvmSerialize", "true");
         properties.setProperty("spring.application.name", "tSofaEventHandlerTest");
         SofaFramework.getRuntimeSet().forEach(value -> SofaFramework.unRegisterSofaRuntimeManager(value));
@@ -102,6 +103,7 @@ public class SofaEventHandlerTest {
         Assert.assertFalse(SofaRuntimeProperties.isDisableJvmFirst(ctx.getClassLoader()));
         Assert
             .assertFalse(SofaRuntimeProperties.isSkipJvmReferenceHealthCheck(ctx.getClassLoader()));
+        Assert.assertFalse(SofaRuntimeProperties.isSkipExtensionHealthCheck(ctx.getClassLoader()));
         Assert.assertFalse(SofaRuntimeProperties.isSkipJvmSerialize(ctx.getClassLoader()));
         Assert.assertTrue(SofaFramework.getRuntimeSet().isEmpty());
         Assert.assertFalse(ctx.isActive());
