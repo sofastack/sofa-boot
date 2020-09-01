@@ -27,7 +27,7 @@ import com.alipay.sofa.boot.util.StringUtils;
  * @author xuanbei 18/2/28
  */
 public abstract class ServiceProxy implements MethodInterceptor {
-    private ClassLoader serviceClassLoader;
+    protected ClassLoader serviceClassLoader;
 
     public ServiceProxy(ClassLoader serviceClassLoader) {
         this.serviceClassLoader = serviceClassLoader;
@@ -36,27 +36,17 @@ public abstract class ServiceProxy implements MethodInterceptor {
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
         ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
-        Context context = new Context(invocation);
-        Object rtn;
-
         long startTime = System.currentTimeMillis();
         try {
             Thread.currentThread().setContextClassLoader(serviceClassLoader);
-            if (FilterHolder.beforeInvoking(context)) {
-                rtn = doInvoke(invocation);
-                context.setInvokeResult(rtn);
-            }
+            return doInvoke(invocation);
         } catch (Throwable e) {
-            context.setE(e);
             doCatch(invocation, e, startTime);
             throw e;
         } finally {
-            FilterHolder.afterInvoking(context);
-            rtn = context.getInvokeResult();
             doFinally(invocation, startTime);
             Thread.currentThread().setContextClassLoader(oldClassLoader);
         }
-        return rtn;
     }
 
     protected void pushThreadContextClassLoader(ClassLoader newContextClassLoader) {
