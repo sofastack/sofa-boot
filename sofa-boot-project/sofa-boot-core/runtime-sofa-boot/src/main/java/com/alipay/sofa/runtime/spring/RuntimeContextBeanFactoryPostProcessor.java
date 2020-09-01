@@ -63,7 +63,6 @@ public class RuntimeContextBeanFactoryPostProcessor implements BeanFactoryPostPr
         beanFactory
             .addBeanPostProcessor(new ReferenceAnnotationBeanPostProcessor(applicationContext,
                 sofaRuntimeContext, bindingAdapterFactory, bindingConverterFactory));
-        beanFactory.addBeanPostProcessor(new JvmFilterPostProcessor());
 
         beanFactory.registerSingleton(RuntimeShutdownAwarePostProcessor.class.getSimpleName(),
             new RuntimeShutdownAwarePostProcessor(sofaRuntimeContext.getSofaRuntimeManager()));
