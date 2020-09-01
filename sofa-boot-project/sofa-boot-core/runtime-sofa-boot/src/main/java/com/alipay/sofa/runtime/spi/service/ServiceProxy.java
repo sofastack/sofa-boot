@@ -16,6 +16,8 @@
  */
 package com.alipay.sofa.runtime.spi.service;
 
+import com.alipay.sofa.runtime.ambush.Context;
+import com.alipay.sofa.runtime.ambush.FilterHolder;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
@@ -34,17 +36,27 @@ public abstract class ServiceProxy implements MethodInterceptor {
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
         ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
+        Context context = new Context(invocation);
+        Object rtn;
+
         long startTime = System.currentTimeMillis();
         try {
             Thread.currentThread().setContextClassLoader(serviceClassLoader);
-            return doInvoke(invocation);
+            if (FilterHolder.beforeInvoking(context)) {
+                rtn = doInvoke(invocation);
+                context.setInvokeResult(rtn);
+            }
         } catch (Throwable e) {
+            context.setE(e);
             doCatch(invocation, e, startTime);
             throw e;
         } finally {
+            FilterHolder.afterInvoking(context);
+            rtn = context.getInvokeResult();
             doFinally(invocation, startTime);
             Thread.currentThread().setContextClassLoader(oldClassLoader);
         }
+        return rtn;
     }
 
     protected void pushThreadContextClassLoader(ClassLoader newContextClassLoader) {

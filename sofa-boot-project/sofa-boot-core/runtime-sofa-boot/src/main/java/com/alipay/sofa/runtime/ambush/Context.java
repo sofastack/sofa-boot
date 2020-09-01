@@ -25,8 +25,6 @@ import org.aopalliance.intercept.MethodInvocation;
 public class Context {
     private Object           invokeResult;
 
-    private Object           targetObj;
-
     private MethodInvocation methodInvocation;
 
     private Throwable        e;
@@ -34,8 +32,7 @@ public class Context {
     public Context() {
     }
 
-    public Context(Object targetObj, MethodInvocation methodInvocation) {
-        this.targetObj = targetObj;
+    public Context(MethodInvocation methodInvocation) {
         this.methodInvocation = methodInvocation;
     }
 
@@ -45,14 +42,6 @@ public class Context {
 
     public void setInvokeResult(Object invokeResult) {
         this.invokeResult = invokeResult;
-    }
-
-    public Object getTargetObj() {
-        return targetObj;
-    }
-
-    public void setTargetObj(Object targetObj) {
-        this.targetObj = targetObj;
     }
 
     public MethodInvocation getMethodInvocation() {

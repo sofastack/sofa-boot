@@ -198,21 +198,12 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
             }
 
             ClassLoader tcl = Thread.currentThread().getContextClassLoader();
-            Context context = new Context(targetObj, invocation);
             try {
                 pushThreadContextClassLoader(sofaRuntimeContext.getAppClassLoader());
-                if (FilterHolder.beforeInvoking(context)) {
-                    retVal = invocation.getMethod().invoke(targetObj, invocation.getArguments());
-                    context.setInvokeResult(retVal);
-                }
+                retVal = invocation.getMethod().invoke(targetObj, invocation.getArguments());
             } catch (InvocationTargetException ex) {
-                context.setE(ex);
                 throw ex.getTargetException();
-            } catch (Throwable e) {
-                context.setE(e);
             } finally {
-                FilterHolder.afterInvoking(context);
-                retVal = context.getInvokeResult();
                 SofaLogger.debug(
                     "<< Finish JVM service invoke, the service implementation is  - {}]",
                     (this.target == null ? "null" : this.target.getClass().getName()));
