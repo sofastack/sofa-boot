@@ -21,7 +21,7 @@ import com.alipay.sofa.runtime.ambush.FilterHolder;
 import com.alipay.sofa.runtime.ambush.JvmFilter;
 import com.alipay.sofa.runtime.test.RuntimeTestBase;
 import org.junit.Assert;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -37,8 +37,8 @@ public class JvmFilterTest extends RuntimeTestBase {
     @Autowired
     private Service myService;
 
-    @Before
-    public void before() {
+    @BeforeClass
+    public static void before() {
         FilterHolder.clearJvmFilters();
     }
 
@@ -52,6 +52,8 @@ public class JvmFilterTest extends RuntimeTestBase {
 
     @Test
     public void testResort() {
+        FilterHolder.clearJvmFilters();
+
         FilterHolder.addJvmFilter(new JvmFilter() {
             @Override
             public boolean before(Context context) {
