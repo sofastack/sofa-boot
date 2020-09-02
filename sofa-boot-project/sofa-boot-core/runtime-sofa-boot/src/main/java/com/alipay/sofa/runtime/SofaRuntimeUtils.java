@@ -28,7 +28,7 @@ import java.util.List;
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 2020/9/2
  */
-public class Utils {
+public class SofaRuntimeUtils {
     private static final String ARK_BIZ_CLASSLOADER_NAME = "com.alipay.sofa.ark.container.service.classloader.BizClassLoader";
     private static Object       masterBiz;
 
