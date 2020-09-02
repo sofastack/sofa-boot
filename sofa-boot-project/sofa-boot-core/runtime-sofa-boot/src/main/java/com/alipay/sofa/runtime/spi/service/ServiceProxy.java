@@ -16,8 +16,6 @@
  */
 package com.alipay.sofa.runtime.spi.service;
 
-import com.alipay.sofa.runtime.ambush.Context;
-import com.alipay.sofa.runtime.ambush.FilterHolder;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
