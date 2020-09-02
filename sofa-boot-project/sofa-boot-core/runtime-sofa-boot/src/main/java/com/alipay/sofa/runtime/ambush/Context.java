@@ -24,12 +24,12 @@ import org.aopalliance.intercept.MethodInvocation;
  * Created on 2020/8/18
  */
 public class Context {
-    private Object                     invokeResult;
+    private Object                       invokeResult;
 
-    private transient MethodInvocation methodInvocation;
-    private SofaRuntimeContext         sofaRuntimeContext;
+    private transient MethodInvocation   methodInvocation;
+    private transient SofaRuntimeContext sofaRuntimeContext;
 
-    private Throwable                  e;
+    private Throwable                    e;
 
     public Context() {
     }
