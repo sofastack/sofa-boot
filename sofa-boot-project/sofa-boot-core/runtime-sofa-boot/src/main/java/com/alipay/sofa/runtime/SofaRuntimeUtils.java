@@ -55,7 +55,10 @@ public class SofaRuntimeUtils {
             return tccl.equals(((Biz) masterBiz).getBizClassLoader());
         } catch (Throwable e) {
             // For catching ClassNotFound exception
-            SofaLogger.info("Assume normal SOFABoot environment because Loading of master biz fails with error: {}", e);
+            SofaLogger
+                .info(
+                    "Assume normal SOFABoot environment because Loading of master biz fails with error: {}",
+                    e);
             return true;
         }
     }

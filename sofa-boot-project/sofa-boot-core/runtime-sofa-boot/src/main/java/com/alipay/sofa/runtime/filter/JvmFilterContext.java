@@ -29,7 +29,7 @@ public class JvmFilterContext {
     private transient MethodInvocation   methodInvocation;
     private transient SofaRuntimeContext sofaRuntimeContext;
 
-    private Throwable                    e;
+    private Throwable                    exception;
 
     public JvmFilterContext() {
     }
@@ -62,11 +62,11 @@ public class JvmFilterContext {
         this.methodInvocation = methodInvocation;
     }
 
-    public Throwable getE() {
-        return e;
+    public Throwable getException() {
+        return exception;
     }
 
-    public void setE(Throwable e) {
-        this.e = e;
+    public void setException(Throwable e) {
+        this.exception = e;
     }
 }

@@ -173,7 +173,7 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
                     context.setInvokeResult(rtn);
                 }
             } catch (Throwable e) {
-                context.setE(e);
+                context.setException(e);
                 doCatch(invocation, e, startTime);
                 throw e;
             } finally {
