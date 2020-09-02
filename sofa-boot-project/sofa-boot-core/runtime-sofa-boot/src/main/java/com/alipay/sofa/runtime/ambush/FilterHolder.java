@@ -19,7 +19,6 @@ package com.alipay.sofa.runtime.ambush;
 import org.springframework.core.Ordered;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -29,51 +28,36 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Created on 2020/8/18
  */
 public class FilterHolder {
-    private static final List<IngressFilter> ingressFilters = new ArrayList<>();
-    private static final AtomicBoolean ingressSorted  = new AtomicBoolean(false);
-
-    private static final List<EgressFilter> egressFilters = new ArrayList<>();
-    private static final AtomicBoolean egressSorted = new AtomicBoolean(false);
+    private static final List<JvmFilter> JVM_FILTERS = new ArrayList<>();
+    private static final AtomicBoolean filtersSorted  = new AtomicBoolean(false);
 
     private static final Comparator<Ordered> comparator = (f1, f2) -> {
         return Integer.compare(f1.getOrder(), f2.getOrder());
     };
 
-    public static void addIngressFilter(IngressFilter f) {
-        ingressFilters.add(f);
-        ingressSorted.compareAndSet(true, false);
+    public static void addJvmFilter(JvmFilter f) {
+        JVM_FILTERS.add(f);
+        filtersSorted.compareAndSet(true, false);
     }
 
-    private static void sortIngressFilters() {
-        if (ingressSorted.compareAndSet(false, true)) {
-            ingressFilters.sort(comparator);
+    public static void clearJvmFilters() {
+        JVM_FILTERS.clear();
+    }
+
+    private static void sortJvmFilters() {
+        if (filtersSorted.compareAndSet(false, true)) {
+            JVM_FILTERS.sort(comparator);
         }
     }
 
-    public static void addEgressFilter(EgressFilter f) {
-        egressFilters.add(f);
-        egressSorted.compareAndSet(true, false);
-    }
-
-    private static void sortEgressFilters() {
-        if (egressSorted.compareAndSet(false, true)) {
-            egressFilters.sort(comparator);
-        }
-    }
-
-    public static Collection<IngressFilter> getIngressFilters() {
-        sortIngressFilters();
-        return ingressFilters;
-    }
-
-    public static Collection<EgressFilter> getEgressFilters() {
-        sortEgressFilters();
-        return egressFilters;
+    public static List<JvmFilter> getJvmFilters() {
+        sortJvmFilters();
+        return JVM_FILTERS;
     }
 
     public static boolean beforeInvoking(Context context) {
-        sortIngressFilters();
-        for (IngressFilter filter : ingressFilters) {
+        sortJvmFilters();
+        for (JvmFilter filter : JVM_FILTERS) {
             if (!filter.before(context)) {
                 return false;
             }
@@ -82,8 +66,8 @@ public class FilterHolder {
     }
 
     public static boolean afterInvoking(Context context) {
-        sortEgressFilters();
-        for (EgressFilter filter : egressFilters) {
+        sortJvmFilters();
+        for (JvmFilter filter : JVM_FILTERS) {
             if (!filter.after(context)) {
                 return false;
             }

@@ -17,8 +17,7 @@
 package com.alipay.sofa.runtime.test.ambush;
 
 import com.alipay.sofa.runtime.ambush.Context;
-import com.alipay.sofa.runtime.ambush.EgressFilter;
-import com.alipay.sofa.runtime.ambush.IngressFilter;
+import com.alipay.sofa.runtime.ambush.JvmFilter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ImportResource;
@@ -34,8 +33,8 @@ public class JvmFilterTestConfiguration {
     public static int afterCount  = 0;
 
     @Bean
-    public IngressFilter ingressFilter1() {
-        return new IngressFilter() {
+    public JvmFilter egressFilter1() {
+        return new JvmFilter() {
             @Override
             public boolean before(Context context) {
                 ++beforeCount;
@@ -46,12 +45,17 @@ public class JvmFilterTestConfiguration {
             public int getOrder() {
                 return 0;
             }
+
+            @Override
+            public boolean after(Context context) {
+                return true;
+            }
         };
     }
 
     @Bean
-    public IngressFilter ingressFilter2() {
-        return new IngressFilter() {
+    public JvmFilter egressFilter2() {
+        return new JvmFilter() {
             @Override
             public boolean before(Context context) {
                 ++beforeCount;
@@ -62,12 +66,17 @@ public class JvmFilterTestConfiguration {
             public int getOrder() {
                 return 100;
             }
+
+            @Override
+            public boolean after(Context context) {
+                return true;
+            }
         };
     }
 
     @Bean
-    public IngressFilter ingressFilter3() {
-        return new IngressFilter() {
+    public JvmFilter egressFilter3() {
+        return new JvmFilter() {
             @Override
             public boolean before(Context context) {
                 ++beforeCount;
@@ -78,12 +87,17 @@ public class JvmFilterTestConfiguration {
             public int getOrder() {
                 return -100;
             }
+
+            @Override
+            public boolean after(Context context) {
+                return true;
+            }
         };
     }
 
     @Bean
-    public EgressFilter egressFilter1() {
-        return new EgressFilter() {
+    public JvmFilter ingressFilter1() {
+        return new JvmFilter() {
             @Override
             public boolean after(Context context) {
                 ++afterCount;
@@ -94,12 +108,17 @@ public class JvmFilterTestConfiguration {
             public int getOrder() {
                 return 0;
             }
+
+            @Override
+            public boolean before(Context context) {
+                return true;
+            }
         };
     }
 
     @Bean
-    public EgressFilter egressFilter2() {
-        return new EgressFilter() {
+    public JvmFilter ingressFilter2() {
+        return new JvmFilter() {
             @Override
             public boolean after(Context context) {
                 ++afterCount;
@@ -110,6 +129,11 @@ public class JvmFilterTestConfiguration {
             @Override
             public int getOrder() {
                 return -100;
+            }
+
+            @Override
+            public boolean before(Context context) {
+                return true;
             }
         };
     }

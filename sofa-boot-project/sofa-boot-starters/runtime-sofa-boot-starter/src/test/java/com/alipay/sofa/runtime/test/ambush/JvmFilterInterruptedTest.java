@@ -19,6 +19,7 @@ package com.alipay.sofa.runtime.test.ambush;
 import com.alipay.sofa.runtime.ambush.FilterHolder;
 import com.alipay.sofa.runtime.test.RuntimeTestBase;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,11 +33,15 @@ public class JvmFilterInterruptedTest extends RuntimeTestBase {
     @Autowired
     private Service myService;
 
+    @Before
+    public void before() {
+        FilterHolder.clearJvmFilters();
+    }
+
     @Test
     public void test() {
         Assert.assertEquals("interrupted", myService.say());
-        Assert.assertEquals(3, FilterHolder.getIngressFilters().size());
-        Assert.assertEquals(0, FilterHolder.getEgressFilters().size());
+        Assert.assertEquals(3, FilterHolder.getJvmFilters().size());
         Assert.assertEquals(1, JvmFilterInterruptedConfiguration.beforeCount);
         Assert.assertEquals(0, JvmFilterInterruptedConfiguration.afterCount);
     }
