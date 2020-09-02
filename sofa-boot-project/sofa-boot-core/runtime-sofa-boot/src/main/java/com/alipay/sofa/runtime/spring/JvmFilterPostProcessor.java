@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.runtime.spring;
 
+import com.alipay.sofa.runtime.Utils;
 import com.alipay.sofa.runtime.ambush.EgressFilter;
 import com.alipay.sofa.runtime.ambush.FilterHolder;
 import com.alipay.sofa.runtime.ambush.IngressFilter;
@@ -30,12 +31,14 @@ public class JvmFilterPostProcessor implements BeanPostProcessor {
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName)
                                                                               throws BeansException {
-        if (bean instanceof IngressFilter) {
-            FilterHolder.addIngressFilter((IngressFilter) bean);
-        }
+        if (!Utils.isArkEnvironment()) {
+            if (bean instanceof IngressFilter) {
+                FilterHolder.addIngressFilter((IngressFilter) bean);
+            }
 
-        if (bean instanceof EgressFilter) {
-            FilterHolder.addEgressFilter((EgressFilter) bean);
+            if (bean instanceof EgressFilter) {
+                FilterHolder.addEgressFilter((EgressFilter) bean);
+            }
         }
 
         return bean;

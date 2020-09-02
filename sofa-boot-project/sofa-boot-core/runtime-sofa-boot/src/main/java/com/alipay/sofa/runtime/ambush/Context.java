@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.runtime.ambush;
 
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import org.aopalliance.intercept.MethodInvocation;
 
 /**
@@ -26,6 +27,7 @@ public class Context {
     private Object                     invokeResult;
 
     private transient MethodInvocation methodInvocation;
+    private SofaRuntimeContext         sofaRuntimeContext;
 
     private Throwable                  e;
 
@@ -42,6 +44,14 @@ public class Context {
 
     public void setInvokeResult(Object invokeResult) {
         this.invokeResult = invokeResult;
+    }
+
+    public SofaRuntimeContext getSofaRuntimeContext() {
+        return sofaRuntimeContext;
+    }
+
+    public void setSofaRuntimeContext(SofaRuntimeContext sofaRuntimeContext) {
+        this.sofaRuntimeContext = sofaRuntimeContext;
     }
 
     public MethodInvocation getMethodInvocation() {

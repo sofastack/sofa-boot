@@ -28,6 +28,12 @@
             <optional>true</optional>
         </dependency>
 
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>sofa-ark-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
         <!--Optional-->
         <dependency>
             <groupId>com.alipay.sofa</groupId>

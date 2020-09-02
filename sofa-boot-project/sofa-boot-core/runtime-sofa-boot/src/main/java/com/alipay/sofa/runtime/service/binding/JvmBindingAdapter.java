@@ -156,6 +156,15 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
             Context context = new Context(invocation);
             Object rtn;
 
+            if (getTarget() == null) {
+                context.setSofaRuntimeContext(DynamicJvmServiceProxyFinder
+                    .getDynamicJvmServiceProxyFinder()
+                    .findServiceComponent(sofaRuntimeContext.getAppClassLoader(), contract)
+                    .getContext());
+            } else {
+                context.setSofaRuntimeContext(sofaRuntimeContext);
+            }
+
             long startTime = System.currentTimeMillis();
             try {
                 Thread.currentThread().setContextClassLoader(serviceClassLoader);

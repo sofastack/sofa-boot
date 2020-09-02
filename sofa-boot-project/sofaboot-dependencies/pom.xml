@@ -356,6 +356,26 @@
                 <version>${sofa.ark.version}</version>
             </dependency>
             <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>sofa-ark-common</artifactId>
+                <version>${sofa.ark.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>sofa-ark-tools</artifactId>
+                <version>${sofa.ark.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>sofa-ark-api</artifactId>
+                <version>${sofa.ark.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>sofa-ark-container</artifactId>
+                <version>${sofa.ark.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>com.alipay.sofa.lookout</groupId>
                 <artifactId>lookout-api</artifactId>
                 <version>${sofa.lookout.version}</version>
