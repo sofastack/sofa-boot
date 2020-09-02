@@ -20,6 +20,7 @@ import com.alipay.sofa.ark.api.ArkClient;
 import com.alipay.sofa.ark.api.ArkConfigs;
 import com.alipay.sofa.ark.spi.constant.Constants;
 import com.alipay.sofa.ark.spi.model.Biz;
+import com.alipay.sofa.runtime.log.SofaLogger;
 import org.springframework.util.Assert;
 
 import java.util.List;
@@ -54,6 +55,7 @@ public class SofaRuntimeUtils {
             return tccl.equals(((Biz) masterBiz).getBizClassLoader());
         } catch (Throwable e) {
             // For catching ClassNotFound exception
+            SofaLogger.info("Assume normal SOFABoot environment because Loading of master biz fails with error: {}", e);
             return true;
         }
     }
