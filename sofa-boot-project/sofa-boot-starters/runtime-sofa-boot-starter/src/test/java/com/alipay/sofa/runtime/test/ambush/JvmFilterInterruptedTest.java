@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.runtime.test.ambush;
 
-import com.alipay.sofa.runtime.ambush.FilterHolder;
+import com.alipay.sofa.runtime.filter.JvmFilterHolder;
 import com.alipay.sofa.runtime.test.RuntimeTestBase;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -35,13 +35,13 @@ public class JvmFilterInterruptedTest extends RuntimeTestBase {
 
     @BeforeClass
     public static void before() {
-        FilterHolder.clearJvmFilters();
+        JvmFilterHolder.clearJvmFilters();
     }
 
     @Test
     public void test() {
         Assert.assertEquals("interrupted", myService.say());
-        Assert.assertEquals(3, FilterHolder.getJvmFilters().size());
+        Assert.assertEquals(3, JvmFilterHolder.getJvmFilters().size());
         Assert.assertEquals(1, JvmFilterInterruptedConfiguration.beforeCount);
         Assert.assertEquals(0, JvmFilterInterruptedConfiguration.afterCount);
     }

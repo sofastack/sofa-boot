@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime.ambush;
+package com.alipay.sofa.runtime.filter;
 
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import org.aopalliance.intercept.MethodInvocation;
@@ -23,7 +23,7 @@ import org.aopalliance.intercept.MethodInvocation;
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 2020/8/18
  */
-public class Context {
+public class JvmFilterContext {
     private Object                       invokeResult;
 
     private transient MethodInvocation   methodInvocation;
@@ -31,10 +31,10 @@ public class Context {
 
     private Throwable                    e;
 
-    public Context() {
+    public JvmFilterContext() {
     }
 
-    public Context(MethodInvocation methodInvocation) {
+    public JvmFilterContext(MethodInvocation methodInvocation) {
         this.methodInvocation = methodInvocation;
     }
 

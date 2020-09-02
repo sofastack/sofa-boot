@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime.ambush;
+package com.alipay.sofa.runtime.filter;
 
 import org.springframework.core.Ordered;
 
@@ -33,7 +33,7 @@ public interface JvmFilter extends Ordered {
      * @param context JVM invoking context
      * @return whether to continue processing
      */
-    boolean before(Context context);
+    boolean before(JvmFilterContext context);
 
     /**
      * This method is called after the actual JVM service invoking.
@@ -41,5 +41,5 @@ public interface JvmFilter extends Ordered {
      * @param context JVM invoking context
      * @return whether to continue processing
      */
-    boolean after(Context context);
+    boolean after(JvmFilterContext context);
 }

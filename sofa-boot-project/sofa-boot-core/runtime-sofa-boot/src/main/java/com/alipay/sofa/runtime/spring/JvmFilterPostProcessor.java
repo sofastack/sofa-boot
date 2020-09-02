@@ -17,8 +17,8 @@
 package com.alipay.sofa.runtime.spring;
 
 import com.alipay.sofa.runtime.SofaRuntimeUtils;
-import com.alipay.sofa.runtime.ambush.FilterHolder;
-import com.alipay.sofa.runtime.ambush.JvmFilter;
+import com.alipay.sofa.runtime.filter.JvmFilterHolder;
+import com.alipay.sofa.runtime.filter.JvmFilter;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 
@@ -32,7 +32,7 @@ public class JvmFilterPostProcessor implements BeanPostProcessor {
                                                                               throws BeansException {
         if (SofaRuntimeUtils.onMasterBiz()) {
             if (bean instanceof JvmFilter) {
-                FilterHolder.addJvmFilter((JvmFilter) bean);
+                JvmFilterHolder.addJvmFilter((JvmFilter) bean);
             }
         }
 

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime.ambush;
+package com.alipay.sofa.runtime.filter;
 
 import org.springframework.core.Ordered;
 
@@ -27,7 +27,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 2020/8/18
  */
-public class FilterHolder {
+public class JvmFilterHolder {
     private static final List<JvmFilter> JVM_FILTERS = new ArrayList<>();
     private static final AtomicBoolean filtersSorted  = new AtomicBoolean(false);
 
@@ -55,7 +55,7 @@ public class FilterHolder {
         return JVM_FILTERS;
     }
 
-    public static boolean beforeInvoking(Context context) {
+    public static boolean beforeInvoking(JvmFilterContext context) {
         sortJvmFilters();
         for (JvmFilter filter : JVM_FILTERS) {
             if (!filter.before(context)) {
@@ -65,7 +65,7 @@ public class FilterHolder {
         return true;
     }
 
-    public static boolean afterInvoking(Context context) {
+    public static boolean afterInvoking(JvmFilterContext context) {
         sortJvmFilters();
         for (JvmFilter filter : JVM_FILTERS) {
             if (!filter.after(context)) {

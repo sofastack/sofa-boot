@@ -16,8 +16,8 @@
  */
 package com.alipay.sofa.runtime.test.ambush;
 
-import com.alipay.sofa.runtime.ambush.Context;
-import com.alipay.sofa.runtime.ambush.JvmFilter;
+import com.alipay.sofa.runtime.filter.JvmFilterContext;
+import com.alipay.sofa.runtime.filter.JvmFilter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ImportResource;
@@ -36,7 +36,7 @@ public class JvmFilterTestConfiguration {
     public JvmFilter egressFilter1() {
         return new JvmFilter() {
             @Override
-            public boolean before(Context context) {
+            public boolean before(JvmFilterContext context) {
                 ++beforeCount;
                 return true;
             }
@@ -47,7 +47,7 @@ public class JvmFilterTestConfiguration {
             }
 
             @Override
-            public boolean after(Context context) {
+            public boolean after(JvmFilterContext context) {
                 return true;
             }
         };
@@ -57,7 +57,7 @@ public class JvmFilterTestConfiguration {
     public JvmFilter egressFilter2() {
         return new JvmFilter() {
             @Override
-            public boolean before(Context context) {
+            public boolean before(JvmFilterContext context) {
                 ++beforeCount;
                 return true;
             }
@@ -68,7 +68,7 @@ public class JvmFilterTestConfiguration {
             }
 
             @Override
-            public boolean after(Context context) {
+            public boolean after(JvmFilterContext context) {
                 return true;
             }
         };
@@ -78,7 +78,7 @@ public class JvmFilterTestConfiguration {
     public JvmFilter egressFilter3() {
         return new JvmFilter() {
             @Override
-            public boolean before(Context context) {
+            public boolean before(JvmFilterContext context) {
                 ++beforeCount;
                 return true;
             }
@@ -89,7 +89,7 @@ public class JvmFilterTestConfiguration {
             }
 
             @Override
-            public boolean after(Context context) {
+            public boolean after(JvmFilterContext context) {
                 return true;
             }
         };
@@ -99,7 +99,7 @@ public class JvmFilterTestConfiguration {
     public JvmFilter ingressFilter1() {
         return new JvmFilter() {
             @Override
-            public boolean after(Context context) {
+            public boolean after(JvmFilterContext context) {
                 ++afterCount;
                 return true;
             }
@@ -110,7 +110,7 @@ public class JvmFilterTestConfiguration {
             }
 
             @Override
-            public boolean before(Context context) {
+            public boolean before(JvmFilterContext context) {
                 return true;
             }
         };
@@ -120,7 +120,7 @@ public class JvmFilterTestConfiguration {
     public JvmFilter ingressFilter2() {
         return new JvmFilter() {
             @Override
-            public boolean after(Context context) {
+            public boolean after(JvmFilterContext context) {
                 ++afterCount;
                 context.setInvokeResult("egressFilter2");
                 return false;
@@ -132,7 +132,7 @@ public class JvmFilterTestConfiguration {
             }
 
             @Override
-            public boolean before(Context context) {
+            public boolean before(JvmFilterContext context) {
                 return true;
             }
         };
