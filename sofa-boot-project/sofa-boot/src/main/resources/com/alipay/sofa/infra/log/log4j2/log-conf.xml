@@ -30,7 +30,7 @@
             <!-- only print error log -->
             <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout charset="${INFRASTRUCTURE_FILE_ENCODING}">
-                <pattern>%d %-5p %-32t - %m%n</pattern>
+                <pattern>%d %-5p %-32t - %m%n %throwable</pattern>
             </PatternLayout>
             <Policies>
                 <!-- 按天分日志文件:重要的是 filePattern 配置到按照天 -->
@@ -42,7 +42,7 @@
                      filePattern="${INFRASTRUCTURE_LOG_PATH}/infra/common-default.log.%d{yyyy-MM-dd}">
             <ThresholdFilter level="${INFRASTRUCTURE_LOG_LEVEL}" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout charset="${INFRASTRUCTURE_FILE_ENCODING}">
-                <pattern>%d %-5p %-32t - %m%n</pattern>
+                <pattern>%d %-5p %-32t - %m%n %throwable</pattern>
             </PatternLayout>
             <Policies>
                 <!-- 按天分日志文件:重要的是 filePattern 配置到按照天 -->
