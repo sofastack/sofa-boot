@@ -30,7 +30,7 @@ public class JvmFilterPostProcessor implements BeanPostProcessor {
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName)
                                                                               throws BeansException {
-        if (SofaRuntimeUtils.onMasterBiz()) {
+        if (!SofaRuntimeUtils.isArkEnvironment() || SofaRuntimeUtils.onMasterBiz()) {
             if (bean instanceof JvmFilter) {
                 JvmFilterHolder.addJvmFilter((JvmFilter) bean);
             }

@@ -38,11 +38,11 @@ public class SofaRuntimeUtils {
         return tccl != null && ARK_BIZ_CLASSLOADER_NAME.equals(tccl.getClass().getName());
     }
 
+    /**
+     * Invoke this method only in Ark environment!
+     * @return true if on master biz in Ark environment, otherwise false
+     */
     public static boolean onMasterBiz() {
-        if (!isArkEnvironment()) {
-            return true;
-        }
-
         try {
             if (masterBiz == null) {
                 String masterBizName = ArkConfigs.getStringValue(Constants.MASTER_BIZ);
@@ -57,9 +57,9 @@ public class SofaRuntimeUtils {
             // For catching ClassNotFound exception
             SofaLogger
                 .info(
-                    "Assume normal SOFABoot environment because Loading of master biz fails with error: {}",
+                    "Assume normal SOFABoot environment because Loading of master biz fails with error:",
                     e);
-            return true;
+            throw e;
         }
     }
 }
