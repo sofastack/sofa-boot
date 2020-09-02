@@ -19,6 +19,7 @@ package com.alipay.sofa.runtime.service.binding;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Proxy;
 
+import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import com.alipay.sofa.runtime.filter.JvmFilterContext;
 import com.alipay.sofa.runtime.filter.JvmFilterHolder;
 import org.aopalliance.intercept.MethodInvocation;
@@ -152,6 +153,10 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
 
         @Override
         public Object invoke(MethodInvocation invocation) throws Throwable {
+            if (!SofaRuntimeProperties.isJvmFilterEnable()) {
+                return super.invoke(invocation);
+            }
+
             ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
             JvmFilterContext context = new JvmFilterContext(invocation);
             Object rtn;

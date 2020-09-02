@@ -32,7 +32,9 @@ import java.util.List;
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 2020/8/18
  */
-@SpringBootTest(classes = JvmFilterTestConfiguration.class, properties = "spring.application.name=filterTest")
+@SpringBootTest(classes = JvmFilterTestConfiguration.class, properties = {
+                                                                          "spring.application.name=filterTest",
+                                                                          "com.alipay.sofa.boot.jvm-filter-enable=true" })
 public class JvmFilterTest extends RuntimeTestBase {
     @Autowired
     private Service myService;

@@ -28,7 +28,9 @@ import org.springframework.boot.test.context.SpringBootTest;
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 2020/8/18
  */
-@SpringBootTest(classes = JvmFilterInterruptedConfiguration.class, properties = "spring.application.name=filterTest")
+@SpringBootTest(classes = JvmFilterInterruptedConfiguration.class, properties = {
+                                                                                 "spring.application.name=filterTest",
+                                                                                 "com.alipay.sofa.boot.jvm-filter-enable=true" })
 public class JvmFilterInterruptedTest extends RuntimeTestBase {
     @Autowired
     private Service myService;
