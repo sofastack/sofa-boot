@@ -31,6 +31,16 @@ public class SofaRuntimeProperties {
     private static ConcurrentHashMap<ClassLoader, Boolean> disableJvmFirstMap             = new ConcurrentHashMap<>();
     private static ConcurrentHashMap<ClassLoader, Boolean> skipJvmSerializeMap            = new ConcurrentHashMap<>();
 
+    private static boolean                                 jvmFilterEnable                = false;
+
+    public static boolean isJvmFilterEnable() {
+        return jvmFilterEnable;
+    }
+
+    public static void setJvmFilterEnable(boolean jvmFilterEnable) {
+        SofaRuntimeProperties.jvmFilterEnable = jvmFilterEnable;
+    }
+
     public static boolean isSkipJvmReferenceHealthCheck(SofaRuntimeContext sofaRuntimeContext) {
         return isSkipJvmReferenceHealthCheck(sofaRuntimeContext.getAppClassLoader());
     }
