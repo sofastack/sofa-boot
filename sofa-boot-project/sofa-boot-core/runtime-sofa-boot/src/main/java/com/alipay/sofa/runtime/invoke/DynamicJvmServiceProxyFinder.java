@@ -130,8 +130,14 @@ public class DynamicJvmServiceProxyFinder {
             .getBinding(JvmBinding.JVM_BINDING_TYPE);
         JvmBinding serviceJvmBinding = (JvmBinding) serviceComponent.getService().getBinding(
             JvmBinding.JVM_BINDING_TYPE);
-        boolean serialize = referenceJvmBinding.getJvmBindingParam().isSerialize()
-                            || serviceJvmBinding.getJvmBindingParam().isSerialize();
+        boolean serialize;
+        if (serviceJvmBinding != null) {
+            serialize = referenceJvmBinding.getJvmBindingParam().isSerialize()
+                        || serviceJvmBinding.getJvmBindingParam().isSerialize();
+        } else {
+            // Service provider don't intend to publish JVM service, serialize is considered to be true in this case
+            serialize = true;
+        }
         return new DynamicJvmServiceInvoker(clientClassloader,
             sofaRuntimeManager.getAppClassLoader(), serviceComponent.getService().getTarget(),
             contract, biz.getIdentity(), serialize);
