@@ -84,7 +84,7 @@
                                 <excludeGroupId>org.apache.tomcat.embed</excludeGroupId>
                             </excludeGroupIds>
 
-                            <outputDirectory>${build.directory}</outputDirectory>
+                            <outputDirectory>${project.build.directory}</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>

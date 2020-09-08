@@ -8,6 +8,8 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.1.13.RELEASE</version>
+        <!-- Add this to resolve to repository -->
+        <relativePath />
     </parent>
 
     <groupId>com.alipay.sofa</groupId>
