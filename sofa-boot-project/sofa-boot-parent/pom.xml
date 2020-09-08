@@ -317,7 +317,7 @@
                         </dependencies>
                         <configuration>
                             <runOrder>alphabetical</runOrder>
-                            <skipAfterFailureCount>1</skipAfterFailureCount>
+                            <reuseForks>false</reuseForks>
                         </configuration>
                     </plugin>
                 </plugins>
