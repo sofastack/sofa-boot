@@ -91,7 +91,9 @@ public class SofaServiceAndReferenceTest {
         ApplicationContext ctx = springApplication.run();
         SofaServiceAndReferenceTest sofaServiceAndReferenceTest = ctx
             .getBean(SofaServiceAndReferenceTest.class);
-        Assert.assertNotNull(sofaServiceAndReferenceTest.getSampleService());
+        sampleService = sofaServiceAndReferenceTest.getSampleService();
+        Assert.assertNotNull(sampleService);
+        Assert.assertEquals("TestSofaReferenceOnMethodConfiguration", sampleService.service());
     }
 
     @Test
@@ -171,6 +173,12 @@ public class SofaServiceAndReferenceTest {
         @Bean
         public SofaServiceAndReferenceTest sofaServiceAndReferenceTest() {
             return new SofaServiceAndReferenceTest();
+        }
+
+        @Bean
+        @SofaService
+        public SampleService sampleService() {
+            return new DefaultSampleService("TestSofaReferenceOnMethodConfiguration");
         }
     }
 
