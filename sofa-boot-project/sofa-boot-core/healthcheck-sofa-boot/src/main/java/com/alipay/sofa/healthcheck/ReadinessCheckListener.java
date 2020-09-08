@@ -80,7 +80,7 @@ public class ReadinessCheckListener implements ApplicationContextAware, Priority
     public void afterPropertiesSet() throws Exception {
         try {
             HealthCheckProperties healthCheckProperties = applicationContext
-                    .getBean(HealthCheckProperties.class);
+                .getBean(HealthCheckProperties.class);
             healthCheckerInsulator = healthCheckProperties.isHealthCheckInsulator();
         } catch (Throwable e) {
             // Defaults to false
