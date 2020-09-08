@@ -16,8 +16,11 @@
  */
 package com.alipay.sofa.runtime.test.spi.component;
 
+import java.lang.reflect.Field;
 import java.util.Map;
 
+import com.alipay.sofa.runtime.api.component.ComponentName;
+import com.alipay.sofa.runtime.spi.health.HealthResult;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -53,4 +56,30 @@ public class AbstractComponentTest {
         abstractComponent.deactivate();
         Assert.assertEquals(abstractComponent.getState(), ComponentStatus.RESOLVED);
     }
+
+    @Test
+    public void testIsHealthy() throws Exception {
+        Field componentNameField = AbstractComponent.class.getDeclaredField("componentName");
+        componentNameField.setAccessible(true);
+        ComponentName componentName = new ComponentName(new ComponentType("healthy"), "test");
+        componentNameField.set(abstractComponent, componentName);
+
+        Assert.assertEquals("healthy:test", abstractComponent.dump());
+
+        abstractComponent.unregister();
+        abstractComponent.register();
+        abstractComponent.resolve();
+        abstractComponent.activate();
+        Assert.assertTrue(abstractComponent.isHealthy().isHealthy());
+
+        abstractComponent.exception(new RuntimeException("this is a test exception"));
+        HealthResult healthResult = abstractComponent.isHealthy();
+        Assert.assertFalse(healthResult.isHealthy());
+        Assert.assertEquals("this is a test exception", healthResult.getHealthReport());
+
+        abstractComponent.deactivate();
+        Assert.assertFalse(abstractComponent.isHealthy().isHealthy());
+        abstractComponent.unregister();
+    }
+
 }

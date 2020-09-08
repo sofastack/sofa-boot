@@ -16,6 +16,9 @@
  */
 package com.alipay.sofa.runtime.test;
 
+import com.alipay.sofa.runtime.api.client.param.ServiceParam;
+import com.alipay.sofa.runtime.service.binding.JvmBindingParam;
+import com.alipay.sofa.runtime.test.beans.service.DefaultSampleService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -98,4 +101,90 @@ public class ClientFactoryTest {
             return new ClientFactoryAwareBean();
         }
     }
+
+    /**
+     * test WithBindingParam in ReferenceClientImpl and ServiceClientImpl
+     */
+    @Test
+    public void testWithBindingParam() {
+        JvmBindingParam jvmBindingParam = new JvmBindingParam();
+        jvmBindingParam.setSerialize(true);
+
+        ServiceParam serviceParam = new ServiceParam();
+        serviceParam.setInstance(new DefaultSampleService("WithBindingParam"));
+        serviceParam.setInterfaceType(SampleService.class);
+        serviceParam.setUniqueId("withBindingParam");
+        serviceParam.addBindingParam(jvmBindingParam);
+
+        serviceClient.service(serviceParam);
+        try {
+            Thread.sleep(2000);
+        } catch (Exception e) {
+            //ignore
+        }
+        ReferenceParam<SampleService> referenceParam = new ReferenceParam<>();
+        referenceParam.setInterfaceType(SampleService.class);
+        referenceParam.setUniqueId("withBindingParam");
+        referenceParam.setBindingParam(jvmBindingParam);
+
+        SampleService service = referenceClient.reference(referenceParam);
+        Assert.assertNotNull(service);
+        Assert.assertEquals("WithBindingParam", service.service());
+    }
+
+    private class PrivateServiceImpl implements PrivateService {
+        @Override
+        public String service() {
+            return this.getClass().getName();
+        }
+    }
+
+    public interface PrivateService {
+        String service();
+    }
+
+    /**
+     * test removeService and removeReference methods in in ReferenceClientImpl and ServiceClientImpl
+     */
+    @Test
+    public void testRemoveServiceOrRemoveReference() {
+        //without unique id
+        ServiceParam serviceParam = new ServiceParam();
+        serviceParam.setInstance(new PrivateServiceImpl());
+        serviceParam.setInterfaceType(PrivateService.class);
+        serviceClient.service(serviceParam);
+        //with unique id
+        serviceParam.setUniqueId("uniqueId");
+        serviceClient.service(serviceParam);
+
+        try {
+            Thread.sleep(2000);
+        } catch (Exception e) {
+            //ignore
+        }
+
+        //reference without unique id
+        ReferenceParam<PrivateService> referenceParam = new ReferenceParam<>();
+        referenceParam.setInterfaceType(PrivateService.class);
+        Assert.assertEquals(PrivateServiceImpl.class.getName(),
+            referenceClient.reference(referenceParam).service());
+        //reference with unique id
+        referenceParam.setUniqueId("uniqueId");
+        Assert.assertEquals(PrivateServiceImpl.class.getName(),
+            referenceClient.reference(referenceParam).service());
+
+        //remove Reference
+        referenceClient.removeReference(PrivateService.class);
+        referenceClient.removeReference(referenceParam);
+
+        //remove Service
+        try {
+            serviceClient.removeService(PrivateService.class, -1);
+        } catch (IllegalArgumentException ex) {
+            Assert.assertEquals("Argument delay must be a positive integer or zero.",
+                ex.getMessage());
+        }
+        serviceClient.removeService(PrivateService.class, "uniqueId", 0);
+    }
+
 }
