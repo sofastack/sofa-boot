@@ -16,4 +16,6 @@
             <sofa:global-attrs timeout="${timeout}" />
         </sofa:binding.bolt>
     </sofa:reference>
+
+    <sofa:reference id="whateverJvm" jvm-first="false" interface="com.alipay.sofa.rpc.boot.test.misc.WhateverInterface" />
 </beans>

@@ -52,7 +52,7 @@ public class ComponentHealthCheckerTest {
         Health health = componentHealthChecker.isHealthy();
         Map<String, Object> details = health.getDetails();
         for (String key : details.keySet()) {
-            Assert.assertTrue(((String) details.get(key)).contains("bolt"));
+            Assert.assertTrue(((String) details.get(key)).contains("passed"));
         }
     }
 

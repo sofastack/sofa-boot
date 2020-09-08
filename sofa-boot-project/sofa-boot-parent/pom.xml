@@ -316,6 +316,7 @@
                             </dependency>
                         </dependencies>
                         <configuration>
+                            <runOrder>alphabetical</runOrder>
                             <reuseForks>false</reuseForks>
                         </configuration>
                     </plugin>

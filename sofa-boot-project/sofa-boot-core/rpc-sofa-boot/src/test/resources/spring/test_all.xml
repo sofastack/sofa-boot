@@ -168,7 +168,7 @@
     <sofa:service ref="sofaGreeterTripleImpl" interface="io.grpc.examples.helloworld.SofaGreeterTriple$IGreeter">
         <sofa:binding.tri/>
     </sofa:service>
-    <sofa:reference jvm-first="false" id="SofaGreeterTripleRef"
+    <sofa:reference jvm-first="false" id="sofaGreeterTripleRef"
                     interface="io.grpc.examples.helloworld.SofaGreeterTriple$IGreeter">
         <sofa:binding.tri/>
     </sofa:reference>
