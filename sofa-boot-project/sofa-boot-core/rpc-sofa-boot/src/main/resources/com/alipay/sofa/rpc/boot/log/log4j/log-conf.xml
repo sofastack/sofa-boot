@@ -33,9 +33,25 @@
         </layout>
     </appender>
 
+    <appender name="RPC-TRIPLE-THREADPOOL-LOG-FILE" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="file" value="${logging.path}/rpc/triple-threadpool.log"/>
+        <param name="append" value="true"/>
+        <param name="encoding" value="${file.encoding}"/>
+        <param name="threshold" value="${logging.level.com.alipay.sofa.rpc.boot}"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d %-5p %-32t %c{2} - %m%n"/>
+        </layout>
+    </appender>
+
     <logger name="RPC-BOLT-THREADPOOL">
         <level value="${logging.level.com.alipay.sofa.rpc.boot}"/>
         <appender-ref ref="RPC-BOLT-THREADPOOL-LOG-FILE"/>
+        <appender-ref ref="ERROR-APPENDER"/>
+    </logger>
+
+    <logger name="RPC-TRIPLE-THREADPOOL">
+        <level value="${logging.level.com.alipay.sofa.rpc.boot}"/>
+        <appender-ref ref="RPC-TRIPLE-THREADPOOL-LOG-FILE"/>
         <appender-ref ref="ERROR-APPENDER"/>
     </logger>
 

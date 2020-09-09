@@ -21,12 +21,14 @@ import com.alipay.sofa.rpc.boot.common.RpcThreadPoolMonitor;
 import com.alipay.sofa.rpc.boot.common.SofaBootRpcRuntimeException;
 import com.alipay.sofa.rpc.boot.config.SofaBootRpcConfigConstants;
 import com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties;
+import com.alipay.sofa.rpc.boot.log.LoggerConstant;
 import com.alipay.sofa.rpc.boot.log.SofaBootRpcLoggerFactory;
 import com.alipay.sofa.rpc.common.RpcConstants;
 import com.alipay.sofa.rpc.config.ServerConfig;
 import com.alipay.sofa.rpc.log.LogCodes;
 import com.alipay.sofa.rpc.server.Server;
 import com.alipay.sofa.rpc.server.bolt.BoltServer;
+import com.alipay.sofa.rpc.server.triple.TripleServer;
 import org.slf4j.Logger;
 import org.springframework.util.StringUtils;
 
@@ -103,7 +105,8 @@ public class ServerConfigContainer {
             ThreadPoolExecutor threadPoolExecutor = server.getBizThreadPool();
 
             if (threadPoolExecutor != null) {
-                new RpcThreadPoolMonitor(threadPoolExecutor).start();
+                new RpcThreadPoolMonitor(threadPoolExecutor, LoggerConstant.BOLT_THREAD_LOGGER_NAME)
+                    .start();
             } else {
                 if (LOGGER.isWarnEnabled()) {
                     LOGGER.warn("the business threadpool can not be get");
@@ -127,8 +130,11 @@ public class ServerConfigContainer {
 
         if (tripleServerConfig != null) {
             tripleServerConfig.buildIfAbsent().start();
+            TripleServer tripleServer = (TripleServer) tripleServerConfig.getServer();
+            ThreadPoolExecutor threadPoolExecutor = tripleServer.getBizThreadPool();
 
-            // 加入线程监测？
+            new RpcThreadPoolMonitor(threadPoolExecutor, LoggerConstant.TRIPLE_THREAD_LOGGER_NAME)
+                .start();
         }
 
         for (Map.Entry<String, ServerConfig> entry : customServerConfigs.entrySet()) {

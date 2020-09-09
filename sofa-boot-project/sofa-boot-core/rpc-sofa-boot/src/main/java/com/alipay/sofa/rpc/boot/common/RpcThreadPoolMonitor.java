@@ -32,21 +32,22 @@ import com.alipay.sofa.rpc.boot.log.SofaBootRpcLoggerFactory;
  */
 public class RpcThreadPoolMonitor {
 
-    private static final Logger LOGGER     = SofaBootRpcLoggerFactory
-                                               .getLogger("RPC-BOLT-THREADPOOL");
+    private final Logger       logger;
 
     /**
      * 线程池
      */
-    private ThreadPoolExecutor  threadPoolExecutor;
+    private ThreadPoolExecutor threadPoolExecutor;
 
     /**
      * 开启标志
      */
-    private AtomicInteger       startTimes = new AtomicInteger(0);
+    private AtomicInteger      startTimes = new AtomicInteger(0);
 
-    public RpcThreadPoolMonitor(final ThreadPoolExecutor threadPoolExecutor) {
+    public RpcThreadPoolMonitor(final ThreadPoolExecutor threadPoolExecutor, String loggerName) {
         this.threadPoolExecutor = threadPoolExecutor;
+        this.logger = SofaBootRpcLoggerFactory.getLogger(loggerName);
+
     }
 
     /**
@@ -61,15 +62,15 @@ public class RpcThreadPoolMonitor {
                     sb.append("maxPoolSize:" + threadPoolExecutor.getMaximumPoolSize() + ",");
                     sb.append("keepAliveTime:"
                               + threadPoolExecutor.getKeepAliveTime(TimeUnit.MILLISECONDS) + "\n");
-                    if (LOGGER.isInfoEnabled()) {
-                        LOGGER.info(sb.toString());
+                    if (logger.isInfoEnabled()) {
+                        logger.info(sb.toString());
                     }
                     Thread monitor = new Thread() {
                         public void run() {
                             while (true) {
 
                                 try {
-                                    if (LOGGER.isInfoEnabled()) {
+                                    if (logger.isInfoEnabled()) {
                                         StringBuilder sb = new StringBuilder();
                                         int blockQueueSize = threadPoolExecutor.getQueue().size();
                                         int activeSize = threadPoolExecutor.getActiveCount();
@@ -78,16 +79,16 @@ public class RpcThreadPoolMonitor {
                                         sb.append("active:" + activeSize + ", ");
                                         sb.append("idle:" + (poolSize - activeSize) + ", ");
                                         sb.append("poolSize:" + poolSize);
-                                        LOGGER.info(sb.toString());
+                                        logger.info(sb.toString());
                                     }
                                 } catch (Throwable throwable) {
-                                    LOGGER.error("Thread pool monitor error", throwable);
+                                    logger.error("Thread pool monitor error", throwable);
                                 }
 
                                 try {
                                     sleep(30000);
                                 } catch (InterruptedException e) {
-                                    LOGGER.error("Error happen the thread pool watch sleep ");
+                                    logger.error("Error happen the thread pool watch sleep ");
                                 }
                             }
                         }
