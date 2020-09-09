@@ -18,4 +18,18 @@
     </sofa:reference>
 
     <sofa:reference id="whateverJvm" jvm-first="false" interface="com.alipay.sofa.rpc.boot.test.misc.WhateverInterface" />
+
+    <bean id="methodElementInterfaceImpl" class="com.alipay.sofa.rpc.boot.test.misc.MethodElementInterfaceImpl" />
+    <sofa:service ref="methodElementInterfaceImpl" interface="com.alipay.sofa.rpc.boot.test.misc.MethodElementInterface">
+        <sofa:binding.bolt>
+            <sofa:method name="service" timeout="${timeout}"/>
+        </sofa:binding.bolt>
+    </sofa:service>
+
+    <bean id="callback" class="com.alipay.sofa.rpc.boot.test.bean.invoke.CallbackImpl"/>
+    <sofa:reference id="methodElementInterface" interface="com.alipay.sofa.rpc.boot.test.misc.MethodElementInterface">
+        <sofa:binding.bolt>
+            <sofa:method name="service" type="callback" callback-ref="callback"/>
+        </sofa:binding.bolt>
+    </sofa:reference>
 </beans>
