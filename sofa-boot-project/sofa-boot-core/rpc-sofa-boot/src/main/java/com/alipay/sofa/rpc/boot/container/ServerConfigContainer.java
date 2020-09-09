@@ -487,11 +487,11 @@ public class ServerConfigContainer {
         }
 
         if (StringUtils.hasText(httpThreadPoolCoreSizeStr)) {
-            serverConfig.setMaxThreads(Integer.parseInt(httpThreadPoolCoreSizeStr));
+            serverConfig.setCoreThreads(Integer.parseInt(httpThreadPoolCoreSizeStr));
         }
 
         if (StringUtils.hasText(httpThreadPoolMaxSizeStr)) {
-            serverConfig.setCoreThreads(Integer.parseInt(httpThreadPoolMaxSizeStr));
+            serverConfig.setMaxThreads(Integer.parseInt(httpThreadPoolMaxSizeStr));
         }
 
         if (StringUtils.hasText(acceptsSizeStr)) {

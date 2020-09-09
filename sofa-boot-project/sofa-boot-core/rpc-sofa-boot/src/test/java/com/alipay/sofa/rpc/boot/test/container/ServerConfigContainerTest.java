@@ -166,4 +166,22 @@ public class ServerConfigContainerTest extends ActivelyDestroyTest {
         Assert.assertFalse(twiceResult);
 
     }
+
+    @Test
+    public void testCreateHttpServerConfig() {
+        sofaBootRpcProperties.setHttpPort("8080");
+        sofaBootRpcProperties.setHttpThreadPoolCoreSize("5");
+        sofaBootRpcProperties.setHttpThreadPoolMaxSize("10");
+        sofaBootRpcProperties.setHttpAcceptsSize("1");
+        sofaBootRpcProperties.setHttpThreadPoolQueueSize("8");
+
+        ServerConfig serverConfig = serverConfigContainer
+            .getServerConfig(SofaBootRpcConfigConstants.RPC_PROTOCOL_HTTP);
+
+        Assert.assertEquals(8080, serverConfig.getPort());
+        Assert.assertEquals(5, serverConfig.getCoreThreads());
+        Assert.assertEquals(10, serverConfig.getMaxThreads());
+        Assert.assertEquals(1, serverConfig.getAccepts());
+        Assert.assertEquals(8, serverConfig.getQueues());
+    }
 }
