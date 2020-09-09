@@ -19,6 +19,9 @@ package com.alipay.sofa.runtime.service.binding;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Proxy;
 
+import com.alipay.sofa.runtime.SofaRuntimeProperties;
+import com.alipay.sofa.runtime.filter.JvmFilterContext;
+import com.alipay.sofa.runtime.filter.JvmFilterHolder;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.aop.framework.ProxyFactory;
 
@@ -146,6 +149,45 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
             this.binding = binding;
             this.sofaRuntimeContext = sofaRuntimeContext;
             this.contract = contract;
+        }
+
+        @Override
+        public Object invoke(MethodInvocation invocation) throws Throwable {
+            if (!SofaRuntimeProperties.isJvmFilterEnable()) {
+                return super.invoke(invocation);
+            }
+
+            ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
+            JvmFilterContext context = new JvmFilterContext(invocation);
+            Object rtn;
+
+            if (getTarget() == null) {
+                context.setSofaRuntimeContext(DynamicJvmServiceProxyFinder
+                    .getDynamicJvmServiceProxyFinder()
+                    .findServiceComponent(sofaRuntimeContext.getAppClassLoader(), contract)
+                    .getContext());
+            } else {
+                context.setSofaRuntimeContext(sofaRuntimeContext);
+            }
+
+            long startTime = System.currentTimeMillis();
+            try {
+                Thread.currentThread().setContextClassLoader(serviceClassLoader);
+                if (JvmFilterHolder.beforeInvoking(context)) {
+                    rtn = doInvoke(invocation);
+                    context.setInvokeResult(rtn);
+                }
+            } catch (Throwable e) {
+                context.setException(e);
+                doCatch(invocation, e, startTime);
+                throw e;
+            } finally {
+                JvmFilterHolder.afterInvoking(context);
+                rtn = context.getInvokeResult();
+                doFinally(invocation, startTime);
+                Thread.currentThread().setContextClassLoader(oldClassLoader);
+            }
+            return rtn;
         }
 
         @Override

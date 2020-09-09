@@ -5,7 +5,7 @@
     <parent>
         <artifactId>sofa-boot-core</artifactId>
         <groupId>com.alipay.sofa</groupId>
-        <version>3.4.4-SNAPSHOT</version>
+        <version>3.4.4</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -251,14 +251,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <skipTests>true</skipTests>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
-
 </project>

@@ -61,6 +61,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ImportResource;
@@ -123,6 +124,7 @@ public class SofaBootRpcAllTest {
     private LazyService                lazyServiceDubbo;
 
     @Autowired
+    @Qualifier("sofaGreeterTripleRef")
     private SofaGreeterTriple.IGreeter sofaGreeterTripleRef;
 
     @SofaReference(binding = @SofaReferenceBinding(bindingType = "bolt"), jvmFirst = false, uniqueId = "bolt")

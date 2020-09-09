@@ -5,7 +5,7 @@
     <parent>
         <artifactId>sofaboot-dependencies</artifactId>
         <groupId>com.alipay.sofa</groupId>
-        <version>3.4.4-SNAPSHOT</version>
+        <version>3.4.4</version>
         <relativePath>../sofaboot-dependencies</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -45,6 +45,19 @@
         <junit.platform.version>1.3.2</junit.platform.version>
         <junit.version>4.12</junit.version>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
     <dependencyManagement>
         <dependencies>
@@ -303,6 +316,7 @@
                             </dependency>
                         </dependencies>
                         <configuration>
+                            <runOrder>alphabetical</runOrder>
                             <reuseForks>false</reuseForks>
                         </configuration>
                     </plugin>

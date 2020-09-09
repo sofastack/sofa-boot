@@ -23,6 +23,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties;
@@ -37,6 +38,7 @@ import com.alipay.sofa.rpc.module.ModuleFactory;
 public class DisableTracingTest {
 
     @Test
+    @DirtiesContext
     public void testDisableTracing() throws NoSuchFieldException, IllegalAccessException {
         Field installedModulesField = ModuleFactory.class.getDeclaredField("INSTALLED_MODULES");
         installedModulesField.setAccessible(true);

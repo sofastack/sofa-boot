@@ -5,7 +5,7 @@
     <parent>
         <artifactId>sofa-boot-core</artifactId>
         <groupId>com.alipay.sofa</groupId>
-        <version>3.4.4-SNAPSHOT</version>
+        <version>3.4.4</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -25,6 +25,12 @@
         <dependency>
             <groupId>com.alipay.sofa</groupId>
             <artifactId>sofa-ark-spi</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>sofa-ark-api</artifactId>
+            <optional>true</optional>
         </dependency>
 
         <!--Optional-->
@@ -49,12 +55,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
 

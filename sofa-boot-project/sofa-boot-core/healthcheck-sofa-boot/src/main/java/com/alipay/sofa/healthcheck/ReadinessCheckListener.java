@@ -78,9 +78,14 @@ public class ReadinessCheckListener implements ApplicationContextAware, Priority
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        HealthCheckProperties healthCheckProperties = applicationContext
-            .getBean(HealthCheckProperties.class);
-        healthCheckerInsulator = healthCheckProperties.isHealthCheckInsulator();
+        try {
+            HealthCheckProperties healthCheckProperties = applicationContext
+                .getBean(HealthCheckProperties.class);
+            healthCheckerInsulator = healthCheckProperties.isHealthCheckInsulator();
+        } catch (Throwable e) {
+            // Defaults to false
+            healthCheckerInsulator = false;
+        }
     }
 
     @Override

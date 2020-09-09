@@ -24,6 +24,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.Health;
+import org.springframework.boot.actuate.health.Status;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
@@ -113,5 +114,13 @@ public class ReadinessCheckListenerTest {
         Assert.assertTrue("server is ok".equals(health.getDetails().get("server")));
         health = readinessCheckListener.getHealthIndicatorDetails().get("disk");
         Assert.assertTrue("hard disk is ok".equals(health.getDetails().get("disk")));
+    }
+
+    @Test
+    public void testAggregateReadinessHealth() {
+        ReadinessCheckListener readinessCheckListener = applicationContext
+            .getBean(ReadinessCheckListener.class);
+        Health health = readinessCheckListener.aggregateReadinessHealth();
+        Assert.assertEquals(Status.UP, health.getStatus());
     }
 }

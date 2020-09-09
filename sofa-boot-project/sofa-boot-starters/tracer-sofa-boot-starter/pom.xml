@@ -5,7 +5,7 @@
     <parent>
         <artifactId>sofa-boot-starters</artifactId>
         <groupId>com.alipay.sofa</groupId>
-        <version>3.4.4-SNAPSHOT</version>
+        <version>3.4.4</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -65,13 +65,6 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
-        </dependency>
-
-        <!-- optional -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <optional>true</optional>
         </dependency>
 
         <dependency>
@@ -146,5 +139,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
 </project>
+
