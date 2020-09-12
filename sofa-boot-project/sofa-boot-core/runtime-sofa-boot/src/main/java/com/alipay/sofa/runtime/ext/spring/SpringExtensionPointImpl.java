@@ -35,8 +35,6 @@ public class SpringExtensionPointImpl extends ExtensionPointImpl {
 
     private static final long serialVersionUID = -7891847787889605861L;
 
-    private XMapSpring        xmapSpring;
-
     public SpringExtensionPointImpl(String name, Class<?> contributionClass) {
         super(name, contributionClass);
     }
@@ -50,7 +48,7 @@ public class SpringExtensionPointImpl extends ExtensionPointImpl {
             applicationContext = ((SpringExtensionImpl) extension).getApplicationContext();
         }
         if (contributions != null) {
-            xmapSpring = new XMapSpring();
+            XMapSpring xmapSpring = new XMapSpring();
             for (Class<?> contrib : contributions) {
                 xmapSpring.register(contrib, applicationContext);
             }
