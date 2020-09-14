@@ -53,17 +53,17 @@ public class SpringExtensionPointImpl extends ExtensionPointImpl {
                 xmapSpring.register(contrib, applicationContext);
             }
 
-            Object[] contribs = xmapSpring.loadAll(new XMapContext(extension.getAppClassLoader()),
-                extension.getElement());
-            for (Object o : contribs) {
+            Object[] contributions = xmapSpring.loadAll(
+                new XMapContext(extension.getAppClassLoader()), extension.getElement());
+            for (Object o : contributions) {
                 if (applicationContext != null && o instanceof BeanFactoryAware) {
                     ((BeanFactoryAware) o).setBeanFactory(applicationContext
                         .getAutowireCapableBeanFactory());
                 }
             }
-            extension.setContributions(contribs);
+            extension.setContributions(contributions);
 
-            return contribs;
+            return contributions;
         }
         return null;
     }
