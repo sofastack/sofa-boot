@@ -156,16 +156,19 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
             if (!SofaRuntimeProperties.isJvmFilterEnable()) {
                 return super.invoke(invocation);
             }
+            ServiceComponent serviceComponent = DynamicJvmServiceProxyFinder
+                    .getDynamicJvmServiceProxyFinder()
+                    .findServiceComponent(sofaRuntimeContext.getAppClassLoader(), contract);
+            if (serviceComponent == null) {
+                return super.invoke(invocation);
+            }
 
             ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
             JvmFilterContext context = new JvmFilterContext(invocation);
             Object rtn;
 
             if (getTarget() == null) {
-                context.setSofaRuntimeContext(DynamicJvmServiceProxyFinder
-                    .getDynamicJvmServiceProxyFinder()
-                    .findServiceComponent(sofaRuntimeContext.getAppClassLoader(), contract)
-                    .getContext());
+                context.setSofaRuntimeContext(serviceComponent.getContext());
             } else {
                 context.setSofaRuntimeContext(sofaRuntimeContext);
             }
