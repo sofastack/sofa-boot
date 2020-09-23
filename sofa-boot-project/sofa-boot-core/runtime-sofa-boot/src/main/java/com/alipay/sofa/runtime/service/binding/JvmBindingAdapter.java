@@ -157,8 +157,8 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
                 return super.invoke(invocation);
             }
             ServiceComponent serviceComponent = DynamicJvmServiceProxyFinder
-                    .getDynamicJvmServiceProxyFinder()
-                    .findServiceComponent(sofaRuntimeContext.getAppClassLoader(), contract);
+                .getDynamicJvmServiceProxyFinder().findServiceComponent(
+                    sofaRuntimeContext.getAppClassLoader(), contract);
             if (serviceComponent == null) {
                 return super.invoke(invocation);
             }
