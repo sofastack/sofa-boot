@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.alipay.sofa</groupId>
         <artifactId>sofa-boot-parent</artifactId>
-        <version>3.4.4</version>
+        <version>3.4.4.1-SNAPSHOT</version>
         <relativePath>../sofa-boot-parent</relativePath>
     </parent>
 
