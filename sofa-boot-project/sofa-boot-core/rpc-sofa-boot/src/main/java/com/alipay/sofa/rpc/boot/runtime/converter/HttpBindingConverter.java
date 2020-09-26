@@ -21,10 +21,8 @@ import com.alipay.sofa.rpc.boot.runtime.param.HttpBindingParam;
 import org.springframework.context.ApplicationContext;
 
 import com.alipay.sofa.rpc.boot.config.SofaBootRpcConfigConstants;
-import com.alipay.sofa.rpc.boot.runtime.binding.H2cBinding;
 import com.alipay.sofa.rpc.boot.runtime.binding.RpcBinding;
 import com.alipay.sofa.rpc.boot.runtime.binding.RpcBindingType;
-import com.alipay.sofa.rpc.boot.runtime.param.H2cBindingParam;
 import com.alipay.sofa.rpc.boot.runtime.param.RpcBindingParam;
 import com.alipay.sofa.runtime.api.annotation.SofaReference;
 import com.alipay.sofa.runtime.api.annotation.SofaReferenceBinding;
