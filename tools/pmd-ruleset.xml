@@ -5,7 +5,7 @@
          xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
 
     <description>
-        Before pushing to SOFABoot Github, rules should be checked.
+        Before pushing to SOFABoot Github, please make sure all PMD rules are passed.
     </description>
 
     <rule ref="category/java/bestpractices.xml/CheckResultSet" />
