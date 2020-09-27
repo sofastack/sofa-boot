@@ -21,6 +21,7 @@
         <sofa.version.maven.plugin>1.0.1</sofa.version.maven.plugin>
         <license.maven.plugin>3.0</license.maven.plugin>
         <maven.java.formatter.plugin>0.4</maven.java.formatter.plugin>
+        <maven.pmd.plugin.version>3.13.0</maven.pmd.plugin.version>
         <maven.compiler.plugin>3.1</maven.compiler.plugin>
         <maven.source.plugin>3.0.0</maven.source.plugin>
         <maven.javadoc.plugin>2.9.1</maven.javadoc.plugin>
@@ -200,6 +201,7 @@
                 <version>${maven.java.formatter.plugin}</version>
                 <executions>
                     <execution>
+                        <phase>validate</phase>
                         <goals>
                             <goal>format</goal>
                         </goals>
@@ -209,6 +211,26 @@
                     <configFile>${main.user.dir}/tools/Formatter.xml</configFile>
                     <encoding>${project.encoding}</encoding>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>${maven.pmd.plugin.version}</version>
+                <configuration>
+                    <printFailingErrors>true</printFailingErrors>
+                    <linkXRef>false</linkXRef>
+                    <rulesets>${main.user.dir}/tools/pmd-ruleset.xml</rulesets>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>check</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>

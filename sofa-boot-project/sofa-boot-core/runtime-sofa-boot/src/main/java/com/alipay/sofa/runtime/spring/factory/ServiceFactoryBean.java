@@ -59,7 +59,6 @@ public class ServiceFactoryBean extends AbstractContractFactoryBean {
 
         // default add jvm binding and service jvm binding should set serialize as true
         if (bindings.size() == 0) {
-            JvmBinding jvmBinding = new JvmBinding();
             JvmBindingParam jvmBindingParam = new JvmBindingParam().setSerialize(true);
             bindings.add(new JvmBinding().setJvmBindingParam(jvmBindingParam));
         }

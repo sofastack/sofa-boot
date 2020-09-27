@@ -30,7 +30,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.alipay.sofa.boot.actuator.health.ComponentHealthIndicator;
 import com.alipay.sofa.boot.actuator.health.MultiApplicationHealthIndicator;
 import com.alipay.sofa.boot.actuator.health.ReadinessEndpointWebExtension;
 import com.alipay.sofa.boot.actuator.health.SofaBootHealthIndicator;
