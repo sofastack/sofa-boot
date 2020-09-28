@@ -27,7 +27,6 @@ import org.springframework.boot.actuate.health.Status;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.Assert;
 
-import com.alipay.sofa.boot.util.BinaryOperators;
 import com.alipay.sofa.healthcheck.log.HealthCheckLoggerFactory;
 import com.alipay.sofa.healthcheck.startup.ReadinessCheckCallback;
 import com.alipay.sofa.healthcheck.util.HealthCheckUtils;

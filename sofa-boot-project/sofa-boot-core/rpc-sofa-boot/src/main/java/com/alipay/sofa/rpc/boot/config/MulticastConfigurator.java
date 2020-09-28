@@ -17,7 +17,6 @@
 package com.alipay.sofa.rpc.boot.config;
 
 import com.alipay.sofa.rpc.boot.common.RegistryParseUtil;
-import com.alipay.sofa.rpc.common.utils.StringUtils;
 import com.alipay.sofa.rpc.config.RegistryConfig;
 
 import java.util.Map;

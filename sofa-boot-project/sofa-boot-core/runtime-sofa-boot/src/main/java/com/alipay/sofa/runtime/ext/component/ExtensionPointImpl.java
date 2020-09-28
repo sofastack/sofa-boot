@@ -35,8 +35,7 @@ public class ExtensionPointImpl implements ExtensionPointInternal, Serializable 
     private static final long          serialVersionUID = 3939941819263075106L;
     protected String                   name;
     protected String                   documentation;
-    protected transient List<Class<?>> contributions    = new ArrayList<Class<?>>(2);
-    protected transient XMap           xmap;
+    protected transient List<Class<?>> contributions    = new ArrayList<>(2);
     protected ClassLoader              beanClassLoader;
 
     public ExtensionPointImpl(String name, Class<?> contributionClass) {
@@ -76,16 +75,14 @@ public class ExtensionPointImpl implements ExtensionPointInternal, Serializable 
 
     public Object[] loadContributions(ExtensionInternal extension) throws Exception {
         if (contributions != null) {
-            if (xmap == null) {
-                xmap = new XMap();
-                for (Class<?> contrib : contributions) {
-                    xmap.register(contrib);
-                }
+            XMap xmap = new XMap();
+            for (Class<?> contrib : contributions) {
+                xmap.register(contrib);
             }
-            Object[] contribs = xmap.loadAll(new XMapContext(extension.getAppClassLoader()),
+            Object[] contributions = xmap.loadAll(new XMapContext(extension.getAppClassLoader()),
                 extension.getElement());
-            extension.setContributions(contribs);
-            return contribs;
+            extension.setContributions(contributions);
+            return contributions;
         }
 
         return null;

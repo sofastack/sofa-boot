@@ -24,7 +24,6 @@ import java.util.concurrent.CountDownLatch;
 
 import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
-import com.alipay.sofa.runtime.api.client.ServiceClient;
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.api.component.Property;
 import com.alipay.sofa.runtime.invoke.DynamicJvmServiceProxyFinder;
