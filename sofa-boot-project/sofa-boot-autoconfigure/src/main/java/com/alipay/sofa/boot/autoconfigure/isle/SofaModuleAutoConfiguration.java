@@ -44,7 +44,7 @@ import com.alipay.sofa.isle.stage.SpringContextInstallStage;
 @Configuration
 @EnableConfigurationProperties(SofaModuleProperties.class)
 @ConditionalOnClass(ApplicationRuntimeModel.class)
-@ConditionalOnProperty(value = "com.alipay.sofa.boot.enableIsle", matchIfMissing = true)
+@ConditionalOnProperty(value = "com.alipay.sofa.boot.enable-isle", matchIfMissing = true)
 public class SofaModuleAutoConfiguration {
 
     @Bean
