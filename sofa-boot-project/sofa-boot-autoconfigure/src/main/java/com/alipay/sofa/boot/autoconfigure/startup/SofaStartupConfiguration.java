@@ -53,7 +53,8 @@ import javax.servlet.Servlet;
 public class SofaStartupConfiguration {
 
     @Configuration
-    @ConditionalOnClass({ Servlet.class, Tomcat.class, UpgradeProtocol.class, SofaStartupContext.class })
+    @ConditionalOnClass({ Servlet.class, Tomcat.class, UpgradeProtocol.class,
+            SofaStartupContext.class })
     @ConditionalOnMissingBean(value = ServletWebServerFactory.class, search = SearchStrategy.CURRENT)
     static class StartupTomcat {
 
@@ -64,7 +65,8 @@ public class SofaStartupConfiguration {
     }
 
     @Configuration
-    @ConditionalOnClass({ Servlet.class, Server.class, Loader.class, WebAppContext.class, SofaStartupContext.class })
+    @ConditionalOnClass({ Servlet.class, Server.class, Loader.class, WebAppContext.class,
+            SofaStartupContext.class })
     @ConditionalOnMissingBean(value = ServletWebServerFactory.class, search = SearchStrategy.CURRENT)
     static class StartupJetty {
 
@@ -75,7 +77,8 @@ public class SofaStartupConfiguration {
     }
 
     @Configuration
-    @ConditionalOnClass({ Servlet.class, Undertow.class, SslClientAuthMode.class, SofaStartupContext.class })
+    @ConditionalOnClass({ Servlet.class, Undertow.class, SslClientAuthMode.class,
+            SofaStartupContext.class })
     @ConditionalOnMissingBean(value = ServletWebServerFactory.class, search = SearchStrategy.CURRENT)
     static class StartupUndertow {
         @Bean
@@ -98,7 +101,7 @@ public class SofaStartupConfiguration {
 
     @Configuration
     @ConditionalOnMissingBean(value = SpringContextAwarer.class, search = SearchStrategy.CURRENT)
-    @ConditionalOnClass({ApplicationRuntimeModel.class, SofaStartupContext.class})
+    @ConditionalOnClass({ ApplicationRuntimeModel.class, SofaStartupContext.class })
     static class IsleSpringContextAware {
 
         @Bean
@@ -109,14 +112,14 @@ public class SofaStartupConfiguration {
 
     @Configuration
     @AutoConfigureBefore(SofaModuleAutoConfiguration.class)
-    @ConditionalOnClass({ApplicationRuntimeModel.class, SofaStartupContext.class})
+    @ConditionalOnClass({ ApplicationRuntimeModel.class, SofaStartupContext.class })
     @ConditionalOnMissingBean(value = SpringContextInstallStage.class, search = SearchStrategy.CURRENT)
     static class InstallStage {
 
         @Bean
         public StartupSpringContextInstallStage startupSpringContextInstallStage(ApplicationContext applicationContext) {
             return new StartupSpringContextInstallStage(
-                    (AbstractApplicationContext) applicationContext);
+                (AbstractApplicationContext) applicationContext);
         }
     }
 }
