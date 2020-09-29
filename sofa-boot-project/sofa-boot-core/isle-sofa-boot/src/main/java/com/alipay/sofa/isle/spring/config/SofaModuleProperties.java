@@ -34,6 +34,7 @@ public class SofaModuleProperties {
     private boolean     allowBeanDefinitionOverriding = false;
     private boolean     moduleStartUpParallel         = true;
     private boolean     publishEventToParent          = false;
+    private boolean     enableIsle                    = true;
 
     public String getActiveProfiles() {
         return activeProfiles;
@@ -73,5 +74,13 @@ public class SofaModuleProperties {
 
     public void setPublishEventToParent(boolean publishEventToParent) {
         this.publishEventToParent = publishEventToParent;
+    }
+
+    public boolean isEnableIsle() {
+        return enableIsle;
+    }
+
+    public void setEnableIsle(boolean enableIsle) {
+        this.enableIsle = enableIsle;
     }
 }

@@ -19,6 +19,7 @@ package com.alipay.sofa.boot.autoconfigure.startup;
 import com.alipay.sofa.boot.autoconfigure.isle.SofaModuleAutoConfiguration;
 import com.alipay.sofa.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.isle.stage.SpringContextInstallStage;
+import com.alipay.sofa.startup.SofaStartupContext;
 import com.alipay.sofa.startup.spring.IsleSpringContextAwarer;
 import com.alipay.sofa.startup.spring.SpringContextAwarer;
 import com.alipay.sofa.startup.stage.StartupSpringContextInstallStage;
@@ -52,7 +53,8 @@ import javax.servlet.Servlet;
 public class SofaStartupConfiguration {
 
     @Configuration
-    @ConditionalOnClass({ Servlet.class, Tomcat.class, UpgradeProtocol.class })
+    @ConditionalOnClass({ Servlet.class, Tomcat.class, UpgradeProtocol.class,
+            SofaStartupContext.class })
     @ConditionalOnMissingBean(value = ServletWebServerFactory.class, search = SearchStrategy.CURRENT)
     static class StartupTomcat {
 
@@ -63,7 +65,8 @@ public class SofaStartupConfiguration {
     }
 
     @Configuration
-    @ConditionalOnClass({ Servlet.class, Server.class, Loader.class, WebAppContext.class })
+    @ConditionalOnClass({ Servlet.class, Server.class, Loader.class, WebAppContext.class,
+            SofaStartupContext.class })
     @ConditionalOnMissingBean(value = ServletWebServerFactory.class, search = SearchStrategy.CURRENT)
     static class StartupJetty {
 
@@ -74,7 +77,8 @@ public class SofaStartupConfiguration {
     }
 
     @Configuration
-    @ConditionalOnClass({ Servlet.class, Undertow.class, SslClientAuthMode.class })
+    @ConditionalOnClass({ Servlet.class, Undertow.class, SslClientAuthMode.class,
+            SofaStartupContext.class })
     @ConditionalOnMissingBean(value = ServletWebServerFactory.class, search = SearchStrategy.CURRENT)
     static class StartupUndertow {
         @Bean
@@ -85,6 +89,7 @@ public class SofaStartupConfiguration {
 
     @Configuration
     @ConditionalOnMissingBean(value = SpringContextAwarer.class, search = SearchStrategy.CURRENT)
+    @ConditionalOnClass(SofaStartupContext.class)
     @ConditionalOnMissingClass("com.alipay.sofa.isle.ApplicationRuntimeModel")
     static class SpringContextAware {
 
@@ -96,7 +101,7 @@ public class SofaStartupConfiguration {
 
     @Configuration
     @ConditionalOnMissingBean(value = SpringContextAwarer.class, search = SearchStrategy.CURRENT)
-    @ConditionalOnClass(ApplicationRuntimeModel.class)
+    @ConditionalOnClass({ ApplicationRuntimeModel.class, SofaStartupContext.class })
     static class IsleSpringContextAware {
 
         @Bean
@@ -107,7 +112,7 @@ public class SofaStartupConfiguration {
 
     @Configuration
     @AutoConfigureBefore(SofaModuleAutoConfiguration.class)
-    @ConditionalOnClass(ApplicationRuntimeModel.class)
+    @ConditionalOnClass({ ApplicationRuntimeModel.class, SofaStartupContext.class })
     @ConditionalOnMissingBean(value = SpringContextInstallStage.class, search = SearchStrategy.CURRENT)
     static class InstallStage {
 
