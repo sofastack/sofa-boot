@@ -19,7 +19,7 @@
         <dubbo_version>2.6.7</dubbo_version>
         <zkclient.version>0.11</zkclient.version>
         <protoc.version>3.11.0</protoc.version>
-        <sofa.rpc.compiler.version>0.0.1</sofa.rpc.compiler.version>
+        <sofa.rpc.compiler.version>0.0.3</sofa.rpc.compiler.version>
         <grpc.version>1.28.0</grpc.version>
         <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
     </properties>
