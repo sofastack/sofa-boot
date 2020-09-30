@@ -15,7 +15,7 @@
             <!-- only print error log -->
             <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout charset="${RPC_FILE_ENCODING}">
-                <pattern>%d %-5p %-32t - %m%n</pattern>
+                <pattern>%d %-5p %-32t - %m%n %throwable</pattern>
             </PatternLayout>
             <Policies>
                 <!-- 按天分日志文件:重要的是 filePattern 配置到按照天 -->
@@ -27,7 +27,7 @@
                      filePattern="${RPC_LOG_PATH}/rpc/common-default.log.%d{yyyy-MM-dd}">
             <ThresholdFilter level="${RPC_LOG_LEVEL}" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout charset="${RPC_FILE_ENCODING}">
-                <pattern>%d %-5p %-32t - %m%n</pattern>
+                <pattern>%d %-5p %-32t - %m%n %throwable</pattern>
             </PatternLayout>
             <Policies>
                 <!-- 按天分日志文件:重要的是 filePattern 配置到按照天 -->
@@ -39,7 +39,7 @@
                      filePattern="${RPC_LOG_PATH}/rpc/bolt-threadpool.log.%d{yyyy-MM-dd}">
             <ThresholdFilter level="${RPC_LOG_LEVEL}" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout charset="${RPC_FILE_ENCODING}">
-                <pattern>%d %-5p %-32t %c{2} - %m%n</pattern>
+                <pattern>%d %-5p %-32t %c{2} - %m%n %throwable</pattern>
             </PatternLayout>
             <Policies>
                 <!-- 按天分日志文件:重要的是 filePattern 配置到按照天 -->
@@ -51,7 +51,7 @@
                      filePattern="${RPC_LOG_PATH}/rpc/triple-threadpool.log.%d{yyyy-MM-dd}">
             <ThresholdFiltewer level="${RPC_LOG_LEVEL}" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout charset="${RPC_FILE_ENCODING}">
-                <pattern>%d %-5p %-32t %c{2} - %m%n</pattern>
+                <pattern>%d %-5p %-32t %c{2} - %m%n %throwable</pattern>
             </PatternLayout>
             <Policies>
                 <!-- 按天分日志文件:重要的是 filePattern 配置到按照天 -->
