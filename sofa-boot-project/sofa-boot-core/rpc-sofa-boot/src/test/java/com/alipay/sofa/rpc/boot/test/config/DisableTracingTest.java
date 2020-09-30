@@ -36,21 +36,6 @@ import com.alipay.sofa.rpc.module.ModuleFactory;
 @SpringBootTest(properties = { SofaBootRpcProperties.PREFIX + ".defaultTracer=" })
 public class DisableTracingTest {
 
-    //    private static final Logger LOGGER = SofaBootRpcLoggerFactory.getLogger(LoggerConstant.TRIPLE_THREAD_LOGGER_NAME);
-    //
-    //    @Test
-    //    public void test() throws InterruptedException {
-    //        LOGGER.info("a");
-    //        LOGGER.info("a");
-    //        LOGGER.info("a");
-    //        LOGGER.info("a");
-    //        LOGGER.info("a");
-    //        ThreadPoolExecutor executorService = new ThreadPoolExecutor(10, 11, 1, TimeUnit.DAYS,
-    //                new LinkedBlockingQueue<>(10));
-    //        new RpcThreadPoolMonitor(executorService, LoggerConstant.TRIPLE_THREAD_LOGGER_NAME).start();
-    //        Thread.sleep(10000);
-    //    }
-
     @Test
     public void testDisableTracing() throws NoSuchFieldException, IllegalAccessException {
         Field installedModulesField = ModuleFactory.class.getDeclaredField("INSTALLED_MODULES");
