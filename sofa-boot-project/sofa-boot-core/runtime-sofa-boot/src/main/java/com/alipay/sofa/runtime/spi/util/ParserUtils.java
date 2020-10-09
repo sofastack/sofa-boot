@@ -53,7 +53,7 @@ public class ParserUtils {
                     (StringUtils.tokenizeToStringArray(attribute.getValue(),
                         BeanDefinitionParserDelegate.MULTI_VALUE_ATTRIBUTE_DELIMITERS)));
             } else if (BeanDefinitionParserDelegate.LAZY_INIT_ATTRIBUTE.equals(name)) {
-                builder.setLazyInit(Boolean.getBoolean(attribute.getValue()));
+                builder.setLazyInit(Boolean.parseBoolean(attribute.getValue()));
             } else if (BeanDefinitionParserDelegate.ABSTRACT_ATTRIBUTE.equals(name)) {
                 builder.setAbstract(Boolean.parseBoolean(attribute.getValue()));
             } else if (BeanDefinitionParserDelegate.PARENT_ATTRIBUTE.equals(name)) {
