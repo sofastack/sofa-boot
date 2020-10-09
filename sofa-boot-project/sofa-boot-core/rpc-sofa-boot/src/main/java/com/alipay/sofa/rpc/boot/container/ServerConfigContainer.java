@@ -108,7 +108,7 @@ public class ServerConfigContainer {
             BoltServer server = (BoltServer) boltServerConfig.getServer();
             ThreadPoolExecutor threadPoolExecutor = server.getBizThreadPool();
 
-            if (threadPoolExecutor != null) {
+            if (threadPoolExecutor != null && boltThreadPoolMonitor == null) {
                 boltThreadPoolMonitor = new RpcThreadPoolMonitor(threadPoolExecutor,
                     LoggerConstant.BOLT_THREAD_LOGGER_NAME);
                 boltThreadPoolMonitor.start();
@@ -138,9 +138,12 @@ public class ServerConfigContainer {
             TripleServer tripleServer = (TripleServer) tripleServerConfig.getServer();
             ThreadPoolExecutor threadPoolExecutor = tripleServer.getBizThreadPool();
 
-            tripleThreadPoolMonitor = new RpcThreadPoolMonitor(threadPoolExecutor,
-                LoggerConstant.TRIPLE_THREAD_LOGGER_NAME);
+            if (threadPoolExecutor != null && tripleThreadPoolMonitor == null) {
+                tripleThreadPoolMonitor = new RpcThreadPoolMonitor(threadPoolExecutor,
+                    LoggerConstant.TRIPLE_THREAD_LOGGER_NAME);
+            }
             tripleThreadPoolMonitor.start();
+
         }
 
         for (Map.Entry<String, ServerConfig> entry : customServerConfigs.entrySet()) {
