@@ -18,9 +18,8 @@ package com.alipay.sofa.rpc.boot.test.common;
 
 import com.alipay.sofa.rpc.boot.common.RpcThreadPoolMonitor;
 import com.alipay.sofa.rpc.boot.log.LoggerConstant;
-import com.alipay.sofa.rpc.boot.log.SofaBootRpcLoggerFactory;
+import org.junit.Assert;
 import org.junit.Test;
-import org.slf4j.Logger;
 
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -38,6 +37,24 @@ public class ThreadPoolMonitorTest {
             new LinkedBlockingQueue<>(10));
         new RpcThreadPoolMonitor(executorService, LoggerConstant.TRIPLE_THREAD_LOGGER_NAME).start();
         Thread.sleep(10000);
+    }
+
+    @Test
+    public void testTestStop() throws InterruptedException {
+        ThreadPoolExecutor executorService = new ThreadPoolExecutor(10, 11, 1, TimeUnit.DAYS,
+            new LinkedBlockingQueue<>(10));
+        RpcThreadPoolMonitor rpcThreadPoolMonitor = new RpcThreadPoolMonitor(executorService,
+            LoggerConstant.TRIPLE_THREAD_LOGGER_NAME);
+        rpcThreadPoolMonitor.start();
+
+        Thread monitor = rpcThreadPoolMonitor.getMonitor();
+        Assert.assertFalse(Thread.State.TERMINATED == monitor.getState());
+        rpcThreadPoolMonitor.stop();
+        Thread.sleep(100);
+        System.out.println(monitor.getState());
+        ;
+        Assert.assertTrue(Thread.State.TERMINATED == monitor.getState());
+
     }
 
 }

@@ -87,6 +87,10 @@ public class ServerConfigContainer {
     //custom server configs
     private Map<String, ServerConfig> customServerConfigs = new ConcurrentHashMap<String, ServerConfig>();
 
+    private RpcThreadPoolMonitor      boltThreadPoolMonitor;
+
+    private RpcThreadPoolMonitor      tripleThreadPoolMonitor;
+
     public ServerConfigContainer(SofaBootRpcProperties sofaBootRpcProperties) {
         this.sofaBootRpcProperties = sofaBootRpcProperties;
 
@@ -105,8 +109,9 @@ public class ServerConfigContainer {
             ThreadPoolExecutor threadPoolExecutor = server.getBizThreadPool();
 
             if (threadPoolExecutor != null) {
-                new RpcThreadPoolMonitor(threadPoolExecutor, LoggerConstant.BOLT_THREAD_LOGGER_NAME)
-                    .start();
+                boltThreadPoolMonitor = new RpcThreadPoolMonitor(threadPoolExecutor,
+                    LoggerConstant.BOLT_THREAD_LOGGER_NAME);
+                boltThreadPoolMonitor.start();
             } else {
                 if (LOGGER.isWarnEnabled()) {
                     LOGGER.warn("the business threadpool can not be get");
@@ -133,8 +138,9 @@ public class ServerConfigContainer {
             TripleServer tripleServer = (TripleServer) tripleServerConfig.getServer();
             ThreadPoolExecutor threadPoolExecutor = tripleServer.getBizThreadPool();
 
-            new RpcThreadPoolMonitor(threadPoolExecutor, LoggerConstant.TRIPLE_THREAD_LOGGER_NAME)
-                .start();
+            tripleThreadPoolMonitor = new RpcThreadPoolMonitor(threadPoolExecutor,
+                LoggerConstant.TRIPLE_THREAD_LOGGER_NAME);
+            tripleThreadPoolMonitor.start();
         }
 
         for (Map.Entry<String, ServerConfig> entry : customServerConfigs.entrySet()) {
@@ -565,6 +571,9 @@ public class ServerConfigContainer {
      * 释放所有 ServerConfig 对应的资源，并移除所有的 ServerConfig。
      */
     public void closeAllServer() {
+        boltThreadPoolMonitor.stop();
+        tripleThreadPoolMonitor.stop();
+
         destroyServerConfig(boltServerConfig);
         destroyServerConfig(restServerConfig);
         destroyServerConfig(dubboServerConfig);

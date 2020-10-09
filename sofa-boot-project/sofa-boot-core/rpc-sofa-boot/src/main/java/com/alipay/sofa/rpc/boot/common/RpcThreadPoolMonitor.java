@@ -20,6 +20,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.alipay.sofa.rpc.common.annotation.VisibleForTesting;
 import org.slf4j.Logger;
 
 import com.alipay.sofa.rpc.boot.log.SofaBootRpcLoggerFactory;
@@ -44,6 +45,10 @@ public class RpcThreadPoolMonitor {
      */
     private AtomicInteger      startTimes = new AtomicInteger(0);
 
+    private volatile boolean   active     = true;
+
+    private Thread             monitor;
+
     public RpcThreadPoolMonitor(final ThreadPoolExecutor threadPoolExecutor, String loggerName) {
         this.threadPoolExecutor = threadPoolExecutor;
         this.logger = SofaBootRpcLoggerFactory.getLogger(loggerName);
@@ -65,10 +70,9 @@ public class RpcThreadPoolMonitor {
                     if (logger.isInfoEnabled()) {
                         logger.info(sb.toString());
                     }
-                    Thread monitor = new Thread() {
+                    monitor = new Thread() {
                         public void run() {
-                            while (true) {
-
+                            while (active) {
                                 try {
                                     if (logger.isInfoEnabled()) {
                                         StringBuilder sb = new StringBuilder();
@@ -107,4 +111,14 @@ public class RpcThreadPoolMonitor {
         }
     }
 
+    public void stop() {
+        this.active = false;
+        this.monitor.interrupt();
+        this.threadPoolExecutor = null;
+    }
+
+    @VisibleForTesting
+    public Thread getMonitor() {
+        return monitor;
+    }
 }
