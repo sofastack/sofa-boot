@@ -571,8 +571,12 @@ public class ServerConfigContainer {
      * 释放所有 ServerConfig 对应的资源，并移除所有的 ServerConfig。
      */
     public void closeAllServer() {
-        boltThreadPoolMonitor.stop();
-        tripleThreadPoolMonitor.stop();
+        if (boltThreadPoolMonitor != null) {
+            boltThreadPoolMonitor.stop();
+        }
+        if (tripleThreadPoolMonitor != null) {
+            tripleThreadPoolMonitor.stop();
+        }
 
         destroyServerConfig(boltServerConfig);
         destroyServerConfig(restServerConfig);

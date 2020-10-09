@@ -113,7 +113,9 @@ public class RpcThreadPoolMonitor {
 
     public void stop() {
         this.active = false;
-        this.monitor.interrupt();
+        if (this.monitor != null) {
+            this.monitor.interrupt();
+        }
         this.threadPoolExecutor = null;
     }
 
