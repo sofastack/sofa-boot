@@ -53,6 +53,10 @@ public class RpcThreadPoolMonitor {
 
     private Thread             monitor;
 
+    public RpcThreadPoolMonitor(String loggerName) {
+        this(null, loggerName, DEFAULT_SLEEP_TIME);
+    }
+
     public RpcThreadPoolMonitor(final ThreadPoolExecutor threadPoolExecutor, String loggerName) {
         this(threadPoolExecutor, loggerName, DEFAULT_SLEEP_TIME);
     }
@@ -68,66 +72,77 @@ public class RpcThreadPoolMonitor {
      * 开启线程池监测
      */
     public void start() {
-        if (threadPoolExecutor != null) {
-            if (startTimes.intValue() == 0) {
-                if (startTimes.incrementAndGet() == 1) {
-                    StringBuilder sb = new StringBuilder();
-                    sb.append("coreSize:" + threadPoolExecutor.getCorePoolSize() + ",");
-                    sb.append("maxPoolSize:" + threadPoolExecutor.getMaximumPoolSize() + ",");
-                    sb.append("keepAliveTime:"
-                              + threadPoolExecutor.getKeepAliveTime(TimeUnit.MILLISECONDS) + "\n");
-                    if (logger.isInfoEnabled()) {
-                        logger.info(sb.toString());
-                    }
-                    monitor = new Thread() {
-                        public void run() {
-                            while (active) {
-                                try {
-                                    if (logger.isInfoEnabled()) {
-                                        StringBuilder sb = new StringBuilder();
-                                        int blockQueueSize = threadPoolExecutor.getQueue().size();
-                                        int activeSize = threadPoolExecutor.getActiveCount();
-                                        int poolSize = threadPoolExecutor.getPoolSize();
-                                        sb.append("blockQueue:" + blockQueueSize + ", ");
-                                        sb.append("active:" + activeSize + ", ");
-                                        sb.append("idle:" + (poolSize - activeSize) + ", ");
-                                        sb.append("poolSize:" + poolSize);
-                                        logger.info(sb.toString());
+        synchronized (this) {
+            if (threadPoolExecutor != null) {
+                if (startTimes.intValue() == 0) {
+                    if (startTimes.incrementAndGet() == 1) {
+                        StringBuilder sb = new StringBuilder();
+                        sb.append("coreSize:" + threadPoolExecutor.getCorePoolSize() + ",");
+                        sb.append("maxPoolSize:" + threadPoolExecutor.getMaximumPoolSize() + ",");
+                        sb.append("keepAliveTime:"
+                                  + threadPoolExecutor.getKeepAliveTime(TimeUnit.MILLISECONDS)
+                                  + "\n");
+                        if (logger.isInfoEnabled()) {
+                            logger.info(sb.toString());
+                        }
+                        monitor = new Thread() {
+                            public void run() {
+                                while (active) {
+                                    try {
+                                        if (logger.isInfoEnabled()) {
+                                            StringBuilder sb = new StringBuilder();
+                                            int blockQueueSize = threadPoolExecutor.getQueue()
+                                                .size();
+                                            int activeSize = threadPoolExecutor.getActiveCount();
+                                            int poolSize = threadPoolExecutor.getPoolSize();
+                                            sb.append("blockQueue:" + blockQueueSize + ", ");
+                                            sb.append("active:" + activeSize + ", ");
+                                            sb.append("idle:" + (poolSize - activeSize) + ", ");
+                                            sb.append("poolSize:" + poolSize);
+                                            logger.info(sb.toString());
+                                        }
+                                    } catch (Throwable throwable) {
+                                        logger.error("Thread pool monitor error", throwable);
                                     }
-                                } catch (Throwable throwable) {
-                                    logger.error("Thread pool monitor error", throwable);
-                                }
 
-                                try {
-                                    sleep(sleepTimeMS);
-                                } catch (InterruptedException e) {
-                                    logger
-                                        .error("Error happened when the thread pool monitor is sleeping");
+                                    try {
+                                        sleep(sleepTimeMS);
+                                    } catch (InterruptedException e) {
+                                        logger
+                                            .error("Error happened when the thread pool monitor is sleeping");
+                                    }
                                 }
                             }
-                        }
-                    };
-                    monitor.setDaemon(true);
-                    monitor.setName("RPC-RES-MONITOR");
-                    monitor.start();
+                        };
+                        monitor.setDaemon(true);
+                        monitor.setName("RPC-RES-MONITOR");
+                        monitor.start();
+                    } else {
+                        throw new RuntimeException("rpc started event has been consumed");
+                    }
                 } else {
                     throw new RuntimeException("rpc started event has been consumed");
                 }
             } else {
-                throw new RuntimeException("rpc started event has been consumed");
+                throw new RuntimeException("the rpc thread pool is null");
             }
-        } else {
-            throw new RuntimeException("the rpc thread pool is null");
         }
     }
 
+    public void setThreadPoolExecutor(ThreadPoolExecutor threadPoolExecutor) {
+        this.threadPoolExecutor = threadPoolExecutor;
+    }
+
     public void stop() {
-        this.active = false;
-        if (this.monitor != null) {
-            this.monitor.interrupt();
+        synchronized (this) {
+            this.active = false;
+            if (this.monitor != null) {
+                this.monitor.interrupt();
+                this.monitor = null;
+            }
+            this.threadPoolExecutor = null;
+            this.startTimes.set(0);
         }
-        this.threadPoolExecutor = null;
-        this.startTimes.set(0);
     }
 
     @VisibleForTesting
