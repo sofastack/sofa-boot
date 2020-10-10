@@ -15,7 +15,7 @@
             <!-- only print error log -->
             <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout charset="${RPC_FILE_ENCODING}">
-                <pattern>%d %-5p %-32t - %m%n</pattern>
+                <pattern>%d %-5p %-32t - %m%n %throwable</pattern>
             </PatternLayout>
             <Policies>
                 <!-- 按天分日志文件:重要的是 filePattern 配置到按照天 -->
@@ -27,7 +27,7 @@
                      filePattern="${RPC_LOG_PATH}/rpc/common-default.log.%d{yyyy-MM-dd}">
             <ThresholdFilter level="${RPC_LOG_LEVEL}" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout charset="${RPC_FILE_ENCODING}">
-                <pattern>%d %-5p %-32t - %m%n</pattern>
+                <pattern>%d %-5p %-32t - %m%n %throwable</pattern>
             </PatternLayout>
             <Policies>
                 <!-- 按天分日志文件:重要的是 filePattern 配置到按照天 -->
@@ -39,7 +39,19 @@
                      filePattern="${RPC_LOG_PATH}/rpc/bolt-threadpool.log.%d{yyyy-MM-dd}">
             <ThresholdFilter level="${RPC_LOG_LEVEL}" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout charset="${RPC_FILE_ENCODING}">
-                <pattern>%d %-5p %-32t %c{2} - %m%n</pattern>
+                <pattern>%d %-5p %-32t %c{2} - %m%n %throwable</pattern>
+            </PatternLayout>
+            <Policies>
+                <!-- 按天分日志文件:重要的是 filePattern 配置到按照天 -->
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+        </RollingFile>
+
+        <RollingFile name="RPC-TRIPLE-THREADPOOL-LOG-FILE" fileName="${RPC_LOG_PATH}/rpc/triple-threadpool.log" append="true"
+                     filePattern="${RPC_LOG_PATH}/rpc/triple-threadpool.log.%d{yyyy-MM-dd}">
+            <ThresholdFiltewer level="${RPC_LOG_LEVEL}" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout charset="${RPC_FILE_ENCODING}">
+                <pattern>%d %-5p %-32t %c{2} - %m%n %throwable</pattern>
             </PatternLayout>
             <Policies>
                 <!-- 按天分日志文件:重要的是 filePattern 配置到按照天 -->
@@ -52,6 +64,11 @@
 
         <logger name="RPC-BOLT-THREADPOOL" level="${RPC_LOG_LEVEL}" additivity="false">
             <appender-ref ref="RPC-BOLT-THREADPOOL-LOG-FILE"/>
+            <appender-ref ref="ERROR-APPENDER"/>
+        </logger>
+
+        <logger name="RPC-TRIPLE-THREADPOOL" level="${RPC_LOG_LEVEL}" additivity="false">
+            <appender-ref ref="RPC-TRIPLE-THREADPOOL-LOG-FILE"/>
             <appender-ref ref="ERROR-APPENDER"/>
         </logger>
 

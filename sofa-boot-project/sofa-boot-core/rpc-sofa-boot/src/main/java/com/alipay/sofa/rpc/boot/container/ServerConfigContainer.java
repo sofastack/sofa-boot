@@ -21,12 +21,14 @@ import com.alipay.sofa.rpc.boot.common.RpcThreadPoolMonitor;
 import com.alipay.sofa.rpc.boot.common.SofaBootRpcRuntimeException;
 import com.alipay.sofa.rpc.boot.config.SofaBootRpcConfigConstants;
 import com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties;
+import com.alipay.sofa.rpc.boot.log.LoggerConstant;
 import com.alipay.sofa.rpc.boot.log.SofaBootRpcLoggerFactory;
 import com.alipay.sofa.rpc.common.RpcConstants;
 import com.alipay.sofa.rpc.config.ServerConfig;
 import com.alipay.sofa.rpc.log.LogCodes;
 import com.alipay.sofa.rpc.server.Server;
 import com.alipay.sofa.rpc.server.bolt.BoltServer;
+import com.alipay.sofa.rpc.server.triple.TripleServer;
 import org.slf4j.Logger;
 import org.springframework.util.StringUtils;
 
@@ -42,48 +44,54 @@ import java.util.concurrent.ThreadPoolExecutor;
  */
 public class ServerConfigContainer {
 
-    private static final Logger       LOGGER              = SofaBootRpcLoggerFactory
-                                                              .getLogger(ServerConfigContainer.class);
+    private static final Logger       LOGGER                  = SofaBootRpcLoggerFactory
+                                                                  .getLogger(ServerConfigContainer.class);
 
     private SofaBootRpcProperties     sofaBootRpcProperties;
     /**
      * bolt ServerConfig
      */
     private volatile ServerConfig     boltServerConfig;
-    private final Object              BOLT_LOCK           = new Object();
+    private final Object              BOLT_LOCK               = new Object();
 
     /**
      * rest ServerConfig
      */
     private volatile ServerConfig     restServerConfig;
-    private final Object              REST_LOCK           = new Object();
+    private final Object              REST_LOCK               = new Object();
 
     /**
      * dubbo ServerConfig
      */
     private volatile ServerConfig     dubboServerConfig;
-    private final Object              DUBBO_LOCK          = new Object();
+    private final Object              DUBBO_LOCK              = new Object();
 
     /**
      * h2c ServerConfig
      */
     private volatile ServerConfig     h2cServerConfig;
-    private final Object              H2C_LOCK            = new Object();
+    private final Object              H2C_LOCK                = new Object();
 
     /**
      * http ServerConfig
      */
     private volatile ServerConfig     httpServerConfig;
-    private final Object              HTTP_LOCK           = new Object();
+    private final Object              HTTP_LOCK               = new Object();
 
     /**
      * http ServerConfig
      */
     private volatile ServerConfig     tripleServerConfig;
-    private final Object              TRIPLE_LOCK         = new Object();
+    private final Object              TRIPLE_LOCK             = new Object();
 
     //custom server configs
-    private Map<String, ServerConfig> customServerConfigs = new ConcurrentHashMap<String, ServerConfig>();
+    private Map<String, ServerConfig> customServerConfigs     = new ConcurrentHashMap<String, ServerConfig>();
+
+    private RpcThreadPoolMonitor      boltThreadPoolMonitor   = new RpcThreadPoolMonitor(
+                                                                  LoggerConstant.BOLT_THREAD_LOGGER_NAME);
+
+    private RpcThreadPoolMonitor      tripleThreadPoolMonitor = new RpcThreadPoolMonitor(
+                                                                  LoggerConstant.TRIPLE_THREAD_LOGGER_NAME);
 
     public ServerConfigContainer(SofaBootRpcProperties sofaBootRpcProperties) {
         this.sofaBootRpcProperties = sofaBootRpcProperties;
@@ -103,7 +111,8 @@ public class ServerConfigContainer {
             ThreadPoolExecutor threadPoolExecutor = server.getBizThreadPool();
 
             if (threadPoolExecutor != null) {
-                new RpcThreadPoolMonitor(threadPoolExecutor).start();
+                boltThreadPoolMonitor.setThreadPoolExecutor(threadPoolExecutor);
+                boltThreadPoolMonitor.start();
             } else {
                 if (LOGGER.isWarnEnabled()) {
                     LOGGER.warn("the business threadpool can not be get");
@@ -127,8 +136,17 @@ public class ServerConfigContainer {
 
         if (tripleServerConfig != null) {
             tripleServerConfig.buildIfAbsent().start();
+            TripleServer tripleServer = (TripleServer) tripleServerConfig.getServer();
+            ThreadPoolExecutor threadPoolExecutor = tripleServer.getBizThreadPool();
 
-            // 加入线程监测？
+            if (threadPoolExecutor != null) {
+                tripleThreadPoolMonitor.setThreadPoolExecutor(threadPoolExecutor);
+                tripleThreadPoolMonitor.start();
+            } else {
+                if (LOGGER.isWarnEnabled()) {
+                    LOGGER.warn("the business threadpool can not be get");
+                }
+            }
         }
 
         for (Map.Entry<String, ServerConfig> entry : customServerConfigs.entrySet()) {
@@ -559,6 +577,13 @@ public class ServerConfigContainer {
      * 释放所有 ServerConfig 对应的资源，并移除所有的 ServerConfig。
      */
     public void closeAllServer() {
+        if (boltThreadPoolMonitor != null) {
+            boltThreadPoolMonitor.stop();
+        }
+        if (tripleThreadPoolMonitor != null) {
+            tripleThreadPoolMonitor.stop();
+        }
+
         destroyServerConfig(boltServerConfig);
         destroyServerConfig(restServerConfig);
         destroyServerConfig(dubboServerConfig);
