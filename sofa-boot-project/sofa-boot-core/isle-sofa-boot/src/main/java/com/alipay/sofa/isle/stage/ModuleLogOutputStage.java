@@ -24,10 +24,7 @@ import com.alipay.sofa.runtime.log.SofaLogger;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
-import org.springframework.util.CollectionUtils;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -37,14 +34,16 @@ import java.util.List;
  * @version $Id: ModuleLogOutputStage.java, v 0.1 2012-3-16 18:17:48 fengqi.lin Exp $
  */
 public class ModuleLogOutputStage extends AbstractPipelineStage {
-    private static final String SYMBOLIC1 = "  ├─ ";
-    private static final String SYMBOLIC2 = "  └─ ";
+    private static final String SYMBOLIC1     = "  ├─";
+    private static final String SYMBOLIC2     = "  └─";
 
-    private static final String SYMBOLIC3 = "  │    +---";
-    private static final String SYMBOLIC4 = "  │    `---";
+    private static final String SYMBOLIC3     = "  │   +---";
+    private static final String SYMBOLIC4     = "  │   `---";
 
-    private static final String SYMBOLIC5 = "       +---";
-    private static final String SYMBOLIC6 = "       `---";
+    private static final String SYMBOLIC5     = "      +---";
+    private static final String SYMBOLIC6     = "      `---";
+
+    private static final String INDENT_PREFIX = "  │   ";
 
     public ModuleLogOutputStage(AbstractApplicationContext applicationContext) {
         super(applicationContext);
@@ -126,73 +125,30 @@ public class ModuleLogOutputStage extends AbstractPipelineStage {
         stringBuilder.append("\n").append("Spring bean load time cost list").append("(")
             .append(deploys.size()).append(") >>>>>>>");
         StringBuilder sb = new StringBuilder();
-        for (Iterator<DeploymentDescriptor> i = deploys.iterator(); i.hasNext();) {
-            DeploymentDescriptor dd = i.next();
-            String outTreeSymbol = SYMBOLIC1;
-            String innerTreeSymbol1 = SYMBOLIC3;
-            String innerTreeSymbol2 = SYMBOLIC4;
 
-            if (!i.hasNext()) {
-                outTreeSymbol = SYMBOLIC2;
-                innerTreeSymbol1 = SYMBOLIC5;
-                innerTreeSymbol2 = SYMBOLIC6;
-            }
-            sb.append(outTreeSymbol).append(dd.getName()).append(" [").append(dd.getElapsedTime())
-                .append(" ms]\n");
-            totalTime += dd.getElapsedTime();
+        int size = deploys.size();
+        for (int i = 0; i < size; ++i) {
+            String prefix = (i == size - 1) ? SYMBOLIC2 : SYMBOLIC1;
 
-            this.beanCostInfo(dd, sb, innerTreeSymbol1, innerTreeSymbol2);
-
+            DeploymentDescriptor dd = deploys.get(i);
+            BeanFactory beanFactory = ((ConfigurableApplicationContext) dd.getApplicationContext())
+                .getBeanFactory();
             if (realStart == 0 || dd.getStartTime() < realStart) {
                 realStart = dd.getStartTime();
             }
-
             if (realEnd == 0 || (dd.getStartTime() + dd.getElapsedTime()) > realEnd) {
                 realEnd = dd.getStartTime() + dd.getElapsedTime();
+            }
+            totalTime += dd.getElapsedTime();
+
+            if (beanFactory instanceof BeanLoadCostBeanFactory) {
+                sb.append(prefix).append("[Module] ").append(dd.getName()).append(" [")
+                    .append(dd.getElapsedTime()).append(" ms]\n");
+                sb.append(((BeanLoadCostBeanFactory) beanFactory).outputBeanLoadCost(INDENT_PREFIX));
             }
         }
         stringBuilder.append(" [totalTime = ").append(totalTime).append(" ms, realTime = ")
             .append(realEnd - realStart).append(" ms]\n").append(sb);
-    }
-
-    private void beanCostInfo(DeploymentDescriptor dd, StringBuilder sb, String innerTreeSymbol1,
-                              String innerTreeSymbol2) {
-        BeanFactory beanFactory = ((ConfigurableApplicationContext) dd.getApplicationContext())
-            .getBeanFactory();
-        if (!(beanFactory instanceof BeanLoadCostBeanFactory)) {
-            return;
-        }
-
-        BeanLoadCostBeanFactory beanLoad = (BeanLoadCostBeanFactory) beanFactory;
-        List<BeanLoadCostBeanFactory.BeanNode> beanCosts = beanLoad.getBeanLoadList();
-
-        if (!CollectionUtils.isEmpty(beanCosts)) {
-            Collections.sort(beanCosts, new Comparator<BeanLoadCostBeanFactory.BeanNode>() {
-
-                @Override
-                public int compare(BeanLoadCostBeanFactory.BeanNode o1,
-                                   BeanLoadCostBeanFactory.BeanNode o2) {
-                    if (o1 == null && o2 == null) {
-                        return 0;
-                    } else if (o1 != null && o2 == null) {
-                        return 1;
-                    } else if (o1 == null && o2 != null) {
-                        return -1;
-                    }
-                    return Long.compare(o2.costTime, o1.costTime);
-                }
-            });
-
-            for (Iterator<BeanLoadCostBeanFactory.BeanNode> beanNameNode = beanCosts.iterator(); beanNameNode
-                .hasNext();) {
-                BeanLoadCostBeanFactory.BeanNode node = beanNameNode.next();
-                String innerTreeSymbol = innerTreeSymbol1;
-                if (!beanNameNode.hasNext()) {
-                    innerTreeSymbol = innerTreeSymbol2;
-                }
-                sb.append(innerTreeSymbol).append(node).append("\n");
-            }
-        }
     }
 
     @Override
