@@ -53,7 +53,7 @@ public class ApplicationRuntimeModelTest {
         Properties props = new Properties();
         props.setProperty(SofaBootConstants.MODULE_NAME, "com.alipay.common");
         URL jarUrl = new URL(
-            "jar:file:/demo/pqwiubfiuqwvyfvsiuyadfbaisnfiasjbfsadath/demo.jar!/isle-module.config");
+            "jar:file:/whatever/path/demo.jar!/isle-module.config");
         DeploymentDescriptor dd = DeploymentBuilder.build(jarUrl, props,
             deploymentDescriptorConfiguration, ApplicationRuntimeModelTest.class.getClassLoader());
         Assert.assertTrue(dd instanceof JarDeploymentDescriptor);
