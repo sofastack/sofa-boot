@@ -26,7 +26,7 @@ dependencies {
     implementation gradleApi()
     compile group: 'org.springframework.boot', name: 'spring-boot-gradle-plugin', version: '2.1.13.RELEASE'
     compile 'io.spring.gradle:dependency-management-plugin:1.0.6.RELEASE'
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: 'junit', name: 'junit', version: '4.13.1'
     testImplementation gradleTestKit()
 }
 
