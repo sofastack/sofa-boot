@@ -59,10 +59,10 @@ public class XsdValidationTest {
         } catch (SAXParseException e) {
             // org.xml.sax.SAXParseException; lineNumber: 11; columnNumber: 65;
             // cvc-complex-type.2.4.a: Invalid content was found starting with element 'sofa:parameter'.
-            // One of '{"http://sofastack.io/schema/sofaboot":binding.jvm,
-            // "http://sofastack.io/schema/sofaboot":binding.rest,
-            // "http://sofastack.io/schema/sofaboot":binding.dubbo,
-            // "http://sofastack.io/schema/sofaboot":binding.h2c}' is expected.
+            // One of '{"http://www.sofastack.io/schema/sofaboot":binding.jvm,
+            // "http://www.sofastack.io/schema/sofaboot":binding.rest,
+            // "http://www.sofastack.io/schema/sofaboot":binding.dubbo,
+            // "http://www.sofastack.io/schema/sofaboot":binding.h2c}' is expected.
             assertSaxException(11, 65, "cvc-complex-type.2.4.a", e);
         }
     }

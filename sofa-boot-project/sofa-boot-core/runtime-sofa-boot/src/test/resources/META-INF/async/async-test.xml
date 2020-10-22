@@ -2,9 +2,9 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:sofa="http://sofastack.io/schema/sofaboot"
+       xmlns:sofa="http://www.sofastack.io/schema/sofaboot"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-            http://sofastack.io/schema/sofaboot   http://sofastack.io/schema/sofaboot.xsd"
+            http://www.sofastack.io/schema/sofaboot   http://www.sofastack.io/schema/sofaboot.xsd"
        default-autowire="byName">
     <!-- async init  test -->
     <bean id="testBean1" class="com.alipay.sofa.runtime.test.beans.TimeWasteBean" init-method="init" sofa:async-init="true"/>

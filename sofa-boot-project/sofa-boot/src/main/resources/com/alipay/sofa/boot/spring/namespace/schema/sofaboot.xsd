@@ -18,10 +18,10 @@
   ~ limitations under the License.
   -->
 
-<xsd:schema xmlns="http://sofastack.io/schema/sofaboot"
+<xsd:schema xmlns="http://www.sofastack.io/schema/sofaboot"
             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
             xmlns:beans="http://www.springframework.org/schema/beans"
-            targetNamespace="http://sofastack.io/schema/sofaboot"
+            targetNamespace="http://www.sofastack.io/schema/sofaboot"
             elementFormDefault="qualified" attributeFormDefault="unqualified">
 
     <xsd:import namespace="http://www.springframework.org/schema/beans"/>
