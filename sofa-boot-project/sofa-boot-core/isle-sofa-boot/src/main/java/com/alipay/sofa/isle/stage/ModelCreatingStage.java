@@ -62,11 +62,10 @@ public class ModelCreatingStage extends AbstractPipelineStage {
             throw new RuntimeException("Found more than 1 instance of SofaRuntimeManager");
         } else if (sofaRuntimeManagers.size() == 1) {
             application.setSofaRuntimeContext(sofaRuntimeManagers.values().iterator().next()
-                    .getSofaRuntimeContext());
+                .getSofaRuntimeContext());
         } else {
             SofaLogger.warn("SofaRuntimeManager not found in model creating stage");
         }
-
 
         application.setModuleDeploymentValidator(new DefaultModuleDeploymentValidator());
         getAllDeployments(application);

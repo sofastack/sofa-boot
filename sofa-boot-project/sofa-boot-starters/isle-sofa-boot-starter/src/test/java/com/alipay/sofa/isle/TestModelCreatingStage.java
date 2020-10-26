@@ -36,15 +36,17 @@ import com.alipay.sofa.isle.deployment.DeploymentDescriptorConfiguration;
 public class TestModelCreatingStage extends ModelCreatingStage {
     private final String[] modulePrefixes;
 
-    public TestModelCreatingStage(AbstractApplicationContext applicationContext, String... modulePrefixes) {
+    public TestModelCreatingStage(AbstractApplicationContext applicationContext,
+                                  String... modulePrefixes) {
         super(applicationContext);
         this.modulePrefixes = modulePrefixes;
     }
 
     @Override
     protected void getAllDeployments(ApplicationRuntimeModel application) throws IOException {
-        for (String prefix: modulePrefixes) {
-            Enumeration<URL> urls = appClassLoader.getResources(prefix + "/" + SofaBootConstants.SOFA_MODULE_FILE);
+        for (String prefix : modulePrefixes) {
+            Enumeration<URL> urls = appClassLoader
+                .getResources(prefix + "/" + SofaBootConstants.SOFA_MODULE_FILE);
             if (urls == null || !urls.hasMoreElements()) {
                 continue;
             }
@@ -55,10 +57,10 @@ public class TestModelCreatingStage extends ModelCreatingStage {
                 Properties props = new Properties();
                 props.load(urlResource.getInputStream());
                 DeploymentDescriptorConfiguration deploymentDescriptorConfiguration = new DeploymentDescriptorConfiguration(
-                        Collections.singletonList(SofaBootConstants.MODULE_NAME),
-                        Collections.singletonList(SofaBootConstants.REQUIRE_MODULE));
+                    Collections.singletonList(SofaBootConstants.MODULE_NAME),
+                    Collections.singletonList(SofaBootConstants.REQUIRE_MODULE));
                 DeploymentDescriptor dd = DeploymentBuilder.build(url, props,
-                        deploymentDescriptorConfiguration, appClassLoader);
+                    deploymentDescriptorConfiguration, appClassLoader);
 
                 if (application.isModuleDeployment(dd)) {
                     if (sofaModuleProfileChecker.acceptModule(dd)) {
