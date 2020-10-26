@@ -20,8 +20,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.Map;
 import java.util.Properties;
 
+import com.alipay.sofa.runtime.log.SofaLogger;
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.core.io.UrlResource;
@@ -43,7 +46,7 @@ import com.alipay.sofa.isle.profile.SofaModuleProfileChecker;
 public class ModelCreatingStage extends AbstractPipelineStage {
 
     @Autowired
-    private SofaModuleProfileChecker sofaModuleProfileChecker;
+    protected SofaModuleProfileChecker sofaModuleProfileChecker;
 
     public ModelCreatingStage(AbstractApplicationContext applicationContext) {
         super(applicationContext);
@@ -52,13 +55,26 @@ public class ModelCreatingStage extends AbstractPipelineStage {
     protected void doProcess() throws Exception {
         ApplicationRuntimeModel application = new ApplicationRuntimeModel();
         application.setAppName(appName);
+
+        Map<String, SofaRuntimeManager> sofaRuntimeManagers = applicationContext
+            .getBeansOfType(SofaRuntimeManager.class);
+        if (sofaRuntimeManagers.size() > 1) {
+            throw new RuntimeException("Found more than 1 instance of SofaRuntimeManager");
+        } else if (sofaRuntimeManagers.size() == 1) {
+            application.setSofaRuntimeContext(sofaRuntimeManagers.values().iterator().next()
+                    .getSofaRuntimeContext());
+        } else {
+            SofaLogger.warn("SofaRuntimeManager not found in model creating stage");
+        }
+
+
         application.setModuleDeploymentValidator(new DefaultModuleDeploymentValidator());
         getAllDeployments(application);
         applicationContext.getBeanFactory().registerSingleton(SofaBootConstants.APPLICATION,
             application);
     }
 
-    private void getAllDeployments(ApplicationRuntimeModel application) throws IOException {
+    protected void getAllDeployments(ApplicationRuntimeModel application) throws IOException {
         Enumeration<URL> urls = appClassLoader.getResources(SofaBootConstants.SOFA_MODULE_FILE);
         if (urls == null || !urls.hasMoreElements()) {
             return;
