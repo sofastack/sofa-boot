@@ -1,0 +1,22 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:sofa="http://sofastack.io/schema/sofaboot"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+            http://sofastack.io/schema/sofaboot   http://sofastack.io/schema/sofaboot.xsd">
+
+    <context:annotation-config />
+
+    <bean id="testService" class="com.alipay.sofa.isle.test.service.ServiceImpl" init-method="sleepInit" />
+
+    <bean id="child1" class="com.alipay.sofa.isle.test.service.Child1" init-method="sleepInit" />
+    <bean id="child2" class="com.alipay.sofa.isle.test.service.Child2" init-method="sleepInit" />
+    <bean id="child3" class="com.alipay.sofa.isle.test.service.Child3" init-method="sleepInit" />
+
+    <bean id="serviceImpl" class="com.alipay.sofa.isle.test.service.ServiceImpl" init-method="sleepInit" />
+
+    <bean id="grandChild1" class="com.alipay.sofa.isle.test.service.GrandChild1" init-method="sleepInit" />
+    <bean id="grandChild2" class="com.alipay.sofa.isle.test.service.GrandChild2" init-method="sleepInit" />
+    <bean id="grandChild3" class="com.alipay.sofa.isle.test.service.GrandChild3" init-method="sleepInit" />
+</beans>
