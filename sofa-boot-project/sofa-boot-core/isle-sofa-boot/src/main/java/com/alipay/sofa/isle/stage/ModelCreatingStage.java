@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Properties;
 
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.core.io.UrlResource;
@@ -43,7 +44,7 @@ import com.alipay.sofa.isle.profile.SofaModuleProfileChecker;
 public class ModelCreatingStage extends AbstractPipelineStage {
 
     @Autowired
-    private SofaModuleProfileChecker sofaModuleProfileChecker;
+    protected SofaModuleProfileChecker sofaModuleProfileChecker;
 
     public ModelCreatingStage(AbstractApplicationContext applicationContext) {
         super(applicationContext);
@@ -52,13 +53,18 @@ public class ModelCreatingStage extends AbstractPipelineStage {
     protected void doProcess() throws Exception {
         ApplicationRuntimeModel application = new ApplicationRuntimeModel();
         application.setAppName(appName);
+
+        SofaRuntimeManager sofaRuntimeManager = applicationContext
+            .getBean(SofaRuntimeManager.class);
+        application.setSofaRuntimeContext(sofaRuntimeManager.getSofaRuntimeContext());
+
         application.setModuleDeploymentValidator(new DefaultModuleDeploymentValidator());
         getAllDeployments(application);
         applicationContext.getBeanFactory().registerSingleton(SofaBootConstants.APPLICATION,
             application);
     }
 
-    private void getAllDeployments(ApplicationRuntimeModel application) throws IOException {
+    protected void getAllDeployments(ApplicationRuntimeModel application) throws IOException {
         Enumeration<URL> urls = appClassLoader.getResources(SofaBootConstants.SOFA_MODULE_FILE);
         if (urls == null || !urls.hasMoreElements()) {
             return;

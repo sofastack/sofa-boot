@@ -26,6 +26,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import com.alipay.sofa.isle.deployment.DeployRegistry;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
 import com.alipay.sofa.isle.deployment.ModuleDeploymentValidator;
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 
 /**
  * contains all deployments of the application
@@ -51,6 +52,16 @@ public class ApplicationRuntimeModel {
     private String                                  appName;
     /** resolved deployments */
     private List<DeploymentDescriptor>              resolvedDeployments;
+
+    private SofaRuntimeContext                      sofaRuntimeContext;
+
+    public SofaRuntimeContext getSofaRuntimeContext() {
+        return sofaRuntimeContext;
+    }
+
+    public void setSofaRuntimeContext(SofaRuntimeContext sofaRuntimeContext) {
+        this.sofaRuntimeContext = sofaRuntimeContext;
+    }
 
     public void setModuleDeploymentValidator(ModuleDeploymentValidator moduleDeploymentValidator) {
         this.moduleDeploymentValidator = moduleDeploymentValidator;

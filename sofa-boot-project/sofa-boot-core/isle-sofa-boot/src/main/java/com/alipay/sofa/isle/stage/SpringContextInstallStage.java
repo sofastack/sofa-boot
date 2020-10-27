@@ -25,14 +25,20 @@ import com.alipay.sofa.isle.deployment.DeploymentException;
 import com.alipay.sofa.isle.loader.DynamicSpringContextLoader;
 import com.alipay.sofa.isle.loader.SpringContextLoader;
 import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
+import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.log.SofaLogger;
+import com.alipay.sofa.runtime.spi.component.ComponentInfo;
+import com.alipay.sofa.runtime.spi.component.Implementation;
+import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
+import com.alipay.sofa.runtime.spring.SpringContextComponent;
+import com.alipay.sofa.runtime.spring.SpringContextImplementation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.*;
 
@@ -279,6 +285,7 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
             try {
                 deployment.startDeploy();
                 ctx.refresh();
+                publishContextAsSofaComponent(deployment, application, ctx);
                 application.addInstalled(deployment);
             } catch (Throwable t) {
                 SofaLogger.error(
@@ -296,16 +303,25 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
         }
     }
 
+    private void publishContextAsSofaComponent(DeploymentDescriptor deployment,
+                                               ApplicationRuntimeModel application,
+                                               ApplicationContext context) {
+        ComponentName componentName = ComponentNameFactory.createComponentName(
+            SpringContextComponent.SPRING_COMPONENT_TYPE, deployment.getModuleName());
+        Implementation implementation = new SpringContextImplementation(context);
+        ComponentInfo componentInfo = new SpringContextComponent(componentName, implementation,
+            application.getSofaRuntimeContext());
+        application.getSofaRuntimeContext().getComponentManager().register(componentInfo);
+    }
+
     private void writeMessageToStringBuilder(StringBuilder sb, List<DeploymentDescriptor> deploys,
                                              String info) {
-        sb.append("\n").append(info).append("(").append(deploys.size()).append(") >>>>>>>\n");
-        for (Iterator<DeploymentDescriptor> i = deploys.iterator(); i.hasNext();) {
-            DeploymentDescriptor dd = i.next();
-            String treeSymbol = SYMBOLIC1;
-            if (!i.hasNext()) {
-                treeSymbol = SYMBOLIC2;
-            }
-            sb.append(treeSymbol).append(dd.getName()).append("\n");
+        int size = deploys.size();
+        sb.append("\n").append(info).append("(").append(size).append(") >>>>>>>\n");
+
+        for (int i = 0; i < size; ++i) {
+            String symbol = i == size - 1 ? SYMBOLIC2 : SYMBOLIC1;
+            sb.append(symbol).append(deploys.get(i).getName()).append("\n");
         }
     }
 
