@@ -20,10 +20,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.Map;
 import java.util.Properties;
 
-import com.alipay.sofa.runtime.log.SofaLogger;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.AbstractApplicationContext;
@@ -56,16 +54,9 @@ public class ModelCreatingStage extends AbstractPipelineStage {
         ApplicationRuntimeModel application = new ApplicationRuntimeModel();
         application.setAppName(appName);
 
-        Map<String, SofaRuntimeManager> sofaRuntimeManagers = applicationContext
-            .getBeansOfType(SofaRuntimeManager.class);
-        if (sofaRuntimeManagers.size() > 1) {
-            throw new RuntimeException("Found more than 1 instance of SofaRuntimeManager");
-        } else if (sofaRuntimeManagers.size() == 1) {
-            application.setSofaRuntimeContext(sofaRuntimeManagers.values().iterator().next()
-                .getSofaRuntimeContext());
-        } else {
-            SofaLogger.warn("SofaRuntimeManager not found in model creating stage");
-        }
+        SofaRuntimeManager sofaRuntimeManager = applicationContext
+            .getBean(SofaRuntimeManager.class);
+        application.setSofaRuntimeContext(sofaRuntimeManager.getSofaRuntimeContext());
 
         application.setModuleDeploymentValidator(new DefaultModuleDeploymentValidator());
         getAllDeployments(application);

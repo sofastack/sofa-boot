@@ -30,7 +30,7 @@ import com.alipay.sofa.runtime.log.SofaLogger;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.Implementation;
 import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
-import com.alipay.sofa.runtime.spring.SpringComponent;
+import com.alipay.sofa.runtime.spring.SpringContextComponent;
 import com.alipay.sofa.runtime.spring.SpringContextImplementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -311,9 +311,9 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
         }
 
         ComponentName componentName = ComponentNameFactory.createComponentName(
-            SpringComponent.SPRING_COMPONENT_TYPE, deployment.getModuleName());
+            SpringContextComponent.SPRING_COMPONENT_TYPE, deployment.getModuleName());
         Implementation implementation = new SpringContextImplementation(context);
-        ComponentInfo componentInfo = new SpringComponent(componentName, implementation,
+        ComponentInfo componentInfo = new SpringContextComponent(componentName, implementation,
             application.getSofaRuntimeContext());
         application.getSofaRuntimeContext().getComponentManager().register(componentInfo);
     }
