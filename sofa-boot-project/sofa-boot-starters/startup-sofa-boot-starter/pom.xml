@@ -22,7 +22,7 @@
     <parent>
         <artifactId>sofa-boot-starters</artifactId>
         <groupId>com.alipay.sofa</groupId>
-        <version>3.4.5</version>
+        <version>3.4.6-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
