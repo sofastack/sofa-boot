@@ -22,6 +22,11 @@ import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
 import com.alipay.sofa.isle.spring.listener.SofaModuleContextRefreshedListener;
 import com.alipay.sofa.isle.spring.share.SofaModulePostProcessorShareManager;
 import com.alipay.sofa.isle.stage.*;
+import com.alipay.sofa.runtime.SofaFramework;
+import com.alipay.sofa.runtime.client.impl.ClientFactoryImpl;
+import com.alipay.sofa.runtime.component.impl.StandardSofaRuntimeManager;
+import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import com.alipay.sofa.startup.SofaStartupContext;
 import com.alipay.sofa.startup.SofaStartupProperties;
 import com.alipay.sofa.startup.spring.IsleSpringContextAwarer;
@@ -118,5 +123,15 @@ public class IsleStageCostTest {
                 (AbstractApplicationContext) applicationContext);
         }
 
+        @Bean(destroyMethod = "")
+        @ConditionalOnMissingBean
+        public static SofaRuntimeManager sofaRuntimeManager() {
+            ClientFactoryInternal clientFactoryInternal = new ClientFactoryImpl();
+            SofaRuntimeManager sofaRuntimeManager = new StandardSofaRuntimeManager(
+                "IsleStageCostTest", Thread.currentThread().getContextClassLoader(),
+                clientFactoryInternal);
+            SofaFramework.registerSofaRuntimeManager(sofaRuntimeManager);
+            return sofaRuntimeManager;
+        }
     }
 }

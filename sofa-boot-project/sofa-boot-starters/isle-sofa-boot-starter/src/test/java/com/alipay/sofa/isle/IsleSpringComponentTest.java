@@ -22,16 +22,14 @@ import com.alipay.sofa.runtime.spi.component.ComponentManager;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.spring.SofaRuntimeContextAware;
 import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
-import com.alipay.sofa.runtime.spring.SpringComponent;
+import com.alipay.sofa.runtime.spring.SpringContextComponent;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.BeansException;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.AbstractApplicationContext;
@@ -50,9 +48,9 @@ public class IsleSpringComponentTest implements SofaRuntimeContextAware {
     public void test() {
         ComponentManager componentManager = sofaRuntimeContext.getComponentManager();
         ComponentName componentName1 = ComponentNameFactory.createComponentName(
-            SpringComponent.SPRING_COMPONENT_TYPE, "com.alipay.sofa.isle.module1");
+            SpringContextComponent.SPRING_COMPONENT_TYPE, "com.alipay.sofa.isle.module1");
         ComponentName componentName2 = ComponentNameFactory.createComponentName(
-            SpringComponent.SPRING_COMPONENT_TYPE, "com.alipay.sofa.isle.module2");
+            SpringContextComponent.SPRING_COMPONENT_TYPE, "com.alipay.sofa.isle.module2");
         Assert.assertNotNull(componentManager.getComponentInfo(componentName1));
         Assert.assertNotNull(componentManager.getComponentInfo(componentName2));
     }

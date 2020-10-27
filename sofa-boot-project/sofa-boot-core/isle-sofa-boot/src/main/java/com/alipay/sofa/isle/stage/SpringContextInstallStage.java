@@ -306,10 +306,6 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
     private void publishContextAsSofaComponent(DeploymentDescriptor deployment,
                                                ApplicationRuntimeModel application,
                                                ApplicationContext context) {
-        if (application.getSofaRuntimeContext() == null) {
-            return;
-        }
-
         ComponentName componentName = ComponentNameFactory.createComponentName(
             SpringContextComponent.SPRING_COMPONENT_TYPE, deployment.getModuleName());
         Implementation implementation = new SpringContextImplementation(context);
