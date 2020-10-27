@@ -14,12 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.isle.sample.test.processor;
+package com.alipay.sofa.isle.test;
 
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.util.BeanDefinitionUtil;
-import com.alipay.sofa.isle.sample.ApplicationRun;
+import com.alipay.sofa.isle.spring.listener.SofaModuleBeanFactoryPostProcessor;
 import com.alipay.sofa.isle.spring.share.SofaModulePostProcessorShareFilter;
+import com.alipay.sofa.isle.spring.share.SofaModulePostProcessorShareManager;
 import com.alipay.sofa.isle.spring.share.UnshareSofaModulePostProcessor;
 import org.junit.Assert;
 import org.junit.Test;
@@ -35,6 +36,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import java.util.Arrays;
@@ -44,7 +46,7 @@ import java.util.Map;
 /**
  * Created by TomorJM on 2019-10-09.
  */
-@SpringBootTest(classes = {ApplicationRun.class})
+@SpringBootTest
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = PostProcessorShareTest.ProcessorConfig.class)
 public class PostProcessorShareTest {
@@ -67,6 +69,19 @@ public class PostProcessorShareTest {
 
     @Configuration
     static class ProcessorConfig {
+
+        @Bean
+        @ConditionalOnMissingBean
+        public SofaModulePostProcessorShareManager sofaModulePostProcessorShareManager(ApplicationContext applicationContext) {
+            return new SofaModulePostProcessorShareManager(
+                (AbstractApplicationContext) applicationContext);
+        }
+
+        @Bean
+        @ConditionalOnMissingBean
+        public static SofaModuleBeanFactoryPostProcessor sofaModuleBeanFactoryPostProcessor(SofaModulePostProcessorShareManager shareManager) {
+            return new SofaModuleBeanFactoryPostProcessor(shareManager);
+        }
 
         @Bean
         @ConditionalOnMissingBean
@@ -108,7 +123,7 @@ public class PostProcessorShareTest {
 
             @Override
             public List<Class<? extends BeanPostProcessor>> filterBeanPostProcessorClass() {
-                return Arrays.asList(ProcessorConfig.TestA.class);
+                return Arrays.asList(TestA.class);
             }
 
             @Override
@@ -127,7 +142,8 @@ public class PostProcessorShareTest {
 
         public class TestB implements BeanFactoryPostProcessor {
             @Override
-            public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+            public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory)
+                                                                                           throws BeansException {
                 int i = 0;
             }
         }
@@ -145,6 +161,5 @@ public class PostProcessorShareTest {
 
         }
     }
-
 
 }
