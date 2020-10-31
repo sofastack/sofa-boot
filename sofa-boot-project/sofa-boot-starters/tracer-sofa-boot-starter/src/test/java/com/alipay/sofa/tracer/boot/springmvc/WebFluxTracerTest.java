@@ -16,11 +16,6 @@
  */
 package com.alipay.sofa.tracer.boot.springmvc;
 
-/**
- * @author qilong.zql
- * @since 3.0.0
- */
-
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
@@ -32,8 +27,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.alipay.sofa.tracer.boot.TestUtil;
@@ -41,6 +34,10 @@ import com.alipay.sofa.tracer.boot.base.AbstractTestBase;
 import com.alipay.sofa.tracer.boot.base.SpringBootWebApplication;
 import com.alipay.sofa.tracer.plugins.springmvc.SpringMvcLogEnum;
 
+/**
+ * @author qilong.zql
+ * @since 3.0.0
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = SpringBootWebApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {
                                                                                                                                     "spring.main.web-application-type=reactive",
@@ -57,8 +54,7 @@ public class WebFluxTracerTest extends AbstractTestBase {
     @Test
     public void testWebFluxTracer() throws Exception {
         String urlHttpPrefix = "http://localhost:" + definedPort;
-        ResponseEntity<String> response = testRestTemplate
-            .getForEntity(urlHttpPrefix, String.class);
+        testRestTemplate.getForEntity(urlHttpPrefix, String.class);
 
         TestUtil.waitForAsyncLog();
 

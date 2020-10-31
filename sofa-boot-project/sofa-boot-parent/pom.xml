@@ -220,6 +220,7 @@
                 <configuration>
                     <printFailingErrors>true</printFailingErrors>
                     <linkXRef>false</linkXRef>
+                    <includeTests>true</includeTests>
                     <rulesets>
                         <ruleset>${main.user.dir}/tools/pmd-ruleset.xml</ruleset>
                     </rulesets>

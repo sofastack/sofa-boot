@@ -18,10 +18,8 @@ package com.alipay.sofa.isle;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.List;
 import java.util.Properties;
 
 import com.alipay.sofa.isle.stage.ModelCreatingStage;
@@ -33,6 +31,10 @@ import com.alipay.sofa.isle.deployment.DeploymentBuilder;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptorConfiguration;
 
+/**
+ * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
+ * Created on 2020/10/31
+ */
 public class TestModelCreatingStage extends ModelCreatingStage {
     private final String[] modulePrefixes;
 

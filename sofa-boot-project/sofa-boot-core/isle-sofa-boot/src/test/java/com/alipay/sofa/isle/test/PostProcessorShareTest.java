@@ -144,7 +144,6 @@ public class PostProcessorShareTest {
             @Override
             public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory)
                                                                                            throws BeansException {
-                int i = 0;
             }
         }
 

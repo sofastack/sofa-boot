@@ -52,9 +52,7 @@ public class ThreadPoolMonitorTest {
         rpcThreadPoolMonitor.stop();
         Thread.sleep(100);
         System.out.println(monitor.getState());
-        ;
         Assert.assertTrue(Thread.State.TERMINATED == monitor.getState());
-
     }
 
 }
