@@ -182,7 +182,9 @@
                 <configuration>
                     <!-- There are unused imports in pb generated java file -->
                     <!-- TODO: remove this -->
-                    <excludes>io.grpc.examples.helloworld.*</excludes>
+                    <excludeRoots>
+                        <excludeRoot>build/generated/source/proto/test/java/</excludeRoot>
+                    </excludeRoots>
                 </configuration>
             </plugin>
             <!-- grpc -->
