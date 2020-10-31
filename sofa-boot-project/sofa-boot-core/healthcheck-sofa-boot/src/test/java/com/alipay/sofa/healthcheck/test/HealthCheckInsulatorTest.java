@@ -23,7 +23,6 @@ import com.alipay.sofa.healthcheck.HealthCheckerProcessor;
 import com.alipay.sofa.healthcheck.HealthIndicatorProcessor;
 import com.alipay.sofa.healthcheck.ReadinessCheckListener;
 import com.alipay.sofa.healthcheck.core.HealthChecker;
-import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.actuate.health.Health;

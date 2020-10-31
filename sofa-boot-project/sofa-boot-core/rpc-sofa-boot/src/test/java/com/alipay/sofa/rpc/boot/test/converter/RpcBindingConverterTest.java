@@ -20,8 +20,6 @@ import java.util.List;
 
 import com.alipay.sofa.rpc.boot.test.RuntimeTestConfiguration;
 import com.alipay.sofa.runtime.service.impl.BindingConverterFactoryImpl;
-import com.alipay.sofa.runtime.spi.binding.BindingAdapter;
-import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
 import org.junit.Assert;

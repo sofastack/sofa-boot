@@ -189,7 +189,7 @@ public class HealthCheckerProcessorTest {
             .getBean(HealthCheckerProcessor.class);
         MemoryHealthChecker memoryHealthChecker = applicationContext
             .getBean(MemoryHealthChecker.class);
-        boolean result = healthCheckerProcessor.livenessHealthCheck(hashMap);
+        healthCheckerProcessor.livenessHealthCheck(hashMap);
         Health memoryHealth = hashMap.get("memoryHealthChecker");
         Health networkHealth = hashMap.get("networkHealthChecker");
         Assert.assertTrue(true);

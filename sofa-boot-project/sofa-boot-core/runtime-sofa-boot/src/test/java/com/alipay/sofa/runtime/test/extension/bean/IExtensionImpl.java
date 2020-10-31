@@ -142,7 +142,6 @@ public class IExtensionImpl implements IExtension {
                     .getSubExtensionDescriptor().getParentValue().getValue();
             } else if ("bad".equals(extensionPoint)) {
                 badDescriptor = (SimpleExtensionDescriptor) contribution;
-                ;
             }
         }
     }
