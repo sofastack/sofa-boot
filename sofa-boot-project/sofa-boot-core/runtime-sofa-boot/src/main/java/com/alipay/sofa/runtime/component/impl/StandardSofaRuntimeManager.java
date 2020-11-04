@@ -36,6 +36,7 @@ import org.springframework.context.ApplicationContextAware;
  * Default Sofa Runtime Manager
  *
  * @author xuanbei 18/3/1
+ * @author zx.zeng 20/11/4
  */
 public class StandardSofaRuntimeManager implements SofaRuntimeManager, ApplicationContextAware {
 
