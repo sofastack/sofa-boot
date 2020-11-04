@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.runtime.component.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -110,9 +111,13 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager, Applicati
     @Override
     public void shutdown() throws ServiceRuntimeException {
         try {
+            ArrayList<RuntimeShutdownAware> runtimeShutdownAwareList
+                    = new ArrayList<>((int) Math.round(runtimeShutdownAwares.size() * 0.75));
 
             for (RuntimeShutdownAware shutdownAware : runtimeShutdownAwares) {
-                if (!(shutdownAware instanceof DefaultRuntimeShutdownAware)) {
+                if (shutdownAware instanceof DefaultRuntimeShutdownAware) {
+                    runtimeShutdownAwareList.add(shutdownAware);
+                }else {
                     shutdownAware.shutdown();
                 }
             }
@@ -121,10 +126,8 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager, Applicati
                 componentManager.shutdown();
             }
 
-            for (RuntimeShutdownAware shutdownAware : runtimeShutdownAwares) {
-                if (shutdownAware instanceof DefaultRuntimeShutdownAware) {
-                    shutdownAware.shutdown();
-                }
+            for (RuntimeShutdownAware shutdownAware : runtimeShutdownAwareList) {
+                shutdownAware.shutdown();
             }
 
             clear();
