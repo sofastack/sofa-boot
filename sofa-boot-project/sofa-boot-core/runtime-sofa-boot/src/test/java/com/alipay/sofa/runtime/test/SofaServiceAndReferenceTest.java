@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.boot.SpringApplication;
@@ -57,8 +58,22 @@ public class SofaServiceAndReferenceTest {
     }
 
     @SofaReference
+    private static SampleService staticSampleService;
+
+    public static SampleService getStaticSampleService() {
+        return staticSampleService;
+    }
+
+    @SofaReference
     public void setSampleService(SampleService sampleService) {
         this.sampleService = sampleService;
+    }
+
+    @AfterClass
+    public static void clearLogFiles() throws IOException {
+        final String logRootPath = StringUtils.hasText(System.getProperty("logging.path")) ? System
+            .getProperty("logging.path") : "./logs";
+        FileUtils.deleteDirectory(new File(logRootPath));
     }
 
     @Test
@@ -117,7 +132,6 @@ public class SofaServiceAndReferenceTest {
         Assert.assertTrue(content.contains("SofaService was already registered: "
                                            + SofaBeanNameGenerator.generateSofaServiceBeanName(
                                                SampleService.class, "")));
-        FileUtils.deleteDirectory(new File("./logs"));
     }
 
     @Test
@@ -145,6 +159,31 @@ public class SofaServiceAndReferenceTest {
         Assert.assertEquals(2, bean.getBindings().size());
         Assert.assertEquals(new BindingType("jvm"), bean.getBindings().get(0).getBindingType());
         Assert.assertEquals(new BindingType("jvm"), bean.getBindings().get(1).getBindingType());
+    }
+
+    @Test
+    public void testSofaReferenceOnStaticField() throws IOException, NoSuchFieldException {
+        String logRootPath = StringUtils.hasText(System.getProperty("logging.path")) ? System
+            .getProperty("logging.path") : "./logs";
+        File sofaLog = new File(logRootPath + File.separator + "sofa-runtime" + File.separator
+                                + "sofa-default.log");
+        FileUtils.write(sofaLog, "", System.getProperty("file.encoding"));
+
+        Map<String, Object> properties = new HashMap<>();
+        properties.put("spring.application.name", "SofaServiceAndReferenceTest");
+        properties.put("logging.path", logRootPath);
+        SpringApplication springApplication = new SpringApplication(
+            TestSofaReferenceOnMethodConfiguration.class, RuntimeConfiguration.class);
+        springApplication.setWebApplicationType(WebApplicationType.NONE);
+        springApplication.setDefaultProperties(properties);
+        springApplication.run();
+
+        SampleService staticSampleService = SofaServiceAndReferenceTest.getStaticSampleService();
+        Assert.assertNull(staticSampleService);
+        String content = FileUtils.readFileToString(sofaLog, System.getProperty("file.encoding"));
+        Assert.assertTrue(content
+            .contains("SofaReference annotation is not supported on static fields: "
+                      + SofaServiceAndReferenceTest.class.getDeclaredField("staticSampleService")));
     }
 
     @Configuration
