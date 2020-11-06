@@ -106,6 +106,12 @@
             <organization>Ant Group</organization>
             <organizationUrl>https://www.alipay.com/</organizationUrl>
         </developer>
+        <developer>
+            <name>zijie.hu</name>
+            <email>hzj266771@antfin.com</email>
+            <organization>Ant Group</organization>
+            <organizationUrl>https://www.alipay.com/</organizationUrl>
+        </developer>
     </developers>
 
     <dependencyManagement>
