@@ -73,31 +73,37 @@
         <developer>
             <name>guanchao.ygc</name>
             <email>guanchao.ygc@antfin.com</email>
-            <organization>Ant Financial</organization>
+            <organization>Ant Group</organization>
             <organizationUrl>https://www.alipay.com/</organizationUrl>
         </developer>
         <developer>
             <name>wei.li</name>
             <email>lw111072@antfin.com</email>
-            <organization>Ant Financial</organization>
+            <organization>Ant Group</organization>
             <organizationUrl>https://www.alipay.com/</organizationUrl>
         </developer>
         <developer>
             <name>jie.cao</name>
             <email>caojie.cj@alipay.com</email>
-            <organization>Ant Financial</organization>
+            <organization>Ant Group</organization>
             <organizationUrl>https://www.alipay.com/</organizationUrl>
         </developer>
         <developer>
             <name>qilong.zql</name>
             <email>qilong.zql@alipay.com</email>
-            <organization>Ant Financial</organization>
+            <organization>Ant Group</organization>
             <organizationUrl>https://www.alipay.com/</organizationUrl>
         </developer>
         <developer>
             <name>abby.zh</name>
             <email>abby.zh@antfin.com</email>
-            <organization>Ant Financial</organization>
+            <organization>Ant Group</organization>
+            <organizationUrl>https://www.alipay.com/</organizationUrl>
+        </developer>
+        <developer>
+            <name>alaneuler</name>
+            <email>guaner.zzx@alipay.com</email>
+            <organization>Ant Group</organization>
             <organizationUrl>https://www.alipay.com/</organizationUrl>
         </developer>
     </developers>
