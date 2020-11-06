@@ -34,16 +34,17 @@ import java.util.List;
  * @version $Id: ModuleLogOutputStage.java, v 0.1 2012-3-16 18:17:48 fengqi.lin Exp $
  */
 public class ModuleLogOutputStage extends AbstractPipelineStage {
-    private static final String SYMBOLIC1     = "  ├─";
-    private static final String SYMBOLIC2     = "  └─";
+    private static final String SYMBOLIC1          = "  ├─";
+    private static final String SYMBOLIC2          = "  └─";
 
-    private static final String SYMBOLIC3     = "  │   +---";
-    private static final String SYMBOLIC4     = "  │   `---";
+    private static final String SYMBOLIC3          = "  │   +---";
+    private static final String SYMBOLIC4          = "  │   `---";
 
-    private static final String SYMBOLIC5     = "      +---";
-    private static final String SYMBOLIC6     = "      `---";
+    private static final String SYMBOLIC5          = "      +---";
+    private static final String SYMBOLIC6          = "      `---";
 
-    private static final String INDENT_PREFIX = "  │   ";
+    private static final String INDENT_PREFIX      = "  │   ";
+    private static final String EMPTY_INDEX_PREFIX = "      ";
 
     public ModuleLogOutputStage(AbstractApplicationContext applicationContext) {
         super(applicationContext);
@@ -129,6 +130,7 @@ public class ModuleLogOutputStage extends AbstractPipelineStage {
         int size = deploys.size();
         for (int i = 0; i < size; ++i) {
             String prefix = (i == size - 1) ? SYMBOLIC2 : SYMBOLIC1;
+            String index_prefix = (i == size - 1) ? EMPTY_INDEX_PREFIX : INDENT_PREFIX;
 
             DeploymentDescriptor dd = deploys.get(i);
             BeanFactory beanFactory = ((ConfigurableApplicationContext) dd.getApplicationContext())
@@ -144,7 +146,7 @@ public class ModuleLogOutputStage extends AbstractPipelineStage {
             if (beanFactory instanceof BeanLoadCostBeanFactory) {
                 sb.append(prefix).append("[Module] ").append(dd.getName()).append(" [")
                     .append(dd.getElapsedTime()).append(" ms]\n");
-                sb.append(((BeanLoadCostBeanFactory) beanFactory).outputBeanLoadCost(INDENT_PREFIX));
+                sb.append(((BeanLoadCostBeanFactory) beanFactory).outputBeanLoadCost(index_prefix));
             }
         }
         stringBuilder.append(" [totalTime = ").append(totalTime).append(" ms, realTime = ")
