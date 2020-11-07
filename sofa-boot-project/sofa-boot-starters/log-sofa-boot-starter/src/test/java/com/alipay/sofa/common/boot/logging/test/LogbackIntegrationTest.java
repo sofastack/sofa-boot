@@ -119,15 +119,17 @@ public class LogbackIntegrationTest extends BaseLogIntegrationTest {
      */
     @Test
     public void testLogConfig() throws IOException {
-        Map<String, Object> properties = new HashMap<String, Object>();
+        Map<String, Object> properties = new HashMap<>();
         properties.put(Constants.LOG_CONFIG_PREFIX + TEST_SPACE, "logback-test-conf.xml");
         SpringApplication springApplication = new SpringApplication(EmptyConfig.class);
         springApplication.setDefaultProperties(properties);
-        ConfigurableApplicationContext applicationContext = springApplication.run(new String[] {});
+        ConfigurableApplicationContext applicationContext = springApplication.run();
         Environment environment = applicationContext.getEnvironment();
         File logFile = getLogbackDefaultFile(environment);
         FileUtils.write(logFile, StringUtil.EMPTY_STRING,
             environment.getProperty(Constants.LOG_ENCODING_PROP_KEY));
+        logger = LoggerSpaceManager.getLoggerBySpace(
+                LogbackIntegrationTest.class.getCanonicalName(), TEST_SPACE);
         logger.info("info level");
         List<String> contents = FileUtils.readLines(logFile,
             environment.getProperty(Constants.LOG_ENCODING_PROP_KEY));

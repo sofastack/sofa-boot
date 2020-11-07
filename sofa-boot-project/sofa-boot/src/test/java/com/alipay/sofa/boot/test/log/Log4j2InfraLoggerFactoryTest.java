@@ -39,6 +39,7 @@ public class Log4j2InfraLoggerFactoryTest extends BaseLogTest {
 
     @Before
     public void before() throws Exception {
+        super.before();
         //disable logback
         System.setProperty(Constants.LOGBACK_MIDDLEWARE_LOG_DISABLE_PROP_KEY, "true");
         //disable log4j

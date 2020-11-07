@@ -56,8 +56,8 @@ public abstract class BaseLogIntegrationTest {
 
     @Before
     public void setUpStreams() {
-        logger = LoggerSpaceManager.getLoggerBySpace(
-            LogbackIntegrationTest.class.getCanonicalName(), TEST_SPACE);
+//        logger = LoggerSpaceManager.getLoggerBySpace(
+//            LogbackIntegrationTest.class.getCanonicalName(), TEST_SPACE);
         outContent = new ByteArrayOutputStream();
         errContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
