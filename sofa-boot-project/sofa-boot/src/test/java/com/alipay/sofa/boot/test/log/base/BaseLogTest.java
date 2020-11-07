@@ -17,10 +17,13 @@
 package com.alipay.sofa.boot.test.log.base;
 
 import java.lang.reflect.Field;
+import java.util.Map;
 
 import com.alipay.sofa.boot.log.InfraLoggerFactory;
 import com.alipay.sofa.common.log.Constants;
 import com.alipay.sofa.common.log.MultiAppLoggerSpaceManager;
+import com.alipay.sofa.common.log.SpaceId;
+import com.alipay.sofa.common.log.SpaceInfo;
 import com.alipay.sofa.common.log.env.LogEnvUtils;
 
 /**
@@ -32,11 +35,13 @@ public abstract class BaseLogTest {
 
     public static final String restLogLevel = Constants.LOG_LEVEL_PREFIX
                                               + InfraLoggerFactory.INFRASTRUCTURE_LOG_SPACE;
+    private static Map<SpaceId, SpaceInfo>         SPACES_MAP;
 
     static {
         try {
             Field field = MultiAppLoggerSpaceManager.class.getDeclaredField("SPACES_MAP");
             field.setAccessible(true);
+            SPACES_MAP = (Map<SpaceId, SpaceInfo>) field.get(null);
 
             Field globalSystemProperties = LogEnvUtils.class
                 .getDeclaredField("globalSystemProperties");
@@ -44,6 +49,10 @@ public abstract class BaseLogTest {
         } catch (Throwable throwable) {
             // ignore
         }
+    }
+
+    public void before() throws Exception {
+        SPACES_MAP.remove(new SpaceId(InfraLoggerFactory.INFRASTRUCTURE_LOG_SPACE));
     }
 
     public void after() throws Exception {
