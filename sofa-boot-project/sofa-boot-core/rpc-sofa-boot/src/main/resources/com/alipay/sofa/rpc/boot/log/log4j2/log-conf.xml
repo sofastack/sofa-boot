@@ -49,7 +49,7 @@
 
         <RollingFile name="RPC-TRIPLE-THREADPOOL-LOG-FILE" fileName="${RPC_LOG_PATH}/rpc/triple-threadpool.log" append="true"
                      filePattern="${RPC_LOG_PATH}/rpc/triple-threadpool.log.%d{yyyy-MM-dd}">
-            <ThresholdFiltewer level="${RPC_LOG_LEVEL}" onMatch="ACCEPT" onMismatch="DENY"/>
+            <ThresholdFilter level="${RPC_LOG_LEVEL}" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout charset="${RPC_FILE_ENCODING}">
                 <pattern>%d %-5p %-32t %c{2} - %m%n %throwable</pattern>
             </PatternLayout>
