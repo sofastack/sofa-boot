@@ -28,7 +28,7 @@
                      filePattern="${RUNTIME_LOG_PATH}/sofa-runtime/common-error.log.%d{yyyy-MM-dd}">
             <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout charset="${RUNTIME_FILE_ENCODING}">
-                <pattern>%d %-5p %-32t - %m%n %throwable</pattern>
+                <pattern>%d %-5p %-32t - %m %throwable%n</pattern>
             </PatternLayout>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
@@ -39,7 +39,7 @@
                      filePattern="${RUNTIME_LOG_PATH}/sofa-runtime/sofa-default.log.%d{yyyy-MM-dd}">
             <ThresholdFilter level="${RUNTIME_LOG_LEVEL}" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout charset="${RUNTIME_FILE_ENCODING}">
-                <pattern>%d %-5p %-32t - %m%n %throwable</pattern>
+                <pattern>%d %-5p %-32t - %m %throwable%n</pattern>
             </PatternLayout>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
