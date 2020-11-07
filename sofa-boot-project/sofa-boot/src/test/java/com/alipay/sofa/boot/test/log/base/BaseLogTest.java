@@ -33,9 +33,9 @@ import com.alipay.sofa.common.log.env.LogEnvUtils;
  */
 public abstract class BaseLogTest {
 
-    public static final String restLogLevel = Constants.LOG_LEVEL_PREFIX
-                                              + InfraLoggerFactory.INFRASTRUCTURE_LOG_SPACE;
-    private static Map<SpaceId, SpaceInfo>         SPACES_MAP;
+    public static final String             restLogLevel = Constants.LOG_LEVEL_PREFIX
+                                                          + InfraLoggerFactory.INFRASTRUCTURE_LOG_SPACE;
+    private static Map<SpaceId, SpaceInfo> SPACES_MAP;
 
     static {
         try {

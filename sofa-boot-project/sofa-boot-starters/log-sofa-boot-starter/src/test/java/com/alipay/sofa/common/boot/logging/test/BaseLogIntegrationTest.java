@@ -17,13 +17,12 @@
 package com.alipay.sofa.common.boot.logging.test;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.util.Map;
 
+import com.alipay.sofa.common.log.env.LogEnvUtils;
 import org.junit.After;
-import org.junit.Before;
 import org.slf4j.Logger;
 
 import com.alipay.sofa.common.log.LoggerSpaceManager;
@@ -43,21 +42,28 @@ public abstract class BaseLogIntegrationTest {
     protected ByteArrayOutputStream      errContent;
     protected final PrintStream          originalOut = System.out;
     protected final PrintStream          originalErr = System.err;
+    protected static Field               globalSystemPropertiesField;
 
     static {
         try {
             Field spacesMapField = MultiAppLoggerSpaceManager.class.getDeclaredField("SPACES_MAP");
             spacesMapField.setAccessible(true);
             SPACES_MAP = (Map<Object, Object>) spacesMapField.get(MultiAppLoggerSpaceManager.class);
+
+            globalSystemPropertiesField = LogEnvUtils.class
+                .getDeclaredField("globalSystemProperties");
+            globalSystemPropertiesField.setAccessible(true);
         } catch (Throwable throwable) {
             // ignore
         }
     }
 
-    @Before
+    protected Logger getLogger() {
+        return LoggerSpaceManager.getLoggerBySpace(LogbackIntegrationTest.class.getCanonicalName(),
+            TEST_SPACE);
+    }
+
     public void setUpStreams() {
-//        logger = LoggerSpaceManager.getLoggerBySpace(
-//            LogbackIntegrationTest.class.getCanonicalName(), TEST_SPACE);
         outContent = new ByteArrayOutputStream();
         errContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
@@ -65,11 +71,12 @@ public abstract class BaseLogIntegrationTest {
     }
 
     @After
-    public void restoreStreams() throws IOException {
+    public void restoreStreams() throws Exception {
         System.setOut(originalOut);
         System.setErr(originalErr);
         outContent.close();
         errContent.close();
         SPACES_MAP.remove(new SpaceId(TEST_SPACE));
+        globalSystemPropertiesField.set(null, null);
     }
 }

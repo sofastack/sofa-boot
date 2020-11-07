@@ -16,11 +16,11 @@
  */
 package com.alipay.sofa.common.boot.logging.test;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.logging.log4j.ThreadContext;
 import org.apache.logging.log4j.core.appender.AbstractManager;
 import org.apache.logging.log4j.core.config.DefaultConfiguration;
 import org.junit.After;
@@ -62,7 +62,7 @@ public class Log4j2IntegrationTest extends BaseLogIntegrationTest {
 
     @After
     @Override
-    public void restoreStreams() throws IOException {
+    public void restoreStreams() throws Exception {
         super.restoreStreams();
         System.getProperties().remove(Constants.LOGBACK_MIDDLEWARE_LOG_DISABLE_PROP_KEY);
     }
@@ -112,5 +112,27 @@ public class Log4j2IntegrationTest extends BaseLogIntegrationTest {
         System.getProperties().remove(DefaultConfiguration.DEFAULT_LEVEL);
         LogEnvUtils.processGlobalSystemLogProperties().remove(
             String.format(Constants.SOFA_MIDDLEWARE_SINGLE_LOG_CONSOLE_SWITCH, TEST_SPACE));
+    }
+
+    @Test
+    public void testThreadContextConfiguration() {
+        try {
+            System.setProperty(Constants.LOGBACK_MIDDLEWARE_LOG_DISABLE_PROP_KEY, "true");
+            SPACES_MAP.remove(new SpaceId(TEST_SPACE));
+            LoggerSpaceManager.getLoggerBySpace(LogbackIntegrationTest.class.getCanonicalName(),
+                TEST_SPACE);
+            ThreadContext.put("testKey", "testValue");
+            ThreadContext.put("logging.path", "anyPath");
+            Map<String, Object> properties = new HashMap<>();
+            SpringApplication springApplication = new SpringApplication(
+                LogbackIntegrationTest.EmptyConfig.class);
+            springApplication.setDefaultProperties(properties);
+            springApplication.run();
+            logger = getLogger();
+            Assert.assertEquals("testValue", ThreadContext.get("testKey"));
+            Assert.assertEquals(Constants.LOGGING_PATH_DEFAULT, ThreadContext.get("logging.path"));
+        } finally {
+            System.getProperties().remove(Constants.LOGBACK_MIDDLEWARE_LOG_DISABLE_PROP_KEY);
+        }
     }
 }
