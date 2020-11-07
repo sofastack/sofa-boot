@@ -1,1 +1,1 @@
-org.springframework.context.ApplicationListener=com.alipay.sofa.boot.logging.CommonLoggingApplicationListener
+org.springframework.context.ApplicationListener=com.alipay.sofa.boot.logging.LogEnvironmentPreparingListener

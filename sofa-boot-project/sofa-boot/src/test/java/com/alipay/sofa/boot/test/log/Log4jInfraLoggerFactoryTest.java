@@ -38,7 +38,6 @@ public class Log4jInfraLoggerFactoryTest extends BaseLogTest {
 
     @Before
     public void before() throws Exception {
-        super.before();
         //禁用logback
         System.setProperty(Constants.LOGBACK_MIDDLEWARE_LOG_DISABLE_PROP_KEY, "true");
         //禁用log4j2

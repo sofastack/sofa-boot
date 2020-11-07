@@ -26,7 +26,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.slf4j.Logger;
 
-import com.alipay.sofa.boot.logging.CommonLoggingApplicationListener;
 import com.alipay.sofa.common.log.LoggerSpaceManager;
 import com.alipay.sofa.common.log.MultiAppLoggerSpaceManager;
 import com.alipay.sofa.common.log.SpaceId;
@@ -72,6 +71,5 @@ public abstract class BaseLogIntegrationTest {
         outContent.close();
         errContent.close();
         SPACES_MAP.remove(new SpaceId(TEST_SPACE));
-        new CommonLoggingApplicationListener().setReInitialize(false);
     }
 }
