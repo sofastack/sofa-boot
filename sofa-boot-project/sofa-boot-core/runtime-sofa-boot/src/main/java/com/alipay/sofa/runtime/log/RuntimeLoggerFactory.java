@@ -32,7 +32,7 @@ public class RuntimeLoggerFactory {
     /**
      * get Logger Object
      *
-     * @param name
+     * @param name name of the logger
      * @return Logger Object
      */
     public static Logger getLogger(String name) {
@@ -44,13 +44,13 @@ public class RuntimeLoggerFactory {
 
     /**
      * get Logger Object
-     * @param klazz
+     * @param clazz the returned logger will be named after clazz
      * @return Logger Object
      */
-    public static Logger getLogger(Class klazz) {
-        if (klazz == null) {
+    public static Logger getLogger(Class<?> clazz) {
+        if (clazz == null) {
             return null;
         }
-        return getLogger(klazz.getCanonicalName());
+        return getLogger(clazz.getCanonicalName());
     }
 }
