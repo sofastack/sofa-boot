@@ -18,7 +18,7 @@ package com.alipay.sofa.boot.logging;
 
 import com.alipay.sofa.common.log.Constants;
 import com.alipay.sofa.common.log.env.LogEnvUtils;
-import org.apache.logging.log4j.util.Strings;
+import com.alipay.sofa.common.utils.StringUtil;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.Ordered;
@@ -64,7 +64,7 @@ public class LogEnvironmentPreparingListener
 
     private void loadLogConfiguration(String key, String value) {
         if (!System.getProperties().contains(key) && !System.getenv().containsKey(key)
-            && Strings.isNotEmpty(value)) {
+            && StringUtil.isNotEmpty(value)) {
             System.setProperty(key, value);
         }
     }
