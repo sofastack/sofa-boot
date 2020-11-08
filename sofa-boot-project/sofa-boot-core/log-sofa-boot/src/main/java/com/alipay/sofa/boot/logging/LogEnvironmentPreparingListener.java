@@ -63,7 +63,8 @@ public class LogEnvironmentPreparingListener
     }
 
     private void loadLogConfiguration(String key, String value) {
-        if (!System.getProperties().contains(key) && Strings.isNotEmpty(value)) {
+        if (!System.getProperties().contains(key) && !System.getenv().containsKey(key)
+            && Strings.isNotEmpty(value)) {
             System.setProperty(key, value);
         }
     }
