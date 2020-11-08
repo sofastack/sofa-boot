@@ -25,7 +25,6 @@ import com.alipay.sofa.common.log.env.LogEnvUtils;
 import org.junit.After;
 import org.slf4j.Logger;
 
-import com.alipay.sofa.common.log.LoggerSpaceManager;
 import com.alipay.sofa.common.log.MultiAppLoggerSpaceManager;
 import com.alipay.sofa.common.log.SpaceId;
 
@@ -56,11 +55,6 @@ public abstract class BaseLogIntegrationTest {
         } catch (Throwable throwable) {
             // ignore
         }
-    }
-
-    protected Logger getLogger() {
-        return LoggerSpaceManager.getLoggerBySpace(LogbackIntegrationTest.class.getCanonicalName(),
-            TEST_SPACE);
     }
 
     public void setUpStreams() {
