@@ -53,11 +53,10 @@ public class Log4j2IntegrationTest extends BaseLogIntegrationTest {
     }
 
     @Before
-    @Override
-    public void setUpStreams() {
+    public void before() {
         MANAGER_MAP.clear();
         System.setProperty(Constants.LOGBACK_MIDDLEWARE_LOG_DISABLE_PROP_KEY, "true");
-        super.setUpStreams();
+        setUpStreams();
     }
 
     @After
@@ -78,7 +77,7 @@ public class Log4j2IntegrationTest extends BaseLogIntegrationTest {
         SpringApplication springApplication = new SpringApplication(
             LogbackIntegrationTest.EmptyConfig.class);
         springApplication.setDefaultProperties(properties);
-        springApplication.run(new String[] {});
+        springApplication.run();
         logger.info("space console");
         Assert.assertTrue(outContent.toString().contains("space console"));
         LogEnvUtils.processGlobalSystemLogProperties().remove(
@@ -90,19 +89,16 @@ public class Log4j2IntegrationTest extends BaseLogIntegrationTest {
      */
     @Test
     public void testRootLevelConfig() {
-        SPACES_MAP.remove(new SpaceId(TEST_SPACE));
         System.setProperty(DefaultConfiguration.DEFAULT_LEVEL, "ERROR");
 
-        logger = LoggerSpaceManager.getLoggerBySpace(
-            LogbackIntegrationTest.class.getCanonicalName(), TEST_SPACE);
-
-        Map<String, Object> properties = new HashMap<String, Object>();
+        Map<String, Object> properties = new HashMap<>();
         properties.put(
             String.format(Constants.SOFA_MIDDLEWARE_SINGLE_LOG_CONSOLE_SWITCH, TEST_SPACE), "true");
         SpringApplication springApplication = new SpringApplication(
             LogbackIntegrationTest.EmptyConfig.class);
         springApplication.setDefaultProperties(properties);
-        springApplication.run(new String[] {});
+        springApplication.run();
+        logger = getLogger();
 
         logger.info("space info console");
         logger.error("space error console");
