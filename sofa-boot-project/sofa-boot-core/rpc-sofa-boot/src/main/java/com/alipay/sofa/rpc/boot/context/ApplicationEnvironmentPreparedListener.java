@@ -17,7 +17,6 @@
 package com.alipay.sofa.rpc.boot.context;
 
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
-import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.env.Environment;
 
@@ -28,16 +27,16 @@ import com.alipay.sofa.rpc.common.RpcOptions;
 /**
  * @author khotyn
  */
-public class ApplicationEnvironmentPreparedListener implements ApplicationListener {
+public class ApplicationEnvironmentPreparedListener
+                                                   implements
+                                                   ApplicationListener<ApplicationEnvironmentPreparedEvent> {
 
     @Override
-    public void onApplicationEvent(ApplicationEvent event) {
-        if (event instanceof ApplicationEnvironmentPreparedEvent) {
-            Environment env = ((ApplicationEnvironmentPreparedEvent) event).getEnvironment();
-            String defaultTracer = env.getProperty(SofaBootRpcProperties.PREFIX + ".defaultTracer");
-            if (defaultTracer != null) {
-                RpcConfigs.putValue(RpcOptions.DEFAULT_TRACER, defaultTracer);
-            }
+    public void onApplicationEvent(ApplicationEnvironmentPreparedEvent event) {
+        Environment env = event.getEnvironment();
+        String defaultTracer = env.getProperty(SofaBootRpcProperties.PREFIX + ".defaultTracer");
+        if (defaultTracer != null) {
+            RpcConfigs.putValue(RpcOptions.DEFAULT_TRACER, defaultTracer);
         }
     }
 }
