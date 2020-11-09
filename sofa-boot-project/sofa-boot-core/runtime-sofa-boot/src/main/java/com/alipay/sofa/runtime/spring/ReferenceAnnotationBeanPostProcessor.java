@@ -118,8 +118,8 @@ public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor, 
                     return false;
                 }
                 if (Modifier.isStatic(field.getModifiers())) {
-                    SofaLogger.warn("SofaReference annotation is not supported on static fields: "
-                                    + field);
+                    SofaLogger.warn(
+                        "SofaReference annotation is not supported on static fields: {}", field);
                     return false;
                 }
                 return true;
