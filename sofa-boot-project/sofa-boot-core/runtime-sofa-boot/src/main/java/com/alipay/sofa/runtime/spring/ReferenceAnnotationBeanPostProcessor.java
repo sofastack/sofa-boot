@@ -20,6 +20,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
+import com.alipay.sofa.runtime.log.SofaLogger;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.ApplicationContext;
@@ -113,8 +114,15 @@ public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor, 
 
             @Override
             public boolean matches(Field field) {
-                return !Modifier.isStatic(field.getModifiers())
-                       && field.isAnnotationPresent(SofaReference.class);
+                if (!field.isAnnotationPresent(SofaReference.class)) {
+                    return false;
+                }
+                if (Modifier.isStatic(field.getModifiers())) {
+                    SofaLogger.warn(
+                        "SofaReference annotation is not supported on static fields: {}", field);
+                    return false;
+                }
+                return true;
             }
         });
 
