@@ -35,7 +35,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
 import com.alipay.sofa.common.log.Constants;
-import com.alipay.sofa.common.log.env.LogEnvUtils;
 import com.alipay.sofa.common.utils.ReportUtil;
 import com.alipay.sofa.common.utils.StringUtil;
 
@@ -98,8 +97,6 @@ public class LogbackIntegrationTest extends BaseLogIntegrationTest {
         Assert.assertEquals(2, contents.size());
         Assert.assertTrue(contents.get(0).contains("info level"));
         Assert.assertTrue(contents.get(1).contains("debug level"));
-        LogEnvUtils.processGlobalSystemLogProperties()
-            .remove(Constants.LOG_LEVEL_PREFIX + "test.*");
     }
 
     /**
@@ -149,7 +146,6 @@ public class LogbackIntegrationTest extends BaseLogIntegrationTest {
             environment.getProperty(Constants.LOG_ENCODING_PROP_KEY));
         Assert.assertEquals(1, contents.size());
         Assert.assertTrue(contents.get(0).contains("logback-test-conf"));
-        System.clearProperty(Constants.LOG_CONFIG_PREFIX + TEST_SPACE);
     }
 
     /**
@@ -180,8 +176,6 @@ public class LogbackIntegrationTest extends BaseLogIntegrationTest {
         logger.debug("space console debug");
         Assert.assertTrue(outContent.toString().contains("space console"));
         Assert.assertFalse(outContent.toString().contains("space console debug"));
-        System.clearProperty(String.format(Constants.SOFA_MIDDLEWARE_SINGLE_LOG_CONSOLE_SWITCH,
-            TEST_SPACE));
     }
 
     /**
@@ -223,7 +217,6 @@ public class LogbackIntegrationTest extends BaseLogIntegrationTest {
         logger.debug("global space console debug");
         Assert.assertTrue(outContent.toString().contains("global space console"));
         Assert.assertFalse(outContent.toString().contains("global space console debug"));
-        System.clearProperty(Constants.SOFA_MIDDLEWARE_ALL_LOG_CONSOLE_SWITCH);
     }
 
     /**
@@ -242,8 +235,6 @@ public class LogbackIntegrationTest extends BaseLogIntegrationTest {
         logger.debug("global space console debug");
         Assert.assertTrue(outContent.toString().contains("global space console"));
         Assert.assertTrue(outContent.toString().contains("global space console debug"));
-        System.clearProperty(Constants.SOFA_MIDDLEWARE_ALL_LOG_CONSOLE_SWITCH);
-        System.clearProperty(Constants.SOFA_MIDDLEWARE_ALL_LOG_CONSOLE_LEVEL);
     }
 
     /**
@@ -277,12 +268,6 @@ public class LogbackIntegrationTest extends BaseLogIntegrationTest {
         Assert.assertTrue(contents.get(0).contains("info level"));
         Assert.assertFalse(outContent.toString().contains("info level"));
         Assert.assertFalse(outContent.toString().contains("debug level"));
-        System.clearProperty(Constants.SOFA_MIDDLEWARE_ALL_LOG_CONSOLE_SWITCH);
-        System.clearProperty(Constants.SOFA_MIDDLEWARE_ALL_LOG_CONSOLE_LEVEL);
-        System.clearProperty(String.format(Constants.SOFA_MIDDLEWARE_SINGLE_LOG_CONSOLE_SWITCH,
-            TEST_SPACE));
-        System.clearProperty(String.format(Constants.SOFA_MIDDLEWARE_SINGLE_LOG_CONSOLE_LEVEL,
-            TEST_SPACE));
     }
 
     /**
@@ -301,8 +286,6 @@ public class LogbackIntegrationTest extends BaseLogIntegrationTest {
         logger = getLogger();
         logger.info("global space console");
         Assert.assertTrue(outContent.toString().contains("logback-test-console-pattern"));
-        System.clearProperty(Constants.SOFA_MIDDLEWARE_ALL_LOG_CONSOLE_SWITCH);
-        System.clearProperty(Constants.SOFA_MIDDLEWARE_LOG_CONSOLE_LOGBACK_PATTERN);
     }
 
     /**
@@ -319,7 +302,6 @@ public class LogbackIntegrationTest extends BaseLogIntegrationTest {
         logger.debug("global space console debug");
         Assert.assertFalse(outContent.toString().contains("global space console"));
         Assert.assertFalse(outContent.toString().contains("global space console debug"));
-        System.clearProperty(Constants.SOFA_MIDDLEWARE_LOG_DISABLE_PROP_KEY);
     }
 
     protected File getLogbackDefaultFile(Environment environment) {

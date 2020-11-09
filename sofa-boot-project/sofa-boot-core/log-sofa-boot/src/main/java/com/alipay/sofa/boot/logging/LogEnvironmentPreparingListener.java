@@ -16,9 +16,9 @@
  */
 package com.alipay.sofa.boot.logging;
 
+import com.alipay.sofa.common.log.CommonLoggingConfigurations;
 import com.alipay.sofa.common.log.Constants;
 import com.alipay.sofa.common.log.env.LogEnvUtils;
-import com.alipay.sofa.common.utils.StringUtil;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.Ordered;
@@ -45,27 +45,22 @@ public class LogEnvironmentPreparingListener
     }
 
     private void prepare(ConfigurableEnvironment environment) {
-        loadLogConfiguration(Constants.LOG_PATH, environment.getProperty(Constants.LOG_PATH));
-        loadLogConfiguration(Constants.OLD_LOG_PATH,
+        CommonLoggingConfigurations.loadExternalConfiguration(Constants.LOG_PATH,
+            environment.getProperty(Constants.LOG_PATH));
+        CommonLoggingConfigurations.loadExternalConfiguration(Constants.OLD_LOG_PATH,
             environment.getProperty(Constants.OLD_LOG_PATH));
-        loadLogConfiguration(Constants.LOG_ENCODING_PROP_KEY,
+        CommonLoggingConfigurations.loadExternalConfiguration(Constants.LOG_ENCODING_PROP_KEY,
             environment.getProperty(Constants.LOG_ENCODING_PROP_KEY));
 
         for (PropertySource<?> propertySource : environment.getPropertySources()) {
             if (propertySource instanceof EnumerablePropertySource) {
                 for (String key : ((EnumerablePropertySource) propertySource).getPropertyNames()) {
-                    if (LogEnvUtils.filterAllLogConfig(key)) {
-                        loadLogConfiguration(key, environment.getProperty(key));
+                    if (LogEnvUtils.isSofaCommonLoggingConfig(key)) {
+                        CommonLoggingConfigurations.loadExternalConfiguration(key,
+                            environment.getProperty(key));
                     }
                 }
             }
-        }
-    }
-
-    private void loadLogConfiguration(String key, String value) {
-        if (!System.getProperties().contains(key) && !System.getenv().containsKey(key)
-            && StringUtil.isNotEmpty(value)) {
-            System.setProperty(key, value);
         }
     }
 }
