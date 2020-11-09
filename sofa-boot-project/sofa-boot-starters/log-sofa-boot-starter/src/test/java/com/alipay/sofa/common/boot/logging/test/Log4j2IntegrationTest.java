@@ -16,23 +16,21 @@
  */
 package com.alipay.sofa.common.boot.logging.test;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.alipay.sofa.common.log.LoggerSpaceManager;
+import org.apache.logging.log4j.ThreadContext;
 import org.apache.logging.log4j.core.appender.AbstractManager;
-import org.apache.logging.log4j.core.config.DefaultConfiguration;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
 import org.springframework.boot.SpringApplication;
 
 import com.alipay.sofa.common.log.Constants;
-import com.alipay.sofa.common.log.LoggerSpaceManager;
-import com.alipay.sofa.common.log.SpaceId;
-import com.alipay.sofa.common.log.env.LogEnvUtils;
 
 /**
  * @author qilong.zql
@@ -53,18 +51,22 @@ public class Log4j2IntegrationTest extends BaseLogIntegrationTest {
     }
 
     @Before
-    @Override
-    public void setUpStreams() {
+    public void before() {
         MANAGER_MAP.clear();
         System.setProperty(Constants.LOGBACK_MIDDLEWARE_LOG_DISABLE_PROP_KEY, "true");
-        super.setUpStreams();
+        setUpStreams();
     }
 
     @After
     @Override
-    public void restoreStreams() throws IOException {
+    public void restoreStreams() throws Exception {
         super.restoreStreams();
         System.getProperties().remove(Constants.LOGBACK_MIDDLEWARE_LOG_DISABLE_PROP_KEY);
+    }
+
+    protected Logger getLogger() {
+        return LoggerSpaceManager.getLoggerBySpace(Log4j2IntegrationTest.class.getCanonicalName(),
+            TEST_SPACE);
     }
 
     /**
@@ -72,45 +74,36 @@ public class Log4j2IntegrationTest extends BaseLogIntegrationTest {
      */
     @Test
     public void testLog4j2InfoToConsole() {
-        Map<String, Object> properties = new HashMap<String, Object>();
+        Map<String, Object> properties = new HashMap<>();
         properties.put(
             String.format(Constants.SOFA_MIDDLEWARE_SINGLE_LOG_CONSOLE_SWITCH, TEST_SPACE), "true");
         SpringApplication springApplication = new SpringApplication(
             LogbackIntegrationTest.EmptyConfig.class);
         springApplication.setDefaultProperties(properties);
-        springApplication.run(new String[] {});
+        springApplication.run();
+        logger = getLogger();
         logger.info("space console");
         Assert.assertTrue(outContent.toString().contains("space console"));
-        LogEnvUtils.processGlobalSystemLogProperties().remove(
-            String.format(Constants.SOFA_MIDDLEWARE_SINGLE_LOG_CONSOLE_SWITCH, TEST_SPACE));
+        System.clearProperty(String.format(Constants.SOFA_MIDDLEWARE_SINGLE_LOG_CONSOLE_SWITCH,
+            TEST_SPACE));
     }
 
-    /**
-     * test log4j2 root level config
-     */
     @Test
-    public void testRootLevelConfig() {
-        SPACES_MAP.remove(new SpaceId(TEST_SPACE));
-        System.setProperty(DefaultConfiguration.DEFAULT_LEVEL, "ERROR");
-
-        logger = LoggerSpaceManager.getLoggerBySpace(
-            LogbackIntegrationTest.class.getCanonicalName(), TEST_SPACE);
-
-        Map<String, Object> properties = new HashMap<String, Object>();
-        properties.put(
-            String.format(Constants.SOFA_MIDDLEWARE_SINGLE_LOG_CONSOLE_SWITCH, TEST_SPACE), "true");
-        SpringApplication springApplication = new SpringApplication(
-            LogbackIntegrationTest.EmptyConfig.class);
-        springApplication.setDefaultProperties(properties);
-        springApplication.run(new String[] {});
-
-        logger.info("space info console");
-        logger.error("space error console");
-        Assert.assertFalse(outContent.toString().contains("space info console"));
-        Assert.assertTrue(outContent.toString().contains("space error console"));
-
-        System.getProperties().remove(DefaultConfiguration.DEFAULT_LEVEL);
-        LogEnvUtils.processGlobalSystemLogProperties().remove(
-            String.format(Constants.SOFA_MIDDLEWARE_SINGLE_LOG_CONSOLE_SWITCH, TEST_SPACE));
+    public void testThreadContextConfiguration() {
+        try {
+            System.setProperty(Constants.LOGBACK_MIDDLEWARE_LOG_DISABLE_PROP_KEY, "true");
+            ThreadContext.put("testKey", "testValue");
+            ThreadContext.put("logging.path", "anyPath");
+            Map<String, Object> properties = new HashMap<>();
+            SpringApplication springApplication = new SpringApplication(
+                LogbackIntegrationTest.EmptyConfig.class);
+            springApplication.setDefaultProperties(properties);
+            springApplication.run();
+            logger = getLogger();
+            Assert.assertEquals("testValue", ThreadContext.get("testKey"));
+            Assert.assertEquals(Constants.LOGGING_PATH_DEFAULT, ThreadContext.get("logging.path"));
+        } finally {
+            System.getProperties().remove(Constants.LOGBACK_MIDDLEWARE_LOG_DISABLE_PROP_KEY);
+        }
     }
 }

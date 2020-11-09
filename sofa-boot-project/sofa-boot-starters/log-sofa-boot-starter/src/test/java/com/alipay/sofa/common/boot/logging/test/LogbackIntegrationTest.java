@@ -22,10 +22,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.alipay.sofa.common.log.LoggerSpaceManager;
 import org.apache.commons.io.FileUtils;
-import org.apache.logging.log4j.ThreadContext;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -33,8 +35,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
 import com.alipay.sofa.common.log.Constants;
-import com.alipay.sofa.common.log.LoggerSpaceManager;
-import com.alipay.sofa.common.log.SpaceId;
 import com.alipay.sofa.common.log.env.LogEnvUtils;
 import com.alipay.sofa.common.utils.ReportUtil;
 import com.alipay.sofa.common.utils.StringUtil;
@@ -44,12 +44,26 @@ import com.alipay.sofa.common.utils.StringUtil;
  * @since 1.0.15
  */
 public class LogbackIntegrationTest extends BaseLogIntegrationTest {
+    @Before
+    public void before() {
+        setUpStreams();
+        //disable logback
+        System.setProperty(Constants.LOG4J2_MIDDLEWARE_LOG_DISABLE_PROP_KEY, "true");
+        //disable log4j
+        System.setProperty(Constants.LOG4J_MIDDLEWARE_LOG_DISABLE_PROP_KEY, "true");
+    }
+
+    protected Logger getLogger() {
+        return LoggerSpaceManager.getLoggerBySpace(LogbackIntegrationTest.class.getCanonicalName(),
+            TEST_SPACE);
+    }
 
     @Test
     public void testDefaultLevel() throws IOException {
         SpringApplication springApplication = new SpringApplication(EmptyConfig.class);
-        ConfigurableApplicationContext applicationContext = springApplication.run(new String[] {});
+        ConfigurableApplicationContext applicationContext = springApplication.run();
         Environment environment = applicationContext.getEnvironment();
+        logger = getLogger();
         File logFile = getLogbackDefaultFile(environment);
         FileUtils.write(logFile, StringUtil.EMPTY_STRING,
             environment.getProperty(Constants.LOG_ENCODING_PROP_KEY));
@@ -63,16 +77,17 @@ public class LogbackIntegrationTest extends BaseLogIntegrationTest {
 
     /**
      * test logging.level.com.* config
-     * @throws IOException
+     * @throws IOException not handling
      */
     @Test
     public void testWildLogLevel() throws IOException {
-        Map<String, Object> properties = new HashMap<String, Object>();
+        Map<String, Object> properties = new HashMap<>();
         properties.put(Constants.LOG_LEVEL_PREFIX + "test.*", "debug");
         SpringApplication springApplication = new SpringApplication(EmptyConfig.class);
         springApplication.setDefaultProperties(properties);
-        ConfigurableApplicationContext applicationContext = springApplication.run(new String[] {});
+        ConfigurableApplicationContext applicationContext = springApplication.run();
         Environment environment = applicationContext.getEnvironment();
+        logger = getLogger();
         File logFile = getLogbackDefaultFile(environment);
         FileUtils.write(logFile, StringUtil.EMPTY_STRING,
             environment.getProperty(Constants.LOG_ENCODING_PROP_KEY));
@@ -89,16 +104,17 @@ public class LogbackIntegrationTest extends BaseLogIntegrationTest {
 
     /**
      * test logging.level.{space id} config
-     * @throws IOException
+     * @throws IOException not handling
      */
     @Test
     public void testSpecifyLogLevel() throws IOException {
-        Map<String, Object> properties = new HashMap<String, Object>();
+        Map<String, Object> properties = new HashMap<>();
         properties.put(Constants.LOG_LEVEL_PREFIX + "test.space", "debug");
         SpringApplication springApplication = new SpringApplication(EmptyConfig.class);
         springApplication.setDefaultProperties(properties);
-        ConfigurableApplicationContext applicationContext = springApplication.run(new String[] {});
+        ConfigurableApplicationContext applicationContext = springApplication.run();
         Environment environment = applicationContext.getEnvironment();
+        logger = getLogger();
         File logFile = getLogbackDefaultFile(environment);
         FileUtils.write(logFile, StringUtil.EMPTY_STRING,
             environment.getProperty(Constants.LOG_ENCODING_PROP_KEY));
@@ -109,22 +125,22 @@ public class LogbackIntegrationTest extends BaseLogIntegrationTest {
         Assert.assertEquals(2, contents.size());
         Assert.assertTrue(contents.get(0).contains("info level"));
         Assert.assertTrue(contents.get(1).contains("debug level"));
-        LogEnvUtils.processGlobalSystemLogProperties().remove(
-            Constants.LOG_LEVEL_PREFIX + "test.space");
+        System.clearProperty(Constants.LOG_LEVEL_PREFIX + "test.space");
     }
 
     /**
      * test logging.config.{space id} config
-     * @throws IOException
+     * @throws IOException not handling
      */
     @Test
     public void testLogConfig() throws IOException {
-        Map<String, Object> properties = new HashMap<String, Object>();
+        Map<String, Object> properties = new HashMap<>();
         properties.put(Constants.LOG_CONFIG_PREFIX + TEST_SPACE, "logback-test-conf.xml");
         SpringApplication springApplication = new SpringApplication(EmptyConfig.class);
         springApplication.setDefaultProperties(properties);
-        ConfigurableApplicationContext applicationContext = springApplication.run(new String[] {});
+        ConfigurableApplicationContext applicationContext = springApplication.run();
         Environment environment = applicationContext.getEnvironment();
+        logger = getLogger();
         File logFile = getLogbackDefaultFile(environment);
         FileUtils.write(logFile, StringUtil.EMPTY_STRING,
             environment.getProperty(Constants.LOG_ENCODING_PROP_KEY));
@@ -133,8 +149,7 @@ public class LogbackIntegrationTest extends BaseLogIntegrationTest {
             environment.getProperty(Constants.LOG_ENCODING_PROP_KEY));
         Assert.assertEquals(1, contents.size());
         Assert.assertTrue(contents.get(0).contains("logback-test-conf"));
-        LogEnvUtils.processGlobalSystemLogProperties().remove(
-            Constants.LOG_CONFIG_PREFIX + TEST_SPACE);
+        System.clearProperty(Constants.LOG_CONFIG_PREFIX + TEST_SPACE);
     }
 
     /**
@@ -154,18 +169,19 @@ public class LogbackIntegrationTest extends BaseLogIntegrationTest {
      */
     @Test
     public void testSpaceConsoleConfig() {
-        Map<String, Object> properties = new HashMap<String, Object>();
+        Map<String, Object> properties = new HashMap<>();
         properties.put(
             String.format(Constants.SOFA_MIDDLEWARE_SINGLE_LOG_CONSOLE_SWITCH, TEST_SPACE), "true");
         SpringApplication springApplication = new SpringApplication(EmptyConfig.class);
         springApplication.setDefaultProperties(properties);
-        springApplication.run(new String[] {});
+        springApplication.run();
+        logger = getLogger();
         logger.info("space console");
         logger.debug("space console debug");
         Assert.assertTrue(outContent.toString().contains("space console"));
         Assert.assertFalse(outContent.toString().contains("space console debug"));
-        LogEnvUtils.processGlobalSystemLogProperties().remove(
-            String.format(Constants.SOFA_MIDDLEWARE_SINGLE_LOG_CONSOLE_SWITCH, TEST_SPACE));
+        System.clearProperty(String.format(Constants.SOFA_MIDDLEWARE_SINGLE_LOG_CONSOLE_SWITCH,
+            TEST_SPACE));
     }
 
     /**
@@ -173,22 +189,23 @@ public class LogbackIntegrationTest extends BaseLogIntegrationTest {
      */
     @Test
     public void testSpaceConsoleLevelConfig() {
-        Map<String, Object> properties = new HashMap<String, Object>();
+        Map<String, Object> properties = new HashMap<>();
         properties.put(
             String.format(Constants.SOFA_MIDDLEWARE_SINGLE_LOG_CONSOLE_SWITCH, TEST_SPACE), "true");
         properties.put(
             String.format(Constants.SOFA_MIDDLEWARE_SINGLE_LOG_CONSOLE_LEVEL, TEST_SPACE), "debug");
         SpringApplication springApplication = new SpringApplication(EmptyConfig.class);
         springApplication.setDefaultProperties(properties);
-        springApplication.run(new String[] {});
+        springApplication.run();
+        logger = getLogger();
         logger.info("space console");
         logger.debug("space console debug");
         Assert.assertTrue(outContent.toString().contains("space console"));
         Assert.assertTrue(outContent.toString().contains("space console debug"));
-        LogEnvUtils.processGlobalSystemLogProperties().remove(
-            String.format(Constants.SOFA_MIDDLEWARE_SINGLE_LOG_CONSOLE_SWITCH, TEST_SPACE));
-        LogEnvUtils.processGlobalSystemLogProperties().remove(
-            String.format(Constants.SOFA_MIDDLEWARE_SINGLE_LOG_CONSOLE_LEVEL, TEST_SPACE));
+        System.clearProperty(String.format(Constants.SOFA_MIDDLEWARE_SINGLE_LOG_CONSOLE_SWITCH,
+            TEST_SPACE));
+        System.clearProperty(String.format(Constants.SOFA_MIDDLEWARE_SINGLE_LOG_CONSOLE_LEVEL,
+            TEST_SPACE));
     }
 
     /**
@@ -196,17 +213,17 @@ public class LogbackIntegrationTest extends BaseLogIntegrationTest {
      */
     @Test
     public void testGlobalConsoleConfig() {
-        Map<String, Object> properties = new HashMap<String, Object>();
+        Map<String, Object> properties = new HashMap<>();
         properties.put(Constants.SOFA_MIDDLEWARE_ALL_LOG_CONSOLE_SWITCH, "true");
         SpringApplication springApplication = new SpringApplication(EmptyConfig.class);
         springApplication.setDefaultProperties(properties);
-        springApplication.run(new String[] {});
+        springApplication.run();
+        logger = getLogger();
         logger.info("global space console");
         logger.debug("global space console debug");
         Assert.assertTrue(outContent.toString().contains("global space console"));
         Assert.assertFalse(outContent.toString().contains("global space console debug"));
-        LogEnvUtils.processGlobalSystemLogProperties().remove(
-            Constants.SOFA_MIDDLEWARE_ALL_LOG_CONSOLE_SWITCH);
+        System.clearProperty(Constants.SOFA_MIDDLEWARE_ALL_LOG_CONSOLE_SWITCH);
     }
 
     /**
@@ -214,29 +231,28 @@ public class LogbackIntegrationTest extends BaseLogIntegrationTest {
      */
     @Test
     public void testGlobalConsoleLevelConfig() {
-        Map<String, Object> properties = new HashMap<String, Object>();
+        Map<String, Object> properties = new HashMap<>();
         properties.put(Constants.SOFA_MIDDLEWARE_ALL_LOG_CONSOLE_SWITCH, "true");
         properties.put(Constants.SOFA_MIDDLEWARE_ALL_LOG_CONSOLE_LEVEL, "debug");
         SpringApplication springApplication = new SpringApplication(EmptyConfig.class);
         springApplication.setDefaultProperties(properties);
-        springApplication.run(new String[] {});
+        springApplication.run();
+        logger = getLogger();
         logger.info("global space console");
         logger.debug("global space console debug");
         Assert.assertTrue(outContent.toString().contains("global space console"));
         Assert.assertTrue(outContent.toString().contains("global space console debug"));
-        LogEnvUtils.processGlobalSystemLogProperties().remove(
-            Constants.SOFA_MIDDLEWARE_ALL_LOG_CONSOLE_SWITCH);
-        LogEnvUtils.processGlobalSystemLogProperties().remove(
-            Constants.SOFA_MIDDLEWARE_ALL_LOG_CONSOLE_LEVEL);
+        System.clearProperty(Constants.SOFA_MIDDLEWARE_ALL_LOG_CONSOLE_SWITCH);
+        System.clearProperty(Constants.SOFA_MIDDLEWARE_ALL_LOG_CONSOLE_LEVEL);
     }
 
     /**
      * test space config override global config
-     * @throws IOException
+     * @throws IOException not handling
      */
     @Test
     public void testSpaceOverrideGlobalConfig() throws IOException {
-        Map<String, Object> properties = new HashMap<String, Object>();
+        Map<String, Object> properties = new HashMap<>();
         properties.put(Constants.SOFA_MIDDLEWARE_ALL_LOG_CONSOLE_SWITCH, "true");
         properties.put(Constants.SOFA_MIDDLEWARE_ALL_LOG_CONSOLE_LEVEL, "debug");
         properties
@@ -247,9 +263,9 @@ public class LogbackIntegrationTest extends BaseLogIntegrationTest {
 
         SpringApplication springApplication = new SpringApplication(EmptyConfig.class);
         springApplication.setDefaultProperties(properties);
-        springApplication.run(new String[] {});
-        ConfigurableApplicationContext applicationContext = springApplication.run(new String[] {});
+        ConfigurableApplicationContext applicationContext = springApplication.run();
         Environment environment = applicationContext.getEnvironment();
+        logger = getLogger();
         File logFile = getLogbackDefaultFile(environment);
         FileUtils.write(logFile, StringUtil.EMPTY_STRING,
             environment.getProperty(Constants.LOG_ENCODING_PROP_KEY));
@@ -261,14 +277,12 @@ public class LogbackIntegrationTest extends BaseLogIntegrationTest {
         Assert.assertTrue(contents.get(0).contains("info level"));
         Assert.assertFalse(outContent.toString().contains("info level"));
         Assert.assertFalse(outContent.toString().contains("debug level"));
-        LogEnvUtils.processGlobalSystemLogProperties().remove(
-            Constants.SOFA_MIDDLEWARE_ALL_LOG_CONSOLE_SWITCH);
-        LogEnvUtils.processGlobalSystemLogProperties().remove(
-            Constants.SOFA_MIDDLEWARE_ALL_LOG_CONSOLE_LEVEL);
-        LogEnvUtils.processGlobalSystemLogProperties().remove(
-            String.format(Constants.SOFA_MIDDLEWARE_SINGLE_LOG_CONSOLE_SWITCH, TEST_SPACE));
-        LogEnvUtils.processGlobalSystemLogProperties().remove(
-            String.format(Constants.SOFA_MIDDLEWARE_SINGLE_LOG_CONSOLE_LEVEL, TEST_SPACE));
+        System.clearProperty(Constants.SOFA_MIDDLEWARE_ALL_LOG_CONSOLE_SWITCH);
+        System.clearProperty(Constants.SOFA_MIDDLEWARE_ALL_LOG_CONSOLE_LEVEL);
+        System.clearProperty(String.format(Constants.SOFA_MIDDLEWARE_SINGLE_LOG_CONSOLE_SWITCH,
+            TEST_SPACE));
+        System.clearProperty(String.format(Constants.SOFA_MIDDLEWARE_SINGLE_LOG_CONSOLE_LEVEL,
+            TEST_SPACE));
     }
 
     /**
@@ -276,41 +290,19 @@ public class LogbackIntegrationTest extends BaseLogIntegrationTest {
      */
     @Test
     public void testLogbackLogConsolePattern() {
-        Map<String, Object> properties = new HashMap<String, Object>();
+        Map<String, Object> properties = new HashMap<>();
         properties.put(Constants.SOFA_MIDDLEWARE_ALL_LOG_CONSOLE_SWITCH, "true");
         properties.put(Constants.SOFA_MIDDLEWARE_LOG_CONSOLE_LOGBACK_PATTERN,
             "logback-test-console-pattern"
                     + Constants.SOFA_MIDDLEWARE_LOG_CONSOLE_LOGBACK_PATTERN_DEFAULT);
         SpringApplication springApplication = new SpringApplication(EmptyConfig.class);
         springApplication.setDefaultProperties(properties);
-        springApplication.run(new String[] {});
+        springApplication.run();
+        logger = getLogger();
         logger.info("global space console");
         Assert.assertTrue(outContent.toString().contains("logback-test-console-pattern"));
-        LogEnvUtils.processGlobalSystemLogProperties().remove(
-            Constants.SOFA_MIDDLEWARE_ALL_LOG_CONSOLE_SWITCH);
-        LogEnvUtils.processGlobalSystemLogProperties().remove(
-            Constants.SOFA_MIDDLEWARE_LOG_CONSOLE_LOGBACK_PATTERN);
-    }
-
-    @Test
-    public void testThreadContextConfiguration() {
-        try {
-            System.setProperty(Constants.LOGBACK_MIDDLEWARE_LOG_DISABLE_PROP_KEY, "true");
-            SPACES_MAP.remove(new SpaceId(TEST_SPACE));
-            LoggerSpaceManager.getLoggerBySpace(LogbackIntegrationTest.class.getCanonicalName(),
-                TEST_SPACE);
-            ThreadContext.put("testKey", "testValue");
-            ThreadContext.put("logging.path", "anyPath");
-            Map<String, Object> properties = new HashMap<String, Object>();
-            SpringApplication springApplication = new SpringApplication(EmptyConfig.class);
-            springApplication.setDefaultProperties(properties);
-            springApplication.run(new String[] {});
-            Assert.assertTrue("testValue".equals(ThreadContext.get("testKey")));
-            Assert.assertTrue(Constants.LOGGING_PATH_DEFAULT.equals(ThreadContext
-                .get("logging.path")));
-        } finally {
-            System.getProperties().remove(Constants.LOGBACK_MIDDLEWARE_LOG_DISABLE_PROP_KEY);
-        }
+        System.clearProperty(Constants.SOFA_MIDDLEWARE_ALL_LOG_CONSOLE_SWITCH);
+        System.clearProperty(Constants.SOFA_MIDDLEWARE_LOG_CONSOLE_LOGBACK_PATTERN);
     }
 
     /**
@@ -318,17 +310,16 @@ public class LogbackIntegrationTest extends BaseLogIntegrationTest {
      */
     @Test
     public void testDisableMiddleLog() {
-        Map<String, Object> properties = new HashMap<String, Object>();
+        Map<String, Object> properties = new HashMap<>();
         properties.put(Constants.SOFA_MIDDLEWARE_LOG_DISABLE_PROP_KEY, "true");
         SpringApplication springApplication = new SpringApplication(EmptyConfig.class);
         springApplication.setDefaultProperties(properties);
-        springApplication.run(new String[] {});
+        springApplication.run();
         logger.info("global space console");
         logger.debug("global space console debug");
         Assert.assertFalse(outContent.toString().contains("global space console"));
         Assert.assertFalse(outContent.toString().contains("global space console debug"));
-        LogEnvUtils.processGlobalSystemLogProperties().remove(
-            Constants.SOFA_MIDDLEWARE_LOG_DISABLE_PROP_KEY);
+        System.clearProperty(Constants.SOFA_MIDDLEWARE_LOG_DISABLE_PROP_KEY);
     }
 
     protected File getLogbackDefaultFile(Environment environment) {

@@ -20,10 +20,10 @@ import java.lang.reflect.Field;
 import java.util.Map;
 
 import com.alipay.sofa.boot.log.InfraLoggerFactory;
-import com.alipay.sofa.boot.logging.CommonLoggingApplicationListener;
 import com.alipay.sofa.common.log.Constants;
 import com.alipay.sofa.common.log.MultiAppLoggerSpaceManager;
 import com.alipay.sofa.common.log.SpaceId;
+import com.alipay.sofa.common.log.SpaceInfo;
 import com.alipay.sofa.common.log.env.LogEnvUtils;
 
 /**
@@ -33,18 +33,18 @@ import com.alipay.sofa.common.log.env.LogEnvUtils;
  */
 public abstract class BaseLogTest {
 
-    public static final String restLogLevel = Constants.LOG_LEVEL_PREFIX
-                                              + InfraLoggerFactory.INFRASTRUCTURE_LOG_SPACE;
-    private static Map         SPACES_MAP;
-    private static Field       globalSystemProperties;
+    public static final String             restLogLevel = Constants.LOG_LEVEL_PREFIX
+                                                          + InfraLoggerFactory.INFRASTRUCTURE_LOG_SPACE;
+    private static Map<SpaceId, SpaceInfo> SPACES_MAP;
 
     static {
         try {
             Field field = MultiAppLoggerSpaceManager.class.getDeclaredField("SPACES_MAP");
             field.setAccessible(true);
-            SPACES_MAP = (Map) field.get(null);
+            SPACES_MAP = (Map<SpaceId, SpaceInfo>) field.get(null);
 
-            globalSystemProperties = LogEnvUtils.class.getDeclaredField("globalSystemProperties");
+            Field globalSystemProperties = LogEnvUtils.class
+                .getDeclaredField("globalSystemProperties");
             globalSystemProperties.setAccessible(true);
         } catch (Throwable throwable) {
             // ignore
@@ -53,7 +53,6 @@ public abstract class BaseLogTest {
 
     public void before() throws Exception {
         SPACES_MAP.remove(new SpaceId(InfraLoggerFactory.INFRASTRUCTURE_LOG_SPACE));
-        new CommonLoggingApplicationListener().setReInitialize(true);
     }
 
     public void after() throws Exception {

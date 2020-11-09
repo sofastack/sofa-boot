@@ -30,33 +30,23 @@ public class SofaLogger {
     }
 
     public static void debug(String msg) {
-        if (DEFAULT_LOG.isDebugEnabled()) {
-            DEFAULT_LOG.debug(msg);
-        }
+        DEFAULT_LOG.debug(msg);
     }
 
     public static void debug(String format, Object arg) {
-        if (DEFAULT_LOG.isDebugEnabled()) {
-            DEFAULT_LOG.debug(format, arg);
-        }
+        DEFAULT_LOG.debug(format, arg);
     }
 
     public static void debug(String format, Object arg1, Object arg2) {
-        if (DEFAULT_LOG.isDebugEnabled()) {
-            DEFAULT_LOG.debug(format, arg1, arg2);
-        }
+        DEFAULT_LOG.debug(format, arg1, arg2);
     }
 
     public static void debug(String format, Object... arguments) {
-        if (DEFAULT_LOG.isDebugEnabled()) {
-            DEFAULT_LOG.debug(format, arguments);
-        }
+        DEFAULT_LOG.debug(format, arguments);
     }
 
     public static void debug(String msg, Throwable t) {
-        if (DEFAULT_LOG.isDebugEnabled()) {
-            DEFAULT_LOG.debug(msg, t);
-        }
+        DEFAULT_LOG.debug(msg, t);
     }
 
     public static boolean isInfoEnabled() {
@@ -64,33 +54,23 @@ public class SofaLogger {
     }
 
     public static void info(String msg) {
-        if (DEFAULT_LOG.isInfoEnabled()) {
-            DEFAULT_LOG.info(msg);
-        }
+        DEFAULT_LOG.info(msg);
     }
 
     public static void info(String format, Object arg) {
-        if (DEFAULT_LOG.isInfoEnabled()) {
-            DEFAULT_LOG.info(format, arg);
-        }
+        DEFAULT_LOG.info(format, arg);
     }
 
     public static void info(String format, Object arg1, Object arg2) {
-        if (DEFAULT_LOG.isInfoEnabled()) {
-            DEFAULT_LOG.info(format, arg1, arg2);
-        }
+        DEFAULT_LOG.info(format, arg1, arg2);
     }
 
     public static void info(String format, Object... arguments) {
-        if (DEFAULT_LOG.isInfoEnabled()) {
-            DEFAULT_LOG.info(format, arguments);
-        }
+        DEFAULT_LOG.info(format, arguments);
     }
 
     public static void info(String msg, Throwable t) {
-        if (DEFAULT_LOG.isInfoEnabled()) {
-            DEFAULT_LOG.info(msg, t);
-        }
+        DEFAULT_LOG.info(msg, t);
     }
 
     public static boolean isWarnEnabled() {
@@ -98,33 +78,23 @@ public class SofaLogger {
     }
 
     public static void warn(String msg) {
-        if (DEFAULT_LOG.isWarnEnabled()) {
-            DEFAULT_LOG.warn(msg);
-        }
+        DEFAULT_LOG.warn(msg);
     }
 
     public static void warn(String format, Object arg) {
-        if (DEFAULT_LOG.isWarnEnabled()) {
-            DEFAULT_LOG.warn(format, arg);
-        }
+        DEFAULT_LOG.warn(format, arg);
     }
 
     public static void warn(String format, Object... arguments) {
-        if (DEFAULT_LOG.isWarnEnabled()) {
-            DEFAULT_LOG.warn(format, arguments);
-        }
+        DEFAULT_LOG.warn(format, arguments);
     }
 
     public static void warn(String format, Object arg1, Object arg2) {
-        if (DEFAULT_LOG.isWarnEnabled()) {
-            DEFAULT_LOG.warn(format, arg1, arg2);
-        }
+        DEFAULT_LOG.warn(format, arg1, arg2);
     }
 
     public static void warn(String msg, Throwable t) {
-        if (DEFAULT_LOG.isWarnEnabled()) {
-            DEFAULT_LOG.warn(msg, t);
-        }
+        DEFAULT_LOG.warn(msg, t);
     }
 
     public static boolean isErrorEnabled() {
@@ -132,32 +102,22 @@ public class SofaLogger {
     }
 
     public static void error(String msg) {
-        if (DEFAULT_LOG.isErrorEnabled()) {
-            DEFAULT_LOG.error(msg);
-        }
+        DEFAULT_LOG.error(msg);
     }
 
     public static void error(String format, Object arg) {
-        if (DEFAULT_LOG.isErrorEnabled()) {
-            DEFAULT_LOG.error(format, arg);
-        }
+        DEFAULT_LOG.error(format, arg);
     }
 
     public static void error(String format, Object arg1, Object arg2) {
-        if (DEFAULT_LOG.isErrorEnabled()) {
-            DEFAULT_LOG.error(format, arg1, arg2);
-        }
+        DEFAULT_LOG.error(format, arg1, arg2);
     }
 
     public static void error(String format, Object... arguments) {
-        if (DEFAULT_LOG.isErrorEnabled()) {
-            DEFAULT_LOG.error(format, arguments);
-        }
+        DEFAULT_LOG.error(format, arguments);
     }
 
     public static void error(String msg, Throwable t) {
-        if (DEFAULT_LOG.isErrorEnabled()) {
-            DEFAULT_LOG.error(msg, t);
-        }
+        DEFAULT_LOG.error(msg, t);
     }
 }

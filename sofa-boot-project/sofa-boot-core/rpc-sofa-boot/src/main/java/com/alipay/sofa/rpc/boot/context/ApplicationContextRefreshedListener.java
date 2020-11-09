@@ -17,7 +17,6 @@
 package com.alipay.sofa.rpc.boot.context;
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
@@ -29,19 +28,15 @@ import com.alipay.sofa.rpc.boot.context.event.SofaBootRpcStartEvent;
  *
  * @author <a href="mailto:leizhiyuan@gmail.com">leizhiyuan</a>
  */
-public class ApplicationContextRefreshedListener implements ApplicationListener {
+public class ApplicationContextRefreshedListener implements
+                                                ApplicationListener<ContextRefreshedEvent> {
 
     @Override
-    public void onApplicationEvent(ApplicationEvent event) {
-        if (event instanceof ContextRefreshedEvent) {
-
-            ApplicationContext applicationContext = ((ContextRefreshedEvent) event)
-                .getApplicationContext();
-            //rpc 开始启动事件监听器
-            applicationContext.publishEvent(new SofaBootRpcStartEvent(applicationContext));
-
-            //rpc 启动完毕事件监听器
-            applicationContext.publishEvent(new SofaBootRpcStartAfterEvent(applicationContext));
-        }
+    public void onApplicationEvent(ContextRefreshedEvent event) {
+        ApplicationContext applicationContext = event.getApplicationContext();
+        //rpc 开始启动事件监听器
+        applicationContext.publishEvent(new SofaBootRpcStartEvent(applicationContext));
+        //rpc 启动完毕事件监听器
+        applicationContext.publishEvent(new SofaBootRpcStartAfterEvent(applicationContext));
     }
 }
