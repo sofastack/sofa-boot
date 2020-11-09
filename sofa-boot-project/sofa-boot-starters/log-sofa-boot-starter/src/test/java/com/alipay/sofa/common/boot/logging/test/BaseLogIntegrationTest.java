@@ -21,6 +21,7 @@ import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.util.Map;
 
+import com.alipay.sofa.common.log.CommonLoggingConfigurations;
 import com.alipay.sofa.common.log.env.LogEnvUtils;
 import org.junit.After;
 import org.slf4j.Logger;
@@ -42,6 +43,7 @@ public abstract class BaseLogIntegrationTest {
     protected final PrintStream          originalOut = System.out;
     protected final PrintStream          originalErr = System.err;
     protected static Field               globalSystemPropertiesField;
+    protected static Field               externalConfigurationsField;
 
     static {
         try {
@@ -52,6 +54,10 @@ public abstract class BaseLogIntegrationTest {
             globalSystemPropertiesField = LogEnvUtils.class
                 .getDeclaredField("globalSystemProperties");
             globalSystemPropertiesField.setAccessible(true);
+
+            externalConfigurationsField = CommonLoggingConfigurations.class
+                .getDeclaredField("externalConfigurations");
+            externalConfigurationsField.setAccessible(true);
         } catch (Throwable throwable) {
             // ignore
         }
@@ -65,6 +71,7 @@ public abstract class BaseLogIntegrationTest {
     }
 
     @After
+    @SuppressWarnings("unchecked")
     public void restoreStreams() throws Exception {
         System.setOut(originalOut);
         System.setErr(originalErr);
@@ -72,5 +79,6 @@ public abstract class BaseLogIntegrationTest {
         errContent.close();
         SPACES_MAP.remove(new SpaceId(TEST_SPACE));
         globalSystemPropertiesField.set(null, null);
+        ((Map<String, String>) externalConfigurationsField.get(null)).clear();
     }
 }
