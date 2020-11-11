@@ -11,7 +11,7 @@
         <!-- Add this to resolve to repository -->
         <relativePath />
     </parent>
-
+    
     <groupId>com.alipay.sofa</groupId>
     <artifactId>sofaboot-dependencies</artifactId>
     <packaging>pom</packaging>

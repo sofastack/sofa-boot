@@ -46,7 +46,7 @@ public class JvmFilterTest extends RuntimeTestBase {
 
     @Test
     public void test() {
-        Assert.assertEquals("egressFilter2", myService.say());
+        Assert.assertEquals("egressFilter1", myService.say());
         Assert.assertEquals(5, JvmFilterHolder.getJvmFilters().size());
         Assert.assertEquals(3, JvmFilterTestConfiguration.beforeCount);
         Assert.assertEquals(1, JvmFilterTestConfiguration.afterCount);
