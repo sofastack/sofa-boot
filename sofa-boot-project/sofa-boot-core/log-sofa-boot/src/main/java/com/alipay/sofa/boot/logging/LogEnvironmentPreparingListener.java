@@ -41,6 +41,7 @@ public class LogEnvironmentPreparingListener
 
     @Override
     public int getOrder() {
+        // Must be invoked after ConfigFileApplicationListener
         return Ordered.HIGHEST_PRECEDENCE + 100;
     }
 

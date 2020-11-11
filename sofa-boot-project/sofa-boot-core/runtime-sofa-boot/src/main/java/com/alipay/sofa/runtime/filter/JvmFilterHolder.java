@@ -67,8 +67,8 @@ public class JvmFilterHolder {
 
     public static boolean afterInvoking(JvmFilterContext context) {
         sortJvmFilters();
-        for (JvmFilter filter : JVM_FILTERS) {
-            if (!filter.after(context)) {
+        for (int i = JVM_FILTERS.size() - 1; i >= 0; --i) {
+            if (!JVM_FILTERS.get(i).after(context)) {
                 return false;
             }
         }
