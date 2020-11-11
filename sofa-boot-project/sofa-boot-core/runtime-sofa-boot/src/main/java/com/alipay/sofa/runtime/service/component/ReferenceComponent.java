@@ -139,6 +139,8 @@ public class ReferenceComponent extends AbstractComponent {
                     if (JvmBinding.JVM_BINDING_TYPE.getType().equals(binding.getName())) {
                         candidate = binding;
                     } else {
+                        // Under normal RPC reference (local-first/jvm-first is not set to false) binding,
+                        // backup proxy is the RPC proxy, which will be invoked if Jvm service is not found
                         backupProxy = createProxy(reference, binding);
                     }
                 }

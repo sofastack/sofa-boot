@@ -101,7 +101,8 @@ public class JvmFilterTestConfiguration {
             @Override
             public boolean after(JvmFilterContext context) {
                 ++afterCount;
-                return true;
+                context.setInvokeResult("egressFilter1");
+                return false;
             }
 
             @Override
@@ -122,8 +123,7 @@ public class JvmFilterTestConfiguration {
             @Override
             public boolean after(JvmFilterContext context) {
                 ++afterCount;
-                context.setInvokeResult("egressFilter2");
-                return false;
+                return true;
             }
 
             @Override

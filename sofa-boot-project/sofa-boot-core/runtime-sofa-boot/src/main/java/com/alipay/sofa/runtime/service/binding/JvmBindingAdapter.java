@@ -154,6 +154,7 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
         @Override
         public Object invoke(MethodInvocation invocation) throws Throwable {
             if (!SofaRuntimeProperties.isJvmFilterEnable()) {
+                // Jvm filtering is not enabled
                 return super.invoke(invocation);
             }
 
@@ -166,9 +167,10 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
                     .getDynamicJvmServiceProxyFinder().findServiceComponent(
                         sofaRuntimeContext.getAppClassLoader(), contract);
                 if (serviceComponent == null) {
+                    // Jvm service is not found in normal or Ark environment
+                    // We're actually invoking an RPC service, skip Jvm filtering
                     return super.invoke(invocation);
                 }
-
                 context.setSofaRuntimeContext(serviceComponent.getContext());
             } else {
                 context.setSofaRuntimeContext(sofaRuntimeContext);
@@ -177,15 +179,19 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
             long startTime = System.currentTimeMillis();
             try {
                 Thread.currentThread().setContextClassLoader(serviceClassLoader);
+                // Do Jvm filter <code>before</code> invoking
+                // if some filter returns false, skip remaining filters and actual Jvm invoking
                 if (JvmFilterHolder.beforeInvoking(context)) {
                     rtn = doInvoke(invocation);
                     context.setInvokeResult(rtn);
                 }
             } catch (Throwable e) {
+                // Exception occurs, set <code>e</code> in Jvm context
                 context.setException(e);
                 doCatch(invocation, e, startTime);
                 throw e;
             } finally {
+                // Do Jvm Filter <code>after</code> invoking regardless of the fact whether exception happens or not
                 JvmFilterHolder.afterInvoking(context);
                 rtn = context.getInvokeResult();
                 doFinally(invocation, startTime);
@@ -296,5 +302,4 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
             return contract.getUniqueId();
         }
     }
-
 }
