@@ -49,6 +49,15 @@ public class SofaRuntimeConfigurationProperties {
             .isSkipJvmReferenceHealthCheck(this.getClass().getClassLoader());
     }
 
+    public void setExtensionFailureInsulating(boolean extensionFailureInsulating) {
+        SofaRuntimeProperties.setExtensionFailureInsulating(this.getClass().getClassLoader(),
+            extensionFailureInsulating);
+    }
+
+    public boolean isExtensionFailureInsulating() {
+        return SofaRuntimeProperties.isExtensionFailureInsulating(this.getClass().getClassLoader());
+    }
+
     public boolean isDisableJvmFirst() {
         return SofaRuntimeProperties.isDisableJvmFirst(this.getClass().getClassLoader());
     }

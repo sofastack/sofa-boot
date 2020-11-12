@@ -145,6 +145,10 @@ public class ExtensionComponent extends AbstractComponent {
                     .loadContributions((ExtensionInternal) extension);
                 ((ExtensionInternal) extension).setContributions(contribs);
             } catch (Exception e) {
+                if (SofaRuntimeProperties.isExtensionFailureInsulating(sofaRuntimeContext
+                    .getAppClassLoader())) {
+                    this.e = e;
+                }
                 SofaLogger.error("Failed to create contribution objects", e);
             }
         }

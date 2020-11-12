@@ -77,6 +77,7 @@ public class SofaEventHandlerTest {
         properties.setProperty("com.alipay.sofa.boot.skipJvmReferenceHealthCheck", "true");
         properties.setProperty("com.alipay.sofa.boot.skipExtensionHealthCheck", "true");
         properties.setProperty("com.alipay.sofa.boot.skipJvmSerialize", "true");
+        properties.setProperty("com.alipay.sofa.boot.extensionFailureInsulating", "true");
         properties.setProperty("spring.application.name", "tSofaEventHandlerTest");
         SofaFramework.getRuntimeSet().forEach(value -> SofaFramework.unRegisterSofaRuntimeManager(value));
         SpringApplication springApplication = new SpringApplication(
@@ -104,6 +105,8 @@ public class SofaEventHandlerTest {
         Assert
             .assertFalse(SofaRuntimeProperties.isSkipJvmReferenceHealthCheck(ctx.getClassLoader()));
         Assert.assertFalse(SofaRuntimeProperties.isSkipExtensionHealthCheck(ctx.getClassLoader()));
+        Assert
+            .assertFalse(SofaRuntimeProperties.isExtensionFailureInsulating(ctx.getClassLoader()));
         Assert.assertFalse(SofaRuntimeProperties.isSkipJvmSerialize(ctx.getClassLoader()));
         Assert.assertTrue(SofaFramework.getRuntimeSet().isEmpty());
         Assert.assertFalse(ctx.isActive());
