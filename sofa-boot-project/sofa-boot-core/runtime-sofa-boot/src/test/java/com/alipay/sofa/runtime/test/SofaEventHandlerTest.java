@@ -105,7 +105,8 @@ public class SofaEventHandlerTest {
         Assert
             .assertFalse(SofaRuntimeProperties.isSkipJvmReferenceHealthCheck(ctx.getClassLoader()));
         Assert.assertFalse(SofaRuntimeProperties.isSkipExtensionHealthCheck(ctx.getClassLoader()));
-        Assert.assertFalse(SofaRuntimeProperties.isExtensionFailureInsulating(ctx.getClassLoader()));
+        Assert
+            .assertFalse(SofaRuntimeProperties.isExtensionFailureInsulating(ctx.getClassLoader()));
         Assert.assertFalse(SofaRuntimeProperties.isSkipJvmSerialize(ctx.getClassLoader()));
         Assert.assertTrue(SofaFramework.getRuntimeSet().isEmpty());
         Assert.assertFalse(ctx.isActive());

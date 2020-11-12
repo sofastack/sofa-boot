@@ -36,11 +36,11 @@ import com.alipay.sofa.runtime.configure.SofaRuntimeConfigurationProperties;
  */
 @SpringBootTest
 @RunWith(SpringRunner.class)
-@TestPropertySource(properties = {"com.alipay.sofa.boot.disableJvmFirst=true",
+@TestPropertySource(properties = { "com.alipay.sofa.boot.disableJvmFirst=true",
                                   "com.alipay.sofa.boot.skipJvmReferenceHealthCheck=true",
                                   "com.alipay.sofa.boot.skipJvmSerialize=true",
                                   "com.alipay.sofa.boot.skipExtensionHealthCheck=true",
-                                  "com.alipay.sofa.boot.extensionFailureInsulating=true"})
+                                  "com.alipay.sofa.boot.extensionFailureInsulating=true" })
 public class SofaRuntimePropertiesTest {
 
     @Autowired
@@ -86,7 +86,7 @@ public class SofaRuntimePropertiesTest {
     @Test
     public void testExtensionFailureInsulating() {
         SofaRuntimeConfigurationProperties configurationProperties = ctx
-                .getBean(SofaRuntimeConfigurationProperties.class);
+            .getBean(SofaRuntimeConfigurationProperties.class);
 
         Assert.assertTrue(SofaRuntimeProperties.isSkipExtensionHealthCheck(ctx.getClassLoader()));
         Assert.assertTrue(configurationProperties.isExtensionFailureInsulating());

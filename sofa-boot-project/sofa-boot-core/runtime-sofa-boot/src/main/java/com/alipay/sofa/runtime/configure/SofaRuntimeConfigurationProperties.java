@@ -50,7 +50,8 @@ public class SofaRuntimeConfigurationProperties {
     }
 
     public void setExtensionFailureInsulating(boolean extensionFailureInsulating) {
-        SofaRuntimeProperties.setExtensionFailureInsulating(this.getClass().getClassLoader(), extensionFailureInsulating);
+        SofaRuntimeProperties.setExtensionFailureInsulating(this.getClass().getClassLoader(),
+            extensionFailureInsulating);
     }
 
     public boolean isExtensionFailureInsulating() {
