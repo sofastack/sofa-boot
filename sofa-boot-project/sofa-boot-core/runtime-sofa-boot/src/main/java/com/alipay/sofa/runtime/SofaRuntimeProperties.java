@@ -26,10 +26,11 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
  */
 public class SofaRuntimeProperties {
 
-    private static ConcurrentHashMap<ClassLoader, Boolean> skipJvmReferenceHealthCheckMap = new ConcurrentHashMap<>();
-    private static ConcurrentHashMap<ClassLoader, Boolean> skipExtensionHealthCheckMap    = new ConcurrentHashMap<>();
-    private static ConcurrentHashMap<ClassLoader, Boolean> disableJvmFirstMap             = new ConcurrentHashMap<>();
-    private static ConcurrentHashMap<ClassLoader, Boolean> skipJvmSerializeMap            = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<ClassLoader, Boolean> skipJvmReferenceHealthCheckMap = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<ClassLoader, Boolean> skipExtensionHealthCheckMap    = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<ClassLoader, Boolean> disableJvmFirstMap             = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<ClassLoader, Boolean> skipJvmSerializeMap            = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<ClassLoader, Boolean> extensionFailureInsulatingMap  = new ConcurrentHashMap<>();
 
     private static boolean                                 jvmFilterEnable                = false;
 
@@ -53,6 +54,14 @@ public class SofaRuntimeProperties {
     public static void setSkipJvmReferenceHealthCheck(ClassLoader classLoader,
                                                       boolean skipJvmReferenceHealthCheck) {
         skipJvmReferenceHealthCheckMap.putIfAbsent(classLoader, skipJvmReferenceHealthCheck);
+    }
+
+    public static boolean isExtensionFailureInsulating(ClassLoader classLoader) {
+        return extensionFailureInsulatingMap.get(classLoader) != null && extensionFailureInsulatingMap.get(classLoader);
+    }
+
+    public static void setExtensionFailureInsulating(ClassLoader classLoader, boolean extensionFailureInsulating) {
+        extensionFailureInsulatingMap.putIfAbsent(classLoader, extensionFailureInsulating);
     }
 
     public static boolean isSkipExtensionHealthCheck(SofaRuntimeContext sofaRuntimeContext) {
