@@ -18,7 +18,9 @@ package com.alipay.sofa.healthcheck;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
+import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import org.slf4j.Logger;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
@@ -45,10 +47,10 @@ import com.alipay.sofa.healthcheck.log.HealthCheckLoggerFactory;
  */
 public class ReadinessCheckListener implements ApplicationContextAware, PriorityOrdered,
                                    ApplicationListener<ContextRefreshedEvent>, InitializingBean {
-    private static Logger                        logger                 = HealthCheckLoggerFactory
-                                                                            .getLogger(ReadinessCheckListener.class);
+    private static Logger                        logger                     = HealthCheckLoggerFactory
+                                                                                .getLogger(ReadinessCheckListener.class);
 
-    private final HealthAggregator               healthAggregator       = new OrderedHealthAggregator();
+    private final HealthAggregator               healthAggregator           = new OrderedHealthAggregator();
 
     private ApplicationContext                   applicationContext;
 
@@ -64,17 +66,19 @@ public class ReadinessCheckListener implements ApplicationContextAware, Priority
     @Autowired
     private AfterReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor;
 
-    private boolean                              healthCheckerStatus    = true;
+    private boolean                              healthCheckerStatus        = true;
 
-    private Map<String, Health>                  healthCheckerDetails   = new HashMap<>();
+    private Map<String, Health>                  healthCheckerDetails       = new HashMap<>();
 
-    private boolean                              healthIndicatorStatus  = true;
+    private boolean                              healthIndicatorStatus      = true;
 
-    private Map<String, Health>                  healthIndicatorDetails = new HashMap<>();
+    private Map<String, Health>                  healthIndicatorDetails     = new HashMap<>();
 
-    private boolean                              healthCallbackStatus   = true;
-    private boolean                              readinessCheckFinish   = false;
-    private boolean                              healthCheckerInsulator = false;
+    private boolean                              healthCallbackStatus       = true;
+    private boolean                              readinessCheckFinish       = false;
+    private boolean                              healthCheckerInsulator     = false;
+    private AtomicBoolean                        readinessCallbackTriggered = new AtomicBoolean(
+                                                                                false);
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -132,10 +136,19 @@ public class ReadinessCheckListener implements ApplicationContextAware, Priority
             }
         }
 
-        if (healthCheckerStatus && healthIndicatorStatus) {
-            healthCallbackStatus = afterReadinessCheckCallbackProcessor
-                .afterReadinessCheckCallback(healthCallbackDetails);
+        if (!SofaRuntimeProperties.isManualReadinessCallback()) {
+            if (healthCheckerStatus && healthIndicatorStatus) {
+                readinessCallbackTriggered.set(true);
+                logger.info("Invoking all readiness check callbacks...");
+                healthCallbackStatus = afterReadinessCheckCallbackProcessor
+                    .afterReadinessCheckCallback(healthCallbackDetails);
+            }
+        } else {
+            logger
+                .info("Manual readiness callback is set to true, skip normal readiness callback. "
+                      + "You can trigger all readiness callbacks through URL: actuator/triggerReadinessCallbacks");
         }
+
         if (healthCheckerStatus && healthIndicatorStatus && healthCallbackStatus) {
             logger.info("Readiness check result: success");
         } else {
@@ -144,6 +157,24 @@ public class ReadinessCheckListener implements ApplicationContextAware, Priority
                 throw new HealthCheckException(
                     "Application health check is failed and health check insulator switch is turned on!");
             }
+        }
+    }
+
+    public ManualReadinessCallbackResult triggerReadinessCallback() {
+        if (healthCheckerStatus && healthIndicatorStatus) {
+            if (readinessCallbackTriggered.compareAndSet(false, true)) {
+                logger.info("Invoking all readiness callbacks...");
+                healthCallbackStatus = afterReadinessCheckCallbackProcessor
+                    .afterReadinessCheckCallback(healthCallbackDetails);
+                return new ManualReadinessCallbackResult(true,
+                    "Readiness callbacks invoked successfully with result: " + healthCallbackStatus);
+            } else {
+                logger.warn("Readiness callbacks are already triggered! Action skipped.");
+                return ManualReadinessCallbackResult.SKIPPED;
+            }
+        } else {
+            logger.warn("Health checker or indicator failed, skip all readiness callbacks!");
+            return ManualReadinessCallbackResult.STAGE_ONE_FAILED;
         }
     }
 
@@ -229,5 +260,42 @@ public class ReadinessCheckListener implements ApplicationContextAware, Priority
 
     public boolean isReadinessCheckFinish() {
         return readinessCheckFinish;
+    }
+
+    public AtomicBoolean getReadinessCallbackTriggered() {
+        return readinessCallbackTriggered;
+    }
+
+    public static class ManualReadinessCallbackResult {
+        public static ManualReadinessCallbackResult STAGE_ONE_FAILED = new ManualReadinessCallbackResult(
+                                                                         false,
+                                                                         "Health checker or indicator failed.");
+        public static ManualReadinessCallbackResult SKIPPED          = new ManualReadinessCallbackResult(
+                                                                         false,
+                                                                         "Readiness callbacks are already triggered.");
+
+        private boolean                             success;
+        private String                              details;
+
+        public ManualReadinessCallbackResult(boolean success, String details) {
+            this.success = success;
+            this.details = details;
+        }
+
+        public boolean isSuccess() {
+            return success;
+        }
+
+        public void setSuccess(boolean success) {
+            this.success = success;
+        }
+
+        public String getDetails() {
+            return details;
+        }
+
+        public void setDetails(String details) {
+            this.details = details;
+        }
     }
 }

@@ -105,15 +105,18 @@ public class ReadinessCheckListenerTest {
         Assert.assertTrue(readinessCheckListener.getHealthCheckerStatus());
         Assert.assertTrue(readinessCheckListener.getHealthIndicatorStatus());
         Assert.assertTrue(readinessCheckListener.getHealthCallbackStatus());
-        Assert.assertTrue(readinessCheckListener.getHealthCheckerDetails().size() == 1);
+        Assert.assertTrue(readinessCheckListener.getReadinessCallbackTriggered().get());
+        Assert.assertEquals(1, readinessCheckListener.getHealthCheckerDetails().size());
 
         Health health = readinessCheckListener.getHealthCheckerDetails().get("memoryHealthChecker");
-        Assert.assertTrue("memory is bad".equals(health.getDetails().get("memory")));
+        Assert.assertEquals("memory is bad", health.getDetails().get("memory"));
         health = readinessCheckListener.getHealthCallbackDetails().get(
             "middlewareHealthCheckCallback");
-        Assert.assertTrue("server is ok".equals(health.getDetails().get("server")));
+        Assert.assertEquals("server is ok", health.getDetails().get("server"));
         health = readinessCheckListener.getHealthIndicatorDetails().get("disk");
-        Assert.assertTrue("hard disk is ok".equals(health.getDetails().get("disk")));
+        Assert.assertEquals("hard disk is ok", health.getDetails().get("disk"));
+
+        readinessCheckListener.triggerReadinessCallback();
     }
 
     @Test

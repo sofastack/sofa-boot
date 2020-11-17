@@ -27,6 +27,14 @@ import com.alipay.sofa.runtime.SofaRuntimeProperties;
 @ConfigurationProperties(SofaBootConstants.PREFIX)
 public class SofaRuntimeConfigurationProperties {
 
+    public boolean isManualReadinessCallback() {
+        return SofaRuntimeProperties.isManualReadinessCallback();
+    }
+
+    public void setManualReadinessCallback(boolean manualReadinessCallback) {
+        SofaRuntimeProperties.setManualReadinessCallback(manualReadinessCallback);
+    }
+
     public boolean isJvmFilterEnable() {
         return SofaRuntimeProperties.isJvmFilterEnable();
     }

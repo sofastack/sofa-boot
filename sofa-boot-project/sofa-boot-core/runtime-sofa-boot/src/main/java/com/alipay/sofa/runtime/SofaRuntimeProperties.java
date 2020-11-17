@@ -32,7 +32,16 @@ public class SofaRuntimeProperties {
     private static final ConcurrentHashMap<ClassLoader, Boolean> skipJvmSerializeMap            = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<ClassLoader, Boolean> extensionFailureInsulatingMap  = new ConcurrentHashMap<>();
 
+    private static boolean                                       manualReadinessCallback        = false;
     private static boolean                                       jvmFilterEnable                = false;
+
+    public static boolean isManualReadinessCallback() {
+        return manualReadinessCallback;
+    }
+
+    public static void setManualReadinessCallback(boolean manualReadinessCallback) {
+        SofaRuntimeProperties.manualReadinessCallback = manualReadinessCallback;
+    }
 
     public static boolean isJvmFilterEnable() {
         return jvmFilterEnable;
