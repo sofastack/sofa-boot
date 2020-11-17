@@ -25,7 +25,7 @@ import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 2020/11/17
  */
-@Endpoint(id = "triggerReadinessCallbacks")
+@Endpoint(id = "triggerReadinessCallback")
 public class ManualReadinessCallbackEndPoint {
     @Autowired
     private ReadinessCheckListener readinessCheckListener;

@@ -49,7 +49,7 @@ public class SofaBootConstants {
      * Default {@literal management.endpoints.web.exposure.include} value
      */
     public static final String  ENDPOINTS_WEB_EXPOSURE_INCLUDE_CONFIG                        = "management.endpoints.web.exposure.include";
-    public static final String  SOFA_DEFAULT_ENDPOINTS_WEB_EXPOSURE_VALUE                    = "info, health, versions, readiness, startup, triggerReadinessCallbacks";
+    public static final String  SOFA_DEFAULT_ENDPOINTS_WEB_EXPOSURE_VALUE                    = "info, health, versions, readiness, startup, triggerReadinessCallback";
 
     /**
      * root application context name

@@ -146,7 +146,7 @@ public class ReadinessCheckListener implements ApplicationContextAware, Priority
         } else {
             logger
                 .info("Manual readiness callback is set to true, skip normal readiness callback. "
-                      + "You can trigger all readiness callbacks through URL: actuator/triggerReadinessCallbacks");
+                      + "You can trigger all readiness callbacks through URL: actuator/triggerReadinessCallback");
         }
 
         if (healthCheckerStatus && healthIndicatorStatus && healthCallbackStatus) {
