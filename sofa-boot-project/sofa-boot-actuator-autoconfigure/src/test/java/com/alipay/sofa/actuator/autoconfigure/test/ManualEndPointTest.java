@@ -40,14 +40,15 @@ public class ManualEndPointTest {
     @Test
     public void test() {
         ResponseEntity<ReadinessCheckListener.ManualReadinessCallbackResult> response = restTemplate
-                .getForEntity("/actuator/triggerReadinessCallback",
-                        ReadinessCheckListener.ManualReadinessCallbackResult.class);
+            .getForEntity("/actuator/triggerReadinessCallback",
+                ReadinessCheckListener.ManualReadinessCallbackResult.class);
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertNotNull(response.getBody());
         Assert.assertTrue(response.getBody().isSuccess());
         Assert.assertTrue(response.getBody().getDetails().contains("invoked successfully"));
 
-        response = restTemplate.getForEntity("/actuator/triggerReadinessCallback", ReadinessCheckListener.ManualReadinessCallbackResult.class);
+        response = restTemplate.getForEntity("/actuator/triggerReadinessCallback",
+            ReadinessCheckListener.ManualReadinessCallbackResult.class);
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertNotNull(response.getBody());
         Assert.assertFalse(response.getBody().isSuccess());
