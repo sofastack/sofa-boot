@@ -17,6 +17,7 @@
 package com.alipay.sofa.boot.actuator.autoconfigure.health;
 
 import com.alipay.sofa.boot.actuator.health.ManualReadinessCallbackEndPoint;
+import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.healthcheck.HealthCheckProperties;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnEnabledEndpoint;
 import org.springframework.boot.actuate.autoconfigure.health.HealthEndpointAutoConfiguration;
@@ -65,6 +66,7 @@ public class SofaBootHealthCheckAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     @ConditionalOnEnabledEndpoint(endpoint = ManualReadinessCallbackEndPoint.class)
+    @ConditionalOnProperty(prefix = SofaBootConstants.PREFIX, name = "manualReadinessCallback", havingValue = "true")
     public ManualReadinessCallbackEndPoint manualReadinessCallbackEndPoint() {
         return new ManualReadinessCallbackEndPoint();
     }

@@ -31,17 +31,26 @@ import org.springframework.test.context.junit4.SpringRunner;
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 2020/11/18
  */
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = EmptyConfiguration.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = EmptyConfiguration.class, properties = "com.alipay.sofa.boot.manualReadinessCallback=true")
 @RunWith(SpringRunner.class)
-public class EndPointTest {
+public class ManualEndPointTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
     @Test
     public void test() {
         ResponseEntity<ReadinessCheckListener.ManualReadinessCallbackResult> response = restTemplate
-            .getForEntity("/actuator/triggerReadinessCallback",
-                ReadinessCheckListener.ManualReadinessCallbackResult.class);
-        Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+                .getForEntity("/actuator/triggerReadinessCallback",
+                        ReadinessCheckListener.ManualReadinessCallbackResult.class);
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertNotNull(response.getBody());
+        Assert.assertTrue(response.getBody().isSuccess());
+        Assert.assertTrue(response.getBody().getDetails().contains("invoked successfully"));
+
+        response = restTemplate.getForEntity("/actuator/triggerReadinessCallback", ReadinessCheckListener.ManualReadinessCallbackResult.class);
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertNotNull(response.getBody());
+        Assert.assertFalse(response.getBody().isSuccess());
+        Assert.assertTrue(response.getBody().getDetails().contains("already triggered"));
     }
 }
