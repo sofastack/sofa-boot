@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import org.slf4j.Logger;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
@@ -136,7 +135,9 @@ public class ReadinessCheckListener implements ApplicationContextAware, Priority
             }
         }
 
-        if (!SofaRuntimeProperties.isManualReadinessCallback()) {
+        // TODO: fix classloader (key) bug in SofaRuntimeConfigurationProperties
+        if ("false".equals(applicationContext.getEnvironment().getProperty(
+            SofaBootConstants.PREFIX + ".manualReadinessCallback", "false"))) {
             if (healthCheckerStatus && healthIndicatorStatus) {
                 readinessCallbackTriggered.set(true);
                 logger.info("Invoking all readiness check callbacks...");
@@ -276,6 +277,9 @@ public class ReadinessCheckListener implements ApplicationContextAware, Priority
 
         private boolean                             success;
         private String                              details;
+
+        public ManualReadinessCallbackResult() {
+        }
 
         public ManualReadinessCallbackResult(boolean success, String details) {
             this.success = success;
