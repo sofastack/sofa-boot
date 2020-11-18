@@ -22,10 +22,22 @@ import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.runtime.SofaRuntimeProperties;
 
 /**
+ * TODO: use this.getClass().getClassLoader() as key has problem,
+ * SofaRuntimeConfigurationProperties is exported by SOFA Runtime plugin in Ark.
+ *
  * @author xuanbei 18/5/9
  */
 @ConfigurationProperties(SofaBootConstants.PREFIX)
 public class SofaRuntimeConfigurationProperties {
+
+    public boolean isManualReadinessCallback() {
+        return SofaRuntimeProperties.isManualReadinessCallback(this.getClass().getClassLoader());
+    }
+
+    public void setManualReadinessCallback(boolean manualReadinessCallback) {
+        SofaRuntimeProperties.setManualReadinessCallback(this.getClass().getClassLoader(),
+            manualReadinessCallback);
+    }
 
     public boolean isJvmFilterEnable() {
         return SofaRuntimeProperties.isJvmFilterEnable();

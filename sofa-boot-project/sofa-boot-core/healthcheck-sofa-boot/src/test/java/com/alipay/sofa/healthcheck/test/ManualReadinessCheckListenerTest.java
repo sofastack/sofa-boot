@@ -16,7 +16,14 @@
  */
 package com.alipay.sofa.healthcheck.test;
 
+import com.alipay.sofa.healthcheck.AfterReadinessCheckCallbackProcessor;
 import com.alipay.sofa.healthcheck.HealthCheckProperties;
+import com.alipay.sofa.healthcheck.HealthCheckerProcessor;
+import com.alipay.sofa.healthcheck.HealthIndicatorProcessor;
+import com.alipay.sofa.healthcheck.ReadinessCheckListener;
+import com.alipay.sofa.healthcheck.core.HealthChecker;
+import com.alipay.sofa.healthcheck.test.bean.DiskHealthIndicator;
+import com.alipay.sofa.runtime.configure.SofaRuntimeConfigurationProperties;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,7 +31,6 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.Health;
-import org.springframework.boot.actuate.health.Status;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
@@ -33,44 +39,40 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.alipay.sofa.healthcheck.AfterReadinessCheckCallbackProcessor;
-import com.alipay.sofa.healthcheck.HealthCheckerProcessor;
-import com.alipay.sofa.healthcheck.HealthIndicatorProcessor;
-import com.alipay.sofa.healthcheck.ReadinessCheckListener;
-import com.alipay.sofa.healthcheck.test.bean.DiskHealthIndicator;
-import com.alipay.sofa.healthcheck.test.bean.MemoryHealthChecker;
-import com.alipay.sofa.healthcheck.test.bean.MiddlewareHealthCheckCallback;
-
 /**
- * @author liangen
- * @version 2.3.0
+ * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
+ * Created on 2020/11/17
  */
 @SpringBootTest
 @RunWith(SpringRunner.class)
-@TestPropertySource(properties = "spring.application.name=ReadinessCheckListenerTest")
-public class ReadinessCheckListenerTest {
-
+@TestPropertySource(properties = { "spring.application.name=ManualReadinessCheckListenerTest",
+                                  "com.alipay.sofa.boot.manualReadinessCallback=true" })
+public class ManualReadinessCheckListenerTest {
     @Autowired
     private ApplicationContext applicationContext;
 
     @Configuration
-    @EnableConfigurationProperties(HealthCheckProperties.class)
+    @EnableConfigurationProperties({ HealthCheckProperties.class,
+            SofaRuntimeConfigurationProperties.class })
     static class HealthCheckConfiguration {
         @Bean
-        public MemoryHealthChecker memoryHealthChecker(@Value("${memory-health-checker.count:0}") int count,
-                                                       @Value("${memory-health-checker.strict:false}") boolean strict,
-                                                       @Value("${memory-health-checker.retry-count:0}") int retryCount) {
-            return new MemoryHealthChecker(count, strict, retryCount);
+        public HealthChecker myHealthChecker() {
+            return new HealthChecker() {
+                @Override
+                public Health isHealthy() {
+                    return Health.down().withDetail("health", "failed").build();
+                }
+
+                @Override
+                public String getComponentName() {
+                    return "myHealthChecker";
+                }
+            };
         }
 
         @Bean
         public DiskHealthIndicator diskHealthIndicator(@Value("${disk-health-indicator.health:true}") boolean health) {
             return new DiskHealthIndicator(health);
-        }
-
-        @Bean
-        public MiddlewareHealthCheckCallback middlewareHealthCheckCallback(@Value("${middleware-health-check-callback.health:true}") boolean health) {
-            return new MiddlewareHealthCheckCallback(health);
         }
 
         @Bean
@@ -98,32 +100,14 @@ public class ReadinessCheckListenerTest {
     public void testReadinessCheck() throws BeansException {
         ReadinessCheckListener readinessCheckListener = applicationContext
             .getBean(ReadinessCheckListener.class);
-        Assert.assertNotNull(readinessCheckListener);
-        Assert.assertFalse(readinessCheckListener.skipAllCheck());
-        Assert.assertFalse(readinessCheckListener.skipComponent());
-        Assert.assertFalse(readinessCheckListener.skipIndicator());
-        Assert.assertTrue(readinessCheckListener.getHealthCheckerStatus());
+        Assert.assertFalse(readinessCheckListener.getReadinessCallbackTriggered().get());
+        Assert.assertFalse(readinessCheckListener.getHealthCheckerStatus());
         Assert.assertTrue(readinessCheckListener.getHealthIndicatorStatus());
-        Assert.assertTrue(readinessCheckListener.getHealthCallbackStatus());
-        Assert.assertTrue(readinessCheckListener.getReadinessCallbackTriggered().get());
-        Assert.assertEquals(1, readinessCheckListener.getHealthCheckerDetails().size());
 
-        Health health = readinessCheckListener.getHealthCheckerDetails().get("memoryHealthChecker");
-        Assert.assertEquals("memory is bad", health.getDetails().get("memory"));
-        health = readinessCheckListener.getHealthCallbackDetails().get(
-            "middlewareHealthCheckCallback");
-        Assert.assertEquals("server is ok", health.getDetails().get("server"));
-        health = readinessCheckListener.getHealthIndicatorDetails().get("disk");
-        Assert.assertEquals("hard disk is ok", health.getDetails().get("disk"));
-
-        readinessCheckListener.triggerReadinessCallback();
-    }
-
-    @Test
-    public void testAggregateReadinessHealth() {
-        ReadinessCheckListener readinessCheckListener = applicationContext
-            .getBean(ReadinessCheckListener.class);
-        Health health = readinessCheckListener.aggregateReadinessHealth();
-        Assert.assertEquals(Status.UP, health.getStatus());
+        ReadinessCheckListener.ManualReadinessCallbackResult result = readinessCheckListener
+            .triggerReadinessCallback();
+        Assert.assertFalse(result.isSuccess());
+        Assert.assertTrue(result.getDetails().contains("checker or indicator failed"));
+        Assert.assertFalse(readinessCheckListener.getReadinessCallbackTriggered().get());
     }
 }
