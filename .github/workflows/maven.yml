@@ -20,18 +20,13 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-    - name: Install 
-      run: ｜
-        echo "Install Zookeeper 3.5.4-beta" 
-        wget http://archive.apache.org/dist/zookeeper/zookeeper-3.5.4-beta/zookeeper-3.5.4-beta.tar.gz
-        tar -zxf zookeeper-3.5.4-beta.tar.gz
-        mv zookeeper-3.5.4-beta/conf/zoo_sample.cfg zookeeper-3.5.4-beta/conf/zoo.cfg
-        /bin/bash zookeeper-3.5.4-beta/bin/zkServer.sh start
+    - name: Install Zookeeper
+      run: echo "Install Zookeeper 3.5.4-beta"
+        && wget http://archive.apache.org/dist/zookeeper/zookeeper-3.5.4-beta/zookeeper-3.5.4-beta.tar.gz
+        && tar -zxf zookeeper-3.5.4-beta.tar.gz
+        && mv zookeeper-3.5.4-beta/conf/zoo_sample.cfg zookeeper-3.5.4-beta/conf/zoo.cfg
+        && /bin/bash zookeeper-3.5.4-beta/bin/zkServer.sh start
     - name: Build with Maven
-      run: ｜
-        mvn clean install -DskipTests -B -V
-        mvn test
-    - name: Check format
-      run: ls -la && sh ./check_format.sh
-    - name: Codecov
-      uses: codecov/codecov-action@v1
+      run: mvn clean install -DskipTests -B -V
+        && sh ./check_format.sh
+        && mvn clean test
