@@ -97,16 +97,17 @@ public class BeanLoadCostBeanFactory extends DefaultListableBeanFactory {
     }
 
     public static class BeanNode {
-        private static final String  LAST_PREFIX   = "└─";
-        private static final String  MIDDLE_PREFIX = "├─";
-        private static final String  INDENT_PREFIX = "│   ";
+        private static final String  LAST_PREFIX        = "└─";
+        private static final String  MIDDLE_PREFIX      = "├─";
+        private static final String  INDENT_PREFIX      = "│   ";
+        private static final String  EMPTY_INDEX_PREFIX = "    ";
 
         private String               beanClassName;
 
         // costTime includes all bean refreshing time-consumption incurred by this bean
         private long                 costTime;
 
-        private final List<BeanNode> children      = new ArrayList<>();
+        private final List<BeanNode> children           = new ArrayList<>();
 
         public String getBeanClassName() {
             return beanClassName;
@@ -145,7 +146,8 @@ public class BeanLoadCostBeanFactory extends DefaultListableBeanFactory {
 
             for (int i = 0; i < children.size(); ++i) {
                 rtn.append("\n").append(
-                    children.get(i).toString(indent + INDENT_PREFIX, i == size - 1));
+                    children.get(i).toString(indent + (last ? EMPTY_INDEX_PREFIX : INDENT_PREFIX),
+                        i == size - 1));
             }
             return rtn.toString();
         }
