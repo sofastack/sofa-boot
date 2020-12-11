@@ -130,7 +130,7 @@ public class ModuleLogOutputStage extends AbstractPipelineStage {
         int size = deploys.size();
         for (int i = 0; i < size; ++i) {
             String prefix = (i == size - 1) ? SYMBOLIC2 : SYMBOLIC1;
-            String index_prefix = (i == size - 1) ? EMPTY_INDEX_PREFIX : INDENT_PREFIX;
+            String indexPrefix = (i == size - 1) ? EMPTY_INDEX_PREFIX : INDENT_PREFIX;
 
             DeploymentDescriptor dd = deploys.get(i);
             BeanFactory beanFactory = ((ConfigurableApplicationContext) dd.getApplicationContext())
@@ -146,7 +146,7 @@ public class ModuleLogOutputStage extends AbstractPipelineStage {
             if (beanFactory instanceof BeanLoadCostBeanFactory) {
                 sb.append(prefix).append("[Module] ").append(dd.getName()).append(" [")
                     .append(dd.getElapsedTime()).append(" ms]\n");
-                sb.append(((BeanLoadCostBeanFactory) beanFactory).outputBeanLoadCost(index_prefix));
+                sb.append(((BeanLoadCostBeanFactory) beanFactory).outputBeanLoadCost(indexPrefix));
             }
         }
         stringBuilder.append(" [totalTime = ").append(totalTime).append(" ms, realTime = ")
