@@ -37,6 +37,7 @@ public class LogEnvironmentPreparingListener
     @Override
     public void onApplicationEvent(ApplicationEnvironmentPreparedEvent event) {
         prepare(event.getEnvironment());
+        defaultConsoleLoggers();
     }
 
     @Override
@@ -62,6 +63,13 @@ public class LogEnvironmentPreparingListener
                     }
                 }
             }
+        }
+    }
+
+    private void defaultConsoleLoggers() {
+        if (LocalEnvUtil.isLocalEnv()) {
+            CommonLoggingConfigurations.loadExternalConfiguration(
+                Constants.SOFA_MIDDLEWARE_ALL_LOG_CONSOLE_SWITCH, "true");
         }
     }
 }
