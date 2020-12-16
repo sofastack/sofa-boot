@@ -53,9 +53,12 @@
 
         <resteasy.version>3.6.3.Final</resteasy.version>
         <curator.version>4.0.1</curator.version>
-        <dubbo_version>2.6.7</dubbo_version>
+        <dubbo.version>2.6.7</dubbo.version>
         <zkclient.version>0.11</zkclient.version>
         <nacos.version>1.0.0</nacos.version>
+        <swagger.version>2.0.0</swagger.version>
+        <protoc.version>3.11.0</protoc.version>
+        <grpc.version>1.28.0</grpc.version>
 
         <!--maven plugin-->
         <maven.staging.plugin>1.6.7</maven.staging.plugin>
@@ -482,6 +485,11 @@
                 <artifactId>zipkin-reporter</artifactId>
                 <version>${zipkin.reporter.version}</version>
             </dependency>
+            <dependency>
+                <groupId>io.swagger.core.v3</groupId>
+                <artifactId>swagger-jaxrs2</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
 
             <!--extension dependency -->
             <dependency>
@@ -548,7 +556,7 @@
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>dubbo</artifactId>
-                <version>${dubbo_version}</version>
+                <version>${dubbo.version}</version>
                 <exclusions>
                     <exclusion>
                         <artifactId>javassist</artifactId>

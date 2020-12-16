@@ -14,13 +14,7 @@
 
     <properties>
         <main.user.dir>${basedir}/../../..</main.user.dir>
-        <swagger.version>2.0.0</swagger.version>
-        <curator.version>4.0.1</curator.version>
-        <dubbo_version>2.6.7</dubbo_version>
-        <zkclient.version>0.11</zkclient.version>
-        <protoc.version>3.11.0</protoc.version>
         <sofa.rpc.compiler.version>0.0.3</sofa.rpc.compiler.version>
-        <grpc.version>1.28.0</grpc.version>
         <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
     </properties>
 
@@ -66,7 +60,6 @@
         <dependency>
             <groupId>io.swagger.core.v3</groupId>
             <artifactId>swagger-jaxrs2</artifactId>
-            <version>${swagger.version}</version>
             <optional>true</optional>
         </dependency>
 
@@ -74,19 +67,16 @@
         <dependency>
             <groupId>org.apache.curator</groupId>
             <artifactId>curator-client</artifactId>
-            <version>${curator.version}</version>
             <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.apache.curator</groupId>
             <artifactId>curator-framework</artifactId>
-            <version>${curator.version}</version>
             <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.apache.curator</groupId>
             <artifactId>curator-recipes</artifactId>
-            <version>${curator.version}</version>
             <optional>true</optional>
         </dependency>
 
@@ -94,7 +84,6 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>dubbo</artifactId>
-            <version>${dubbo_version}</version>
             <exclusions>
                 <exclusion>
                     <artifactId>javassist</artifactId>
@@ -126,7 +115,18 @@
                     <artifactId>zookeeper</artifactId>
                 </exclusion>
             </exclusions>
-            <version>${zkclient.version}</version>
+            <optional>true</optional>
+        </dependency>
+
+        <!--nacos-->
+        <dependency>
+            <groupId>com.alibaba.nacos</groupId>
+            <artifactId>nacos-api</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.nacos</groupId>
+            <artifactId>nacos-client</artifactId>
             <optional>true</optional>
         </dependency>
 
