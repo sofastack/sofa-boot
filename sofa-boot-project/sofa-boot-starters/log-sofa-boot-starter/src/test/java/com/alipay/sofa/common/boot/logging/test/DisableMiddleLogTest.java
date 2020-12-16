@@ -16,26 +16,33 @@
  */
 package com.alipay.sofa.common.boot.logging.test;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 import com.alipay.sofa.common.log.Constants;
-import com.alipay.sofa.common.utils.ReportUtil;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.springframework.boot.SpringApplication;
 
 /**
- * @author qilong.zql
- * @since 1.0.15
+ * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
+ * Created on 2020/12/15
  */
-public class LogbackIntegrationTest extends LogTestBase {
+public class DisableMiddleLogTest extends LogTestBase {
+    @BeforeClass
+    public static void before() {
+        System.setProperty(Constants.SOFA_MIDDLEWARE_LOG_DISABLE_PROP_KEY, "true");
+    }
+
     /**
-     * test sofa.middleware.log.internal.level config
+     * test sofa.middleware.log.disable
      */
     @Test
-    public void testInternalLogLevel() {
-        ReportUtil.reportDebug("debug");
-        Assert.assertFalse(outContent.toString().contains("debug"));
-        System.setProperty(Constants.SOFA_MIDDLEWARE_LOG_INTERNAL_LEVEL, "debug");
-        ReportUtil.reportDebug("debug");
-        Assert.assertTrue(outContent.toString().contains("debug"));
+    public void test() {
+        SpringApplication springApplication = new SpringApplication(EmptyConfig.class);
+        springApplication.run();
+        logger = getLogger();
+        logger.info("global space console");
+        logger.debug("global space console debug");
+        Assert.assertTrue(outContent.toString().contains("global space console"));
+        Assert.assertFalse(outContent.toString().contains("global space console debug"));
     }
 }

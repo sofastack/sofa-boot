@@ -18,9 +18,8 @@ package com.alipay.sofa.boot.test.log;
 
 import static junit.framework.TestCase.assertTrue;
 
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 
@@ -36,19 +35,12 @@ import com.alipay.sofa.common.log.env.LogEnvUtils;
  * @since 1.0
  */
 public class Log4j2InfraLoggerFactoryTest extends BaseLogTest {
-
-    @Before
-    public void before() throws Exception {
-        super.before();
+    @BeforeClass
+    public static void beforeClass() {
         //disable logback
         System.setProperty(Constants.LOGBACK_MIDDLEWARE_LOG_DISABLE_PROP_KEY, "true");
         //disable log4j
         System.setProperty(Constants.LOG4J_MIDDLEWARE_LOG_DISABLE_PROP_KEY, "true");
-    }
-
-    @After
-    public void after() throws Exception {
-        super.after();
     }
 
     /**

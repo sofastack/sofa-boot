@@ -16,26 +16,29 @@
  */
 package com.alipay.sofa.common.boot.logging.test;
 
+import com.alipay.sofa.common.log.Constants;
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.boot.SpringApplication;
 
-import com.alipay.sofa.common.log.Constants;
-import com.alipay.sofa.common.utils.ReportUtil;
+import java.util.Collections;
+import java.util.Map;
 
 /**
- * @author qilong.zql
- * @since 1.0.15
+ * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
+ * Created on 2020/12/15
  */
-public class LogbackIntegrationTest extends LogTestBase {
-    /**
-     * test sofa.middleware.log.internal.level config
-     */
+public class Log4j2ConsoleLoggingTest extends LogTestBase {
     @Test
-    public void testInternalLogLevel() {
-        ReportUtil.reportDebug("debug");
-        Assert.assertFalse(outContent.toString().contains("debug"));
-        System.setProperty(Constants.SOFA_MIDDLEWARE_LOG_INTERNAL_LEVEL, "debug");
-        ReportUtil.reportDebug("debug");
-        Assert.assertTrue(outContent.toString().contains("debug"));
+    public void testLog4j2InfoToConsole() {
+        SpringApplication springApplication = new SpringApplication(EmptyConfig.class);
+        Map<String, Object> properties = Collections.singletonMap(
+            String.format(Constants.SOFA_MIDDLEWARE_SINGLE_LOG_CONSOLE_SWITCH, TEST_SPACE), "true");
+        springApplication.setDefaultProperties(properties);
+        springApplication.run();
+
+        logger = getLogger();
+        logger.info("space console");
+        Assert.assertTrue(outContent.toString().contains("space console"));
     }
 }
