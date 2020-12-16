@@ -46,6 +46,6 @@ public class LogbackConsoleLoggingTest extends LogTestBase {
         logger.info("space console");
         logger.debug("space console debug");
         Assert.assertTrue(outContent.toString().contains("space console"));
-        Assert.assertFalse(outContent.toString().contains("space console debug"));
+        Assert.assertTrue(outContent.toString().contains("space console debug"));
     }
 }

@@ -44,7 +44,6 @@ public class GlobalConsoleLevelConfigTest extends LogTestBase {
         logger.info("global space console");
         logger.debug("global space console debug");
         Assert.assertTrue(outContent.toString().contains("global space console"));
-        // This changed to false because console level won't override normal logger
-        Assert.assertFalse(outContent.toString().contains("global space console debug"));
+        Assert.assertTrue(outContent.toString().contains("global space console debug"));
     }
 }
