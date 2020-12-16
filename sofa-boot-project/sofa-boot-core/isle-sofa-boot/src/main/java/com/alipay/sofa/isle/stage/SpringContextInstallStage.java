@@ -186,7 +186,7 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
         ThreadPoolExecutor executor = new SofaThreadPoolExecutor(CPU_COUNT + 1, CPU_COUNT + 1, 60,
             TimeUnit.MILLISECONDS, new SynchronousQueue<Runnable>(), new NamedThreadFactory(
                 "sofa-module-start"), new ThreadPoolExecutor.CallerRunsPolicy(),
-            "sofa-module-start", "sofa-boot", 60000, 30000, TimeUnit.MILLISECONDS);
+            "sofa-module-start", "sofa-boot", 60, 30, TimeUnit.SECONDS);
         try {
             for (DeploymentDescriptor deployment : application.getResolvedDeployments()) {
                 DependencyTree.Entry entry = application.getDeployRegistry().getEntry(
