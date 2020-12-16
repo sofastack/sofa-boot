@@ -16,9 +16,8 @@
  */
 package com.alipay.sofa.boot.test.log;
 
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.alipay.sofa.boot.log.InfraLoggerFactory;
@@ -30,17 +29,10 @@ import com.alipay.sofa.common.log.Constants;
  * @since 3.2.0
  */
 public class AllInfraLoggerFactoryTest extends BaseLogTest {
-
-    @Before
-    public void before() throws Exception {
+    @BeforeClass
+    public static void beforeClass() {
         // disable all log space
         System.setProperty(Constants.SOFA_MIDDLEWARE_LOG_DISABLE_PROP_KEY, "true");
-    }
-
-    @After
-    public void after() throws Exception {
-        super.after();
-        System.setProperty(Constants.SOFA_MIDDLEWARE_LOG_DISABLE_PROP_KEY, "false");
     }
 
     @Test

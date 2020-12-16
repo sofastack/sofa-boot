@@ -20,8 +20,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.After;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.alipay.sofa.boot.log.InfraLoggerFactory;
@@ -35,19 +34,12 @@ import com.alipay.sofa.common.log.Constants;
  * @since 1.0
  */
 public class Log4jInfraLoggerFactoryTest extends BaseLogTest {
-
-    @Before
-    public void before() throws Exception {
-        super.before();
+    @BeforeClass
+    public static void beforeClass() {
         //禁用logback
         System.setProperty(Constants.LOGBACK_MIDDLEWARE_LOG_DISABLE_PROP_KEY, "true");
         //禁用log4j2
         System.setProperty(Constants.LOG4J2_MIDDLEWARE_LOG_DISABLE_PROP_KEY, "true");
-    }
-
-    @After
-    public void after() throws Exception {
-        super.after();
     }
 
     /**
