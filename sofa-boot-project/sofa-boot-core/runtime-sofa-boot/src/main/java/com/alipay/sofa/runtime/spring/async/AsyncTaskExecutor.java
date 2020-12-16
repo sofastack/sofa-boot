@@ -29,6 +29,7 @@ import org.springframework.core.env.Environment;
 
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.util.NamedThreadFactory;
+import com.alipay.sofa.common.thread.SofaThreadPoolExecutor;
 import com.alipay.sofa.runtime.log.SofaLogger;
 
 /**
@@ -79,9 +80,10 @@ public class AsyncTaskExecutor {
         SofaLogger.info(String.format(
             "create async-init-bean thread pool, corePoolSize: %d, maxPoolSize: %d.",
             threadPoolCoreSize, threadPoolMaxSize));
-        return new ThreadPoolExecutor(threadPoolCoreSize, threadPoolMaxSize, 30, TimeUnit.SECONDS,
-            new SynchronousQueue<Runnable>(), new NamedThreadFactory("async-init-bean"),
-            new ThreadPoolExecutor.CallerRunsPolicy());
+        return new SofaThreadPoolExecutor(threadPoolCoreSize, threadPoolMaxSize, 30,
+            TimeUnit.SECONDS, new SynchronousQueue<Runnable>(), new NamedThreadFactory(
+                "async-init-bean"), new ThreadPoolExecutor.CallerRunsPolicy(), "async-init-bean",
+            "sofa-boot");
     }
 
     public static void ensureAsyncTasksFinish() {

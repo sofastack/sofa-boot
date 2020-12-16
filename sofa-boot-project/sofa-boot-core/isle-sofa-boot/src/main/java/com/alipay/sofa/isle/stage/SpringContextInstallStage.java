@@ -18,6 +18,7 @@ package com.alipay.sofa.isle.stage;
 
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.util.NamedThreadFactory;
+import com.alipay.sofa.common.thread.SofaThreadPoolExecutor;
 import com.alipay.sofa.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.isle.deployment.DependencyTree;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
@@ -182,9 +183,10 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
     private void refreshSpringContextParallel(ApplicationRuntimeModel application) {
         ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
         List<DeploymentDescriptor> coreRoots = new ArrayList<>();
-        ThreadPoolExecutor executor = new ThreadPoolExecutor(CPU_COUNT + 1, CPU_COUNT + 1, 60,
+        ThreadPoolExecutor executor = new SofaThreadPoolExecutor(CPU_COUNT + 1, CPU_COUNT + 1, 60,
             TimeUnit.MILLISECONDS, new SynchronousQueue<Runnable>(), new NamedThreadFactory(
-                "sofa-module-start"), new ThreadPoolExecutor.CallerRunsPolicy());
+                "sofa-module-start"), new ThreadPoolExecutor.CallerRunsPolicy(),
+            "sofa-module-start", "sofa-boot");
         try {
             for (DeploymentDescriptor deployment : application.getResolvedDeployments()) {
                 DependencyTree.Entry entry = application.getDeployRegistry().getEntry(
