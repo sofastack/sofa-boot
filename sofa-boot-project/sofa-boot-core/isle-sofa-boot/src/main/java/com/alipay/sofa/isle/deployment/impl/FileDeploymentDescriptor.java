@@ -47,7 +47,7 @@ public class FileDeploymentDescriptor extends AbstractDeploymentDescriptor {
         springResources = new HashMap<>();
 
         try {
-            // When path contains space characters (e.g., white space, Chinese), URL converts it to UTF8 code point
+            // When path contains special characters (e.g., white space, Chinese), URL converts them to UTF8 code point.
             // In order to processing correctly, create File from URI
             URI springXmlUri = new URI("file://"
                                        + url.getFile().substring(
