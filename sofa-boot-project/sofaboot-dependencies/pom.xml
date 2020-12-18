@@ -64,6 +64,8 @@
         <!--maven plugin-->
         <maven.staging.plugin>1.6.7</maven.staging.plugin>
         <maven.gpg.pluign>1.5</maven.gpg.pluign>
+
+        <tomcat.version>9.0.37</tomcat.version>
     </properties>
 
     <licenses>
