@@ -17,6 +17,7 @@
 package com.alipay.sofa.isle.deployment.impl;
 
 import java.io.File;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,7 +33,7 @@ import com.alipay.sofa.isle.deployment.DeploymentDescriptorConfiguration;
  *
  * @author yangyanzhao
  * @version $Id: FileDescriptor.java, v 0.1 2012-1-11 17:41:52 yangyanzhao Exp $
-*/
+ */
 public class FileDeploymentDescriptor extends AbstractDeploymentDescriptor {
     public FileDeploymentDescriptor(URL url,
                                     Properties props,
@@ -44,14 +45,22 @@ public class FileDeploymentDescriptor extends AbstractDeploymentDescriptor {
     @Override
     public void loadSpringXMLs() {
         springResources = new HashMap<>();
-        File springXml = new File(url.getFile().substring(0,
-            url.getFile().length() - SofaBootConstants.SOFA_MODULE_FILE.length()),
-            SofaBootConstants.SPRING_CONTEXT_PATH);
-        List<File> springFiles = new ArrayList<>();
-        if (springXml.exists()) {
-            listFiles(springFiles, springXml, ".xml");
-        }
+
         try {
+            // When path contains special characters (e.g., white space, Chinese), URL converts them to UTF8 code point.
+            // In order to processing correctly, create File from URI
+            URI springXmlUri = new URI("file://"
+                                       + url.getFile().substring(
+                                           0,
+                                           url.getFile().length()
+                                                   - SofaBootConstants.SOFA_MODULE_FILE.length())
+                                       + SofaBootConstants.SPRING_CONTEXT_PATH);
+            File springXml = new File(springXmlUri);
+            List<File> springFiles = new ArrayList<>();
+            if (springXml.exists()) {
+                listFiles(springFiles, springXml, ".xml");
+            }
+
             for (File f : springFiles) {
                 springResources.put(f.getAbsolutePath(), new FileSystemResource(f));
             }
