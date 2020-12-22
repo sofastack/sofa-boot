@@ -33,7 +33,7 @@ public class SofaConfigSourceSupportListener
                                             implements
                                             ApplicationListener<ApplicationEnvironmentPreparedEvent>,
                                             Ordered {
-    private static final int SOFA_BOOT_CONFIG_SOURCE_ORDER = 300;
+    private static final int SOFA_BOOT_CONFIG_SOURCE_ORDER = LOWEST_PRECEDENCE;
 
     @Override
     public void onApplicationEvent(ApplicationEnvironmentPreparedEvent event) {
