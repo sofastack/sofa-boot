@@ -14,7 +14,6 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>infra-sofa-boot-starter</module>
         <module>test-sofa-boot-starter</module>
         <module>healthcheck-sofa-boot-starter</module>
         <module>runtime-sofa-boot-starter</module>
