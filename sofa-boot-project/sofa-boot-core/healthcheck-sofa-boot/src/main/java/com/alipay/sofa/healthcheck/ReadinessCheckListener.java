@@ -31,7 +31,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.core.PriorityOrdered;
+import org.springframework.core.Ordered;
 import org.springframework.core.env.Environment;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -44,7 +44,7 @@ import com.alipay.sofa.healthcheck.log.HealthCheckLoggerFactory;
  * @author liangen
  * @author qilong.zql
  */
-public class ReadinessCheckListener implements ApplicationContextAware, PriorityOrdered,
+public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
                                    ApplicationListener<ContextRefreshedEvent>, InitializingBean {
     private static Logger                        logger                     = HealthCheckLoggerFactory
                                                                                 .getLogger(ReadinessCheckListener.class);
