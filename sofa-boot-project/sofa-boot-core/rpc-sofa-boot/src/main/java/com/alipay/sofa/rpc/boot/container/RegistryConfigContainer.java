@@ -16,9 +16,11 @@
  */
 package com.alipay.sofa.rpc.boot.container;
 
+import com.alipay.sofa.common.config.SofaConfigs;
 import com.alipay.sofa.rpc.boot.common.SofaBootRpcRuntimeException;
 import com.alipay.sofa.rpc.boot.config.RegistryConfigureProcessor;
 import com.alipay.sofa.rpc.boot.config.SofaBootRpcConfigConstants;
+import com.alipay.sofa.rpc.boot.config.SofaBootRpcConfigKeys;
 import com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties;
 import com.alipay.sofa.rpc.common.SofaOptions;
 import com.alipay.sofa.rpc.common.utils.StringUtils;
@@ -66,7 +68,7 @@ public class RegistryConfigContainer {
     private String                                  customDefaultRegistryAddress;
 
     public RegistryConfigContainer() {
-        customDefaultRegistry = System.getProperty(SofaBootRpcConfigConstants.DEFAULT_REGISTRY);
+        customDefaultRegistry = SofaConfigs.getOrDefault(SofaBootRpcConfigKeys.DEFAULT_REGISTRY);
         if (StringUtils.isNotBlank(customDefaultRegistry)) {
             customDefaultRegistryAddress = System.getProperty(customDefaultRegistry);
         }
