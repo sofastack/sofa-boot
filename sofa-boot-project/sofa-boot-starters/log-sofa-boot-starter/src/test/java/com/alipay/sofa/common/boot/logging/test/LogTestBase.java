@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.common.boot.logging.test;
 
+import com.alipay.sofa.common.log.CommonLoggingConfigurations;
 import com.alipay.sofa.common.log.Constants;
 import com.alipay.sofa.common.log.LoggerSpaceManager;
 import com.alipay.sofa.common.utils.StringUtil;
@@ -34,7 +35,8 @@ import java.io.PrintStream;
  * Created on 2020/12/15
  */
 public abstract class LogTestBase {
-    protected static final String   TEST_SPACE = "test.space";
+    protected static final String   TEST_SPACE  = "test.space";
+    protected static final String   TEST_LOGGER = TEST_SPACE + ".logger";
 
     protected ByteArrayOutputStream outContent;
 
@@ -44,10 +46,12 @@ public abstract class LogTestBase {
     public void setUpStreams() {
         outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
+
+        CommonLoggingConfigurations.appendConsoleLoggerName(TEST_LOGGER);
     }
 
     protected Logger getLogger() {
-        return LoggerSpaceManager.getLoggerBySpace(this.getClass().getName(), TEST_SPACE);
+        return LoggerSpaceManager.getLoggerBySpace(TEST_LOGGER, TEST_SPACE);
     }
 
     protected File getLogbackDefaultFile(Environment environment) {
