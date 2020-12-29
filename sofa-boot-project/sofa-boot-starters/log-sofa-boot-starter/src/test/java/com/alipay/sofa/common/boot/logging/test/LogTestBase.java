@@ -35,7 +35,7 @@ import java.io.PrintStream;
  * Created on 2020/12/15
  */
 public abstract class LogTestBase {
-    protected static final String   TEST_SPACE = "test.space";
+    protected static final String   TEST_SPACE  = "test.space";
     protected static final String   TEST_LOGGER = TEST_SPACE + ".logger";
 
     protected ByteArrayOutputStream outContent;
