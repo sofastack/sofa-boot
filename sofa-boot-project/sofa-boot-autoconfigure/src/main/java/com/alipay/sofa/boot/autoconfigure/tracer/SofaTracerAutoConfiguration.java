@@ -40,7 +40,7 @@ import java.util.List;
  * @author yangguanchao
  * @since 2018/05/08
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(SofaTracerProperties.class)
 @ConditionalOnClass({ SpanReportListenerHolder.class, Tracer.class, SofaTracerProperties.class,
                      FlexibleTracer.class })

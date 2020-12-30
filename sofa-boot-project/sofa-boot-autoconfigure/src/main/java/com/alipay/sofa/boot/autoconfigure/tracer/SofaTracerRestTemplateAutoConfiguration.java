@@ -29,7 +29,7 @@ import org.springframework.context.annotation.Configuration;
  * @author: guolei.sgl (guolei.sgl@antfin.com) 2019/9/11 9:43 PM
  * @since:
  **/
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @ConditionalOnWebApplication
 @ConditionalOnProperty(prefix = "com.alipay.sofa.tracer.resttemplate", value = "enable", matchIfMissing = true)
 @ConditionalOnClass({ RestTemplateTracer.class, SofaTracerRestTemplateEnhance.class })

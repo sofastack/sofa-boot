@@ -16,12 +16,11 @@
  */
 package com.alipay.sofa.boot.actuator.health;
 
+import com.alipay.sofa.healthcheck.ReadinessCheckListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
 import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
-import org.springframework.boot.actuate.health.Health;
-
-import com.alipay.sofa.healthcheck.ReadinessCheckListener;
+import org.springframework.boot.actuate.health.HealthComponent;
 
 /**
  * The health check HTTP checker for start status.
@@ -37,7 +36,7 @@ public class SofaBootReadinessEndpoint {
     private ReadinessCheckListener readinessCheckListener;
 
     @ReadOperation
-    public Health health() {
+    public HealthComponent health() {
         return readinessCheckListener.aggregateReadinessHealth();
     }
 }

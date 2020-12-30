@@ -17,14 +17,15 @@
 package com.alipay.sofa.healthcheck;
 
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.Health;
+import org.springframework.boot.actuate.health.HealthContributorNameFactory;
 import org.springframework.boot.actuate.health.HealthIndicator;
-import org.springframework.boot.actuate.health.HealthIndicatorNameFactory;
 import org.springframework.boot.actuate.health.ReactiveHealthIndicator;
 import org.springframework.boot.actuate.health.Status;
 import org.springframework.context.ApplicationContext;
@@ -59,6 +60,9 @@ public class HealthIndicatorProcessor {
     private ApplicationContext                     applicationContext;
 
     private final static String                    REACTOR_CLASS    = "reactor.core.publisher.Mono";
+
+    private static final String[]                  SUFFIXES         = { "healthindicator",
+            "healthcontributor"                                    };
 
     public void init() {
         if (isInitiated.compareAndSet(false, true)) {
@@ -130,12 +134,13 @@ public class HealthIndicatorProcessor {
     }
 
     /**
-     * refer to {@link HealthIndicatorNameFactory#apply(String)}
+     * refer to {@link HealthContributorNameFactory#apply(String)}
      */
     public String getKey(String name) {
-        int index = name.toLowerCase().indexOf("healthindicator");
-        if (index > 0) {
-            return name.substring(0, index);
+        for (String suffix : SUFFIXES) {
+            if (name != null && name.toLowerCase(Locale.ENGLISH).endsWith(suffix)) {
+                return name.substring(0, name.length() - suffix.length());
+            }
         }
         return name;
     }

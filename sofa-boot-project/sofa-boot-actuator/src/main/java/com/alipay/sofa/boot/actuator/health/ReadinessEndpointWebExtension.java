@@ -22,8 +22,9 @@ import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
 import org.springframework.boot.actuate.endpoint.web.WebEndpointResponse;
 import org.springframework.boot.actuate.endpoint.web.annotation.EndpointWebExtension;
 import org.springframework.boot.actuate.health.Health;
-import org.springframework.boot.actuate.health.HealthWebEndpointResponseMapper;
-import org.springframework.boot.actuate.health.ShowDetails;
+import org.springframework.boot.actuate.health.HealthComponent;
+import org.springframework.boot.actuate.health.HealthEndpointGroups;
+import org.springframework.boot.actuate.health.HttpCodeStatusMapper;
 
 /**
  * @author qilong.zql
@@ -33,14 +34,25 @@ import org.springframework.boot.actuate.health.ShowDetails;
 public class ReadinessEndpointWebExtension {
 
     @Autowired
-    private SofaBootReadinessEndpoint       delegate;
+    private SofaBootReadinessEndpoint delegate;
 
     @Autowired
-    private HealthWebEndpointResponseMapper responseMapper;
+    private HttpCodeStatusMapper      httpCodeStatusMapper;
+
+    @Autowired
+    private HealthEndpointGroups      groups;
+
+    //todo be changeable
+    private final boolean             isShowAll = true;
 
     @ReadOperation
-    public WebEndpointResponse<Health> getHealth(SecurityContext securityContext) {
-        return this.responseMapper.map(this.delegate.health(), securityContext, ShowDetails.ALWAYS);
+    public WebEndpointResponse<HealthComponent> getHealth(SecurityContext securityContext) {
+        HealthComponent result = this.delegate.health();
+        boolean showDetails = isShowAll || groups.getPrimary().showDetails(securityContext);
+        if (!showDetails) {
+            result = Health.status(result.getStatus()).build();
+        }
+        int statusCode = httpCodeStatusMapper.getStatusCode(result.getStatus());
+        return new WebEndpointResponse<>(result, statusCode);
     }
-
 }

@@ -52,7 +52,7 @@ import javax.servlet.Servlet;
  */
 public class SofaStartupConfiguration {
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @ConditionalOnClass({ Servlet.class, Tomcat.class, UpgradeProtocol.class,
             SofaStartupContext.class })
     @ConditionalOnMissingBean(value = ServletWebServerFactory.class, search = SearchStrategy.CURRENT)
@@ -64,7 +64,7 @@ public class SofaStartupConfiguration {
         }
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @ConditionalOnClass({ Servlet.class, Server.class, Loader.class, WebAppContext.class,
             SofaStartupContext.class })
     @ConditionalOnMissingBean(value = ServletWebServerFactory.class, search = SearchStrategy.CURRENT)
@@ -76,7 +76,7 @@ public class SofaStartupConfiguration {
         }
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @ConditionalOnClass({ Servlet.class, Undertow.class, SslClientAuthMode.class,
             SofaStartupContext.class })
     @ConditionalOnMissingBean(value = ServletWebServerFactory.class, search = SearchStrategy.CURRENT)
@@ -87,7 +87,7 @@ public class SofaStartupConfiguration {
         }
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @ConditionalOnMissingBean(value = SpringContextAwarer.class, search = SearchStrategy.CURRENT)
     @ConditionalOnClass(SofaStartupContext.class)
     @ConditionalOnMissingClass("com.alipay.sofa.isle.ApplicationRuntimeModel")
@@ -99,7 +99,7 @@ public class SofaStartupConfiguration {
         }
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @ConditionalOnMissingBean(value = SpringContextAwarer.class, search = SearchStrategy.CURRENT)
     @ConditionalOnClass({ ApplicationRuntimeModel.class, SofaStartupContext.class })
     static class IsleSpringContextAware {
@@ -110,7 +110,7 @@ public class SofaStartupConfiguration {
         }
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @AutoConfigureBefore(SofaModuleAutoConfiguration.class)
     @ConditionalOnClass({ ApplicationRuntimeModel.class, SofaStartupContext.class })
     @ConditionalOnMissingBean(value = SpringContextInstallStage.class, search = SearchStrategy.CURRENT)

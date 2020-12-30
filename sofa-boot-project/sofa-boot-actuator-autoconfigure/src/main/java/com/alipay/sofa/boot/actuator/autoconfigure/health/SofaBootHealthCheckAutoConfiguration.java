@@ -19,11 +19,12 @@ package com.alipay.sofa.boot.actuator.autoconfigure.health;
 import com.alipay.sofa.boot.actuator.health.ManualReadinessCallbackEndPoint;
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.healthcheck.HealthCheckProperties;
-import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnEnabledEndpoint;
+import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.boot.actuate.autoconfigure.health.HealthEndpointAutoConfiguration;
-import org.springframework.boot.actuate.autoconfigure.health.HealthIndicatorProperties;
+import org.springframework.boot.actuate.autoconfigure.health.HealthEndpointProperties;
 import org.springframework.boot.actuate.endpoint.web.WebEndpointResponse;
-import org.springframework.boot.actuate.health.HealthStatusHttpMapper;
+import org.springframework.boot.actuate.health.HttpCodeStatusMapper;
+import org.springframework.boot.actuate.health.SimpleHttpCodeStatusMapper;
 import org.springframework.boot.actuate.health.Status;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -49,11 +50,14 @@ import com.alipay.sofa.healthcheck.impl.SofaRuntimeHealthChecker;
 import com.alipay.sofa.isle.stage.ModelCreatingStage;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author qilong.zql
  * @since 2.5.0
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(HealthCheckProperties.class)
 @ConditionalOnClass(HealthChecker.class)
 public class SofaBootHealthCheckAutoConfiguration {
@@ -65,7 +69,7 @@ public class SofaBootHealthCheckAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    @ConditionalOnEnabledEndpoint(endpoint = ManualReadinessCallbackEndPoint.class)
+    @ConditionalOnAvailableEndpoint(endpoint = ManualReadinessCallbackEndPoint.class)
     @ConditionalOnProperty(prefix = SofaBootConstants.PREFIX, name = "manualReadinessCallback", havingValue = "true")
     public ManualReadinessCallbackEndPoint manualReadinessCallbackEndPoint() {
         return new ManualReadinessCallbackEndPoint();
@@ -105,7 +109,7 @@ public class SofaBootHealthCheckAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    @ConditionalOnEnabledEndpoint(endpoint = SofaBootReadinessEndpoint.class)
+    @ConditionalOnAvailableEndpoint(endpoint = SofaBootReadinessEndpoint.class)
     public SofaBootReadinessEndpoint sofaBootReadinessCheckEndpoint() {
         return new SofaBootReadinessEndpoint();
     }
@@ -116,7 +120,7 @@ public class SofaBootHealthCheckAutoConfiguration {
         return new ComponentHealthChecker(sofaRuntimeContext);
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @ConditionalOnClass({ HealthChecker.class, ModelCreatingStage.class })
     @ConditionalOnProperty(value = "com.alipay.sofa.boot.enable-isle", matchIfMissing = true)
     public static class SofaModuleHealthIndicatorConfiguration {
@@ -131,13 +135,13 @@ public class SofaBootHealthCheckAutoConfiguration {
         }
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @AutoConfigureBefore(HealthEndpointAutoConfiguration.class)
     @ConditionalOnClass(HealthChecker.class)
     public static class ReadinessCheckExtensionConfiguration {
         @Bean
         @ConditionalOnMissingBean
-        @ConditionalOnEnabledEndpoint(endpoint = ReadinessEndpointWebExtension.class)
+        @ConditionalOnAvailableEndpoint(endpoint = ReadinessEndpointWebExtension.class)
         public ReadinessEndpointWebExtension readinessEndpointWebExtension() {
             return new ReadinessEndpointWebExtension();
         }
@@ -145,14 +149,18 @@ public class SofaBootHealthCheckAutoConfiguration {
         @Bean
         @ConditionalOnMissingBean
         @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
-        public HealthStatusHttpMapper createHealthStatusHttpMapper(HealthIndicatorProperties healthIndicatorProperties) {
-            HealthStatusHttpMapper statusHttpMapper = new HealthStatusHttpMapper();
-            if (healthIndicatorProperties.getHttpMapping() != null) {
-                statusHttpMapper.addStatusMapping(healthIndicatorProperties.getHttpMapping());
+        public HttpCodeStatusMapper createHealthStatusHttpMapper(HealthEndpointProperties healthEndpointProperties) {
+            Map<String, Integer> defaultMappings = new HashMap<>(8);
+            if (healthEndpointProperties.getStatus().getHttpMapping() != null) {
+                defaultMappings.putAll(healthEndpointProperties.getStatus().getHttpMapping());
             }
-            statusHttpMapper.addStatusMapping(Status.UNKNOWN,
+            defaultMappings.put(Status.DOWN.getCode(),
+                WebEndpointResponse.STATUS_SERVICE_UNAVAILABLE);
+            defaultMappings.put(Status.OUT_OF_SERVICE.getCode(),
+                WebEndpointResponse.STATUS_SERVICE_UNAVAILABLE);
+            defaultMappings.put(Status.UNKNOWN.getCode(),
                 WebEndpointResponse.STATUS_INTERNAL_SERVER_ERROR);
-            return statusHttpMapper;
+            return new SimpleHttpCodeStatusMapper(defaultMappings);
         }
     }
 }

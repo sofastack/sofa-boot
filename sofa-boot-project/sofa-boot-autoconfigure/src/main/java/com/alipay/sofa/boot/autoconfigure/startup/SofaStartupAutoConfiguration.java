@@ -33,7 +33,7 @@ import org.springframework.context.annotation.Import;
  * @author: Zhijie
  * @since: 2020/7/8
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @AutoConfigureBefore(ServletWebServerFactoryAutoConfiguration.class)
 @ConditionalOnClass(SofaStartupContext.class)
 @EnableConfigurationProperties(SofaStartupProperties.class)
