@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.runtime.spi.component;
 
-import com.alipay.sofa.boot.startup.CommonStartupCost;
+import com.alipay.sofa.boot.startup.StageStat;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.model.ComponentType;
@@ -121,5 +121,5 @@ public interface ComponentManager {
      *
      * @return commonStartupCosts
      */
-    List<CommonStartupCost> getComponentCostList();
+    List<StageStat> getComponentCostList();
 }

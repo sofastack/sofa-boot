@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.runtime.component.impl;
 
-import com.alipay.sofa.boot.startup.CommonStartupCost;
+import com.alipay.sofa.boot.startup.StageStat;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.log.SofaLogger;
@@ -41,7 +41,7 @@ public class ComponentManagerImpl implements ComponentManager {
     protected ConcurrentMap<ComponentType, Map<ComponentName, ComponentInfo>> resolvedRegistry;
     /** client factory */
     private ClientFactoryInternal                                             clientFactoryInternal;
-    private List<CommonStartupCost>                                           componentCostList = new ArrayList<>();
+    private List<StageStat>                                                   componentCostList = new ArrayList<>();
 
     public ComponentManagerImpl(ClientFactoryInternal clientFactoryInternal) {
         this.registry = new ConcurrentHashMap(16);
@@ -125,9 +125,9 @@ public class ComponentManagerImpl implements ComponentManager {
 
     private ComponentInfo doRegister(ComponentInfo ci) {
         ComponentName name = ci.getName();
-        CommonStartupCost commonStartupCost = new CommonStartupCost();
-        commonStartupCost.setName(name.getRawName());
-        commonStartupCost.setBeginTime(System.currentTimeMillis());
+        StageStat stageStat = new StageStat();
+        stageStat.setStageName(name.getRawName());
+        stageStat.setStageStartTime(System.currentTimeMillis());
         if (isRegistered(name)) {
             SofaLogger.error("Component was already registered: {}", name);
             if (ci.canBeDuplicate()) {
@@ -164,8 +164,8 @@ public class ComponentManagerImpl implements ComponentManager {
             ci.exception(new Exception(t));
             SofaLogger.error("Failed to create the component {}", ci.getName(), t);
         }
-        commonStartupCost.setEndTime(System.currentTimeMillis());
-        componentCostList.add(commonStartupCost);
+        stageStat.setStageEndTime(System.currentTimeMillis());
+        componentCostList.add(stageStat);
 
         return ci;
     }
@@ -216,7 +216,7 @@ public class ComponentManagerImpl implements ComponentManager {
     }
 
     @Override
-    public List<CommonStartupCost> getComponentCostList() {
+    public List<StageStat> getComponentCostList() {
         return componentCostList;
     }
 

@@ -14,12 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.startup.test.beans.facade;
+package com.alipay.sofa.startup;
+
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * @author: Zhijie
  * @since: 2020/7/13
  */
-public interface SampleService {
-    String service();
+@ConfigurationProperties(prefix = "com.alipay.sofa.boot.startup")
+public class StartupProperties {
+    private long beanInitCostThreshold = 100;
+
+    public long getBeanInitCostThreshold() {
+        return beanInitCostThreshold;
+    }
+
+    public void setBeanInitCostThreshold(long beanInitCostThreshold) {
+        this.beanInitCostThreshold = beanInitCostThreshold;
+    }
 }

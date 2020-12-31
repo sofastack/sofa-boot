@@ -1,0 +1,32 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:sofa="http://sofastack.io/schema/sofaboot"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+            http://sofastack.io/schema/sofaboot   http://sofastack.io/schema/sofaboot.xsd">
+
+    <bean id="parent" class="com.alipay.sofa.startup.test.beans.ParentBean"/>
+    <bean id="child" class="com.alipay.sofa.startup.test.beans.ChildBean" init-method="init"/>
+
+    <bean id="extension" class="com.alipay.sofa.startup.test.beans.ExtensionBean">
+        <property name="word" value="Hello, world"/>
+    </bean>
+
+    <sofa:extension-point name="word" ref="extension">
+        <sofa:object class="com.alipay.sofa.startup.test.beans.ExtensionDescriptor"/>
+    </sofa:extension-point>
+
+    <sofa:extension bean="extension" point="word">
+        <sofa:content>
+            <word>
+                <value>newValue</value>
+            </word>
+        </sofa:content>
+    </sofa:extension>
+
+    <bean id="sample" class="com.alipay.sofa.startup.test.beans.service.DefaultSampleService"/>
+    <sofa:service ref="sample" interface="com.alipay.sofa.startup.test.beans.facade.SampleService"/>
+
+    <sofa:reference id="reference" interface="com.alipay.sofa.startup.test.beans.facade.TestService"/>
+</beans>

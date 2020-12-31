@@ -59,6 +59,7 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 public class SofaBootHealthCheckAutoConfiguration {
 
     @Bean
+    @ConditionalOnMissingBean
     public ReadinessCheckListener readinessCheckListener() {
         return new ReadinessCheckListener();
     }

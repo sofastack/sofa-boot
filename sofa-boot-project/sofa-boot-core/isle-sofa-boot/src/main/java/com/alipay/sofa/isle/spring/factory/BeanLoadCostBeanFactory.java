@@ -16,11 +16,16 @@
  */
 package com.alipay.sofa.isle.spring.factory;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
+import java.security.AccessController;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
+import java.util.*;
 
+import com.alipay.sofa.boot.startup.BeanStat;
+import com.alipay.sofa.boot.startup.BeanStatExtension;
+import com.alipay.sofa.runtime.spring.factory.ReferenceFactoryBean;
 import org.springframework.beans.factory.BeanCreationException;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 
@@ -33,130 +38,127 @@ import org.springframework.lang.Nullable;
  * @author xiangxing.deng 2012-11-20
  */
 public class BeanLoadCostBeanFactory extends DefaultListableBeanFactory {
-    private static final long                   DEFAULT_BEAN_LOAD_COST = 100;
+    private final List<BeanStat>                beanStats              = new ArrayList<>();
 
-    private final List<BeanNode>                beanCostList           = new ArrayList<>();
-
-    private long                                beanLoadCost           = DEFAULT_BEAN_LOAD_COST;
+    private long                                beanLoadCost;
 
     private String                              moduleName;
 
-    private static ThreadLocal<Stack<BeanNode>> parentStackThreadLocal = new ThreadLocal<>();
+    private static ThreadLocal<Stack<BeanStat>> parentStackThreadLocal = new ThreadLocal<>();
+
+    private BeanStatExtension                   beanStatExtension;
 
     public BeanLoadCostBeanFactory(long beanCost, String moduleName) {
         this.beanLoadCost = beanCost;
         this.moduleName = moduleName;
     }
 
+    public BeanLoadCostBeanFactory(long beanCost, String moduleName,
+                                   BeanStatExtension beanStatExtension) {
+        this.beanLoadCost = beanCost;
+        this.moduleName = moduleName;
+        this.beanStatExtension = beanStatExtension;
+    }
+
+    @Override
+    protected void invokeInitMethods(String beanName, final Object bean, RootBeanDefinition mbd)
+            throws Throwable {
+        boolean isInitializingBean = (bean instanceof InitializingBean);
+        if (isInitializingBean
+                && (mbd == null || !mbd.isExternallyManagedInitMethod("afterPropertiesSet"))) {
+            if (System.getSecurityManager() != null) {
+                try {
+                    AccessController.doPrivileged((PrivilegedExceptionAction<Object>) () -> {
+                        ((InitializingBean) bean).afterPropertiesSet();
+                        return null;
+                    }, getAccessControlContext());
+                } catch (PrivilegedActionException pae) {
+                    throw pae.getException();
+                }
+            } else {
+                long start = System.currentTimeMillis();
+                ((InitializingBean) bean).afterPropertiesSet();
+                parentStackThreadLocal.get().peek()
+                        .setAfterPropertiesSetTime(System.currentTimeMillis() - start);
+            }
+        }
+
+        if (mbd != null) {
+            String initMethodName = mbd.getInitMethodName();
+            if (initMethodName != null
+                    && !(isInitializingBean && "afterPropertiesSet".equals(initMethodName))
+                    && !mbd.isExternallyManagedInitMethod(initMethodName)) {
+                long start = System.currentTimeMillis();
+                invokeCustomInitMethod(beanName, bean, mbd);
+                parentStackThreadLocal.get().peek().setInitTime(System.currentTimeMillis() - start);
+            }
+        }
+    }
+
     @Override
     protected Object createBean(String beanName, RootBeanDefinition mbd, @Nullable Object[] args)
                                                                                                  throws BeanCreationException {
-        Stack<BeanNode> parentStack = parentStackThreadLocal.get();
-        BeanNode bn = new BeanNode();
+        Stack<BeanStat> parentStack = parentStackThreadLocal.get();
+        BeanStat bs = new BeanStat();
         if (parentStack == null) {
             parentStack = new Stack<>();
             parentStackThreadLocal.set(parentStack);
         }
         if (!parentStack.empty()) {
-            parentStack.peek().addChild(bn);
+            parentStack.peek().addChild(bs);
         }
-        parentStack.push(bn);
+        parentStack.push(bs);
 
-        long begin = System.currentTimeMillis();
+        bs.startRefresh();
         Object object = super.createBean(beanName, mbd, args);
+        bs.finishRefresh();
 
         if (mbd.getBeanClassName() == null) {
-            bn.setBeanClassName("Factory (" + mbd.getFactoryBeanName() + ")");
+            bs.setBeanClassName("Factory (" + mbd.getFactoryBeanName() + ")");
         } else {
+            if (mbd.getBeanClassName().contains("ExtensionPointFactoryBean")
+                || mbd.getBeanClassName().contains("ExtensionFactoryBean")) {
+                bs.setExtensionProperty(object.toString());
+            }
+
             if (object instanceof ServiceFactoryBean) {
-                bn.setBeanClassName(mbd.getBeanClassName() + " ("
+                bs.setBeanClassName(mbd.getBeanClassName() + " ("
                                     + ((ServiceFactoryBean) object).getBeanId() + ")");
+                bs.setInterfaceType(((ServiceFactoryBean) object).getInterfaceType());
+            } else if (object instanceof ReferenceFactoryBean) {
+                bs.setBeanClassName(mbd.getBeanClassName() + " (" + beanName + ")");
+                bs.setInterfaceType(((ReferenceFactoryBean) object).getInterfaceType());
             } else {
-                bn.beanClassName = mbd.getBeanClassName() + " (" + beanName + ")";
+                bs.setBeanClassName(mbd.getBeanClassName() + " (" + beanName + ")");
                 if (beanName.contains(mbd.getBeanClassName())) {
-                    bn.setBeanClassName(mbd.getBeanClassName());
+                    bs.setBeanClassName(mbd.getBeanClassName());
                 }
             }
         }
-        bn.setCostTime(System.currentTimeMillis() - begin);
+
+        if (beanStatExtension != null) {
+            beanStatExtension.customBeanStat(beanName, mbd, args, bs);
+        }
 
         parentStack.pop();
-        if (parentStack.empty() && bn.getCostTime() > beanLoadCost) {
-            beanCostList.add(bn);
+        if (parentStack.empty() && bs.getRefreshElapsedTime() > beanLoadCost) {
+            beanStats.add(bs);
         }
 
         return object;
     }
 
-    public List<BeanNode> getBeanLoadList() {
-        return beanCostList;
+    public List<BeanStat> getBeanStats() {
+        return beanStats;
     }
 
     public String getModuleName() {
         return moduleName;
     }
 
-    public static class BeanNode {
-        private static final String  LAST_PREFIX        = "└─";
-        private static final String  MIDDLE_PREFIX      = "├─";
-        private static final String  INDENT_PREFIX      = "│   ";
-        private static final String  EMPTY_INDEX_PREFIX = "    ";
-
-        private String               beanClassName;
-
-        // costTime includes all bean refreshing time-consumption incurred by this bean
-        private long                 costTime;
-
-        private final List<BeanNode> children           = new ArrayList<>();
-
-        public String getBeanClassName() {
-            return beanClassName;
-        }
-
-        public void setCostTime(long time) {
-            costTime = time;
-        }
-
-        public long getCostTime() {
-            return costTime;
-        }
-
-        public void setBeanClassName(String beanClassName) {
-            this.beanClassName = beanClassName;
-        }
-
-        public void addChild(BeanNode bn) {
-            children.add(bn);
-        }
-
-        public List<BeanNode> getChildren() {
-            return children;
-        }
-
-        public String toString() {
-            return toString("", false);
-        }
-
-        private String toString(String indent, boolean last) {
-            StringBuilder rtn = new StringBuilder();
-            rtn.append(indent).append(last ? LAST_PREFIX : MIDDLE_PREFIX).append(beanClassName)
-                .append("  [").append(costTime).append("ms]");
-
-            int size = children.size();
-
-            for (int i = 0; i < children.size(); ++i) {
-                rtn.append("\n").append(
-                    children.get(i).toString(indent + (last ? EMPTY_INDEX_PREFIX : INDENT_PREFIX),
-                        i == size - 1));
-            }
-            return rtn.toString();
-        }
-    }
-
-    public String outputBeanLoadCost(String indent) {
+    public String outputBeanStats(String indent) {
         StringBuilder rtn = new StringBuilder();
-
-        beanCostList.sort((o1, o2) -> {
+        beanStats.sort((o1, o2) -> {
             if (o1 == null && o2 == null) {
                 return 0;
             } else if (o1 != null && o2 == null) {
@@ -164,12 +166,11 @@ public class BeanLoadCostBeanFactory extends DefaultListableBeanFactory {
             } else if (o1 == null) {
                 return -1;
             }
-            return Long.compare(o2.getCostTime(), o1.getCostTime());
+            return o2.getRealRefreshElapsedTime() > o1.getRealRefreshElapsedTime() ? 1 : -1;
         });
-
-        int size = beanCostList.size();
+        int size = beanStats.size();
         for (int i = 0; i < size; ++i) {
-            rtn.append(beanCostList.get(i).toString(indent, i == size - 1));
+            rtn.append(beanStats.get(i).toString(indent, i == size - 1));
             rtn.append("\n");
         }
         return rtn.toString();
