@@ -1,3 +1,19 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.alipay.sofa.startup.test;
 
 import com.alipay.sofa.boot.startup.*;
@@ -7,7 +23,6 @@ import com.alipay.sofa.runtime.spring.factory.ReferenceFactoryBean;
 import com.alipay.sofa.runtime.spring.factory.ServiceFactoryBean;
 import com.alipay.sofa.startup.StartupReporter;
 import com.alipay.sofa.startup.test.beans.ChildBean;
-import com.alipay.sofa.startup.test.beans.ExtensionBean;
 import com.alipay.sofa.startup.test.beans.ParentBean;
 import com.alipay.sofa.startup.test.configuration.SofaStartupAutoConfiguration;
 import com.alipay.sofa.startup.test.configuration.SofaStartupIsleAutoConfiguration;
@@ -25,15 +40,13 @@ import java.util.List;
 import static com.alipay.sofa.startup.test.beans.ChildBean.CHILD_INIT_TIME;
 import static com.alipay.sofa.startup.test.beans.ParentBean.PARENT_INIT_TIM;
 
-
 /**
  * @author huzijie
  * @version StartupReporterTest.java, v 0.1 2021年01月04日 8:31 下午 huzijie Exp $
  */
-@SpringBootTest(classes = StartupApplication.class, webEnvironment = SpringBootTest.WebEnvironment.NONE,
-        properties = "com.alipay.sofa.boot.beanLoadCost=1")
+@SpringBootTest(classes = StartupApplication.class, webEnvironment = SpringBootTest.WebEnvironment.NONE, properties = "com.alipay.sofa.boot.beanLoadCost=1")
 @RunWith(SpringRunner.class)
-@Import(value = {SofaStartupAutoConfiguration.class, SofaStartupIsleAutoConfiguration.class})
+@Import(value = { SofaStartupAutoConfiguration.class, SofaStartupIsleAutoConfiguration.class })
 public class IsleCheckStartupReporterTest {
     @Autowired
     private StartupReporter startupReporter;

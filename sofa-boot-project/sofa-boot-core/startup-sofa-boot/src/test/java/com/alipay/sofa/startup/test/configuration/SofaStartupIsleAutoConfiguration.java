@@ -48,7 +48,7 @@ import org.springframework.context.support.AbstractApplicationContext;
  */
 @Configuration
 @ConditionalOnClass({ ApplicationRuntimeModel.class, StartupReporter.class })
-@EnableConfigurationProperties({ SofaModuleProperties.class})
+@EnableConfigurationProperties({ SofaModuleProperties.class })
 public class SofaStartupIsleAutoConfiguration {
 
     @Bean
@@ -95,7 +95,7 @@ public class SofaStartupIsleAutoConfiguration {
     @ConditionalOnMissingBean
     public SofaModulePostProcessorShareManager sofaModulePostProcessorShareManager(ApplicationContext applicationContext) {
         return new SofaModulePostProcessorShareManager(
-                (AbstractApplicationContext) applicationContext);
+            (AbstractApplicationContext) applicationContext);
     }
 
     @Bean
@@ -108,9 +108,8 @@ public class SofaStartupIsleAutoConfiguration {
     @ConditionalOnMissingBean
     public static SofaRuntimeManager sofaRuntimeManager() {
         ClientFactoryInternal clientFactoryInternal = new ClientFactoryImpl();
-        SofaRuntimeManager sofaRuntimeManager = new StandardSofaRuntimeManager(
-                "IsleStageCostTest", Thread.currentThread().getContextClassLoader(),
-                clientFactoryInternal);
+        SofaRuntimeManager sofaRuntimeManager = new StandardSofaRuntimeManager("IsleStageCostTest",
+            Thread.currentThread().getContextClassLoader(), clientFactoryInternal);
         SofaFramework.registerSofaRuntimeManager(sofaRuntimeManager);
         return sofaRuntimeManager;
     }
