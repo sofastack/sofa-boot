@@ -21,7 +21,7 @@ import com.alipay.sofa.boot.startup.ModuleStat;
 import com.alipay.sofa.boot.startup.StageStat;
 import com.alipay.sofa.runtime.log.SofaLogger;
 import com.alipay.sofa.startup.StartupReporter;
-import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.SpringApplicationRunListener;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -89,31 +89,32 @@ public class StartupSpringApplicationRunListener implements SpringApplicationRun
 
     @Override
     public void started(ConfigurableApplicationContext context) {
+        StartupReporter startupReporter;
         try {
-            // refresh applicationRefreshStage
-            StartupReporter startupReporter = context.getBean(StartupReporter.class);
-            ContextRefreshStageStat applicationRefreshStage = (ContextRefreshStageStat) startupReporter
-                .getStageNyName(APPLICATION_CONTEXT_REFRESH_STAGE);
-            applicationRefreshStage
-                .setStageStartTime(applicationContextLoadStage.getStageEndTime());
-            applicationRefreshStage.setElapsedTime(applicationRefreshStage.getStageEndTime()
-                                                   - applicationRefreshStage.getStageStartTime());
-
-            // init rootModuleStat
-            ModuleStat rootModule = applicationRefreshStage.getModuleStats().get(0);
-            rootModule.setModuleStartTime(applicationRefreshStage.getStageStartTime());
-            rootModule.setElapsedTime(rootModule.getModuleEndTime()
-                                      - rootModule.getModuleStartTime());
-
-            // report all stage
-            startupReporter.addCommonStartupStat(jvmStartingStage);
-            startupReporter.addCommonStartupStat(environmentPrepareStage);
-            startupReporter.addCommonStartupStat(applicationContextPrepareStage);
-            startupReporter.addCommonStartupStat(applicationContextLoadStage);
-            startupReporter.applicationBootFinish();
-        } catch (BeansException exception) {
-            SofaLogger.error("Report boot stages error", exception);
+            startupReporter = context.getBean(StartupReporter.class);
+        } catch (NoSuchBeanDefinitionException e) {
+            // just happen in unit tests
+            SofaLogger.warn("Failed to found bean StartupReporter", e);
+            return;
         }
+        // refresh applicationRefreshStage
+        ContextRefreshStageStat applicationRefreshStage = (ContextRefreshStageStat) startupReporter
+            .getStageNyName(APPLICATION_CONTEXT_REFRESH_STAGE);
+        applicationRefreshStage.setStageStartTime(applicationContextLoadStage.getStageEndTime());
+        applicationRefreshStage.setElapsedTime(applicationRefreshStage.getStageEndTime()
+                                               - applicationRefreshStage.getStageStartTime());
+
+        // init rootModuleStat
+        ModuleStat rootModule = applicationRefreshStage.getModuleStats().get(0);
+        rootModule.setModuleStartTime(applicationRefreshStage.getStageStartTime());
+        rootModule.setElapsedTime(rootModule.getModuleEndTime() - rootModule.getModuleStartTime());
+
+        // report all stage
+        startupReporter.addCommonStartupStat(jvmStartingStage);
+        startupReporter.addCommonStartupStat(environmentPrepareStage);
+        startupReporter.addCommonStartupStat(applicationContextPrepareStage);
+        startupReporter.addCommonStartupStat(applicationContextLoadStage);
+        startupReporter.applicationBootFinish();
     }
 
     @Override
