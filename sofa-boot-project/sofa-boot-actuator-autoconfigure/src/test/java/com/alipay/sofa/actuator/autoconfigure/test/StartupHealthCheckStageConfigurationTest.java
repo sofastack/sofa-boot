@@ -42,8 +42,8 @@ public class StartupHealthCheckStageConfigurationTest {
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
                                                              .withConfiguration(AutoConfigurations
                                                                  .of(SofaStartupAutoConfiguration.class,
-                                                                     StartupHealthCheckStageConfiguration.class,
                                                                      SofaBootHealthCheckAutoConfiguration.class,
+                                                                     StartupHealthCheckStageConfiguration.class,
                                                                      TestHealthCheckConfiguration.class,
                                                                      SofaRuntimeAutoConfiguration.class));
 

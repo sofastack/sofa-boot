@@ -21,7 +21,7 @@ import com.alipay.sofa.isle.stage.ModelCreatingStage;
 import com.alipay.sofa.startup.StartupReporter;
 import org.springframework.context.support.AbstractApplicationContext;
 
-import static com.alipay.sofa.boot.startup.BootStageConstants.ISLE_MODULE_CREATING_STAGE;
+import static com.alipay.sofa.boot.startup.BootStageConstants.ISLE_MODEL_CREATING_STAGE;
 
 /**
  * @author huzijie
@@ -39,7 +39,7 @@ public class StartupModelCreatingStage extends ModelCreatingStage {
     @Override
     protected void doProcess() throws Exception {
         StageStat stageStat = new StageStat();
-        stageStat.setStageName(ISLE_MODULE_CREATING_STAGE);
+        stageStat.setStageName(ISLE_MODEL_CREATING_STAGE);
         stageStat.setStageStartTime(System.currentTimeMillis());
         try {
             super.doProcess();

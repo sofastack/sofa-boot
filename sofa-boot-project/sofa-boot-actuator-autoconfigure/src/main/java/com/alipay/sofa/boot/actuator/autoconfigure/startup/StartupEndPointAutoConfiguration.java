@@ -25,7 +25,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 /**
  * @author: Zhijie
@@ -34,7 +33,6 @@ import org.springframework.context.annotation.Import;
 @Configuration
 @ConditionalOnClass(StartupReporter.class)
 @AutoConfigureBefore(SofaStartupAutoConfiguration.class)
-@Import(StartupHealthCheckStageConfiguration.class)
 public class StartupEndPointAutoConfiguration {
 
     @Bean

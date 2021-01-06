@@ -58,12 +58,12 @@ public class BootStageConstants {
     /**
      * The running stage for ModuleCreatingStage
      */
-    public static final String ISLE_MODULE_CREATING_STAGE        = "IsleModuleCreatingStage";
+    public static final String ISLE_MODEL_CREATING_STAGE         = "ModelCreatingStage";
 
     /**
      * The running stage for SpringContextInstallStage
      */
-    public static final String ISLE_SPRING_CONTEXT_INSTALL_STAGE = "IsleSpringContextInstallStage";
+    public static final String ISLE_SPRING_CONTEXT_INSTALL_STAGE = "SpringContextInstallStage";
 
     /**
      * The running stage for ReadinessCheckListener

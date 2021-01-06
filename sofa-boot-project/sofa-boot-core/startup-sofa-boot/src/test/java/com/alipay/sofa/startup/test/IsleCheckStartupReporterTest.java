@@ -58,9 +58,9 @@ public class IsleCheckStartupReporterTest {
         Assert.assertNotNull(startupStaticsModel);
         Assert.assertEquals(7, startupStaticsModel.getStageStats().size());
 
-        StageStat isleModuleCreatingStage = startupReporter.getStageNyName(BootStageConstants.ISLE_MODULE_CREATING_STAGE);
-        Assert.assertNotNull(isleModuleCreatingStage);
-        Assert.assertTrue(isleModuleCreatingStage.getElapsedTime() > 0);
+        StageStat isleModelCreatingStage = startupReporter.getStageNyName(BootStageConstants.ISLE_MODEL_CREATING_STAGE);
+        Assert.assertNotNull(isleModelCreatingStage);
+        Assert.assertTrue(isleModelCreatingStage.getElapsedTime() > 0);
 
         StageStat isleSpringContextInstallStage = startupReporter.getStageNyName(BootStageConstants.ISLE_SPRING_CONTEXT_INSTALL_STAGE);
         Assert.assertNotNull(isleSpringContextInstallStage);
