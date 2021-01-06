@@ -25,9 +25,7 @@ import org.springframework.boot.actuate.autoconfigure.health.HealthEndpointPrope
 import org.springframework.boot.actuate.endpoint.web.WebEndpointResponse;
 import org.springframework.boot.actuate.health.HttpCodeStatusMapper;
 import org.springframework.boot.actuate.health.SimpleHttpCodeStatusMapper;
-import org.springframework.boot.actuate.health.SimpleStatusAggregator;
 import org.springframework.boot.actuate.health.Status;
-import org.springframework.boot.actuate.health.StatusAggregator;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -159,19 +157,10 @@ public class SofaBootHealthCheckAutoConfiguration {
             defaultMappings.put(Status.DOWN.getCode(),
                 WebEndpointResponse.STATUS_SERVICE_UNAVAILABLE);
             defaultMappings.put(Status.OUT_OF_SERVICE.getCode(),
-                WebEndpointResponse.STATUS_SERVICE_UNAVAILABLE);
+                WebEndpointResponse.STATUS_INTERNAL_SERVER_ERROR);
             defaultMappings.put(Status.UNKNOWN.getCode(),
                 WebEndpointResponse.STATUS_INTERNAL_SERVER_ERROR);
             return new SimpleHttpCodeStatusMapper(defaultMappings);
-        }
-
-        @Bean
-        @ConditionalOnMissingBean
-        @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
-        public StatusAggregator createStatusAggregator() {
-            return new SimpleStatusAggregator(Status.DOWN.getCode(),
-                Status.OUT_OF_SERVICE.getCode(), Status.UNKNOWN.getCode(), Status.UP.getCode());
-
         }
     }
 }

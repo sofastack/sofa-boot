@@ -59,7 +59,7 @@ public class HealthCheckManagementTest {
         ResponseEntity<String> responseEntity = highOrderApplicationListener
             .getLivenessCheckResponse();
         Assert.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());
-        Assert.assertTrue(responseEntity.getBody().contains("{\"status\":\"UNKNOWN\"}"));
+        Assert.assertTrue(responseEntity.getBody().contains("{\"status\":\"OUT_OF_SERVICE\"}"));
     }
 
     @Configuration

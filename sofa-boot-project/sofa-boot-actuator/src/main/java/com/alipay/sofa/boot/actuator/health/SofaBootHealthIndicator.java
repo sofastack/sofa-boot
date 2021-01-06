@@ -48,7 +48,7 @@ public class SofaBootHealthIndicator implements HealthIndicator, NonReadinessChe
     public Health health() {
         if (!readinessCheckListener.isReadinessCheckFinish()) {
             return Health
-                .unknown()
+                .outOfService()
                 .withDetail(SofaBootConstants.SOFABOOT_HEALTH_CHECK_NOT_READY_KEY,
                     SofaBootConstants.SOFABOOT_HEALTH_CHECK_NOT_READY_MSG).build();
         }
