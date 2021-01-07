@@ -27,9 +27,13 @@ import com.alipay.sofa.isle.stage.ModelCreatingStage;
 import com.alipay.sofa.startup.StartupReporter;
 import com.alipay.sofa.startup.stage.healthcheck.StartupReadinessCheckListener;
 import org.junit.Test;
+import org.springframework.boot.actuate.autoconfigure.health.HealthEndpointProperties;
+import org.springframework.boot.actuate.autoconfigure.health.HealthIndicatorProperties;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.FilteredClassLoader;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
+import org.springframework.context.annotation.Configuration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -70,5 +74,12 @@ public class StartupHealthCheckStageConfigurationTest {
                     assertThat(context).hasSingleBean(ReadinessCheckListener.class);
                     assertThat(context).doesNotHaveBean(StartupReadinessCheckListener.class);
                 }));
+    }
+
+    @Configuration
+    @EnableConfigurationProperties(value = { HealthIndicatorProperties.class,
+            HealthEndpointProperties.class })
+    static class TestHealthCheckConfiguration {
+
     }
 }
