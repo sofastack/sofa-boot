@@ -133,4 +133,9 @@ public class ExtensionFactoryBean extends AbstractExtFactoryBean {
     public String getPoint() {
         return point;
     }
+
+    @Override
+    public String toString() {
+        return "ExtensionPointTarget: " + bean;
+    }
 }

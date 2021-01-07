@@ -63,6 +63,7 @@ import java.util.Map;
 public class SofaBootHealthCheckAutoConfiguration {
 
     @Bean
+    @ConditionalOnMissingBean
     public ReadinessCheckListener readinessCheckListener() {
         return new ReadinessCheckListener();
     }

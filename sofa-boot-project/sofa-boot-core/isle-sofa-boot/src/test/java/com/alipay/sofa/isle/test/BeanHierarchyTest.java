@@ -17,6 +17,7 @@
 package com.alipay.sofa.isle.test;
 
 import com.alipay.sofa.boot.constant.SofaBootConstants;
+import com.alipay.sofa.boot.startup.BeanStat;
 import com.alipay.sofa.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.isle.deployment.DeploymentBuilder;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
@@ -66,11 +67,10 @@ public class BeanHierarchyTest {
         refreshApplication(application);
         BeanFactory beanFactory = ((ConfigurableApplicationContext) dd.getApplicationContext())
             .getBeanFactory();
-        for (BeanLoadCostBeanFactory.BeanNode bn : ((BeanLoadCostBeanFactory) beanFactory)
-            .getBeanLoadList()) {
+        for (BeanStat bn : ((BeanLoadCostBeanFactory) beanFactory).getBeanStats()) {
             if (bn.getBeanClassName().contains("testService")) {
                 Assert.assertEquals(3, bn.getChildren().size());
-                for (BeanLoadCostBeanFactory.BeanNode cbn : bn.getChildren()) {
+                for (BeanStat cbn : bn.getChildren()) {
                     if (cbn.getChildren().size() > 1) {
                         Assert.assertEquals(3, cbn.getChildren().size());
                     }

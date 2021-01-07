@@ -178,6 +178,10 @@ public abstract class AbstractContractFactoryBean implements InitializingBean, F
         this.interfaceType = interfaceType;
     }
 
+    public String getInterfaceType() {
+        return this.interfaceType;
+    }
+
     public void setElements(List<TypedStringValue> elements) {
         this.elements = elements;
     }

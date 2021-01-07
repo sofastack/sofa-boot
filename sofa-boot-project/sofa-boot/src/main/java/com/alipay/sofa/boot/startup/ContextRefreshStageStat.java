@@ -14,23 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.startup;
+package com.alipay.sofa.boot.startup;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * @author: Zhijie
- * @since: 2020/7/13
+ * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
+ * Created on 2020/11/23
  */
-@ConfigurationProperties(prefix = "com.alipay.sofa.boot.startup")
-public class SofaStartupProperties {
-    private long beanInitCostThreshold = 100;
+public class ContextRefreshStageStat extends StageStat {
+    private List<ModuleStat> moduleStats = new CopyOnWriteArrayList<ModuleStat>();
 
-    public long getBeanInitCostThreshold() {
-        return beanInitCostThreshold;
+    public void appendModuleStat(ModuleStat moduleStat) {
+        moduleStats.add(moduleStat);
     }
 
-    public void setBeanInitCostThreshold(long beanInitCostThreshold) {
-        this.beanInitCostThreshold = beanInitCostThreshold;
+    public List<ModuleStat> getModuleStats() {
+        return moduleStats;
+    }
+
+    public void setModuleStats(List<ModuleStat> moduleStats) {
+        this.moduleStats = moduleStats;
     }
 }

@@ -22,33 +22,42 @@ package com.alipay.sofa.boot.startup;
  * @author: Zhijie
  * @since: 2020/7/7
  */
-public class CommonStartupCost {
+public class StageStat {
+    private String stageName;
+    private long   stageStartTime;
+    private long   stageEndTime;
+    private long   elapsedTime;
 
-    private String name;
-    private long   beginTime = -1;
-    private long   endTime   = -1;
-
-    public String getName() {
-        return name;
+    public String getStageName() {
+        return stageName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setStageName(String stageName) {
+        this.stageName = stageName;
     }
 
-    public long getBeginTime() {
-        return beginTime;
+    public long getStageStartTime() {
+        return stageStartTime;
     }
 
-    public void setBeginTime(long beginTime) {
-        this.beginTime = beginTime;
+    public void setStageStartTime(long stageStartTime) {
+        this.stageStartTime = stageStartTime;
     }
 
-    public long getEndTime() {
-        return endTime;
+    public long getStageEndTime() {
+        return stageEndTime;
     }
 
-    public void setEndTime(long endTime) {
-        this.endTime = endTime;
+    public void setStageEndTime(long stageEndTime) {
+        this.stageEndTime = stageEndTime;
+        this.elapsedTime = this.stageEndTime - this.stageStartTime;
+    }
+
+    public long getElapsedTime() {
+        return elapsedTime;
+    }
+
+    public void setElapsedTime(long elapsedTime) {
+        this.elapsedTime = elapsedTime;
     }
 }

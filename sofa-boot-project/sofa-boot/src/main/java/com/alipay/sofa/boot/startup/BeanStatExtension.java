@@ -14,26 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.startup.test.spring;
+package com.alipay.sofa.boot.startup;
 
-import org.springframework.context.ApplicationContextInitializer;
-import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.beans.factory.support.RootBeanDefinition;
 
 /**
- * @author qilong.zql
- * @author 2.5.0
+ * @author huzijie
+ * @version BeanStatExtension.java, v 0.1 2021年01月04日 5:27 下午 huzijie Exp $
  */
-public class SampleSpringContextInitializer
-                                           implements
-                                           ApplicationContextInitializer<ConfigurableApplicationContext> {
-    public static final long INITIALIZE_COST_TIME = 1000L;
-
-    @Override
-    public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
-        try {
-            Thread.sleep(INITIALIZE_COST_TIME);
-        } catch (InterruptedException e) {
-            //
-        }
-    }
+public interface BeanStatExtension {
+    void customBeanStat(String beanName, RootBeanDefinition mbd, Object[] args, BeanStat bs);
 }
