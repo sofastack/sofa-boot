@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.runtime.component.impl;
 
-import com.alipay.sofa.boot.startup.StageStat;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.log.SofaLogger;
@@ -26,7 +25,11 @@ import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.ComponentManager;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -41,7 +44,6 @@ public class ComponentManagerImpl implements ComponentManager {
     protected ConcurrentMap<ComponentType, Map<ComponentName, ComponentInfo>> resolvedRegistry;
     /** client factory */
     private ClientFactoryInternal                                             clientFactoryInternal;
-    private List<StageStat>                                                   componentCostList = new ArrayList<>();
 
     public ComponentManagerImpl(ClientFactoryInternal clientFactoryInternal) {
         this.registry = new ConcurrentHashMap(16);
@@ -125,9 +127,6 @@ public class ComponentManagerImpl implements ComponentManager {
 
     private ComponentInfo doRegister(ComponentInfo ci) {
         ComponentName name = ci.getName();
-        StageStat stageStat = new StageStat();
-        stageStat.setStageName(name.getRawName());
-        stageStat.setStageStartTime(System.currentTimeMillis());
         if (isRegistered(name)) {
             SofaLogger.error("Component was already registered: {}", name);
             if (ci.canBeDuplicate()) {
@@ -164,8 +163,6 @@ public class ComponentManagerImpl implements ComponentManager {
             ci.exception(new Exception(t));
             SofaLogger.error("Failed to create the component {}", ci.getName(), t);
         }
-        stageStat.setStageEndTime(System.currentTimeMillis());
-        componentCostList.add(stageStat);
 
         return ci;
     }
@@ -213,11 +210,6 @@ public class ComponentManagerImpl implements ComponentManager {
                 SofaLogger.error("Failed to create the component {}.", componentInfo.getName(), t);
             }
         }
-    }
-
-    @Override
-    public List<StageStat> getComponentCostList() {
-        return componentCostList;
     }
 
     private void typeRegistry(ComponentInfo componentInfo) {
