@@ -31,6 +31,7 @@
         <sofa.lookout.version>1.5.2</sofa.lookout.version>
 
         <!--core-->
+        <sofa.registry.version>5.4.2</sofa.registry.version>
         <tracer.core.version>3.0.8</tracer.core.version>
         <rpc.core.version>5.7.6</rpc.core.version>
 
@@ -334,6 +335,12 @@
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>sofa-tracer-zipkin-plugin</artifactId>
                 <version>${tracer.core.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>registry-client-all</artifactId>
+                <version>${sofa.registry.version}</version>
             </dependency>
 
             <!--rpc-->
