@@ -14,31 +14,42 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.boot.actuator.autoconfigure.startup;
+package com.alipay.sofa.startup.test.configuration;
 
-import com.alipay.sofa.boot.actuator.startup.SofaBootStartupEndPoint;
-import com.alipay.sofa.boot.autoconfigure.startup.SofaStartupAutoConfiguration;
+import com.alipay.sofa.startup.StartupProperties;
 import com.alipay.sofa.startup.StartupReporter;
-import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnEnabledEndpoint;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import com.alipay.sofa.startup.stage.BeanCostBeanPostProcessor;
+import com.alipay.sofa.startup.test.beans.InitCostBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 
 /**
  * @author: Zhijie
- * @since: 2020/7/7
+ * @since: 2020/7/8
  */
 @Configuration
 @ConditionalOnClass(StartupReporter.class)
-@AutoConfigureBefore(SofaStartupAutoConfiguration.class)
-public class StartupEndPointAutoConfiguration {
+@EnableConfigurationProperties(StartupProperties.class)
+public class SofaStartupAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    @ConditionalOnEnabledEndpoint(endpoint = SofaBootStartupEndPoint.class)
-    public SofaBootStartupEndPoint sofaBootStartupEndPoint() {
-        return new SofaBootStartupEndPoint();
+    public StartupReporter sofaStartupReporter(Environment environment) {
+        return new StartupReporter(environment);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public BeanCostBeanPostProcessor beanCostBeanPostProcessor(StartupProperties startupProperties) {
+        return new BeanCostBeanPostProcessor(startupProperties.getBeanInitCostThreshold());
+    }
+
+    @Bean
+    public InitCostBean initCostBean() {
+        return new InitCostBean();
     }
 }

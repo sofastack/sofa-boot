@@ -14,12 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.startup.test.beans.facade;
+package com.alipay.sofa.startup.test.beans;
+
+import com.alipay.sofa.common.xmap.annotation.XNode;
+import com.alipay.sofa.common.xmap.annotation.XObject;
 
 /**
- * @author: Zhijie
- * @since: 2020/7/13
+ * @author huzijie
+ * @version ExtensionDescriptor.java, v 0.1 2021年01月05日 11:18 上午 huzijie Exp $
  */
-public interface SampleService {
-    String service();
+@XObject("word")
+public class ExtensionDescriptor {
+
+    @XNode("value")
+    private String value;
+
+    public String getValue() {
+        return value;
+    }
 }

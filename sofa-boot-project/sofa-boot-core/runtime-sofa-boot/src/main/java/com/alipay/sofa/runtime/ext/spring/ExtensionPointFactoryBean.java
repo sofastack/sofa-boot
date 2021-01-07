@@ -118,4 +118,9 @@ public class ExtensionPointFactoryBean extends AbstractExtFactoryBean {
     public void setContribution(String[] contribution) throws Exception {
         this.contribution = contribution;
     }
+
+    @Override
+    public String toString() {
+        return "ExtensionPointTarget: " + targetBeanName;
+    }
 }

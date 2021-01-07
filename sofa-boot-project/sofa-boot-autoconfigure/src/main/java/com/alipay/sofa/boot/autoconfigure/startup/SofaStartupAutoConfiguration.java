@@ -16,45 +16,34 @@
  */
 package com.alipay.sofa.boot.autoconfigure.startup;
 
-import com.alipay.sofa.startup.SofaStartupContext;
-import com.alipay.sofa.startup.SofaStartupProperties;
-import com.alipay.sofa.startup.SofaStartupReporter;
-import com.alipay.sofa.startup.spring.SpringContextAwarer;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import com.alipay.sofa.startup.StartupProperties;
+import com.alipay.sofa.startup.StartupReporter;
+import com.alipay.sofa.startup.stage.BeanCostBeanPostProcessor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.web.servlet.ServletWebServerFactoryAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.springframework.core.env.Environment;
 
 /**
  * @author: Zhijie
  * @since: 2020/7/8
  */
 @Configuration
-@AutoConfigureBefore(ServletWebServerFactoryAutoConfiguration.class)
-@ConditionalOnClass(SofaStartupContext.class)
-@EnableConfigurationProperties(SofaStartupProperties.class)
-@Import({ SofaStartupConfiguration.StartupTomcat.class,
-         SofaStartupConfiguration.StartupJetty.class,
-         SofaStartupConfiguration.StartupUndertow.class,
-         SofaStartupConfiguration.SpringContextAware.class,
-         SofaStartupConfiguration.IsleSpringContextAware.class,
-         SofaStartupConfiguration.InstallStage.class })
+@ConditionalOnClass(StartupReporter.class)
+@EnableConfigurationProperties(StartupProperties.class)
 public class SofaStartupAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public SofaStartupContext sofaStartupContext(SpringContextAwarer springContextAwarer,
-                                                 SofaStartupProperties sofaStartupProperties) {
-        return new SofaStartupContext(springContextAwarer, sofaStartupProperties);
+    public StartupReporter sofaStartupReporter(Environment environment) {
+        return new StartupReporter(environment);
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public SofaStartupReporter sofaStartupReporter(SofaStartupContext sofaStartupContext) {
-        return new SofaStartupReporter(sofaStartupContext);
+    public BeanCostBeanPostProcessor beanCostBeanPostProcessor(StartupProperties startupProperties) {
+        return new BeanCostBeanPostProcessor(startupProperties.getBeanInitCostThreshold());
     }
 }

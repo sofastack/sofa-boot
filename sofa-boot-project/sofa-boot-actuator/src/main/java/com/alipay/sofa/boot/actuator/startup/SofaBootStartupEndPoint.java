@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.boot.actuator.startup;
 
-import com.alipay.sofa.startup.SofaStartupReporter;
+import com.alipay.sofa.startup.StartupReporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
 import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
@@ -31,10 +31,10 @@ import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
 public class SofaBootStartupEndPoint {
 
     @Autowired
-    SofaStartupReporter sofaStartupReporter;
+    StartupReporter startupReporter;
 
     @ReadOperation
-    public SofaStartupReporter.SofaStartupCostModel startup() {
-        return sofaStartupReporter.report();
+    public StartupReporter.StartupStaticsModel startup() {
+        return startupReporter.report();
     }
 }

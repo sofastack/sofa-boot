@@ -16,29 +16,30 @@
  */
 package com.alipay.sofa.boot.actuator.autoconfigure.startup;
 
-import com.alipay.sofa.boot.actuator.startup.SofaBootStartupEndPoint;
-import com.alipay.sofa.boot.autoconfigure.startup.SofaStartupAutoConfiguration;
+import com.alipay.sofa.boot.actuator.autoconfigure.health.SofaBootHealthCheckAutoConfiguration;
+import com.alipay.sofa.healthcheck.ReadinessCheckListener;
+import com.alipay.sofa.healthcheck.core.HealthChecker;
 import com.alipay.sofa.startup.StartupReporter;
-import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnEnabledEndpoint;
+import com.alipay.sofa.startup.stage.healthcheck.StartupReadinessCheckListener;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.SearchStrategy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @author: Zhijie
- * @since: 2020/7/7
+ * @author huzijie
+ * @version StartupHealthCheckStageConfiguration.java, v 0.1 2020年12月31日 5:09 下午 huzijie Exp $
  */
 @Configuration
-@ConditionalOnClass(StartupReporter.class)
-@AutoConfigureBefore(SofaStartupAutoConfiguration.class)
-public class StartupEndPointAutoConfiguration {
+@AutoConfigureBefore(SofaBootHealthCheckAutoConfiguration.class)
+@ConditionalOnClass({ HealthChecker.class, StartupReporter.class })
+public class StartupHealthCheckStageConfiguration {
 
     @Bean
-    @ConditionalOnMissingBean
-    @ConditionalOnEnabledEndpoint(endpoint = SofaBootStartupEndPoint.class)
-    public SofaBootStartupEndPoint sofaBootStartupEndPoint() {
-        return new SofaBootStartupEndPoint();
+    @ConditionalOnMissingBean(value = ReadinessCheckListener.class, search = SearchStrategy.CURRENT)
+    public StartupReadinessCheckListener startupReadinessCheckListener(StartupReporter startupReporter) {
+        return new StartupReadinessCheckListener(startupReporter);
     }
 }

@@ -9,4 +9,5 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.alipay.sofa.boot.autoconfigure.tracer.ZipkinSofaTracerAutoConfiguration,\
   com.alipay.sofa.boot.autoconfigure.tracer.SofaTracerRestTemplateAutoConfiguration,\
   com.alipay.sofa.boot.autoconfigure.tracer.TracerAnnotationAutoConfiguration,\
-  com.alipay.sofa.boot.autoconfigure.startup.SofaStartupAutoConfiguration
+  com.alipay.sofa.boot.autoconfigure.startup.SofaStartupAutoConfiguration,\
+  com.alipay.sofa.boot.autoconfigure.startup.SofaStartupIsleAutoConfiguration

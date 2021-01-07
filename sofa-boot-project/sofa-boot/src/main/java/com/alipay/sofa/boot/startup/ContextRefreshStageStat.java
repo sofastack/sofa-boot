@@ -14,12 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.startup.test.beans.facade;
+package com.alipay.sofa.boot.startup;
+
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * @author: Zhijie
- * @since: 2020/7/13
+ * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
+ * Created on 2020/11/23
  */
-public interface SampleService {
-    String service();
+public class ContextRefreshStageStat extends StageStat {
+    private List<ModuleStat> moduleStats = new CopyOnWriteArrayList<ModuleStat>();
+
+    public void appendModuleStat(ModuleStat moduleStat) {
+        moduleStats.add(moduleStat);
+    }
+
+    public List<ModuleStat> getModuleStats() {
+        return moduleStats;
+    }
+
+    public void setModuleStats(List<ModuleStat> moduleStats) {
+        this.moduleStats = moduleStats;
+    }
 }

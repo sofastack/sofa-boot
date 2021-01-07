@@ -51,7 +51,7 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
 
     private final HealthAggregator               healthAggregator           = new OrderedHealthAggregator();
 
-    private ApplicationContext                   applicationContext;
+    protected ApplicationContext                 applicationContext;
 
     @Autowired
     private Environment                          environment;

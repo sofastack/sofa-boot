@@ -277,8 +277,8 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
         }));
     }
 
-    private void doRefreshSpringContext(DeploymentDescriptor deployment,
-                                        ApplicationRuntimeModel application) {
+    protected void doRefreshSpringContext(DeploymentDescriptor deployment,
+                                          ApplicationRuntimeModel application) {
         SofaLogger.info("Begin refresh Spring Application Context of module {} of application {}.",
             deployment.getName(), application.getAppName());
         ConfigurableApplicationContext ctx = (ConfigurableApplicationContext) deployment
