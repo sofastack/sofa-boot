@@ -25,15 +25,13 @@ import com.alipay.sofa.runtime.api.client.param.BindingParam;
 import com.alipay.sofa.runtime.api.client.param.ServiceParam;
 import com.alipay.sofa.runtime.api.component.Property;
 import com.alipay.sofa.runtime.model.InterfaceMode;
-import com.alipay.sofa.runtime.service.binding.JvmBinding;
 import com.alipay.sofa.runtime.service.component.Service;
 import com.alipay.sofa.runtime.service.component.ServiceComponent;
 import com.alipay.sofa.runtime.service.component.impl.ServiceImpl;
+import com.alipay.sofa.runtime.service.helper.ServiceRegisterHelper;
 import com.alipay.sofa.runtime.spi.binding.Binding;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
-import com.alipay.sofa.runtime.spi.component.DefaultImplementation;
-import com.alipay.sofa.runtime.spi.component.Implementation;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
@@ -59,9 +57,6 @@ public class ServiceClientImpl implements ServiceClient {
 
     @SuppressWarnings("unchecked")
     public void service(ServiceParam serviceParam) {
-        Implementation implementation = new DefaultImplementation();
-        implementation.setTarget(serviceParam.getInstance());
-
         if (serviceParam.getInterfaceType() == null) {
             throw new ServiceRuntimeException(
                 "Interface type is null. Interface type is required while publish a service.");
@@ -86,21 +81,8 @@ public class ServiceClientImpl implements ServiceClient {
             service.addBinding(binding);
         }
 
-        boolean hasJvmBinding = false;
-        for (Binding binding : service.getBindings()) {
-            if (binding.getBindingType().equals(JvmBinding.JVM_BINDING_TYPE)) {
-                hasJvmBinding = true;
-                break;
-            }
-        }
-
-        if (!hasJvmBinding) {
-            service.addBinding(new JvmBinding());
-        }
-
-        ComponentInfo componentInfo = new ServiceComponent(implementation, service,
+        ServiceRegisterHelper.registerService(service, serviceParam.getInstance(),
             bindingAdapterFactory, sofaRuntimeContext);
-        sofaRuntimeContext.getComponentManager().register(componentInfo);
     }
 
     @Override

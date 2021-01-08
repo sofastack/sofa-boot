@@ -16,10 +16,12 @@
  */
 package com.alipay.sofa.runtime.service.helper;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.ServiceLoader;
 
-import com.alipay.sofa.runtime.SofaRuntimeProperties;
-import com.alipay.sofa.runtime.service.binding.JvmBinding;
+import com.alipay.sofa.runtime.api.ReferenceRegisterHook;
 import com.alipay.sofa.runtime.service.component.Reference;
 import com.alipay.sofa.runtime.service.component.ReferenceComponent;
 import com.alipay.sofa.runtime.spi.binding.Binding;
@@ -30,21 +32,33 @@ import com.alipay.sofa.runtime.spi.component.DefaultImplementation;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 
 /**
- * reference register helper
+ * Reference register helper.
+ * Before referencing, invoke <code>ReferenceRegisterHook.before</code> implementations via JAVA SPI.
+ * After referencing, invoke <code>ReferenceRegisterHook.after</code> implementations via JAVA SPI.
  *
  * @author xuanbei 18/3/1
  */
 public class ReferenceRegisterHelper {
+    private final static List<ReferenceRegisterHook> referenceRegisterHooks = new ArrayList<>();
+
+    static {
+        ServiceLoader<ReferenceRegisterHook> serviceLoader = ServiceLoader.load(ReferenceRegisterHook.class);
+        for (ReferenceRegisterHook referenceRegisterHook: serviceLoader) {
+            referenceRegisterHooks.add(referenceRegisterHook);
+        }
+
+        // Sort in ascending order
+        referenceRegisterHooks.sort((o1, o2) -> {
+            return Integer.compare(o1.order(), o2.order());
+        });
+    }
+
     public static Object registerReference(Reference reference,
                                            BindingAdapterFactory bindingAdapterFactory,
                                            SofaRuntimeContext sofaRuntimeContext) {
-        Binding binding = (Binding) reference.getBindings().toArray()[0];
-
-        if (!binding.getBindingType().equals(JvmBinding.JVM_BINDING_TYPE)
-            && !SofaRuntimeProperties.isDisableJvmFirst(sofaRuntimeContext)
-            && reference.isJvmFirst()) {
-            // as rpc invocation would be serialized, so here would Not ignore serialized
-            reference.addBinding(new JvmBinding());
+        // Invoke reference registering before hook
+        for (ReferenceRegisterHook referenceRegisterHook: referenceRegisterHooks) {
+            referenceRegisterHook.before(reference, sofaRuntimeContext);
         }
 
         ComponentManager componentManager = sofaRuntimeContext.getComponentManager();
@@ -57,8 +71,13 @@ public class ReferenceRegisterHelper {
         }
 
         ComponentInfo componentInfo = componentManager.registerAndGet(referenceComponent);
-        return componentInfo.getImplementation().getTarget();
+        Object rtn = componentInfo.getImplementation().getTarget();
 
+        // Invoke reference registering after hook
+        for (ReferenceRegisterHook referenceRegisterHook: referenceRegisterHooks) {
+            referenceRegisterHook.after(rtn);
+        }
+        return rtn;
     }
 
     public static int generateBindingHashCode(Reference reference) {

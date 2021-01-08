@@ -19,15 +19,10 @@ package com.alipay.sofa.runtime.spring.factory;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.annotation.SofaService;
 import com.alipay.sofa.runtime.model.InterfaceMode;
-import com.alipay.sofa.runtime.service.binding.JvmBinding;
-import com.alipay.sofa.runtime.service.binding.JvmBindingParam;
 import com.alipay.sofa.runtime.service.component.Service;
-import com.alipay.sofa.runtime.service.component.ServiceComponent;
 import com.alipay.sofa.runtime.service.component.impl.ServiceImpl;
+import com.alipay.sofa.runtime.service.helper.ServiceRegisterHelper;
 import com.alipay.sofa.runtime.spi.binding.Binding;
-import com.alipay.sofa.runtime.spi.component.ComponentInfo;
-import com.alipay.sofa.runtime.spi.component.DefaultImplementation;
-import com.alipay.sofa.runtime.spi.component.Implementation;
 import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
 
 /**
@@ -53,23 +48,12 @@ public class ServiceFactoryBean extends AbstractContractFactoryBean {
                         + " can not be registered using xml. Please check it.");
         }
 
-        Implementation implementation = new DefaultImplementation();
-        implementation.setTarget(ref);
         service = buildService();
-
-        // default add jvm binding and service jvm binding should set serialize as true
-        if (bindings.size() == 0) {
-            JvmBindingParam jvmBindingParam = new JvmBindingParam().setSerialize(true);
-            bindings.add(new JvmBinding().setJvmBindingParam(jvmBindingParam));
-        }
-
         for (Binding binding : bindings) {
             service.addBinding(binding);
         }
-
-        ComponentInfo componentInfo = new ServiceComponent(implementation, service,
-            bindingAdapterFactory, sofaRuntimeContext);
-        sofaRuntimeContext.getComponentManager().register(componentInfo);
+        ServiceRegisterHelper.registerService(service, ref, bindingAdapterFactory,
+            sofaRuntimeContext);
     }
 
     private boolean hasSofaServiceAnnotation() {
