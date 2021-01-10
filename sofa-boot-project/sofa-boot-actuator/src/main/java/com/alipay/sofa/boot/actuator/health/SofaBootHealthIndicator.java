@@ -45,9 +45,26 @@ public class SofaBootHealthIndicator implements HealthIndicator, NonReadinessChe
 
     @Autowired
     private ReadinessCheckListener readinessCheckListener;
+    
+    private static final Integer MAXPOLLINGNUM = 10;
+    
+    private static final Integer SLEEPTIME = 1000;
 
     @Override
     public Health health() {
+        int i = 0;
+		while (!readinessCheckListener.isReadinessCheckFinish()){
+			try {
+				Thread.sleep(SLEEPTIME);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			if (i>MAXPOLLINGNUM){
+				break;
+			}
+			i++;
+        }
+    
         Assert.isTrue(readinessCheckListener.isReadinessCheckFinish(),
             SofaBootConstants.SOFABOOT_HEALTH_CHECK_NOT_READY_MSG);
 
