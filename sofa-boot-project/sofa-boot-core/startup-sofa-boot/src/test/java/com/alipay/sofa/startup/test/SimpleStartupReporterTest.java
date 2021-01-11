@@ -18,7 +18,7 @@ package com.alipay.sofa.startup.test;
 
 import com.alipay.sofa.boot.startup.*;
 import com.alipay.sofa.startup.StartupReporter;
-import com.alipay.sofa.startup.stage.StartupContextRefreshedListener;
+import com.alipay.sofa.startup.stage.StartupContextLifecycle;
 import com.alipay.sofa.startup.test.beans.InitCostBean;
 import com.alipay.sofa.startup.test.configuration.SofaStartupAutoConfiguration;
 import com.alipay.sofa.startup.test.spring.StartupApplication;
@@ -82,7 +82,7 @@ public class SimpleStartupReporterTest {
         Assert.assertEquals(1, ((ContextRefreshStageStat) applicationContextRefreshStage).getModuleStats().size());
         ModuleStat moduleStat = ((ContextRefreshStageStat) applicationContextRefreshStage).getModuleStats().get(0);
         Assert.assertNotNull(moduleStat);
-        Assert.assertEquals(StartupContextRefreshedListener.ROOT_MODULE_NAME, moduleStat.getModuleName());
+        Assert.assertEquals(StartupContextLifecycle.ROOT_MODULE_NAME, moduleStat.getModuleName());
         Assert.assertTrue(moduleStat.getModuleEndTime() > moduleStat.getModuleStartTime());
         Assert.assertEquals(moduleStat.getElapsedTime(), moduleStat.getModuleEndTime() - moduleStat.getModuleStartTime());
 

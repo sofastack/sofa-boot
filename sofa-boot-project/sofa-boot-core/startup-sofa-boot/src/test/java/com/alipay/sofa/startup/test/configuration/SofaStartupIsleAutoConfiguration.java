@@ -21,7 +21,7 @@ import com.alipay.sofa.isle.profile.DefaultSofaModuleProfileChecker;
 import com.alipay.sofa.isle.profile.SofaModuleProfileChecker;
 import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
 import com.alipay.sofa.isle.spring.listener.SofaModuleBeanFactoryPostProcessor;
-import com.alipay.sofa.isle.spring.listener.SofaModuleContextRefreshedListener;
+import com.alipay.sofa.isle.spring.listener.SofaModuleContextLifecycle;
 import com.alipay.sofa.isle.spring.share.SofaModulePostProcessorShareManager;
 import com.alipay.sofa.isle.stage.*;
 import com.alipay.sofa.runtime.SofaFramework;
@@ -69,8 +69,8 @@ public class SofaStartupIsleAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public SofaModuleContextRefreshedListener sofaModuleContextRefreshedListener() {
-        return new SofaModuleContextRefreshedListener();
+    public SofaModuleContextLifecycle sofaModuleContextRefreshedListener() {
+        return new SofaModuleContextLifecycle();
     }
 
     @Bean
