@@ -34,7 +34,6 @@ public interface ReferenceRegisterHook {
      */
     void before(Reference reference, SofaRuntimeContext sofaRuntimeContext);
 
-
     /**
      * Hook method invoked by SOFA after the actually reference registering.
      *
