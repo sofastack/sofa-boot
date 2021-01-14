@@ -64,8 +64,7 @@ public class ServiceFactoryBean extends AbstractContractFactoryBean {
         }
 
         String annotationUniqueId = sofaService.uniqueId();
-        if ((uniqueId == null || uniqueId.isEmpty())
-            && (annotationUniqueId == null || annotationUniqueId.isEmpty())) {
+        if ((uniqueId == null || uniqueId.isEmpty()) && annotationUniqueId.isEmpty()) {
             return true;
         }
         return annotationUniqueId.equals(uniqueId);
