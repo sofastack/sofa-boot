@@ -20,13 +20,30 @@ import com.alipay.sofa.runtime.service.component.Reference;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 
 /**
+ * SOFA Reference registering hook.
+ *
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 2021/1/8
  */
 public interface ReferenceRegisterHook {
+    /**
+     * Hook method invoked by SOFA before the actually reference registering.
+     *
+     * @param reference the reference contract to register
+     * @param sofaRuntimeContext current SOFA Runtime
+     */
     void before(Reference reference, SofaRuntimeContext sofaRuntimeContext);
 
+
+    /**
+     * Hook method invoked by SOFA after the actually reference registering.
+     *
+     * @param target the result target returned by SOFA Runtime
+     */
     void after(Object target);
 
+    /**
+     * The order of this hook.
+     */
     int order();
 }

@@ -22,6 +22,9 @@ import com.alipay.sofa.runtime.service.component.Service;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 
 /**
+ * For each service contract, add a JVM binding if it doesn't have any binding.
+ * The hook's order has value of minimum integer, the first to invoke.
+ *
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 2021/1/8
  */

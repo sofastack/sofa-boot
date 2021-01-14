@@ -24,6 +24,9 @@ import com.alipay.sofa.runtime.spi.binding.Binding;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 
 /**
+ * For each normal RPC service contract, a JVM binding is added automatically by default.
+ * This hook's order has value of minimum integer, the first to invoke.
+ *
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 2021/1/8
  */
