@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>sofa-boot-plugins</artifactId>
+        <groupId>com.alipay.sofa</groupId>
+        <version>3.4.7-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <properties>
+        <main.user.dir>${basedir}/../../..</main.user.dir>
+    </properties>
+    <artifactId>runtime-serverless-sofa-boot-plugin</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>runtime-serverless-sofa-boot-starter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>logback-classic</artifactId>
+                    <groupId>ch.qos.logback</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+
+
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>sofa-ark-spi</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>sofa-ark-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>sofa-ark-common</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib-nodep</artifactId>
+            <version>2.1_3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+            <version>1.6.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
+            <version>2.3.2</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>sofa-ark-plugin-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>default-cli</id>
+                        <goals>
+                            <goal>ark-plugin</goal>
+                        </goals>
+
+                        <configuration>
+                            <priority>1500</priority>
+                            <activator>com.alipay.sofa.serverless.runtime.ark.activator.ServerlessRuntimeActivator</activator>
+
+                            <exported>
+                                <!-- 配置包级别导出的类 -->
+                                <packages>
+                                    <!-- spring 相关的必须导出 -->
+                                    <package>org.springframework.*</package>
+                                    <!-- validation -->
+                                    <package>javax.validation.*</package>
+                                    <!-- servlet -->
+                                    <package>javax.servlet.*</package>
+                                    <!-- script -->
+                                    <package>javax.script.*</package>
+                                    <!-- aop -->
+                                    <package>org.aopalliance.*</package>
+                                    <!-- tomcat -->
+                                    <package>org.apache.*</package>
+                                    <!-- sofa and rpc -->
+                                    <package>com.alipay.sofa.*</package>
+
+                                    <package>com.alibaba.dubbo.*</package>
+
+                                    <package>com.google.gson.*</package>
+                                    <package>com.google.protobuf.*</package>
+                                    <package>com.google.common.*</package>
+                                    <package>com.google.code.*</package>
+
+                                    <!-- mybatis -->
+                                    <package>org.mybatis.spring.boot.autoconfigure.*</package>
+                                    <package>org.mybatis.spring.*</package>
+                                    <package>com.ibatis.*</package>
+
+                                    <!-- quartz -->
+                                    <package>org.quartz.*</package>
+                                    <!-- hessian -->
+                                    <package>com.caucho.hessian.*</package>
+                                    <!-- aspect -->
+                                    <package>org.aspectj.*</package>
+                                    <!-- cglib -->
+                                    <package>net.sf.cglib.*</package>
+                                    <package>org.slf4j.*</package>
+                                    <package>org.mvel2.*</package>
+                                    <package>org.dom4j.*</package>
+                                    <package>javax.el.*</package>
+                                    <package>net.sf.acegisecurity.*</package>
+                                    <package>org.junit.*</package>
+                                    <package>io.grpc.*</package>
+                                </packages>
+
+                                <!-- 配置 ark plugin 对外导出的资源 -->
+                                <resources>
+                                    <resource>META-INF/spring.*</resource>
+                                    <resource>META-INF/services/*</resource>
+                                    <resource>META-INF/com/alipay/boot/middleware/service/config/*</resource>
+                                    <resource>org/springframework/boot/logging/*</resource>
+                                    <resource>*.xsd</resource>
+                                </resources>
+
+                            </exported>
+
+                            <excludes>
+                                <exclude>com.alipay.sofa:serverless-runtime-sofa-boot-plugin</exclude>
+                            </excludes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+
+</project>

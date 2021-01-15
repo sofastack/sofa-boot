@@ -17,6 +17,7 @@
         <module>runtime-sofa-boot-plugin</module>
         <module>rpc-sofa-boot-plugin</module>
         <module>tracer-sofa-boot-plugin</module>
+        <module>runtime-serverless-sofa-boot-plugin</module>
     </modules>
 
 </project>

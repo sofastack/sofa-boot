@@ -27,7 +27,7 @@
         <sofa.boot.version>3.4.7-SNAPSHOT</sofa.boot.version>
 
         <!--starter-->
-        <sofa.ark.version>1.1.5</sofa.ark.version>
+        <sofa.ark.version>1.1.6</sofa.ark.version>
         <sofa.lookout.version>1.5.2</sofa.lookout.version>
 
         <!--core-->
@@ -237,6 +237,12 @@
             </dependency>
 
             <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>runtime-serverless-sofa-boot-starter</artifactId>
+                <version>${sofa.boot.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>com.alipay.sofa.lookout</groupId>
                 <artifactId>lookout-sofa-boot-starter</artifactId>
                 <version>${sofa.lookout.version}</version>
@@ -249,6 +255,12 @@
             <!-- starter management end -->
 
             <!-- Ark Plugin Management begin -->
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>runtime-serverless-sofa-boot-plugin</artifactId>
+                <version>${sofa.boot.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>runtime-sofa-boot-plugin</artifactId>

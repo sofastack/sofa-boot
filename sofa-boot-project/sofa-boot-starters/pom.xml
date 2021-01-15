@@ -23,6 +23,7 @@
         <module>tracer-sofa-boot-starter</module>
         <module>log-sofa-boot-starter</module>
         <module>startup-sofa-boot-starter</module>
+        <module>runtime-serverless-sofa-boot-starter</module>
     </modules>
 
 </project>

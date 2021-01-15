@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Appenders>
+        <RollingFile name="ERROR-APPENDER" fileName="${ctx:logging.path}/serverless-runtime/common-error.log"
+                     filePattern="${ctx:logging.path}/serverless-runtime/common-error.log.%d{yyyy-MM-dd}"
+                     append="true">
+            <PatternLayout
+                    pattern="%d [%X{traceId} %X{rpcId} - %X{loginUserEmail}/%X{loginUserID}/%X{remoteAddr}/%X{clientId} - %X{requestURIWithQueryString}] %-5p %c{2} - %m%n%throwable"
+                    charset="UTF-8"/>
+            <TimeBasedTriggeringPolicy/>
+            <DefaultRolloverStrategy/>
+            <ThresholdFilter level="ERROR"/>
+        </RollingFile>
+
+        <RollingFile name="APP-DEFAULT-APPENDER" fileName="${ctx:logging.path}/serverless-runtime/common-default.log"
+                     filePattern="${ctx:logging.path}/serverless-runtime/common-default.log.%d{yyyy-MM-dd}"
+                     append="true">
+            <PatternLayout
+                    pattern="%d [%X{traceId} %X{rpcId} - %X{loginUserEmail}/%X{loginUserID}/%X{remoteAddr}/%X{clientId} - %X{requestURIWithQueryString}] %-5p %c{2} - %m%n%throwable"
+                    charset="UTF-8"/>
+            <TimeBasedTriggeringPolicy/>
+            <DefaultRolloverStrategy/>
+        </RollingFile>
+
+        <RollingFile name="NO-USAGE-APPENDER" fileName="${ctx:logging.path}/serverless-runtime/no-usage.log"
+                     filePattern="${ctx:logging.path}/no-usage/no-usage.log.%d{yyyy-MM-dd}"
+                     append="true">
+            <PatternLayout
+                    pattern="%d [%X{traceId} %X{rpcId} - %X{loginUserEmail}/%X{loginUserID}/%X{remoteAddr}/%X{clientId} - %X{requestURIWithQueryString}] %-5p %c{2} - %m%n%throwable"
+                    charset="UTF-8"/>
+            <TimeBasedTriggeringPolicy/>
+            <DefaultRolloverStrategy/>
+        </RollingFile>
+
+        <RollingFile name="SPRING-APPENDER" fileName="${ctx:logging.path}/spring/spring.log"
+                     filePattern="${ctx:logging.path}/spring/spring.log.%d{yyyy-MM-dd}"
+                     append="true">
+            <PatternLayout
+                    pattern="%d [%X{traceId} %X{rpcId} - %X{loginUserEmail}/%X{loginUserID}/%X{remoteAddr}/%X{clientId} - %X{requestURIWithQueryString}] %-5p %c{2} - %m%n%throwable"
+                    charset="UTF-8"/>
+            <TimeBasedTriggeringPolicy/>
+            <DefaultRolloverStrategy/>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <AsyncLogger name="org.springframework" additivity="false" level="info">
+            <AppenderRef ref="ERROR-APPENDER"/>
+            <AppenderRef ref="SPRING-APPENDER"/>
+        </AsyncLogger>
+
+        <AsyncRoot level="info">
+            <AppenderRef ref="APP-DEFAULT-APPENDER"/>
+            <AppenderRef ref="ERROR-APPENDER"/>
+        </AsyncRoot>
+    </Loggers>
+</Configuration>
