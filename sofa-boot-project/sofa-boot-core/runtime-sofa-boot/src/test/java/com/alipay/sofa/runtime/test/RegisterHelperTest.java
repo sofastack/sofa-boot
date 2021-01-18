@@ -43,6 +43,9 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.w3c.dom.Element;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 /**
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 2021/1/14
@@ -109,13 +112,8 @@ public class RegisterHelperTest {
         });
         ReferenceRegisterHelper.registerReference(reference, null, sofaRuntimeContext);
         Assert.assertEquals(2, reference.getBindings().size());
-        boolean containsJvmBinding = false;
-        for (Binding binding: reference.getBindings()) {
-            if (JvmBinding.JVM_BINDING_TYPE.equals(binding.getBindingType())) {
-                containsJvmBinding = true;
-                break;
-            }
-        }
-        Assert.assertTrue(containsJvmBinding);
+
+        Set<BindingType> bindingTypes = reference.getBindings().stream().map(Binding::getBindingType).collect(Collectors.toSet());
+        Assert.assertTrue(bindingTypes.contains(JvmBinding.JVM_BINDING_TYPE));
     }
 }
