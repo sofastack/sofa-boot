@@ -24,5 +24,5 @@ import com.alipay.sofa.rpc.config.ConsumerConfig;
  */
 public interface ConsumerConfigProcessor {
 
-    void processorConsumer(ConsumerConfig consumerConfig);
+    void processorConsumer(ConsumerConfig<?> consumerConfig);
 }

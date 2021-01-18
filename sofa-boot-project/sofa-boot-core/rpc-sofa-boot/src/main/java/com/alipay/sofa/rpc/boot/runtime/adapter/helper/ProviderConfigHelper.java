@@ -19,6 +19,7 @@ package com.alipay.sofa.rpc.boot.runtime.adapter.helper;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.alipay.sofa.rpc.boot.runtime.util.ConfigUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.CollectionUtils;
@@ -36,7 +37,6 @@ import com.alipay.sofa.rpc.config.ApplicationConfig;
 import com.alipay.sofa.rpc.config.ConfigUniqueNameGenerator;
 import com.alipay.sofa.rpc.config.MethodConfig;
 import com.alipay.sofa.rpc.config.ProviderConfig;
-import com.alipay.sofa.rpc.config.RegistryConfig;
 import com.alipay.sofa.rpc.config.ServerConfig;
 import com.alipay.sofa.rpc.config.UserThreadPoolManager;
 import com.alipay.sofa.rpc.filter.Filter;
@@ -65,13 +65,14 @@ public class ProviderConfigHelper {
      * @return the ProviderConfig
      * @throws SofaBootRpcRuntimeException
      */
-    public ProviderConfig getProviderConfig(Contract contract, RpcBinding binding, Object target)
-                                                                                                 throws SofaBootRpcRuntimeException {
+    @SuppressWarnings("unchecked")
+    public <T> ProviderConfig<T> getProviderConfig(Contract contract, RpcBinding binding,
+                                                   Object target)
+                                                                 throws SofaBootRpcRuntimeException {
         RpcBindingParam param = binding.getRpcBindingParam();
 
         String id = binding.getBeanId();
         String interfaceId = contract.getInterfaceType().getName();
-        Object ref = target;
         String uniqueId = contract.getUniqueId();
         Integer timeout = param.getTimeout();
         Integer weight = param.getWeight();
@@ -85,7 +86,7 @@ public class ProviderConfigHelper {
         ServerConfig serverConfig = serverConfigContainer.getServerConfig(binding.getBindingType()
             .getType());
 
-        ProviderConfig providerConfig = new ProviderConfig();
+        ProviderConfig<T> providerConfig = new ProviderConfig<>();
         if (StringUtils.hasText(appName)) {
             providerConfig.setApplication(new ApplicationConfig().setAppName(appName));
         }
@@ -98,8 +99,9 @@ public class ProviderConfigHelper {
         if (contract.getInterfaceType() != null) {
             providerConfig.setProxyClass(contract.getInterfaceType());
         }
-        if (ref != null) {
-            providerConfig.setRef(ref);
+
+        if (target != null) {
+            providerConfig.setRef((T) target);
         }
         if (StringUtils.hasText(uniqueId)) {
             providerConfig.setUniqueId(uniqueId);
@@ -145,36 +147,17 @@ public class ProviderConfigHelper {
             providerConfig.setParameters(param.getParameters());
         }
 
-        if (param.getRegistrys() != null && param.getRegistrys().size() > 0) {
-            List<String> registrys = param.getRegistrys();
-            for (String registryAlias : registrys) {
-                RegistryConfig registryConfig = registryConfigContainer
-                    .getRegistryConfig(registryAlias);
-                providerConfig.setRegistry(registryConfig);
-            }
-        } else if (registryConfigContainer.isMeshEnabled(protocol)) {
-            RegistryConfig registryConfig = registryConfigContainer
-                .getRegistryConfig(SofaBootRpcConfigConstants.REGISTRY_PROTOCOL_MESH);
-            providerConfig.setRegistry(registryConfig);
-        } else {
-            RegistryConfig registryConfig = registryConfigContainer.getRegistryConfig();
-
-            providerConfig.setRegistry(registryConfig);
-
-        }
-
+        ConfigUtil.setRegistry(param, registryConfigContainer, providerConfig, protocol);
         providerConfig.setRegister(false);
 
         return providerConfig;
     }
 
     private List<MethodConfig> convertToMethodConfig(List<RpcBindingMethodInfo> methodInfos) {
-        List<MethodConfig> methodConfigs = new ArrayList<MethodConfig>();
+        List<MethodConfig> methodConfigs = new ArrayList<>();
 
         if (!CollectionUtils.isEmpty(methodInfos)) {
-
             for (RpcBindingMethodInfo info : methodInfos) {
-
                 String name = info.getName();
                 Integer timeout = info.getTimeout();
 
@@ -188,7 +171,6 @@ public class ProviderConfigHelper {
             }
 
         }
-
         return methodConfigs;
     }
 }

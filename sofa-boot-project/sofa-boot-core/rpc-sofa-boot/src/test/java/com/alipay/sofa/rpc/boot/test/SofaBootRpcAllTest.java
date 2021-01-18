@@ -235,15 +235,16 @@ public class SofaBootRpcAllTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testLoadBalancerAnnotation() throws NoSuchFieldException, IllegalAccessException {
         Field consumerConfigMapField = ConsumerConfigContainer.class
             .getDeclaredField("consumerConfigMap");
         consumerConfigMapField.setAccessible(true);
-        ConcurrentMap<Binding, ConsumerConfig> consumerConfigMap = (ConcurrentMap<Binding, ConsumerConfig>) consumerConfigMapField
+        ConcurrentMap<Binding, ConsumerConfig<?>> consumerConfigMap = (ConcurrentMap<Binding, ConsumerConfig<?>>) consumerConfigMapField
             .get(consumerConfigContainer);
 
         boolean found = false;
-        for (ConsumerConfig consumerConfig : consumerConfigMap.values()) {
+        for (ConsumerConfig<?> consumerConfig : consumerConfigMap.values()) {
             if ("loadbalancer".equals(consumerConfig.getUniqueId())
                 && AnnotationService.class.getName().equals(consumerConfig.getInterfaceId())) {
                 found = true;
@@ -251,7 +252,7 @@ public class SofaBootRpcAllTest {
             }
         }
 
-        Assert.assertTrue("Found roundrobin reference", found);
+        Assert.assertTrue("Found round-robin reference", found);
     }
 
     @Test

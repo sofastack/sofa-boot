@@ -19,6 +19,7 @@ package com.alipay.sofa.rpc.boot.runtime.adapter.helper;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.alipay.sofa.rpc.boot.runtime.util.ConfigUtil;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -33,7 +34,6 @@ import com.alipay.sofa.rpc.boot.runtime.param.RpcBindingParam;
 import com.alipay.sofa.rpc.config.ApplicationConfig;
 import com.alipay.sofa.rpc.config.ConsumerConfig;
 import com.alipay.sofa.rpc.config.MethodConfig;
-import com.alipay.sofa.rpc.config.RegistryConfig;
 import com.alipay.sofa.rpc.core.invoke.SofaResponseCallback;
 import com.alipay.sofa.rpc.filter.Filter;
 import com.alipay.sofa.rpc.hystrix.HystrixConstants;
@@ -63,7 +63,7 @@ public class ConsumerConfigHelper {
      * @param binding  the RpcBinding
      * @return the ConsumerConfig
      */
-    public ConsumerConfig getConsumerConfig(Contract contract, RpcBinding binding) {
+    public <T> ConsumerConfig<T> getConsumerConfig(Contract contract, RpcBinding binding) {
         RpcBindingParam param = binding.getRpcBindingParam();
 
         String id = binding.getBeanId();
@@ -88,7 +88,7 @@ public class ConsumerConfigHelper {
 
         String referenceLimit = sofaBootRpcProperties.getConsumerRepeatedReferenceLimit();
 
-        ConsumerConfig consumerConfig = new ConsumerConfig();
+        ConsumerConfig<T> consumerConfig = new ConsumerConfig<>();
         if (StringUtils.hasText(appName)) {
             consumerConfig.setApplication(new ApplicationConfig().setAppName(appName));
         }
@@ -160,24 +160,7 @@ public class ConsumerConfigHelper {
             consumerConfig.setInJVM(false);
         }
 
-        if (param.getRegistrys() != null && param.getRegistrys().size() > 0) {
-            List<String> registrys = param.getRegistrys();
-            for (String registryAlias : registrys) {
-                RegistryConfig registryConfig = registryConfigContainer
-                    .getRegistryConfig(registryAlias);
-                consumerConfig.setRegistry(registryConfig);
-            }
-        } else if (registryConfigContainer.isMeshEnabled(protocol)) {
-            RegistryConfig registryConfig = registryConfigContainer
-                .getRegistryConfig(SofaBootRpcConfigConstants.REGISTRY_PROTOCOL_MESH);
-            consumerConfig.setRegistry(registryConfig);
-        } else {
-            RegistryConfig registryConfig = registryConfigContainer.getRegistryConfig();
-
-            consumerConfig.setRegistry(registryConfig);
-
-        }
-
+        ConfigUtil.setRegistry(param, registryConfigContainer, consumerConfig, protocol);
         if (StringUtils.hasText(serialization)) {
             consumerConfig.setSerialization(serialization);
         }
@@ -196,7 +179,7 @@ public class ConsumerConfigHelper {
     }
 
     private List<MethodConfig> convertToMethodConfig(List<RpcBindingMethodInfo> methodInfos) {
-        List<MethodConfig> methodConfigs = new ArrayList<MethodConfig>();
+        List<MethodConfig> methodConfigs = new ArrayList<>();
 
         if (!CollectionUtils.isEmpty(methodInfos)) {
 
@@ -221,7 +204,7 @@ public class ConsumerConfigHelper {
                 }
                 if (callbackHandler != null) {
                     if (callbackHandler instanceof SofaResponseCallback) {
-                        methodConfig.setOnReturn((SofaResponseCallback) callbackHandler);
+                        methodConfig.setOnReturn((SofaResponseCallback<?>) callbackHandler);
                     } else {
                         throw new SofaBootRpcRuntimeException(
                             "callback handler must implement SofaResponseCallback ["
@@ -233,16 +216,16 @@ public class ConsumerConfigHelper {
             }
 
         }
-
         return methodConfigs;
     }
 
-    public Object getMockRef(RpcBinding binding, ApplicationContext applicationContext) {
+    @SuppressWarnings("unchecked")
+    public <T> T getMockRef(RpcBinding binding, ApplicationContext applicationContext) {
         RpcBindingParam rpcBindingParam = binding.getRpcBindingParam();
         String mockBean = rpcBindingParam.getMockBean();
 
         if (StringUtils.hasText(mockBean)) {
-            return applicationContext.getBean(mockBean);
+            return (T) applicationContext.getBean(mockBean);
         } else {
             throw new IllegalArgumentException("Mock mode is open, mock bean can't be empty.");
         }

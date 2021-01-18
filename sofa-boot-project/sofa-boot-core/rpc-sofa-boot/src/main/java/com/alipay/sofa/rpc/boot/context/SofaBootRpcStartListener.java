@@ -69,7 +69,7 @@ public class SofaBootRpcStartListener implements ApplicationListener<SofaBootRpc
         //start fault tolerance
         faultToleranceConfigurator.startFaultTolerance();
 
-        Collection<ProviderConfig> allProviderConfig = providerConfigContainer
+        Collection<ProviderConfig<?>> allProviderConfig = providerConfigContainer
             .getAllProviderConfig();
         if (!CollectionUtils.isEmpty(allProviderConfig)) {
             //start server

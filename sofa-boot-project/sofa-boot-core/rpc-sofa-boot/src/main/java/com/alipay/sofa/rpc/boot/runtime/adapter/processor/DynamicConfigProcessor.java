@@ -33,16 +33,16 @@ public class DynamicConfigProcessor implements ConsumerConfigProcessor, Provider
     private String dynamicConfig;
 
     @Override
-    public void processorConsumer(ConsumerConfig consumerConfig) {
+    public void processorConsumer(ConsumerConfig<?> consumerConfig) {
         setDynamicConfig(consumerConfig);
     }
 
     @Override
-    public void processorProvider(ProviderConfig providerConfig) {
+    public void processorProvider(ProviderConfig<?> providerConfig) {
         setDynamicConfig(providerConfig);
     }
 
-    private void setDynamicConfig(AbstractInterfaceConfig config) {
+    private void setDynamicConfig(AbstractInterfaceConfig<?, ?> config) {
         String configAlias = config.getParameter(DynamicConfigKeys.DYNAMIC_ALIAS);
         if (StringUtils.isBlank(configAlias) && StringUtils.isNotBlank(dynamicConfig)) {
             config.setParameter(DynamicConfigKeys.DYNAMIC_ALIAS, dynamicConfig);

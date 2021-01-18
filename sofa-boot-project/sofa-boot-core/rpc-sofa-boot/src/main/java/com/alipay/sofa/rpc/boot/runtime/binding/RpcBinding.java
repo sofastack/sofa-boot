@@ -24,6 +24,8 @@ import com.alipay.sofa.runtime.spi.health.HealthResult;
 import org.springframework.context.ApplicationContext;
 import org.w3c.dom.Element;
 
+import java.util.Objects;
+
 /**
  * rpc binding implementation
  *
@@ -50,7 +52,7 @@ public abstract class RpcBinding extends AbstractBinding {
     /**
      * the ConsumerConfig 。在服务引用方才有值。
      */
-    protected ConsumerConfig     consumerConfig;
+    protected ConsumerConfig<?>  consumerConfig;
 
     public RpcBinding(RpcBindingParam bindingParam, ApplicationContext applicationContext,
                       boolean inBinding) {
@@ -205,7 +207,7 @@ public abstract class RpcBinding extends AbstractBinding {
      *
      * @return property value of consumerConfig
      */
-    public ConsumerConfig getConsumerConfig() {
+    public ConsumerConfig<?> getConsumerConfig() {
         return consumerConfig;
     }
 
@@ -214,7 +216,7 @@ public abstract class RpcBinding extends AbstractBinding {
      *
      * @param consumerConfig value to be assigned to property consumerConfig
      */
-    public void setConsumerConfig(ConsumerConfig consumerConfig) {
+    public void setConsumerConfig(ConsumerConfig<?> consumerConfig) {
         this.consumerConfig = consumerConfig;
     }
 
@@ -232,22 +234,19 @@ public abstract class RpcBinding extends AbstractBinding {
         if (inBinding != that.inBinding) {
             return false;
         }
-        if (appName != null ? !appName.equals(that.appName) : that.appName != null) {
+        if (!Objects.equals(appName, that.appName)) {
             return false;
         }
-        if (beanId != null ? !beanId.equals(that.beanId) : that.beanId != null) {
+        if (!Objects.equals(beanId, that.beanId)) {
             return false;
         }
-        if (rpcBindingParam != null ? !rpcBindingParam.equals(that.rpcBindingParam)
-            : that.rpcBindingParam != null) {
+        if (!Objects.equals(rpcBindingParam, that.rpcBindingParam)) {
             return false;
         }
-        if (applicationContext != null ? !applicationContext.equals(that.applicationContext)
-            : that.applicationContext != null) {
+        if (!Objects.equals(applicationContext, that.applicationContext)) {
             return false;
         }
-        return consumerConfig != null ? consumerConfig.equals(that.consumerConfig)
-            : that.consumerConfig == null;
+        return Objects.equals(consumerConfig, that.consumerConfig);
     }
 
     @Override

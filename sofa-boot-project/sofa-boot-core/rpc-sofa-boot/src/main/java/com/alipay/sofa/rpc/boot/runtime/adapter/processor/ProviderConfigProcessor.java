@@ -24,6 +24,6 @@ import com.alipay.sofa.rpc.config.ProviderConfig;
  */
 public interface ProviderConfigProcessor {
 
-    void processorProvider(ProviderConfig providerConfig);
+    void processorProvider(ProviderConfig<?> providerConfig);
 
 }

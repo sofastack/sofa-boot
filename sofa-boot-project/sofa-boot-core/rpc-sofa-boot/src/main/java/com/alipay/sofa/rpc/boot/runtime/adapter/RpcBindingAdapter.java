@@ -39,7 +39,7 @@ import org.springframework.context.ApplicationContext;
 import java.util.List;
 
 /**
- * 根据 {@link RpcBindingParam} 生效上层配置到 SOFARPC 组件中。
+ * 根据 {@link RpcBindingParam} 生效上层配置到 SOFA RPC 组件中。
  *
  * @author <a href="mailto:caojie.cj@antfin.com">CaoJie</a>
  * @author <a href="mailto:lw111072@antfin.com">LiWei</a>
@@ -65,8 +65,8 @@ public abstract class RpcBindingAdapter implements BindingAdapter<RpcBinding> {
         String uniqueName = providerConfigContainer.createUniqueName((Contract) contract, binding);
         ProviderConfigHelper providerConfigHelper = applicationContext
             .getBean(ProviderConfigHelper.class);
-        ProviderConfig providerConfig = providerConfigHelper.getProviderConfig((Contract) contract,
-            binding, target);
+        ProviderConfig<?> providerConfig = providerConfigHelper.getProviderConfig(
+            (Contract) contract, binding, target);
         try {
             providerConfigContainer.addProviderConfig(uniqueName, providerConfig);
         } catch (Exception e) {
@@ -95,7 +95,7 @@ public abstract class RpcBindingAdapter implements BindingAdapter<RpcBinding> {
             .getBean(ProcessorContainer.class);
 
         String uniqueName = providerConfigContainer.createUniqueName((Contract) contract, binding);
-        ProviderConfig providerConfig = providerConfigContainer.getProviderConfig(uniqueName);
+        ProviderConfig<?> providerConfig = providerConfigContainer.getProviderConfig(uniqueName);
         processorContainer.processorProvider(providerConfig);
 
         if (providerConfig == null) {
@@ -111,8 +111,8 @@ public abstract class RpcBindingAdapter implements BindingAdapter<RpcBinding> {
 
         if (providerConfigContainer.isAllowPublish()) {
             providerConfig.setRegister(true);
-            List<RegistryConfig> registrys = providerConfig.getRegistry();
-            for (RegistryConfig registryConfig : registrys) {
+            List<RegistryConfig> registries = providerConfig.getRegistry();
+            for (RegistryConfig registryConfig : registries) {
                 Registry registry = RegistryFactory.getRegistry(registryConfig);
                 registry.init();
                 registry.start();
@@ -140,7 +140,7 @@ public abstract class RpcBindingAdapter implements BindingAdapter<RpcBinding> {
         ProviderConfigContainer providerConfigContainer = applicationContext
             .getBean(ProviderConfigContainer.class);
         String key = providerConfigContainer.createUniqueName((Contract) contract, binding);
-        ProviderConfig providerConfig = providerConfigContainer.getProviderConfig(key);
+        ProviderConfig<?> providerConfig = providerConfigContainer.getProviderConfig(key);
         try {
             providerConfig.unExport();
         } catch (Exception e) {
@@ -194,8 +194,8 @@ public abstract class RpcBindingAdapter implements BindingAdapter<RpcBinding> {
         ProcessorContainer processorContainer = applicationContext
             .getBean(ProcessorContainer.class);
 
-        ConsumerConfig consumerConfig = consumerConfigHelper.getConsumerConfig((Contract) contract,
-            binding);
+        ConsumerConfig<?> consumerConfig = consumerConfigHelper.getConsumerConfig(
+            (Contract) contract, binding);
         processorContainer.processorConsumer(consumerConfig);
 
         if (MockMode.LOCAL.equalsIgnoreCase(binding.getRpcBindingParam().getMockMode())) {
@@ -216,9 +216,9 @@ public abstract class RpcBindingAdapter implements BindingAdapter<RpcBinding> {
     /**
      * undo in binding
      *
-     * @param contract
-     * @param binding
-     * @param sofaRuntimeContext
+     * @param contract binding contract
+     * @param binding binding object
+     * @param sofaRuntimeContext sofa runtime context
      */
     @Override
     public void unInBinding(Object contract, RpcBinding binding,
@@ -244,5 +244,4 @@ public abstract class RpcBindingAdapter implements BindingAdapter<RpcBinding> {
     public Class<RpcBinding> getBindingClass() {
         return RpcBinding.class;
     }
-
 }

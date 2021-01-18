@@ -32,7 +32,7 @@ public class ConsumerConfigContainer {
     /**
      * ConsumerConfig 缓存
      */
-    private final ConcurrentMap<Binding, ConsumerConfig> consumerConfigMap = new ConcurrentHashMap<Binding, ConsumerConfig>();
+    private final ConcurrentMap<Binding, ConsumerConfig<?>> consumerConfigMap = new ConcurrentHashMap<>();
 
     /**
      * 增加 ConsumerConfig
@@ -40,7 +40,7 @@ public class ConsumerConfigContainer {
      * @param binding        the {@link Binding}
      * @param consumerConfig consumerConfigs
      */
-    public void addConsumerConfig(Binding binding, ConsumerConfig consumerConfig) {
+    public void addConsumerConfig(Binding binding, ConsumerConfig<?> consumerConfig) {
         if (binding != null) {
             consumerConfigMap.put(binding, consumerConfig);
         }
@@ -53,14 +53,14 @@ public class ConsumerConfigContainer {
      */
     public void removeAndUnReferConsumerConfig(Binding binding) {
         if (binding != null) {
-            ConsumerConfig consumerConfig = consumerConfigMap.remove(binding);
+            ConsumerConfig<?> consumerConfig = consumerConfigMap.remove(binding);
             if (consumerConfig != null) {
                 consumerConfig.unRefer();
             }
         }
     }
 
-    public ConcurrentMap<Binding, ConsumerConfig> getConsumerConfigMap() {
+    public ConcurrentMap<Binding, ConsumerConfig<?>> getConsumerConfigMap() {
         return consumerConfigMap;
     }
 }

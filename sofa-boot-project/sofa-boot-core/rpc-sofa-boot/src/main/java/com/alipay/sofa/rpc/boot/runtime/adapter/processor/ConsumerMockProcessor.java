@@ -32,7 +32,7 @@ public class ConsumerMockProcessor implements ConsumerConfigProcessor {
     private String             mockUrl;
 
     @Override
-    public void processorConsumer(ConsumerConfig consumerConfig) {
+    public void processorConsumer(ConsumerConfig<?> consumerConfig) {
         String mockMode = consumerConfig.getMockMode();
         if (StringUtils.hasText(mockUrl)
             && (!StringUtils.hasText(mockMode) || MockMode.REMOTE.equals(mockMode))) {

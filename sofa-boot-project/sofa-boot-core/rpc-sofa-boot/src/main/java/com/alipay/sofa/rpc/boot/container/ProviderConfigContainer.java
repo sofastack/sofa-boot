@@ -40,19 +40,19 @@ import com.alipay.sofa.runtime.spi.binding.Contract;
  * @author <a href="mailto:lw111072@antfin.com">LiWei</a>
  */
 public class ProviderConfigContainer {
-    private static final Logger                         LOGGER                = SofaBootRpcLoggerFactory
-                                                                                  .getLogger(ProviderConfigContainer.class);
+    private static final Logger                            LOGGER                = SofaBootRpcLoggerFactory
+                                                                                     .getLogger(ProviderConfigContainer.class);
 
     /**
      * 是否允许发布ProviderConfig
      */
-    private boolean                                     allowPublish          = false;
+    private boolean                                        allowPublish          = false;
 
     /**
      * ProviderConfig 缓存
      */
-    private final ConcurrentMap<String, ProviderConfig> RPC_SERVICE_CONTAINER = new ConcurrentHashMap<String, ProviderConfig>(
-                                                                                  256);
+    private final ConcurrentMap<String, ProviderConfig<?>> RPC_SERVICE_CONTAINER = new ConcurrentHashMap<>(
+                                                                                     256);
 
     /**
      * 增加 ProviderConfig
@@ -60,7 +60,7 @@ public class ProviderConfigContainer {
      * @param key            唯一id
      * @param providerConfig the ProviderConfig
      */
-    public void addProviderConfig(String key, ProviderConfig providerConfig) {
+    public void addProviderConfig(String key, ProviderConfig<?> providerConfig) {
         if (providerConfig != null) {
             if (RPC_SERVICE_CONTAINER.containsKey(key)) {
                 if (LOGGER.isWarnEnabled()) {
@@ -79,7 +79,7 @@ public class ProviderConfigContainer {
      * @param key 唯一id
      * @return the ProviderConfig
      */
-    public ProviderConfig getProviderConfig(String key) {
+    public ProviderConfig<?> getProviderConfig(String key) {
         return RPC_SERVICE_CONTAINER.get(key);
     }
 
@@ -97,7 +97,7 @@ public class ProviderConfigContainer {
      *
      * @return 所有 ProviderConfig
      */
-    public Collection<ProviderConfig> getAllProviderConfig() {
+    public Collection<ProviderConfig<?>> getAllProviderConfig() {
         return RPC_SERVICE_CONTAINER.values();
     }
 
@@ -105,15 +105,15 @@ public class ProviderConfigContainer {
      * 发布所有 ProviderConfig 元数据信息到注册中心
      */
     public void publishAllProviderConfig() {
-        for (ProviderConfig providerConfig : getAllProviderConfig()) {
+        for (ProviderConfig<?> providerConfig : getAllProviderConfig()) {
 
-            ServerConfig serverConfig = (ServerConfig) providerConfig.getServer().get(0);
+            ServerConfig serverConfig = providerConfig.getServer().get(0);
             if (!serverConfig.getProtocol().equalsIgnoreCase(
                 SofaBootRpcConfigConstants.RPC_PROTOCOL_DUBBO)) {
                 providerConfig.setRegister(true);
 
-                List<RegistryConfig> registrys = providerConfig.getRegistry();
-                for (RegistryConfig registryConfig : registrys) {
+                List<RegistryConfig> registries = providerConfig.getRegistry();
+                for (RegistryConfig registryConfig : registries) {
 
                     Registry registry = RegistryFactory.getRegistry(registryConfig);
                     registry.init();
@@ -133,12 +133,12 @@ public class ProviderConfigContainer {
     }
 
     /**
-     * export所有 Dubbo 类型的 ProviderConfig
+     * Export 所有 Dubbo 类型的 ProviderConfig
      */
     public void exportAllDubboProvideConfig() {
-        for (ProviderConfig providerConfig : getAllProviderConfig()) {
+        for (ProviderConfig<?> providerConfig : getAllProviderConfig()) {
 
-            ServerConfig serverConfig = (ServerConfig) providerConfig.getServer().get(0);
+            ServerConfig serverConfig = providerConfig.getServer().get(0);
             if (serverConfig.getProtocol().equalsIgnoreCase(
                 SofaBootRpcConfigConstants.RPC_PROTOCOL_DUBBO)) {
                 providerConfig.setRegister(true);
@@ -157,7 +157,7 @@ public class ProviderConfigContainer {
      * unExport所有的 ProviderConfig
      */
     public void unExportAllProviderConfig() {
-        for (ProviderConfig providerConfig : getAllProviderConfig()) {
+        for (ProviderConfig<?> providerConfig : getAllProviderConfig()) {
             providerConfig.unExport();
         }
 
@@ -166,7 +166,7 @@ public class ProviderConfigContainer {
     /**
      * 是否允许发布 ProviderConfig 元数据信息
      *
-     * @return
+     * @return 是否运行发布
      */
     public boolean isAllowPublish() {
         return allowPublish;
@@ -202,8 +202,6 @@ public class ProviderConfigContainer {
             protocol = ":" + binding.getBindingType().getType();
         }
 
-        return new StringBuilder(contract.getInterfaceType().getName()).append(version)
-            .append(uniqueId).append(protocol).toString();
+        return contract.getInterfaceType().getName() + version + uniqueId + protocol;
     }
-
 }

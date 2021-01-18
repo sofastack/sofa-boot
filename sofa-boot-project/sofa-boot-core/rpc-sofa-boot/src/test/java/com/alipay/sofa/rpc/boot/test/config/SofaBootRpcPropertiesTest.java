@@ -79,7 +79,8 @@ public class SofaBootRpcPropertiesTest {
         try {
             Map configMap = (Map) consumerConfigMap.get(consumerConfigContainer);
             for (Object consumerConfig : configMap.values()) {
-                Assert.assertEquals(10, ((ConsumerConfig) consumerConfig).getRepeatedReferLimit());
+                Assert.assertEquals(10,
+                    ((ConsumerConfig<?>) consumerConfig).getRepeatedReferLimit());
             }
         } catch (IllegalAccessException ex) {
 

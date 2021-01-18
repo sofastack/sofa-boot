@@ -38,7 +38,7 @@ public class ProcessorContainer {
         this.consumerProcessors = consumerProcessors;
     }
 
-    public void processorConsumer(ConsumerConfig consumerConfig) {
+    public void processorConsumer(ConsumerConfig<?> consumerConfig) {
         if (CommonUtils.isNotEmpty(consumerProcessors)) {
             for (ConsumerConfigProcessor consumerProcessor : consumerProcessors) {
                 consumerProcessor.processorConsumer(consumerConfig);
@@ -46,13 +46,11 @@ public class ProcessorContainer {
         }
     }
 
-    public void processorProvider(ProviderConfig providerConfig) {
+    public void processorProvider(ProviderConfig<?> providerConfig) {
         if (CommonUtils.isNotEmpty(providerProcessors)) {
             for (ProviderConfigProcessor providerProcessor : providerProcessors) {
                 providerProcessor.processorProvider(providerConfig);
             }
         }
-
     }
-
 }
