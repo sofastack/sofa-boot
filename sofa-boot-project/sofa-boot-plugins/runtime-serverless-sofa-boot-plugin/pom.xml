@@ -21,44 +21,69 @@
                     <artifactId>logback-classic</artifactId>
                     <groupId>ch.qos.logback</groupId>
                 </exclusion>
+                <exclusion>
+                    <artifactId>logback-core</artifactId>
+                    <groupId>ch.qos.logback</groupId>
+                </exclusion>
             </exclusions>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
 
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-core</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>sofa-ark-springboot-starter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>sofa-ark-all</artifactId>
+                    <groupId>com.alipay.sofa</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>sofa-ark-spi</artifactId>
+                    <groupId>com.alipay.sofa</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>sofa-ark-exception</artifactId>
+                    <groupId>com.alipay.sofa</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>sofa-ark-common</artifactId>
+                    <groupId>com.alipay.sofa</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>sofa-ark-api</artifactId>
+                    <groupId>com.alipay.sofa</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>sofa-ark-compatible-springboot1</artifactId>
+                    <groupId>com.alipay.sofa</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
         <dependency>
             <groupId>com.alipay.sofa</groupId>
             <artifactId>sofa-ark-spi</artifactId>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>com.alipay.sofa</groupId>
             <artifactId>sofa-ark-api</artifactId>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>com.alipay.sofa</groupId>
             <artifactId>sofa-ark-common</artifactId>
             <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib-nodep</artifactId>
-            <version>2.1_3</version>
-        </dependency>
-
-        <dependency>
-            <groupId>dom4j</groupId>
-            <artifactId>dom4j</artifactId>
-            <version>1.6.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.quartz-scheduler</groupId>
-            <artifactId>quartz</artifactId>
-            <version>2.3.2</version>
         </dependency>
     </dependencies>
 
@@ -87,6 +112,7 @@
                                     <package>javax.validation.*</package>
                                     <!-- servlet -->
                                     <package>javax.servlet.*</package>
+                                    <package>javax.el.*</package>
                                     <!-- script -->
                                     <package>javax.script.*</package>
                                     <!-- aop -->
@@ -95,7 +121,7 @@
                                     <package>org.apache.*</package>
                                     <!-- sofa and rpc -->
                                     <package>com.alipay.sofa.*</package>
-
+                                    <!-- dubbo -->
                                     <package>com.alibaba.dubbo.*</package>
 
                                     <package>com.google.gson.*</package>
@@ -103,13 +129,6 @@
                                     <package>com.google.common.*</package>
                                     <package>com.google.code.*</package>
 
-                                    <!-- mybatis -->
-                                    <package>org.mybatis.spring.boot.autoconfigure.*</package>
-                                    <package>org.mybatis.spring.*</package>
-                                    <package>com.ibatis.*</package>
-
-                                    <!-- quartz -->
-                                    <package>org.quartz.*</package>
                                     <!-- hessian -->
                                     <package>com.caucho.hessian.*</package>
                                     <!-- aspect -->
@@ -117,10 +136,6 @@
                                     <!-- cglib -->
                                     <package>net.sf.cglib.*</package>
                                     <package>org.slf4j.*</package>
-                                    <package>org.mvel2.*</package>
-                                    <package>org.dom4j.*</package>
-                                    <package>javax.el.*</package>
-                                    <package>net.sf.acegisecurity.*</package>
                                     <package>org.junit.*</package>
                                     <package>io.grpc.*</package>
                                 </packages>
@@ -145,6 +160,4 @@
             </plugin>
         </plugins>
     </build>
-
-
 </project>
