@@ -12,6 +12,7 @@ bak
 *.iml
 *.ipr
 *.iws
+*.log
 bak
 null/
 tree.log
