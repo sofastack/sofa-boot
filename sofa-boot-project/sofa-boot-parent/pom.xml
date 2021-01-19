@@ -342,7 +342,9 @@
                         </dependencies>
                         <configuration>
                             <runOrder>alphabetical</runOrder>
-                            <reuseForks>false</reuseForks>
+                            <!-- For the sake of CI/CD speed, don't change this to false -->
+                            <!-- If your test cases works only in refresh JVM, adjust in your own module  -->
+                            <reuseForks>true</reuseForks>
                         </configuration>
                     </plugin>
                 </plugins>
