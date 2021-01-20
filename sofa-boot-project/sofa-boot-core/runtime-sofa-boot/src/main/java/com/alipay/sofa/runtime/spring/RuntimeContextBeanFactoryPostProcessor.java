@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.runtime.spring;
 
+import com.alipay.sofa.runtime.service.helper.ReferenceRegisterHelper;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -42,13 +43,16 @@ public class RuntimeContextBeanFactoryPostProcessor implements BeanFactoryPostPr
     private BindingConverterFactory bindingConverterFactory;
     private SofaRuntimeContext      sofaRuntimeContext;
     private ApplicationContext      applicationContext;
+    private ReferenceRegisterHelper referenceRegisterHelper;
 
     public RuntimeContextBeanFactoryPostProcessor(BindingAdapterFactory bindingAdapterFactory,
                                                   BindingConverterFactory bindingConverterFactory,
-                                                  SofaRuntimeContext sofaRuntimeContext) {
+                                                  SofaRuntimeContext sofaRuntimeContext,
+                                                  ReferenceRegisterHelper referenceRegisterHelper) {
         this.bindingAdapterFactory = bindingAdapterFactory;
         this.bindingConverterFactory = bindingConverterFactory;
         this.sofaRuntimeContext = sofaRuntimeContext;
+        this.referenceRegisterHelper = referenceRegisterHelper;
     }
 
     @Override
@@ -60,9 +64,9 @@ public class RuntimeContextBeanFactoryPostProcessor implements BeanFactoryPostPr
             .getClientFactory()));
         beanFactory.addBeanPostProcessor(new ExtensionClientBeanPostProcessor(
             new ExtensionClientImpl(sofaRuntimeContext)));
-        beanFactory
-            .addBeanPostProcessor(new ReferenceAnnotationBeanPostProcessor(applicationContext,
-                sofaRuntimeContext, bindingAdapterFactory, bindingConverterFactory));
+        beanFactory.addBeanPostProcessor(new ReferenceAnnotationBeanPostProcessor(
+            applicationContext, sofaRuntimeContext, bindingAdapterFactory, bindingConverterFactory,
+            referenceRegisterHelper));
 
         beanFactory.registerSingleton(RuntimeShutdownAwarePostProcessor.class.getSimpleName(),
             new RuntimeShutdownAwarePostProcessor(sofaRuntimeContext.getSofaRuntimeManager()));

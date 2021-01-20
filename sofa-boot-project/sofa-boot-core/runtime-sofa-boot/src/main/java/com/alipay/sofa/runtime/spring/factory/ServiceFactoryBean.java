@@ -24,13 +24,17 @@ import com.alipay.sofa.runtime.service.component.impl.ServiceImpl;
 import com.alipay.sofa.runtime.service.helper.ServiceRegisterHelper;
 import com.alipay.sofa.runtime.spi.binding.Binding;
 import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author xuanbei 18/3/1
  */
 public class ServiceFactoryBean extends AbstractContractFactoryBean {
-    protected Object  ref;
-    protected Service service;
+    protected Object              ref;
+    protected Service             service;
+
+    @Autowired
+    private ServiceRegisterHelper serviceRegisterHelper;
 
     public ServiceFactoryBean() {
     }
@@ -52,7 +56,7 @@ public class ServiceFactoryBean extends AbstractContractFactoryBean {
         for (Binding binding : bindings) {
             service.addBinding(binding);
         }
-        ServiceRegisterHelper.registerService(service, ref, bindingAdapterFactory,
+        serviceRegisterHelper.registerService(service, ref, bindingAdapterFactory,
             sofaRuntimeContext);
     }
 

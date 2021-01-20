@@ -20,6 +20,7 @@ import com.alipay.sofa.runtime.api.ServiceRegisterHook;
 import com.alipay.sofa.runtime.service.binding.JvmBinding;
 import com.alipay.sofa.runtime.service.component.Service;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
+import org.springframework.core.Ordered;
 
 /**
  * For each service contract, add a JVM binding if it doesn't have any binding.
@@ -37,11 +38,11 @@ public class JvmServiceAddingHook implements ServiceRegisterHook {
     }
 
     @Override
-    public void after() {
+    public void after(Service service, SofaRuntimeContext sofaRuntimeContext) {
     }
 
     @Override
-    public int order() {
-        return Integer.MIN_VALUE;
+    public int getOrder() {
+        return Ordered.HIGHEST_PRECEDENCE;
     }
 }

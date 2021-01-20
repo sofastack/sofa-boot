@@ -22,7 +22,10 @@ import com.alipay.sofa.isle.profile.DefaultSofaModuleProfileChecker;
 import com.alipay.sofa.isle.profile.SofaModuleProfileChecker;
 import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
 import com.alipay.sofa.isle.stage.ModelCreatingStage;
+import com.alipay.sofa.runtime.component.impl.ComponentManagerImpl;
 import com.alipay.sofa.runtime.component.impl.StandardSofaRuntimeManager;
+import com.alipay.sofa.runtime.spi.component.ComponentManager;
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import org.junit.Assert;
 import org.junit.Test;
@@ -78,8 +81,12 @@ public class ModelCreatingStageTest implements ApplicationContextAware {
         @Bean
         @ConditionalOnMissingBean
         public SofaRuntimeManager sofaRuntimeManager() {
-            SofaRuntimeManager sofaRuntimeManager = new StandardSofaRuntimeManager("test",
-                ModelCreatingStageTest.class.getClassLoader(), null);
+            ComponentManager componentManager = new ComponentManagerImpl(null);
+            StandardSofaRuntimeManager sofaRuntimeManager = new StandardSofaRuntimeManager(Thread
+                .currentThread().getContextClassLoader(), null, componentManager);
+            sofaRuntimeManager.setAppName("ModelCreatingStageTest");
+            sofaRuntimeManager.setSofaRuntimeContext(new SofaRuntimeContext(sofaRuntimeManager,
+                componentManager, null));
             return sofaRuntimeManager;
         }
     }

@@ -25,6 +25,8 @@ import com.alipay.sofa.runtime.service.component.Reference;
 import com.alipay.sofa.runtime.service.component.Service;
 import com.alipay.sofa.runtime.service.component.impl.ReferenceImpl;
 import com.alipay.sofa.runtime.service.component.impl.ServiceImpl;
+import com.alipay.sofa.runtime.service.helper.JvmReferenceAddingHook;
+import com.alipay.sofa.runtime.service.helper.JvmServiceAddingHook;
 import com.alipay.sofa.runtime.service.helper.ReferenceRegisterHelper;
 import com.alipay.sofa.runtime.service.helper.ServiceRegisterHelper;
 import com.alipay.sofa.runtime.spi.binding.AbstractBinding;
@@ -43,6 +45,8 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.w3c.dom.Element;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -74,7 +78,10 @@ public class RegisterHelperTest {
     @Test
     public void serviceTest() {
         Service service = new ServiceImpl("", ServiceRegisterHook.class, null);
-        ServiceRegisterHelper.registerService(service, null, null, sofaRuntimeContext);
+        List<ServiceRegisterHook> hooks = new ArrayList<>();
+        hooks.add(new JvmServiceAddingHook());
+        ServiceRegisterHelper serviceRegisterHelper = new ServiceRegisterHelper(hooks);
+        serviceRegisterHelper.registerService(service, null, null, sofaRuntimeContext);
         Assert.assertEquals(1, service.getBindings().size());
         Assert.assertEquals(JvmBinding.JVM_BINDING_TYPE,
             ((Binding) service.getBindings().toArray()[0]).getBindingType());
@@ -84,6 +91,9 @@ public class RegisterHelperTest {
     public void referenceTest() {
         Reference reference = new ReferenceImpl("", ReferenceRegisterHook.class,
             InterfaceMode.spring, true);
+        List<ReferenceRegisterHook> hooks = new ArrayList<>();
+        hooks.add(new JvmReferenceAddingHook());
+        ReferenceRegisterHelper referenceRegisterHelper = new ReferenceRegisterHelper(hooks);
         reference.addBinding(new AbstractBinding() {
             @Override
             public String getURI() {
@@ -110,7 +120,7 @@ public class RegisterHelperTest {
                 return null;
             }
         });
-        ReferenceRegisterHelper.registerReference(reference, null, sofaRuntimeContext);
+        referenceRegisterHelper.registerReference(reference, null, sofaRuntimeContext);
         Assert.assertEquals(2, reference.getBindings().size());
 
         Set<BindingType> bindingTypes = reference.getBindings().stream().map(Binding::getBindingType).collect(Collectors.toSet());

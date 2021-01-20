@@ -18,6 +18,7 @@ package com.alipay.sofa.boot.actuator.test;
 
 import com.alipay.sofa.boot.actuator.health.MultiApplicationHealthIndicator;
 import com.alipay.sofa.runtime.SofaFramework;
+import com.alipay.sofa.runtime.component.impl.ComponentManagerImpl;
 import com.alipay.sofa.runtime.component.impl.StandardSofaRuntimeManager;
 import org.junit.Assert;
 import org.junit.Test;
@@ -30,8 +31,8 @@ import org.springframework.boot.actuate.health.Status;
 public class MultiApplicationHealthIndicatorTest {
     @Test
     public void testUp() {
-        SofaFramework.registerSofaRuntimeManager(new StandardSofaRuntimeManager("test1", this
-            .getClass().getClassLoader(), null));
+        SofaFramework.registerSofaRuntimeManager(new StandardSofaRuntimeManager(Thread
+            .currentThread().getContextClassLoader(), null, new ComponentManagerImpl(null)));
         Assert.assertEquals(Status.UP, new MultiApplicationHealthIndicator().health().getStatus());
     }
 }

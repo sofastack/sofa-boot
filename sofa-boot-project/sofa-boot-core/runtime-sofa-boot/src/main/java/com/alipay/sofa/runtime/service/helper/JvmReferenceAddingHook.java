@@ -22,6 +22,7 @@ import com.alipay.sofa.runtime.service.binding.JvmBinding;
 import com.alipay.sofa.runtime.service.component.Reference;
 import com.alipay.sofa.runtime.spi.binding.Binding;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
+import org.springframework.core.Ordered;
 
 /**
  * For each normal RPC service contract, a JVM binding is added automatically by default.
@@ -44,11 +45,12 @@ public class JvmReferenceAddingHook implements ReferenceRegisterHook {
     }
 
     @Override
-    public void after(Object target) {
+    public void after(Reference reference, SofaRuntimeContext sofaRuntimeContext, Object target) {
+
     }
 
     @Override
-    public int order() {
-        return Integer.MIN_VALUE;
+    public int getOrder() {
+        return Ordered.HIGHEST_PRECEDENCE;
     }
 }

@@ -186,5 +186,4 @@ public class ClientFactoryTest {
         }
         serviceClient.removeService(PrivateService.class, "uniqueId", 0);
     }
-
 }

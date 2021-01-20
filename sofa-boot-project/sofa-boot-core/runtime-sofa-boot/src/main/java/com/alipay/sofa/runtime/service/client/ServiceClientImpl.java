@@ -46,7 +46,19 @@ public class ServiceClientImpl implements ServiceClient {
     private SofaRuntimeContext      sofaRuntimeContext;
     private BindingConverterFactory bindingConverterFactory;
     private BindingAdapterFactory   bindingAdapterFactory;
+    private ServiceRegisterHelper   serviceRegisterHelper;
 
+    public ServiceClientImpl(SofaRuntimeContext sofaRuntimeContext,
+                             BindingConverterFactory bindingConverterFactory,
+                             BindingAdapterFactory bindingAdapterFactory,
+                             ServiceRegisterHelper serviceRegisterHelper) {
+        this.sofaRuntimeContext = sofaRuntimeContext;
+        this.bindingConverterFactory = bindingConverterFactory;
+        this.bindingAdapterFactory = bindingAdapterFactory;
+        this.serviceRegisterHelper = serviceRegisterHelper;
+    }
+
+    @Deprecated
     public ServiceClientImpl(SofaRuntimeContext sofaRuntimeContext,
                              BindingConverterFactory bindingConverterFactory,
                              BindingAdapterFactory bindingAdapterFactory) {
@@ -81,7 +93,7 @@ public class ServiceClientImpl implements ServiceClient {
             service.addBinding(binding);
         }
 
-        ServiceRegisterHelper.registerService(service, serviceParam.getInstance(),
+        serviceRegisterHelper.registerService(service, serviceParam.getInstance(),
             bindingAdapterFactory, sofaRuntimeContext);
     }
 

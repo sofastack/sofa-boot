@@ -24,6 +24,7 @@ import java.util.Map;
 
 import com.alipay.sofa.healthcheck.HealthCheckProperties;
 import com.alipay.sofa.healthcheck.impl.ComponentHealthChecker;
+import com.alipay.sofa.runtime.component.impl.ComponentManagerImpl;
 import com.alipay.sofa.runtime.component.impl.StandardSofaRuntimeManager;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
@@ -205,9 +206,8 @@ public class HealthCheckerProcessorTest {
 
     @Test
     public void testComponentHealthCheckerFailedFirst() {
-        SofaRuntimeManager manager = new StandardSofaRuntimeManager(
-            "testComponentHealthCheckerFailedFirst",
-            Thread.currentThread().getContextClassLoader(), null);
+        SofaRuntimeManager manager = new StandardSofaRuntimeManager(Thread.currentThread()
+            .getContextClassLoader(), null, new ComponentManagerImpl(null));
         manager.getComponentManager().register(new TestComponent("component1", true));
         manager.getComponentManager().register(new TestComponent("component2", true));
         manager.getComponentManager().register(new TestComponent("component3", false));

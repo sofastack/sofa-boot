@@ -27,16 +27,14 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 public class MockedServiceRegisterHook implements ServiceRegisterHook {
     @Override
     public void before(Service service, SofaRuntimeContext sofaRuntimeContext) {
-
     }
 
     @Override
-    public void after() {
-
+    public void after(Service service, SofaRuntimeContext sofaRuntimeContext) {
     }
 
     @Override
-    public int order() {
+    public int getOrder() {
         return 0;
     }
 }

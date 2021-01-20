@@ -35,22 +35,23 @@ import java.util.concurrent.ConcurrentMap;
  */
 @SuppressWarnings("unchecked")
 public class ComponentManagerImpl implements ComponentManager {
+    private ClientFactoryInternal                                             clientFactoryInternal;
+
     /** container for all components */
     protected ConcurrentMap<ComponentName, ComponentInfo>                     registry;
     /** container for resolved components */
     protected ConcurrentMap<ComponentType, Map<ComponentName, ComponentInfo>> resolvedRegistry;
     /** client factory */
-    private ClientFactoryInternal                                             clientFactoryInternal;
     private List<CommonStartupCost>                                           componentCostList = new ArrayList<>();
 
     public ComponentManagerImpl(ClientFactoryInternal clientFactoryInternal) {
-        this.registry = new ConcurrentHashMap(16);
-        this.resolvedRegistry = new ConcurrentHashMap(16);
+        this.registry = new ConcurrentHashMap<>(16);
+        this.resolvedRegistry = new ConcurrentHashMap<>(16);
         this.clientFactoryInternal = clientFactoryInternal;
     }
 
     public Collection<ComponentInfo> getComponentInfos() {
-        return new ArrayList(registry.values());
+        return new ArrayList<>(registry.values());
     }
 
     public Collection<ComponentName> getPendingComponentInfos() {

@@ -17,40 +17,73 @@
 package com.alipay.sofa.rpc.boot.test;
 
 import com.alipay.sofa.runtime.SofaFramework;
+import com.alipay.sofa.runtime.api.ReferenceRegisterHook;
+import com.alipay.sofa.runtime.api.ServiceRegisterHook;
+import com.alipay.sofa.runtime.api.client.ClientFactory;
 import com.alipay.sofa.runtime.api.client.ReferenceClient;
 import com.alipay.sofa.runtime.api.client.ServiceClient;
 import com.alipay.sofa.runtime.client.impl.ClientFactoryImpl;
+import com.alipay.sofa.runtime.component.impl.ComponentManagerImpl;
 import com.alipay.sofa.runtime.component.impl.StandardSofaRuntimeManager;
 import com.alipay.sofa.runtime.service.client.ReferenceClientImpl;
 import com.alipay.sofa.runtime.service.client.ServiceClientImpl;
+import com.alipay.sofa.runtime.service.helper.JvmReferenceAddingHook;
+import com.alipay.sofa.runtime.service.helper.JvmServiceAddingHook;
+import com.alipay.sofa.runtime.service.helper.ReferenceRegisterHelper;
+import com.alipay.sofa.runtime.service.helper.ServiceRegisterHelper;
 import com.alipay.sofa.runtime.service.impl.BindingAdapterFactoryImpl;
 import com.alipay.sofa.runtime.service.impl.BindingConverterFactoryImpl;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapter;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
 import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
+import com.alipay.sofa.runtime.spi.component.ComponentManager;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
-import com.alipay.sofa.runtime.spring.AsyncProxyBeanPostProcessor;
 import com.alipay.sofa.runtime.spring.RuntimeContextBeanFactoryPostProcessor;
 import com.alipay.sofa.runtime.spring.ServiceBeanFactoryPostProcessor;
-import com.alipay.sofa.runtime.spring.async.AsyncTaskExecutionListener;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.ServiceLoader;
 import java.util.Set;
 
 /**
  * @author qilong.zql
+ * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * @since 3.2.0
  */
 @Configuration
 public class RuntimeTestConfiguration {
+    @Bean
+    @ConditionalOnMissingBean
+    public ReferenceRegisterHelper referenceRegisterHelper(List<ReferenceRegisterHook> referenceRegisterHooks) {
+        return new ReferenceRegisterHelper(referenceRegisterHooks);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public JvmReferenceAddingHook jvmReferenceAddingHook() {
+        return new JvmReferenceAddingHook();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public ServiceRegisterHelper serviceRegisterHelper(List<ServiceRegisterHook> serviceRegisterHooks) {
+        return new ServiceRegisterHelper(serviceRegisterHooks);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public JvmServiceAddingHook jvmServiceAddingHook() {
+        return new JvmServiceAddingHook();
+    }
+
     @Bean
     public static BindingConverterFactory bindingConverterFactory() {
         BindingConverterFactory bindingConverterFactory = new BindingConverterFactoryImpl();
@@ -67,54 +100,79 @@ public class RuntimeTestConfiguration {
         return bindingAdapterFactory;
     }
 
-    @Bean
+    @Bean(destroyMethod = "")
     @ConditionalOnMissingBean
-    public static SofaRuntimeManager sofaRuntimeManager(@Value("${spring.application.name}") String appName,
-                                                        BindingConverterFactory bindingConverterFactory,
-                                                        BindingAdapterFactory bindingAdapterFactory) {
-        ClientFactoryInternal clientFactoryInternal = new ClientFactoryImpl();
-        SofaRuntimeManager sofaRuntimeManager = new StandardSofaRuntimeManager(appName, Thread
-            .currentThread().getContextClassLoader(), clientFactoryInternal);
-        sofaRuntimeManager.getComponentManager().registerComponentClient(
-            ReferenceClient.class,
-            new ReferenceClientImpl(sofaRuntimeManager.getSofaRuntimeContext(),
-                bindingConverterFactory, bindingAdapterFactory));
-        sofaRuntimeManager.getComponentManager().registerComponentClient(
-            ServiceClient.class,
-            new ServiceClientImpl(sofaRuntimeManager.getSofaRuntimeContext(),
-                bindingConverterFactory, bindingAdapterFactory));
+    public static SofaRuntimeManager sofaRuntimeManager(ComponentManager componentManager,
+                                                        ClientFactoryInternal clientFactoryInternal) {
+        SofaRuntimeManager sofaRuntimeManager = new StandardSofaRuntimeManager(Thread
+            .currentThread().getContextClassLoader(), clientFactoryInternal, componentManager);
         SofaFramework.registerSofaRuntimeManager(sofaRuntimeManager);
         return sofaRuntimeManager;
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public static SofaRuntimeContext sofaRuntimeContext(SofaRuntimeManager sofaRuntimeManager) {
-        return sofaRuntimeManager.getSofaRuntimeContext();
+    public ClientFactoryInternal clientFactoryInternal(ReferenceClient referenceClient,
+                                                       ServiceClient serviceClient) {
+        ClientFactoryInternal clientFactoryInternal = new ClientFactoryImpl();
+        clientFactoryInternal.registerClient(ReferenceClient.class, referenceClient);
+        clientFactoryInternal.registerClient(ServiceClient.class, serviceClient);
+        return clientFactoryInternal;
     }
 
     @Bean
+    @ConditionalOnMissingBean
+    public SofaRuntimeContext sofaRuntimeContext(SofaRuntimeManager sofaRuntimeManager,
+                                                 ComponentManager componentManager,
+                                                 ClientFactory clientFactory) {
+        SofaRuntimeContext sofaRuntimeContext = new SofaRuntimeContext(sofaRuntimeManager,
+            componentManager, clientFactory);
+        // To avoid circular bean creation, as SofaRuntimeContext depends on SofaRuntimeManager and vice versa.
+        ((StandardSofaRuntimeManager) sofaRuntimeManager).setSofaRuntimeContext(sofaRuntimeContext);
+        return sofaRuntimeContext;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public ComponentManager componentManager(ClientFactoryInternal clientFactoryInternal) {
+        return new ComponentManagerImpl(clientFactoryInternal);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public ReferenceClient referenceClient(@Lazy SofaRuntimeContext sofaRuntimeContext,
+                                           BindingAdapterFactory bindingAdapterFactory,
+                                           BindingConverterFactory bindingConverterFactory,
+                                           ReferenceRegisterHelper referenceRegisterHelper) {
+        return new ReferenceClientImpl(sofaRuntimeContext, bindingConverterFactory,
+            bindingAdapterFactory, referenceRegisterHelper);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public ServiceClient serviceClient(@Lazy SofaRuntimeContext sofaRuntimeContext,
+                                       BindingAdapterFactory bindingAdapterFactory,
+                                       BindingConverterFactory bindingConverterFactory,
+                                       ServiceRegisterHelper serviceRegisterHelper) {
+        return new ServiceClientImpl(sofaRuntimeContext, bindingConverterFactory,
+            bindingAdapterFactory, serviceRegisterHelper);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
     public static RuntimeContextBeanFactoryPostProcessor runtimeContextBeanFactoryPostProcessor(BindingAdapterFactory bindingAdapterFactory,
                                                                                                 BindingConverterFactory bindingConverterFactory,
-                                                                                                SofaRuntimeContext sofaRuntimeContext) {
+                                                                                                SofaRuntimeContext sofaRuntimeContext,
+                                                                                                ReferenceRegisterHelper referenceRegisterHelper) {
         return new RuntimeContextBeanFactoryPostProcessor(bindingAdapterFactory,
-            bindingConverterFactory, sofaRuntimeContext);
+            bindingConverterFactory, sofaRuntimeContext, referenceRegisterHelper);
     }
 
     @Bean
+    @ConditionalOnMissingBean
     public static ServiceBeanFactoryPostProcessor serviceBeanFactoryPostProcessor(SofaRuntimeContext sofaRuntimeContext,
                                                                                   BindingConverterFactory bindingConverterFactory) {
         return new ServiceBeanFactoryPostProcessor(sofaRuntimeContext, bindingConverterFactory);
-    }
-
-    @Bean
-    public AsyncProxyBeanPostProcessor asyncProxyBeanPostProcessor() {
-        return new AsyncProxyBeanPostProcessor();
-    }
-
-    @Bean
-    public AsyncTaskExecutionListener asyncTaskExecutionListener() {
-        return new AsyncTaskExecutionListener();
     }
 
     public static <T> Set<T> getClassesByServiceLoader(Class<T> clazz) {

@@ -18,6 +18,7 @@ package com.alipay.sofa.runtime.api;
 
 import com.alipay.sofa.runtime.service.component.Service;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
+import org.springframework.core.Ordered;
 
 /**
  * SOFA Service registering hook.
@@ -25,7 +26,7 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 2021/1/8
  */
-public interface ServiceRegisterHook {
+public interface ServiceRegisterHook extends Ordered {
     /**
      * Hook method invoked by SOFA before the actually reference registering.
      *
@@ -37,10 +38,5 @@ public interface ServiceRegisterHook {
     /**
      * Hook method invoked by SOFA after the actually service registering.
      */
-    void after();
-
-    /**
-     * The order of this hook.
-     */
-    int order();
+    void after(Service service, SofaRuntimeContext sofaRuntimeContext);
 }

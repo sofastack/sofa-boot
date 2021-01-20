@@ -24,51 +24,40 @@ import com.alipay.sofa.runtime.spi.component.DefaultImplementation;
 import com.alipay.sofa.runtime.spi.component.Implementation;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.ServiceLoader;
 
 /**
  * Service register helper.
- * Before service registering, invoke <code>ServiceRegisterHook.before</code> implementations via JAVA SPI.
- * After service registering, invoke <code>ServiceRegisterHook.after</code> implementations via JAVA SPI.
+ * Before service registering, invoke <code>ServiceRegisterHook.before</code> implementations.
+ * After service registering, invoke <code>ServiceRegisterHook.after</code> implementations.
  *
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 2021/1/8
  */
 public class ServiceRegisterHelper {
-    private static final List<ServiceRegisterHook> serviceRegisterHooks = new ArrayList<>();
+    private List<ServiceRegisterHook> serviceRegisterHooks;
 
-    static {
-        ServiceLoader<ServiceRegisterHook> serviceLoader = ServiceLoader.load(ServiceRegisterHook.class);
-        for (ServiceRegisterHook serviceRegisterHook: serviceLoader) {
-            serviceRegisterHooks.add(serviceRegisterHook);
-        }
-
-        // Sort in ascending order
-        serviceRegisterHooks.sort((o1, o2) -> {
-            return Integer.compare(o1.order(), o2.order());
-        });
+    public ServiceRegisterHelper(List<ServiceRegisterHook> serviceRegisterHooks) {
+        this.serviceRegisterHooks = serviceRegisterHooks;
     }
 
-    public static void registerService(Service service,
-                                       Object target,
-                                       BindingAdapterFactory bindingAdapterFactory,
-                                       SofaRuntimeContext sofaRuntimeContext) {
+    public void registerService(Service service, Object target,
+                                BindingAdapterFactory bindingAdapterFactory,
+                                SofaRuntimeContext sofaRuntimeContext) {
         // Invoke service registering before hook
-        for (ServiceRegisterHook serviceRegisterHook: serviceRegisterHooks) {
+        for (ServiceRegisterHook serviceRegisterHook : serviceRegisterHooks) {
             serviceRegisterHook.before(service, sofaRuntimeContext);
         }
 
         Implementation implementation = new DefaultImplementation();
         implementation.setTarget(target);
         ServiceComponent serviceComponent = new ServiceComponent(implementation, service,
-                bindingAdapterFactory, sofaRuntimeContext);
+            bindingAdapterFactory, sofaRuntimeContext);
         sofaRuntimeContext.getComponentManager().register(serviceComponent);
 
         // Invoke service registering after hook
-        for (ServiceRegisterHook serviceRegisterHook: serviceRegisterHooks) {
-            serviceRegisterHook.after();
+        for (ServiceRegisterHook serviceRegisterHook : serviceRegisterHooks) {
+            serviceRegisterHook.after(service, sofaRuntimeContext);
         }
     }
 }

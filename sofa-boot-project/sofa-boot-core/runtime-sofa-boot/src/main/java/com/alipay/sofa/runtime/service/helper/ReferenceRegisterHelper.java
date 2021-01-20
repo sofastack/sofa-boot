@@ -16,12 +16,11 @@
  */
 package com.alipay.sofa.runtime.service.helper;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.ServiceLoader;
 
 import com.alipay.sofa.runtime.api.ReferenceRegisterHook;
+import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.service.component.Reference;
 import com.alipay.sofa.runtime.service.component.ReferenceComponent;
 import com.alipay.sofa.runtime.spi.binding.Binding;
@@ -30,40 +29,36 @@ import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.ComponentManager;
 import com.alipay.sofa.runtime.spi.component.DefaultImplementation;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
+import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
 
 /**
  * Reference register helper.
- * Before referencing, invoke <code>ReferenceRegisterHook.before</code> implementations via JAVA SPI.
- * After referencing, invoke <code>ReferenceRegisterHook.after</code> implementations via JAVA SPI.
+ * Before referencing, invoke <code>ReferenceRegisterHook.before</code> implementations.
+ * After referencing, invoke <code>ReferenceRegisterHook.after</code> implementations.
  *
  * @author xuanbei 18/3/1
  */
 public class ReferenceRegisterHelper {
-    private final static List<ReferenceRegisterHook> referenceRegisterHooks = new ArrayList<>();
+    private List<ReferenceRegisterHook> referenceRegisterHooks;
 
-    static {
-        ServiceLoader<ReferenceRegisterHook> serviceLoader = ServiceLoader.load(ReferenceRegisterHook.class);
-        for (ReferenceRegisterHook referenceRegisterHook: serviceLoader) {
-            referenceRegisterHooks.add(referenceRegisterHook);
-        }
-
-        // Sort in ascending order
-        referenceRegisterHooks.sort((o1, o2) -> {
-            return Integer.compare(o1.order(), o2.order());
-        });
+    public ReferenceRegisterHelper(List<ReferenceRegisterHook> referenceRegisterHooks) {
+        this.referenceRegisterHooks = referenceRegisterHooks;
     }
 
-    public static Object registerReference(Reference reference,
-                                           BindingAdapterFactory bindingAdapterFactory,
-                                           SofaRuntimeContext sofaRuntimeContext) {
+    public Object registerReference(Reference reference,
+                                    BindingAdapterFactory bindingAdapterFactory,
+                                    SofaRuntimeContext sofaRuntimeContext) {
         // Invoke reference registering before hook
-        for (ReferenceRegisterHook referenceRegisterHook: referenceRegisterHooks) {
+        for (ReferenceRegisterHook referenceRegisterHook : referenceRegisterHooks) {
             referenceRegisterHook.before(reference, sofaRuntimeContext);
         }
 
         ComponentManager componentManager = sofaRuntimeContext.getComponentManager();
+        ComponentName componentName = ComponentNameFactory.createComponentName(
+            ReferenceComponent.REFERENCE_COMPONENT_TYPE, reference.getInterfaceType(),
+            reference.getUniqueId() + "#" + generateBindingHashCode(reference));
         ReferenceComponent referenceComponent = new ReferenceComponent(reference,
-            new DefaultImplementation(), bindingAdapterFactory, sofaRuntimeContext);
+            new DefaultImplementation(), bindingAdapterFactory, sofaRuntimeContext, componentName);
 
         if (componentManager.isRegistered(referenceComponent.getName())) {
             return componentManager.getComponentInfo(referenceComponent.getName())
@@ -74,13 +69,13 @@ public class ReferenceRegisterHelper {
         Object rtn = componentInfo.getImplementation().getTarget();
 
         // Invoke reference registering after hook
-        for (ReferenceRegisterHook referenceRegisterHook: referenceRegisterHooks) {
-            referenceRegisterHook.after(rtn);
+        for (ReferenceRegisterHook referenceRegisterHook : referenceRegisterHooks) {
+            referenceRegisterHook.after(reference, sofaRuntimeContext, rtn);
         }
         return rtn;
     }
 
-    public static int generateBindingHashCode(Reference reference) {
+    public int generateBindingHashCode(Reference reference) {
         Collection<Binding> bindings = reference.getBindings();
         int result = 1;
         for (Binding binding : bindings) {

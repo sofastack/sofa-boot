@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.runtime.spring.factory;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
 import com.alipay.sofa.runtime.model.InterfaceMode;
@@ -30,11 +31,14 @@ import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
  * @author xuanbei 18/3/1
  */
 public class ReferenceFactoryBean extends AbstractContractFactoryBean {
-    protected Object  proxy;
+    protected Object                proxy;
     /** jvm first or not */
-    protected boolean jvmFirst = true;
+    protected boolean               jvmFirst = true;
     /** load balance **/
-    protected String  loadBalance;
+    protected String                loadBalance;
+
+    @Autowired
+    private ReferenceRegisterHelper referenceRegisterHelper;
 
     public ReferenceFactoryBean() {
     }
@@ -59,7 +63,7 @@ public class ReferenceFactoryBean extends AbstractContractFactoryBean {
         }
 
         reference.addBinding(bindings.get(0));
-        proxy = ReferenceRegisterHelper.registerReference(reference, bindingAdapterFactory,
+        proxy = referenceRegisterHelper.registerReference(reference, bindingAdapterFactory,
             sofaRuntimeContext);
     }
 

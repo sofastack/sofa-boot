@@ -53,29 +53,29 @@ import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
  */
 public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor, PriorityOrdered {
     private final PlaceHolderBinder binder = new DefaultPlaceHolderBinder();
+
     private ApplicationContext      applicationContext;
     private SofaRuntimeContext      sofaRuntimeContext;
     private BindingAdapterFactory   bindingAdapterFactory;
     private BindingConverterFactory bindingConverterFactory;
     private Environment             environment;
+    private ReferenceRegisterHelper referenceRegisterHelper;
 
     /**
      * To construct a ReferenceAnnotationBeanPostProcessor via a Spring Bean
      * sofaRuntimeContext and sofaRuntimeProperties will be obtained from applicationContext
-     * @param applicationContext
-     * @param sofaRuntimeContext
-     * @param bindingAdapterFactory
-     * @param bindingConverterFactory
      */
     public ReferenceAnnotationBeanPostProcessor(ApplicationContext applicationContext,
                                                 SofaRuntimeContext sofaRuntimeContext,
                                                 BindingAdapterFactory bindingAdapterFactory,
-                                                BindingConverterFactory bindingConverterFactory) {
+                                                BindingConverterFactory bindingConverterFactory,
+                                                ReferenceRegisterHelper referenceRegisterHelper) {
         this.applicationContext = applicationContext;
         this.sofaRuntimeContext = sofaRuntimeContext;
         this.bindingAdapterFactory = bindingAdapterFactory;
         this.bindingConverterFactory = bindingConverterFactory;
         this.environment = applicationContext.getEnvironment();
+        this.referenceRegisterHelper = referenceRegisterHelper;
     }
 
     @Override
@@ -178,7 +178,7 @@ public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor, 
         Binding binding = bindingConverter.convert(sofaReferenceAnnotation,
             sofaReferenceAnnotation.binding(), bindingConverterContext);
         reference.addBinding(binding);
-        return ReferenceRegisterHelper.registerReference(reference, bindingAdapterFactory,
+        return referenceRegisterHelper.registerReference(reference, bindingAdapterFactory,
             sofaRuntimeContext);
     }
 

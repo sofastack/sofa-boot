@@ -48,7 +48,19 @@ public class ReferenceClientImpl implements ReferenceClient {
     private SofaRuntimeContext      sofaRuntimeContext;
     private BindingConverterFactory bindingConverterFactory;
     private BindingAdapterFactory   bindingAdapterFactory;
+    private ReferenceRegisterHelper referenceRegisterHelper;
 
+    public ReferenceClientImpl(SofaRuntimeContext sofaRuntimeContext,
+                               BindingConverterFactory bindingConverterFactory,
+                               BindingAdapterFactory bindingAdapterFactory,
+                               ReferenceRegisterHelper referenceRegisterHelper) {
+        this.sofaRuntimeContext = sofaRuntimeContext;
+        this.bindingConverterFactory = bindingConverterFactory;
+        this.bindingAdapterFactory = bindingAdapterFactory;
+        this.referenceRegisterHelper = referenceRegisterHelper;
+    }
+
+    @Deprecated
     public ReferenceClientImpl(SofaRuntimeContext sofaRuntimeContext,
                                BindingConverterFactory bindingConverterFactory,
                                BindingAdapterFactory bindingAdapterFactory) {
@@ -90,7 +102,7 @@ public class ReferenceClientImpl implements ReferenceClient {
     @SuppressWarnings("unchecked")
     public <T> T reference(ReferenceParam<T> referenceParam) {
 
-        return (T) ReferenceRegisterHelper.registerReference(
+        return (T) referenceRegisterHelper.registerReference(
             getReferenceFromReferenceParam(referenceParam), bindingAdapterFactory,
             sofaRuntimeContext);
     }
@@ -102,7 +114,7 @@ public class ReferenceClientImpl implements ReferenceClient {
             ReferenceComponent.REFERENCE_COMPONENT_TYPE,
             reference.getInterfaceType(),
             reference.getUniqueId() + "#"
-                    + ReferenceRegisterHelper.generateBindingHashCode(reference));
+                    + referenceRegisterHelper.generateBindingHashCode(reference));
         Collection<ComponentInfo> referenceComponents = sofaRuntimeContext.getComponentManager()
             .getComponentInfosByType(ReferenceComponent.REFERENCE_COMPONENT_TYPE);
 

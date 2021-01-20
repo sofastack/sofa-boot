@@ -19,8 +19,11 @@ package com.alipay.sofa.isle.test;
 import com.alipay.sofa.isle.spring.share.SofaModulePostProcessorShareManager;
 import com.alipay.sofa.runtime.SofaFramework;
 import com.alipay.sofa.runtime.client.impl.ClientFactoryImpl;
+import com.alipay.sofa.runtime.component.impl.ComponentManagerImpl;
 import com.alipay.sofa.runtime.component.impl.StandardSofaRuntimeManager;
 import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
+import com.alipay.sofa.runtime.spi.component.ComponentManager;
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import org.junit.Assert;
 import org.junit.Test;
@@ -134,9 +137,12 @@ public class FailModuleTest {
         @ConditionalOnMissingBean
         public static SofaRuntimeManager sofaRuntimeManager() {
             ClientFactoryInternal clientFactoryInternal = new ClientFactoryImpl();
-            SofaRuntimeManager sofaRuntimeManager = new StandardSofaRuntimeManager(
-                "FailModuleTest", Thread.currentThread().getContextClassLoader(),
-                clientFactoryInternal);
+            ComponentManager componentManager = new ComponentManagerImpl(clientFactoryInternal);
+            StandardSofaRuntimeManager sofaRuntimeManager = new StandardSofaRuntimeManager(Thread
+                .currentThread().getContextClassLoader(), clientFactoryInternal, componentManager);
+            sofaRuntimeManager.setAppName("FailModuleTest");
+            sofaRuntimeManager.setSofaRuntimeContext(new SofaRuntimeContext(sofaRuntimeManager,
+                componentManager, clientFactoryInternal));
             SofaFramework.registerSofaRuntimeManager(sofaRuntimeManager);
             return sofaRuntimeManager;
         }

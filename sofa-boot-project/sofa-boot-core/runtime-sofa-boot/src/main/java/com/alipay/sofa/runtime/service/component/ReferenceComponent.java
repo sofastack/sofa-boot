@@ -30,7 +30,6 @@ import com.alipay.sofa.runtime.invoke.DynamicJvmServiceProxyFinder;
 import com.alipay.sofa.runtime.log.SofaLogger;
 import com.alipay.sofa.runtime.model.ComponentType;
 import com.alipay.sofa.runtime.service.binding.JvmBinding;
-import com.alipay.sofa.runtime.service.helper.ReferenceRegisterHelper;
 import com.alipay.sofa.runtime.spi.binding.Binding;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapter;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
@@ -57,12 +56,8 @@ public class ReferenceComponent extends AbstractComponent {
 
     public ReferenceComponent(Reference reference, Implementation implementation,
                               BindingAdapterFactory bindingAdapterFactory,
-                              SofaRuntimeContext sofaRuntimeContext) {
-        this.componentName = ComponentNameFactory.createComponentName(
-            REFERENCE_COMPONENT_TYPE,
-            reference.getInterfaceType(),
-            reference.getUniqueId() + "#"
-                    + ReferenceRegisterHelper.generateBindingHashCode(reference));
+                              SofaRuntimeContext sofaRuntimeContext, ComponentName componentName) {
+        this.componentName = componentName;
         this.reference = reference;
         this.implementation = implementation;
         this.sofaRuntimeContext = sofaRuntimeContext;

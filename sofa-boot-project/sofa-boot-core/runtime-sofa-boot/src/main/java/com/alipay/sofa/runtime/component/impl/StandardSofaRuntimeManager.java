@@ -19,6 +19,7 @@ package com.alipay.sofa.runtime.component.impl;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.health.RuntimeHealthChecker;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
@@ -37,16 +38,30 @@ import org.springframework.context.ApplicationContextAware;
  * @author xuanbei 18/3/1
  */
 public class StandardSofaRuntimeManager implements SofaRuntimeManager, ApplicationContextAware {
-
+    private String                     appName;
+    private ClassLoader                appClassLoader;
     private ComponentManager           componentManager;
     private ClientFactoryInternal      clientFactoryInternal;
     private SofaRuntimeContext         sofaRuntimeContext;
+
     private ApplicationContext         rootApplicationContext;
-    private String                     appName;
-    private ClassLoader                appClassLoader;
-    private List<RuntimeShutdownAware> runtimeShutdownAwares = new CopyOnWriteArrayList<RuntimeShutdownAware>();
+
+    private List<RuntimeShutdownAware> runtimeShutdownAwares = new CopyOnWriteArrayList<>();
     private List<RuntimeHealthChecker> runtimeHealthCheckers = new CopyOnWriteArrayList<>();
 
+    public StandardSofaRuntimeManager(ClassLoader appClassLoader,
+                                      ClientFactoryInternal clientFactoryInternal,
+                                      ComponentManager componentManager) {
+        this.componentManager = componentManager;
+        this.appClassLoader = appClassLoader;
+        this.clientFactoryInternal = clientFactoryInternal;
+    }
+
+    /**
+     * This method is no longer used, SofaRuntimeContext is also a bean in Spring context.
+     * We don't create it by ourself.
+     */
+    @Deprecated
     public StandardSofaRuntimeManager(String appName, ClassLoader appClassLoader,
                                       ClientFactoryInternal clientFactoryInternal) {
         componentManager = new ComponentManagerImpl(clientFactoryInternal);
@@ -55,6 +70,11 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager, Applicati
         this.sofaRuntimeContext = new SofaRuntimeContext(this, componentManager,
             clientFactoryInternal);
         this.clientFactoryInternal = clientFactoryInternal;
+    }
+
+    // To avoid circular bean creation, as SofaRuntimeContext depends on SofaRuntimeManager and vice versa.
+    public void setSofaRuntimeContext(SofaRuntimeContext sofaRuntimeContext) {
+        this.sofaRuntimeContext = sofaRuntimeContext;
     }
 
     @Override
@@ -160,5 +180,10 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager, Applicati
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         rootApplicationContext = applicationContext;
+        appName = applicationContext.getEnvironment().getProperty(SofaBootConstants.APP_NAME_KEY);
+    }
+
+    public void setAppName(String appName) {
+        this.appName = appName;
     }
 }
