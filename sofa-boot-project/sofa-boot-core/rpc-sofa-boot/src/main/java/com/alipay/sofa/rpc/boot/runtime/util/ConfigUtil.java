@@ -25,6 +25,8 @@ import com.alipay.sofa.rpc.config.RegistryConfig;
 import java.util.List;
 
 /**
+ * Utility method for registry operation for ProviderConfig and ConsumerConfig.
+ *
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 2021/1/15
  */
