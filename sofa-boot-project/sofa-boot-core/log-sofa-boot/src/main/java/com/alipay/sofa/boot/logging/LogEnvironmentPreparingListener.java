@@ -36,8 +36,8 @@ public class LogEnvironmentPreparingListener
                                             Ordered {
     @Override
     public void onApplicationEvent(ApplicationEnvironmentPreparedEvent event) {
-        prepare(event.getEnvironment());
         defaultConsoleLoggers();
+        prepare(event.getEnvironment());
     }
 
     @Override
