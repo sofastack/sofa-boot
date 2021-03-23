@@ -23,8 +23,7 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 
 /**
- * @author: guolei.sgl (guolei.sgl@antfin.com) 2019/8/10 11:51 AM
- * @since:
+ * @author guolei.sgl (guolei.sgl@antfin.com) 2019/8/10 11:51 AM
  **/
 public class SofaTracerAdvisingBeanPostProcessor extends AbstractAdvisingBeanPostProcessor
                                                                                           implements

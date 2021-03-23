@@ -22,8 +22,7 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * @author: guolei.sgl (guolei.sgl@antfin.com) 2019/9/11 11:59 PM
- * @since:
+ * @author guolei.sgl (guolei.sgl@antfin.com) 2019/9/11 11:59 PM
  **/
 public class SofaTracerRestTemplateBeanPostProcessor implements BeanPostProcessor {
 

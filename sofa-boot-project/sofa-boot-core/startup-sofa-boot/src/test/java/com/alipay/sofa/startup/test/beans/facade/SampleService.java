@@ -17,8 +17,8 @@
 package com.alipay.sofa.startup.test.beans.facade;
 
 /**
- * @author: Zhijie
- * @since: 2020/7/13
+ * @author Zhijie
+ * @since 2020/7/13
  */
 public interface SampleService {
     String service();

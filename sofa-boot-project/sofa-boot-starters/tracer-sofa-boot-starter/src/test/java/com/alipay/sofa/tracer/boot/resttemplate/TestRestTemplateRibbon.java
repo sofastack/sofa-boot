@@ -34,8 +34,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * @author: guolei.sgl (guolei.sgl@antfin.com) 2019/9/12 12:52 AM
- * @since:
+ * @author guolei.sgl (guolei.sgl@antfin.com) 2019/9/12 12:52 AM
  **/
 @ActiveProfiles("ribbon")
 @Import({ FeignAutoConfiguration.class, HttpMessageConvertersAutoConfiguration.class })

@@ -28,8 +28,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @author: guolei.sgl (guolei.sgl@antfin.com) 2019/3/13 6:04 PM
- * @since:
+ * @author guolei.sgl (guolei.sgl@antfin.com) 2019/3/13 6:04 PM
  **/
 @Configuration
 @ConditionalOnClass({ Client.class, SofaTracerFeignContextBeanPostProcessor.class,

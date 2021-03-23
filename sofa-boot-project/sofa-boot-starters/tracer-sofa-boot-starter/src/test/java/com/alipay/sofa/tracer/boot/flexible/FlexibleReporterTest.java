@@ -35,8 +35,7 @@ import java.util.List;
 import static org.junit.Assert.assertTrue;
 
 /**
- * @author: guolei.sgl (guolei.sgl@antfin.com) 2019/8/3 11:29 AM
- * @since:
+ * @author guolei.sgl (guolei.sgl@antfin.com) 2019/8/3 11:29 AM
  **/
 @ActiveProfiles("flexible")
 public class FlexibleReporterTest extends AbstractTestBase {

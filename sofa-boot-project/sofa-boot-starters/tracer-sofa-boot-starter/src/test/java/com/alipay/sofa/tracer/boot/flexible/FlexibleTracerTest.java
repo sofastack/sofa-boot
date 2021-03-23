@@ -36,8 +36,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
- * @author: guolei.sgl (guolei.sgl@antfin.com) 2019/8/3 10:59 AM
- * @since:
+ * @author guolei.sgl (guolei.sgl@antfin.com) 2019/8/3 10:59 AM
  **/
 @ActiveProfiles("json")
 public class FlexibleTracerTest extends AbstractTestBase {

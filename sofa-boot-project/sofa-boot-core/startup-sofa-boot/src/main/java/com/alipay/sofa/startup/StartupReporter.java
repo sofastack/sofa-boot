@@ -26,8 +26,8 @@ import java.util.List;
 /**
  * Collect and report the costs
  *
- * @author: Zhijie
- * @since: 2020/7/8
+ * @author Zhijie
+ * @since 2020/7/8
  */
 public class StartupReporter {
     private final StartupStaticsModel startupStaticsModel = new StartupStaticsModel();

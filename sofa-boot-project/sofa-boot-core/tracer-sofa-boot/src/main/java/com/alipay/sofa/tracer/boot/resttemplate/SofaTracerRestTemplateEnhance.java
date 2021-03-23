@@ -26,8 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author: guolei.sgl (guolei.sgl@antfin.com) 2019/9/12 12:02 AM
- * @since:
+ * @author guolei.sgl (guolei.sgl@antfin.com) 2019/9/12 12:02 AM
  **/
 public class SofaTracerRestTemplateEnhance {
 

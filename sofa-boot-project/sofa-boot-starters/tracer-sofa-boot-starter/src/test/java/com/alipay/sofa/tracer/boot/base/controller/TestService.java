@@ -20,8 +20,7 @@ import com.alipay.sofa.tracer.plugin.flexible.annotations.Tracer;
 import org.springframework.stereotype.Service;
 
 /**
- * @author: guolei.sgl (guolei.sgl@antfin.com) 2019/8/3 10:27 AM
- * @since:
+ * @author guolei.sgl (guolei.sgl@antfin.com) 2019/8/3 10:27 AM
  **/
 @Service
 public class TestService {

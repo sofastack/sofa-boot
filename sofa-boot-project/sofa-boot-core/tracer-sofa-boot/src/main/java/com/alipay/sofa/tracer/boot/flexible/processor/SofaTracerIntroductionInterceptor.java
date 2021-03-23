@@ -27,8 +27,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 /**
- * @author: guolei.sgl (guolei.sgl@antfin.com) 2019/8/9 3:05 PM
- * @since:
+ * @author guolei.sgl (guolei.sgl@antfin.com) 2019/8/9 3:05 PM
  **/
 public class SofaTracerIntroductionInterceptor implements IntroductionInterceptor {
 

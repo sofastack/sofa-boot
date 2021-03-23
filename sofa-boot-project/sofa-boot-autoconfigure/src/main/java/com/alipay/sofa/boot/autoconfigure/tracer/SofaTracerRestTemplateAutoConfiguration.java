@@ -26,8 +26,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @author: guolei.sgl (guolei.sgl@antfin.com) 2019/9/11 9:43 PM
- * @since:
+ * @author guolei.sgl (guolei.sgl@antfin.com) 2019/9/11 9:43 PM
  **/
 @Configuration
 @ConditionalOnWebApplication
