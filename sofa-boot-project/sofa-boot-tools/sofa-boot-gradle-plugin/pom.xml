@@ -17,7 +17,7 @@
         <gradle.task>build</gradle.task>
         <skip.gradle.build>false</skip.gradle.build>
         <skip.gradle.test>false</skip.gradle.test>
-        <kotlin.version>1.2.20</kotlin.version>
+<!--        <kotlin.version>1.2.20</kotlin.version>-->
     </properties>
     <dependencies>
         <dependency>
@@ -35,12 +35,12 @@
             <artifactId>commons-compress</artifactId>
             <version>1.18</version>
         </dependency>
-        <dependency>
-            <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-gradle-plugin</artifactId>
-            <version>${kotlin.version}</version>
-            <optional>true</optional>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.jetbrains.kotlin</groupId>-->
+<!--            <artifactId>kotlin-gradle-plugin</artifactId>-->
+<!--            <version>${kotlin.version}</version>-->
+<!--            <optional>true</optional>-->
+<!--        </dependency>-->
     </dependencies>
     <build>
         <plugins>

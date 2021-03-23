@@ -44,7 +44,6 @@ public class StartupHealthCheckStageConfigurationTest {
                                                                  .of(SofaStartupAutoConfiguration.class,
                                                                      SofaBootHealthCheckAutoConfiguration.class,
                                                                      StartupHealthCheckStageConfiguration.class,
-                                                                     TestHealthCheckConfiguration.class,
                                                                      SofaRuntimeAutoConfiguration.class));
 
     @Test
