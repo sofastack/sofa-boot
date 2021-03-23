@@ -144,7 +144,7 @@ public class SofaBootHealthCheckAutoConfiguration {
         @Bean
         @ConditionalOnMissingBean
         @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
-        public HttpCodeStatusMapper createHealthStatusHttpMapper(HealthEndpointProperties healthEndpointProperties) {
+        public HttpCodeStatusMapper httpCodeStatusMapper(HealthEndpointProperties healthEndpointProperties) {
             return new SofaHttpCodeStatusMapper(healthEndpointProperties);
         }
     }

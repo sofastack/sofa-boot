@@ -27,6 +27,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.alipay.sofa.rpc.boot.config.SofaBootRpcConfigConstants;
@@ -41,6 +42,7 @@ public class RpcShutdownTest extends ActivelyDestroyTest implements ApplicationC
     private static ApplicationContext applicationContext;
 
     @Test
+    @DirtiesContext
     public void test() {
         Assert.assertFalse(TestUtils.available(SofaBootRpcConfigConstants.BOLT_PORT_DEFAULT));
     }
@@ -49,11 +51,11 @@ public class RpcShutdownTest extends ActivelyDestroyTest implements ApplicationC
     public static void testRpcGracefulShutdown() {
         ((ConfigurableApplicationContext) applicationContext).close();
 
-        boolean portAvailale = false;
+        boolean portAvailable = false;
         //in case of graceful shutdown too slow
         for (int i = 0; i < 3; i++) {
-            portAvailale = TestUtils.available(SofaBootRpcConfigConstants.BOLT_PORT_DEFAULT);
-            if (portAvailale) {
+            portAvailable = TestUtils.available(SofaBootRpcConfigConstants.BOLT_PORT_DEFAULT);
+            if (portAvailable) {
                 break;
             }
             try {
@@ -62,8 +64,7 @@ public class RpcShutdownTest extends ActivelyDestroyTest implements ApplicationC
                 e.printStackTrace();
             }
         }
-        Assert.assertTrue(portAvailale);
-
+        Assert.assertTrue(portAvailable);
     }
 
     @Override
