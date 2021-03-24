@@ -19,12 +19,16 @@ package com.alipay.sofa.boot.logging;
 import com.alipay.sofa.common.log.CommonLoggingConfigurations;
 import com.alipay.sofa.common.log.Constants;
 import com.alipay.sofa.common.log.env.LogEnvUtils;
+import com.alipay.sofa.common.utils.StringUtil;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.EnumerablePropertySource;
 import org.springframework.core.env.PropertySource;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
@@ -47,12 +51,20 @@ public class LogEnvironmentPreparingListener
     }
 
     private void prepare(ConfigurableEnvironment environment) {
-        CommonLoggingConfigurations.loadExternalConfiguration(Constants.LOG_PATH,
-            environment.getProperty(Constants.LOG_PATH));
-        CommonLoggingConfigurations.loadExternalConfiguration(Constants.OLD_LOG_PATH,
-            environment.getProperty(Constants.OLD_LOG_PATH));
-        CommonLoggingConfigurations.loadExternalConfiguration(Constants.LOG_ENCODING_PROP_KEY,
-            environment.getProperty(Constants.LOG_ENCODING_PROP_KEY));
+        Map<String, String> context = new HashMap<>();
+        loadLogConfiguration(Constants.LOG_PATH, environment.getProperty(Constants.LOG_PATH),
+            context);
+        loadLogConfiguration(Constants.OLD_LOG_PATH,
+            environment.getProperty(Constants.OLD_LOG_PATH), context);
+        loadLogConfiguration(Constants.LOG_ENCODING_PROP_KEY,
+            environment.getProperty(Constants.LOG_ENCODING_PROP_KEY), context);
+        // Don't delete this!
+        // Some old SOFA SDKs rely on JVM system properties to determine log configurations.
+        LogEnvUtils.keepCompatible(context, true);
+
+        for (Map.Entry<String, String> entry : context.entrySet()) {
+            CommonLoggingConfigurations.loadExternalConfiguration(entry.getKey(), entry.getValue());
+        }
 
         for (PropertySource<?> propertySource : environment.getPropertySources()) {
             if (propertySource instanceof EnumerablePropertySource) {
@@ -70,6 +82,12 @@ public class LogEnvironmentPreparingListener
         if (LocalEnvUtil.isLocalEnv()) {
             CommonLoggingConfigurations.loadExternalConfiguration(
                 Constants.SOFA_MIDDLEWARE_ALL_LOG_CONSOLE_SWITCH, "true");
+        }
+    }
+
+    private void loadLogConfiguration(String key, String value, Map<String, String> context) {
+        if (!StringUtil.isBlank(value)) {
+            context.put(key, value);
         }
     }
 }
