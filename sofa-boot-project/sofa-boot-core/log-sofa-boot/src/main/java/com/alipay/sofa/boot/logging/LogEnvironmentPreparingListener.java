@@ -47,7 +47,7 @@ public class LogEnvironmentPreparingListener
     @Override
     public int getOrder() {
         // Must be invoked after ConfigFileApplicationListener
-        return Ordered.HIGHEST_PRECEDENCE + 100;
+        return Ordered.HIGHEST_PRECEDENCE + 20;
     }
 
     private void prepare(ConfigurableEnvironment environment) {
