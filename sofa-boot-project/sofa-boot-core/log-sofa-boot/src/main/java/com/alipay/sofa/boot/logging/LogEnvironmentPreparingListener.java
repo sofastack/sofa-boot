@@ -53,9 +53,10 @@ public class LogEnvironmentPreparingListener
     private void prepare(ConfigurableEnvironment environment) {
         Map<String, String> context = new HashMap<>();
         loadLogConfiguration(Constants.LOG_PATH, environment.getProperty(Constants.LOG_PATH),
-            context);
+            Constants.LOGGING_PATH_DEFAULT, context);
         loadLogConfiguration(Constants.OLD_LOG_PATH,
-            environment.getProperty(Constants.OLD_LOG_PATH), context);
+            environment.getProperty(Constants.OLD_LOG_PATH), context.get(Constants.LOG_PATH),
+            context);
         loadLogConfiguration(Constants.LOG_ENCODING_PROP_KEY,
             environment.getProperty(Constants.LOG_ENCODING_PROP_KEY), context);
         // Don't delete this!
@@ -82,6 +83,15 @@ public class LogEnvironmentPreparingListener
         if (LocalEnvUtil.isLocalEnv()) {
             CommonLoggingConfigurations.loadExternalConfiguration(
                 Constants.SOFA_MIDDLEWARE_ALL_LOG_CONSOLE_SWITCH, "true");
+        }
+    }
+
+    private void loadLogConfiguration(String key, String value, String defaultValue,
+                                      Map<String, String> context) {
+        if (!StringUtil.isBlank(value)) {
+            context.put(key, value);
+        } else {
+            context.put(key, defaultValue);
         }
     }
 
