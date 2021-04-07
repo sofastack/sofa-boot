@@ -14,9 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.isle.spring.listener;
-
-import java.util.*;
+package com.alipay.sofa.isle.spring;
 
 import com.alipay.sofa.boot.util.BeanDefinitionUtil;
 import com.alipay.sofa.isle.spring.share.SofaModulePostProcessorShareManager;
@@ -27,18 +25,23 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.ConfigurationClassPostProcessor;
-import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import org.springframework.core.env.Environment;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * get all the BeanPostProcessors and BeanFactoryPostProcessors of the root application context
  *
  * @author xuanbei 18/3/26
  */
-@Order(Ordered.LOWEST_PRECEDENCE)
+@Order
 public class SofaModuleBeanFactoryPostProcessor implements BeanFactoryPostProcessor,
                                                EnvironmentAware {
     /** spring will add automatically  **/

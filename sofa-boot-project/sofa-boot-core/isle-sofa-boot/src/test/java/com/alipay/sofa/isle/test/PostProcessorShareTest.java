@@ -18,7 +18,7 @@ package com.alipay.sofa.isle.test;
 
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.util.BeanDefinitionUtil;
-import com.alipay.sofa.isle.spring.listener.SofaModuleBeanFactoryPostProcessor;
+import com.alipay.sofa.isle.spring.SofaModuleBeanFactoryPostProcessor;
 import com.alipay.sofa.isle.spring.share.SofaModulePostProcessorShareFilter;
 import com.alipay.sofa.isle.spring.share.SofaModulePostProcessorShareManager;
 import com.alipay.sofa.isle.spring.share.UnshareSofaModulePostProcessor;
