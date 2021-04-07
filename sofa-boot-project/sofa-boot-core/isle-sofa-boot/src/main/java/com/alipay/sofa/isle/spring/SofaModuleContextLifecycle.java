@@ -28,7 +28,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * SofaModuleContextLifecycle is a SmartLifecycle which will be started after ApplicationContext refreshed.
  * SofaModuleContextLifecycle has -100 phase, which overrides default lowest order, and has following effect:
  * 1. Start before default Lifecycle bean.
- * 2. Other bean has option to precedes.
+ * 2. Any other bean has option to precede.
  *
  * @author xuanbei 18/3/12
  */
