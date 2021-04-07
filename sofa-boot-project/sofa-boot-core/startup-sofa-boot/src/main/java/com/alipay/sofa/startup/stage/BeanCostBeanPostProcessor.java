@@ -36,15 +36,17 @@ public class BeanCostBeanPostProcessor implements BeanPostProcessor {
     private final Map<String, BeanStat> beanInitCostMap        = new ConcurrentHashMap<>();
     private final List<BeanStat>        beanStatList           = new ArrayList<>();
     private final long                  beanLoadCost;
+    private final boolean               skipSofaBean;
 
-    public BeanCostBeanPostProcessor(long beanInitCostThreshold) {
+    public BeanCostBeanPostProcessor(long beanInitCostThreshold, boolean skipSofaBean) {
         this.beanLoadCost = beanInitCostThreshold;
+        this.skipSofaBean = skipSofaBean;
     }
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName)
                                                                                throws BeansException {
-        if (isNotSofaBean(bean)) {
+        if (!skipSofaBean || isNotSofaBean(bean)) {
             BeanStat beanStat = new BeanStat();
             String beanClassName = getBeanName(bean, beanName);
             beanStat.setBeanClassName(beanClassName);
@@ -57,7 +59,7 @@ public class BeanCostBeanPostProcessor implements BeanPostProcessor {
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName)
                                                                               throws BeansException {
-        if (isNotSofaBean(bean)) {
+        if (!skipSofaBean || isNotSofaBean(bean)) {
             String beanClassName = getBeanName(bean, beanName);
             BeanStat beanStat = beanInitCostMap.remove(beanClassName);
             if (beanStat != null) {
