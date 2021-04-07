@@ -40,12 +40,13 @@ public class SofaModuleContextLifecycle implements SmartLifecycle {
 
     @Override
     public void start() {
-        try {
-            pipelineContext.process();
-            isleRefreshed.set(true);
-        } catch (Throwable t) {
-            SofaLogger.error("process pipeline error", t);
-            throw new RuntimeException(t);
+        if (isleRefreshed.compareAndSet(false, true)) {
+            try {
+                pipelineContext.process();
+            } catch (Throwable t) {
+                SofaLogger.error("process pipeline error", t);
+                throw new RuntimeException(t);
+            }
         }
     }
 
