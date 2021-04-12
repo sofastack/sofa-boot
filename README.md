@@ -42,6 +42,8 @@ Aimed to solve class or dependency conflicts, [SOFAArk](https://github.com/sofas
 Compared with unwieldy OSGi class isolation implementation, SOFAArk is a light-weight scheme and focuses on the point of class loading between application and middleware modules.
 Also, it is easy to make a third party SDK into SOFAArk module because the high extensibility of SOFAArk.
 
+See further on [SOFAArk documentation](https://www.sofastack.tech/en/projects/sofa-boot/sofa-ark-readme/).
+
 ### Spring Context Isolation
 Two common forms of modularization are popular in Java world:
 1. Modularization based on code organization: different functional codes are organized under separate Java projects and packaged into different JARs. All Java classes are loaded by same classloader when running.
