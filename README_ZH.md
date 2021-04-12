@@ -54,7 +54,7 @@ SOFABoot 从 2.4.0 版本开始支持基于 Spring 上下文隔离的模块化�
 
 在贡献代码之前，请阅读[如何贡献](./CONTRIBUTING.md)来了解如何向 SOFABoot 贡献代码。
 
-SOFABoot 的编译环境的要求为 JDK7 或者 JDK8，需要采用 [Apache Maven 3.2.5](https://archive.apache.org/dist/maven/maven-3/3.2.5/binaries/) 或者更高的版本进行编译。
+SOFABoot 的编译环境的要求为 JDK8，需要采用 [Apache Maven 3.2.5](https://archive.apache.org/dist/maven/maven-3/3.2.5/binaries/) 或者更高的版本进行编译。
 
 ## 五、感谢
 

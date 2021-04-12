@@ -8,8 +8,9 @@
 ![maven](https://img.shields.io/github/release/sofastack/sofa-boot.svg)
 
 SOFABoot is an open source Java development framework based on Spring Boot.
+
 Varieties of enhancements such as application readiness check, Spring context isolation, class isolation, log space separation, etc. are provided.
-SOFABoot accommodates additionally SOFAStack middleware more comfortably and seamlessly for developers coming from Spring Boot.
+In addition, SOFABoot accommodates SOFAStack middleware more comfortably and seamlessly for developers coming from Spring Boot.
 
 ## Background
 
@@ -19,13 +20,25 @@ Spring Boot makes it easy to create stand-alone, production-grade Spring-based a
 - No built-in class isolation scheme to support finer modular applications.
 - Log configurations of all SDKs used by application are repeatedly arranged.
 
-To solve above issues while maintain the advantages of Spring Boot, Ant Group develops the SOFABoot based on Spring Boot and make it open source.
+To address above issues while maintain the advantages of Spring Boot, Ant Group develops the SOFABoot based on Spring Boot and make it open source.
 In SOFABoot, SOFAStack middleware SDKs are packaged as self-contained "starters" to provide the corresponding facet or functionality dependencies. 
 
+## Quick Start
+Please refer to SOFAStack Documentation for [SOFABoot quick start guide](https://www.sofastack.tech/en/projects/sofa-boot/quick-start/).
 
-为了解决以上的问题，又因为 SOFA 中间件中的各个组件本身就需要集成 Spring Boot，所以蚂蚁金服基于 Spring Boot 开发并开源了 SOFABoot，来解决以上的问题，也方便使用者在 Spring Boot 中方便地去使用 SOFA 中间件。
+## Functionality
+To supplement the abilities of deploying large-scale microservices in production environment, SOFABoot offers following enhancements:
 
-## 二、功能简介
+### Readiness Check
+
+### Spring Context Isolation
+
+### Class Isolation
+
+### Log Space Separation
+
+### Built-in SOFAStack Middlewares
+
 
 为了解决 Spring Boot 在实施大规模微服务架构时候的问题，SOFABoot 提供了以下的能力：
 
@@ -51,15 +64,10 @@ In SOFABoot, SOFAStack middleware SDKs are packaged as self-contained "starters"
 
 SOFABoot 从 2.4.0 版本开始支持基于 Spring 上下文隔离的模块化开发能力，每个 SOFABoot 模块使用独立的 Spring 上下文，避免不同 SOFABoot 模块间的 BeanId 冲突，有效降低企业级多模块开发时团队间的沟通成本。
 
-## 三、快速开始
+## Contribution
+We love contributions! Before taking any further steps, please take a look at [Contributing to SOFABoot](./CONTRIBUTING.md).
 
-请查看文档中的[快速开始](http://www.sofastack.tech/sofa-boot/docs/QuickStart)来了解如何快速上手使用 SOFABoot。
-
-## 四、如何贡献
-
-在贡献代码之前，请阅读[如何贡献](./CONTRIBUTING.md)来了解如何向 SOFABoot 贡献代码。
-
-SOFABoot 的编译环境的要求为 JDK7 或者 JDK8，需要采用 [Apache Maven 3.2.5](https://archive.apache.org/dist/maven/maven-3/3.2.5/binaries/) 或者更高的版本进行编译。
+SOFABoot is compiled under JDK 8 currently and needs [Apache Maven 3.2.5](https://archive.apache.org/dist/maven/maven-3/3.2.5/binaries/) or higher version.
 
 ## 五、感谢
 
