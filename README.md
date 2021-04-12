@@ -9,8 +9,8 @@
 
 SOFABoot is an open source Java development framework based on Spring Boot.
 
-Varieties of enhancements such as application readiness check, Spring context isolation, class isolation, log space separation, etc. are provided.
-In addition, SOFABoot accommodates SOFAStack middleware more comfortably and seamlessly for developers coming from Spring Boot.
+Varieties of enhancements such as application readiness check, Spring context isolation, class isolation, log space separation, etc. are provided out of box.
+In addition, SOFABoot accommodates SOFAStack middleware more comfortably and seamlessly for developers coming from Spring Boot world.
 
 ## Background
 
@@ -20,16 +20,22 @@ Spring Boot makes it easy to create stand-alone, production-grade Spring-based a
 - No built-in class isolation scheme to support finer modular applications.
 - Log configurations of all SDKs used by application are repeatedly arranged.
 
-To address above issues while maintain the advantages of Spring Boot, Ant Group develops the SOFABoot based on Spring Boot and make it open source.
+To address the above issues while maintain the advantages of Spring Boot, Ant Group develops the SOFABoot based on Spring Boot and make it open source.
 In SOFABoot, SOFAStack middleware SDKs are packaged as self-contained "starters" to provide the corresponding facet or functionality dependencies. 
 
 ## Quick Start
 Please refer to SOFAStack Documentation for [SOFABoot quick start guide](https://www.sofastack.tech/en/projects/sofa-boot/quick-start/).
 
 ## Functionality
-To supplement the abilities of deploying large-scale microservices in production environment, SOFABoot offers following enhancements:
+To supplement the abilities of deploying large-scale microservices in production environment for Spring Boot, SOFABoot offers following enhancements:
 
 ### Readiness Check
+If request traffic reaches service instance before it is fully initialized, requests are subject to timeout or exceptions.
+While Spring Boot health indicators are practical real-time exposure of application health, it doesn't help determine when services are available. 
+Therefore, readiness check is an indispensable part of deployment automation in production environment and SOFABoot provides the readiness check for application out of box.
+For reliable application startup, all SOFAStack middleware services won't reveal themselves (e.g., RPC services publishing to Service Registry) until readiness check passes.
+
+Platform PAAS can also make use of the readiness check result via URL `http://localhost:8080/health/readiness` to control external traffic, such as gateway, load balancer, etc.
 
 ### Spring Context Isolation
 
