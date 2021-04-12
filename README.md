@@ -35,24 +35,26 @@ While Spring Boot health indicators are practical real-time exposure of applicat
 Therefore, readiness check is an indispensable part of deployment automation in production environment and SOFABoot provides the readiness check for application out of box.
 For reliable application startup, all SOFAStack middleware services won't reveal themselves (e.g., RPC services publishing to Service Registry) until readiness check passes.
 
-Platform PAAS can also make use of the readiness check result via URL `http://localhost:8080/health/readiness` to control external traffic, such as gateway, load balancer, etc.
-
-### Spring Context Isolation
+Platform PAAS can also make use of the readiness check result via URL `http://localhost:8080/health/readiness` to control gracefully external traffic originating such as gateway, load balancer, etc.
 
 ### Class Isolation
+
+### Spring Context Isolation
+Two common forms of modularization are popular in Java world:
+1. Modularization based on code organization: different functional codes are organized under separate Java projects and packaged into different JARs. All Java classes are loaded by same classloader when running.
+2. Modularization based on classloader: each module has its own classloader and classpath between different modules differs.
+
+SOFABoot supplies a third option with degree of modularity between above two, which is built upon Spring Context.
+Different modules owns by itself a distinct Spring Context and all contexts forms a simple dependency tree.
+Bean resolution of dependency injection happens in the path up to the tree root.
+It is obvious that `beanId` conflicts are avoided between different modules, communication between teams during enterprise-level multi-module development is reduced effectively.
+
+More details about SOFABoot modularization are introduced in this [article](https://www.sofastack.tech/posts/2018-07-25-01).
 
 ### Log Space Separation
 
 ### Built-in SOFAStack Middlewares
 
-
-为了解决 Spring Boot 在实施大规模微服务架构时候的问题，SOFABoot 提供了以下的能力：
-
-### 2.1 增强 Spring Boot 的健康检查能力
-
-针对 Spring Boot 缺少 Readiness Check 能力的情况，SOFABoot 增加了 Spring Boot 现有的健康检查的能力，提供了 Readiness Check 的能力。利用 Readiness Check 的能力，SOFA 中间件中的各个组件只有在 Readiness Check 通过之后，才将流量引入到应用的实例中，比如 RPC，只有在 Readiness Check 通过之后，才会向服务注册中心注册，后面来自上游应用的流量才会进入。
-
-除了中间件可以利用 Readiness Check 的事件来控制流量的进入之外，PAAS 系统也可以通过访问 `http://localhost:8080/health/readiness` 来获取应用的 Readiness Check 的状况，用来控制例如负载均衡设备等等流量的进入。
 
 ### 2.2 提供类隔离的能力
 
