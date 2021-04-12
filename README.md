@@ -38,6 +38,9 @@ For reliable application startup, all SOFAStack middleware services won't reveal
 Platform PAAS can also make use of the readiness check result via URL `http://localhost:8080/health/readiness` to control gracefully external traffic originating such as gateway, load balancer, etc.
 
 ### Class Isolation
+Aimed to solve class or dependency conflicts, [SOFAArk](https://github.com/sofastack/sofa-ark) is created.
+Compared with unwieldy OSGi class isolation implementation, SOFAArk is a light-weight scheme and focuses on the point of class loading between application and middleware modules.
+Also, it is easy to make a third party SDK into SOFAArk module because the high extensibility of SOFAArk.
 
 ### Spring Context Isolation
 Two common forms of modularization are popular in Java world:
@@ -47,7 +50,7 @@ Two common forms of modularization are popular in Java world:
 SOFABoot supplies a third option with degree of modularity between above two, which is built upon Spring Context.
 Different modules owns by itself a distinct Spring Context and all contexts forms a simple dependency tree.
 Bean resolution of dependency injection happens in the path up to the tree root.
-It is obvious that `beanId` conflicts are avoided between different modules, communication between teams during enterprise-level multi-module development is reduced effectively.
+It is obvious that bean and configuration conflicts are avoided between different modules, communication between teams during enterprise-level multi-module development is reduced effectively.
 
 More details about SOFABoot modularization are introduced in this [article](https://www.sofastack.tech/posts/2018-07-25-01).
 
