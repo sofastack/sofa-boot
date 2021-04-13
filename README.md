@@ -7,7 +7,7 @@
 [![Percentage of issues still open](http://isitmaintained.com/badge/open/sofastack/sofa-boot.svg)](http://isitmaintained.com/project/sofastack/sofa-boot "Percentage of issues still open")
 ![maven](https://img.shields.io/github/release/sofastack/sofa-boot.svg)
 
-中文[版本](./README_ZH.md)
+[中文版本](./README_ZH.md)
 
 SOFABoot is an open source Java development framework based on Spring Boot.
 
