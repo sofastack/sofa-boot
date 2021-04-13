@@ -7,20 +7,22 @@
 [![Percentage of issues still open](http://isitmaintained.com/badge/open/sofastack/sofa-boot.svg)](http://isitmaintained.com/project/sofastack/sofa-boot "Percentage of issues still open")
 ![maven](https://img.shields.io/github/release/sofastack/sofa-boot.svg)
 
+中文[版本](./README_ZH.md)
+
 SOFABoot is an open source Java development framework based on Spring Boot.
 
 Varieties of enhancements such as application readiness check, Spring context isolation, class isolation, log space separation, etc. are provided out of box.
-In addition, SOFABoot accommodates SOFAStack middleware more comfortably and seamlessly for developers coming from Spring Boot world.
+In addition, SOFABoot accommodates SOFAStack middlewares more comfortably and seamlessly for developers coming from Spring Boot world.
 
 ## Background
 
-Spring Boot makes it easy to create stand-alone, production-grade Spring-based applications which "just runs". However, some domain-specific issues remain open:
+Spring Boot makes it easy to create stand-alone, production-grade Spring-based applications which "just run". However, some domain-specific issues remain open:
 
 - Spring Boot provides health indicators to reveal the liveness of application but not readiness (i.e., the capability of servicing requests).
 - No built-in class isolation scheme to support finer modular applications.
 - Log configurations of all SDKs used by application are repeatedly arranged.
 
-To address the above issues while maintain the advantages of Spring Boot, Ant Group develops the SOFABoot based on Spring Boot and make it open source.
+To address the above issues while maintaining the advantages of Spring Boot, Ant Group develops the SOFABoot based on Spring Boot and make it open source.
 In SOFABoot, SOFAStack middleware SDKs are packaged as self-contained "starters" to provide the corresponding facet or functionality dependencies. 
 
 ## Quick Start
