@@ -58,16 +58,13 @@ More details about SOFABoot modularization are introduced in this [article](http
 
 ### Unified Logging
 In Spring Boot, the responsibility of log configurations is left to users: all the users of a certain SDK need to configure for its logging, but the configurations are basically the same in most cases.
-In order to save the configuring workload, SOFABoot utilizes the [sofa-common-tools](https://github.com/sofastack/sofa-common-tools) to provide for each SDKs basic log configurations.
+In order to save the repeated configuration, SOFABoot utilizes the [sofa-common-tools](https://github.com/sofastack/sofa-common-tools) to provide for each SDKs basic log configurations.
 Users don't need to worry about SDk logging anymore.
-Besides, every SDK has a different logging directory to separate it from application logs to assist monitor based on logging. 
+Besides, every SDK has a different logging directory to separate it from application logs to assist handy monitoring based on logging. 
 
 ### Built-in SOFAStack Middlewares
-
-
-### 2.4 SOFA 中间件的集成管理
-
-基于 Spring Boot 的自动配置能力，SOFABoot 提供了 SOFA 中间件统一易用的编程接口以及 Spring Boot 的 Starter，方便在 Spring Boot 环境下使用 SOFA 中间件，SOFA 中间件中的各个组件都是独立可插拔的，节约开发时间，和后期维护的成本。
+Based on the auto-configuring and dependencies descriptor (aka starter) in Spring Boot, SOFABoot offers easy-to-use programming interface for all SOFAStack middlewares.
+All of them are packaged as self-contained "starters" to provide the corresponding facet dependencies and are independently pluggable.
 
 ## Contribution
 We love contributions! Before taking any further steps, please take a look at [Contributing to SOFABoot](./CONTRIBUTING.md).
