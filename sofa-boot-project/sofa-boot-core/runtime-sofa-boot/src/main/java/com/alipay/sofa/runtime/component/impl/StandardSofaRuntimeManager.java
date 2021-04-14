@@ -26,10 +26,10 @@ import com.alipay.sofa.runtime.spi.component.ComponentManager;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import com.alipay.sofa.runtime.spi.spring.RuntimeShutdownAware;
-import com.alipay.sofa.runtime.spring.aware.DefaultRuntimeShutdownAware;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.support.AbstractApplicationContext;
 
 /**
  * Default Sofa Runtime Manager
@@ -110,24 +110,29 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager, Applicati
     @Override
     public void shutdown() throws ServiceRuntimeException {
         try {
-
             for (RuntimeShutdownAware shutdownAware : runtimeShutdownAwares) {
-                if (!(shutdownAware instanceof DefaultRuntimeShutdownAware)) {
-                    shutdownAware.shutdown();
-                }
+                shutdownAware.shutdown();
             }
 
             if (componentManager != null) {
                 componentManager.shutdown();
             }
 
-            for (RuntimeShutdownAware shutdownAware : runtimeShutdownAwares) {
-                if (shutdownAware instanceof DefaultRuntimeShutdownAware) {
-                    shutdownAware.shutdown();
-                }
-            }
-
             clear();
+        } catch (Throwable throwable) {
+            throw new ServiceRuntimeException(throwable);
+        }
+    }
+
+    @Override
+    public void shutDownRootContext() throws ServiceRuntimeException {
+        try {
+            AbstractApplicationContext applicationContext = (AbstractApplicationContext) rootApplicationContext;
+            // only need shutdown when root context is active
+            if (applicationContext.isActive()) {
+                applicationContext.close();
+            }
+            appClassLoader = null;
         } catch (Throwable throwable) {
             throw new ServiceRuntimeException(throwable);
         }
@@ -152,7 +157,6 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager, Applicati
         componentManager = null;
         sofaRuntimeContext = null;
         clientFactoryInternal = null;
-        appClassLoader = null;
         runtimeShutdownAwares.clear();
         runtimeHealthCheckers.clear();
     }
