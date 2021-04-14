@@ -92,7 +92,7 @@ public class SofaRuntimeAutoConfiguration {
         return bindingAdapterFactory;
     }
 
-    @Bean(destroyMethod = "")
+    @Bean
     @ConditionalOnMissingBean
     public static SofaRuntimeManager sofaRuntimeManager(@Value("${spring.application.name}") String appName,
                                                         BindingConverterFactory bindingConverterFactory,

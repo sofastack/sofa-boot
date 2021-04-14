@@ -69,6 +69,13 @@ public interface SofaRuntimeManager extends RuntimeHealthChecker {
     void shutdown() throws ServiceRuntimeException;
 
     /**
+     * shutdown manager by Ark
+     *
+     * @throws ServiceRuntimeException throws when exception occur
+     */
+    void shutdownByArk() throws ServiceRuntimeException;
+
+    /**
      * register shutdown aware which would be executed after receive uninstall event
      *
      * @param shutdownAware
