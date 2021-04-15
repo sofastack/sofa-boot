@@ -96,7 +96,7 @@ Scan the QR code below with WeChat(微信) to Follow our Official Accounts.
 
 
 ## Acknowledgements
-The first version of SOFA is created by Felix, lots of thanks are given to Felix for laying a solid foundation for SOFA.
+The first version of SOFA is created by Felix(阿玺), lots of thanks are given to Felix for laying a solid foundation for SOFA.
 It is also very grateful to the people who have contributed codes in the history of SOFA.
 
 ## License
