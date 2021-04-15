@@ -18,7 +18,7 @@ In addition, SOFABoot accommodates SOFAStack middlewares more comfortably and se
 
 Spring Boot makes it easy to create stand-alone, production-grade Spring-based applications which "just run". However, some domain-specific issues remain open:
 
-- Spring Boot provides health indicators to reveal the liveness of application but not readiness (i.e., the capability of servicing requests).
+- Spring Boot provides health indicators to reveal the liveness of application but not readiness (aka the capability of servicing requests).
 - No built-in class isolation scheme to support finer modular applications.
 - Log configurations of all SDKs used by application are repeatedly arranged.
 
@@ -80,6 +80,21 @@ We love contributions! Before taking any further steps, please take a look at [C
 
 SOFABoot is compiled under JDK 8 currently and needs [Apache Maven 3.2.5](https://archive.apache.org/dist/maven/maven-3/3.2.5/binaries/) or higher version.
 
+### Community
+See our community [materials](https://github.com/sofastack/community/blob/master/ROLES-EN.md).
+
+Scan the QR code below with DingTalk(钉钉) to join the SOFAStack user group.
+<p align="center">
+<img src="https://gw.alipayobjects.com/mdn/sofastack/afts/img/A*1DklS7SZFNMAAAAAAAAAAAAAARQnAQ" width="222">
+</p>
+
+Scan the QR code below with WeChat(微信) to Follow our Official Accounts.
+<p align="center">
+<img src="https://gw.alipayobjects.com/mdn/sofastack/afts/img/A*LVCnR6KtEfEAAAAAAAAAAABjARQnAQ" width="222">
+</p>
+
+
+
 ## Acknowledgements
 The first version of SOFA is created by Felix, lots of thanks are given to Felix for laying a solid foundation for SOFA.
 It is also very grateful to the people who have contributed codes in the history of SOFA.
@@ -87,3 +102,5 @@ It is also very grateful to the people who have contributed codes in the history
 ## License
 Ant Group SOFABoot is distributed under the [Apache License, version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html).
 The licenses of third parity dependencies of SOFABoot are explained [here](https://www.sofastack.tech/projects/sofa-boot/notice/).
+
+## End Users
