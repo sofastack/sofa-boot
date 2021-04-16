@@ -109,6 +109,7 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager, Applicati
      */
     @Override
     public void shutdown() throws ServiceRuntimeException {
+        //todo this bean should be the last destroy bean in root context
         try {
             for (RuntimeShutdownAware shutdownAware : runtimeShutdownAwares) {
                 shutdownAware.shutdown();
@@ -125,7 +126,7 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager, Applicati
     }
 
     @Override
-    public void shutDownRootContext() throws ServiceRuntimeException {
+    public void shutDownRootContextByExternalComponent() throws ServiceRuntimeException {
         try {
             AbstractApplicationContext applicationContext = (AbstractApplicationContext) rootApplicationContext;
             // only need shutdown when root context is active

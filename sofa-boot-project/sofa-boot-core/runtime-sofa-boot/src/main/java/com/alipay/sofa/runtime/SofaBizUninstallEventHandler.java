@@ -37,7 +37,7 @@ public class SofaBizUninstallEventHandler implements EventHandler<BeforeBizStopE
         SofaRuntimeProperties.unRegisterProperties(biz.getBizClassLoader());
         SofaRuntimeManager sofaRuntimeManager = getSofaRuntimeManager(biz);
         SofaFramework.unRegisterSofaRuntimeManager(sofaRuntimeManager);
-        sofaRuntimeManager.shutDownRootContext();
+        sofaRuntimeManager.shutDownRootContextByExternalComponent();
     }
 
     private SofaRuntimeManager getSofaRuntimeManager(Biz biz) {
