@@ -126,7 +126,7 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager, Applicati
     }
 
     @Override
-    public void shutDownRootContextByExternalComponent() throws ServiceRuntimeException {
+    public void shutDownExternally() throws ServiceRuntimeException {
         try {
             AbstractApplicationContext applicationContext = (AbstractApplicationContext) rootApplicationContext;
             // only need shutdown when root context is active

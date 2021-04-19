@@ -73,7 +73,7 @@ public interface SofaRuntimeManager extends RuntimeHealthChecker {
      *
      * @throws ServiceRuntimeException throws when exception occur
      */
-    void shutDownRootContextByExternalComponent() throws ServiceRuntimeException;
+    void shutDownExternally() throws ServiceRuntimeException;
 
     /**
      * register shutdown aware which would be executed after receive uninstall event
