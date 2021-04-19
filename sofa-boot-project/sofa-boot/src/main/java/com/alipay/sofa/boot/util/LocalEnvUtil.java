@@ -14,25 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.boot.logging;
-
-import org.junit.Assert;
-import org.junit.Test;
+package com.alipay.sofa.boot.util;
 
 /**
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 2020/12/14
  */
-public class LocalEnvUtilTest {
-    @Test
-    public void test() {
-        StackTraceElement[] elements = Thread.currentThread().getStackTrace();
-        StackTraceElement first = elements[elements.length - 1];
-        if (first.toString().contains("com.intellij.rt.junit.JUnitStarter")) {
-            // If run from IDEA, LOCAL_ENV is true
-            Assert.assertTrue(LocalEnvUtil.isLocalEnv());
-        } else {
-            Assert.assertFalse(LocalEnvUtil.isLocalEnv());
+public class LocalEnvUtil {
+    private static boolean LOCAL_ENV;
+
+    static {
+        // Currently supports for detection of IDEA IntelliJ
+        try {
+            Class.forName("com.intellij.rt.execution.application.AppMainV2");
+            LOCAL_ENV = true;
+        } catch (ClassNotFoundException e) {
+            LOCAL_ENV = false;
         }
+    }
+
+    public static boolean isLocalEnv() {
+        return LOCAL_ENV;
     }
 }
