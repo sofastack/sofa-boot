@@ -20,7 +20,7 @@ jobs:
       with:
         java-version: 1.8
     - name: Install Zookeeper
-      run: echo "Install Zookeeper 3.5.4-beta"
+      run: echo "Install Zookeeper 3.5.6"
         && wget https://archive.apache.org/dist/zookeeper/zookeeper-3.5.6/apache-zookeeper-3.5.6-bin.tar.gz
         && tar -zxf apache-zookeeper-3.5.6-bin.tar.gz
         && mv apache-zookeeper-3.5.6-bin/conf/zoo_sample.cfg apache-zookeeper-3.5.6-bin/conf/zoo.cfg
