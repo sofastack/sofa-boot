@@ -11,8 +11,7 @@ on:
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-16.04
 
     steps:
     - uses: actions/checkout@v2
@@ -22,10 +21,10 @@ jobs:
         java-version: 1.8
     - name: Install Zookeeper
       run: echo "Install Zookeeper 3.5.4-beta"
-        && wget http://archive.apache.org/dist/zookeeper/zookeeper-3.5.4-beta/zookeeper-3.5.4-beta.tar.gz
-        && tar -zxf zookeeper-3.5.4-beta.tar.gz
-        && mv zookeeper-3.5.4-beta/conf/zoo_sample.cfg zookeeper-3.5.4-beta/conf/zoo.cfg
-        && /bin/bash zookeeper-3.5.4-beta/bin/zkServer.sh start
+        && wget https://archive.apache.org/dist/zookeeper/zookeeper-3.5.6/apache-zookeeper-3.5.6.tar.gz
+        && tar -zxf apache-zookeeper-3.5.6.tar.gz
+        && mv apache-zookeeper-3.5.6/conf/zoo_sample.cfg apache-zookeeper-3.5.6/conf/zoo.cfg
+        && /bin/bash apache-zookeeper-3.5.6/bin/zkServer.sh start
     - name: Build with Maven
       run: mvn clean install -Pdefault -DskipTests -B -V
         && sh ./tools/check_format.sh
