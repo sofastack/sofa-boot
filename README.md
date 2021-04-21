@@ -104,7 +104,7 @@ Ant Group SOFABoot is distributed under the [Apache License, version 2.0](http:/
 The licenses of third parity dependencies of SOFABoot are explained [here](https://www.sofastack.tech/projects/sofa-boot/notice/).
 
 ## Known Users
-The SOFABoot users. Please leave a comment [here](https://github.com/sofastack/sofastack.tech/issues/5) to tell us your scenario to make SOFABoot better.
+The SOFABoot users (the names are in no particular order). Please leave a comment [here](https://github.com/sofastack/sofastack.tech/issues/5) to tell us your scenario to make SOFABoot better.
 <div>
 <img alt="蚂蚁集团" src="https://gw.alipayobjects.com/mdn/sofastack/afts/img/A*aK79TJUJykkAAAAAAAAAAAAAARQnAQ" height="60" />
 <img alt="网商银行" src="https://gw.alipayobjects.com/mdn/sofastack/afts/img/A*uAmFRZQ0Z4YAAAAAAAAAAABjARQnAQ" height="60" />
