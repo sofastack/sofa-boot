@@ -16,12 +16,28 @@
  */
 package com.alipay.sofa.runtime.test;
 
-import java.util.Properties;
-
 import com.alipay.sofa.ark.spi.event.biz.AfterBizStartupEvent;
 import com.alipay.sofa.ark.spi.event.biz.BeforeBizStopEvent;
+import com.alipay.sofa.ark.spi.model.Biz;
+import com.alipay.sofa.ark.spi.model.BizState;
 import com.alipay.sofa.runtime.SofaBizHealthCheckEventHandler;
 import com.alipay.sofa.runtime.SofaBizUninstallEventHandler;
+import com.alipay.sofa.runtime.SofaFramework;
+import com.alipay.sofa.runtime.SofaRuntimeProperties;
+import com.alipay.sofa.runtime.api.annotation.SofaService;
+import com.alipay.sofa.runtime.invoke.DynamicJvmServiceProxyFinder;
+import com.alipay.sofa.runtime.service.binding.JvmBinding;
+import com.alipay.sofa.runtime.spi.binding.Contract;
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
+import com.alipay.sofa.runtime.spi.service.ServiceProxy;
+import com.alipay.sofa.runtime.test.beans.facade.SampleService;
+import com.alipay.sofa.runtime.test.beans.service.DefaultSampleService;
+import com.alipay.sofa.runtime.test.configuration.RuntimeConfiguration;
+import mockit.Expectations;
+import mockit.Mock;
+import mockit.MockUp;
+import mockit.Mocked;
 import org.aopalliance.intercept.MethodInvocation;
 import org.junit.Assert;
 import org.junit.Before;
@@ -33,26 +49,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import com.alipay.sofa.ark.spi.model.Biz;
-import com.alipay.sofa.ark.spi.model.BizState;
-import com.alipay.sofa.runtime.SofaFramework;
-import com.alipay.sofa.runtime.SofaRuntimeProperties;
-import com.alipay.sofa.runtime.api.annotation.SofaService;
-import com.alipay.sofa.runtime.invoke.DynamicJvmServiceProxyFinder;
-import com.alipay.sofa.runtime.service.binding.JvmBinding;
-import com.alipay.sofa.runtime.spi.binding.Contract;
-import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
-import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
-import com.alipay.sofa.runtime.spi.service.ServiceProxy;
-import com.alipay.sofa.runtime.spring.aware.DefaultRuntimeShutdownAware;
-import com.alipay.sofa.runtime.test.beans.facade.SampleService;
-import com.alipay.sofa.runtime.test.beans.service.DefaultSampleService;
-import com.alipay.sofa.runtime.test.configuration.RuntimeConfiguration;
-
-import mockit.Expectations;
-import mockit.Mock;
-import mockit.MockUp;
-import mockit.Mocked;
+import java.util.Properties;
 
 /**
  * @author qilong.zql
@@ -179,10 +176,6 @@ public class SofaEventHandlerTest {
     @Configuration
     @Import(RuntimeConfiguration.class)
     static class SofaEventHandlerTestConfiguration {
-        @Bean
-        public DefaultRuntimeShutdownAware defaultRuntimeShutdownAware() {
-            return new DefaultRuntimeShutdownAware();
-        }
 
         @Bean
         @SofaService
