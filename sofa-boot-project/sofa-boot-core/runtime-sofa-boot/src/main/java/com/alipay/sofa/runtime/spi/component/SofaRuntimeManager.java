@@ -69,6 +69,13 @@ public interface SofaRuntimeManager extends RuntimeHealthChecker {
     void shutdown() throws ServiceRuntimeException;
 
     /**
+     * shutdown root context, only used by external component such SOFA Ark
+     *
+     * @throws ServiceRuntimeException throws when exception occur
+     */
+    void shutDownExternally() throws ServiceRuntimeException;
+
+    /**
      * register shutdown aware which would be executed after receive uninstall event
      *
      * @param shutdownAware

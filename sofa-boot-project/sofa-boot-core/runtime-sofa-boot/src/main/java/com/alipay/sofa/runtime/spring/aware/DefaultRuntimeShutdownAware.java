@@ -24,6 +24,7 @@ import org.springframework.context.support.AbstractApplicationContext;
 import com.alipay.sofa.runtime.spi.spring.RuntimeShutdownAware;
 
 /**
+ * @deprecated will be deleted in 3.9.0
  * @author qilong.zql
  * @since 2.5.0
  */

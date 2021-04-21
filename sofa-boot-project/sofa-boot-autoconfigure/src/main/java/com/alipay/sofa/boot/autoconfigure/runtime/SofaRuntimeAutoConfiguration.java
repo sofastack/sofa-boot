@@ -38,7 +38,6 @@ import com.alipay.sofa.runtime.spring.JvmFilterPostProcessor;
 import com.alipay.sofa.runtime.spring.RuntimeContextBeanFactoryPostProcessor;
 import com.alipay.sofa.runtime.spring.ServiceBeanFactoryPostProcessor;
 import com.alipay.sofa.runtime.spring.async.AsyncTaskExecutionListener;
-import com.alipay.sofa.runtime.spring.aware.DefaultRuntimeShutdownAware;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -57,11 +56,6 @@ import java.util.Set;
 @EnableConfigurationProperties(SofaRuntimeConfigurationProperties.class)
 @ConditionalOnClass(SofaFramework.class)
 public class SofaRuntimeAutoConfiguration {
-    @Bean
-    @ConditionalOnMissingBean
-    public DefaultRuntimeShutdownAware defaultRuntimeShutdownAware() {
-        return new DefaultRuntimeShutdownAware();
-    }
 
     @Bean
     @ConditionalOnMissingBean
@@ -92,7 +86,7 @@ public class SofaRuntimeAutoConfiguration {
         return bindingAdapterFactory;
     }
 
-    @Bean(destroyMethod = "")
+    @Bean
     @ConditionalOnMissingBean
     public static SofaRuntimeManager sofaRuntimeManager(@Value("${spring.application.name}") String appName,
                                                         BindingConverterFactory bindingConverterFactory,
