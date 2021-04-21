@@ -45,7 +45,8 @@ public class SofaStartupAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public BeanCostBeanPostProcessor beanCostBeanPostProcessor(StartupProperties startupProperties) {
-        return new BeanCostBeanPostProcessor(startupProperties.getBeanInitCostThreshold());
+        return new BeanCostBeanPostProcessor(startupProperties.getBeanInitCostThreshold(),
+            startupProperties.isSkipSofaBean());
     }
 
     @Bean

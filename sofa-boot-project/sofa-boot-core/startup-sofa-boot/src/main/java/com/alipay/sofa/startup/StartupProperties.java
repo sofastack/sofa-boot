@@ -24,7 +24,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @ConfigurationProperties(prefix = "com.alipay.sofa.boot.startup")
 public class StartupProperties {
-    private long beanInitCostThreshold = 100;
+    private long    beanInitCostThreshold = 100;
+    private boolean skipSofaBean          = true;
 
     public long getBeanInitCostThreshold() {
         return beanInitCostThreshold;
@@ -32,5 +33,13 @@ public class StartupProperties {
 
     public void setBeanInitCostThreshold(long beanInitCostThreshold) {
         this.beanInitCostThreshold = beanInitCostThreshold;
+    }
+
+    public boolean isSkipSofaBean() {
+        return skipSofaBean;
+    }
+
+    public void setSkipSofaBean(boolean skipSofaBean) {
+        this.skipSofaBean = skipSofaBean;
     }
 }
