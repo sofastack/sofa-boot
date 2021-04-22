@@ -145,5 +145,4 @@ public class SofaBootPlugin implements Plugin<Project> {
         return jarFile.getManifest().getMainAttributes()
             .getValue(Attributes.Name.IMPLEMENTATION_VERSION);
     }
-
 }

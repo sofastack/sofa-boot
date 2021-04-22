@@ -27,12 +27,12 @@
         <dependency>
             <groupId>io.spring.gradle</groupId>
             <artifactId>dependency-management-plugin</artifactId>
-            <version>1.0.6.RELEASE</version>
+            <version>1.0.11.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-compress</artifactId>
-            <version>1.18</version>
+            <version>1.19</version>
         </dependency>
     </dependencies>
     <build>
