@@ -36,8 +36,8 @@ import static com.alipay.sofa.boot.startup.BootStageConstants.APPLICATION_CONTEX
 /**
  * SpringApplicationRunListener to record application startup time
  *
- * @author: Zhijie
- * @since: 2020/7/20
+ * @author Zhijie
+ * @since 2020/7/20
  */
 public class StartupContextRefreshedListener implements ApplicationListener<ContextRefreshedEvent>,
                                             ApplicationContextAware, PriorityOrdered {

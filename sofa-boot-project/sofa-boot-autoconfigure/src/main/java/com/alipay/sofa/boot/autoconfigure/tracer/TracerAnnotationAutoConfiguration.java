@@ -30,8 +30,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @author: guolei.sgl (guolei.sgl@antfin.com) 2019/8/9 3:20 PM
- * @since:
+ * @author guolei.sgl (guolei.sgl@antfin.com) 2019/8/9 3:20 PM
  **/
 @Configuration
 @ConditionalOnProperty(prefix = "com.alipay.sofa.tracer.flexible", value = "enable", matchIfMissing = true)

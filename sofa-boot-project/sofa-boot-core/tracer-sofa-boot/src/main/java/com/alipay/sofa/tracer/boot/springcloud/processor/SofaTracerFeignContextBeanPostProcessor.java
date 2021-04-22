@@ -24,8 +24,7 @@ import org.springframework.cloud.openfeign.FeignContext;
 import com.alipay.sofa.tracer.plugins.springcloud.instruments.feign.SofaTracerFeignContext;
 
 /**
- * @author: guolei.sgl (guolei.sgl@antfin.com) 2019/3/13 6:08 PM
- * @since:
+ * @author guolei.sgl (guolei.sgl@antfin.com) 2019/3/13 6:08 PM
  **/
 public class SofaTracerFeignContextBeanPostProcessor implements BeanPostProcessor {
 

@@ -33,13 +33,18 @@ import com.alipay.sofa.actuator.autoconfigure.test.listener.HighOrderApplication
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 
 /**
+ * Attention:
+ * 1. Before Spring Boot 2.3.x (exclude), Tomcat started after SpringContextRefreshed event
+ * 2. After Spring Boot 2.3.x (include), tomcat started before SpringContextRefreshed event
+ *
  * @author ruoshan
  * @since 2.6.0
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(properties = { "spring.application.name=HealthCheckManagementTest",
-                                  "management.server.port=8888" })
+                                  "management.server.port=8888",
+                                  "management.endpoint.health.show-details=ALWAYS" })
 public class HealthCheckManagementTest {
 
     @Autowired
@@ -58,7 +63,7 @@ public class HealthCheckManagementTest {
     public void testHealthCheckNotReadyLiveness() {
         ResponseEntity<String> responseEntity = highOrderApplicationListener
             .getLivenessCheckResponse();
-        Assert.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());
+        Assert.assertEquals(HttpStatus.SERVICE_UNAVAILABLE, responseEntity.getStatusCode());
         Assert.assertTrue(responseEntity.getBody().contains(
             SofaBootConstants.SOFABOOT_HEALTH_CHECK_NOT_READY_MSG));
     }

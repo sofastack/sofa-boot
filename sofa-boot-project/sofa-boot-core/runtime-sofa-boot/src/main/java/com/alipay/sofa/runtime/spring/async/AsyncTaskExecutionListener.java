@@ -42,7 +42,6 @@ public class AsyncTaskExecutionListener implements PriorityOrdered,
 
     @Override
     public int getOrder() {
-        // invoked after {@literal com.alipay.sofa.isle.spring.listener.SofaModuleContextRefreshedListener}
         return Ordered.HIGHEST_PRECEDENCE + 1;
     }
 

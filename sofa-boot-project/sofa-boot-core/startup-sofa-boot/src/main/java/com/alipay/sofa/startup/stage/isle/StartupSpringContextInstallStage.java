@@ -32,8 +32,8 @@ import static com.alipay.sofa.boot.startup.BootStageConstants.ISLE_SPRING_CONTEX
 /**
  * Wrapper for SpringContextInstallStage to calculate time cost by install spring context
  *
- * @author: Zhijie
- * @since: 2020/7/8
+ * @author Zhijie
+ * @since 2020/7/8
  */
 public class StartupSpringContextInstallStage extends SpringContextInstallStage {
     private final StartupReporter   startupReporter;

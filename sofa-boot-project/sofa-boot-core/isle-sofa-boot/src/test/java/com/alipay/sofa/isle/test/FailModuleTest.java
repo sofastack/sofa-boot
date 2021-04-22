@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.isle.test;
 
+import com.alipay.sofa.isle.spring.SofaModuleContextLifecycle;
 import com.alipay.sofa.isle.spring.share.SofaModulePostProcessorShareManager;
 import com.alipay.sofa.runtime.SofaFramework;
 import com.alipay.sofa.runtime.client.impl.ClientFactoryImpl;
@@ -41,8 +42,7 @@ import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
 import com.alipay.sofa.isle.profile.DefaultSofaModuleProfileChecker;
 import com.alipay.sofa.isle.profile.SofaModuleProfileChecker;
 import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
-import com.alipay.sofa.isle.spring.listener.SofaModuleBeanFactoryPostProcessor;
-import com.alipay.sofa.isle.spring.listener.SofaModuleContextRefreshedListener;
+import com.alipay.sofa.isle.spring.SofaModuleBeanFactoryPostProcessor;
 import com.alipay.sofa.isle.stage.DefaultPipelineContext;
 import com.alipay.sofa.isle.stage.ModelCreatingStage;
 import com.alipay.sofa.isle.stage.ModuleLogOutputStage;
@@ -89,8 +89,8 @@ public class FailModuleTest {
 
         @Bean
         @ConditionalOnMissingBean
-        public SofaModuleContextRefreshedListener sofaModuleContextRefreshedListener() {
-            return new SofaModuleContextRefreshedListener();
+        public SofaModuleContextLifecycle sofaModuleContextLifecycle() {
+            return new SofaModuleContextLifecycle();
         }
 
         @Bean

@@ -19,8 +19,8 @@ package com.alipay.sofa.startup.test.beans.service;
 import com.alipay.sofa.startup.test.beans.facade.SampleService;
 
 /**
- * @author: Zhijie
- * @since: 2020/7/13
+ * @author Zhijie
+ * @since 2020/7/13
  */
 public class DefaultSampleService implements SampleService {
     protected String message;

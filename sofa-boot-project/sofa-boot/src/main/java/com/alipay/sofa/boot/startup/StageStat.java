@@ -19,8 +19,8 @@ package com.alipay.sofa.boot.startup;
 /**
  * Common unit to record startup time cost
  *
- * @author: Zhijie
- * @since: 2020/7/7
+ * @author Zhijie
+ * @since 2020/7/7
  */
 public class StageStat {
     private String stageName;

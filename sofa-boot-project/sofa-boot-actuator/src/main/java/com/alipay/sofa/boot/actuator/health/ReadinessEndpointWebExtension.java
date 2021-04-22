@@ -22,8 +22,7 @@ import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
 import org.springframework.boot.actuate.endpoint.web.WebEndpointResponse;
 import org.springframework.boot.actuate.endpoint.web.annotation.EndpointWebExtension;
 import org.springframework.boot.actuate.health.Health;
-import org.springframework.boot.actuate.health.HealthWebEndpointResponseMapper;
-import org.springframework.boot.actuate.health.ShowDetails;
+import org.springframework.boot.actuate.health.HttpCodeStatusMapper;
 
 /**
  * @author qilong.zql
@@ -33,14 +32,14 @@ import org.springframework.boot.actuate.health.ShowDetails;
 public class ReadinessEndpointWebExtension {
 
     @Autowired
-    private SofaBootReadinessEndpoint       delegate;
+    private SofaBootReadinessEndpoint delegate;
 
     @Autowired
-    private HealthWebEndpointResponseMapper responseMapper;
+    private HttpCodeStatusMapper      statusMapper;
 
     @ReadOperation
     public WebEndpointResponse<Health> getHealth(SecurityContext securityContext) {
-        return this.responseMapper.map(this.delegate.health(), securityContext, ShowDetails.ALWAYS);
+        Health result = delegate.health();
+        return new WebEndpointResponse<>(result, statusMapper.getStatusCode(result.getStatus()));
     }
-
 }

@@ -90,7 +90,7 @@ public class IsleCheckStartupReporterTest {
         // test child bean
         BeanStat childBeanStat = parentBeanStat.getChildren().get(0);
         Assert.assertNotNull(childBeanStat);
-        Assert.assertEquals(CHILD_INIT_TIME, childBeanStat.getRealRefreshElapsedTime(), 10);
+        Assert.assertEquals(CHILD_INIT_TIME, childBeanStat.getRealRefreshElapsedTime(), 15);
         Assert.assertEquals(CHILD_INIT_TIME, childBeanStat.getInitTime(), 10);
         Assert.assertEquals(0, childBeanStat.getChildren().size());
         Assert.assertEquals(ChildBean.class.getName() + " (child)", childBeanStat.getBeanClassName());

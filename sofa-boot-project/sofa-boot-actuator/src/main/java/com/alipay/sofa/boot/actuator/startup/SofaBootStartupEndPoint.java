@@ -24,8 +24,8 @@ import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
 /**
  * Display the time cost details used in startup
  *
- * @author: Zhijie
- * @since: 2020/7/7
+ * @author Zhijie
+ * @since 2020/7/7
  */
 @Endpoint(id = "startup")
 public class SofaBootStartupEndPoint {

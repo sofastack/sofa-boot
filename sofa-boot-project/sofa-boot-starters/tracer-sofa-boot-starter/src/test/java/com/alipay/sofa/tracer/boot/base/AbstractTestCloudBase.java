@@ -36,8 +36,7 @@ import com.alipay.common.tracer.core.configuration.SofaTracerConfiguration;
 import com.alipay.sofa.boot.listener.SofaBootstrapRunListener;
 
 /**
- * @author: guolei.sgl (guolei.sgl@antfin.com) 2019/3/28 2:40 PM
- * @since:
+ * @author guolei.sgl (guolei.sgl@antfin.com) 2019/3/28 2:40 PM
  **/
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = SpringBootWebApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)

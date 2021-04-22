@@ -28,8 +28,7 @@ import java.lang.reflect.Method;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * @author: guolei.sgl (guolei.sgl@antfin.com) 2019/8/9 3:12 PM
- * @since:
+ * @author guolei.sgl (guolei.sgl@antfin.com) 2019/8/9 3:12 PM
  **/
 public class TracerAnnotationClassPointcut extends DynamicMethodMatcherPointcut {
 
