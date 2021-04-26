@@ -16,11 +16,17 @@
  */
 package com.alipay.sofa.healthcheck;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
+import org.springframework.aop.framework.AopProxyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
@@ -31,7 +37,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
-import com.alipay.sofa.boot.health.NonReadinessCheck;
 import com.alipay.sofa.boot.util.BinaryOperators;
 import com.alipay.sofa.healthcheck.log.HealthCheckLoggerFactory;
 import com.alipay.sofa.healthcheck.util.HealthCheckUtils;
@@ -45,20 +50,31 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @version 2.3.0
  */
 public class HealthIndicatorProcessor {
+    private static Logger                          logger                     = HealthCheckLoggerFactory
+                                                                                  .getLogger(HealthIndicatorProcessor.class);
 
-    private static Logger                          logger           = HealthCheckLoggerFactory
-                                                                        .getLogger(HealthIndicatorProcessor.class);
+    private static final List<String>              DEFAULT_EXCLUDE_INDICATORS = Arrays
+                                                                                  .asList(
+                                                                                      "com.alipay.sofa.boot.health.NonReadinessCheck",
+                                                                                      "org.springframework.boot.actuate.availability.ReadinessStateHealthIndicator",
+                                                                                      "org.springframework.boot.actuate.availability.LivenessStateHealthIndicator");
 
-    private ObjectMapper                           objectMapper     = new ObjectMapper();
+    private ObjectMapper                           objectMapper               = new ObjectMapper();
 
-    private AtomicBoolean                          isInitiated      = new AtomicBoolean(false);
+    private AtomicBoolean                          isInitiated                = new AtomicBoolean(
+                                                                                  false);
 
-    private LinkedHashMap<String, HealthIndicator> healthIndicators = null;
+    private LinkedHashMap<String, HealthIndicator> healthIndicators           = null;
 
     @Autowired
     private ApplicationContext                     applicationContext;
 
-    private final static String                    REACTOR_CLASS    = "reactor.core.publisher.Mono";
+    private final static String                    REACTOR_CLASS              = "reactor.core.publisher.Mono";
+
+    @Autowired
+    private HealthCheckProperties                  healthCheckProperties;
+
+    private Set<Class<?>>                          excludedIndicators;
 
     public void init() {
         if (isInitiated.compareAndSet(false, true)) {
@@ -69,7 +85,11 @@ public class HealthIndicatorProcessor {
                 applicationContext.getBeansOfType(ReactiveHealthIndicator.class).forEach(
                         (name, indicator) -> beansOfType.put(name, () -> indicator.health().block()));
             }
-            healthIndicators = HealthCheckUtils.sortMapAccordingToValue(beansOfType,
+            initExcludedIndicators(healthCheckProperties.getExcludedIndicators());
+
+            healthIndicators = beansOfType.entrySet().stream().filter(entry -> !isExcluded(entry.getValue()))
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (x, y) -> y, LinkedHashMap::new));
+            healthIndicators = HealthCheckUtils.sortMapAccordingToValue(healthIndicators,
                     applicationContext.getAutowireCapableBeanFactory());
 
             StringBuilder healthIndicatorInfo = new StringBuilder(512).append("Found ")
@@ -79,18 +99,46 @@ public class HealthIndicatorProcessor {
         }
     }
 
+    private void initExcludedIndicators(List<String> excludes) {
+        if (excludes == null || excludes.size() == 0) {
+            excludes = DEFAULT_EXCLUDE_INDICATORS;
+        } else {
+            excludes.addAll(DEFAULT_EXCLUDE_INDICATORS);
+        }
+
+        excludedIndicators = new HashSet<>();
+        for (String exclude : excludes) {
+            try {
+                Class<?> c = Class.forName(exclude);
+                excludedIndicators.add(c);
+            } catch (Throwable e) {
+                logger.warn("Unable to find excluded HealthIndicator class {}, just ignore it.",
+                    exclude);
+            }
+        }
+    }
+
+    private boolean isExcluded(Object target) {
+        Class<?> klass = AopProxyUtils.ultimateTargetClass(target);
+        for (Class<?> c : excludedIndicators) {
+            if (c.isAssignableFrom(klass)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Provided for readiness check.
      *
-     * @param healthMap
-     * @return
+     * @param healthMap used to save the information of {@link HealthIndicator}.
+     * @return whether readiness health check passes or not
      */
     public boolean readinessHealthCheck(Map<String, Health> healthMap) {
         Assert.notNull(healthIndicators, () -> "HealthIndicators must not be null.");
 
         logger.info("Begin SOFABoot HealthIndicator readiness check.");
         boolean result = healthIndicators.entrySet().stream()
-                .filter(entry -> !(entry.getValue() instanceof NonReadinessCheck))
                 .map(entry -> doHealthCheck(entry.getKey(), entry.getValue(), healthMap))
                 .reduce(true, BinaryOperators.andBoolean());
         if (result) {

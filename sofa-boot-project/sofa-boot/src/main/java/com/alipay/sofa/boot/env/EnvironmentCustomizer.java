@@ -44,24 +44,20 @@ public class EnvironmentCustomizer implements EnvironmentPostProcessor {
             return;
         }
 
-        /**
-         * Get SOFABoot version properties
-         */
+        // Get SOFABoot version properties
         Properties defaultConfiguration = getSofaBootVersionProperties();
 
-        /**
-         * Config default value of {@literal management.endpoints.web.exposure.include}
-         */
+        // Config default value of {@literal management.endpoints.web.exposure.include}
         defaultConfiguration.put(SofaBootConstants.ENDPOINTS_WEB_EXPOSURE_INCLUDE_CONFIG,
             SofaBootConstants.SOFA_DEFAULT_ENDPOINTS_WEB_EXPOSURE_VALUE);
+        defaultConfiguration.put(SofaBootConstants.ENDPOINT_AVAILABILITY_GROUP_CONFIG_KEY,
+            SofaBootConstants.DEFAULT_ENDPOINT_AVAILABILITY_GROUP_CONFIG_VALUE);
 
         PropertiesPropertySource propertySource = new PropertiesPropertySource(
             SofaBootConstants.SOFA_DEFAULT_PROPERTY_SOURCE, defaultConfiguration);
         environment.getPropertySources().addLast(propertySource);
 
-        /**
-         * set required properties, {@link MissingRequiredPropertiesException}
-         **/
+        // set required properties, {@link MissingRequiredPropertiesException}
         environment.setRequiredProperties(SofaBootConstants.APP_NAME_KEY);
     }
 
@@ -84,7 +80,6 @@ public class EnvironmentCustomizer implements EnvironmentPostProcessor {
 
     /**
      * Get SOFABoot Version string.
-     * @return
      */
     protected String getSofaBootVersion() {
         return EnvironmentCustomizer.class.getPackage().getImplementationVersion();

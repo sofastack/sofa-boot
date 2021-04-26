@@ -18,13 +18,17 @@ package com.alipay.sofa.healthcheck;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.util.List;
+
 /**
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 2020/5/18
  */
 @ConfigurationProperties(prefix = "com.alipay.sofa.boot")
 public class HealthCheckProperties {
-    private boolean healthCheckInsulator = false;
+    private boolean      healthCheckInsulator = false;
+
+    private List<String> excludedIndicators;
 
     public boolean isHealthCheckInsulator() {
         return healthCheckInsulator;
@@ -32,5 +36,13 @@ public class HealthCheckProperties {
 
     public void setHealthCheckInsulator(boolean healthCheckInsulator) {
         this.healthCheckInsulator = healthCheckInsulator;
+    }
+
+    public List<String> getExcludedIndicators() {
+        return excludedIndicators;
+    }
+
+    public void setExcludedIndicators(List<String> excludedIndicators) {
+        this.excludedIndicators = excludedIndicators;
     }
 }

@@ -35,7 +35,6 @@ import com.alipay.sofa.boot.actuator.health.MultiApplicationHealthIndicator;
 import com.alipay.sofa.boot.actuator.health.ReadinessEndpointWebExtension;
 import com.alipay.sofa.boot.actuator.health.SofaBootHealthIndicator;
 import com.alipay.sofa.boot.actuator.health.SofaBootReadinessEndpoint;
-import com.alipay.sofa.boot.actuator.health.SofaModuleHealthIndicator;
 import com.alipay.sofa.healthcheck.AfterReadinessCheckCallbackProcessor;
 import com.alipay.sofa.healthcheck.HealthCheckerProcessor;
 import com.alipay.sofa.healthcheck.HealthIndicatorProcessor;
@@ -119,11 +118,6 @@ public class SofaBootHealthCheckAutoConfiguration {
     @ConditionalOnClass({ HealthChecker.class, ModelCreatingStage.class })
     @ConditionalOnProperty(value = "com.alipay.sofa.boot.enable-isle", matchIfMissing = true)
     public static class SofaModuleHealthIndicatorConfiguration {
-        @Bean
-        public SofaModuleHealthIndicator sofaModuleHealthIndicator() {
-            return new SofaModuleHealthIndicator();
-        }
-
         @Bean
         public ModuleHealthChecker sofaModuleHealthChecker() {
             return new ModuleHealthChecker();

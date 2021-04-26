@@ -19,14 +19,17 @@ package com.alipay.sofa.healthcheck;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.Health;
-import org.springframework.boot.actuate.health.HealthAggregator;
-import org.springframework.boot.actuate.health.OrderedHealthAggregator;
+import org.springframework.boot.actuate.health.Status;
+import org.springframework.boot.actuate.health.StatusAggregator;
+import org.springframework.boot.availability.AvailabilityChangeEvent;
+import org.springframework.boot.availability.ReadinessState;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
@@ -49,7 +52,8 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
     private static Logger                        logger                     = HealthCheckLoggerFactory
                                                                                 .getLogger(ReadinessCheckListener.class);
 
-    private final HealthAggregator               healthAggregator           = new OrderedHealthAggregator();
+    private final StatusAggregator               statusAggregator           = StatusAggregator
+                                                                                .getDefault();
 
     protected ApplicationContext                 applicationContext;
 
@@ -151,8 +155,10 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
         }
 
         if (healthCheckerStatus && healthIndicatorStatus && healthCallbackStatus) {
+            AvailabilityChangeEvent.publish(applicationContext, ReadinessState.ACCEPTING_TRAFFIC);
             logger.info("Readiness check result: success");
         } else {
+            AvailabilityChangeEvent.publish(applicationContext, ReadinessState.REFUSING_TRAFFIC);
             logger.error("Readiness check result: fail");
             if (healthCheckerInsulator) {
                 throw new HealthCheckException(
@@ -214,7 +220,9 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
             // HealthIndicator
             healths.putAll(healthIndicatorDetails);
         }
-        return this.healthAggregator.aggregate(healths);
+        Status overallStatus = this.statusAggregator.getAggregateStatus(
+                healths.values().stream().map(Health::getStatus).collect(Collectors.toSet()));
+        return new Health.Builder(overallStatus, healths).build();
     }
 
     public boolean skipAllCheck() {
