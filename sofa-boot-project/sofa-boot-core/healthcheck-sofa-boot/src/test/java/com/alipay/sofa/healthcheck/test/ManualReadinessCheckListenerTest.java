@@ -30,12 +30,18 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.availability.ApplicationAvailabilityAutoConfiguration;
 import org.springframework.boot.actuate.health.Health;
+import org.springframework.boot.availability.ApplicationAvailability;
+import org.springframework.boot.availability.ReadinessState;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -51,9 +57,12 @@ public class ManualReadinessCheckListenerTest {
     @Autowired
     private ApplicationContext applicationContext;
 
+    protected static ReadinessState readinessState;
+
     @Configuration
     @EnableConfigurationProperties({ HealthCheckProperties.class,
             SofaRuntimeConfigurationProperties.class })
+    @Import(ApplicationAvailabilityAutoConfiguration.class)
     static class HealthCheckConfiguration {
         @Bean
         public HealthChecker myHealthChecker() {
@@ -66,6 +75,19 @@ public class ManualReadinessCheckListenerTest {
                 @Override
                 public String getComponentName() {
                     return "myHealthChecker";
+                }
+            };
+        }
+
+        @Bean
+        public ApplicationListener<ContextRefreshedEvent> testListener() {
+            return new ApplicationListener<ContextRefreshedEvent>() {
+                @Autowired
+                private ApplicationAvailability applicationAvailability;
+
+                @Override
+                public void onApplicationEvent(ContextRefreshedEvent event) {
+                    ManualReadinessCheckListenerTest.readinessState = applicationAvailability.getReadinessState();
                 }
             };
         }
@@ -109,5 +131,10 @@ public class ManualReadinessCheckListenerTest {
         Assert.assertFalse(result.isSuccess());
         Assert.assertTrue(result.getDetails().contains("checker or indicator failed"));
         Assert.assertFalse(readinessCheckListener.getReadinessCallbackTriggered().get());
+    }
+
+    @Test
+    public void testAvailabilityReadinessDown() {
+        Assert.assertEquals(ReadinessState.REFUSING_TRAFFIC, readinessState);
     }
 }

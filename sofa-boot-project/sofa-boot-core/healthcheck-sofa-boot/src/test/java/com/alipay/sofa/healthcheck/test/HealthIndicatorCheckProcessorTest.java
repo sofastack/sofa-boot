@@ -86,10 +86,10 @@ public class HealthIndicatorCheckProcessorTest {
         boolean result = healthIndicatorProcessor.readinessHealthCheck(hashMap);
         Health diskHealth = hashMap.get("disk");
         Assert.assertTrue(result);
-        Assert.assertTrue(hashMap.size() == 1);
+        Assert.assertEquals(1, hashMap.size());
         Assert.assertNotNull(diskHealth);
-        Assert.assertTrue(diskHealth.getStatus().equals(Status.UP));
-        Assert.assertTrue("hard disk is ok".equals(diskHealth.getDetails().get("disk")));
+        Assert.assertEquals(diskHealth.getStatus(), Status.UP);
+        Assert.assertEquals("hard disk is ok", diskHealth.getDetails().get("disk"));
     }
 
     @Test
@@ -101,10 +101,10 @@ public class HealthIndicatorCheckProcessorTest {
         boolean result = healthIndicatorProcessor.readinessHealthCheck(hashMap);
         Health diskHealth = hashMap.get("disk");
         Assert.assertFalse(result);
-        Assert.assertTrue(hashMap.size() == 1);
+        Assert.assertEquals(1, hashMap.size());
         Assert.assertNotNull(diskHealth);
-        Assert.assertTrue(diskHealth.getStatus().equals(Status.DOWN));
-        Assert.assertTrue("hard disk is bad".equals(diskHealth.getDetails().get("disk")));
+        Assert.assertEquals(diskHealth.getStatus(), Status.DOWN);
+        Assert.assertEquals("hard disk is bad", diskHealth.getDetails().get("disk"));
     }
 
     private void initApplicationContext(boolean health) {
