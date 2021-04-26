@@ -89,7 +89,8 @@ public class HealthIndicatorExclusionTest {
         Map<String, Object> properties = new LinkedHashMap<>();
         properties.put("spring.application.name", "HealthIndicatorCheckProcessorTest");
         if (exclude) {
-            properties.put("com.alipay.sofa.boot.excludedIndicators", "com.alipay.sofa.healthcheck.test.bean.DiskHealthIndicator");
+            properties.put("com.alipay.sofa.boot.excludedIndicators",
+                    "com.alipay.sofa.healthcheck.test.bean.DiskHealthIndicator");
         }
         SpringApplication springApplication = new SpringApplication(
                 HealthIndicatorExclusionTest.HealthIndicatorConfiguration.class);
