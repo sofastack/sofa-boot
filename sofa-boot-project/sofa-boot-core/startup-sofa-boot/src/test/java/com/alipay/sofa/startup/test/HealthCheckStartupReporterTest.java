@@ -40,7 +40,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(classes = StartupApplication.class, webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @RunWith(SpringRunner.class)
 @Import(value = { SofaStartupAutoConfiguration.class, SofaStartupHealthCheckAutoConfiguration.class })
-@EnableConfigurationProperties({HealthCheckProperties.class, SofaRuntimeConfigurationProperties.class})
+@EnableConfigurationProperties({ HealthCheckProperties.class,
+                                SofaRuntimeConfigurationProperties.class })
 public class HealthCheckStartupReporterTest {
     @Autowired
     private StartupReporter startupReporter;

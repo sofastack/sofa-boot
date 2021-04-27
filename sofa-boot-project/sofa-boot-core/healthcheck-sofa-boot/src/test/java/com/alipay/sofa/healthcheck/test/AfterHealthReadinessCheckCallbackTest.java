@@ -147,7 +147,8 @@ public class AfterHealthReadinessCheckCallbackTest {
     }
 
     @Configuration
-    @EnableConfigurationProperties({HealthCheckProperties.class, SofaRuntimeConfigurationProperties.class})
+    @EnableConfigurationProperties({ HealthCheckProperties.class,
+            SofaRuntimeConfigurationProperties.class })
     static class AfterHealthReadinessCheckCallbackTestConfiguration {
         @Bean
         public MiddlewareHealthCheckCallback middlewareHealthCheckCallback(@Value("${after-readiness-check-callback-a.health:false}") boolean health) {

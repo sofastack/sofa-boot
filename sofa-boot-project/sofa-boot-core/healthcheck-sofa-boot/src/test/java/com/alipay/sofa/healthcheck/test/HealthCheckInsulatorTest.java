@@ -37,7 +37,8 @@ import org.springframework.context.annotation.Configuration;
  * Created on 2020/5/18
  */
 public class HealthCheckInsulatorTest {
-    @EnableConfigurationProperties({HealthCheckProperties.class, SofaRuntimeConfigurationProperties.class})
+    @EnableConfigurationProperties({ HealthCheckProperties.class,
+            SofaRuntimeConfigurationProperties.class })
     @Configuration
     static class HealthCheckConfiguration {
         @Bean

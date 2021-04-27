@@ -32,7 +32,8 @@ import com.alipay.sofa.healthcheck.ReadinessCheckListener;
  * @since 3.2.0
  */
 @Configuration
-@EnableConfigurationProperties({HealthCheckProperties.class, SofaRuntimeConfigurationProperties.class})
+@EnableConfigurationProperties({ HealthCheckProperties.class,
+                                SofaRuntimeConfigurationProperties.class })
 public class HealthcheckTestConfiguration {
     @Bean
     public ReadinessCheckListener readinessCheckListener() {

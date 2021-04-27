@@ -61,7 +61,8 @@ public class HealthCheckerProcessorTest {
     private ApplicationContext applicationContext;
 
     @Configuration
-    @EnableConfigurationProperties({HealthCheckProperties.class, SofaRuntimeConfigurationProperties.class})
+    @EnableConfigurationProperties({ HealthCheckProperties.class,
+            SofaRuntimeConfigurationProperties.class })
     static class HealthCheckerProcessorTestConfiguration {
         @Bean
         public DiskHealthChecker diskHealthChecker() {

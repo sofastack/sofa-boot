@@ -50,7 +50,8 @@ public class HealthIndicatorCheckProcessorTest {
     private ApplicationContext applicationContext;
 
     @Configuration
-    @EnableConfigurationProperties({HealthCheckProperties.class, SofaRuntimeConfigurationProperties.class})
+    @EnableConfigurationProperties({ HealthCheckProperties.class,
+            SofaRuntimeConfigurationProperties.class })
     static class HealthIndicatorConfiguration {
         @Bean
         public DiskHealthIndicator diskHealthIndicator(@Value("${disk-health-indicator.health}") boolean health) {

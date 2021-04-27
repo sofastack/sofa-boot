@@ -62,7 +62,8 @@ public class ReadinessCheckListenerTest {
     private ApplicationAvailability applicationAvailability;
 
     @Configuration
-    @EnableConfigurationProperties({HealthCheckProperties.class, SofaRuntimeConfigurationProperties.class})
+    @EnableConfigurationProperties({ HealthCheckProperties.class,
+            SofaRuntimeConfigurationProperties.class })
     @Import(ApplicationAvailabilityAutoConfiguration.class)
     static class HealthCheckConfiguration {
         @Bean
