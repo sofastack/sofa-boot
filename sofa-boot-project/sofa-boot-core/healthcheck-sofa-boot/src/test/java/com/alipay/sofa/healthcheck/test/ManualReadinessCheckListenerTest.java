@@ -37,11 +37,9 @@ import org.springframework.boot.availability.ReadinessState;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -57,7 +55,8 @@ public class ManualReadinessCheckListenerTest {
     @Autowired
     private ApplicationContext      applicationContext;
 
-    protected static ReadinessState readinessState;
+    @Autowired
+    private ApplicationAvailability applicationAvailability;
 
     @Configuration
     @EnableConfigurationProperties({ HealthCheckProperties.class,
@@ -75,20 +74,6 @@ public class ManualReadinessCheckListenerTest {
                 @Override
                 public String getComponentName() {
                     return "myHealthChecker";
-                }
-            };
-        }
-
-        @Bean
-        public ApplicationListener<ContextRefreshedEvent> testListener() {
-            return new ApplicationListener<ContextRefreshedEvent>() {
-                @Autowired
-                private ApplicationAvailability applicationAvailability;
-
-                @Override
-                public void onApplicationEvent(ContextRefreshedEvent event) {
-                    ManualReadinessCheckListenerTest.readinessState = applicationAvailability
-                        .getReadinessState();
                 }
             };
         }
@@ -136,6 +121,7 @@ public class ManualReadinessCheckListenerTest {
 
     @Test
     public void testAvailabilityReadinessDown() {
-        Assert.assertEquals(ReadinessState.REFUSING_TRAFFIC, readinessState);
+        Assert.assertEquals(ReadinessState.REFUSING_TRAFFIC,
+            applicationAvailability.getReadinessState());
     }
 }

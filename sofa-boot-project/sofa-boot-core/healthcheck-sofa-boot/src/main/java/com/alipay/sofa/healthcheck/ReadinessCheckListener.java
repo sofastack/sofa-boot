@@ -21,9 +21,9 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
+import com.alipay.sofa.runtime.configure.SofaRuntimeConfigurationProperties;
 import org.slf4j.Logger;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.Status;
@@ -32,9 +32,11 @@ import org.springframework.boot.availability.AvailabilityChangeEvent;
 import org.springframework.boot.availability.ReadinessState;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.ApplicationListener;
+import org.springframework.context.ApplicationEvent;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.GenericApplicationListener;
 import org.springframework.core.Ordered;
+import org.springframework.core.ResolvableType;
 import org.springframework.core.env.Environment;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -48,7 +50,7 @@ import com.alipay.sofa.healthcheck.log.HealthCheckLoggerFactory;
  * @author qilong.zql
  */
 public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
-                                   ApplicationListener<ContextRefreshedEvent>, InitializingBean {
+                                   GenericApplicationListener {
     private static Logger                        logger                     = HealthCheckLoggerFactory
                                                                                 .getLogger(ReadinessCheckListener.class);
 
@@ -69,6 +71,12 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
     @Autowired
     private AfterReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor;
 
+    @Autowired
+    private SofaRuntimeConfigurationProperties   sofaRuntimeConfigurationProperties;
+
+    @Autowired
+    private HealthCheckProperties                healthCheckProperties;
+
     private boolean                              healthCheckerStatus        = true;
 
     private Map<String, Health>                  healthCheckerDetails       = new HashMap<>();
@@ -79,21 +87,10 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
 
     private boolean                              healthCallbackStatus       = true;
     private boolean                              readinessCheckFinish       = false;
-    private boolean                              healthCheckerInsulator     = false;
     private AtomicBoolean                        readinessCallbackTriggered = new AtomicBoolean(
                                                                                 false);
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        try {
-            HealthCheckProperties healthCheckProperties = applicationContext
-                .getBean(HealthCheckProperties.class);
-            healthCheckerInsulator = healthCheckProperties.isHealthCheckInsulator();
-        } catch (Throwable e) {
-            // Defaults to false
-            healthCheckerInsulator = false;
-        }
-    }
+    private ReadinessState                       readinessState;
 
     @Override
     public void setApplicationContext(ApplicationContext ctx) throws BeansException {
@@ -103,18 +100,53 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
     private Map<String, Health> healthCallbackDetails = new HashMap<>();
 
     @Override
+    public boolean supportsEventType(ResolvableType eventType) {
+        Class<?> eventClass = eventType.getRawClass();
+        if (eventClass == null) {
+            return false;
+        }
+
+        return ContextRefreshedEvent.class.isAssignableFrom(eventClass)
+               || AvailabilityChangeEvent.class.isAssignableFrom(eventClass);
+    }
+
+    @Override
     public int getOrder() {
         return LOWEST_PRECEDENCE;
     }
 
     @Override
-    public void onApplicationEvent(ContextRefreshedEvent event) {
+    public void onApplicationEvent(ApplicationEvent event) {
+        if (event instanceof ContextRefreshedEvent) {
+            onContextRefreshedEvent((ContextRefreshedEvent) event);
+        } else if (event instanceof AvailabilityChangeEvent) {
+            onAvailabilityChangeEvent((AvailabilityChangeEvent<?>) event);
+        }
+    }
+
+    public void onContextRefreshedEvent(ContextRefreshedEvent event) {
         if (applicationContext.equals(event.getApplicationContext())) {
             healthCheckerProcessor.init();
             healthIndicatorProcessor.init();
             afterReadinessCheckCallbackProcessor.init();
             readinessHealthCheck();
             readinessCheckFinish = true;
+        }
+    }
+
+    public void onAvailabilityChangeEvent(AvailabilityChangeEvent<?> event) {
+        if (isReadinessCheckFinish()) {
+            Object payload = event.getPayload();
+            if (payload instanceof ReadinessState && payload != readinessState) {
+                // If readinessCheck if performed normally, readinessState won't be null
+                // it means application is in critical state if it is
+                if (readinessState == null) {
+                    AvailabilityChangeEvent.publish(applicationContext,
+                        ReadinessState.REFUSING_TRAFFIC);
+                } else {
+                    AvailabilityChangeEvent.publish(applicationContext, readinessState);
+                }
+            }
         }
     }
 
@@ -139,40 +171,29 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
             }
         }
 
-        // TODO: fix classloader (key) bug in SofaRuntimeConfigurationProperties
-        if ("false".equals(applicationContext.getEnvironment().getProperty(
-            SofaBootConstants.PREFIX + ".manualReadinessCallback", "false"))) {
+        if (sofaRuntimeConfigurationProperties.isManualReadinessCallback()) {
+            logger
+                .info("Manual readiness callback is set to true, skip normal readiness callback. "
+                      + "You can trigger all readiness callbacks through URL: actuator/triggerReadinessCallback");
+        } else {
             if (healthCheckerStatus && healthIndicatorStatus) {
                 readinessCallbackTriggered.set(true);
                 logger.info("Invoking all readiness check callbacks...");
                 healthCallbackStatus = afterReadinessCheckCallbackProcessor
                     .afterReadinessCheckCallback(healthCallbackDetails);
             }
-        } else {
-            logger
-                .info("Manual readiness callback is set to true, skip normal readiness callback. "
-                      + "You can trigger all readiness callbacks through URL: actuator/triggerReadinessCallback");
         }
-
-        if (healthCheckerStatus && healthIndicatorStatus && healthCallbackStatus) {
-            AvailabilityChangeEvent.publish(applicationContext, ReadinessState.ACCEPTING_TRAFFIC);
-            logger.info("Readiness check result: success");
-        } else {
-            AvailabilityChangeEvent.publish(applicationContext, ReadinessState.REFUSING_TRAFFIC);
-            logger.error("Readiness check result: fail");
-            if (healthCheckerInsulator) {
-                throw new HealthCheckException(
-                    "Application health check is failed and health check insulator switch is turned on!");
-            }
-        }
+        determineReadinessState();
     }
 
+    // After invoking readiness callbacks, we will determine readinessState again to include healthCallbackStatus
     public ManualReadinessCallbackResult triggerReadinessCallback() {
         if (healthCheckerStatus && healthIndicatorStatus) {
             if (readinessCallbackTriggered.compareAndSet(false, true)) {
                 logger.info("Invoking all readiness callbacks...");
                 healthCallbackStatus = afterReadinessCheckCallbackProcessor
                     .afterReadinessCheckCallback(healthCallbackDetails);
+                determineReadinessState();
                 return new ManualReadinessCallbackResult(true,
                     "Readiness callbacks invoked successfully with result: " + healthCallbackStatus);
             } else {
@@ -183,6 +204,21 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
             logger.warn("Health checker or indicator failed, skip all readiness callbacks!");
             return ManualReadinessCallbackResult.STAGE_ONE_FAILED;
         }
+    }
+
+    private void determineReadinessState() {
+        if (healthCheckerStatus && healthIndicatorStatus && healthCallbackStatus) {
+            readinessState = ReadinessState.ACCEPTING_TRAFFIC;
+            logger.info("Readiness check result: success");
+        } else {
+            readinessState = ReadinessState.REFUSING_TRAFFIC;
+            logger.error("Readiness check result: fail");
+            if (healthCheckProperties.isHealthCheckInsulator()) {
+                throw new HealthCheckException(
+                    "Application health check is failed and health check insulator switch is turned on!");
+            }
+        }
+        AvailabilityChangeEvent.publish(applicationContext, readinessState);
     }
 
     public Health aggregateReadinessHealth() {
