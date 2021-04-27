@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.alipay.sofa.healthcheck.HealthCheckProperties;
+import com.alipay.sofa.runtime.configure.SofaRuntimeConfigurationProperties;
 import org.junit.Test;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
@@ -84,7 +85,8 @@ public class HealthCheckConfigurationTest {
     }
 
     @Configuration
-    @EnableConfigurationProperties(HealthCheckProperties.class)
+    @EnableConfigurationProperties({ HealthCheckProperties.class,
+            SofaRuntimeConfigurationProperties.class })
     static class HealthCheckConfigurationTestConfiguration {
         @Bean
         public AfterReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor() {

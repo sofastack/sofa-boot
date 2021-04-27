@@ -23,10 +23,12 @@ import org.springframework.boot.actuate.health.HealthIndicator;
 import com.alipay.sofa.healthcheck.impl.ModuleHealthChecker;
 
 /**
- * module health checker which implements ${@link org.springframework.boot.actuate.health.HealthIndicator}
- *
+ * Module health checker which implements ${@link org.springframework.boot.actuate.health.HealthIndicator}
+ * Deprecated as {@link SofaBootHealthIndicator} will expose this information as well.
+ * Will be removed in 3.9.0
  * @author xuanbei 18/5/16
  */
+@Deprecated
 public class SofaModuleHealthIndicator implements HealthIndicator {
 
     @Autowired

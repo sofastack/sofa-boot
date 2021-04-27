@@ -23,6 +23,7 @@ import com.alipay.sofa.healthcheck.HealthCheckerProcessor;
 import com.alipay.sofa.healthcheck.HealthIndicatorProcessor;
 import com.alipay.sofa.healthcheck.ReadinessCheckListener;
 import com.alipay.sofa.healthcheck.core.HealthChecker;
+import com.alipay.sofa.runtime.configure.SofaRuntimeConfigurationProperties;
 import org.junit.Test;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.actuate.health.Health;
@@ -36,7 +37,8 @@ import org.springframework.context.annotation.Configuration;
  * Created on 2020/5/18
  */
 public class HealthCheckInsulatorTest {
-    @EnableConfigurationProperties(HealthCheckProperties.class)
+    @EnableConfigurationProperties({ HealthCheckProperties.class,
+            SofaRuntimeConfigurationProperties.class })
     @Configuration
     static class HealthCheckConfiguration {
         @Bean

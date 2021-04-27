@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.alipay.sofa.healthcheck.HealthCheckProperties;
+import com.alipay.sofa.runtime.configure.SofaRuntimeConfigurationProperties;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -72,7 +73,8 @@ public class ReactiveHealthIndicatorTest {
     }
 
     @Configuration
-    @EnableConfigurationProperties(HealthCheckProperties.class)
+    @EnableConfigurationProperties({ HealthCheckProperties.class,
+            SofaRuntimeConfigurationProperties.class })
     static class ReactiveHealthIndicatorTestConfiguration {
         @Bean
         public AfterReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor() {

@@ -76,7 +76,7 @@ public class HealthCheckerProcessor {
      * Provided for liveness check.
      *
      * @param healthMap used to save the information of {@link HealthChecker}.
-     * @return
+     * @return whether liveness health check passes or not
      */
     public boolean livenessHealthCheck(Map<String, Health> healthMap) {
         Assert.notNull(healthCheckers, () -> "HealthCheckers must not be null");
@@ -97,7 +97,7 @@ public class HealthCheckerProcessor {
      * Provided for readiness check.
      *
      * @param healthMap used to save the information of {@link HealthChecker}.
-     * @return
+     * @return whether readiness health check passes or not
      */
     public boolean readinessHealthCheck(Map<String, Health> healthMap) {
         Assert.notNull(healthCheckers, "HealthCheckers must not be null.");
@@ -122,7 +122,7 @@ public class HealthCheckerProcessor {
      * @param isRetry Whether retry when check failed, true for readiness and false for liveness.
      * @param healthMap Used to save the information of {@link HealthChecker}.
      * @param isReadiness Mark whether invoked during readiness.
-     * @return
+     * @return health check passes or not
      */
     private boolean doHealthCheck(String beanId, HealthChecker healthChecker, boolean isRetry,
                                   Map<String, Health> healthMap, boolean isReadiness) {

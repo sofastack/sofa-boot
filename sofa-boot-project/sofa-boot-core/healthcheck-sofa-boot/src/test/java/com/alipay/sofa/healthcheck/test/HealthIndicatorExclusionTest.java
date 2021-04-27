@@ -16,15 +16,15 @@
  */
 package com.alipay.sofa.healthcheck.test;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
+import com.alipay.sofa.healthcheck.AfterReadinessCheckCallbackProcessor;
 import com.alipay.sofa.healthcheck.HealthCheckProperties;
+import com.alipay.sofa.healthcheck.HealthCheckerProcessor;
+import com.alipay.sofa.healthcheck.HealthIndicatorProcessor;
+import com.alipay.sofa.healthcheck.ReadinessCheckListener;
+import com.alipay.sofa.healthcheck.test.bean.DiskHealthIndicator;
 import com.alipay.sofa.runtime.configure.SofaRuntimeConfigurationProperties;
 import org.junit.Assert;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.actuate.health.Health;
@@ -34,19 +34,15 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.alipay.sofa.healthcheck.AfterReadinessCheckCallbackProcessor;
-import com.alipay.sofa.healthcheck.HealthCheckerProcessor;
-import com.alipay.sofa.healthcheck.HealthIndicatorProcessor;
-import com.alipay.sofa.healthcheck.ReadinessCheckListener;
-import com.alipay.sofa.healthcheck.test.bean.DiskHealthIndicator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
- * @author liangen
- * @author qilong.zql
- * @version 2.3.0
+ * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
+ * Created on 2021/4/26
  */
-public class HealthIndicatorCheckProcessorTest {
-
+public class HealthIndicatorExclusionTest {
     private ApplicationContext applicationContext;
 
     @Configuration
@@ -54,8 +50,8 @@ public class HealthIndicatorCheckProcessorTest {
             SofaRuntimeConfigurationProperties.class })
     static class HealthIndicatorConfiguration {
         @Bean
-        public DiskHealthIndicator diskHealthIndicator(@Value("${disk-health-indicator.health}") boolean health) {
-            return new DiskHealthIndicator(health);
+        public DiskHealthIndicator diskHealthIndicator() {
+            return new DiskHealthIndicator(false);
         }
 
         @Bean
@@ -80,26 +76,11 @@ public class HealthIndicatorCheckProcessorTest {
     }
 
     @Test
-    public void testCheckIndicatorPassed() {
-        initApplicationContext(true);
-        HealthIndicatorProcessor healthIndicatorProcessor = applicationContext
-            .getBean(HealthIndicatorProcessor.class);
-        HashMap<String, Health> hashMap = new HashMap<>();
-        boolean result = healthIndicatorProcessor.readinessHealthCheck(hashMap);
-        Health diskHealth = hashMap.get("disk");
-        Assert.assertTrue(result);
-        Assert.assertEquals(1, hashMap.size());
-        Assert.assertNotNull(diskHealth);
-        Assert.assertEquals(diskHealth.getStatus(), Status.UP);
-        Assert.assertEquals("hard disk is ok", diskHealth.getDetails().get("disk"));
-    }
-
-    @Test
     public void testCheckIndicatorFailed() {
         initApplicationContext(false);
-        HashMap<String, Health> hashMap = new HashMap<>();
         HealthIndicatorProcessor healthIndicatorProcessor = applicationContext
             .getBean(HealthIndicatorProcessor.class);
+        HashMap<String, Health> hashMap = new HashMap<>();
         boolean result = healthIndicatorProcessor.readinessHealthCheck(hashMap);
         Health diskHealth = hashMap.get("disk");
         Assert.assertFalse(result);
@@ -109,15 +90,30 @@ public class HealthIndicatorCheckProcessorTest {
         Assert.assertEquals("hard disk is bad", diskHealth.getDetails().get("disk"));
     }
 
-    private void initApplicationContext(boolean health) {
+    @Test
+    public void testCheckIndicatorPassed() {
+        initApplicationContext(true);
+        HealthIndicatorProcessor healthIndicatorProcessor = applicationContext
+            .getBean(HealthIndicatorProcessor.class);
+        HashMap<String, Health> hashMap = new HashMap<>();
+        boolean result = healthIndicatorProcessor.readinessHealthCheck(hashMap);
+        Health diskHealth = hashMap.get("disk");
+        Assert.assertTrue(result);
+        Assert.assertEquals(0, hashMap.size());
+        Assert.assertNull(diskHealth);
+    }
+
+    private void initApplicationContext(boolean exclude) {
         Map<String, Object> properties = new LinkedHashMap<>();
-        properties.put("disk-health-indicator.health", health);
         properties.put("spring.application.name", "HealthIndicatorCheckProcessorTest");
+        if (exclude) {
+            properties.put("com.alipay.sofa.boot.excludedIndicators",
+                "com.alipay.sofa.healthcheck.test.bean.DiskHealthIndicator");
+        }
         SpringApplication springApplication = new SpringApplication(
-            HealthIndicatorConfiguration.class);
+            HealthIndicatorExclusionTest.HealthIndicatorConfiguration.class);
         springApplication.setDefaultProperties(properties);
         springApplication.setWebApplicationType(WebApplicationType.NONE);
         applicationContext = springApplication.run();
     }
-
 }

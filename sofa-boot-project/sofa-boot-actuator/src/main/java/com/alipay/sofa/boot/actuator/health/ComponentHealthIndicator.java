@@ -25,6 +25,8 @@ import com.alipay.sofa.healthcheck.impl.ComponentHealthChecker;
 
 /**
  * component health checker which implements ${@link org.springframework.boot.actuate.health.HealthIndicator}
+ * Deprecated as {@link SofaBootHealthIndicator} will expose this information as well.
+ * Will be removed in 3.9.0
  *
  * @author xuanbei 18/5/15
  */

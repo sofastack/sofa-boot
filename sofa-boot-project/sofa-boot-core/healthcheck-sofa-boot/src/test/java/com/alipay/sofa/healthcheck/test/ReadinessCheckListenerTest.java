@@ -17,6 +17,7 @@
 package com.alipay.sofa.healthcheck.test;
 
 import com.alipay.sofa.healthcheck.HealthCheckProperties;
+import com.alipay.sofa.runtime.configure.SofaRuntimeConfigurationProperties;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,11 +26,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.Status;
+import org.springframework.boot.autoconfigure.availability.ApplicationAvailabilityAutoConfiguration;
+import org.springframework.boot.availability.ApplicationAvailability;
+import org.springframework.boot.availability.ReadinessState;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -51,10 +56,15 @@ import com.alipay.sofa.healthcheck.test.bean.MiddlewareHealthCheckCallback;
 public class ReadinessCheckListenerTest {
 
     @Autowired
-    private ApplicationContext applicationContext;
+    private ApplicationContext      applicationContext;
+
+    @Autowired
+    private ApplicationAvailability applicationAvailability;
 
     @Configuration
-    @EnableConfigurationProperties(HealthCheckProperties.class)
+    @EnableConfigurationProperties({ HealthCheckProperties.class,
+            SofaRuntimeConfigurationProperties.class })
+    @Import(ApplicationAvailabilityAutoConfiguration.class)
     static class HealthCheckConfiguration {
         @Bean
         public MemoryHealthChecker memoryHealthChecker(@Value("${memory-health-checker.count:0}") int count,
@@ -125,5 +135,11 @@ public class ReadinessCheckListenerTest {
             .getBean(ReadinessCheckListener.class);
         Health health = readinessCheckListener.aggregateReadinessHealth();
         Assert.assertEquals(Status.UP, health.getStatus());
+    }
+
+    @Test
+    public void testAvailabilityReadinessUp() {
+        Assert.assertEquals(ReadinessState.ACCEPTING_TRAFFIC,
+            applicationAvailability.getReadinessState());
     }
 }

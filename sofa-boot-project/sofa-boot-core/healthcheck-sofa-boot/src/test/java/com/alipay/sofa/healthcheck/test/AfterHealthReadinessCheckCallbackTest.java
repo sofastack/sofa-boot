@@ -28,6 +28,7 @@ import com.alipay.sofa.healthcheck.test.bean.HighestOrderReadinessCheckCallback;
 import com.alipay.sofa.healthcheck.test.bean.LowestOrderReadinessCheckCallback;
 import com.alipay.sofa.healthcheck.test.bean.MiddlewareHealthCheckCallback;
 import com.alipay.sofa.healthcheck.test.bean.SuccessHealthCheck;
+import com.alipay.sofa.runtime.configure.SofaRuntimeConfigurationProperties;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Value;
@@ -146,7 +147,8 @@ public class AfterHealthReadinessCheckCallbackTest {
     }
 
     @Configuration
-    @EnableConfigurationProperties(HealthCheckProperties.class)
+    @EnableConfigurationProperties({ HealthCheckProperties.class,
+            SofaRuntimeConfigurationProperties.class })
     static class AfterHealthReadinessCheckCallbackTestConfiguration {
         @Bean
         public MiddlewareHealthCheckCallback middlewareHealthCheckCallback(@Value("${after-readiness-check-callback-a.health:false}") boolean health) {
