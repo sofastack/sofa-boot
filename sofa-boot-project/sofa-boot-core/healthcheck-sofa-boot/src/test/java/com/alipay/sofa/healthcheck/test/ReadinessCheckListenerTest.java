@@ -55,7 +55,7 @@ import com.alipay.sofa.healthcheck.test.bean.MiddlewareHealthCheckCallback;
 public class ReadinessCheckListenerTest {
 
     @Autowired
-    private ApplicationContext applicationContext;
+    private ApplicationContext      applicationContext;
 
     @Autowired
     private ApplicationAvailability applicationAvailability;
@@ -137,6 +137,7 @@ public class ReadinessCheckListenerTest {
 
     @Test
     public void testAvailabilityReadinessUp() {
-        Assert.assertEquals(ReadinessState.ACCEPTING_TRAFFIC, applicationAvailability.getReadinessState());
+        Assert.assertEquals(ReadinessState.ACCEPTING_TRAFFIC,
+            applicationAvailability.getReadinessState());
     }
 }

@@ -55,7 +55,7 @@ import org.springframework.test.context.junit4.SpringRunner;
                                   "com.alipay.sofa.boot.manualReadinessCallback=true" })
 public class ManualReadinessCheckListenerTest {
     @Autowired
-    private ApplicationContext applicationContext;
+    private ApplicationContext      applicationContext;
 
     protected static ReadinessState readinessState;
 
@@ -87,7 +87,8 @@ public class ManualReadinessCheckListenerTest {
 
                 @Override
                 public void onApplicationEvent(ContextRefreshedEvent event) {
-                    ManualReadinessCheckListenerTest.readinessState = applicationAvailability.getReadinessState();
+                    ManualReadinessCheckListenerTest.readinessState = applicationAvailability
+                        .getReadinessState();
                 }
             };
         }

@@ -1,3 +1,19 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.alipay.sofa.healthcheck.test;
 
 import com.alipay.sofa.healthcheck.AfterReadinessCheckCallbackProcessor;
@@ -61,7 +77,7 @@ public class HealthIndicatorExclusionTest {
     public void testCheckIndicatorFailed() {
         initApplicationContext(false);
         HealthIndicatorProcessor healthIndicatorProcessor = applicationContext
-                .getBean(HealthIndicatorProcessor.class);
+            .getBean(HealthIndicatorProcessor.class);
         HashMap<String, Health> hashMap = new HashMap<>();
         boolean result = healthIndicatorProcessor.readinessHealthCheck(hashMap);
         Health diskHealth = hashMap.get("disk");
@@ -76,7 +92,7 @@ public class HealthIndicatorExclusionTest {
     public void testCheckIndicatorPassed() {
         initApplicationContext(true);
         HealthIndicatorProcessor healthIndicatorProcessor = applicationContext
-                .getBean(HealthIndicatorProcessor.class);
+            .getBean(HealthIndicatorProcessor.class);
         HashMap<String, Health> hashMap = new HashMap<>();
         boolean result = healthIndicatorProcessor.readinessHealthCheck(hashMap);
         Health diskHealth = hashMap.get("disk");
@@ -90,10 +106,10 @@ public class HealthIndicatorExclusionTest {
         properties.put("spring.application.name", "HealthIndicatorCheckProcessorTest");
         if (exclude) {
             properties.put("com.alipay.sofa.boot.excludedIndicators",
-                    "com.alipay.sofa.healthcheck.test.bean.DiskHealthIndicator");
+                "com.alipay.sofa.healthcheck.test.bean.DiskHealthIndicator");
         }
         SpringApplication springApplication = new SpringApplication(
-                HealthIndicatorExclusionTest.HealthIndicatorConfiguration.class);
+            HealthIndicatorExclusionTest.HealthIndicatorConfiguration.class);
         springApplication.setDefaultProperties(properties);
         springApplication.setWebApplicationType(WebApplicationType.NONE);
         applicationContext = springApplication.run();
