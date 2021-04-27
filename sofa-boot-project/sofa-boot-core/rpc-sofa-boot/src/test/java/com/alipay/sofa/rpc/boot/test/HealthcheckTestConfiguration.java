@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.rpc.boot.test;
 
+import com.alipay.sofa.runtime.configure.SofaRuntimeConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,7 +32,7 @@ import com.alipay.sofa.healthcheck.ReadinessCheckListener;
  * @since 3.2.0
  */
 @Configuration
-@EnableConfigurationProperties(HealthCheckProperties.class)
+@EnableConfigurationProperties({HealthCheckProperties.class, SofaRuntimeConfigurationProperties.class})
 public class HealthcheckTestConfiguration {
     @Bean
     public ReadinessCheckListener readinessCheckListener() {

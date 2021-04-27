@@ -19,6 +19,7 @@ package com.alipay.sofa.startup.test;
 import com.alipay.sofa.boot.startup.BootStageConstants;
 import com.alipay.sofa.boot.startup.StageStat;
 import com.alipay.sofa.healthcheck.HealthCheckProperties;
+import com.alipay.sofa.runtime.configure.SofaRuntimeConfigurationProperties;
 import com.alipay.sofa.startup.StartupReporter;
 import com.alipay.sofa.startup.test.configuration.SofaStartupAutoConfiguration;
 import com.alipay.sofa.startup.test.configuration.SofaStartupHealthCheckAutoConfiguration;
@@ -39,7 +40,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(classes = StartupApplication.class, webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @RunWith(SpringRunner.class)
 @Import(value = { SofaStartupAutoConfiguration.class, SofaStartupHealthCheckAutoConfiguration.class })
-@EnableConfigurationProperties(HealthCheckProperties.class)
+@EnableConfigurationProperties({HealthCheckProperties.class, SofaRuntimeConfigurationProperties.class})
 public class HealthCheckStartupReporterTest {
     @Autowired
     private StartupReporter startupReporter;

@@ -22,6 +22,7 @@ import com.alipay.sofa.healthcheck.HealthCheckerProcessor;
 import com.alipay.sofa.healthcheck.HealthIndicatorProcessor;
 import com.alipay.sofa.healthcheck.ReadinessCheckListener;
 import com.alipay.sofa.healthcheck.test.bean.DiskHealthIndicator;
+import com.alipay.sofa.runtime.configure.SofaRuntimeConfigurationProperties;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.boot.SpringApplication;
@@ -45,7 +46,7 @@ public class HealthIndicatorExclusionTest {
     private ApplicationContext applicationContext;
 
     @Configuration
-    @EnableConfigurationProperties(HealthCheckProperties.class)
+    @EnableConfigurationProperties({HealthCheckProperties.class, SofaRuntimeConfigurationProperties.class})
     static class HealthIndicatorConfiguration {
         @Bean
         public DiskHealthIndicator diskHealthIndicator() {

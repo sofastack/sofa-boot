@@ -17,6 +17,7 @@
 package com.alipay.sofa.healthcheck.test;
 
 import com.alipay.sofa.healthcheck.HealthCheckProperties;
+import com.alipay.sofa.runtime.configure.SofaRuntimeConfigurationProperties;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -61,7 +62,7 @@ public class ReadinessCheckListenerTest {
     private ApplicationAvailability applicationAvailability;
 
     @Configuration
-    @EnableConfigurationProperties(HealthCheckProperties.class)
+    @EnableConfigurationProperties({HealthCheckProperties.class, SofaRuntimeConfigurationProperties.class})
     @Import(ApplicationAvailabilityAutoConfiguration.class)
     static class HealthCheckConfiguration {
         @Bean
