@@ -5,26 +5,19 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.9.RELEASE</version>
-        <!-- Add this to resolve to repository -->
-        <relativePath />
+        <groupId>com.alipay.sofa</groupId>
+        <artifactId>sofa-boot-project</artifactId>
+        <version>${revision}</version>
     </parent>
-    
-    <groupId>com.alipay.sofa</groupId>
+
     <artifactId>sofaboot-dependencies</artifactId>
     <packaging>pom</packaging>
-    <version>3.7.0-SNAPSHOT</version>
 
     <properties>
         <!--project-->
-        <java.version>1.7</java.version>
+        <java.version>1.8</java.version>
         <project.encoding>UTF-8</project.encoding>
         <project.build.encoding>UTF-8</project.build.encoding>
-        <project.build.encoding>UTF-8</project.build.encoding>
-
-        <sofa.boot.version>3.7.0-SNAPSHOT</sofa.boot.version>
 
         <!--starter-->
         <sofa.ark.version>1.1.5</sofa.ark.version>
@@ -61,10 +54,6 @@
         <protoc.version>3.11.0</protoc.version>
         <grpc.version>1.28.0</grpc.version>
         <grpc.common.protos.version>1.17.0</grpc.common.protos.version>
-
-        <!--maven plugin-->
-        <maven.staging.plugin>1.6.7</maven.staging.plugin>
-        <maven.gpg.pluign>1.5</maven.gpg.pluign>
     </properties>
 
     <licenses>
@@ -663,136 +652,32 @@
     </dependencyManagement>
 
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>com.alipay.sofa</groupId>
-                    <artifactId>sofa-ark-maven-plugin</artifactId>
-                    <version>${sofa.ark.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>com.alipay.sofa</groupId>
-                    <artifactId>sofa-ark-plugin-maven-plugin</artifactId>
-                    <version>${sofa.ark.version}</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <inherited>false</inherited>
+                <configuration>
+                    <updatePomFile>true</updatePomFile>
+                    <flattenMode>resolveCiFriendliesOnly</flattenMode>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>flatten.clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
-
-
-    <profiles>
-        <profile>
-            <id>release</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.sonatype.plugins</groupId>
-                        <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>${maven.staging.plugin}</version>
-                        <extensions>true</extensions>
-                        <configuration>
-                            <serverId>ossrh</serverId>
-                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                            <autoReleaseAfterClose>false</autoReleaseAfterClose>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>${maven.gpg.pluign}</version>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-            <distributionManagement>
-                <repository>
-                    <id>ossrh</id>
-                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-                </repository>
-            </distributionManagement>
-        </profile>
-
-        <profile>
-            <id>snapshot</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.sonatype.plugins</groupId>
-                        <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>${maven.staging.plugin}</version>
-                        <extensions>true</extensions>
-                        <configuration>
-                            <serverId>ossrh</serverId>
-                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                            <autoReleaseAfterClose>false</autoReleaseAfterClose>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>${maven.gpg.pluign}</version>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-            <distributionManagement>
-                <snapshotRepository>
-                    <id>ossrh</id>
-                    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-                </snapshotRepository>
-            </distributionManagement>
-        </profile>
-        <profile>
-            <id>default</id>
-            <repositories>
-                <repository>
-                    <snapshots>
-                        <enabled>false</enabled>
-                    </snapshots>
-                    <id>release</id>
-                    <url>https://oss.sonatype.org/content/repositories/releases</url>
-                </repository>
-                <repository>
-                    <snapshots>
-                        <enabled>true</enabled>
-                    </snapshots>
-                    <id>snapshot</id>
-                    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-                </repository>
-            </repositories>
-            <pluginRepositories>
-                <pluginRepository>
-                    <snapshots>
-                        <enabled>false</enabled>
-                    </snapshots>
-                    <id>releases</id>
-                    <url>https://oss.sonatype.org/content/repositories/releases</url>
-                </pluginRepository>
-                <pluginRepository>
-                    <snapshots>
-                        <enabled>true</enabled>
-                    </snapshots>
-                    <id>snapshot</id>
-                    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-                </pluginRepository>
-            </pluginRepositories>
-        </profile>
-    </profiles>
-
 </project>

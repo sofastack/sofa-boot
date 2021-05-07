@@ -20,6 +20,7 @@ velocity.log
 .DS_Store
 logs
 .m2
+**/.flattened-pom.xml
 
 # gradle related ignore in sub directories
 .gradle
