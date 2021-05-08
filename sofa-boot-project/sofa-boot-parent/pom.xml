@@ -5,7 +5,7 @@
     <parent>
         <artifactId>sofaboot-dependencies</artifactId>
         <groupId>com.alipay.sofa</groupId>
-        <version>3.7.0-SNAPSHOT</version>
+        <version>${revision}</version>
         <relativePath>../sofaboot-dependencies</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -168,6 +168,31 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <configuration>
+                    <updatePomFile>true</updatePomFile>
+                    <flattenMode>resolveCiFriendliesOnly</flattenMode>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>flatten.clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <groupId>com.mycila</groupId>
                 <artifactId>license-maven-plugin</artifactId>

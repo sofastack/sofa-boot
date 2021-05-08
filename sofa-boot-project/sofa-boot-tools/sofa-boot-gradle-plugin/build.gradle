@@ -6,7 +6,6 @@ plugins {
 description = "SOFABoot Gradle Plugin"
 
 group 'com.alipay.sofa'
-version '3.7.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
 
