@@ -126,6 +126,9 @@ public class SofaBootPlugin implements Plugin<Project> {
                 (buildResult) -> unresolvedDependenciesAnalyzer.buildFinished(project));
     }
 
+    // This method always returns null when executing gradle test
+    // The version of the sofaboot-dependencies is determined by dependency graph resolving
+    // As is {@link org.springframework.boot.gradle.plugin.SpringBootPlugin#determineSpringBootVersion}
     private static String determineSofaBootVersion() {
         URL codeSourceLocation = Marker.class.getProtectionDomain().getCodeSource().getLocation();
         try {

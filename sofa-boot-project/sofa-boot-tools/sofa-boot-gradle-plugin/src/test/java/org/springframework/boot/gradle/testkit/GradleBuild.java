@@ -236,7 +236,7 @@ public class GradleBuild implements TestRule {
     }
 
     private static String evaluateExpression(String expression) {
-        try (FileReader pomReader = new FileReader("pom.xml")) {
+        try (FileReader pomReader = new FileReader(".flattened-pom.xml")) {
             XPathFactory xPathFactory = XPathFactory.newInstance();
             XPath xpath = xPathFactory.newXPath();
             XPathExpression expr = xpath.compile(expression);
