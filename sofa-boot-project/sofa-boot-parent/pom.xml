@@ -22,6 +22,7 @@
         <license.maven.plugin>3.0</license.maven.plugin>
         <maven.java.formatter.plugin>0.4</maven.java.formatter.plugin>
         <maven.pmd.plugin.version>3.13.0</maven.pmd.plugin.version>
+        <maven.checkstyle.plugin.version>3.1.2</maven.checkstyle.plugin.version>
         <maven.compiler.plugin>3.1</maven.compiler.plugin>
         <maven.source.plugin>3.0.0</maven.source.plugin>
         <maven.javadoc.plugin>2.9.1</maven.javadoc.plugin>
@@ -259,6 +260,34 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${maven.checkstyle.plugin.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.puppycrawl.tools</groupId>
+                        <artifactId>checkstyle</artifactId>
+                        <version>8.42</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <id>checkstyle</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <configuration>
+                            <failOnViolation>true</failOnViolation>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                    <configLocation>${main.user.dir}/tools/check-style.xml</configLocation>
+                </configuration>
             </plugin>
 
             <plugin>
