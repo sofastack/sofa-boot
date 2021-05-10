@@ -331,5 +331,4 @@ public class DynamicJvmServiceProxyFinder {
             return target;
         }
     }
-
 }
