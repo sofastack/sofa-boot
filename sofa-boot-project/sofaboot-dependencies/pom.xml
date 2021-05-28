@@ -35,7 +35,6 @@
 
         <!--3rd lib dependency-->
         <fastjson.version>1.2.69</fastjson.version>
-        <grpc-all.version>1.0.3</grpc-all.version>
         <javassist.version>3.19.0-GA</javassist.version>
         <protobuf-java.version>3.11.0</protobuf-java.version>
         <guice.version>3.0</guice.version>
@@ -460,7 +459,7 @@
             <dependency>
                 <groupId>io.grpc</groupId>
                 <artifactId>grpc-all</artifactId>
-                <version>${grpc-all.version}</version>
+                <version>${grpc.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.grpc</groupId>
