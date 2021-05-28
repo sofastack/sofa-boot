@@ -61,7 +61,7 @@ public class SofaTracerAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public Tracer tracer(SofaTracerProperties sofaTracerProperties) throws Exception {
+    public Tracer sofaTracer(SofaTracerProperties sofaTracerProperties) throws Exception {
         String reporterName = sofaTracerProperties.getReporterName();
         if (StringUtils.isNotBlank(reporterName)) {
             Reporter reporter = (Reporter) Class.forName(reporterName).newInstance();
