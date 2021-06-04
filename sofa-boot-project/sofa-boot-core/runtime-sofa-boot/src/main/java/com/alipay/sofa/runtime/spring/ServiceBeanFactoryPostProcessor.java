@@ -44,6 +44,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ScannedGenericBeanDefinition;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.AnnotatedElementUtils;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 import org.springframework.core.type.MethodMetadata;
@@ -259,7 +260,9 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
     private void generateSofaServiceDefinitionOnClass(String beanId, Class<?> beanClass,
                                                       BeanDefinition beanDefinition,
                                                       ConfigurableListableBeanFactory beanFactory) {
-        SofaService sofaServiceAnnotation = beanClass.getAnnotation(SofaService.class);
+        // See issue: https://github.com/sofastack/sofa-boot/issues/835
+        SofaService sofaServiceAnnotation = AnnotationUtils.findAnnotation(beanClass,
+            SofaService.class);
         generateSofaServiceDefinition(beanId, sofaServiceAnnotation, beanClass, beanDefinition,
             beanFactory);
     }
