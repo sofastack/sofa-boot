@@ -230,7 +230,8 @@ public class SofaBootRpcAllTest {
     @Test
     public void testAnnotationProtobuf() {
         thrown.expect(SofaRpcException.class);
-        thrown.expectMessage("com.alipay.remoting.exception.SerializationException: 0");
+        thrown
+            .expectMessage("com.alipay.remoting.exception.SerializationException: Index 0 out of bounds for length 0");
         annotationServicePb.hello();
     }
 
