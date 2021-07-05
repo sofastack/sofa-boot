@@ -49,6 +49,10 @@ public class ComponentHealthChecker implements HealthChecker {
            + SofaBootConstants.SOFABOOT_COMPONENT_CHECK_STRICT_DEFAULT_ENABLED + "}")
     private boolean            strictCheck;
 
+    @Value("${" + SofaBootConstants.SOFABOOT_COMPONENT_HEALTH_CHECK_TIMEOUT + ":"
+           + SofaBootConstants.SOFABOOT_COMPONENT_HEALTH_CHECK_DEFAULT_TIMEOUT + "}")
+    private int                timeout;
+
     private SofaRuntimeContext sofaRuntimeContext;
 
     public ComponentHealthChecker(SofaRuntimeContext sofaRuntimeContext) {
@@ -103,6 +107,11 @@ public class ComponentHealthChecker implements HealthChecker {
     @Override
     public boolean isStrictCheck() {
         return strictCheck;
+    }
+
+    @Override
+    public int getTimeout() {
+        return timeout;
     }
 
     private static class Pair {

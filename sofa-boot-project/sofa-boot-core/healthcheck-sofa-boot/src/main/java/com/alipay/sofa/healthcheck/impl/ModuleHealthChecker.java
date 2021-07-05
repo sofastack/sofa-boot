@@ -47,6 +47,10 @@ public class ModuleHealthChecker implements ApplicationContextAware, HealthCheck
            + SofaBootConstants.SOFABOOT_MODULE_CHECK_STRICT_DEFAULT_ENABLED + "}")
     private boolean            strictCheck;
 
+    @Value("${" + SofaBootConstants.SOFABOOT_MODULE_HEALTH_CHECK_TIMEOUT + ":"
+           + SofaBootConstants.SOFABOOT_MODULE_HEALTH_CHECK_DEFAULT_TIMEOUT + "}")
+    private int                timeout;
+
     private ApplicationContext applicationContext;
 
     @Override
@@ -97,5 +101,10 @@ public class ModuleHealthChecker implements ApplicationContextAware, HealthCheck
     @Override
     public boolean isStrictCheck() {
         return strictCheck;
+    }
+
+    @Override
+    public int getTimeout() {
+        return timeout;
     }
 }

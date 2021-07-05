@@ -61,4 +61,13 @@ public interface HealthChecker {
     default boolean isStrictCheck() {
         return true;
     }
+
+    /**
+     * The timeout in milliseconds.
+     * If less than or equal to 0, the property {@literal com.alipay.sofa.healthcheck.component.timeout} is used as timeout.
+     * @return
+     */
+    default int getTimeout() {
+        return 0;
+    }
 }

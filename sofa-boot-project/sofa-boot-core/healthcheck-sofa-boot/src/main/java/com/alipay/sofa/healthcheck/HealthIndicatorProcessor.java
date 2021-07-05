@@ -22,18 +22,24 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
+import com.alipay.sofa.boot.constant.SofaBootConstants;
+import com.alipay.sofa.healthcheck.core.HealthCheckExecutor;
 import org.slf4j.Logger;
 import org.springframework.aop.framework.AopProxyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.actuate.health.HealthIndicatorNameFactory;
 import org.springframework.boot.actuate.health.ReactiveHealthIndicator;
 import org.springframework.boot.actuate.health.Status;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.env.Environment;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
@@ -68,6 +74,7 @@ public class HealthIndicatorProcessor {
 
     @Autowired
     private ApplicationContext                     applicationContext;
+    private Environment                            environment;
 
     private final static String                    REACTOR_CLASS              = "reactor.core.publisher.Mono";
 
@@ -76,9 +83,15 @@ public class HealthIndicatorProcessor {
 
     private Set<Class<?>>                          excludedIndicators;
 
+    @Value("${" + SofaBootConstants.SOFABOOT_HEALTH_CHECK_DEFAULT_TIMEOUT + ":"
+           + SofaBootConstants.SOFABOOT_HEALTH_CHECK_DEFAULT_TIMEOUT_VALUE
+           + "}")
+    private int                                    defaultTimeout;
+
     public void init() {
         if (isInitiated.compareAndSet(false, true)) {
             Assert.notNull(applicationContext, () -> "Application must not be null");
+            environment = applicationContext.getEnvironment();
             Map<String, HealthIndicator> beansOfType = applicationContext
                     .getBeansOfType(HealthIndicator.class);
             if (ClassUtils.isPresent(REACTOR_CLASS, null)) {
@@ -138,6 +151,10 @@ public class HealthIndicatorProcessor {
         Assert.notNull(healthIndicators, () -> "HealthIndicators must not be null.");
 
         logger.info("Begin SOFABoot HealthIndicator readiness check.");
+        String checkComponentNames = healthIndicators.keySet().stream()
+                .collect(Collectors.joining(","));
+        logger.info("SOFABoot HealthChecker readiness check {} item: {}.",
+                healthIndicators.size(), checkComponentNames);
         boolean result = healthIndicators.entrySet().stream()
                 .map(entry -> doHealthCheck(entry.getKey(), entry.getValue(), healthMap))
                 .reduce(true, BinaryOperators.andBoolean());
@@ -154,8 +171,18 @@ public class HealthIndicatorProcessor {
         Assert.notNull(healthMap, () -> "HealthMap must not be null");
 
         boolean result;
+        Health health;
+        logger.info("HealthIndicator[{}] readiness check start.", beanId);
+        Integer timeout = environment.getProperty(
+                SofaBootConstants.SOFABOOT_INDICATOR_HEALTH_CHECK_TIMEOUT_PREFIX + beanId,
+                Integer.class);
+        if (timeout == null || timeout <= 0) {
+            timeout = defaultTimeout;
+        }
         try {
-            Health health = healthIndicator.health();
+            Future<Health> future = HealthCheckExecutor
+                    .submitTask(environment, healthIndicator::health);
+            health = future.get(timeout, TimeUnit.MILLISECONDS);
             Status status = health.getStatus();
             result = status.equals(Status.UP);
             if (result) {
@@ -163,7 +190,8 @@ public class HealthIndicatorProcessor {
             } else {
                 logger.error(
                         "HealthIndicator[{}] readiness check fail; the status is: {}; the detail is: {}.",
-                        beanId, status, objectMapper.writeValueAsString(health.getDetails()));
+                        beanId, status,
+                        objectMapper.writeValueAsString(health.getDetails()));
             }
             healthMap.put(getKey(beanId), health);
         } catch (Exception e) {
