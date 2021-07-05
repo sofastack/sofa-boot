@@ -26,7 +26,7 @@ public class GenericResultModel {
     private String value;
 
     /**
-     * Getter method for property <tt>name</tt>.
+     * Getter method for property <code>name</code>.
      *
      * @return property value of name
      */
@@ -35,7 +35,7 @@ public class GenericResultModel {
     }
 
     /**
-     * Setter method for property <tt>name</tt>.
+     * Setter method for property <code>name</code>.
      *
      * @param name  value to be assigned to property name
      */
@@ -44,7 +44,7 @@ public class GenericResultModel {
     }
 
     /**
-     * Getter method for property <tt>value</tt>.
+     * Getter method for property <code>value</code>.
      *
      * @return property value of value
      */
@@ -53,7 +53,7 @@ public class GenericResultModel {
     }
 
     /**
-     * Setter method for property <tt>value</tt>.
+     * Setter method for property <code>value</code>.
      *
      * @param value  value to be assigned to property value
      */
