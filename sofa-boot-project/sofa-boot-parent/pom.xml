@@ -363,10 +363,10 @@
                         </goals>
                     </execution>
                     <execution>
-                        <id>default-report</id>
+                        <id>report</id>
                         <phase>test</phase>
                         <goals>
-                            <goal>report-aggregate</goal>
+                            <goal>report</goal>
                         </goals>
                     </execution>
                 </executions>
