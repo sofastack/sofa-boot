@@ -20,6 +20,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
@@ -162,6 +163,11 @@ public class HealthCheckerProcessor {
                     .submitTask(environment, healthChecker::isHealthy);
             try {
                 health = future.get(timeout, TimeUnit.MILLISECONDS);
+            }  catch (TimeoutException e) {
+                logger.error(
+                        "Timeout occurred while doing HealthChecker[{}] {} check, the timeout value is: {}ms.",
+                        beanId, checkType, timeout);
+                health = new Health.Builder().withException(e).status(Status.UNKNOWN).build();
             } catch (Throwable e) {
                 logger.error(String.format(
                         "Exception occurred while wait the result of HealthChecker[%s] %s check.",

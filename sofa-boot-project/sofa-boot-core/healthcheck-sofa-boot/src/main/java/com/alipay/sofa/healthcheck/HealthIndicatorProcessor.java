@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
@@ -194,6 +195,11 @@ public class HealthIndicatorProcessor {
                         objectMapper.writeValueAsString(health.getDetails()));
             }
             healthMap.put(getKey(beanId), health);
+        } catch (TimeoutException e) {
+            result = false;
+            logger.error(
+                    "HealthIndicator[{}] readiness check fail; the status is: {}; the detail is: timeout, the timeout value is: {}ms.",
+                    beanId, Status.UNKNOWN, timeout);
         } catch (Exception e) {
             result = false;
             logger.error(
