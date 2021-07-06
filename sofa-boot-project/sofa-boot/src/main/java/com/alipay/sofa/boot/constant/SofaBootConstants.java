@@ -161,12 +161,12 @@ public class SofaBootConstants {
     public static final int     SOFABOOT_HEALTH_CHECK_DEFAULT_TIMEOUT_VALUE                  = 10 * 1000;
 
     /**
-     * {@literal com.alipay.sofa.healthcheck.core.HealthChecker} readiness check timeout config.
+     * {@literal com.alipay.sofa.healthcheck.impl.ComponentHealthChecker} readiness check timeout config.
      */
     public static final String  SOFABOOT_COMPONENT_HEALTH_CHECK_TIMEOUT                      = "com.alipay.sofa.healthcheck.component.timeout";
 
     /**
-     * {@literal com.alipay.sofa.healthcheck.impl.ModuleHealthChecker} readiness check timeout config value.
+     * {@literal com.alipay.sofa.healthcheck.impl.ComponentHealthChecker} readiness check timeout config value.
      */
     public static final int     SOFABOOT_COMPONENT_HEALTH_CHECK_DEFAULT_TIMEOUT              = 10 * 1000;
 
