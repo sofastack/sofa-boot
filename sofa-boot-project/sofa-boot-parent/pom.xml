@@ -26,7 +26,7 @@
         <maven.compiler.plugin>3.1</maven.compiler.plugin>
         <maven.source.plugin>3.0.0</maven.source.plugin>
         <maven.javadoc.plugin>2.9.1</maven.javadoc.plugin>
-        <jacoco.maven.plugin>0.7.9</jacoco.maven.plugin>
+        <jacoco.maven.plugin>0.8.7</jacoco.maven.plugin>
         <maven.surefire.plugin>2.21.0</maven.surefire.plugin>
 
         <!-- for dependencyManagement -->
@@ -422,7 +422,6 @@
                         </dependencies>
                         <configuration>
                             <reuseForks>false</reuseForks>
-                            <argLine> -Djdk.attach.allowAttachSelf --add-opens java.base/jdk.internal.loader=ALL-UNNAMED </argLine>
                         </configuration>
                     </plugin>
                     <plugin>
