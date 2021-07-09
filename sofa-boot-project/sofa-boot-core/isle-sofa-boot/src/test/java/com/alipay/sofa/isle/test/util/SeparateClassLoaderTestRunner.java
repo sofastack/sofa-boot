@@ -22,7 +22,6 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 
-import jdk.internal.loader.URLClassPath;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.model.InitializationError;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -89,8 +88,9 @@ public class SeparateClassLoaderTestRunner extends SpringJUnit4ClassRunner {
             try {
                 Field f = getSystemClassLoader().getClass().getDeclaredField("ucp");
                 f.setAccessible(true);
-                URLClassPath path = (URLClassPath) f.get(getSystemClassLoader());
-                for (URL url : path.getURLs()) {
+                Object path = f.get(getSystemClassLoader());
+                Method m = path.getClass().getDeclaredMethod("getURLs");
+                for (URL url : (URL[]) m.invoke(path)) {
                     addURL(url);
                 }
             } catch (Throwable e) {
