@@ -63,7 +63,7 @@ public class ServiceTest {
         Assert.assertNull(serverConfig.getServer());
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @EnableAutoConfiguration
     static class ServiceTestConfiguration {
         @Bean

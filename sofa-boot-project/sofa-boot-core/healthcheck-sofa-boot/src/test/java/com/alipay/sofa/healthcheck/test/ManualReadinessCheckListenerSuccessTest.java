@@ -52,7 +52,7 @@ public class ManualReadinessCheckListenerSuccessTest {
     @Autowired
     private ApplicationContext applicationContext;
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @EnableConfigurationProperties({ HealthCheckProperties.class,
             SofaRuntimeConfigurationProperties.class })
     static class HealthCheckConfiguration {

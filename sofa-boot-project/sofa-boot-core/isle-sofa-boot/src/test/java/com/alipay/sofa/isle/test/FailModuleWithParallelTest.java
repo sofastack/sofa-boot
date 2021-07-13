@@ -61,7 +61,7 @@ public class FailModuleWithParallelTest {
     }
 
     @Import(FailModuleTest.FailModuleTestConfiguration.class)
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     static class FailModuleWithParallelTestConfiguration {
         // ignore
     }

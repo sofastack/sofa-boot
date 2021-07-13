@@ -47,7 +47,7 @@ public class StaticBeanPostProcessorTest {
         Assert.isTrue("aop".equals(StateMessage.getFactoryMessage()));
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @EnableAutoConfiguration
     @Import(RuntimeConfiguration.class)
     static class BeanPostProcessorTestConfiguration {

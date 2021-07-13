@@ -98,7 +98,7 @@ public class BeanPostProcessorOrderTest {
         return (List<RuntimeShutdownAware>) applicationShutdownAwaresField.get(sofaRuntimeManager);
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @Import(RuntimeConfiguration.class)
     static class BeanPostProcessorOrderTestConfiguration {
         @Bean

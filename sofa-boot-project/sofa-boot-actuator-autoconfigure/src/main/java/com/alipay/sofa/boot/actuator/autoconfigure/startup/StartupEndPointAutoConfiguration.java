@@ -30,7 +30,7 @@ import org.springframework.context.annotation.Configuration;
  * @author Zhijie
  * @since 2020/7/7
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @ConditionalOnClass(StartupReporter.class)
 @AutoConfigureBefore(SofaStartupAutoConfiguration.class)
 public class StartupEndPointAutoConfiguration {

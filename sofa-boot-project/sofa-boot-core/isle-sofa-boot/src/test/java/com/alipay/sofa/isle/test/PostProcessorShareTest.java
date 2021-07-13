@@ -67,7 +67,7 @@ public class PostProcessorShareTest {
         Assert.assertTrue(processors.keySet().contains("testE"));
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     static class ProcessorConfig {
 
         @Bean

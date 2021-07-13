@@ -65,7 +65,7 @@ public class PipelineStageTest {
         Assert.assertEquals(30000, pipelineStages.get(3).getOrder());
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @EnableConfigurationProperties(SofaModuleProperties.class)
     static class StageTestConfiguration {
         @Bean

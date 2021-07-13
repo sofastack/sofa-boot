@@ -72,7 +72,7 @@ public class SofaModuleHealthCheckerTest {
     }
 
     @EnableAutoConfiguration
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     static class EmptyConfiguration {
     }
 

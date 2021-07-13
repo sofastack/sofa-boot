@@ -49,7 +49,7 @@ import java.util.Set;
  * @author qilong.zql
  * @since 3.2.0
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class RuntimeTestConfiguration {
     @Bean
     public static BindingConverterFactory bindingConverterFactory() {

@@ -50,7 +50,7 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
  * @author qilong.zql
  * @since 2.5.0
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(HealthCheckProperties.class)
 @ConditionalOnClass(HealthChecker.class)
 public class SofaBootHealthCheckAutoConfiguration {
@@ -114,7 +114,7 @@ public class SofaBootHealthCheckAutoConfiguration {
         return new ComponentHealthChecker(sofaRuntimeContext);
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @ConditionalOnClass({ HealthChecker.class, ModelCreatingStage.class })
     @ConditionalOnProperty(value = "com.alipay.sofa.boot.enable-isle", matchIfMissing = true)
     public static class SofaModuleHealthIndicatorConfiguration {
@@ -124,7 +124,7 @@ public class SofaBootHealthCheckAutoConfiguration {
         }
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @AutoConfigureBefore(HealthEndpointAutoConfiguration.class)
     @ConditionalOnClass(HealthChecker.class)
     public static class ReadinessCheckExtensionConfiguration {
