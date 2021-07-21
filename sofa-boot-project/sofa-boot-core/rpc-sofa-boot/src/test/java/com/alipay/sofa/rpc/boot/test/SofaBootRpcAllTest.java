@@ -156,7 +156,7 @@ public class SofaBootRpcAllTest {
             annotationService.testTimeout(4000);
             Assert.assertEquals(true,false);
         }catch (SofaTimeOutException e){
-
+            Assert.assertEquals(true,true);
         }
         //服务提供端设置5000ms的情况，取服务端的超时时间，应该不超时(open rpc 5.7.10修复这个问题)
         //Assert.assertEquals("sleep 4000 ms", annotationProviderTimeoutService.testTimeout(4000));
@@ -165,7 +165,7 @@ public class SofaBootRpcAllTest {
             annotationConsumerTimeoutService.testTimeout(2000);
             Assert.assertEquals(true,false);
         }catch (SofaTimeOutException e){
-
+            Assert.assertEquals(true,true);
         }
 
     }
