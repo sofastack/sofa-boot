@@ -152,20 +152,20 @@ public class SofaBootRpcAllTest {
     @Test
     public void testTimeoutPriority() throws InterruptedException {
 
-        //都是默认值的情况，取兜底配置3000ms，sleep 2000ms，应该不超时
+        //If all timeout configuration is not configured, the default timeout time 3000ms will take effect.The interface is ok.
         Assert.assertEquals("sleep 2000 ms", annotationService.testTimeout(2000));
 
         try {
-            //都是默认值的情况，取兜底配置3000ms，应该超时
+            //If all timeout configuration is not configured, the default timeout time 3000ms will take effect.The call will be time out.
             annotationService.testTimeout(4000);
             Assert.fail();
         }catch (SofaTimeOutException e){
 
         }
-        //服务提供端设置5000ms的情况，取服务端的超时时间，应该不超时(open rpc 5.7.10修复这个问题)
+        //Only configure the provider side timeout 5000ms, and the default timeout time 3000ms will be invalid.
         //Assert.assertEquals("sleep 4000 ms", annotationProviderTimeoutService.testTimeout(4000));
         try {
-            //客户端设置超时时间1000ms，应该超时
+            //Configured the consumer side timeout time of 1000ms, the provider side timeout time of 5000ms and the default timeout time of 3000ms are invalid.
             annotationConsumerTimeoutService.testTimeout(2000);
             Assert.fail();
         }catch (SofaTimeOutException e){
