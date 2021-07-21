@@ -151,21 +151,25 @@ public class SofaBootRpcAllTest {
 
     @Test
     public void testTimeoutPriority() throws InterruptedException {
+
+        //都是默认值的情况，取兜底配置3000ms，sleep 2000ms，应该不超时
+        Assert.assertEquals("sleep 2000 ms", annotationService.testTimeout(2000));
+
         try {
             //都是默认值的情况，取兜底配置3000ms，应该超时
             annotationService.testTimeout(4000);
-            Assert.assertEquals(true,false);
+            Assert.fail();
         }catch (SofaTimeOutException e){
-            Assert.assertEquals(true,true);
+
         }
         //服务提供端设置5000ms的情况，取服务端的超时时间，应该不超时(open rpc 5.7.10修复这个问题)
         //Assert.assertEquals("sleep 4000 ms", annotationProviderTimeoutService.testTimeout(4000));
         try {
             //客户端设置超时时间1000ms，应该超时
             annotationConsumerTimeoutService.testTimeout(2000);
-            Assert.assertEquals(true,false);
+            Assert.fail();
         }catch (SofaTimeOutException e){
-            Assert.assertEquals(true,true);
+
         }
 
     }
