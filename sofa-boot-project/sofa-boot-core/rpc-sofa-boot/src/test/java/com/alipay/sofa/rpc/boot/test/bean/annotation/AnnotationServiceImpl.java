@@ -32,4 +32,14 @@ public class AnnotationServiceImpl implements AnnotationService {
     public String hello() {
         return "Hello, Annotation";
     }
+
+    @Override
+    public String testTimeout(long millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (Exception e) {
+
+        }
+        return "sleep "+millis+" ms";
+    }
 }

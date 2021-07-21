@@ -38,6 +38,7 @@ import com.alipay.sofa.rpc.boot.test.bean.retry.RetriesServiceImpl;
 import com.alipay.sofa.rpc.boot.test.bean.threadpool.ThreadPoolService;
 import com.alipay.sofa.rpc.config.ConsumerConfig;
 import com.alipay.sofa.rpc.core.exception.SofaRpcException;
+import com.alipay.sofa.rpc.core.exception.SofaTimeOutException;
 import com.alipay.sofa.runtime.api.annotation.SofaClientFactory;
 import com.alipay.sofa.runtime.api.annotation.SofaReference;
 import com.alipay.sofa.runtime.api.annotation.SofaReferenceBinding;
@@ -136,11 +137,38 @@ public class SofaBootRpcAllTest {
     @SofaReference(binding = @SofaReferenceBinding(bindingType = "bolt", loadBalancer = "roundRobin"), uniqueId = "loadbalancer")
     private AnnotationService          annotationLoadBalancerService;
 
+    @SofaReference(binding = @SofaReferenceBinding(bindingType = "bolt"), jvmFirst = false, uniqueId = "timeout")
+    private AnnotationService          annotationProviderTimeoutService;
+
+    @SofaReference(binding = @SofaReferenceBinding(bindingType = "bolt",timeout = 1000), jvmFirst = false, uniqueId = "timeout")
+    private AnnotationService          annotationConsumerTimeoutService;
+
     @SofaClientFactory
     private ClientFactory              clientFactory;
 
     @Autowired
     private ConsumerConfigContainer    consumerConfigContainer;
+
+    @Test
+    public void testTimeoutPriority() throws InterruptedException {
+        try {
+            //都是默认值的情况，取兜底配置3000ms，应该超时
+            annotationService.testTimeout(4000);
+            Assert.assertEquals(true,false);
+        }catch (SofaTimeOutException e){
+
+        }
+        //服务提供端设置5000ms的情况，取服务端的超时时间，应该不超时(open rpc 5.7.10修复这个问题)
+        //Assert.assertEquals("sleep 4000 ms", annotationProviderTimeoutService.testTimeout(4000));
+        try {
+            //客户端设置超时时间1000ms，应该超时
+            annotationConsumerTimeoutService.testTimeout(2000);
+            Assert.assertEquals(true,false);
+        }catch (SofaTimeOutException e){
+
+        }
+
+    }
 
     @Test
     public void testInvoke() throws InterruptedException {
