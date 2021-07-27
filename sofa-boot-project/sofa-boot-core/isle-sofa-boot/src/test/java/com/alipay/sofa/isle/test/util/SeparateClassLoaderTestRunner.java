@@ -17,7 +17,9 @@
 package com.alipay.sofa.isle.test.util;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.net.URLClassLoader;
 
 import org.junit.runner.notification.RunNotifier;
@@ -81,7 +83,19 @@ public class SeparateClassLoaderTestRunner extends SpringJUnit4ClassRunner {
 
     public static class SeparateClassLoader extends URLClassLoader {
         public SeparateClassLoader() {
-            super(((URLClassLoader) getSystemClassLoader()).getURLs(), null);
+            super(new URL[0], null);
+
+            try {
+                Field f = getSystemClassLoader().getClass().getDeclaredField("ucp");
+                f.setAccessible(true);
+                Object path = f.get(getSystemClassLoader());
+                Method m = path.getClass().getDeclaredMethod("getURLs");
+                for (URL url : (URL[]) m.invoke(path)) {
+                    addURL(url);
+                }
+            } catch (Throwable e) {
+                // ignore
+            }
         }
 
         @Override

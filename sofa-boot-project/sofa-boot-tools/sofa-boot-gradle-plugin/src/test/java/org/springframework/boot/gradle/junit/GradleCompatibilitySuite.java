@@ -18,9 +18,9 @@ package org.springframework.boot.gradle.junit;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
+import org.gradle.api.JavaVersion;
 import org.gradle.api.Rule;
 import org.junit.runner.Runner;
 import org.junit.runners.BlockJUnit4ClassRunner;
@@ -44,10 +44,12 @@ public final class GradleCompatibilitySuite extends Suite {
     private static List<String> GRADLE_VERSIONS;
 
     static {
-        if (System.getProperty("java.version").startsWith("11")) {
-            GRADLE_VERSIONS = Collections.singletonList("5.0");
+        JavaVersion javaVersion = JavaVersion.current();
+        if (javaVersion.isCompatibleWith(JavaVersion.VERSION_14)
+            || javaVersion.isCompatibleWith(JavaVersion.VERSION_13)) {
+            GRADLE_VERSIONS = Arrays.asList("6.3", "6.4.1", "6.5.1", "6.6.1", "6.7.1");
         } else {
-            GRADLE_VERSIONS = Arrays.asList("5.6.4", "6.3", "6.4.1", "6.5.1", "default");
+            GRADLE_VERSIONS = Arrays.asList("5.6.4", "6.3", "6.4.1", "6.5.1", "6.6.1", "6.7.1");
         }
     }
 

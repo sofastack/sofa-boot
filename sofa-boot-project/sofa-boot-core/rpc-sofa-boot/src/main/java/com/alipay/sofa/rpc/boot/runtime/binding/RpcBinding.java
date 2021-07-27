@@ -111,7 +111,7 @@ public abstract class RpcBinding extends AbstractBinding {
     }
 
     /**
-     * Getter method for property <tt>appName</tt>.
+     * Getter method for property <code>appName</code>.
      *
      * @return property value of appName
      */
@@ -120,7 +120,7 @@ public abstract class RpcBinding extends AbstractBinding {
     }
 
     /**
-     * Setter method for property <tt>appName</tt>.
+     * Setter method for property <code>appName</code>.
      *
      * @param appName value to be assigned to property appName
      */
@@ -129,7 +129,7 @@ public abstract class RpcBinding extends AbstractBinding {
     }
 
     /**
-     * Getter method for property <tt>beanId</tt>.
+     * Getter method for property <code>beanId</code>.
      *
      * @return property value of beanId
      */
@@ -138,7 +138,7 @@ public abstract class RpcBinding extends AbstractBinding {
     }
 
     /**
-     * Setter method for property <tt>beanId</tt>.
+     * Setter method for property <code>beanId</code>.
      *
      * @param beanId value to be assigned to property beanId
      */
@@ -147,7 +147,7 @@ public abstract class RpcBinding extends AbstractBinding {
     }
 
     /**
-     * Getter method for property <tt>rpcBindingParam</tt>.
+     * Getter method for property <code>rpcBindingParam</code>.
      *
      * @return property value of rpcBindingParam
      */
@@ -156,7 +156,7 @@ public abstract class RpcBinding extends AbstractBinding {
     }
 
     /**
-     * Setter method for property <tt>rpcBindingParam</tt>.
+     * Setter method for property <code>rpcBindingParam</code>.
      *
      * @param rpcBindingParam value to be assigned to property rpcBindingParam
      */
@@ -165,7 +165,7 @@ public abstract class RpcBinding extends AbstractBinding {
     }
 
     /**
-     * Getter method for property <tt>applicationContext</tt>.
+     * Getter method for property <code>applicationContext</code>.
      *
      * @return property value of applicationContext
      */
@@ -174,7 +174,7 @@ public abstract class RpcBinding extends AbstractBinding {
     }
 
     /**
-     * Setter method for property <tt>applicationContext</tt>.
+     * Setter method for property <code>applicationContext</code>.
      *
      * @param applicationContext value to be assigned to property applicationContext
      */
@@ -183,7 +183,7 @@ public abstract class RpcBinding extends AbstractBinding {
     }
 
     /**
-     * Getter method for property <tt>inBinding</tt>.
+     * Getter method for property <code>inBinding</code>.
      *
      * @return property value of inBinding
      */
@@ -192,7 +192,7 @@ public abstract class RpcBinding extends AbstractBinding {
     }
 
     /**
-     * Setter method for property <tt>inBinding</tt>.
+     * Setter method for property <code>inBinding</code>.
      *
      * @param inBinding value to be assigned to property inBinding
      */
@@ -201,7 +201,7 @@ public abstract class RpcBinding extends AbstractBinding {
     }
 
     /**
-     * Getter method for property <tt>consumerConfig</tt>.
+     * Getter method for property <code>consumerConfig</code>.
      *
      * @return property value of consumerConfig
      */
@@ -210,7 +210,7 @@ public abstract class RpcBinding extends AbstractBinding {
     }
 
     /**
-     * Setter method for property <tt>consumerConfig</tt>.
+     * Setter method for property <code>consumerConfig</code>.
      *
      * @param consumerConfig value to be assigned to property consumerConfig
      */
