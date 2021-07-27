@@ -84,7 +84,7 @@ public class HealthCheckConfigurationTest {
         applicationContext = springApplication.run();
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @EnableConfigurationProperties({ HealthCheckProperties.class,
             SofaRuntimeConfigurationProperties.class })
     static class HealthCheckConfigurationTestConfiguration {

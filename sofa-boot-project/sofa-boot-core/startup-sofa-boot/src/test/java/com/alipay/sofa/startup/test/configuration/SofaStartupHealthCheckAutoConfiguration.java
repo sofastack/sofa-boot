@@ -32,7 +32,7 @@ import org.springframework.context.annotation.Configuration;
  * @author huzijie
  * @version SofaStartupHealthCheckAutoConfiguration.java, v 0.1 2021年01月04日 9:19 下午 huzijie Exp $
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @ConditionalOnClass({ ReadinessCheckListener.class, StartupReporter.class })
 public class SofaStartupHealthCheckAutoConfiguration {
 

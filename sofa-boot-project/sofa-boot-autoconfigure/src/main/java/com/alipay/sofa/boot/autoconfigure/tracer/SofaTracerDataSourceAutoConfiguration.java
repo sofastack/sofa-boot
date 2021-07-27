@@ -31,7 +31,7 @@ import org.springframework.context.annotation.Configuration;
  * @author qilong.zql
  * @since 2.2.0
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(SofaTracerDataSourceProperties.class)
 @ConditionalOnProperty(prefix = "com.alipay.sofa.tracer.datasource", value = "enable", matchIfMissing = true)
 @ConditionalOnClass({ SmartDataSource.class, SofaTracerDataSourceProperties.class })

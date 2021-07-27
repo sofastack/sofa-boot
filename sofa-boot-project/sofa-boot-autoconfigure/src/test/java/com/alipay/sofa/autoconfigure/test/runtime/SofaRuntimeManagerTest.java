@@ -47,7 +47,7 @@ public class SofaRuntimeManagerTest {
         Assert.assertNotNull(applicationContext.getBean("sofaRuntimeContext"));
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @EnableAutoConfiguration
     static class SofaRuntimeManagerTestConfiguration {
     }

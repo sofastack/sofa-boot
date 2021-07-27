@@ -28,7 +28,7 @@ import com.alipay.sofa.runtime.spring.async.AsyncTaskExecutionListener;
  * @author qilong.zql
  * @since 3.2.0
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class SofaRuntimeTestConfiguration {
     @Bean
     public AsyncProxyBeanPostProcessor asyncProxyBeanPostProcessor() {

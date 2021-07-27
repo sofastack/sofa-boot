@@ -186,7 +186,7 @@ public class SofaServiceAndReferenceTest {
                       + SofaServiceAndReferenceTest.class.getDeclaredField("staticSampleService")));
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     static class MultipleBindingsSofaServiceConfiguration {
         /**
          * since the sofa-boot does not have any binding converter implementation,
@@ -199,7 +199,7 @@ public class SofaServiceAndReferenceTest {
         }
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     static class TestSofaReferenceConfiguration {
         @Bean
         public SampleService sampleService(@SofaReference(uniqueId = "rpc", binding = @SofaReferenceBinding(bindingType = "bolt")) SampleService sampleService) {
@@ -207,7 +207,7 @@ public class SofaServiceAndReferenceTest {
         }
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     static class TestSofaReferenceOnMethodConfiguration {
         @Bean
         public SofaServiceAndReferenceTest sofaServiceAndReferenceTest() {
@@ -221,7 +221,7 @@ public class SofaServiceAndReferenceTest {
         }
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @Import(RuntimeConfiguration.class)
     @EnableAutoConfiguration
     static class TestSofaServiceConfiguration {

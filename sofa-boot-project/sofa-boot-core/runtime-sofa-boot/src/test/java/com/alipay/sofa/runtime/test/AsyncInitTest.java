@@ -58,7 +58,7 @@ public class AsyncInitTest {
         TimeWasteBean.resetCount();
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @ImportResource({ "classpath*:META-INF/async/*.xml" })
     @Import(SofaRuntimeTestConfiguration.class)
     static class AsyncInitTestConfiguration {

@@ -75,7 +75,7 @@ public class StartupHealthCheckStageConfigurationTest {
                 }));
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @EnableConfigurationProperties(value = { HealthEndpointProperties.class })
     static class TestHealthCheckConfiguration {
     }

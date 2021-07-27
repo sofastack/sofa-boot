@@ -60,7 +60,7 @@ public class ModelCreatingStageTest implements ApplicationContextAware {
         this.applicationContext = applicationContext;
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @EnableConfigurationProperties(SofaModuleProperties.class)
     static class ModelCreatingStageTestConfiguration {
         @Bean

@@ -64,7 +64,7 @@ public class SofaBootstrapTest {
         Assert.assertNotNull(propertySources.get(SofaBootConstants.SOFA_DEFAULT_PROPERTY_SOURCE));
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     static class SofaBootstrapTestConfiguration {
 
     }

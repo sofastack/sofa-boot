@@ -69,7 +69,7 @@ import java.util.Map;
 /**
  * @author <a href="mailto:lw111072@antfin.com">LiWei</a>
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(SofaBootRpcProperties.class)
 @ConditionalOnClass(SofaBootRpcProperties.class)
 public class SofaRpcAutoConfiguration {
@@ -202,7 +202,7 @@ public class SofaRpcAutoConfiguration {
         return new BoltSwaggerServiceApplicationListener();
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @ConditionalOnClass({ SofaBootRpcProperties.class, ReadinessCheckCallback.class, Health.class })
     public static class RpcAfterHealthCheckCallbackConfiguration {
         @Bean

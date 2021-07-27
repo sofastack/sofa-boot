@@ -60,7 +60,7 @@ public class ReadinessHealthCheckHttpCodeTest {
         Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     static class DownHealthIndicatorConfiguration {
         @Bean
         public HealthIndicator downHealthIndicator() {

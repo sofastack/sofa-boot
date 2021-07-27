@@ -132,7 +132,7 @@ public class AfterHealthReadinessCheckCallbackTest {
         ctx = springApplication.run();
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     static class ReadinessCheckCallbackBreakTestConfiguration extends
                                                              AfterHealthReadinessCheckCallbackTestConfiguration {
         @Bean
@@ -146,7 +146,7 @@ public class AfterHealthReadinessCheckCallbackTest {
         }
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @EnableConfigurationProperties({ HealthCheckProperties.class,
             SofaRuntimeConfigurationProperties.class })
     static class AfterHealthReadinessCheckCallbackTestConfiguration {
@@ -181,7 +181,7 @@ public class AfterHealthReadinessCheckCallbackTest {
         }
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     static class ReadinessCheckFailedTestConfiguration extends
                                                       AfterHealthReadinessCheckCallbackTestConfiguration {
         @Bean
@@ -190,7 +190,7 @@ public class AfterHealthReadinessCheckCallbackTest {
         }
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     static class ReadinessCheckSuccessTestConfiguration extends
                                                        AfterHealthReadinessCheckCallbackTestConfiguration {
         @Bean

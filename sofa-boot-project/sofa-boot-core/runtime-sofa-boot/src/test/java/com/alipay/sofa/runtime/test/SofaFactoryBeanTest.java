@@ -103,7 +103,7 @@ public class SofaFactoryBeanTest {
         });
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @Import(RuntimeConfiguration.class)
     @ImportResource("classpath*:META-INF/service/test-service.xml")
     static class SofaFactoryBeanTestConfiguration {

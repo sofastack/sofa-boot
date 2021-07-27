@@ -58,7 +58,7 @@ public class ManualReadinessCheckListenerTest {
     @Autowired
     private ApplicationAvailability applicationAvailability;
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @EnableConfigurationProperties({ HealthCheckProperties.class,
             SofaRuntimeConfigurationProperties.class })
     @Import(ApplicationAvailabilityAutoConfiguration.class)

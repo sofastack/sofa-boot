@@ -47,7 +47,7 @@ public class RuntimeContextAwareTest {
         Assert.assertNotNull(runtimeContextAwareBean.getSofaRuntimeContext());
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @Import(RuntimeConfiguration.class)
     static class RuntimeContextAwareTestConfiguration {
         @Bean

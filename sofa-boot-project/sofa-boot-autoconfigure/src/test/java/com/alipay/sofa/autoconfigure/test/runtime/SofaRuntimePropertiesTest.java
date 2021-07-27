@@ -92,7 +92,7 @@ public class SofaRuntimePropertiesTest {
         Assert.assertTrue(configurationProperties.isExtensionFailureInsulating());
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @EnableAutoConfiguration
     static class SofaRuntimePropertiesTestConfiguration {
 

@@ -31,7 +31,7 @@ import com.alipay.sofa.healthcheck.ReadinessCheckListener;
  * @author qilong.zql
  * @since 3.2.0
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties({ HealthCheckProperties.class,
                                 SofaRuntimeConfigurationProperties.class })
 public class HealthcheckTestConfiguration {

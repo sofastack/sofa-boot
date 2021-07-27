@@ -50,7 +50,7 @@ public class SofaConfigSourceSupportListenerTest {
         Assert.assertEquals("systemValue", SofaConfigs.getOrDefault(key4));
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     static class SofaBootTestConfiguration {
 
     }
