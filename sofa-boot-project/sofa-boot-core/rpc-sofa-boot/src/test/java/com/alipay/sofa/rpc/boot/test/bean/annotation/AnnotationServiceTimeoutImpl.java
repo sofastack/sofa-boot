@@ -30,7 +30,7 @@ public class AnnotationServiceTimeoutImpl implements AnnotationService {
 
     @Override
     public String hello() {
-       return null;
+        return null;
     }
 
     @Override
@@ -40,6 +40,6 @@ public class AnnotationServiceTimeoutImpl implements AnnotationService {
         } catch (Exception e) {
 
         }
-        return "sleep "+millis+" ms";
+        return "sleep " + millis + " ms";
     }
 }
