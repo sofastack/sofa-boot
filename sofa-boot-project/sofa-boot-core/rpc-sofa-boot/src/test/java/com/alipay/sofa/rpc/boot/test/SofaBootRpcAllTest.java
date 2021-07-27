@@ -38,6 +38,7 @@ import com.alipay.sofa.rpc.boot.test.bean.retry.RetriesServiceImpl;
 import com.alipay.sofa.rpc.boot.test.bean.threadpool.ThreadPoolService;
 import com.alipay.sofa.rpc.config.ConsumerConfig;
 import com.alipay.sofa.rpc.core.exception.SofaRpcException;
+import com.alipay.sofa.rpc.core.exception.SofaTimeOutException;
 import com.alipay.sofa.runtime.api.annotation.SofaClientFactory;
 import com.alipay.sofa.runtime.api.annotation.SofaReference;
 import com.alipay.sofa.runtime.api.annotation.SofaReferenceBinding;
@@ -136,11 +137,42 @@ public class SofaBootRpcAllTest {
     @SofaReference(binding = @SofaReferenceBinding(bindingType = "bolt", loadBalancer = "roundRobin"), uniqueId = "loadbalancer")
     private AnnotationService          annotationLoadBalancerService;
 
+    @SofaReference(binding = @SofaReferenceBinding(bindingType = "bolt"), jvmFirst = false, uniqueId = "timeout")
+    private AnnotationService          annotationProviderTimeoutService;
+
+    @SofaReference(binding = @SofaReferenceBinding(bindingType = "bolt", timeout = 1000), jvmFirst = false, uniqueId = "timeout")
+    private AnnotationService          annotationConsumerTimeoutService;
+
     @SofaClientFactory
     private ClientFactory              clientFactory;
 
     @Autowired
     private ConsumerConfigContainer    consumerConfigContainer;
+
+    @Test
+    public void testTimeoutPriority() throws InterruptedException {
+
+        //If all timeout configuration is not configured, the default timeout time 3000ms will take effect.The interface is ok.
+        Assert.assertEquals("sleep 2000 ms", annotationService.testTimeout(2000));
+
+        try {
+            //If all timeout configuration is not configured, the default timeout time 3000ms will take effect.The call will be time out.
+            annotationService.testTimeout(4000);
+            Assert.fail();
+        } catch (SofaTimeOutException e) {
+
+        }
+        //Only configure the provider side timeout 5000ms, and the default timeout time 3000ms will be invalid.
+        //Assert.assertEquals("sleep 4000 ms", annotationProviderTimeoutService.testTimeout(4000));
+        try {
+            //Configured the consumer side timeout time of 1000ms, the provider side timeout time of 5000ms and the default timeout time of 3000ms are invalid.
+            annotationConsumerTimeoutService.testTimeout(2000);
+            Assert.fail();
+        } catch (SofaTimeOutException e) {
+
+        }
+
+    }
 
     @Test
     public void testInvoke() throws InterruptedException {
