@@ -121,6 +121,7 @@ public class HealthCheckerProcessor {
 
         logger.info("Begin SOFABoot HealthChecker readiness check.");
         String checkComponentNames = healthCheckers.values().stream()
+                .filter(healthChecker -> !(healthChecker instanceof NonReadinessCheck))
                 .map(HealthChecker::getComponentName).collect(Collectors.joining(","));
         logger.info("SOFABoot HealthChecker readiness check {} item: {}.",
                 healthCheckers.size(), checkComponentNames);
