@@ -38,9 +38,6 @@ public class HealthCheckExecutor {
 
     private static Logger                                    logger          = HealthCheckLoggerFactory
                                                                                  .getLogger(HealthCheckerProcessor.class);
-    private static final int                                 CPU_COUNT       = Runtime
-                                                                                 .getRuntime()
-                                                                                 .availableProcessors();
     private static final AtomicReference<ThreadPoolExecutor> THREAD_POOL_REF = new AtomicReference<ThreadPoolExecutor>();
 
     public static Future<Health> submitTask(Environment environment, Callable<Health> callable) {
@@ -59,23 +56,8 @@ public class HealthCheckExecutor {
      * @return
      */
     private static ThreadPoolExecutor createThreadPoolExecutor(Environment environment) {
-        int threadPoolCoreSize = CPU_COUNT + 1;
-        String coreSizeStr = environment
-            .getProperty(SofaBootConstants.SOFABOOT_HEALTH_CHECK_THREAD_POOL_CORE_SIZE);
-        if (coreSizeStr != null) {
-            threadPoolCoreSize = Integer.parseInt(coreSizeStr);
-        }
-
-        int threadPoolMaxSize = CPU_COUNT + 1;
-        String maxSizeStr = environment
-            .getProperty(SofaBootConstants.SOFABOOT_HEALTH_CHECK_THREAD_POOL_MAX_SIZE);
-        if (maxSizeStr != null) {
-            threadPoolMaxSize = Integer.parseInt(maxSizeStr);
-        }
-
-        logger.info("create health-check thread pool, corePoolSize: {}, maxPoolSize: {}.",
-            threadPoolCoreSize, threadPoolMaxSize);
-        return new SofaThreadPoolExecutor(threadPoolCoreSize, threadPoolMaxSize, 30,
+        logger.info("create health-check thread pool, corePoolSize: 1, maxPoolSize: 1.");
+        return new SofaThreadPoolExecutor(1, 1, 30,
             TimeUnit.SECONDS, new SynchronousQueue<Runnable>(), new NamedThreadFactory(
                 "health-check"), new ThreadPoolExecutor.CallerRunsPolicy(), "health-check",
             "sofa-boot");

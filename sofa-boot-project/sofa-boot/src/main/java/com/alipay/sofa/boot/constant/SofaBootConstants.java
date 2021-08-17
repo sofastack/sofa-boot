@@ -186,16 +186,6 @@ public class SofaBootConstants {
     public static final String  SOFABOOT_INDICATOR_HEALTH_CHECK_TIMEOUT_PREFIX               = "com.alipay.sofa.healthcheck.indicator.timeout.";
 
     /**
-     * thread pool core size to execute health check.
-     */
-    public static final String  SOFABOOT_HEALTH_CHECK_THREAD_POOL_CORE_SIZE                  = "com.alipay.sofa.healthcheck.thread.pool.core.size";
-
-    /**
-     * thread pool core size to execute health check.
-     */
-    public static final String  SOFABOOT_HEALTH_CHECK_THREAD_POOL_MAX_SIZE                   = "com.alipay.sofa.healthcheck.thread.pool.max.size";
-
-    /**
      * share parent context post processor config.
      */
     public static final String  SOFABOOT_SHARE_PARENT_CONTEXT_POST_PROCESSOR_ENABLED         = "com.alipay.sofa.boot.share.parent.context.post.processor.enabled";
