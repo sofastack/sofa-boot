@@ -407,8 +407,9 @@ public abstract class RpcBindingConverter implements BindingConverter<RpcBinding
                                             SofaService sofaServiceAnnotation,
                                             SofaServiceBinding sofaServiceBindingAnnotation,
                                             BindingConverterContext bindingConverterContext) {
-        bindingParam.setTimeout(sofaServiceBindingAnnotation.timeout());
-
+        if (sofaServiceBindingAnnotation.timeout() != 0) {
+            bindingParam.setTimeout(sofaServiceBindingAnnotation.timeout());
+        }
         //TODO need a magic number
         if (sofaServiceBindingAnnotation.weight() != 0) {
             bindingParam.setWeight(sofaServiceBindingAnnotation.weight());
