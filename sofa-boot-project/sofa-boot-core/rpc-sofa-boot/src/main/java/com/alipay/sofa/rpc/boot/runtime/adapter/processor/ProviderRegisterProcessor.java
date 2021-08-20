@@ -16,21 +16,33 @@
  */
 package com.alipay.sofa.rpc.boot.runtime.adapter.processor;
 
+import com.alipay.sofa.common.config.SofaConfigs;
+import com.alipay.sofa.rpc.boot.config.SofaBootRpcConfigKeys;
 import com.alipay.sofa.rpc.config.ProviderConfig;
-import org.springframework.beans.factory.annotation.Value;
 
 /**
  * @author BaoYi
  */
-public class ProviderRegisterMockProcessor implements ProviderConfigProcessor {
+public class ProviderRegisterProcessor implements ProviderConfigProcessor {
 
-    @Value("${sofa.rpc.register.mock}")
-    private String registerMock;
+    private ProviderConfig providerConfig;
+
+    public ProviderRegisterProcessor() {
+    }
 
     @Override
     public void processorProvider(ProviderConfig providerConfig) {
-        if (Boolean.parseBoolean(registerMock)) {
-            providerConfig.setRegister(false);
+        if (Boolean.parseBoolean(SofaConfigs
+            .getOrDefault(SofaBootRpcConfigKeys.DISABLE_REGISTER_PUB))) {
+            if (providerConfig != null) {
+                providerConfig.setRegister(false);
+            }
         }
+        this.providerConfig = providerConfig;
     }
+
+    public ProviderConfig getProviderConfig() {
+        return providerConfig;
+    }
+
 }
