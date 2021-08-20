@@ -267,8 +267,8 @@ public class SofaRpcAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnProperty(name ="sofa.rpc.register.mock")
-    public ProviderRegisterMockProcessor providerRegisterMockProcessor(){
+    @ConditionalOnProperty(name = "sofa.rpc.register.mock")
+    public ProviderRegisterMockProcessor providerRegisterMockProcessor() {
         return new ProviderRegisterMockProcessor();
     }
 }

@@ -20,8 +20,7 @@ import com.alipay.sofa.rpc.config.ProviderConfig;
 import org.springframework.beans.factory.annotation.Value;
 
 /**
- * @Author: BaoYi
- * @Date: 2021/8/20 2:45 下午
+ * @author BaoYi
  */
 public class ProviderRegisterMockProcessor implements ProviderConfigProcessor {
 
