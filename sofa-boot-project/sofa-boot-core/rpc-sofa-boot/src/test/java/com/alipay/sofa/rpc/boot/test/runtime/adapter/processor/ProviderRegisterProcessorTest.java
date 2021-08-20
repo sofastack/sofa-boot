@@ -29,7 +29,7 @@ public class ProviderRegisterProcessorTest {
     private ProviderRegisterProcessor providerRegisterProcessor = new ProviderRegisterProcessor();
 
     @Test
-    public void testFirstKey() {
+    public void test() {
         ProviderConfig providerConfig = new ProviderConfig();
         providerConfig.setRegister(true);
         providerRegisterProcessor.processorProvider(providerConfig);
@@ -38,45 +38,6 @@ public class ProviderRegisterProcessorTest {
         System.setProperty("sofa.rpc.registry.disablePub", "true");
         providerRegisterProcessor.processorProvider(providerConfig);
         Assert.assertFalse(providerConfig.isRegister());
-
-    }
-
-    @Test
-    public void testSecondKey() {
-        ProviderConfig providerConfig = new ProviderConfig();
-        providerConfig.setRegister(true);
-        providerRegisterProcessor.processorProvider(providerConfig);
-        Assert.assertTrue(providerConfig.isRegister());
-
-        System.setProperty("disable_confreg_pub", "true");
-        providerRegisterProcessor.processorProvider(providerConfig);
-        Assert.assertFalse(providerConfig.isRegister());
-    }
-
-    @Test
-    public void testFirstKeyPriority() {
-        ProviderConfig providerConfig = new ProviderConfig();
-        providerConfig.setRegister(true);
-        providerRegisterProcessor.processorProvider(providerConfig);
-        Assert.assertTrue(providerConfig.isRegister());
-
-        System.setProperty("disable_confreg_pub", "false");
-        System.setProperty("sofa.rpc.registry.disablePub", "true");
-        providerRegisterProcessor.processorProvider(providerConfig);
-        Assert.assertFalse(providerConfig.isRegister());
-    }
-
-    @Test
-    public void testSecondKeyPriority() {
-        ProviderConfig providerConfig = new ProviderConfig();
-        providerConfig.setRegister(true);
-        providerRegisterProcessor.processorProvider(providerConfig);
-        Assert.assertTrue(providerConfig.isRegister());
-
-        System.setProperty("disable_confreg_pub", "true");
-        System.setProperty("sofa.rpc.registry.disablePub", "false");
-        providerRegisterProcessor.processorProvider(providerConfig);
-        Assert.assertTrue(providerConfig.isRegister());
     }
 
 }

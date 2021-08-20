@@ -57,6 +57,6 @@ public class ProcessorAutoConfigTest {
         ProviderConfig providerConfig = new ProviderConfig();
         providerConfig.setRegister(true);
         providerRegisterProcessor.processorProvider(providerConfig);
-        Assert.assertFalse(providerRegisterProcessor.getProviderConfig().isRegister());
+        Assert.assertFalse(providerConfig.isRegister());
     }
 }

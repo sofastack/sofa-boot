@@ -25,11 +25,6 @@ import com.alipay.sofa.rpc.config.ProviderConfig;
  */
 public class ProviderRegisterProcessor implements ProviderConfigProcessor {
 
-    private ProviderConfig providerConfig;
-
-    public ProviderRegisterProcessor() {
-    }
-
     @Override
     public void processorProvider(ProviderConfig providerConfig) {
         if (Boolean.parseBoolean(SofaConfigs
@@ -38,11 +33,6 @@ public class ProviderRegisterProcessor implements ProviderConfigProcessor {
                 providerConfig.setRegister(false);
             }
         }
-        this.providerConfig = providerConfig;
-    }
-
-    public ProviderConfig getProviderConfig() {
-        return providerConfig;
     }
 
 }
