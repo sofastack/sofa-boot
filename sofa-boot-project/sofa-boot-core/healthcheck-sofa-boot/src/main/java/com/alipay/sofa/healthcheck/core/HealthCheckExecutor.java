@@ -18,13 +18,11 @@ package com.alipay.sofa.healthcheck.core;
 
 import com.alipay.sofa.boot.util.NamedThreadFactory;
 import com.alipay.sofa.common.thread.SofaThreadPoolExecutor;
-import com.alipay.sofa.healthcheck.HealthCheckerProcessor;
 import com.alipay.sofa.healthcheck.log.HealthCheckLoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.boot.actuate.health.Health;
 
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Health Check Thread Pool
@@ -34,19 +32,12 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class HealthCheckExecutor {
 
-    private static Logger                                    logger          = HealthCheckLoggerFactory
-                                                                                 .getLogger(HealthCheckerProcessor.class);
-    private static final AtomicReference<ThreadPoolExecutor> THREAD_POOL_REF = new AtomicReference<ThreadPoolExecutor>();
+    private static       Logger             logger          = HealthCheckLoggerFactory
+                                                                .getLogger(HealthCheckExecutor.class);
+    private static final ThreadPoolExecutor THREAD_POOL_REF = createThreadPoolExecutor();
 
     public static Future<Health> submitTask(Callable<Health> callable) {
-        if (THREAD_POOL_REF.get() == null) {
-            ThreadPoolExecutor threadPoolExecutor = createThreadPoolExecutor();
-            boolean success = THREAD_POOL_REF.compareAndSet(null, threadPoolExecutor);
-            if (!success) {
-                threadPoolExecutor.shutdown();
-            }
-        }
-        return THREAD_POOL_REF.get().submit(callable);
+        return THREAD_POOL_REF.submit(callable);
     }
 
     /**
@@ -55,9 +46,8 @@ public class HealthCheckExecutor {
      */
     private static ThreadPoolExecutor createThreadPoolExecutor() {
         logger.info("create health-check thread pool, corePoolSize: 1, maxPoolSize: 1.");
-        return new SofaThreadPoolExecutor(1, 1, 30,
-            TimeUnit.SECONDS, new SynchronousQueue<Runnable>(), new NamedThreadFactory(
-                "health-check"), new ThreadPoolExecutor.CallerRunsPolicy(), "health-check",
-            "sofa-boot");
+        return new SofaThreadPoolExecutor(1, 1, 30, TimeUnit.SECONDS,
+                new SynchronousQueue<Runnable>(), new NamedThreadFactory("health-check"),
+                new ThreadPoolExecutor.CallerRunsPolicy(), "health-check", "sofa-boot");
     }
 }
