@@ -16,14 +16,12 @@
  */
 package com.alipay.sofa.healthcheck.core;
 
-import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.util.NamedThreadFactory;
 import com.alipay.sofa.common.thread.SofaThreadPoolExecutor;
 import com.alipay.sofa.healthcheck.HealthCheckerProcessor;
 import com.alipay.sofa.healthcheck.log.HealthCheckLoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.boot.actuate.health.Health;
-import org.springframework.core.env.Environment;
 
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicReference;
@@ -40,9 +38,9 @@ public class HealthCheckExecutor {
                                                                                  .getLogger(HealthCheckerProcessor.class);
     private static final AtomicReference<ThreadPoolExecutor> THREAD_POOL_REF = new AtomicReference<ThreadPoolExecutor>();
 
-    public static Future<Health> submitTask(Environment environment, Callable<Health> callable) {
+    public static Future<Health> submitTask(Callable<Health> callable) {
         if (THREAD_POOL_REF.get() == null) {
-            ThreadPoolExecutor threadPoolExecutor = createThreadPoolExecutor(environment);
+            ThreadPoolExecutor threadPoolExecutor = createThreadPoolExecutor();
             boolean success = THREAD_POOL_REF.compareAndSet(null, threadPoolExecutor);
             if (!success) {
                 threadPoolExecutor.shutdown();
@@ -55,7 +53,7 @@ public class HealthCheckExecutor {
      * Create thread pool to execute health check.
      * @return
      */
-    private static ThreadPoolExecutor createThreadPoolExecutor(Environment environment) {
+    private static ThreadPoolExecutor createThreadPoolExecutor() {
         logger.info("create health-check thread pool, corePoolSize: 1, maxPoolSize: 1.");
         return new SofaThreadPoolExecutor(1, 1, 30,
             TimeUnit.SECONDS, new SynchronousQueue<Runnable>(), new NamedThreadFactory(

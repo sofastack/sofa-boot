@@ -161,7 +161,7 @@ public class HealthCheckerProcessor {
         }
         do {
             Future<Health> future = HealthCheckExecutor
-                    .submitTask(environment, healthChecker::isHealthy);
+                    .submitTask(healthChecker::isHealthy);
             try {
                 health = future.get(timeout, TimeUnit.MILLISECONDS);
             }  catch (TimeoutException e) {

@@ -182,7 +182,7 @@ public class HealthIndicatorProcessor {
         }
         try {
             Future<Health> future = HealthCheckExecutor
-                    .submitTask(environment, healthIndicator::health);
+                    .submitTask(healthIndicator::health);
             health = future.get(timeout, TimeUnit.MILLISECONDS);
             Status status = health.getStatus();
             result = status.equals(Status.UP);
