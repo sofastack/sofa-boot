@@ -38,6 +38,7 @@ public class ProviderRegisterProcessorTest {
         System.setProperty("sofa.rpc.registry.disablePub", "true");
         providerRegisterProcessor.processorProvider(providerConfig);
         Assert.assertFalse(providerConfig.isRegister());
+        System.clearProperty("sofa.rpc.registry.disablePub");
     }
 
 }
