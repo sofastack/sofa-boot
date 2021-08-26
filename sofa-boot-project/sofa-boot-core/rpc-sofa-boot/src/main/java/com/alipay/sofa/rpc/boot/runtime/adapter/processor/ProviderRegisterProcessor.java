@@ -27,8 +27,7 @@ public class ProviderRegisterProcessor implements ProviderConfigProcessor {
 
     @Override
     public void processorProvider(ProviderConfig providerConfig) {
-        if (Boolean.parseBoolean(SofaConfigs
-            .getOrDefault(SofaBootRpcConfigKeys.DISABLE_REGISTER_PUB))) {
+        if (SofaConfigs.getOrDefault(SofaBootRpcConfigKeys.DISABLE_REGISTER_PUB)) {
             if (providerConfig != null) {
                 providerConfig.setRegister(false);
             }
