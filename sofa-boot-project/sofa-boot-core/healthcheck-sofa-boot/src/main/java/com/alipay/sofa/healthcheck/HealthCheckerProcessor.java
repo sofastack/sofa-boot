@@ -120,13 +120,14 @@ public class HealthCheckerProcessor {
         Assert.notNull(healthCheckers, "HealthCheckers must not be null.");
 
         logger.info("Begin SOFABoot HealthChecker readiness check.");
-        String checkComponentNames = healthCheckers.values().stream()
-                .filter(healthChecker -> !(healthChecker instanceof NonReadinessCheck))
+        Map<String, HealthChecker> readinessHealthCheckers = healthCheckers.entrySet().stream()
+                .filter(entry -> !(entry.getValue() instanceof NonReadinessCheck))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        String checkComponentNames = readinessHealthCheckers.values().stream()
                 .map(HealthChecker::getComponentName).collect(Collectors.joining(","));
         logger.info("SOFABoot HealthChecker readiness check {} item: {}.",
                 healthCheckers.size(), checkComponentNames);
-        boolean result = healthCheckers.entrySet().stream()
-                .filter(entry -> !(entry.getValue() instanceof NonReadinessCheck))
+        boolean result = readinessHealthCheckers.entrySet().stream()
                 .map(entry -> doHealthCheck(entry.getKey(), entry.getValue(), true, healthMap, true))
                 .reduce(true, BinaryOperators.andBoolean());
         if (result) {
