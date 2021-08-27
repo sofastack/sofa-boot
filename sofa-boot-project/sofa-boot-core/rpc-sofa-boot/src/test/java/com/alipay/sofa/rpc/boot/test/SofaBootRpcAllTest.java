@@ -137,9 +137,6 @@ public class SofaBootRpcAllTest {
     @SofaReference(binding = @SofaReferenceBinding(bindingType = "bolt", loadBalancer = "roundRobin"), uniqueId = "loadbalancer")
     private AnnotationService          annotationLoadBalancerService;
 
-    @SofaReference(binding = @SofaReferenceBinding(bindingType = "bolt"), jvmFirst = false, uniqueId = "timeout")
-    private AnnotationService          annotationProviderTimeoutService;
-
     @SofaReference(binding = @SofaReferenceBinding(bindingType = "bolt", timeout = 1000), jvmFirst = false, uniqueId = "timeout")
     private AnnotationService          annotationConsumerTimeoutService;
 
@@ -162,8 +159,6 @@ public class SofaBootRpcAllTest {
         } catch (SofaTimeOutException e) {
 
         }
-        //Only configure the provider side timeout 5000ms, and the default timeout time 3000ms will be invalid.
-        //Assert.assertEquals("sleep 4000 ms", annotationProviderTimeoutService.testTimeout(4000));
         try {
             //Configured the consumer side timeout time of 1000ms, the provider side timeout time of 5000ms and the default timeout time of 3000ms are invalid.
             annotationConsumerTimeoutService.testTimeout(2000);
