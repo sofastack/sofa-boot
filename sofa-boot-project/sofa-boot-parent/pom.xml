@@ -5,7 +5,7 @@
     <parent>
         <artifactId>sofaboot-dependencies</artifactId>
         <groupId>com.alipay.sofa</groupId>
-        <version>3.4.7-SNAPSHOT</version>
+        <version>3.4.7</version>
         <relativePath>../sofaboot-dependencies</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -369,7 +369,7 @@
                         </dependencies>
                         <configuration>
                             <reuseForks>false</reuseForks>
-                            <argLine> -Djdk.attach.allowAttachSelf --add-opens java.base/jdk.internal.loader=ALL-UNNAMED </argLine>
+                            <argLine> -Djdk.attach.allowAttachSelf &#45;&#45;add-opens java.base/jdk.internal.loader=ALL-UNNAMED </argLine>
                         </configuration>
                     </plugin>
                 </plugins>

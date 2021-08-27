@@ -15,7 +15,7 @@
     <groupId>com.alipay.sofa</groupId>
     <artifactId>sofaboot-dependencies</artifactId>
     <packaging>pom</packaging>
-    <version>3.4.7-SNAPSHOT</version>
+    <version>3.4.7</version>
 
     <properties>
         <!--project-->
@@ -24,7 +24,7 @@
         <project.build.encoding>UTF-8</project.build.encoding>
         <project.build.encoding>UTF-8</project.build.encoding>
 
-        <sofa.boot.version>3.4.7-SNAPSHOT</sofa.boot.version>
+        <sofa.boot.version>3.4.7</sofa.boot.version>
 
         <!--starter-->
         <sofa.ark.version>1.1.5</sofa.ark.version>
@@ -37,7 +37,7 @@
         <!--2rd lib dependency-->
         <sofa.common.tools.version>1.2.1</sofa.common.tools.version>
         <sofa.bolt.version>1.5.6</sofa.bolt.version>
-        <sofa.hessian.version>3.3.12</sofa.hessian.version>
+        <sofa.hessian.version>3.3.13</sofa.hessian.version>
 
         <!--3rd lib dependency-->
         <fastjson.version>1.2.69</fastjson.version>
