@@ -50,10 +50,13 @@ import java.util.concurrent.*;
  * @version $Id: SpringContextInstallStage.java, v 0.1 2012-3-16 21:17:48 fengqi.lin Exp $
  */
 public class SpringContextInstallStage extends AbstractPipelineStage {
-    private static final String  SYMBOLIC1 = "  ├─ ";
-    private static final String  SYMBOLIC2 = "  └─ ";
+    private static final String  SYMBOLIC1                       = "  ├─ ";
+    private static final String  SYMBOLIC2                       = "  └─ ";
 
-    private static final int     CPU_COUNT = Runtime.getRuntime().availableProcessors(); ;
+    private static final int     DEFAULT_REFRESH_TASK_QUEUE_SIZE = 1000;
+
+    private static final int     CPU_COUNT                       = Runtime.getRuntime()
+                                                                     .availableProcessors(); ;
 
     @Autowired
     private SofaModuleProperties sofaModuleProperties;
@@ -183,9 +186,9 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
     private void refreshSpringContextParallel(ApplicationRuntimeModel application) {
         ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
         List<DeploymentDescriptor> coreRoots = new ArrayList<>();
-        ThreadPoolExecutor executor = new SofaThreadPoolExecutor(CPU_COUNT + 1, CPU_COUNT + 1, 60,
-            TimeUnit.MILLISECONDS, new SynchronousQueue<Runnable>(), new NamedThreadFactory(
-                "sofa-module-start"), new ThreadPoolExecutor.CallerRunsPolicy(),
+        ThreadPoolExecutor executor = new SofaThreadPoolExecutor(CPU_COUNT * 5, CPU_COUNT * 5, 60,
+            TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(DEFAULT_REFRESH_TASK_QUEUE_SIZE),
+            new NamedThreadFactory("sofa-module-start"), new ThreadPoolExecutor.CallerRunsPolicy(),
             "sofa-module-start", "sofa-boot", 60, 30, TimeUnit.SECONDS);
         try {
             for (DeploymentDescriptor deployment : application.getResolvedDeployments()) {
