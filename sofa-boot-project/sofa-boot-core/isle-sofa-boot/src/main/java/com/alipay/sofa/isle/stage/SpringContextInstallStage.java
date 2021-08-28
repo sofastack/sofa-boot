@@ -186,7 +186,7 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
     private void refreshSpringContextParallel(ApplicationRuntimeModel application) {
         ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
         List<DeploymentDescriptor> coreRoots = new ArrayList<>();
-        ThreadPoolExecutor executor = new SofaThreadPoolExecutor(CPU_COUNT + 1, CPU_COUNT + 1, 60,
+        ThreadPoolExecutor executor = new SofaThreadPoolExecutor(CPU_COUNT * 5, CPU_COUNT * 5, 60,
             TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(DEFAULT_REFRESH_TASK_QUEUE_SIZE),
             new NamedThreadFactory("sofa-module-start"), new ThreadPoolExecutor.CallerRunsPolicy(),
             "sofa-module-start", "sofa-boot", 60, 30, TimeUnit.SECONDS);
