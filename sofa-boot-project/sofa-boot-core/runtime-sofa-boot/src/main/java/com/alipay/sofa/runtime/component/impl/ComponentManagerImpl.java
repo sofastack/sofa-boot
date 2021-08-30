@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.runtime.component.impl;
 
+import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.log.SofaLogger;
@@ -96,7 +97,7 @@ public class ComponentManagerImpl implements ComponentManager {
             try {
                 unregister(ri);
             } catch (Throwable t) {
-                SofaLogger.error("failed to shutdown component manager", t);
+                SofaLogger.error(String.format(ErrorCode.convert("01-03001"), ri.getName()), t);
             }
         }
 
@@ -109,7 +110,7 @@ public class ComponentManagerImpl implements ComponentManager {
             try {
                 unregister(ri);
             } catch (Throwable t) {
-                SofaLogger.error("failed to shutdown component manager", t);
+                SofaLogger.error(String.format(ErrorCode.convert("01-03001"), ri.getName()), t);
             }
         }
 
@@ -122,7 +123,7 @@ public class ComponentManagerImpl implements ComponentManager {
             }
             clientFactoryInternal = null;
         } catch (Throwable t) {
-            SofaLogger.error("Failed to shutdown registry manager", t);
+            SofaLogger.error(ErrorCode.convert("01-03000"), t);
         }
     }
 
@@ -148,17 +149,17 @@ public class ComponentManagerImpl implements ComponentManager {
     private ComponentInfo doRegister(ComponentInfo ci) {
         ComponentName name = ci.getName();
         if (isRegistered(name)) {
-            SofaLogger.error("Component was already registered: {}", name);
+            SofaLogger.warn("Component was already registered: {}", name);
             if (ci.canBeDuplicate()) {
                 return getComponentInfo(name);
             }
-            throw new ServiceRuntimeException("Component can not be registered duplicated: " + name);
+            throw new ServiceRuntimeException(String.format(ErrorCode.convert("01-03002"), name));
         }
 
         try {
             ci.register();
         } catch (Throwable t) {
-            SofaLogger.error("Failed to register component: {}", ci.getName(), t);
+            SofaLogger.error(String.format(ErrorCode.convert("01-03003"), ci.getName()), t);
             return null;
         }
 
@@ -167,12 +168,12 @@ public class ComponentManagerImpl implements ComponentManager {
         try {
             ComponentInfo old = registry.putIfAbsent(ci.getName(), ci);
             if (old != null) {
-                SofaLogger.error("Component was already registered: {}", name);
+                SofaLogger.warn("Component was already registered: {}", name);
                 if (ci.canBeDuplicate()) {
                     return old;
                 }
-                throw new ServiceRuntimeException("Component can not be registered duplicated: "
-                                                  + name);
+                throw new ServiceRuntimeException(
+                    String.format(ErrorCode.convert("01-03002"), name));
 
             }
             if (ci.resolve()) {
@@ -181,7 +182,7 @@ public class ComponentManagerImpl implements ComponentManager {
             }
         } catch (Throwable t) {
             ci.exception(new Exception(t));
-            SofaLogger.error("Failed to create the component {}", ci.getName(), t);
+            SofaLogger.error(String.format(ErrorCode.convert("01-03004"), ci.getName()), t);
         }
 
         return ci;
@@ -227,7 +228,8 @@ public class ComponentManagerImpl implements ComponentManager {
                 componentInfo.activate();
             } catch (Throwable t) {
                 componentInfo.exception(new Exception(t));
-                SofaLogger.error("Failed to create the component {}.", componentInfo.getName(), t);
+                SofaLogger.error(
+                    String.format(ErrorCode.convert("01-03005"), componentInfo.getName()), t);
             }
         }
     }

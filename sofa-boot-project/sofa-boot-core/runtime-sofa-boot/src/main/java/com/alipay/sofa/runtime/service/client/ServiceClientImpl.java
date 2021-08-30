@@ -19,6 +19,7 @@ package com.alipay.sofa.runtime.service.client;
 import java.util.Collection;
 import java.util.Map;
 
+import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.client.ServiceClient;
 import com.alipay.sofa.runtime.api.client.param.BindingParam;
@@ -63,8 +64,7 @@ public class ServiceClientImpl implements ServiceClient {
         implementation.setTarget(serviceParam.getInstance());
 
         if (serviceParam.getInterfaceType() == null) {
-            throw new ServiceRuntimeException(
-                "Interface type is null. Interface type is required while publish a service.");
+            throw new ServiceRuntimeException(ErrorCode.convert("01-00201"));
         }
         Service service = new ServiceImpl(serviceParam.getUniqueId(),
             serviceParam.getInterfaceType(), InterfaceMode.api, serviceParam.getInstance(), null);
@@ -74,9 +74,8 @@ public class ServiceClientImpl implements ServiceClient {
                 .getBindingConverter(bindingParam.getBindingType());
 
             if (bindingConverter == null) {
-                throw new ServiceRuntimeException(
-                    "Can not found binding converter for binding type "
-                            + bindingParam.getBindingType());
+                throw new ServiceRuntimeException(String.format(ErrorCode.convert("01-00200"),
+                    bindingParam.getBindingType()));
             }
             BindingConverterContext bindingConverterContext = new BindingConverterContext();
             bindingConverterContext.setInBinding(false);
@@ -111,7 +110,7 @@ public class ServiceClientImpl implements ServiceClient {
     @Override
     public void removeService(Class<?> interfaceClass, String uniqueId, int millisecondsToDelay) {
         if (millisecondsToDelay < 0) {
-            throw new IllegalArgumentException("Argument delay must be a positive integer or zero.");
+            throw new IllegalArgumentException(ErrorCode.convert("01-00202"));
         }
 
         Collection<ComponentInfo> serviceComponents = sofaRuntimeContext.getComponentManager()

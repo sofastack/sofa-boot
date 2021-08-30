@@ -19,6 +19,7 @@ package com.alipay.sofa.runtime.spring;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
+import com.alipay.sofa.boot.error.ErrorCode;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.core.PriorityOrdered;
@@ -64,9 +65,7 @@ public class ClientFactoryBeanPostProcessor implements BeanPostProcessor, Priori
                     ReflectionUtils.makeAccessible(field);
                     ReflectionUtils.setField(field, bean, client);
                 } else {
-                    throw new RuntimeException(
-                        "Field annotated by ClientFactorySetter must be of type"
-                                + " ClientFactory or client store in the ClientFactory.");
+                    throw new RuntimeException(ErrorCode.convert("01-02000"));
                 }
             }
         }, new ReflectionUtils.FieldFilter() {

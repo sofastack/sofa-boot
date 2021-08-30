@@ -25,6 +25,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
+import com.alipay.sofa.boot.error.ErrorCode;
 import org.slf4j.Logger;
 import org.springframework.aop.framework.AopProxyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -144,7 +145,7 @@ public class HealthIndicatorProcessor {
         if (result) {
             logger.info("SOFABoot HealthIndicator readiness check result: success.");
         } else {
-            logger.error("SOFABoot HealthIndicator readiness check result: failed.");
+            logger.error(ErrorCode.convert("01-21000"));
         }
         return result;
     }
@@ -162,14 +163,14 @@ public class HealthIndicatorProcessor {
                 logger.info("HealthIndicator[{}] readiness check success.", beanId);
             } else {
                 logger.error(
-                        "HealthIndicator[{}] readiness check fail; the status is: {}; the detail is: {}.",
+                        ErrorCode.convert("01-23001"),
                         beanId, status, objectMapper.writeValueAsString(health.getDetails()));
             }
             healthMap.put(getKey(beanId), health);
         } catch (Exception e) {
             result = false;
             logger.error(
-                    String.format("Error occurred while doing HealthIndicator[%s] readiness check.",
+                    String.format(ErrorCode.convert("01-23002"),
                             healthIndicator.getClass()),
                     e);
         }
