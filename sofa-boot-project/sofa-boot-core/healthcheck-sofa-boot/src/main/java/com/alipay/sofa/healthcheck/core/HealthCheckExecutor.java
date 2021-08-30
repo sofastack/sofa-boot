@@ -32,7 +32,7 @@ import java.util.concurrent.*;
  */
 public class HealthCheckExecutor {
 
-    private static       Logger             logger          = HealthCheckLoggerFactory
+    private static Logger                   logger          = HealthCheckLoggerFactory
                                                                 .getLogger(HealthCheckExecutor.class);
     private static final ThreadPoolExecutor THREAD_POOL_REF = createThreadPoolExecutor();
 
@@ -42,12 +42,12 @@ public class HealthCheckExecutor {
 
     /**
      * Create thread pool to execute health check.
-     * @return
+     * @return thread pool to execute health check.
      */
     private static ThreadPoolExecutor createThreadPoolExecutor() {
         logger.info("create health-check thread pool, corePoolSize: 1, maxPoolSize: 1.");
         return new SofaThreadPoolExecutor(1, 1, 30, TimeUnit.SECONDS,
-                new SynchronousQueue<Runnable>(), new NamedThreadFactory("health-check"),
-                new ThreadPoolExecutor.CallerRunsPolicy(), "health-check", "sofa-boot");
+            new SynchronousQueue<Runnable>(), new NamedThreadFactory("health-check"),
+            new ThreadPoolExecutor.CallerRunsPolicy(), "health-check", "sofa-boot");
     }
 }

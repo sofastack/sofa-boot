@@ -85,8 +85,7 @@ public class HealthIndicatorProcessor {
     private Set<Class<?>>                          excludedIndicators;
 
     @Value("${" + SofaBootConstants.SOFABOOT_HEALTH_CHECK_DEFAULT_TIMEOUT + ":"
-           + SofaBootConstants.SOFABOOT_HEALTH_CHECK_DEFAULT_TIMEOUT_VALUE
-           + "}")
+           + SofaBootConstants.SOFABOOT_HEALTH_CHECK_DEFAULT_TIMEOUT_VALUE + "}")
     private int                                    defaultTimeout;
 
     public void init() {
