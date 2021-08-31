@@ -113,7 +113,7 @@ public class ServiceComponent extends AbstractComponent {
             }
 
             if (!allPassed) {
-                throw new ServiceRuntimeException(String.format(ErrorCode.convert("01-00002"),
+                throw new ServiceRuntimeException(String.format(ErrorCode.convert("01-00003"),
                     service));
             }
         }
