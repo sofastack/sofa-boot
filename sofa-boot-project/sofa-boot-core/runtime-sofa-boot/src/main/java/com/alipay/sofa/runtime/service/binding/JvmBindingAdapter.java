@@ -19,6 +19,7 @@ package com.alipay.sofa.runtime.service.binding;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Proxy;
 
+import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import com.alipay.sofa.runtime.filter.JvmFilterContext;
 import com.alipay.sofa.runtime.filter.JvmFilterHolder;
@@ -237,14 +238,8 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
             }
 
             if (targetObj == null) {
-                throw new IllegalStateException(
-                    "JVM Reference["
-                            + getInterfaceName()
-                            + "#"
-                            + getUniqueId()
-                            + "] can not find the corresponding JVM service. "
-                            + "Please check if there is a SOFA deployment publish the corresponding JVM service. "
-                            + "If this exception occurred when the application starts up, please add Require-Module to SOFA deployment's MANIFEST.MF to indicate the startup dependency of SOFA modules.");
+                throw new IllegalStateException(String.format(ErrorCode.convert("01-00400"),
+                    getInterfaceName(), getUniqueId()));
             }
 
             ClassLoader tcl = Thread.currentThread().getContextClassLoader();

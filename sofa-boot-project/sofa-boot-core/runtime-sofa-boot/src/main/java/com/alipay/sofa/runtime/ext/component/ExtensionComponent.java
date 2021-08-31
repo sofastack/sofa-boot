@@ -16,13 +16,8 @@
  */
 package com.alipay.sofa.runtime.ext.component;
 
-import java.lang.reflect.Method;
-import java.util.Map;
-
+import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.runtime.SofaRuntimeProperties;
-import org.springframework.util.ObjectUtils;
-import org.springframework.util.ReflectionUtils;
-
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.api.component.Property;
@@ -38,6 +33,11 @@ import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
 import com.alipay.sofa.service.api.component.Extensible;
 import com.alipay.sofa.service.api.component.Extension;
 import com.alipay.sofa.service.api.component.ExtensionPoint;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.ReflectionUtils;
+
+import java.lang.reflect.Method;
+import java.util.Map;
 
 /**
  * SOFA Extension Component
@@ -109,16 +109,21 @@ public class ExtensionComponent extends AbstractComponent {
             ((ExtensionPointComponent) extensionPointComponentInfo).getExtensionPoint(), extension);
 
         Object target = extensionPointComponentInfo.getImplementation().getTarget();
-        if (target instanceof Extensible) {
-            try {
+        try {
+            if (target instanceof Extensible) {
                 ((Extensible) target).registerExtension(extension);
-            } catch (Exception e) {
-                throw new ServiceRuntimeException(e);
+            } else {
+                Method method = ReflectionUtils.findMethod(target.getClass(), "registerExtension",
+                    Extension.class);
+                if (method == null) {
+                    throw new RuntimeException(String.format(ErrorCode.convert("01-01001"), target
+                        .getClass().getCanonicalName()));
+                }
+                ReflectionUtils.invokeMethod(method, target, extension);
             }
-        } else {
-            Method method = ReflectionUtils.findMethod(target.getClass(), "registerExtension",
-                Extension.class);
-            ReflectionUtils.invokeMethod(method, target, extension);
+        } catch (Throwable t) {
+            throw new ServiceRuntimeException(String.format(ErrorCode.convert("01-01000"),
+                extensionPointComponentInfo.getName()), t);
         }
 
         componentStatus = ComponentStatus.ACTIVATED;
@@ -149,7 +154,8 @@ public class ExtensionComponent extends AbstractComponent {
                     .getAppClassLoader())) {
                     this.e = e;
                 }
-                SofaLogger.error("Failed to create contribution objects", e);
+                SofaLogger.error(String.format(ErrorCode.convert("01-01002"),
+                    extensionPoint.getName(), extension.getComponentName()), e);
             }
         }
     }

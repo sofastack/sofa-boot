@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import com.alipay.sofa.boot.error.ErrorCode;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
@@ -134,7 +135,7 @@ public abstract class AbstractContractFactoryBean implements InitializingBean, F
     }
 
     protected void dealWithbindingConverterNotExist(String tagName) {
-        throw new ServiceRuntimeException("Can't find BindingConverter of type " + tagName);
+        throw new ServiceRuntimeException(String.format(ErrorCode.convert("01-00200"), tagName));
     }
 
     @Override

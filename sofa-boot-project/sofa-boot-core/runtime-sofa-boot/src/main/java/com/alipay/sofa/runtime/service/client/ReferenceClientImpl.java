@@ -18,6 +18,7 @@ package com.alipay.sofa.runtime.service.client;
 
 import java.util.Collection;
 
+import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.client.ReferenceClient;
 import com.alipay.sofa.runtime.api.client.param.BindingParam;
@@ -72,9 +73,8 @@ public class ReferenceClientImpl implements ReferenceClient {
             BindingConverter bindingConverter = bindingConverterFactory
                 .getBindingConverter(bindingParam.getBindingType());
             if (bindingConverter == null) {
-                throw new ServiceRuntimeException(
-                    "Can not found binding converter for binding type "
-                            + bindingParam.getBindingType());
+                throw new ServiceRuntimeException(String.format(ErrorCode.convert("01-00200"),
+                    bindingParam.getBindingType()));
             }
             BindingConverterContext bindingConverterContext = new BindingConverterContext();
             bindingConverterContext.setInBinding(true);
