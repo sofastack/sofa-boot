@@ -23,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.healthcheck.core.HealthCheckExecutor;
@@ -32,7 +33,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.Status;
 import org.springframework.context.ApplicationContext;
-import org.springframework.core.env.Environment;
 import org.springframework.util.Assert;
 
 import com.alipay.sofa.boot.health.NonReadinessCheck;
@@ -61,7 +61,6 @@ public class HealthCheckerProcessor {
 
     @Autowired
     private ApplicationContext                   applicationContext;
-    private Environment                          environment;
 
     private LinkedHashMap<String, HealthChecker> healthCheckers = null;
 
@@ -72,7 +71,6 @@ public class HealthCheckerProcessor {
     public void init() {
         if (isInitiated.compareAndSet(false, true)) {
             Assert.notNull(applicationContext, () -> "Application must not be null");
-            environment = applicationContext.getEnvironment();
             Map<String, HealthChecker> beansOfType = applicationContext
                     .getBeansOfType(HealthChecker.class);
             healthCheckers = HealthCheckUtils.sortMapAccordingToValue(beansOfType,
@@ -120,15 +118,13 @@ public class HealthCheckerProcessor {
         Assert.notNull(healthCheckers, "HealthCheckers must not be null.");
 
         logger.info("Begin SOFABoot HealthChecker readiness check.");
-        Map<String, HealthChecker> readinessHealthCheckers = healthCheckers.entrySet().stream()
-                .filter(entry -> !(entry.getValue() instanceof NonReadinessCheck))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-        String checkComponentNames = readinessHealthCheckers.values().stream()
+        Stream<Map.Entry<String, HealthChecker>> readinessHealthCheckerStream = healthCheckers.entrySet().stream()
+                .filter(entry -> !(entry.getValue() instanceof NonReadinessCheck));
+        String checkComponentNames = readinessHealthCheckerStream.map(Map.Entry::getValue)
                 .map(HealthChecker::getComponentName).collect(Collectors.joining(","));
         logger.info("SOFABoot HealthChecker readiness check {} item: {}.",
                 healthCheckers.size(), checkComponentNames);
-        boolean result = readinessHealthCheckers.entrySet().stream()
-                .map(entry -> doHealthCheck(entry.getKey(), entry.getValue(), true, healthMap, true))
+        boolean result = readinessHealthCheckerStream.map(entry -> doHealthCheck(entry.getKey(), entry.getValue(), true, healthMap, true))
                 .reduce(true, BinaryOperators.andBoolean());
         if (result) {
             logger.info("SOFABoot HealthChecker readiness check result: success.");
@@ -157,12 +153,11 @@ public class HealthCheckerProcessor {
         String checkType = isReadiness ? "readiness" : "liveness";
         logger.info("HealthChecker[{}] {} check start.", beanId, checkType);
         int timeout = healthChecker.getTimeout();
-        if(timeout <= 0){
+        if (timeout <= 0) {
             timeout = defaultTimeout;
         }
         do {
-            Future<Health> future = HealthCheckExecutor
-                    .submitTask(healthChecker::isHealthy);
+            Future<Health> future = HealthCheckExecutor.submitTask(healthChecker::isHealthy);
             try {
                 health = future.get(timeout, TimeUnit.MILLISECONDS);
             }  catch (TimeoutException e) {

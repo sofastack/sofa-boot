@@ -16,13 +16,18 @@
  */
 package com.alipay.sofa.healthcheck.core;
 
+import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.util.NamedThreadFactory;
 import com.alipay.sofa.common.thread.SofaThreadPoolExecutor;
 import com.alipay.sofa.healthcheck.log.HealthCheckLoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.boot.actuate.health.Health;
 
-import java.util.concurrent.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Health Check Thread Pool
@@ -31,9 +36,9 @@ import java.util.concurrent.*;
  * @since 3.7.1
  */
 public class HealthCheckExecutor {
-
     private static Logger                   logger          = HealthCheckLoggerFactory
                                                                 .getLogger(HealthCheckExecutor.class);
+
     private static final ThreadPoolExecutor THREAD_POOL_REF = createThreadPoolExecutor();
 
     public static Future<Health> submitTask(Callable<Health> callable) {
@@ -45,9 +50,10 @@ public class HealthCheckExecutor {
      * @return thread pool to execute health check.
      */
     private static ThreadPoolExecutor createThreadPoolExecutor() {
-        logger.info("create health-check thread pool, corePoolSize: 1, maxPoolSize: 1.");
+        logger.info("Create health-check thread pool, corePoolSize: 1, maxPoolSize: 1.");
         return new SofaThreadPoolExecutor(1, 1, 30, TimeUnit.SECONDS,
             new SynchronousQueue<Runnable>(), new NamedThreadFactory("health-check"),
-            new ThreadPoolExecutor.CallerRunsPolicy(), "health-check", "sofa-boot");
+            new ThreadPoolExecutor.CallerRunsPolicy(), "health-check",
+            SofaBootConstants.SOFABOOT_SPACE_NAME);
     }
 }

@@ -218,4 +218,6 @@ public class SofaBootConstants {
     public static String        MODULE_NAME                                                  = "Module-Name";
     public static String        REQUIRE_MODULE                                               = "Require-Module";
     public static String        MODULE_PROFILE                                               = "Module-Profile";
+
+    public static String        SOFABOOT_SPACE_NAME                                          = "sofa-boot";
 }

@@ -75,6 +75,7 @@ public class HealthIndicatorProcessor {
 
     @Autowired
     private ApplicationContext                     applicationContext;
+
     private Environment                            environment;
 
     private final static String                    REACTOR_CLASS              = "reactor.core.publisher.Mono";
