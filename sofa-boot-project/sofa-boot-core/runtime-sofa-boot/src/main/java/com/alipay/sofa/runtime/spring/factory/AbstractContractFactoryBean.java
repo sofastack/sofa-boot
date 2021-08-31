@@ -25,7 +25,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.TypedStringValue;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -56,7 +55,6 @@ public abstract class AbstractContractFactoryBean implements InitializingBean, F
     /** interface class type */
     protected Class<?>                interfaceClass;
     /** sofa runtime context */
-    @Autowired
     protected SofaRuntimeContext      sofaRuntimeContext;
     /** xml elements */
     protected List<TypedStringValue>  elements;
@@ -69,10 +67,8 @@ public abstract class AbstractContractFactoryBean implements InitializingBean, F
     /** repeat times */
     protected String                  repeatReferLimit;
     /** binding converter factory */
-    @Autowired
     protected BindingConverterFactory bindingConverterFactory;
     /** binding adapter factory */
-    @Autowired
     protected BindingAdapterFactory   bindingAdapterFactory;
     /** way to create factory bean. api or xml*/
     protected boolean                 apiType;
