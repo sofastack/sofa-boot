@@ -18,12 +18,18 @@ package com.alipay.sofa.healthcheck;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 import com.alipay.sofa.boot.error.ErrorCode;
+import com.alipay.sofa.boot.constant.SofaBootConstants;
+import com.alipay.sofa.healthcheck.core.HealthCheckExecutor;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.Status;
 import org.springframework.context.ApplicationContext;
@@ -58,6 +64,10 @@ public class HealthCheckerProcessor {
 
     private LinkedHashMap<String, HealthChecker> healthCheckers = null;
 
+    @Value("${" + SofaBootConstants.SOFABOOT_HEALTH_CHECK_DEFAULT_TIMEOUT + ":"
+           + SofaBootConstants.SOFABOOT_HEALTH_CHECK_DEFAULT_TIMEOUT_VALUE + "}")
+    private int                                  defaultTimeout;
+
     public void init() {
         if (isInitiated.compareAndSet(false, true)) {
             Assert.notNull(applicationContext, () -> "Application must not be null");
@@ -83,6 +93,10 @@ public class HealthCheckerProcessor {
         Assert.notNull(healthCheckers, () -> "HealthCheckers must not be null");
 
         logger.info("Begin SOFABoot HealthChecker liveness check.");
+        String checkComponentNames = healthCheckers.values().stream()
+                .map(HealthChecker::getComponentName).collect(Collectors.joining(","));
+        logger.info("SOFABoot HealthChecker liveness check {} item: {}.",
+                healthCheckers.size(), checkComponentNames);
         boolean result = healthCheckers.entrySet().stream()
                 .map(entry -> doHealthCheck(entry.getKey(), entry.getValue(), false, healthMap, false))
                 .reduce(true, BinaryOperators.andBoolean());
@@ -104,8 +118,14 @@ public class HealthCheckerProcessor {
         Assert.notNull(healthCheckers, "HealthCheckers must not be null.");
 
         logger.info("Begin SOFABoot HealthChecker readiness check.");
-        boolean result = healthCheckers.entrySet().stream()
+        Map<String, HealthChecker> readinessHealthCheckers = healthCheckers.entrySet().stream()
                 .filter(entry -> !(entry.getValue() instanceof NonReadinessCheck))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        String checkComponentNames = readinessHealthCheckers.values().stream()
+                .map(HealthChecker::getComponentName).collect(Collectors.joining(","));
+        logger.info("SOFABoot HealthChecker readiness check {} item: {}.",
+                healthCheckers.size(), checkComponentNames);
+        boolean result = readinessHealthCheckers.entrySet().stream()
                 .map(entry -> doHealthCheck(entry.getKey(), entry.getValue(), true, healthMap, true))
                 .reduce(true, BinaryOperators.andBoolean());
         if (result) {
@@ -133,8 +153,26 @@ public class HealthCheckerProcessor {
         boolean result;
         int retryCount = 0;
         String checkType = isReadiness ? "readiness" : "liveness";
+        logger.info("HealthChecker[{}] {} check start.", beanId, checkType);
+        int timeout = healthChecker.getTimeout();
+        if (timeout <= 0) {
+            timeout = defaultTimeout;
+        }
         do {
-            health = healthChecker.isHealthy();
+            Future<Health> future = HealthCheckExecutor.submitTask(healthChecker::isHealthy);
+            try {
+                health = future.get(timeout, TimeUnit.MILLISECONDS);
+            }  catch (TimeoutException e) {
+                logger.error(
+                        "Timeout occurred while doing HealthChecker[{}] {} check, the timeout value is: {}ms.",
+                        beanId, checkType, timeout);
+                health = new Health.Builder().withException(e).status(Status.UNKNOWN).build();
+            } catch (Throwable e) {
+                logger.error(String.format(
+                        "Exception occurred while wait the result of HealthChecker[%s] %s check.",
+                        beanId, checkType), e);
+                health = new Health.Builder().withException(e).status(Status.DOWN).build();
+            }
             result = health.getStatus().equals(Status.UP);
             if (result) {
                 logger.info("HealthChecker[{}] {} check success with {} retry.", beanId, checkType,

@@ -38,14 +38,16 @@ import com.alipay.sofa.rpc.boot.health.RpcAfterHealthCheckCallback;
 import com.alipay.sofa.rpc.boot.runtime.adapter.helper.ConsumerConfigHelper;
 import com.alipay.sofa.rpc.boot.runtime.adapter.helper.ProviderConfigHelper;
 import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ConsumerConfigProcessor;
-import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ConsumerMockProcessor;
-import com.alipay.sofa.rpc.boot.runtime.adapter.processor.DynamicConfigProcessor;
 import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ProcessorContainer;
 import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ProviderConfigProcessor;
+import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ProviderRegisterProcessor;
+import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ConsumerMockProcessor;
+import com.alipay.sofa.rpc.boot.runtime.adapter.processor.DynamicConfigProcessor;
 import com.alipay.sofa.rpc.boot.swagger.BoltSwaggerServiceApplicationListener;
 import com.alipay.sofa.rpc.boot.swagger.SwaggerServiceApplicationListener;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -199,5 +201,11 @@ public class SofaRpcTestAutoConfiguration {
     @ConditionalOnProperty(name = "com.alipay.sofa.rpc.dynamic-config")
     public DynamicConfigProcessor dynamicConfigProcessor() {
         return new DynamicConfigProcessor();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public ProviderRegisterProcessor providerRegisterProcessor() {
+        return new ProviderRegisterProcessor();
     }
 }
