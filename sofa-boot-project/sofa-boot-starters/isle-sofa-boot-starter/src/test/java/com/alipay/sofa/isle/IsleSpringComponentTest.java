@@ -60,7 +60,7 @@ public class IsleSpringComponentTest implements SofaRuntimeContextAware {
         this.sofaRuntimeContext = sofaRuntimeContext;
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @EnableAutoConfiguration
     static class IsleSpringComponentTestConfiguration {
         @Bean

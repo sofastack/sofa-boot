@@ -47,7 +47,7 @@ public class ServiceWithoutInterfaceTest {
         Assert.assertEquals("ServiceWithoutInterface", serviceWithoutInterface.service());
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @Import(RuntimeConfiguration.class)
     static class ServiceWithoutInterfaceTestConfiguration {
         @Bean

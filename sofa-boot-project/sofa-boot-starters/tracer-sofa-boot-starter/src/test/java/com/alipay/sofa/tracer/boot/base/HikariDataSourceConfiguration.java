@@ -28,7 +28,7 @@ import com.zaxxer.hikari.HikariDataSource;
  * @author qilong.zql
  * @since 2.3.2
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class HikariDataSourceConfiguration {
     @Value("${spring.datasource.url}")
     private String jdbcUrl;

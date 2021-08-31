@@ -81,7 +81,7 @@ public class SpringCloudEnvTest {
         FileSystemUtils.deleteRecursively(new File("./logs"));
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @EnableAutoConfiguration
     static class SpringCloudEnvTestConfiguration {
 

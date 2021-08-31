@@ -30,7 +30,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * @author guolei.sgl (guolei.sgl@antfin.com) 2019/3/13 6:04 PM
  **/
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @ConditionalOnClass({ Client.class, SofaTracerFeignContextBeanPostProcessor.class,
                      SofaTracerFeignContext.class })
 @AutoConfigureBefore(FeignAutoConfiguration.class)

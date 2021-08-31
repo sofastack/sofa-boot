@@ -38,7 +38,7 @@ public class RpcBindingMethodInfo {
     private Object  callbackHandler;
 
     /**
-     * Getter method for property <tt>name</tt>.
+     * Getter method for property <code>name</code>.
      *
      * @return property value of name
      */
@@ -47,7 +47,7 @@ public class RpcBindingMethodInfo {
     }
 
     /**
-     * Setter method for property <tt>name</tt>.
+     * Setter method for property <code>name</code>.
      *
      * @param name  value to be assigned to property name
      */
@@ -56,7 +56,7 @@ public class RpcBindingMethodInfo {
     }
 
     /**
-     * Getter method for property <tt>type</tt>.
+     * Getter method for property <code>type</code>.
      *
      * @return property value of type
      */
@@ -65,7 +65,7 @@ public class RpcBindingMethodInfo {
     }
 
     /**
-     * Setter method for property <tt>type</tt>.
+     * Setter method for property <code>type</code>.
      *
      * @param type  value to be assigned to property type
      */
@@ -74,7 +74,7 @@ public class RpcBindingMethodInfo {
     }
 
     /**
-     * Getter method for property <tt>timeout</tt>.
+     * Getter method for property <code>timeout</code>.
      *
      * @return property value of timeout
      */
@@ -83,7 +83,7 @@ public class RpcBindingMethodInfo {
     }
 
     /**
-     * Setter method for property <tt>timeout</tt>.
+     * Setter method for property <code>timeout</code>.
      *
      * @param timeout  value to be assigned to property timeout
      */
@@ -92,7 +92,7 @@ public class RpcBindingMethodInfo {
     }
 
     /**
-     * Getter method for property <tt>retries</tt>.
+     * Getter method for property <code>retries</code>.
      *
      * @return property value of retries
      */
@@ -101,7 +101,7 @@ public class RpcBindingMethodInfo {
     }
 
     /**
-     * Setter method for property <tt>retries</tt>.
+     * Setter method for property <code>retries</code>.
      *
      * @param retries  value to be assigned to property retries
      */
@@ -110,7 +110,7 @@ public class RpcBindingMethodInfo {
     }
 
     /**
-     * Getter method for property <tt>callbackClass</tt>.
+     * Getter method for property <code>callbackClass</code>.
      *
      * @return property value of callbackClass
      */
@@ -119,7 +119,7 @@ public class RpcBindingMethodInfo {
     }
 
     /**
-     * Setter method for property <tt>callbackClass</tt>.
+     * Setter method for property <code>callbackClass</code>.
      *
      * @param callbackClass  value to be assigned to property callbackClass
      */
@@ -128,7 +128,7 @@ public class RpcBindingMethodInfo {
     }
 
     /**
-     * Getter method for property <tt>callbackRef</tt>.
+     * Getter method for property <code>callbackRef</code>.
      *
      * @return property value of callbackRef
      */
@@ -137,7 +137,7 @@ public class RpcBindingMethodInfo {
     }
 
     /**
-     * Setter method for property <tt>callbackRef</tt>.
+     * Setter method for property <code>callbackRef</code>.
      *
      * @param callbackRef  value to be assigned to property callbackRef
      */
@@ -146,7 +146,7 @@ public class RpcBindingMethodInfo {
     }
 
     /**
-     * Getter method for property <tt>callbackHandler</tt>.
+     * Getter method for property <code>callbackHandler</code>.
      *
      * @return property value of callbackHandler
      */
@@ -155,7 +155,7 @@ public class RpcBindingMethodInfo {
     }
 
     /**
-     * Setter method for property <tt>callbackHandler</tt>.
+     * Setter method for property <code>callbackHandler</code>.
      *
      * @param callbackHandler  value to be assigned to property callbackHandler
      */

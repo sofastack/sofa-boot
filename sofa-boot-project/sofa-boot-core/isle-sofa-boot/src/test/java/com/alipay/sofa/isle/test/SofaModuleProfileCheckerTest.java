@@ -112,7 +112,7 @@ public class SofaModuleProfileCheckerTest {
         Assert.assertTrue(sofaModuleProfileChecker.acceptModule(dd));
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @EnableConfigurationProperties(SofaModuleProperties.class)
     static class SofaModuleProfileCheckerTestConfiguration {
         @Bean

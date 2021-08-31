@@ -34,7 +34,7 @@ import org.springframework.web.client.RestTemplate;
  * @author yangguanchao
  * @since 2018/05/01
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(ZipkinSofaTracerProperties.class)
 @ConditionalOnProperty(value = "com.alipay.sofa.tracer.zipkin.enabled", matchIfMissing = true)
 @ConditionalOnClass({ zipkin2.Span.class, zipkin2.reporter.AsyncReporter.class, RestTemplate.class,

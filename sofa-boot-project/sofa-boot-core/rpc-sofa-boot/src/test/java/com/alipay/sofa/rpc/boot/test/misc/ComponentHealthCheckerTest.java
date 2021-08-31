@@ -56,7 +56,7 @@ public class ComponentHealthCheckerTest {
         }
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     static class ComponentHealthCheckerTestConfiguration {
         @Bean
         public ComponentHealthChecker sofaComponentHealthChecker(SofaRuntimeContext sofaRuntimeContext) {

@@ -235,7 +235,7 @@ public class ExtensionTest implements ExtensionClientAware {
         this.extensionClient = extensionClient;
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @Import(RuntimeConfiguration.class)
     @ImportResource("classpath*:META-INF/extension/test-extension.xml")
     static class ExtensionTestConfiguration {

@@ -74,7 +74,7 @@ public class ParameterAnnotationTest {
         }
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     static class Config {
 
         @Bean

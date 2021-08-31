@@ -30,7 +30,7 @@ import org.springframework.core.env.Environment;
  * @author Zhijie
  * @since 2020/7/8
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @ConditionalOnClass(StartupReporter.class)
 @EnableConfigurationProperties(StartupProperties.class)
 public class SofaStartupAutoConfiguration {

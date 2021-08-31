@@ -173,7 +173,7 @@ public class SofaEventHandlerTest {
         }
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @Import(RuntimeConfiguration.class)
     static class SofaEventHandlerTestConfiguration {
 

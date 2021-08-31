@@ -65,7 +65,7 @@ public class ComponentManagerTest {
         Assert.assertEquals("ComponentManagerTest", sofaRuntimeContext.getAppName());
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @Import(RuntimeConfiguration.class)
     static class ComponentManagerTestConfiguration {
         @Bean

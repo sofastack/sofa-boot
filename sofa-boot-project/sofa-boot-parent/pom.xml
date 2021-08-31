@@ -26,8 +26,8 @@
         <maven.compiler.plugin>3.1</maven.compiler.plugin>
         <maven.source.plugin>3.0.0</maven.source.plugin>
         <maven.javadoc.plugin>2.9.1</maven.javadoc.plugin>
-        <jacoco.maven.plugin>0.7.9</jacoco.maven.plugin>
-        <maven.surefire.plugin>2.21.0</maven.surefire.plugin>
+        <jacoco.maven.plugin>0.8.7</jacoco.maven.plugin>
+        <maven.surefire.plugin>2.22.2</maven.surefire.plugin>
 
         <!-- for dependencyManagement -->
         <spring.cloud.starter.openfeign.version>2.1.0.RELEASE</spring.cloud.starter.openfeign.version>
@@ -338,7 +338,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.10.1</version>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
@@ -423,8 +422,23 @@
                         </dependencies>
                         <configuration>
                             <reuseForks>false</reuseForks>
-                            <argLine> -Djdk.attach.allowAttachSelf --add-opens java.base/jdk.internal.loader=ALL-UNNAMED </argLine>
+                            <argLine>@{argLine} -Djdk.attach.allowAttachSelf --add-opens java.base/jdk.internal.loader=ALL-UNNAMED</argLine>
                         </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                                <configuration>
+                                    <additionalOptions>-source 8</additionalOptions>
+                                </configuration>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>

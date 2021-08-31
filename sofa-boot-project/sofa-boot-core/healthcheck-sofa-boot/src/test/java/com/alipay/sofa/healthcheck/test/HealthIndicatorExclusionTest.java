@@ -45,7 +45,7 @@ import java.util.Map;
 public class HealthIndicatorExclusionTest {
     private ApplicationContext applicationContext;
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @EnableConfigurationProperties({ HealthCheckProperties.class,
             SofaRuntimeConfigurationProperties.class })
     static class HealthIndicatorConfiguration {

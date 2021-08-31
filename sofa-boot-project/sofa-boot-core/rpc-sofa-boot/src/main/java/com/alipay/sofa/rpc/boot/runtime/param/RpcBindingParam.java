@@ -91,7 +91,7 @@ public abstract class RpcBindingParam implements BindingParam {
     protected String                     mockBean;
 
     /**
-     * Getter method for property <tt>timeout</tt>.
+     * Getter method for property <code>timeout</code>.
      *
      * @return property value of timeout
      */
@@ -100,7 +100,7 @@ public abstract class RpcBindingParam implements BindingParam {
     }
 
     /**
-     * Setter method for property <tt>timeout</tt>.
+     * Setter method for property <code>timeout</code>.
      *
      * @param timeout value to be assigned to property timeout
      */
@@ -109,7 +109,7 @@ public abstract class RpcBindingParam implements BindingParam {
     }
 
     /**
-     * Getter method for property <tt>addressWaitTime</tt>.
+     * Getter method for property <code>addressWaitTime</code>.
      *
      * @return property value of addressWaitTime
      */
@@ -118,7 +118,7 @@ public abstract class RpcBindingParam implements BindingParam {
     }
 
     /**
-     * Setter method for property <tt>addressWaitTime</tt>.
+     * Setter method for property <code>addressWaitTime</code>.
      *
      * @param addressWaitTime value to be assigned to property addressWaitTime
      */
@@ -127,7 +127,7 @@ public abstract class RpcBindingParam implements BindingParam {
     }
 
     /**
-     * Getter method for property <tt>connectTimeout</tt>.
+     * Getter method for property <code>connectTimeout</code>.
      *
      * @return property value of connectTimeout
      */
@@ -136,7 +136,7 @@ public abstract class RpcBindingParam implements BindingParam {
     }
 
     /**
-     * Setter method for property <tt>connectTimeout</tt>.
+     * Setter method for property <code>connectTimeout</code>.
      *
      * @param connectTimeout value to be assigned to property connectTimeout
      */
@@ -145,7 +145,7 @@ public abstract class RpcBindingParam implements BindingParam {
     }
 
     /**
-     * Getter method for property <tt>retries</tt>.
+     * Getter method for property <code>retries</code>.
      *
      * @return property value of retries
      */
@@ -154,7 +154,7 @@ public abstract class RpcBindingParam implements BindingParam {
     }
 
     /**
-     * Setter method for property <tt>retries</tt>.
+     * Setter method for property <code>retries</code>.
      *
      * @param retries value to be assigned to property retries
      */
@@ -163,7 +163,7 @@ public abstract class RpcBindingParam implements BindingParam {
     }
 
     /**
-     * Getter method for property <tt>type</tt>.
+     * Getter method for property <code>type</code>.
      *
      * @return property value of type
      */
@@ -172,7 +172,7 @@ public abstract class RpcBindingParam implements BindingParam {
     }
 
     /**
-     * Setter method for property <tt>type</tt>.
+     * Setter method for property <code>type</code>.
      *
      * @param type value to be assigned to property type
      */
@@ -181,7 +181,7 @@ public abstract class RpcBindingParam implements BindingParam {
     }
 
     /**
-     * Getter method for property <tt>callbackClass</tt>.
+     * Getter method for property <code>callbackClass</code>.
      *
      * @return property value of callbackClass
      */
@@ -190,7 +190,7 @@ public abstract class RpcBindingParam implements BindingParam {
     }
 
     /**
-     * Setter method for property <tt>callbackClass</tt>.
+     * Setter method for property <code>callbackClass</code>.
      *
      * @param callbackClass value to be assigned to property callbackClass
      */
@@ -199,7 +199,7 @@ public abstract class RpcBindingParam implements BindingParam {
     }
 
     /**
-     * Getter method for property <tt>callbackRef</tt>.
+     * Getter method for property <code>callbackRef</code>.
      *
      * @return property value of callbackRef
      */
@@ -208,7 +208,7 @@ public abstract class RpcBindingParam implements BindingParam {
     }
 
     /**
-     * Setter method for property <tt>callbackRef</tt>.
+     * Setter method for property <code>callbackRef</code>.
      *
      * @param callbackRef value to be assigned to property callbackRef
      */
@@ -217,7 +217,7 @@ public abstract class RpcBindingParam implements BindingParam {
     }
 
     /**
-     * Getter method for property <tt>callbackHandler</tt>.
+     * Getter method for property <code>callbackHandler</code>.
      *
      * @return property value of callbackHandler
      */
@@ -226,7 +226,7 @@ public abstract class RpcBindingParam implements BindingParam {
     }
 
     /**
-     * Setter method for property <tt>callbackHandler</tt>.
+     * Setter method for property <code>callbackHandler</code>.
      *
      * @param callbackHandler value to be assigned to property callbackHandler
      */
@@ -235,7 +235,7 @@ public abstract class RpcBindingParam implements BindingParam {
     }
 
     /**
-     * Getter method for property <tt>weight</tt>.
+     * Getter method for property <code>weight</code>.
      *
      * @return property value of weight
      */
@@ -244,7 +244,7 @@ public abstract class RpcBindingParam implements BindingParam {
     }
 
     /**
-     * Setter method for property <tt>weight</tt>.
+     * Setter method for property <code>weight</code>.
      *
      * @param weight value to be assigned to property weight
      */
@@ -253,7 +253,7 @@ public abstract class RpcBindingParam implements BindingParam {
     }
 
     /**
-     * Getter method for property <tt>warmUpTime</tt>.
+     * Getter method for property <code>warmUpTime</code>.
      *
      * @return property value of warmUpTime
      */
@@ -262,7 +262,7 @@ public abstract class RpcBindingParam implements BindingParam {
     }
 
     /**
-     * Setter method for property <tt>warmUpTime</tt>.
+     * Setter method for property <code>warmUpTime</code>.
      *
      * @param warmUpTime value to be assigned to property warmUpTime
      */
@@ -271,7 +271,7 @@ public abstract class RpcBindingParam implements BindingParam {
     }
 
     /**
-     * Getter method for property <tt>warmUpWeight</tt>.
+     * Getter method for property <code>warmUpWeight</code>.
      *
      * @return property value of warmUpWeight
      */
@@ -280,7 +280,7 @@ public abstract class RpcBindingParam implements BindingParam {
     }
 
     /**
-     * Setter method for property <tt>warmUpWeight</tt>.
+     * Setter method for property <code>warmUpWeight</code>.
      *
      * @param warmUpWeight value to be assigned to property warmUpWeight
      */
@@ -289,7 +289,7 @@ public abstract class RpcBindingParam implements BindingParam {
     }
 
     /**
-     * Getter method for property <tt>filters</tt>.
+     * Getter method for property <code>filters</code>.
      *
      * @return property value of filters
      */
@@ -298,7 +298,7 @@ public abstract class RpcBindingParam implements BindingParam {
     }
 
     /**
-     * Setter method for property <tt>filters</tt>.
+     * Setter method for property <code>filters</code>.
      *
      * @param filters value to be assigned to property filters
      */
@@ -307,7 +307,7 @@ public abstract class RpcBindingParam implements BindingParam {
     }
 
     /**
-     * Getter method for property <tt>methodInfos</tt>.
+     * Getter method for property <code>methodInfos</code>.
      *
      * @return property value of methodInfos
      */
@@ -316,7 +316,7 @@ public abstract class RpcBindingParam implements BindingParam {
     }
 
     /**
-     * Setter method for property <tt>methodInfos</tt>.
+     * Setter method for property <code>methodInfos</code>.
      *
      * @param methodInfos value to be assigned to property methodInfos
      */
@@ -325,7 +325,7 @@ public abstract class RpcBindingParam implements BindingParam {
     }
 
     /**
-     * Getter method for property <tt>targetUrl</tt>.
+     * Getter method for property <code>targetUrl</code>.
      *
      * @return property value of targetUrl
      */
@@ -334,7 +334,7 @@ public abstract class RpcBindingParam implements BindingParam {
     }
 
     /**
-     * Setter method for property <tt>targetUrl</tt>.
+     * Setter method for property <code>targetUrl</code>.
      *
      * @param targetUrl value to be assigned to property targetUrl
      */
@@ -343,7 +343,7 @@ public abstract class RpcBindingParam implements BindingParam {
     }
 
     /**
-     * Getter method for property <tt>userThreadPool</tt>.
+     * Getter method for property <code>userThreadPool</code>.
      *
      * @return property value of userThreadPool
      */
@@ -352,7 +352,7 @@ public abstract class RpcBindingParam implements BindingParam {
     }
 
     /**
-     * Setter method for property <tt>userThreadPool</tt>.
+     * Setter method for property <code>userThreadPool</code>.
      *
      * @param userThreadPool value to be assigned to property userThreadPool
      */
@@ -361,7 +361,7 @@ public abstract class RpcBindingParam implements BindingParam {
     }
 
     /**
-     * Getter method for property <tt>genericInterface</tt>.
+     * Getter method for property <code>genericInterface</code>.
      *
      * @return property value of genericInterface
      */
@@ -370,7 +370,7 @@ public abstract class RpcBindingParam implements BindingParam {
     }
 
     /**
-     * Setter method for property <tt>genericInterface</tt>.
+     * Setter method for property <code>genericInterface</code>.
      *
      * @param genericInterface value to be assigned to property genericInterface
      */
@@ -379,7 +379,7 @@ public abstract class RpcBindingParam implements BindingParam {
     }
 
     /**
-     * Getter method for property <tt>loadBalancer</tt>.
+     * Getter method for property <code>loadBalancer</code>.
      *
      * @return property value of loadBalancer
      */
@@ -388,7 +388,7 @@ public abstract class RpcBindingParam implements BindingParam {
     }
 
     /**
-     * Setter method for property <tt>loadBalancer</tt>.
+     * Setter method for property <code>loadBalancer</code>.
      *
      * @param loadBalancer value to be assigned to property loadBalancer
      */
@@ -397,7 +397,7 @@ public abstract class RpcBindingParam implements BindingParam {
     }
 
     /**
-     * Getter method for property <tt>lazy</tt>.
+     * Getter method for property <code>lazy</code>.
      *
      * @return property value of lazy
      */
@@ -406,7 +406,7 @@ public abstract class RpcBindingParam implements BindingParam {
     }
 
     /**
-     * Setter method for property <tt>lazy</tt>.
+     * Setter method for property <code>lazy</code>.
      *
      * @param lazy value to be assigned to property lazy
      */
@@ -415,7 +415,7 @@ public abstract class RpcBindingParam implements BindingParam {
     }
 
     /**
-     * Getter method for property <tt>check</tt>.
+     * Getter method for property <code>check</code>.
      *
      * @return property value of check
      */
@@ -424,7 +424,7 @@ public abstract class RpcBindingParam implements BindingParam {
     }
 
     /**
-     * Setter method for property <tt>check</tt>.
+     * Setter method for property <code>check</code>.
      *
      * @param check value to be assigned to property check
      */

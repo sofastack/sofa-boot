@@ -93,7 +93,7 @@ public class ClientFactoryTest {
         Assert.assertEquals(sampleService, referenceClient.reference(referenceParam));
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @Import(RuntimeConfiguration.class)
     static class ClientFactoryTestConfiguration {
         @Bean

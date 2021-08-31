@@ -60,7 +60,7 @@ public class HealthCheckerProcessorTest {
 
     private ApplicationContext applicationContext;
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @EnableConfigurationProperties({ HealthCheckProperties.class,
             SofaRuntimeConfigurationProperties.class })
     static class HealthCheckerProcessorTestConfiguration {

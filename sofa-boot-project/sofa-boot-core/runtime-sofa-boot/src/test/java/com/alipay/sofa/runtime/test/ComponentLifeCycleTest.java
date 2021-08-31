@@ -55,7 +55,7 @@ public class ComponentLifeCycleTest {
         Assert.assertEquals("deactivated", lifeCycleSampleService.service());
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @Import(RuntimeConfiguration.class)
     static class ComponentLifeCycleTestConfiguration {
         @Bean

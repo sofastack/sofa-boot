@@ -37,7 +37,7 @@ import org.springframework.context.support.AbstractApplicationContext;
  * @author huzijie
  * @version SofaStartupIsleAutoConfiguration.java, v 0.1 2021年01月04日 7:07 下午 huzijie Exp $
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @AutoConfigureBefore(SofaModuleAutoConfiguration.class)
 @ConditionalOnClass({ ApplicationRuntimeModel.class, StartupReporter.class })
 @ConditionalOnProperty(value = "com.alipay.sofa.boot.enable-isle", matchIfMissing = true)

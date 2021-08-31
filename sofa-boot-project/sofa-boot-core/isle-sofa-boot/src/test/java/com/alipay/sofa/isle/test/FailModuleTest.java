@@ -79,7 +79,7 @@ public class FailModuleTest {
         Assert.assertFalse(applicationRuntimeModel.getInstalled().contains(failModule));
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @EnableConfigurationProperties(SofaModuleProperties.class)
     public static class FailModuleTestConfiguration {
         @Bean

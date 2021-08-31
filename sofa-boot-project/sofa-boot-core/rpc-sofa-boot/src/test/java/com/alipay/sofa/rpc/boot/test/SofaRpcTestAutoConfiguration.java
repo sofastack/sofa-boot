@@ -63,7 +63,7 @@ import java.util.Map;
  * @author qilong.zql
  * @since 3.2.0
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @Import({ RuntimeTestConfiguration.class, HealthcheckTestConfiguration.class })
 @EnableConfigurationProperties(SofaBootRpcProperties.class)
 public class SofaRpcTestAutoConfiguration {
@@ -174,7 +174,7 @@ public class SofaRpcTestAutoConfiguration {
         return new BoltSwaggerServiceApplicationListener();
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @ConditionalOnClass(ReadinessCheckCallback.class)
     public static class RpcAfterHealthCheckCallbackConfiguration {
         @Bean

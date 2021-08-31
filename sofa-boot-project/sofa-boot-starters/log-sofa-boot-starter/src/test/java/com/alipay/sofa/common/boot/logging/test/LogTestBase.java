@@ -64,7 +64,7 @@ public abstract class LogTestBase {
     }
 
     @EnableAutoConfiguration
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     protected static class EmptyConfig {
     }
 }

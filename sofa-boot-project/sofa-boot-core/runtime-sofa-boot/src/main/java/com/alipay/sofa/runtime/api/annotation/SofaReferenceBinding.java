@@ -32,7 +32,7 @@ public @interface SofaReferenceBinding {
      *
      * @return timeout
      */
-    int timeout() default 3000;
+    int timeout() default 0;
 
     /**
      * retry times

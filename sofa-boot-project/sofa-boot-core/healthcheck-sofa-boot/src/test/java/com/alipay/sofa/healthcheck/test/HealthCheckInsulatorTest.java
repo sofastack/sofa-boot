@@ -39,7 +39,7 @@ import org.springframework.context.annotation.Configuration;
 public class HealthCheckInsulatorTest {
     @EnableConfigurationProperties({ HealthCheckProperties.class,
             SofaRuntimeConfigurationProperties.class })
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     static class HealthCheckConfiguration {
         @Bean
         public AfterReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor() {

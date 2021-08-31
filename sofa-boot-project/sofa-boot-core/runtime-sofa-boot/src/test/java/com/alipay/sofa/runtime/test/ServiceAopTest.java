@@ -67,7 +67,7 @@ public class ServiceAopTest {
         Assert.assertFalse(StateAspect.isAspectInvoked());
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @Import({ AopAutoConfiguration.class, RuntimeConfiguration.class })
     @Aspect
     static class ServiceAopTestConfiguration {

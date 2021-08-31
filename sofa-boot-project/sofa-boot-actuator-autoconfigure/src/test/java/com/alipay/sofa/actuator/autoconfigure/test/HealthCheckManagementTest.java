@@ -68,7 +68,7 @@ public class HealthCheckManagementTest {
             SofaBootConstants.SOFABOOT_HEALTH_CHECK_NOT_READY_MSG));
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @EnableAutoConfiguration
     static class HealthCheckManagementTestConfiguration {
         @Bean

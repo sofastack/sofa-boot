@@ -64,7 +64,7 @@ public class ReactiveHealthIndicatorTest {
         Assert.assertNotNull(healthMap.get("reactiveDemo").getDetails().get("reactiveTest"));
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     static class ReactiveHealthIndicatorConfiguration {
         @Bean
         public ReactiveHealthIndicator reactiveDemoHealthIndicator() {
@@ -72,7 +72,7 @@ public class ReactiveHealthIndicatorTest {
         }
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @EnableConfigurationProperties({ HealthCheckProperties.class,
             SofaRuntimeConfigurationProperties.class })
     static class ReactiveHealthIndicatorTestConfiguration {
