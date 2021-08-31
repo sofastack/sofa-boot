@@ -151,6 +151,41 @@ public class SofaBootConstants {
     public static final boolean SOFABOOT_MODULE_CHECK_STRICT_DEFAULT_ENABLED                 = true;
 
     /**
+     * health check default timeout config.
+     */
+    public static final String  SOFABOOT_HEALTH_CHECK_DEFAULT_TIMEOUT                        = "com.alipay.sofa.healthcheck.default.timeout";
+
+    /**
+     * health check default timeout config value.
+     */
+    public static final int     SOFABOOT_HEALTH_CHECK_DEFAULT_TIMEOUT_VALUE                  = 60 * 1000;
+
+    /**
+     * {@literal com.alipay.sofa.healthcheck.impl.ComponentHealthChecker} readiness check timeout config.
+     */
+    public static final String  SOFABOOT_COMPONENT_HEALTH_CHECK_TIMEOUT                      = "com.alipay.sofa.healthcheck.component.timeout";
+
+    /**
+     * {@literal com.alipay.sofa.healthcheck.impl.ComponentHealthChecker} readiness check timeout config value.
+     */
+    public static final int     SOFABOOT_COMPONENT_HEALTH_CHECK_DEFAULT_TIMEOUT              = 10 * 1000;
+
+    /**
+     * {@literal com.alipay.sofa.healthcheck.impl.ModuleHealthChecker} readiness check timeout config.
+     */
+    public static final String  SOFABOOT_MODULE_HEALTH_CHECK_TIMEOUT                         = "com.alipay.sofa.healthcheck.module.timeout";
+
+    /**
+     * {@literal com.alipay.sofa.healthcheck.impl.ModuleHealthChecker} readiness check timeout config value.
+     */
+    public static final int     SOFABOOT_MODULE_HEALTH_CHECK_DEFAULT_TIMEOUT                 = 10 * 1000;
+
+    /**
+     * {@literal com.alipay.sofa.healthcheck.HealthIndicatorProcessor} readiness check timeout config prefix.
+     */
+    public static final String  SOFABOOT_INDICATOR_HEALTH_CHECK_TIMEOUT_PREFIX               = "com.alipay.sofa.healthcheck.indicator.timeout.";
+
+    /**
      * share parent context post processor config.
      */
     public static final String  SOFABOOT_SHARE_PARENT_CONTEXT_POST_PROCESSOR_ENABLED         = "com.alipay.sofa.boot.share.parent.context.post.processor.enabled";
@@ -183,4 +218,6 @@ public class SofaBootConstants {
     public static String        MODULE_NAME                                                  = "Module-Name";
     public static String        REQUIRE_MODULE                                               = "Require-Module";
     public static String        MODULE_PROFILE                                               = "Module-Profile";
+
+    public static String        SOFABOOT_SPACE_NAME                                          = "sofa-boot";
 }
