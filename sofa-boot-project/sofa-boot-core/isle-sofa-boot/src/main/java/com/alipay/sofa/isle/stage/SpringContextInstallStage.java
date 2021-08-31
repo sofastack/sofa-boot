@@ -107,7 +107,7 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
                     Thread.currentThread().setContextClassLoader(deployment.getClassLoader());
                     springContextLoader.loadSpringContext(deployment, application);
                 } catch (Throwable t) {
-                    SofaLogger.error(ErrorCode.convert("01-11001"), deployment.getName(), t);
+                    SofaLogger.error(String.format(ErrorCode.convert("01-11001"), deployment.getName()), t);
                     application.addFailed(deployment);
                 } finally {
                     Thread.currentThread().setContextClassLoader(oldClassLoader);
