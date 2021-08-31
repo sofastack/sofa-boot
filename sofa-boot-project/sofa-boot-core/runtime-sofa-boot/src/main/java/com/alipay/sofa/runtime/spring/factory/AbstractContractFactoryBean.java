@@ -54,6 +54,7 @@ public abstract class AbstractContractFactoryBean implements InitializingBean, F
     protected String                  interfaceType;
     /** interface class type */
     protected Class<?>                interfaceClass;
+
     /** sofa runtime context */
     protected SofaRuntimeContext      sofaRuntimeContext;
     /** xml elements */
@@ -209,6 +210,18 @@ public abstract class AbstractContractFactoryBean implements InitializingBean, F
 
     public void setApiType(boolean apiType) {
         this.apiType = apiType;
+    }
+
+    public void setSofaRuntimeContext(SofaRuntimeContext sofaRuntimeContext) {
+        this.sofaRuntimeContext = sofaRuntimeContext;
+    }
+
+    public void setBindingConverterFactory(BindingConverterFactory bindingConverterFactory) {
+        this.bindingConverterFactory = bindingConverterFactory;
+    }
+
+    public void setBindingAdapterFactory(BindingAdapterFactory bindingAdapterFactory) {
+        this.bindingAdapterFactory = bindingAdapterFactory;
     }
 
     /**
