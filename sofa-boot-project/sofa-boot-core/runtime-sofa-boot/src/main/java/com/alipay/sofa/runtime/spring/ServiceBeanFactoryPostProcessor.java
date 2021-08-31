@@ -237,7 +237,8 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
             builder.getRawBeanDefinition().setLazyInit(beanDefinition.isLazyInit());
             builder.getRawBeanDefinition().setBeanClass(ReferenceFactoryBean.class);
             builder.addAutowiredProperty(AbstractContractDefinitionParser.SOFA_RUNTIME_CONTEXT);
-            builder.addAutowiredProperty(AbstractContractDefinitionParser.BINDING_CONVERTER_FACTORY);
+            builder
+                .addAutowiredProperty(AbstractContractDefinitionParser.BINDING_CONVERTER_FACTORY);
             builder.addAutowiredProperty(AbstractContractDefinitionParser.BINDING_ADAPTER_FACTORY);
             builder.addPropertyValue(AbstractContractDefinitionParser.UNIQUE_ID_PROPERTY, uniqueId);
             builder.addPropertyValue(AbstractContractDefinitionParser.INTERFACE_CLASS_PROPERTY,
@@ -303,7 +304,8 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
             builder.setLazyInit(beanDefinition.isLazyInit());
             builder.getRawBeanDefinition().setBeanClass(ServiceFactoryBean.class);
             builder.addAutowiredProperty(AbstractContractDefinitionParser.SOFA_RUNTIME_CONTEXT);
-            builder.addAutowiredProperty(AbstractContractDefinitionParser.BINDING_CONVERTER_FACTORY);
+            builder
+                .addAutowiredProperty(AbstractContractDefinitionParser.BINDING_CONVERTER_FACTORY);
             builder.addAutowiredProperty(AbstractContractDefinitionParser.BINDING_ADAPTER_FACTORY);
             builder.addPropertyValue(AbstractContractDefinitionParser.INTERFACE_CLASS_PROPERTY,
                 interfaceType);
