@@ -93,8 +93,8 @@ public class SofaRuntimeAutoConfiguration {
                                                         BindingAdapterFactory bindingAdapterFactory) {
         ClientFactoryInternal clientFactoryInternal = new ClientFactoryImpl();
         SofaRuntimeManager sofaRuntimeManager = new StandardSofaRuntimeManager(
-                environment.getProperty("spring.application.name"),
-                Thread.currentThread().getContextClassLoader(), clientFactoryInternal);
+            environment.getProperty("spring.application.name"), Thread.currentThread()
+                .getContextClassLoader(), clientFactoryInternal);
         sofaRuntimeManager.getComponentManager().registerComponentClient(
             ReferenceClient.class,
             new ReferenceClientImpl(sofaRuntimeManager.getSofaRuntimeContext(),
