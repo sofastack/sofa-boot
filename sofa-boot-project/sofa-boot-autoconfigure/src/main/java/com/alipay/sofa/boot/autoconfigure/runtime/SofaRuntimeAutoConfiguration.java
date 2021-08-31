@@ -38,12 +38,12 @@ import com.alipay.sofa.runtime.spring.JvmFilterPostProcessor;
 import com.alipay.sofa.runtime.spring.RuntimeContextBeanFactoryPostProcessor;
 import com.alipay.sofa.runtime.spring.ServiceBeanFactoryPostProcessor;
 import com.alipay.sofa.runtime.spring.async.AsyncTaskExecutionListener;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 
 import java.util.HashSet;
 import java.util.ServiceLoader;
@@ -88,12 +88,13 @@ public class SofaRuntimeAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public static SofaRuntimeManager sofaRuntimeManager(@Value("${spring.application.name}") String appName,
+    public static SofaRuntimeManager sofaRuntimeManager(Environment environment,
                                                         BindingConverterFactory bindingConverterFactory,
                                                         BindingAdapterFactory bindingAdapterFactory) {
         ClientFactoryInternal clientFactoryInternal = new ClientFactoryImpl();
-        SofaRuntimeManager sofaRuntimeManager = new StandardSofaRuntimeManager(appName, Thread
-            .currentThread().getContextClassLoader(), clientFactoryInternal);
+        SofaRuntimeManager sofaRuntimeManager = new StandardSofaRuntimeManager(
+            environment.getProperty("spring.application.name"), Thread.currentThread()
+                .getContextClassLoader(), clientFactoryInternal);
         sofaRuntimeManager.getComponentManager().registerComponentClient(
             ReferenceClient.class,
             new ReferenceClientImpl(sofaRuntimeManager.getSofaRuntimeContext(),
