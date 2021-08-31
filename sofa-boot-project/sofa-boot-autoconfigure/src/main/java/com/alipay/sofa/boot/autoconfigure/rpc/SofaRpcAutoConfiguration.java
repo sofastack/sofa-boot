@@ -43,6 +43,7 @@ import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ConsumerMockProcessor;
 import com.alipay.sofa.rpc.boot.runtime.adapter.processor.DynamicConfigProcessor;
 import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ProcessorContainer;
 import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ProviderConfigProcessor;
+import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ProviderRegisterProcessor;
 import com.alipay.sofa.rpc.boot.swagger.BoltSwaggerServiceApplicationListener;
 import com.alipay.sofa.rpc.boot.swagger.SwaggerServiceApplicationListener;
 import com.alipay.sofa.rpc.config.JAXRSProviderManager;
@@ -268,5 +269,11 @@ public class SofaRpcAutoConfiguration {
     @ConditionalOnProperty(name = "com.alipay.sofa.rpc.dynamic-config")
     public DynamicConfigProcessor dynamicConfigProcessor() {
         return new DynamicConfigProcessor();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public ProviderRegisterProcessor providerRegisterProcessor() {
+        return new ProviderRegisterProcessor();
     }
 }

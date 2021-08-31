@@ -25,9 +25,17 @@ import com.alipay.sofa.common.config.ConfigKey;
 public class SofaBootRpcConfigKeys {
 
     // registry
-    public static ConfigKey<String> DEFAULT_REGISTRY = ConfigKey.build(
-                                                         "sofa.rpc.registry.defaultRegistry", "",
-                                                         false, "默认注册中心实现",
-                                                         new String[] { "default.registry" });
+    public static ConfigKey<String>  DEFAULT_REGISTRY     = ConfigKey.build(
+                                                              "sofa.rpc.registry.defaultRegistry",
+                                                              "", false, "默认注册中心实现",
+                                                              new String[] { "default.registry" });
+
+    public static ConfigKey<Boolean> DISABLE_REGISTER_PUB = ConfigKey
+                                                              .build(
+                                                                  "sofa.rpc.registry.disablePub",
+                                                                  false,
+                                                                  false,
+                                                                  "服务提供方不注册开关",
+                                                                  new String[] { "disable_confreg_pub" });
 
 }
