@@ -181,8 +181,8 @@ public class ClientFactoryTest {
         try {
             serviceClient.removeService(PrivateService.class, -1);
         } catch (IllegalArgumentException ex) {
-            Assert.assertEquals("Argument delay must be a positive integer or zero.",
-                ex.getMessage());
+            Assert.assertTrue(ex.getMessage().contains(
+                "Argument delay must be a positive integer or zero"));
         }
         serviceClient.removeService(PrivateService.class, "uniqueId", 0);
     }
