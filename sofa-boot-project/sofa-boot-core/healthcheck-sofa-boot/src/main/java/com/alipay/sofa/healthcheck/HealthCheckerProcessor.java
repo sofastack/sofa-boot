@@ -23,7 +23,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.healthcheck.core.HealthCheckExecutor;
@@ -118,13 +117,15 @@ public class HealthCheckerProcessor {
         Assert.notNull(healthCheckers, "HealthCheckers must not be null.");
 
         logger.info("Begin SOFABoot HealthChecker readiness check.");
-        Stream<Map.Entry<String, HealthChecker>> readinessHealthCheckerStream = healthCheckers.entrySet().stream()
-                .filter(entry -> !(entry.getValue() instanceof NonReadinessCheck));
-        String checkComponentNames = readinessHealthCheckerStream.map(Map.Entry::getValue)
+        Map<String, HealthChecker> readinessHealthCheckers = healthCheckers.entrySet().stream()
+                .filter(entry -> !(entry.getValue() instanceof NonReadinessCheck))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        String checkComponentNames = readinessHealthCheckers.values().stream()
                 .map(HealthChecker::getComponentName).collect(Collectors.joining(","));
         logger.info("SOFABoot HealthChecker readiness check {} item: {}.",
                 healthCheckers.size(), checkComponentNames);
-        boolean result = readinessHealthCheckerStream.map(entry -> doHealthCheck(entry.getKey(), entry.getValue(), true, healthMap, true))
+        boolean result = readinessHealthCheckers.entrySet().stream()
+                .map(entry -> doHealthCheck(entry.getKey(), entry.getValue(), true, healthMap, true))
                 .reduce(true, BinaryOperators.andBoolean());
         if (result) {
             logger.info("SOFABoot HealthChecker readiness check result: success.");
