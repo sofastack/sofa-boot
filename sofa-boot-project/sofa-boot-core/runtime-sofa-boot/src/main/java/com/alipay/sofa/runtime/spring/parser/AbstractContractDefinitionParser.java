@@ -54,10 +54,17 @@ public abstract class AbstractContractDefinitionParser extends AbstractSingleBea
     public static final String REPEAT_REFER_LIMIT_ELEMENT   = "repeatReferLimit";
     public static final String REPEAT_REFER_LIMIT_PROPERTY  = "repeatReferLimit";
     public static final String DEFINITION_BUILDING_API_TYPE = "apiType";
+    public static final String SOFA_RUNTIME_CONTEXT         = "sofaRuntimeContext";
+    public static final String BINDING_CONVERTER_FACTORY    = "bindingConverterFactory";
+    public static final String BINDING_ADAPTER_FACTORY      = "bindingAdapterFactory";
 
     @Override
     protected void doParse(Element element, ParserContext parserContext,
                            BeanDefinitionBuilder builder) {
+        builder.addAutowiredProperty(SOFA_RUNTIME_CONTEXT);
+        builder.addAutowiredProperty(BINDING_CONVERTER_FACTORY);
+        builder.addAutowiredProperty(BINDING_ADAPTER_FACTORY);
+
         String id = element.getAttribute(BEAN_ID_ELEMENT);
         builder.addPropertyValue(BEAN_ID_PROPERTY, id);
 
