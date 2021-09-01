@@ -31,4 +31,8 @@ public class ErrorCode {
         return LCD.convert(code);
     }
 
+    public static String convert(String code, Object... args) {
+        return LCD.convert(code, args);
+    }
+
 }

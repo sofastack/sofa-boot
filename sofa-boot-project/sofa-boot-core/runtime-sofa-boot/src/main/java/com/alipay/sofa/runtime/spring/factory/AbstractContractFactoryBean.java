@@ -135,7 +135,7 @@ public abstract class AbstractContractFactoryBean implements InitializingBean, F
     }
 
     protected void dealWithbindingConverterNotExist(String tagName) {
-        throw new ServiceRuntimeException(String.format(ErrorCode.convert("01-00200"), tagName));
+        throw new ServiceRuntimeException(ErrorCode.convert("01-00200", tagName));
     }
 
     @Override

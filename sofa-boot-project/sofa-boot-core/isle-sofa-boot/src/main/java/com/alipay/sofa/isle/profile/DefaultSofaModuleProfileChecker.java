@@ -57,7 +57,7 @@ public class DefaultSofaModuleProfileChecker implements SofaModuleProfileChecker
     @Override
     public boolean acceptProfiles(String[] sofaModuleProfiles) {
         Assert.notEmpty(sofaModuleProfiles,
-            String.format(ErrorCode.convert("01-13000"), SofaBootConstants.DEFAULT_PROFILE_VALUE));
+            ErrorCode.convert("01-13000", SofaBootConstants.DEFAULT_PROFILE_VALUE));
         for (String sofaModuleProfile : sofaModuleProfiles) {
             if (StringUtils.hasText(sofaModuleProfile) && sofaModuleProfile.charAt(0) == '!') {
                 if (!isProfileActive(sofaModuleProfile.substring(1))) {
@@ -82,13 +82,12 @@ public class DefaultSofaModuleProfileChecker implements SofaModuleProfileChecker
 
     private void validateProfile(String profile) {
         if (!StringUtils.hasText(profile)) {
-            throw new IllegalArgumentException(String.format(ErrorCode.convert("01-13001"),
-                profile, SofaBootConstants.DEFAULT_PROFILE_VALUE));
+            throw new IllegalArgumentException(ErrorCode.convert("01-13001", profile,
+                SofaBootConstants.DEFAULT_PROFILE_VALUE));
         }
 
         if (profile.charAt(0) == '!') {
-            throw new IllegalArgumentException(
-                String.format(ErrorCode.convert("01-13002"), profile));
+            throw new IllegalArgumentException(ErrorCode.convert("01-13002", profile));
         }
     }
 

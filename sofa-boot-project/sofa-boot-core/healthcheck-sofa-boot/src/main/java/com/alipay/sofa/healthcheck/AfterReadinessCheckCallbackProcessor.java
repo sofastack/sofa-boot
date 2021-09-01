@@ -115,15 +115,14 @@ public class AfterReadinessCheckCallbackProcessor {
                 logger.info("SOFABoot ReadinessCheckCallback[{}] check success.", beanId);
             } else {
                 logger.error(
-                        ErrorCode.convert("01-24001"), beanId,
-                        objectMapper.writeValueAsString(health.getDetails()));
+                        ErrorCode.convert("01-24001", beanId,
+                        objectMapper.writeValueAsString(health.getDetails())));
             }
         } catch (Throwable t) {
             if (health == null) {
                 health = new Health.Builder().down(new RuntimeException(t)).build();
             }
-            logger.error(String
-                    .format(ErrorCode.convert("01-24002"), beanId), t);
+            logger.error(ErrorCode.convert("01-24002", beanId), t);
         } finally {
             healthMap.put(beanId, health);
         }

@@ -171,7 +171,7 @@ public class ReferenceComponent extends AbstractComponent {
                 BindingAdapter<Binding> bindingAdapter = this.bindingAdapterFactory
                     .getBindingAdapter(binding.getBindingType());
                 if (bindingAdapter == null) {
-                    throw new ServiceRuntimeException(String.format(ErrorCode.convert("01-00100"),
+                    throw new ServiceRuntimeException(ErrorCode.convert("01-00100",
                         binding.getBindingType(), reference));
                 }
                 SofaLogger.info(" >>Un-in Binding [{}] Begins - {}.", binding.getBindingType(),
@@ -215,7 +215,7 @@ public class ReferenceComponent extends AbstractComponent {
         BindingAdapter<Binding> bindingAdapter = bindingAdapterFactory.getBindingAdapter(binding
             .getBindingType());
         if (bindingAdapter == null) {
-            throw new ServiceRuntimeException(String.format(ErrorCode.convert("01-00100"),
+            throw new ServiceRuntimeException(ErrorCode.convert("01-00100",
                 binding.getBindingType(), reference));
         }
         SofaLogger.info(" >>In Binding [{}] Begins - {}.", binding.getBindingType(), reference);

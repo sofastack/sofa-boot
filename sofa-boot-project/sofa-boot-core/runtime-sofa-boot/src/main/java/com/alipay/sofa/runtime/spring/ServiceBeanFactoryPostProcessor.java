@@ -136,7 +136,7 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
             declaringClass = ClassUtils.forName(methodMetadata.getDeclaringClassName(), null);
         } catch (Throwable throwable) {
             // it's impossible to catch throwable here
-            SofaLogger.error(String.format(ErrorCode.convert("01-02001"), beanId), throwable);
+            SofaLogger.error(ErrorCode.convert("01-02001", beanId), throwable);
             return;
         }
         if (methodMetadata instanceof StandardMethodMetadata) {
@@ -185,13 +185,13 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
                 if (AnnotatedElementUtils.hasAnnotation(m, SofaService.class)
                     || AnnotatedElementUtils.hasAnnotation(returnType, SofaService.class)) {
                     throw new FatalBeanException(
-                        String.format(ErrorCode.convert("01-02002"), declaringClass.getCanonicalName()));
+                        ErrorCode.convert("01-02002", declaringClass.getCanonicalName()));
                 }
 
                 if (Stream.of(m.getParameterAnnotations())
                         .flatMap(Stream::of).anyMatch(annotation -> annotation instanceof SofaReference)) {
                     throw new FatalBeanException(
-                            String.format(ErrorCode.convert("01-02003"), declaringClass.getCanonicalName()));
+                            ErrorCode.convert("01-02003", declaringClass.getCanonicalName()));
                 }
             }
         }
@@ -287,7 +287,7 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
             } else if (interfaces.length == 1) {
                 interfaceType = interfaces[0];
             } else {
-                throw new FatalBeanException(String.format(ErrorCode.convert("01-02004"), beanId));
+                throw new FatalBeanException(ErrorCode.convert("01-02004", beanId));
             }
         }
 
@@ -324,7 +324,7 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
             BindingConverter bindingConverter = bindingConverterFactory
                 .getBindingConverter(new BindingType(sofaServiceBinding.bindingType()));
             if (bindingConverter == null) {
-                throw new ServiceRuntimeException(String.format(ErrorCode.convert("01-00200"),
+                throw new ServiceRuntimeException(ErrorCode.convert("01-00200",
                     sofaServiceBinding.bindingType()));
             }
             BindingConverterContext bindingConverterContext = new BindingConverterContext();
@@ -354,7 +354,7 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
         BindingConverter bindingConverter = bindingConverterFactory
             .getBindingConverter(new BindingType(sofaReferenceBinding.bindingType()));
         if (bindingConverter == null) {
-            throw new ServiceRuntimeException(String.format(ErrorCode.convert("01-00200"),
+            throw new ServiceRuntimeException(ErrorCode.convert("01-00200",
                 sofaReferenceBinding.bindingType()));
         }
         BindingConverterContext bindingConverterContext = new BindingConverterContext();

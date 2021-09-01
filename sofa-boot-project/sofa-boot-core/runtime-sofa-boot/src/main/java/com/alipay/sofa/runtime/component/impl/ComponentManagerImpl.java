@@ -97,7 +97,7 @@ public class ComponentManagerImpl implements ComponentManager {
             try {
                 unregister(ri);
             } catch (Throwable t) {
-                SofaLogger.error(String.format(ErrorCode.convert("01-03001"), ri.getName()), t);
+                SofaLogger.error(ErrorCode.convert("01-03001", ri.getName()), t);
             }
         }
 
@@ -110,7 +110,7 @@ public class ComponentManagerImpl implements ComponentManager {
             try {
                 unregister(ri);
             } catch (Throwable t) {
-                SofaLogger.error(String.format(ErrorCode.convert("01-03001"), ri.getName()), t);
+                SofaLogger.error(ErrorCode.convert("01-03001", ri.getName()), t);
             }
         }
 
@@ -153,13 +153,13 @@ public class ComponentManagerImpl implements ComponentManager {
             if (ci.canBeDuplicate()) {
                 return getComponentInfo(name);
             }
-            throw new ServiceRuntimeException(String.format(ErrorCode.convert("01-03002"), name));
+            throw new ServiceRuntimeException(ErrorCode.convert("01-03002", name));
         }
 
         try {
             ci.register();
         } catch (Throwable t) {
-            SofaLogger.error(String.format(ErrorCode.convert("01-03003"), ci.getName()), t);
+            SofaLogger.error(ErrorCode.convert("01-03003", ci.getName()), t);
             return null;
         }
 
@@ -172,8 +172,7 @@ public class ComponentManagerImpl implements ComponentManager {
                 if (ci.canBeDuplicate()) {
                     return old;
                 }
-                throw new ServiceRuntimeException(
-                    String.format(ErrorCode.convert("01-03002"), name));
+                throw new ServiceRuntimeException(ErrorCode.convert("01-03002", name));
 
             }
             if (ci.resolve()) {
@@ -182,7 +181,7 @@ public class ComponentManagerImpl implements ComponentManager {
             }
         } catch (Throwable t) {
             ci.exception(new Exception(t));
-            SofaLogger.error(String.format(ErrorCode.convert("01-03004"), ci.getName()), t);
+            SofaLogger.error(ErrorCode.convert("01-03004", ci.getName()), t);
         }
 
         return ci;
@@ -228,8 +227,7 @@ public class ComponentManagerImpl implements ComponentManager {
                 componentInfo.activate();
             } catch (Throwable t) {
                 componentInfo.exception(new Exception(t));
-                SofaLogger.error(
-                    String.format(ErrorCode.convert("01-03005"), componentInfo.getName()), t);
+                SofaLogger.error(ErrorCode.convert("01-03005", componentInfo.getName()), t);
             }
         }
     }

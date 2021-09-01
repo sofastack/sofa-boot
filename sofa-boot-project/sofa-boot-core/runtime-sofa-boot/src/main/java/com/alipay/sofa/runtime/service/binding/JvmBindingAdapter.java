@@ -238,8 +238,8 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
             }
 
             if (targetObj == null) {
-                throw new IllegalStateException(String.format(ErrorCode.convert("01-00400"),
-                    getInterfaceName(), getUniqueId()));
+                throw new IllegalStateException(ErrorCode.convert("01-00400", getInterfaceName(),
+                    getUniqueId()));
             }
 
             ClassLoader tcl = Thread.currentThread().getContextClassLoader();

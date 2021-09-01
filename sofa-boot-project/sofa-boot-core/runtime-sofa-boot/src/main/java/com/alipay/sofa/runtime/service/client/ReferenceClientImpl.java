@@ -73,7 +73,7 @@ public class ReferenceClientImpl implements ReferenceClient {
             BindingConverter bindingConverter = bindingConverterFactory
                 .getBindingConverter(bindingParam.getBindingType());
             if (bindingConverter == null) {
-                throw new ServiceRuntimeException(String.format(ErrorCode.convert("01-00200"),
+                throw new ServiceRuntimeException(ErrorCode.convert("01-00200",
                     bindingParam.getBindingType()));
             }
             BindingConverterContext bindingConverterContext = new BindingConverterContext();

@@ -188,7 +188,7 @@ public class HealthCheckerProcessor {
                     TimeUnit.MILLISECONDS.sleep(healthChecker.getRetryTimeInterval());
                 } catch (InterruptedException e) {
                     logger
-                        .error(String.format(ErrorCode.convert("01-23002"), retryCount, beanId,
+                        .error(ErrorCode.convert("01-23002", retryCount, beanId,
                             checkType), e);
                 }
             }
@@ -197,12 +197,12 @@ public class HealthCheckerProcessor {
         healthMap.put(beanId, health);
         try {
             if (!result) {
-                logger.error(ErrorCode.convert("01-23001"), beanId, checkType, retryCount,
+                logger.error(ErrorCode.convert("01-23001", beanId, checkType, retryCount,
                     objectMapper.writeValueAsString(health.getDetails()),
-                    healthChecker.isStrictCheck());
+                    healthChecker.isStrictCheck()));
             }
         } catch (JsonProcessingException ex) {
-            logger.error(String.format(ErrorCode.convert("01-23003"), checkType), ex);
+            logger.error(ErrorCode.convert("01-23003", checkType), ex);
         }
         return !healthChecker.isStrictCheck() || result;
     }

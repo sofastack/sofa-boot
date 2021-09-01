@@ -93,7 +93,7 @@ public class ServiceComponent extends AbstractComponent {
                     .getBindingAdapter(binding.getBindingType());
 
                 if (bindingAdapter == null) {
-                    throw new ServiceRuntimeException(String.format(ErrorCode.convert("01-00001"),
+                    throw new ServiceRuntimeException(ErrorCode.convert("01-00001",
                         binding.getBindingType(), service));
                 }
 
@@ -103,8 +103,7 @@ public class ServiceComponent extends AbstractComponent {
                     bindingAdapter.preOutBinding(service, binding, target, getContext());
                 } catch (Throwable t) {
                     allPassed = false;
-                    SofaLogger.error(
-                        String.format(ErrorCode.convert("01-00002"), binding.getBindingType()),
+                    SofaLogger.error(ErrorCode.convert("01-00002", binding.getBindingType()),
                         service, t);
                     continue;
                 }
@@ -113,8 +112,7 @@ public class ServiceComponent extends AbstractComponent {
             }
 
             if (!allPassed) {
-                throw new ServiceRuntimeException(String.format(ErrorCode.convert("01-00003"),
-                    service));
+                throw new ServiceRuntimeException(ErrorCode.convert("01-00003", service));
             }
         }
     }
@@ -142,7 +140,7 @@ public class ServiceComponent extends AbstractComponent {
                     .getBindingAdapter(binding.getBindingType());
 
                 if (bindingAdapter == null) {
-                    throw new ServiceRuntimeException(String.format(ErrorCode.convert("01-00001"),
+                    throw new ServiceRuntimeException(ErrorCode.convert("01-00001",
                         binding.getBindingType(), service));
                 }
 
@@ -155,8 +153,7 @@ public class ServiceComponent extends AbstractComponent {
                 } catch (Throwable t) {
                     allPassed = false;
                     binding.setHealthy(false);
-                    SofaLogger.error(
-                        String.format(ErrorCode.convert("01-00004"), binding.getBindingType()),
+                    SofaLogger.error(ErrorCode.convert("01-00004", binding.getBindingType()),
                         service, t);
                     continue;
                 }
@@ -171,8 +168,7 @@ public class ServiceComponent extends AbstractComponent {
             }
 
             if (!allPassed) {
-                throw new ServiceRuntimeException(String.format(ErrorCode.convert("01-00005"),
-                    service));
+                throw new ServiceRuntimeException(ErrorCode.convert("01-00005", service));
             }
         }
 
@@ -195,7 +191,7 @@ public class ServiceComponent extends AbstractComponent {
                     .getBindingAdapter(binding.getBindingType());
 
                 if (bindingAdapter == null) {
-                    throw new ServiceRuntimeException(String.format(ErrorCode.convert("01-00001"),
+                    throw new ServiceRuntimeException(ErrorCode.convert("01-00001",
                         binding.getBindingType(), service));
                 }
 
@@ -205,8 +201,7 @@ public class ServiceComponent extends AbstractComponent {
                     bindingAdapter.preUnoutBinding(service, binding, target, getContext());
                 } catch (Throwable t) {
                     allPassed = false;
-                    SofaLogger.error(
-                        String.format(ErrorCode.convert("01-00006"), binding.getBindingType()),
+                    SofaLogger.error(ErrorCode.convert("01-00006", binding.getBindingType()),
                         service, t);
                     continue;
                 }
@@ -215,8 +210,7 @@ public class ServiceComponent extends AbstractComponent {
             }
 
             if (!allPassed) {
-                throw new ServiceRuntimeException(String.format(ErrorCode.convert("01-00007"),
-                    service));
+                throw new ServiceRuntimeException(ErrorCode.convert("01-00007", service));
             }
         }
 
@@ -236,8 +230,7 @@ public class ServiceComponent extends AbstractComponent {
             try {
                 TimeUnit.MILLISECONDS.sleep(unregisterDelayMilliseconds);
             } catch (InterruptedException e) {
-                throw new ServiceRuntimeException(String.format(ErrorCode.convert("01-00010"),
-                    service), e);
+                throw new ServiceRuntimeException(ErrorCode.convert("01-00010", service), e);
             }
         }
 
@@ -255,7 +248,7 @@ public class ServiceComponent extends AbstractComponent {
                     .getBindingAdapter(binding.getBindingType());
 
                 if (bindingAdapter == null) {
-                    throw new ServiceRuntimeException(String.format(ErrorCode.convert("01-00001"),
+                    throw new ServiceRuntimeException(ErrorCode.convert("01-00001",
                         binding.getBindingType(), service));
                 }
 
@@ -265,8 +258,7 @@ public class ServiceComponent extends AbstractComponent {
                     bindingAdapter.postUnoutBinding(service, binding, target, getContext());
                 } catch (Throwable t) {
                     allPassed = false;
-                    SofaLogger.error(
-                        String.format(ErrorCode.convert("01-00008"), binding.getBindingType()),
+                    SofaLogger.error(ErrorCode.convert("01-00008", binding.getBindingType()),
                         service, t);
                     continue;
                 }
@@ -275,8 +267,7 @@ public class ServiceComponent extends AbstractComponent {
             }
 
             if (!allPassed) {
-                throw new ServiceRuntimeException(String.format(ErrorCode.convert("01-00009"),
-                    service));
+                throw new ServiceRuntimeException(ErrorCode.convert("01-00009", service));
             }
         }
     }

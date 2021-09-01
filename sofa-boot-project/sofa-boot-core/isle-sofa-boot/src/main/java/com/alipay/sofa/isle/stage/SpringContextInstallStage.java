@@ -107,8 +107,7 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
                     Thread.currentThread().setContextClassLoader(deployment.getClassLoader());
                     springContextLoader.loadSpringContext(deployment, application);
                 } catch (Throwable t) {
-                    SofaLogger.error(
-                        String.format(ErrorCode.convert("01-11001"), deployment.getName()), t);
+                    SofaLogger.error(ErrorCode.convert("01-11001", deployment.getName()), t);
                     application.addFailed(deployment);
                 } finally {
                     Thread.currentThread().setContextClassLoader(oldClassLoader);
@@ -267,10 +266,9 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
                         }
                     }
                 } catch (Throwable t) {
-                    SofaLogger.error(
-                        String.format(ErrorCode.convert("01-11002"), deployment.getName()), t);
-                    throw new RuntimeException(String.format(ErrorCode.convert("01-11002"),
-                        deployment.getName()), t);
+                    SofaLogger.error(ErrorCode.convert("01-11002", deployment.getName()), t);
+                    throw new RuntimeException(ErrorCode.convert("01-11002", deployment.getName()),
+                        t);
                 } finally {
                     latch.countDown();
                     Thread.currentThread().setName(oldName);
@@ -298,7 +296,7 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
                 deployment.deployFinish();
             }
         } else {
-            String errorMsg = String.format(ErrorCode.convert("01-11003"), deployment.getName());
+            String errorMsg = ErrorCode.convert("01-11003", deployment.getName());
             application.addFailed(deployment);
             SofaLogger.error(errorMsg, new RuntimeException(errorMsg));
         }

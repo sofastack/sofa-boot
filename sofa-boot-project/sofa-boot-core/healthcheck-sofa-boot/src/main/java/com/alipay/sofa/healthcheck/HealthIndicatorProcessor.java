@@ -191,8 +191,8 @@ public class HealthIndicatorProcessor {
                 logger.info("HealthIndicator[{}] readiness check success.", beanId);
             } else {
                 logger.error(
-                        ErrorCode.convert("01-21001"),
-                        beanId, status, objectMapper.writeValueAsString(health.getDetails()));
+                        ErrorCode.convert("01-21001",
+                        beanId, status, objectMapper.writeValueAsString(health.getDetails())));
             }
             healthMap.put(getKey(beanId), health);
         } catch (TimeoutException e) {
@@ -203,7 +203,7 @@ public class HealthIndicatorProcessor {
         } catch (Exception e) {
             result = false;
             logger.error(
-                    String.format(ErrorCode.convert("01-21002"),
+                    ErrorCode.convert("01-21002",
                             healthIndicator.getClass()),
                     e);
         }

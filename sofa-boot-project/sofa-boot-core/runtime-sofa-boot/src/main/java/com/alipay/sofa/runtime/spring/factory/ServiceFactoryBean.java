@@ -48,8 +48,7 @@ public class ServiceFactoryBean extends AbstractContractFactoryBean {
     @Override
     protected void doAfterPropertiesSet() {
         if (!apiType && hasSofaServiceAnnotation()) {
-            throw new ServiceRuntimeException(String.format(ErrorCode.convert("01-00103"), beanId,
-                ref.getClass()));
+            throw new ServiceRuntimeException(ErrorCode.convert("01-00103", beanId, ref.getClass()));
         }
 
         Implementation implementation = new DefaultImplementation();

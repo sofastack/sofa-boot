@@ -116,13 +116,13 @@ public class ExtensionComponent extends AbstractComponent {
                 Method method = ReflectionUtils.findMethod(target.getClass(), "registerExtension",
                     Extension.class);
                 if (method == null) {
-                    throw new RuntimeException(String.format(ErrorCode.convert("01-01001"), target
-                        .getClass().getCanonicalName()));
+                    throw new RuntimeException(ErrorCode.convert("01-01001", target.getClass()
+                        .getCanonicalName()));
                 }
                 ReflectionUtils.invokeMethod(method, target, extension);
             }
         } catch (Throwable t) {
-            throw new ServiceRuntimeException(String.format(ErrorCode.convert("01-01000"),
+            throw new ServiceRuntimeException(ErrorCode.convert("01-01000",
                 extensionPointComponentInfo.getName()), t);
         }
 
@@ -154,8 +154,8 @@ public class ExtensionComponent extends AbstractComponent {
                     .getAppClassLoader())) {
                     this.e = e;
                 }
-                SofaLogger.error(String.format(ErrorCode.convert("01-01002"),
-                    extensionPoint.getName(), extension.getComponentName()), e);
+                SofaLogger.error(ErrorCode.convert("01-01002"), extensionPoint.getName(),
+                    extension.getComponentName(), e);
             }
         }
     }
