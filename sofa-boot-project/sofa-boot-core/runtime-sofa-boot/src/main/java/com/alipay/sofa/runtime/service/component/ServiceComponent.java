@@ -237,7 +237,7 @@ public class ServiceComponent extends AbstractComponent {
                 TimeUnit.MILLISECONDS.sleep(unregisterDelayMilliseconds);
             } catch (InterruptedException e) {
                 throw new ServiceRuntimeException(String.format(ErrorCode.convert("01-00010"),
-                    toString()), e);
+                    service), e);
             }
         }
 
