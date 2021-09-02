@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
+import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.runtime.configure.SofaRuntimeConfigurationProperties;
 import org.slf4j.Logger;
 import org.springframework.beans.BeansException;
@@ -212,7 +213,7 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
             logger.info("Readiness check result: success");
         } else {
             readinessState = ReadinessState.REFUSING_TRAFFIC;
-            logger.error("Readiness check result: fail");
+            logger.error(ErrorCode.convert("01-20000"));
             if (healthCheckProperties.isHealthCheckInsulator()) {
                 throw new HealthCheckException(
                     "Application health check is failed and health check insulator switch is turned on!");

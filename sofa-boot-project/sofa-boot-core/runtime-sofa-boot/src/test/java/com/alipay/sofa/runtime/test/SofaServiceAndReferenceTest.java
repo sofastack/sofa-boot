@@ -89,8 +89,8 @@ public class SofaServiceAndReferenceTest {
             springApplication.run();
         } catch (Throwable t) {
             throwable = t;
-            Assert.assertEquals("Only jvm type of @SofaReference on parameter is supported.",
-                t.getMessage());
+            Assert.assertTrue(t.getMessage().contains(
+                "Only jvm type of @SofaReference on parameter is supported."));
         }
         Assert.assertNotNull(throwable);
     }
@@ -116,7 +116,7 @@ public class SofaServiceAndReferenceTest {
         String logRootPath = StringUtils.hasText(System.getProperty("logging.path")) ? System
             .getProperty("logging.path") : "./logs";
         File sofaLog = new File(logRootPath + File.separator + "sofa-runtime" + File.separator
-                                + "common-error.log");
+                                + "sofa-default.log");
         FileUtils.write(sofaLog, "", System.getProperty("file.encoding"));
         Map<String, Object> properties = new HashMap<>();
         properties.put("spring.application.name", "SofaServiceAndReferenceTest");

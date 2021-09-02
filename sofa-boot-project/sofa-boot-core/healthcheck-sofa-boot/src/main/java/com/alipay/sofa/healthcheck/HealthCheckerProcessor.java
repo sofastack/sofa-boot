@@ -24,6 +24,7 @@ import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
+import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.healthcheck.core.HealthCheckExecutor;
 import org.slf4j.Logger;
@@ -102,7 +103,7 @@ public class HealthCheckerProcessor {
         if (result) {
             logger.info("SOFABoot HealthChecker liveness check result: success.");
         } else {
-            logger.error("SOFABoot HealthChecker liveness check result: failed.");
+            logger.error(ErrorCode.convert("01-22000"));
         }
         return result;
     }
@@ -130,7 +131,7 @@ public class HealthCheckerProcessor {
         if (result) {
             logger.info("SOFABoot HealthChecker readiness check result: success.");
         } else {
-            logger.error("SOFABoot HealthChecker readiness check result: failed.");
+            logger.error(ErrorCode.convert("01-23000"));
         }
         return result;
     }
@@ -187,11 +188,8 @@ public class HealthCheckerProcessor {
                     TimeUnit.MILLISECONDS.sleep(healthChecker.getRetryTimeInterval());
                 } catch (InterruptedException e) {
                     logger
-                        .error(
-                            String
-                                .format(
-                                    "Exception occurred while sleeping of %d retry HealthChecker[%s] %s check.",
-                                    retryCount, beanId, checkType), e);
+                        .error(ErrorCode.convert("01-23002", retryCount, beanId,
+                            checkType), e);
                 }
             }
         } while (isRetry && retryCount < healthChecker.getRetryCount());
@@ -199,16 +197,12 @@ public class HealthCheckerProcessor {
         healthMap.put(beanId, health);
         try {
             if (!result) {
-                logger
-                    .error(
-                        "HealthChecker[{}] {} check fail with {} retry; fail details:{}; strict mode:{}",
-                        beanId, checkType, retryCount,
-                        objectMapper.writeValueAsString(health.getDetails()),
-                        healthChecker.isStrictCheck());
+                logger.error(ErrorCode.convert("01-23001", beanId, checkType, retryCount,
+                    objectMapper.writeValueAsString(health.getDetails()),
+                    healthChecker.isStrictCheck()));
             }
         } catch (JsonProcessingException ex) {
-            logger.error(
-                String.format("Error occurred while doing HealthChecker %s check.", checkType), ex);
+            logger.error(ErrorCode.convert("01-23003", checkType), ex);
         }
         return !healthChecker.isStrictCheck() || result;
     }

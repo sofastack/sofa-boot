@@ -28,6 +28,7 @@ import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
+import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.healthcheck.core.HealthCheckExecutor;
 import org.slf4j.Logger;
@@ -162,7 +163,7 @@ public class HealthIndicatorProcessor {
         if (result) {
             logger.info("SOFABoot HealthIndicator readiness check result: success.");
         } else {
-            logger.error("SOFABoot HealthIndicator readiness check result: failed.");
+            logger.error(ErrorCode.convert("01-21000"));
         }
         return result;
     }
@@ -190,9 +191,8 @@ public class HealthIndicatorProcessor {
                 logger.info("HealthIndicator[{}] readiness check success.", beanId);
             } else {
                 logger.error(
-                        "HealthIndicator[{}] readiness check fail; the status is: {}; the detail is: {}.",
-                        beanId, status,
-                        objectMapper.writeValueAsString(health.getDetails()));
+                        ErrorCode.convert("01-21001",
+                        beanId, status, objectMapper.writeValueAsString(health.getDetails())));
             }
             healthMap.put(getKey(beanId), health);
         } catch (TimeoutException e) {
@@ -203,7 +203,7 @@ public class HealthIndicatorProcessor {
         } catch (Exception e) {
             result = false;
             logger.error(
-                    String.format("Error occurred while doing HealthIndicator[%s] readiness check.",
+                    ErrorCode.convert("01-21002",
                             healthIndicator.getClass()),
                     e);
         }

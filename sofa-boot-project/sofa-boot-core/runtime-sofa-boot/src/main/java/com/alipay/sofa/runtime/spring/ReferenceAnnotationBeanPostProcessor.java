@@ -20,6 +20,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
+import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.runtime.log.SofaLogger;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
@@ -166,8 +167,8 @@ public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor, 
         BindingConverter bindingConverter = bindingConverterFactory
             .getBindingConverter(new BindingType(sofaReferenceAnnotation.binding().bindingType()));
         if (bindingConverter == null) {
-            throw new ServiceRuntimeException("Can not found binding converter for binding type "
-                                              + sofaReferenceAnnotation.binding().bindingType());
+            throw new ServiceRuntimeException(ErrorCode.convert("01-00200", sofaReferenceAnnotation
+                .binding().bindingType()));
         }
 
         BindingConverterContext bindingConverterContext = new BindingConverterContext();

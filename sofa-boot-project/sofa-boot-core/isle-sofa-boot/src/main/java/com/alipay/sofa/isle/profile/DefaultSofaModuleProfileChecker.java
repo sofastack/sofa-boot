@@ -19,6 +19,7 @@ package com.alipay.sofa.isle.profile;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.alipay.sofa.boot.error.ErrorCode;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
@@ -56,8 +57,7 @@ public class DefaultSofaModuleProfileChecker implements SofaModuleProfileChecker
     @Override
     public boolean acceptProfiles(String[] sofaModuleProfiles) {
         Assert.notEmpty(sofaModuleProfiles,
-            "Must specify at least one sofa module profile,at least one profile value is "
-                    + SofaBootConstants.DEFAULT_PROFILE_VALUE);
+            ErrorCode.convert("01-13000", SofaBootConstants.DEFAULT_PROFILE_VALUE));
         for (String sofaModuleProfile : sofaModuleProfiles) {
             if (StringUtils.hasText(sofaModuleProfile) && sofaModuleProfile.charAt(0) == '!') {
                 if (!isProfileActive(sofaModuleProfile.substring(1))) {
@@ -82,15 +82,12 @@ public class DefaultSofaModuleProfileChecker implements SofaModuleProfileChecker
 
     private void validateProfile(String profile) {
         if (!StringUtils.hasText(profile)) {
-            throw new IllegalArgumentException("Invalid profile [" + profile
-                                               + "]: must contain text and at least a value "
-                                               + SofaBootConstants.DEFAULT_PROFILE_VALUE);
+            throw new IllegalArgumentException(ErrorCode.convert("01-13001", profile,
+                SofaBootConstants.DEFAULT_PROFILE_VALUE));
         }
 
         if (profile.charAt(0) == '!') {
-            throw new IllegalArgumentException(
-                "Invalid sofa.profiles.active value in sofa-config.config [" + profile
-                        + "]: must not begin with ! operator");
+            throw new IllegalArgumentException(ErrorCode.convert("01-13002", profile));
         }
     }
 

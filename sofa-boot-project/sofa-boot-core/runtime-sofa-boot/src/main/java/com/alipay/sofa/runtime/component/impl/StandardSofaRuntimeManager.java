@@ -19,6 +19,7 @@ package com.alipay.sofa.runtime.component.impl;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.boot.health.RuntimeHealthChecker;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
@@ -121,7 +122,7 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager, Applicati
 
             clear();
         } catch (Throwable throwable) {
-            throw new ServiceRuntimeException(throwable);
+            throw new ServiceRuntimeException(ErrorCode.convert("01-03100"), throwable);
         }
     }
 
@@ -135,7 +136,7 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager, Applicati
             }
             appClassLoader = null;
         } catch (Throwable throwable) {
-            throw new ServiceRuntimeException(throwable);
+            throw new ServiceRuntimeException(ErrorCode.convert("01-03100"), throwable);
         }
     }
 

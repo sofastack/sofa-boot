@@ -20,6 +20,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import com.alipay.sofa.boot.error.ErrorCode;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.Health;
@@ -95,7 +96,7 @@ public class AfterReadinessCheckCallbackProcessor {
         if (allResult) {
             logger.info("ReadinessCheckCallback readiness check result: success.");
         } else {
-            logger.error("ReadinessCheckCallback readiness check result: failed.");
+            logger.error(ErrorCode.convert("01-24000"));
         }
         return allResult;
     }
@@ -114,15 +115,14 @@ public class AfterReadinessCheckCallbackProcessor {
                 logger.info("SOFABoot ReadinessCheckCallback[{}] check success.", beanId);
             } else {
                 logger.error(
-                        "SOFABoot ReadinessCheckCallback[{}] check failed, the details is: {}.", beanId,
-                        objectMapper.writeValueAsString(health.getDetails()));
+                        ErrorCode.convert("01-24001", beanId,
+                        objectMapper.writeValueAsString(health.getDetails())));
             }
         } catch (Throwable t) {
             if (health == null) {
                 health = new Health.Builder().down(new RuntimeException(t)).build();
             }
-            logger.error(String
-                    .format("Error occurred while doing ReadinessCheckCallback[%s] check.", beanId), t);
+            logger.error(ErrorCode.convert("01-24002", beanId), t);
         } finally {
             healthMap.put(beanId, health);
         }

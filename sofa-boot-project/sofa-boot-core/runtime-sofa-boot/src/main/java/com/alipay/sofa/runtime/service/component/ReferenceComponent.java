@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 
+import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.component.ComponentName;
@@ -170,9 +171,8 @@ public class ReferenceComponent extends AbstractComponent {
                 BindingAdapter<Binding> bindingAdapter = this.bindingAdapterFactory
                     .getBindingAdapter(binding.getBindingType());
                 if (bindingAdapter == null) {
-                    throw new ServiceRuntimeException("Can't find BindingAdapter of type "
-                                                      + binding.getBindingType()
-                                                      + " for reference " + reference + ".");
+                    throw new ServiceRuntimeException(ErrorCode.convert("01-00100",
+                        binding.getBindingType(), reference));
                 }
                 SofaLogger.info(" >>Un-in Binding [{}] Begins - {}.", binding.getBindingType(),
                     reference);
@@ -197,13 +197,11 @@ public class ReferenceComponent extends AbstractComponent {
         try {
             latch.await();
         } catch (InterruptedException e) {
-            throw new ServiceRuntimeException("Failed to get the implementation.", e);
+            throw new ServiceRuntimeException(ErrorCode.convert("01-00101"), e);
         }
 
         if (e != null) {
-            throw new ServiceRuntimeException(
-                "Unable to get implementation of reference component, there's some error occurred when register this reference component.",
-                e);
+            throw new ServiceRuntimeException(ErrorCode.convert("01-00102"), e);
         }
 
         return super.getImplementation();
@@ -217,9 +215,8 @@ public class ReferenceComponent extends AbstractComponent {
         BindingAdapter<Binding> bindingAdapter = bindingAdapterFactory.getBindingAdapter(binding
             .getBindingType());
         if (bindingAdapter == null) {
-            throw new ServiceRuntimeException("Can't find BindingAdapter of type "
-                                              + binding.getBindingType() + " for reference "
-                                              + reference + ".");
+            throw new ServiceRuntimeException(ErrorCode.convert("01-00100",
+                binding.getBindingType(), reference));
         }
         SofaLogger.info(" >>In Binding [{}] Begins - {}.", binding.getBindingType(), reference);
         Object proxy;

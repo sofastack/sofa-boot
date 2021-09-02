@@ -26,6 +26,8 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.boot.util.BeanDefinitionUtil;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.FatalBeanException;
@@ -134,7 +136,7 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
             declaringClass = ClassUtils.forName(methodMetadata.getDeclaringClassName(), null);
         } catch (Throwable throwable) {
             // it's impossible to catch throwable here
-            SofaLogger.error("Failed to parse factoryBeanMethod of BeanDefinition( {} )", beanId, throwable);
+            SofaLogger.error(ErrorCode.convert("01-02001", beanId), throwable);
             return;
         }
         if (methodMetadata instanceof StandardMethodMetadata) {
@@ -183,15 +185,13 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
                 if (AnnotatedElementUtils.hasAnnotation(m, SofaService.class)
                     || AnnotatedElementUtils.hasAnnotation(returnType, SofaService.class)) {
                     throw new FatalBeanException(
-                        "multi @Bean-method with same name try to publish SofaService in "
-                                + declaringClass.getCanonicalName());
+                        ErrorCode.convert("01-02002", declaringClass.getCanonicalName()));
                 }
 
                 if (Stream.of(m.getParameterAnnotations())
                         .flatMap(Stream::of).anyMatch(annotation -> annotation instanceof SofaReference)) {
                     throw new FatalBeanException(
-                            "multi @Bean-method with same name try to reference SofaService in"
-                                    + declaringClass.getCanonicalName());
+                            ErrorCode.convert("01-02003", declaringClass.getCanonicalName()));
                 }
             }
         }
@@ -291,7 +291,7 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
             } else if (interfaces.length == 1) {
                 interfaceType = interfaces[0];
             } else {
-                throw new FatalBeanException("Bean " + beanId + " has more than one interface.");
+                throw new FatalBeanException(ErrorCode.convert("01-02004", beanId));
             }
         }
 
@@ -321,7 +321,7 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
             ((BeanDefinitionRegistry) beanFactory).registerBeanDefinition(serviceId,
                 builder.getBeanDefinition());
         } else {
-            SofaLogger.error("SofaService was already registered: {}", serviceId);
+            SofaLogger.warn("SofaService was already registered: {}", serviceId);
         }
     }
 
@@ -332,9 +332,8 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
             BindingConverter bindingConverter = bindingConverterFactory
                 .getBindingConverter(new BindingType(sofaServiceBinding.bindingType()));
             if (bindingConverter == null) {
-                throw new ServiceRuntimeException(
-                    "Can not found binding converter for binding type "
-                            + sofaServiceBinding.bindingType());
+                throw new ServiceRuntimeException(ErrorCode.convert("01-00200",
+                    sofaServiceBinding.bindingType()));
             }
             BindingConverterContext bindingConverterContext = new BindingConverterContext();
             bindingConverterContext.setInBinding(false);
@@ -357,15 +356,14 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
     private List<Binding> getSofaReferenceBinding(SofaReference sofaReferenceAnnotation,
                                                   SofaReferenceBinding sofaReferenceBinding) {
         if (!JvmBinding.XmlConstants.BINDING_TYPE.equals(sofaReferenceBinding.bindingType())) {
-            throw new ServiceRuntimeException(
-                "Only jvm sofa reference binding is supported to annotate on parameter.");
+            throw new ServiceRuntimeException(ErrorCode.convert("01-02005"));
         }
         List<Binding> bindings = new ArrayList<>();
         BindingConverter bindingConverter = bindingConverterFactory
             .getBindingConverter(new BindingType(sofaReferenceBinding.bindingType()));
         if (bindingConverter == null) {
-            throw new ServiceRuntimeException("Can not found binding converter for binding type "
-                                              + sofaReferenceBinding.bindingType());
+            throw new ServiceRuntimeException(ErrorCode.convert("01-00200",
+                sofaReferenceBinding.bindingType()));
         }
         BindingConverterContext bindingConverterContext = new BindingConverterContext();
         bindingConverterContext.setInBinding(true);

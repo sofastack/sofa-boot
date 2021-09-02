@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.isle.spring;
 
+import com.alipay.sofa.boot.error.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.SmartLifecycle;
 
@@ -44,7 +45,7 @@ public class SofaModuleContextLifecycle implements SmartLifecycle {
             try {
                 pipelineContext.process();
             } catch (Throwable t) {
-                SofaLogger.error("process pipeline error", t);
+                SofaLogger.error(ErrorCode.convert("01-10000"), t);
                 throw new RuntimeException(t);
             }
         }
