@@ -22,8 +22,11 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.alipay.sofa.ark.spi.replay.ReplayContext;
+import com.alipay.sofa.common.utils.StringUtil;
 import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import org.aopalliance.intercept.MethodInvocation;
 
@@ -50,7 +53,9 @@ import com.caucho.hessian.io.SerializerFactory;
  */
 public class DynamicJvmServiceProxyFinder {
 
-    private static DynamicJvmServiceProxyFinder dynamicJvmServiceProxyFinder = new DynamicJvmServiceProxyFinder();
+    private static DynamicJvmServiceProxyFinder         dynamicJvmServiceProxyFinder = new DynamicJvmServiceProxyFinder();
+
+    private static Map<String, JvmServiceTargetHabitat> jvmServiceTargetHabitats     = new ConcurrentHashMap<>();
 
     private DynamicJvmServiceProxyFinder() {
     }
@@ -65,6 +70,14 @@ public class DynamicJvmServiceProxyFinder {
     }
 
     public ServiceComponent findServiceComponent(ClassLoader clientClassloader, Contract contract) {
+        ServiceComponent serviceComponent = null;
+        if (SofaRuntimeProperties.isDynamicJvmServiceCacheEnable()) {
+            serviceComponent = cacheSearching(contract);
+            if (serviceComponent != null) {
+                return serviceComponent;
+            }
+        }
+
         String interfaceType = contract.getInterfaceType().getCanonicalName();
         String uniqueId = contract.getUniqueId();
         for (SofaRuntimeManager sofaRuntimeManager : SofaFramework.getRuntimeSet()) {
@@ -103,13 +116,78 @@ public class DynamicJvmServiceProxyFinder {
             }
 
             // match biz
-            ServiceComponent serviceComponent = findServiceComponent(uniqueId, interfaceType,
+            serviceComponent = findServiceComponent(uniqueId, interfaceType,
                 sofaRuntimeManager.getComponentManager());
             if (serviceComponent != null) {
                 return serviceComponent;
             }
         }
         return null;
+    }
+
+    public void afterBizStartup(Biz biz) {
+        // Currently, there is no way to get SOFA Runtime Manager from biz
+        // The overhead is acceptable as this only happens after biz's successful installation
+        for (SofaRuntimeManager runtimeManager: SofaFramework.getRuntimeSet()) {
+            if (runtimeManager.getAppClassLoader().equals(biz.getBizClassLoader())) {
+                for (ComponentInfo componentInfo: runtimeManager.getComponentManager().getComponents()) {
+                    if (componentInfo instanceof ServiceComponent) {
+                        ServiceComponent serviceComponent = (ServiceComponent) componentInfo;
+                        String uniqueName = getUniqueName(serviceComponent.getService());
+                        jvmServiceTargetHabitats.computeIfAbsent(uniqueName, e -> new JvmServiceTargetHabitat(biz.getBizName()));
+                        JvmServiceTargetHabitat jvmServiceTargetHabitat = jvmServiceTargetHabitats.get(uniqueName);
+                        jvmServiceTargetHabitat.addServiceComponent(biz.getBizVersion(), serviceComponent);
+                    }
+                }
+            }
+        }
+    }
+
+    public void afterBizUninstall(Biz biz) {
+        for (SofaRuntimeManager runtimeManager : SofaFramework.getRuntimeSet()) {
+            if (runtimeManager.getAppClassLoader().equals(biz.getBizClassLoader())) {
+                for (ComponentInfo componentInfo : runtimeManager.getComponentManager()
+                    .getComponents()) {
+                    if (componentInfo instanceof ServiceComponent) {
+                        ServiceComponent serviceComponent = (ServiceComponent) componentInfo;
+                        String uniqueName = getUniqueName(serviceComponent.getService());
+                        JvmServiceTargetHabitat jvmServiceTargetHabitat = jvmServiceTargetHabitats
+                            .get(uniqueName);
+                        if (jvmServiceTargetHabitat != null) {
+                            jvmServiceTargetHabitat.removeServiceComponent(biz.getBizVersion());
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private ServiceComponent cacheSearching(Contract contract) {
+        // Master Biz is in starting phase, cache isn't ready
+        if (!hasFinishStartup) {
+            return null;
+        }
+
+        String uniqueName = getUniqueName(contract);
+        JvmServiceTargetHabitat jvmServiceTargetHabitat = jvmServiceTargetHabitats.get(uniqueName);
+        if (jvmServiceTargetHabitat == null) {
+            return null;
+        }
+
+        String version = ReplayContext.get();
+        version = ReplayContext.PLACEHOLDER.equals(version) ? null : version;
+        if (StringUtil.isNotBlank(version)) {
+            return jvmServiceTargetHabitat.getServiceComponent(version);
+        }
+        return jvmServiceTargetHabitat.getDefaultServiceComponent();
+    }
+
+    private String getUniqueName(Contract contract) {
+        String uniqueName = contract.getInterfaceType().getName();
+        if (StringUtil.isNotBlank(contract.getUniqueId())) {
+            uniqueName += ":" + contract.getUniqueId();
+        }
+        return uniqueName;
     }
 
     public ServiceProxy findServiceProxy(ClassLoader clientClassloader, Contract contract) {

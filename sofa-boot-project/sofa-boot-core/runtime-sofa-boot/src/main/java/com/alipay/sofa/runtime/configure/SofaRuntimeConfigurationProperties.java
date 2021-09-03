@@ -47,6 +47,14 @@ public class SofaRuntimeConfigurationProperties {
         SofaRuntimeProperties.setJvmFilterEnable(jvmFilterEnable);
     }
 
+    public boolean isDynamicJvmServiceCacheEnable() {
+        return SofaRuntimeProperties.isDynamicJvmServiceCacheEnable();
+    }
+
+    public void setDynamicJvmServiceCacheEnable(boolean dynamicJvmServiceCacheEnable) {
+        SofaRuntimeProperties.setDynamicJvmServiceCacheEnable(dynamicJvmServiceCacheEnable);
+    }
+
     public void setSkipJvmReferenceHealthCheck(boolean skipJvmReferenceHealthCheck) {
         SofaRuntimeProperties.setSkipJvmReferenceHealthCheck(this.getClass().getClassLoader(),
             skipJvmReferenceHealthCheck);
