@@ -98,4 +98,13 @@ public class SofaRuntimeConfigurationProperties {
             .getContextClassLoader());
     }
 
+    public void setServiceAssignableInterfaceTypeCheck(boolean serviceAssignableInterfaceTypeCheck) {
+        SofaRuntimeProperties
+            .setServiceAssignableInterfaceTypeCheck(serviceAssignableInterfaceTypeCheck);
+    }
+
+    public boolean isServiceAssignableInterfaceTypeCheck() {
+        return SofaRuntimeProperties.isServiceAssignableInterfaceTypeCheck();
+    }
+
 }

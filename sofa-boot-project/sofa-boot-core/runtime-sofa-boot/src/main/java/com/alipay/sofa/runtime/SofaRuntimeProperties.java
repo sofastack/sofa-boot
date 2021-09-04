@@ -26,14 +26,15 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
  */
 public class SofaRuntimeProperties {
 
-    private static final ConcurrentHashMap<ClassLoader, Boolean> skipJvmReferenceHealthCheckMap = new ConcurrentHashMap<>();
-    private static final ConcurrentHashMap<ClassLoader, Boolean> skipExtensionHealthCheckMap    = new ConcurrentHashMap<>();
-    private static final ConcurrentHashMap<ClassLoader, Boolean> disableJvmFirstMap             = new ConcurrentHashMap<>();
-    private static final ConcurrentHashMap<ClassLoader, Boolean> skipJvmSerializeMap            = new ConcurrentHashMap<>();
-    private static final ConcurrentHashMap<ClassLoader, Boolean> extensionFailureInsulatingMap  = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<ClassLoader, Boolean> skipJvmReferenceHealthCheckMap      = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<ClassLoader, Boolean> skipExtensionHealthCheckMap         = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<ClassLoader, Boolean> disableJvmFirstMap                  = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<ClassLoader, Boolean> skipJvmSerializeMap                 = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<ClassLoader, Boolean> extensionFailureInsulatingMap       = new ConcurrentHashMap<>();
 
-    private static final ConcurrentHashMap<ClassLoader, Boolean> manualReadinessCallbackMap     = new ConcurrentHashMap<>();
-    private static boolean                                       jvmFilterEnable                = false;
+    private static final ConcurrentHashMap<ClassLoader, Boolean> manualReadinessCallbackMap          = new ConcurrentHashMap<>();
+    private static boolean                                       jvmFilterEnable                     = false;
+    private static boolean                                       serviceAssignableInterfaceTypeCheck = false;
 
     public static boolean isManualReadinessCallback(ClassLoader classLoader) {
         return manualReadinessCallbackMap.get(classLoader) != null
@@ -51,6 +52,14 @@ public class SofaRuntimeProperties {
 
     public static void setJvmFilterEnable(boolean jvmFilterEnable) {
         SofaRuntimeProperties.jvmFilterEnable = jvmFilterEnable;
+    }
+
+    public static boolean isServiceAssignableInterfaceTypeCheck() {
+        return serviceAssignableInterfaceTypeCheck;
+    }
+
+    public static void setServiceAssignableInterfaceTypeCheck(boolean serviceAssignableInterfaceTypeCheck) {
+        SofaRuntimeProperties.serviceAssignableInterfaceTypeCheck = serviceAssignableInterfaceTypeCheck;
     }
 
     public static boolean isSkipJvmReferenceHealthCheck(SofaRuntimeContext sofaRuntimeContext) {

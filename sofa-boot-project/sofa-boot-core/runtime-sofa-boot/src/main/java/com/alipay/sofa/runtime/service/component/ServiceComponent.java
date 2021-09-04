@@ -23,6 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 import com.alipay.sofa.boot.error.ErrorCode;
+import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.component.Property;
 import com.alipay.sofa.runtime.log.SofaLogger;
@@ -77,6 +78,23 @@ public class ServiceComponent extends AbstractComponent {
         return super.resolve();
     }
 
+    @Override
+    public void register() {
+        assertServiceAssignableInterfaceTypeCheck();
+        super.register();
+    }
+
+    private void assertServiceAssignableInterfaceTypeCheck() {
+        Object target = service.getTarget();
+        if (SofaRuntimeProperties.isServiceAssignableInterfaceTypeCheck()) {
+            Class<?> interfaceType = service.getInterfaceType();
+            if (!interfaceType.isAssignableFrom(target.getClass())) {
+                throw new ServiceRuntimeException(ErrorCode.convert("01-00104", service,
+                    target.getClass(), interfaceType));
+            }
+        }
+    }
+
     private void resolveBinding() {
 
         Object target = service.getTarget();
@@ -84,6 +102,7 @@ public class ServiceComponent extends AbstractComponent {
         if (target == null) {
             throw new ServiceRuntimeException(ErrorCode.convert("01-00000"));
         }
+        assertServiceAssignableInterfaceTypeCheck();
 
         if (service.hasBinding()) {
             Set<Binding> bindings = service.getBindings();
@@ -131,6 +150,7 @@ public class ServiceComponent extends AbstractComponent {
         if (target == null) {
             throw new ServiceRuntimeException(ErrorCode.convert("01-00000"));
         }
+        assertServiceAssignableInterfaceTypeCheck();
 
         if (service.hasBinding()) {
             boolean allPassed = true;
@@ -182,6 +202,7 @@ public class ServiceComponent extends AbstractComponent {
         if (target == null) {
             throw new ServiceRuntimeException(ErrorCode.convert("01-00000"));
         }
+        assertServiceAssignableInterfaceTypeCheck();
 
         if (service.hasBinding()) {
             boolean allPassed = true;
@@ -239,6 +260,7 @@ public class ServiceComponent extends AbstractComponent {
         if (target == null) {
             throw new ServiceRuntimeException(ErrorCode.convert("01-00000"));
         }
+        assertServiceAssignableInterfaceTypeCheck();
 
         if (service.hasBinding()) {
             boolean allPassed = true;

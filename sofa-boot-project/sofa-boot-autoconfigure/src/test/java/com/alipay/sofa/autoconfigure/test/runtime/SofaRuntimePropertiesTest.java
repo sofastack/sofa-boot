@@ -40,7 +40,8 @@ import com.alipay.sofa.runtime.configure.SofaRuntimeConfigurationProperties;
                                   "com.alipay.sofa.boot.skipJvmReferenceHealthCheck=true",
                                   "com.alipay.sofa.boot.skipJvmSerialize=true",
                                   "com.alipay.sofa.boot.skipExtensionHealthCheck=true",
-                                  "com.alipay.sofa.boot.extensionFailureInsulating=true" })
+                                  "com.alipay.sofa.boot.extensionFailureInsulating=true",
+                                  "com.alipay.sofa.boot.serviceAssignableInterfaceTypeCheck=true" })
 public class SofaRuntimePropertiesTest {
 
     @Autowired
@@ -90,6 +91,14 @@ public class SofaRuntimePropertiesTest {
 
         Assert.assertTrue(SofaRuntimeProperties.isSkipExtensionHealthCheck(ctx.getClassLoader()));
         Assert.assertTrue(configurationProperties.isExtensionFailureInsulating());
+    }
+
+    @Test
+    public void testServiceAssignableInterfaceTypeCheck() {
+        SofaRuntimeConfigurationProperties configurationProperties = ctx
+            .getBean(SofaRuntimeConfigurationProperties.class);
+        Assert.assertTrue(SofaRuntimeProperties.isServiceAssignableInterfaceTypeCheck());
+        Assert.assertTrue(configurationProperties.isServiceAssignableInterfaceTypeCheck());
     }
 
     @Configuration(proxyBeanMethods = false)

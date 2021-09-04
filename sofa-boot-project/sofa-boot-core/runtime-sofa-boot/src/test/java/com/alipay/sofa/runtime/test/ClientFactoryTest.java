@@ -16,9 +16,12 @@
  */
 package com.alipay.sofa.runtime.test;
 
+import com.alipay.sofa.boot.util.StringUtils;
+import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import com.alipay.sofa.runtime.api.client.param.ServiceParam;
 import com.alipay.sofa.runtime.service.binding.JvmBindingParam;
 import com.alipay.sofa.runtime.test.beans.service.DefaultSampleService;
+import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,6 +42,9 @@ import com.alipay.sofa.runtime.api.client.param.ReferenceParam;
 import com.alipay.sofa.runtime.test.beans.ClientFactoryAwareBean;
 import com.alipay.sofa.runtime.test.beans.facade.SampleService;
 import com.alipay.sofa.runtime.test.configuration.RuntimeConfiguration;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * @author qilong.zql
@@ -100,6 +106,35 @@ public class ClientFactoryTest {
         public ClientFactoryAwareBean clientFactoryAwareBean() {
             return new ClientFactoryAwareBean();
         }
+    }
+
+    @Test
+    public void testBindingInstanceNotIsAssignableFromInterfaceType() throws IOException {
+
+        String logRootPath = StringUtils.hasText(System.getProperty("logging.path")) ? System
+            .getProperty("logging.path") : "./logs";
+        File sofaLog = new File(logRootPath + File.separator + "sofa-runtime" + File.separator
+                                + "sofa-default.log");
+        FileUtils.write(sofaLog, "", System.getProperty("file.encoding"));
+
+        SofaRuntimeProperties.setServiceAssignableInterfaceTypeCheck(true);
+
+        JvmBindingParam jvmBindingParam = new JvmBindingParam();
+        jvmBindingParam.setSerialize(true);
+
+        ServiceParam serviceParam = new ServiceParam();
+        serviceParam.setInstance(new Object());
+        serviceParam.setInterfaceType(SampleService.class);
+        serviceParam.addBindingParam(jvmBindingParam);
+        serviceClient.service(serviceParam);
+
+        String content = FileUtils.readFileToString(sofaLog, System.getProperty("file.encoding"));
+        Assert
+            .assertTrue(content
+                .contains("SOFA-BOOT-01-00104: Bean "
+                          + "[com.alipay.sofa.runtime.test.beans.facade.SampleService] "
+                          + "type is [class java.lang.Object] not isAssignableFrom "
+                          + "[interface com.alipay.sofa.runtime.test.beans.facade.SampleService] , please check it"));
     }
 
     /**
