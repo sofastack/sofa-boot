@@ -71,7 +71,7 @@ public class DynamicJvmServiceProxyFinder {
 
     public ServiceComponent findServiceComponent(ClassLoader clientClassloader, Contract contract) {
         ServiceComponent serviceComponent = null;
-        if (SofaRuntimeProperties.isDynamicJvmServiceCacheEnable()) {
+        if (hasFinishStartup && SofaRuntimeProperties.isDynamicJvmServiceCacheEnable()) {
             serviceComponent = cacheSearching(contract);
             if (serviceComponent != null) {
                 return serviceComponent;
@@ -126,6 +126,10 @@ public class DynamicJvmServiceProxyFinder {
     }
 
     public void afterBizStartup(Biz biz) {
+        if (!SofaRuntimeProperties.isDynamicJvmServiceCacheEnable()) {
+            return;
+        }
+
         // Currently, there is no way to get SOFA Runtime Manager from biz
         // The overhead is acceptable as this only happens after biz's successful installation
         for (SofaRuntimeManager runtimeManager: SofaFramework.getRuntimeSet()) {
@@ -144,6 +148,10 @@ public class DynamicJvmServiceProxyFinder {
     }
 
     public void afterBizUninstall(Biz biz) {
+        if (!SofaRuntimeProperties.isDynamicJvmServiceCacheEnable()) {
+            return;
+        }
+
         for (SofaRuntimeManager runtimeManager : SofaFramework.getRuntimeSet()) {
             if (runtimeManager.getAppClassLoader().equals(biz.getBizClassLoader())) {
                 for (ComponentInfo componentInfo : runtimeManager.getComponentManager()
