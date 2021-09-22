@@ -41,7 +41,7 @@ import com.alipay.sofa.runtime.configure.SofaRuntimeConfigurationProperties;
                                   "com.alipay.sofa.boot.skipJvmSerialize=true",
                                   "com.alipay.sofa.boot.skipExtensionHealthCheck=true",
                                   "com.alipay.sofa.boot.extensionFailureInsulating=true",
-                                  "com.alipay.sofa.boot.serviceAssignableInterfaceTypeCheck=true" })
+                                  "com.alipay.sofa.boot.serviceInterfaceTypeCheck=true" })
 public class SofaRuntimePropertiesTest {
 
     @Autowired
@@ -94,11 +94,11 @@ public class SofaRuntimePropertiesTest {
     }
 
     @Test
-    public void testServiceAssignableInterfaceTypeCheck() {
+    public void testServiceInterfaceTypeCheck() {
         SofaRuntimeConfigurationProperties configurationProperties = ctx
             .getBean(SofaRuntimeConfigurationProperties.class);
-        Assert.assertTrue(SofaRuntimeProperties.isServiceAssignableInterfaceTypeCheck());
-        Assert.assertTrue(configurationProperties.isServiceAssignableInterfaceTypeCheck());
+        Assert.assertTrue(SofaRuntimeProperties.isServiceInterfaceTypeCheck());
+        Assert.assertTrue(configurationProperties.isServiceInterfaceTypeCheck());
     }
 
     @Configuration(proxyBeanMethods = false)

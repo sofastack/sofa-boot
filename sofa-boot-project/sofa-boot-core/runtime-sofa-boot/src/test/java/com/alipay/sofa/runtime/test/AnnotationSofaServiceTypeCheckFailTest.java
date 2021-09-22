@@ -37,12 +37,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 测试发布失败
+ * 测试 Annotation 的 service 没有实现接口，发布失败
  *
  * @author darian1996
- * @since 3.9.0
+ * @since 3.9.1
  */
-public class SofaServiceAndReferenceFailTest {
+public class AnnotationSofaServiceTypeCheckFailTest {
 
     @AfterClass
     public static void clearLogFiles() throws IOException {
@@ -60,10 +60,9 @@ public class SofaServiceAndReferenceFailTest {
         FileUtils.write(sofaLog, "", System.getProperty("file.encoding"));
 
         Map<String, Object> properties = new HashMap<>();
-        properties.put("spring.application.name",
-            "TestSofaServiceNotAssignableFromInterfaceTypeConfiguration");
+        properties.put("spring.application.name", "AnnotationSofaServiceTypeCheckFailTest");
         properties.put("logging.path", logRootPath);
-        properties.put("com.alipay.sofa.boot.serviceAssignableInterfaceTypeCheck", "true");
+        properties.put("com.alipay.sofa.boot.serviceInterfaceTypeCheck", "true");
 
         SpringApplication springApplication = new SpringApplication(
             TestSofaServiceNotAssignableFromInterfaceTypeConfiguration.class);

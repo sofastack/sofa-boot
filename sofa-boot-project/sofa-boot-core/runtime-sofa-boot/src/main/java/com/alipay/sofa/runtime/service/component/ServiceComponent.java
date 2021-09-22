@@ -80,19 +80,16 @@ public class ServiceComponent extends AbstractComponent {
 
     @Override
     public void register() {
-        assertServiceAssignableInterfaceTypeCheck();
-        super.register();
-    }
-
-    private void assertServiceAssignableInterfaceTypeCheck() {
         Object target = service.getTarget();
-        if (SofaRuntimeProperties.isServiceAssignableInterfaceTypeCheck()) {
+        if (SofaRuntimeProperties.isServiceInterfaceTypeCheck()) {
             Class<?> interfaceType = service.getInterfaceType();
             if (!interfaceType.isAssignableFrom(target.getClass())) {
                 throw new ServiceRuntimeException(ErrorCode.convert("01-00104", service,
                     target.getClass(), interfaceType));
             }
         }
+
+        super.register();
     }
 
     private void resolveBinding() {
@@ -102,7 +99,6 @@ public class ServiceComponent extends AbstractComponent {
         if (target == null) {
             throw new ServiceRuntimeException(ErrorCode.convert("01-00000"));
         }
-        assertServiceAssignableInterfaceTypeCheck();
 
         if (service.hasBinding()) {
             Set<Binding> bindings = service.getBindings();
@@ -150,7 +146,6 @@ public class ServiceComponent extends AbstractComponent {
         if (target == null) {
             throw new ServiceRuntimeException(ErrorCode.convert("01-00000"));
         }
-        assertServiceAssignableInterfaceTypeCheck();
 
         if (service.hasBinding()) {
             boolean allPassed = true;
@@ -202,7 +197,6 @@ public class ServiceComponent extends AbstractComponent {
         if (target == null) {
             throw new ServiceRuntimeException(ErrorCode.convert("01-00000"));
         }
-        assertServiceAssignableInterfaceTypeCheck();
 
         if (service.hasBinding()) {
             boolean allPassed = true;
@@ -260,7 +254,6 @@ public class ServiceComponent extends AbstractComponent {
         if (target == null) {
             throw new ServiceRuntimeException(ErrorCode.convert("01-00000"));
         }
-        assertServiceAssignableInterfaceTypeCheck();
 
         if (service.hasBinding()) {
             boolean allPassed = true;

@@ -38,9 +38,9 @@ import java.util.Map;
  * 测试xml的service没有实现接口，发布失败
  *
  * @author darian1996
- * @since 3.9
+ * @since 3.9.1
  */
-public class SofaBindingFailTest {
+public class XMLSofaServiceTypeCheckFailTest {
 
     @AfterClass
     public static void afterClearLogFiles() throws IOException {
@@ -58,12 +58,12 @@ public class SofaBindingFailTest {
         FileUtils.write(sofaLog, "", System.getProperty("file.encoding"));
 
         Map<String, Object> properties = new HashMap<>();
-        properties.put("spring.application.name", "SofaServiceAndReferenceTest");
+        properties.put("spring.application.name", "XMLSofaServiceTypeCheckFailTest");
         properties.put("logging.path", logRootPath);
-        properties.put("com.alipay.sofa.boot.serviceAssignableInterfaceTypeCheck", "true");
+        properties.put("com.alipay.sofa.boot.serviceInterfaceTypeCheck", "true");
 
         SpringApplication springApplication = new SpringApplication(
-            SofaBindingTestNotAssignableFromInterfaceTypeConfiguration.class);
+            SofaBindingTestIsNotAssignableFromInterfaceTypeConfiguration.class);
         springApplication.setWebApplicationType(WebApplicationType.NONE);
         springApplication.setDefaultProperties(properties);
         springApplication.run();
@@ -82,6 +82,7 @@ public class SofaBindingFailTest {
     @Import(RuntimeConfiguration.class)
     @EnableAutoConfiguration
     @ImportResource("classpath*:META-INF/service/test-service-not-assignable-from-interface-type.xml")
-    static class SofaBindingTestNotAssignableFromInterfaceTypeConfiguration {
+    static class SofaBindingTestIsNotAssignableFromInterfaceTypeConfiguration {
+
     }
 }

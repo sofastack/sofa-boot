@@ -22,6 +22,7 @@ import com.alipay.sofa.runtime.api.client.param.ServiceParam;
 import com.alipay.sofa.runtime.service.binding.JvmBindingParam;
 import com.alipay.sofa.runtime.test.beans.service.DefaultSampleService;
 import org.apache.commons.io.FileUtils;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -70,6 +71,13 @@ public class ClientFactoryTest {
     @SofaReference(uniqueId = "clientFactory")
     private SampleService          sampleService;
 
+    @AfterClass
+    public static void afterClearLogFiles() throws IOException {
+        final String logRootPath = StringUtils.hasText(System.getProperty("logging.path")) ? System
+            .getProperty("logging.path") : "./logs";
+        FileUtils.deleteDirectory(new File(logRootPath));
+    }
+
     @Test
     public void testClientFactoryAware() {
         Assert.assertNotNull(clientFactoryAwareBean.getClientFactory());
@@ -109,7 +117,7 @@ public class ClientFactoryTest {
     }
 
     @Test
-    public void testBindingInstanceNotIsAssignableFromInterfaceType() throws IOException {
+    public void testBindingInstanceIsNotAssignableFromInterfaceType() throws IOException {
 
         String logRootPath = StringUtils.hasText(System.getProperty("logging.path")) ? System
             .getProperty("logging.path") : "./logs";
@@ -117,7 +125,7 @@ public class ClientFactoryTest {
                                 + "sofa-default.log");
         FileUtils.write(sofaLog, "", System.getProperty("file.encoding"));
 
-        SofaRuntimeProperties.setServiceAssignableInterfaceTypeCheck(true);
+        SofaRuntimeProperties.setServiceInterfaceTypeCheck(true);
 
         JvmBindingParam jvmBindingParam = new JvmBindingParam();
         jvmBindingParam.setSerialize(true);
