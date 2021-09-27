@@ -16,36 +16,39 @@
  */
 package com.alipay.sofa.boot.autoconfigure.tracer;
 
-import com.sofa.alipay.tracer.plugins.spring.redis.SofaTracerRCFBeanPostProcessor;
-import com.sofa.alipay.tracer.plugins.spring.redis.common.RedisActionWrapperHelper;
-
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import com.alipay.sofa.tracer.boot.rocketmq.processor.SofaTracerRocketMqConsumerPostProcessor;
+import com.alipay.sofa.tracer.boot.rocketmq.processor.SofaTracerRocketMqProducerPostProcessor;
+import org.apache.rocketmq.client.producer.MQProducer;
+import org.apache.rocketmq.spring.autoconfigure.RocketMQAutoConfiguration;
+import org.apache.rocketmq.spring.support.RocketMQListenerContainer;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
 
 /**
- * @author guolei.sgl (guolei.sgl@antfin.com) 2019/11/19 8:03 PM
- * @since
- **/
+ * SofaTracerRocketMqAutoConfiguration.
+ *
+ * @author linnan
+ * @since 3.9.1
+ */
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnClass({ RedisConnectionFactory.class, RedisActionWrapperHelper.class })
-@ConditionalOnProperty(name = "com.alipay.sofa.tracer.redis.enabled", havingValue = "true", matchIfMissing = true)
-@AutoConfigureAfter(SofaTracerAutoConfiguration.class)
-public class SofaTracerRedisConfiguration {
+@AutoConfigureBefore(RocketMQAutoConfiguration.class)
+@ConditionalOnClass({ MQProducer.class, RocketMQListenerContainer.class })
+@ConditionalOnProperty(prefix = "com.alipay.sofa.tracer.rocketmq", value = "enable", matchIfMissing = true)
+public class SofaTracerRocketMqAutoConfiguration {
 
-    @Bean
     @ConditionalOnMissingBean
-    RedisActionWrapperHelper redisActionWrapperHelper() {
-        return new RedisActionWrapperHelper();
+    @Bean
+    public SofaTracerRocketMqProducerPostProcessor sofaTracerRocketMqProducerPostProcessor() {
+        return new SofaTracerRocketMqProducerPostProcessor();
     }
 
-    @Bean
     @ConditionalOnMissingBean
-    SofaTracerRCFBeanPostProcessor sofaTracerRCFBeanPostProcessor(RedisActionWrapperHelper redisActionWrapperHelper) {
-        return new SofaTracerRCFBeanPostProcessor(redisActionWrapperHelper);
+    @Bean
+    public SofaTracerRocketMqConsumerPostProcessor sofaTracerRocketMqConsumerPostProcessor() {
+        return new SofaTracerRocketMqConsumerPostProcessor();
     }
 }

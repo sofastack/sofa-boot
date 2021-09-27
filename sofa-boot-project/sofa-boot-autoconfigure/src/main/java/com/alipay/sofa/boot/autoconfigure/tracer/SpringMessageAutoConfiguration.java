@@ -28,7 +28,7 @@ import org.springframework.messaging.support.ChannelInterceptor;
 
 /**
  * @author guolei.sgl (guolei.sgl@antfin.com) 2019/12/4 10:34 PM
- * @since
+ * @since 3.9.1
  **/
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnClass({ AbstractMessageChannel.class, ChannelInterceptor.class,

@@ -35,7 +35,7 @@ import java.lang.reflect.Field;
  * SofaTracerRabbitMqBeanPostProcessor.
  *
  * @author chenchen6  2020/8/09 20:44
- * @since  3.1.0
+ * @since  3.9.1
  */
 public class SofaTracerRabbitMqBeanPostProcessor implements BeanPostProcessor, PriorityOrdered {
 

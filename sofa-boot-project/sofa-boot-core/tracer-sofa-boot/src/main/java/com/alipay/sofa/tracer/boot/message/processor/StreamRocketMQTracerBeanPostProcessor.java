@@ -27,7 +27,7 @@ import org.springframework.integration.channel.AbstractMessageChannel;
 
 /**
  * @author guolei.sgl (guolei.sgl@antfin.com) 2019/12/4 11:07 AM
- * @since
+ * @since 3.9.1
  **/
 public class StreamRocketMQTracerBeanPostProcessor implements BeanPostProcessor, EnvironmentAware,
                                                   PriorityOrdered {

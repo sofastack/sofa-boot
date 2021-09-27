@@ -25,6 +25,7 @@ import org.springframework.kafka.core.ConsumerFactory;
  * KafkaConsumerFactoryPostProcessor.
  *
  * @author chenchen6   2020/9/3 22:18
+ * @since 3.9.1
  */
 public class KafkaConsumerFactoryPostProcessor implements BeanPostProcessor {
     @Override

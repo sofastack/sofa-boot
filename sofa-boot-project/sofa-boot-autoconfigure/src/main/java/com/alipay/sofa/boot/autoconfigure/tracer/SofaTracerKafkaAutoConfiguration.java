@@ -32,6 +32,7 @@ import org.springframework.kafka.core.ProducerFactory;
 
 /**
  * @author chenchen6  2020/9/2 21:56
+ * @since 3.9.1
  */
 @Configuration(proxyBeanMethods = false)
 @AutoConfigureAfter(KafkaAutoConfiguration.class)
