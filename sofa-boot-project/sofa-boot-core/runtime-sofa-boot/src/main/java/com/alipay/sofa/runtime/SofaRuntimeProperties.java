@@ -34,6 +34,7 @@ public class SofaRuntimeProperties {
 
     private static final ConcurrentHashMap<ClassLoader, Boolean> manualReadinessCallbackMap     = new ConcurrentHashMap<>();
     private static boolean                                       jvmFilterEnable                = false;
+    private static boolean                                       serviceInterfaceTypeCheck      = false;
 
     public static boolean isManualReadinessCallback(ClassLoader classLoader) {
         return manualReadinessCallbackMap.get(classLoader) != null
@@ -51,6 +52,14 @@ public class SofaRuntimeProperties {
 
     public static void setJvmFilterEnable(boolean jvmFilterEnable) {
         SofaRuntimeProperties.jvmFilterEnable = jvmFilterEnable;
+    }
+
+    public static boolean isServiceInterfaceTypeCheck() {
+        return serviceInterfaceTypeCheck;
+    }
+
+    public static void setServiceInterfaceTypeCheck(boolean serviceInterfaceTypeCheck) {
+        SofaRuntimeProperties.serviceInterfaceTypeCheck = serviceInterfaceTypeCheck;
     }
 
     public static boolean isSkipJvmReferenceHealthCheck(SofaRuntimeContext sofaRuntimeContext) {
