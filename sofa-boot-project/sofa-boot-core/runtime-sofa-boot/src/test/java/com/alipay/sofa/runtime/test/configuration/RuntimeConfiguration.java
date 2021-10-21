@@ -22,6 +22,7 @@ import com.alipay.sofa.runtime.api.client.ReferenceClient;
 import com.alipay.sofa.runtime.api.client.ServiceClient;
 import com.alipay.sofa.runtime.client.impl.ClientFactoryImpl;
 import com.alipay.sofa.runtime.component.impl.StandardSofaRuntimeManager;
+import com.alipay.sofa.runtime.configure.SofaRuntimeConfigurationProperties;
 import com.alipay.sofa.runtime.service.client.ReferenceClientImpl;
 import com.alipay.sofa.runtime.service.client.ServiceClientImpl;
 import com.alipay.sofa.runtime.service.impl.BindingAdapterFactoryImpl;
@@ -50,6 +51,13 @@ import java.util.Set;
  */
 @Configuration(proxyBeanMethods = false)
 public class RuntimeConfiguration {
+
+    @Bean
+    @ConditionalOnMissingBean
+    public SofaRuntimeConfigurationProperties sofaRuntimeConfigurationProperties() {
+        return new SofaRuntimeConfigurationProperties();
+    }
+
     @Bean
     public static BindingConverterFactory bindingConverterFactory() {
         BindingConverterFactory bindingConverterFactory = new BindingConverterFactoryImpl();

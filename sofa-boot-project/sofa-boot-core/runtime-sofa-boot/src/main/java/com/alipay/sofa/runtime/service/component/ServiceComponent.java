@@ -23,6 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 import com.alipay.sofa.boot.error.ErrorCode;
+import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.component.Property;
 import com.alipay.sofa.runtime.log.SofaLogger;
@@ -75,6 +76,20 @@ public class ServiceComponent extends AbstractComponent {
     public boolean resolve() {
         resolveBinding();
         return super.resolve();
+    }
+
+    @Override
+    public void register() {
+        Object target = service.getTarget();
+        if (SofaRuntimeProperties.isServiceInterfaceTypeCheck()) {
+            Class<?> interfaceType = service.getInterfaceType();
+            if (!interfaceType.isAssignableFrom(target.getClass())) {
+                throw new ServiceRuntimeException(ErrorCode.convert("01-00104", service,
+                    target.getClass(), interfaceType));
+            }
+        }
+
+        super.register();
     }
 
     private void resolveBinding() {
