@@ -20,6 +20,7 @@ import java.util.Map;
 
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.component.Property;
+import com.alipay.sofa.runtime.model.ComponentStatus;
 import com.alipay.sofa.runtime.model.ComponentType;
 import com.alipay.sofa.runtime.spi.component.AbstractComponent;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
@@ -95,7 +96,12 @@ public class ExtensionPointComponent extends AbstractComponent {
                 }
             }
         }
-        super.deactivate();
+
+        // don't try deactivate spring implement
+        if (componentStatus != ComponentStatus.ACTIVATED) {
+            return;
+        }
+        componentStatus = ComponentStatus.RESOLVED;
     }
 
     public ExtensionPoint getExtensionPoint() {
