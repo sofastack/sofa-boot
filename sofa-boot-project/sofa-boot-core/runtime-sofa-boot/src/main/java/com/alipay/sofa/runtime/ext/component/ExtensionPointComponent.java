@@ -19,6 +19,7 @@ package com.alipay.sofa.runtime.ext.component;
 import java.util.Map;
 
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
+import com.alipay.sofa.runtime.api.component.ComponentLifeCycle;
 import com.alipay.sofa.runtime.api.component.Property;
 import com.alipay.sofa.runtime.model.ComponentStatus;
 import com.alipay.sofa.runtime.model.ComponentType;
@@ -27,6 +28,7 @@ import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.ComponentManager;
 import com.alipay.sofa.runtime.spi.component.Implementation;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
+import com.alipay.sofa.runtime.spi.spring.SpringImplementationImpl;
 import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
 import com.alipay.sofa.service.api.component.ExtensionPoint;
 
@@ -97,9 +99,16 @@ public class ExtensionPointComponent extends AbstractComponent {
             }
         }
 
-        // don't try deactivate spring implement
         if (componentStatus != ComponentStatus.ACTIVATED) {
             return;
+        }
+
+        // skip deactivate SpringImplementationImpl because it's already deactivated
+        if (this.implementation != null && !(implementation instanceof SpringImplementationImpl)) {
+            Object target = this.implementation.getTarget();
+            if (target instanceof ComponentLifeCycle) {
+                ((ComponentLifeCycle) target).deactivate();
+            }
         }
         componentStatus = ComponentStatus.RESOLVED;
     }
