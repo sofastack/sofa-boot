@@ -123,7 +123,7 @@ public class ExtensionComponent extends AbstractComponent {
             }
         } catch (Throwable t) {
             throw new ServiceRuntimeException(ErrorCode.convert("01-01000",
-                extensionPointComponentInfo.getName()), t);
+                    extensionPointComponentInfo.getName()), t);
         }
 
         componentStatus = ComponentStatus.ACTIVATED;
@@ -138,18 +138,29 @@ public class ExtensionComponent extends AbstractComponent {
         }
 
         HealthResult healthResult = new HealthResult(componentName.getRawName());
+        //表示 loadContributions 异常的 Extension
+        if (e!= null) {
+            healthResult.setHealthy(false);
+            healthResult.setHealthReport("Extension loadContributions error: " + e.getMessage());
+            return healthResult;
+        }
+        //表示注册成功的 Extension
+        if (isActivated()) {
+            healthResult.setHealthy(true);
+            return healthResult;
+        }
         //表示对应的 ExtensionPoint 未注册
         if (!isResolved()) {
             healthResult.setHealthy(false);
-            healthResult.setHealthReport("Can not found corresponding ExtensionPoint: "
+            healthResult.setHealthReport("Can not find corresponding ExtensionPoint: "
                                          + extension.getTargetComponentName().getName());
-        } else if (e != null) {
-            healthResult.setHealthy(false);
-            healthResult.setHealthReport(e.getMessage());
+            return healthResult;
         } else {
-            healthResult.setHealthy(true);
+            // 表示 registerExtension 异常的 Extension
+            healthResult.setHealthy(false);
+            healthResult.setHealthReport("Extension registerExtension error");
+            return healthResult;
         }
-        return healthResult;
     }
 
     public Extension getExtension() {
