@@ -123,7 +123,7 @@ public class ExtensionComponent extends AbstractComponent {
             }
         } catch (Throwable t) {
             throw new ServiceRuntimeException(ErrorCode.convert("01-01000",
-                    extensionPointComponentInfo.getName()), t);
+                extensionPointComponentInfo.getName()), t);
         }
 
         componentStatus = ComponentStatus.ACTIVATED;
@@ -139,7 +139,7 @@ public class ExtensionComponent extends AbstractComponent {
 
         HealthResult healthResult = new HealthResult(componentName.getRawName());
         //表示 loadContributions 异常的 Extension
-        if (e!= null) {
+        if (e != null) {
             healthResult.setHealthy(false);
             healthResult.setHealthReport("Extension loadContributions error: " + e.getMessage());
             return healthResult;
