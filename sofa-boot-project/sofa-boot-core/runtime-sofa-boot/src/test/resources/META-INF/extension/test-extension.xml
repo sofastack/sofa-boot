@@ -188,4 +188,10 @@
     </sofa:extension>
 
 
+    <sofa:extension bean="iExtension" point="noExist">
+        <sofa:content>
+            <bad>noExist</bad>
+        </sofa:content>
+    </sofa:extension>
+
 </beans>

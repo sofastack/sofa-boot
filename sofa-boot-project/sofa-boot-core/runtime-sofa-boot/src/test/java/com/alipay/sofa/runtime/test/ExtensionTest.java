@@ -16,13 +16,27 @@
  */
 package com.alipay.sofa.runtime.test;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.OutputStream;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
+import com.alipay.sofa.common.xmap.Context;
+import com.alipay.sofa.common.xmap.DOMSerializer;
+import com.alipay.sofa.common.xmap.Resource;
+import com.alipay.sofa.common.xmap.XMap;
+import com.alipay.sofa.runtime.api.aware.ExtensionClientAware;
+import com.alipay.sofa.runtime.api.client.ExtensionClient;
+import com.alipay.sofa.runtime.api.client.param.ExtensionParam;
+import com.alipay.sofa.runtime.api.client.param.ExtensionPointParam;
+import com.alipay.sofa.runtime.ext.component.ExtensionComponent;
+import com.alipay.sofa.runtime.model.ComponentType;
+import com.alipay.sofa.runtime.spi.component.ComponentInfo;
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
+import com.alipay.sofa.runtime.spi.spring.SofaRuntimeContextAware;
+import com.alipay.sofa.runtime.test.configuration.RuntimeConfiguration;
+import com.alipay.sofa.runtime.test.extension.bean.IExtension;
+import com.alipay.sofa.runtime.test.extension.bean.SimpleSpringBean;
+import com.alipay.sofa.runtime.test.extension.bean.SimpleSpringListBean;
+import com.alipay.sofa.runtime.test.extension.bean.SimpleSpringMapBean;
+import com.alipay.sofa.runtime.test.extension.descriptor.ClientExtensionDescriptor;
+import com.alipay.sofa.runtime.test.extension.descriptor.SimpleExtensionDescriptor;
+import com.alipay.sofa.runtime.test.extension.descriptor.XMapTestDescriptor;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,22 +49,12 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.w3c.dom.Document;
 
-import com.alipay.sofa.common.xmap.Context;
-import com.alipay.sofa.common.xmap.DOMSerializer;
-import com.alipay.sofa.common.xmap.Resource;
-import com.alipay.sofa.common.xmap.XMap;
-import com.alipay.sofa.runtime.api.aware.ExtensionClientAware;
-import com.alipay.sofa.runtime.api.client.ExtensionClient;
-import com.alipay.sofa.runtime.api.client.param.ExtensionParam;
-import com.alipay.sofa.runtime.api.client.param.ExtensionPointParam;
-import com.alipay.sofa.runtime.test.configuration.RuntimeConfiguration;
-import com.alipay.sofa.runtime.test.extension.bean.IExtension;
-import com.alipay.sofa.runtime.test.extension.bean.SimpleSpringBean;
-import com.alipay.sofa.runtime.test.extension.bean.SimpleSpringListBean;
-import com.alipay.sofa.runtime.test.extension.bean.SimpleSpringMapBean;
-import com.alipay.sofa.runtime.test.extension.descriptor.ClientExtensionDescriptor;
-import com.alipay.sofa.runtime.test.extension.descriptor.SimpleExtensionDescriptor;
-import com.alipay.sofa.runtime.test.extension.descriptor.XMapTestDescriptor;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.OutputStream;
+import java.util.Collection;
 
 /**
  * @author ruoshan
@@ -59,9 +63,11 @@ import com.alipay.sofa.runtime.test.extension.descriptor.XMapTestDescriptor;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @TestPropertySource(properties = "spring.application.name=ExtensionTest")
-public class ExtensionTest implements ExtensionClientAware {
+public class ExtensionTest implements ExtensionClientAware, SofaRuntimeContextAware {
 
     private ExtensionClient      extensionClient;
+
+    private SofaRuntimeContext   sofaRuntimeContext;
 
     @Autowired
     private IExtension           iExtension;
@@ -230,9 +236,29 @@ public class ExtensionTest implements ExtensionClientAware {
         Assert.assertNull(iExtension.getBadDescriptor());
     }
 
+    @Test
+    public void testNotExist() {
+        Collection<ComponentInfo> componentInfos =
+                sofaRuntimeContext.getComponentManager().getComponentInfosByType(new ComponentType("extension"));
+        componentInfos.forEach(componentInfo -> {
+            if (componentInfo instanceof ExtensionComponent) {
+                if (componentInfo.getName().getName().contains("noExist")) {
+                    Assert.assertFalse(componentInfo.isHealthy().isHealthy());
+                    Assert.assertEquals("Can not found corresponding ExtensionPoint: iExtension$noExist",
+                            componentInfo.isHealthy().getHealthReport());
+                }
+            }
+        });
+    }
+
     @Override
     public void setExtensionClient(ExtensionClient extensionClient) {
         this.extensionClient = extensionClient;
+    }
+
+    @Override
+    public void setSofaRuntimeContext(SofaRuntimeContext sofaRuntimeContext) {
+        this.sofaRuntimeContext = sofaRuntimeContext;
     }
 
     @Configuration(proxyBeanMethods = false)

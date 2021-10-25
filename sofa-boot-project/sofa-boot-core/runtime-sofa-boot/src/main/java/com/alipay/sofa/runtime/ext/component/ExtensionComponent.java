@@ -136,7 +136,20 @@ public class ExtensionComponent extends AbstractComponent {
             healthResult.setHealthy(true);
             return healthResult;
         }
-        return super.isHealthy();
+
+        HealthResult healthResult = new HealthResult(componentName.getRawName());
+        //表示对应的 ExtensionPoint 未注册
+        if (!isResolved()) {
+            healthResult.setHealthy(false);
+            healthResult.setHealthReport("Can not found corresponding ExtensionPoint: "
+                                         + extension.getTargetComponentName().getName());
+        } else if (e != null) {
+            healthResult.setHealthy(false);
+            healthResult.setHealthReport(e.getMessage());
+        } else {
+            healthResult.setHealthy(true);
+        }
+        return healthResult;
     }
 
     public Extension getExtension() {
