@@ -244,7 +244,7 @@ public class ExtensionTest implements ExtensionClientAware, SofaRuntimeContextAw
             if (componentInfo instanceof ExtensionComponent) {
                 if (componentInfo.getName().getName().contains("noExist")) {
                     Assert.assertFalse(componentInfo.isHealthy().isHealthy());
-                    Assert.assertEquals("Can not found corresponding ExtensionPoint: iExtension$noExist",
+                    Assert.assertEquals("Can not find corresponding ExtensionPoint: iExtension$noExist",
                             componentInfo.isHealthy().getHealthReport());
                 }
             }
