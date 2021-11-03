@@ -290,7 +290,7 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
                 publishContextAsSofaComponent(deployment, application, ctx);
                 application.addInstalled(deployment);
             } catch (Throwable t) {
-                SofaLogger.error(ErrorCode.convert("01-11002"), deployment.getName(), t);
+                SofaLogger.error(ErrorCode.convert("01-11002", deployment.getName()), t);
                 application.addFailed(deployment);
             } finally {
                 deployment.deployFinish();
