@@ -118,8 +118,8 @@ public class ServiceComponent extends AbstractComponent {
                     bindingAdapter.preOutBinding(service, binding, target, getContext());
                 } catch (Throwable t) {
                     allPassed = false;
-                    SofaLogger.error(ErrorCode.convert("01-00002", binding.getBindingType()),
-                        service, t);
+                    SofaLogger.error(
+                        ErrorCode.convert("01-00002", binding.getBindingType(), service), t);
                     continue;
                 }
                 SofaLogger.info(" <<PreOut Binding [{}] Ends - {}.", binding.getBindingType(),
@@ -168,8 +168,8 @@ public class ServiceComponent extends AbstractComponent {
                 } catch (Throwable t) {
                     allPassed = false;
                     binding.setHealthy(false);
-                    SofaLogger.error(ErrorCode.convert("01-00004", binding.getBindingType()),
-                        service, t);
+                    SofaLogger.error(
+                        ErrorCode.convert("01-00004", binding.getBindingType(), service), t);
                     continue;
                 }
                 if (!Boolean.FALSE.equals(outBindingResult)) {
@@ -216,8 +216,8 @@ public class ServiceComponent extends AbstractComponent {
                     bindingAdapter.preUnoutBinding(service, binding, target, getContext());
                 } catch (Throwable t) {
                     allPassed = false;
-                    SofaLogger.error(ErrorCode.convert("01-00006", binding.getBindingType()),
-                        service, t);
+                    SofaLogger.error(
+                        ErrorCode.convert("01-00006", binding.getBindingType(), service), t);
                     continue;
                 }
                 SofaLogger.info(" <<Pre un-out Binding [{}] Ends - {}.", binding.getBindingType(),
@@ -273,8 +273,8 @@ public class ServiceComponent extends AbstractComponent {
                     bindingAdapter.postUnoutBinding(service, binding, target, getContext());
                 } catch (Throwable t) {
                     allPassed = false;
-                    SofaLogger.error(ErrorCode.convert("01-00008", binding.getBindingType()),
-                        service, t);
+                    SofaLogger.error(
+                        ErrorCode.convert("01-00008", binding.getBindingType(), service), t);
                     continue;
                 }
                 SofaLogger.info(" <<Post un-out Binding [{}] Ends - {}.", binding.getBindingType(),

@@ -154,8 +154,9 @@ public class ExtensionComponent extends AbstractComponent {
                     .getAppClassLoader())) {
                     this.e = e;
                 }
-                SofaLogger.error(ErrorCode.convert("01-01002"), extensionPoint.getName(),
-                    extension.getComponentName(), e);
+                SofaLogger.error(
+                    ErrorCode.convert("01-01002", extensionPoint.getName(),
+                        extension.getComponentName()), e);
             }
         }
     }
