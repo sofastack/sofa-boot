@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.runtime.test;
 
+import com.alipay.sofa.runtime.api.model.BindingTypeEnum;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -79,8 +80,8 @@ public class AnnotationPlaceHolderTest {
         SofaServiceBinding delegateBinding = delegate.bindings()[0];
         String[] delegateFilters = delegateBinding.filters();
 
-        Assert.assertEquals("${annotation.sample.service.bindingType}", binding.bindingType());
-        Assert.assertEquals("bolt", delegateBinding.bindingType());
+        Assert.assertEquals("${annotation.sample.service.bindingType}", binding.bindingType().getType());
+        Assert.assertEquals(BindingTypeEnum.JVM, delegateBinding.bindingType());
 
         Assert.assertEquals(300, binding.timeout());
         Assert.assertEquals(300, delegateBinding.timeout());
@@ -121,8 +122,8 @@ public class AnnotationPlaceHolderTest {
         SofaReferenceBinding binding = sofaReference.binding();
         SofaReferenceBinding delegateBinding = delegate.binding();
 
-        Assert.assertEquals("${annotation.sample.ref.bindingType}", binding.bindingType());
-        Assert.assertEquals("bolt", delegateBinding.bindingType());
+        Assert.assertEquals("${annotation.sample.ref.bindingType}", binding.bindingType().getType());
+        Assert.assertEquals(BindingTypeEnum.BOLT, delegateBinding.bindingType());
 
         Assert.assertEquals("${annotation.sample.ref.direct-url}", binding.directUrl());
         Assert.assertEquals("127.0.0.1", delegateBinding.directUrl());

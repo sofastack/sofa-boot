@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.rpc.boot.test.service;
 
+import com.alipay.sofa.runtime.api.model.BindingTypeEnum;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
@@ -67,7 +68,7 @@ public class ServiceTest {
     @EnableAutoConfiguration
     static class ServiceTestConfiguration {
         @Bean
-        @SofaService(bindings = { @SofaServiceBinding(bindingType = "bolt") })
+        @SofaService(bindings = { @SofaServiceBinding(bindingType = BindingTypeEnum.BOLT) })
         public SampleService sampleService() {
             return new SampleService() {
                 @Override

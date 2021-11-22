@@ -19,6 +19,7 @@ package com.alipay.sofa.rpc.boot.test.parameter;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.alipay.sofa.runtime.api.model.BindingTypeEnum;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -51,7 +52,7 @@ import com.alipay.sofa.runtime.api.annotation.SofaServiceBinding;
                                   "dynamic_value=dynamic_test_value" })
 public class ParameterAnnotationTest {
 
-    @SofaReference(jvmFirst = false, binding = @SofaReferenceBinding(filters = "parameterFilter", bindingType = "bolt", parameters = {
+    @SofaReference(jvmFirst = false, binding = @SofaReferenceBinding(filters = "parameterFilter", bindingType = BindingTypeEnum.BOLT, parameters = {
             @SofaParameter(key = "static_key", value = "static_value"),
             @SofaParameter(key = "${dynamic_key}", value = "${dynamic_value}") }))
     private HelloSyncService helloSyncService;
@@ -83,7 +84,7 @@ public class ParameterAnnotationTest {
         }
 
         @Bean
-        @SofaService(bindings = @SofaServiceBinding(filters = "parameterFilter", bindingType = "bolt", parameters = {
+        @SofaService(bindings = @SofaServiceBinding(filters = "parameterFilter", bindingType = BindingTypeEnum.BOLT, parameters = {
                 @SofaParameter(key = "static_key", value = "static_value"),
                 @SofaParameter(key = "${dynamic_key}", value = "${dynamic_value}") }))
         public HelloSyncService helloSyncService() {

@@ -18,6 +18,7 @@ package com.alipay.sofa.rpc.boot.test.bean.annotation;
 
 import com.alipay.sofa.runtime.api.annotation.SofaService;
 import com.alipay.sofa.runtime.api.annotation.SofaServiceBinding;
+import com.alipay.sofa.runtime.api.model.BindingTypeEnum;
 import org.springframework.stereotype.Component;
 
 /**
@@ -25,7 +26,7 @@ import org.springframework.stereotype.Component;
  * @Date: 2021/7/21 2:17 下午
  */
 @Component
-@SofaService(bindings = { @SofaServiceBinding(bindingType = "bolt", timeout = 5000) }, uniqueId = "timeout")
+@SofaService(bindings = { @SofaServiceBinding(bindingType = BindingTypeEnum.BOLT, timeout = 5000) }, uniqueId = "timeout")
 public class AnnotationServiceTimeoutImpl implements AnnotationService {
 
     @Override

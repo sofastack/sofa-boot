@@ -217,7 +217,7 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
                                                    Class<?> parameterType,
                                                    ConfigurableListableBeanFactory beanFactory) {
         Assert.isTrue(
-            JvmBinding.JVM_BINDING_TYPE.getType().equals(sofaReference.binding().bindingType()),
+            JvmBinding.JVM_BINDING_TYPE.getType().equals(sofaReference.binding().bindingType().getType()),
             "Only jvm type of @SofaReference on parameter is supported.");
         AnnotationWrapperBuilder<SofaReference> wrapperBuilder = AnnotationWrapperBuilder.wrap(
             sofaReference).withBinder(binder);
@@ -333,7 +333,7 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
                 .getBindingConverter(new BindingType(sofaServiceBinding.bindingType()));
             if (bindingConverter == null) {
                 throw new ServiceRuntimeException(ErrorCode.convert("01-00200",
-                    sofaServiceBinding.bindingType()));
+                    sofaServiceBinding.bindingType().getType()));
             }
             BindingConverterContext bindingConverterContext = new BindingConverterContext();
             bindingConverterContext.setInBinding(false);
@@ -363,7 +363,7 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
             .getBindingConverter(new BindingType(sofaReferenceBinding.bindingType()));
         if (bindingConverter == null) {
             throw new ServiceRuntimeException(ErrorCode.convert("01-00200",
-                sofaReferenceBinding.bindingType()));
+                sofaReferenceBinding.bindingType().getType()));
         }
         BindingConverterContext bindingConverterContext = new BindingConverterContext();
         bindingConverterContext.setInBinding(true);

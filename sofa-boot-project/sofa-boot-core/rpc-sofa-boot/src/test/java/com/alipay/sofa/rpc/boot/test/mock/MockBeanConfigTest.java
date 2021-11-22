@@ -28,6 +28,7 @@ import com.alipay.sofa.rpc.common.json.JSON;
 import com.alipay.sofa.runtime.api.annotation.SofaParameter;
 import com.alipay.sofa.runtime.api.annotation.SofaReference;
 import com.alipay.sofa.runtime.api.annotation.SofaReferenceBinding;
+import com.alipay.sofa.runtime.api.model.BindingTypeEnum;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -50,7 +51,7 @@ import org.springframework.test.context.junit4.SpringRunner;
                                    + ".consumer.repeated.reference.limit=10", })
 public class MockBeanConfigTest {
 
-    @SofaReference(binding = @SofaReferenceBinding(bindingType = "bolt", mockMode = MockMode.LOCAL, mockBean = "mockHello"))
+    @SofaReference(binding = @SofaReferenceBinding(bindingType = BindingTypeEnum.BOLT, mockMode = MockMode.LOCAL, mockBean = "mockHello"))
     private HelloSyncService     helloSyncService;
 
     @Autowired
@@ -75,7 +76,7 @@ public class MockBeanConfigTest {
         }
     }
 
-    @SofaReference(binding = @SofaReferenceBinding(bindingType = "bolt", mockMode = MockMode.REMOTE, parameters = @SofaParameter(key = "mockUrl", value = "http://127.0.0.1:1235/")))
+    @SofaReference(binding = @SofaReferenceBinding(bindingType = BindingTypeEnum.BOLT, mockMode = MockMode.REMOTE, parameters = @SofaParameter(key = "mockUrl", value = "http://127.0.0.1:1235/")))
     private HelloSyncService remoteMock;
 
     @Test

@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.alipay.sofa.runtime.api.model.BindingTypeEnum;
 import org.apache.commons.io.FileUtils;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -202,7 +203,7 @@ public class SofaServiceAndReferenceTest {
     @Configuration(proxyBeanMethods = false)
     static class TestSofaReferenceConfiguration {
         @Bean
-        public SampleService sampleService(@SofaReference(uniqueId = "rpc", binding = @SofaReferenceBinding(bindingType = "bolt")) SampleService sampleService) {
+        public SampleService sampleService(@SofaReference(uniqueId = "rpc", binding = @SofaReferenceBinding(bindingType = BindingTypeEnum.BOLT)) SampleService sampleService) {
             return new DefaultSampleService("TestSofaReferenceConfiguration");
         }
     }

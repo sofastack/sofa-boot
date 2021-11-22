@@ -16,16 +16,21 @@
  */
 package com.alipay.sofa.runtime.api.annotation;
 
+import com.alipay.sofa.runtime.api.model.BindingTypeEnum;
+
 /**
  * @author xuanbei 18/5/11
  */
 public @interface SofaServiceBinding {
+
     /**
-     * binding type, maybe jvm/bolt/rest
+     * binding type enum
+     * <p>
+     * {@link BindingTypeEnum}
      *
      * @return binding type
      */
-    String bindingType() default "jvm";
+    BindingTypeEnum bindingType() default BindingTypeEnum.JVM;
 
     /**
      * normal weight, default is 100
@@ -94,7 +99,7 @@ public @interface SofaServiceBinding {
      * serialization between biz, default is true.
      * only serialize of reference and service is false
      * then invocation between biz would skip serialization
-     *
+     * <p>
      * Note that the serialize of {@link SofaReferenceBinding} is false
      *
      * @return

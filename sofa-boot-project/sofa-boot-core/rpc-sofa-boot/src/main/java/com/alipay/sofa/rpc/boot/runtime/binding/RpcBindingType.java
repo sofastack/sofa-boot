@@ -17,6 +17,7 @@
 package com.alipay.sofa.rpc.boot.runtime.binding;
 
 import com.alipay.sofa.runtime.api.binding.BindingType;
+import com.alipay.sofa.runtime.api.model.BindingTypeEnum;
 
 /**
  *
@@ -24,16 +25,16 @@ import com.alipay.sofa.runtime.api.binding.BindingType;
  */
 public class RpcBindingType {
 
-    public static final BindingType BOLT_BINDING_TYPE   = new BindingType("bolt");
+    public static final BindingType BOLT_BINDING_TYPE   = new BindingType(BindingTypeEnum.BOLT);
 
-    public static final BindingType REST_BINDING_TYPE   = new BindingType("rest");
+    public static final BindingType REST_BINDING_TYPE   = new BindingType(BindingTypeEnum.REST);
 
-    public static final BindingType DUBBO_BINDING_TYPE  = new BindingType("dubbo");
+    public static final BindingType DUBBO_BINDING_TYPE  = new BindingType(BindingTypeEnum.DUBBO);
 
-    public static final BindingType H2C_BINDING_TYPE    = new BindingType("h2c");
+    public static final BindingType H2C_BINDING_TYPE    = new BindingType(BindingTypeEnum.H2C);
 
-    public static final BindingType HTTP_BINDING_TYPE   = new BindingType("http");
+    public static final BindingType HTTP_BINDING_TYPE   = new BindingType(BindingTypeEnum.HTTP);
 
-    public static final BindingType TRIPLE_BINDING_TYPE = new BindingType("tri");
+    public static final BindingType TRIPLE_BINDING_TYPE = new BindingType(BindingTypeEnum.TRIPLE);
 
 }

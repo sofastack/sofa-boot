@@ -16,16 +16,21 @@
  */
 package com.alipay.sofa.runtime.api.annotation;
 
+import com.alipay.sofa.runtime.api.model.BindingTypeEnum;
+
 /**
  * @author xuanbei 18/5/11
  */
 public @interface SofaReferenceBinding {
+
     /**
-     * binding type, maybe jvm/bolt/rest
+     * binding type enum
+     * <p>
+     * {@link BindingTypeEnum}
      *
      * @return binding type
      */
-    String bindingType() default "jvm";
+    BindingTypeEnum bindingType() default BindingTypeEnum.JVM;
 
     /**
      * timeout
@@ -148,12 +153,14 @@ public @interface SofaReferenceBinding {
 
     /**
      * mock mode of reference
+     *
      * @return "local", "remote" or empty
      */
     String mockMode() default "";
 
     /**
      * get mock from spring beans
+     *
      * @return bean name
      */
     String mockBean() default "";

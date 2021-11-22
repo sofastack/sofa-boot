@@ -19,6 +19,9 @@ package com.alipay.sofa.runtime.test;
 import java.util.Collection;
 import java.util.HashMap;
 
+import com.alipay.sofa.boot.error.ErrorCode;
+import com.alipay.sofa.runtime.api.model.BindingTypeEnum;
+import com.alipay.sofa.runtime.spi.binding.Binding;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,6 +49,8 @@ import com.alipay.sofa.runtime.test.beans.facade.SampleService;
 import com.alipay.sofa.runtime.test.beans.service.DefaultSampleService;
 import com.alipay.sofa.runtime.test.configuration.RuntimeConfiguration;
 import com.alipay.sofa.runtime.test.util.ComponentNameUtil;
+
+import javax.xml.ws.http.HTTPBinding;
 
 /**
  * @author qilong.zql
@@ -166,14 +171,15 @@ public class SofaBindingTest {
 
     @Test
     public void testBindingType() {
+        Assert.assertTrue(new BindingType("jvm").equals(new BindingType(BindingTypeEnum.JVM)));
         Assert.assertTrue(new BindingType("jvm").equals(new BindingType("jvm")));
-        Assert.assertFalse(new BindingType("jvm").equals(new BindingType("bolt")));
+        Assert.assertFalse(new BindingType("jvm").equals(new BindingType(BindingTypeEnum.BOLT)));
         Assert.assertFalse(new BindingType("jvm").equals(null));
         Assert.assertFalse(new BindingType("jvm").equals("jvm"));
 
         HashMap<BindingType, String> map = new HashMap<>();
         map.put(new BindingType("jvm"), "jvm");
-        map.put(new BindingType("bolt"), "bolt");
+        map.put(new BindingType(BindingTypeEnum.BOLT), "bolt");
         map.put(new BindingType("rest"), "rest");
 
         Assert.assertEquals(map.get(new BindingType("jvm")), "jvm");

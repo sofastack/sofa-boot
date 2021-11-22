@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.rpc.boot.test.bean.annotation;
 
+import com.alipay.sofa.runtime.api.model.BindingTypeEnum;
 import org.springframework.stereotype.Component;
 
 import com.alipay.sofa.runtime.api.annotation.SofaService;
@@ -26,7 +27,7 @@ import com.alipay.sofa.runtime.api.annotation.SofaServiceBinding;
  * @since 3.2.0
  */
 @Component
-@SofaService(bindings = { @SofaServiceBinding(bindingType = "bolt") }, uniqueId = "bolt")
+@SofaService(bindings = { @SofaServiceBinding(bindingType = BindingTypeEnum.BOLT) }, uniqueId = "bolt")
 public class AnnotationServiceImpl implements AnnotationService {
     @Override
     public String hello() {

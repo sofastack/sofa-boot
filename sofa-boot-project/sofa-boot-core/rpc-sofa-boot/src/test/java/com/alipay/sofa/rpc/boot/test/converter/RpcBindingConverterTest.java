@@ -19,6 +19,7 @@ package com.alipay.sofa.rpc.boot.test.converter;
 import java.util.List;
 
 import com.alipay.sofa.rpc.boot.test.RuntimeTestConfiguration;
+import com.alipay.sofa.runtime.api.model.BindingTypeEnum;
 import com.alipay.sofa.runtime.service.impl.BindingConverterFactoryImpl;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
@@ -38,7 +39,7 @@ import com.alipay.sofa.runtime.api.annotation.SofaReferenceBinding;
  */
 public class RpcBindingConverterTest {
 
-    @SofaReference(binding = @SofaReferenceBinding(bindingType = "bolt", methodInfos = { @SofaMethod(name = "test", retries = 1, invokeType = "callback", callbackClass = "class", callbackRef = "ref", timeout = 2000) }))
+    @SofaReference(binding = @SofaReferenceBinding(bindingType = BindingTypeEnum.BOLT, methodInfos = { @SofaMethod(name = "test", retries = 1, invokeType = "callback", callbackClass = "class", callbackRef = "ref", timeout = 2000) }))
     private String testAnnotation;
 
     @Test

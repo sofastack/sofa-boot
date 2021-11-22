@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.runtime.service.binding;
 
+import com.alipay.sofa.runtime.api.model.BindingTypeEnum;
 import org.w3c.dom.Element;
 
 import com.alipay.sofa.runtime.api.binding.BindingType;
@@ -99,8 +100,8 @@ public class JvmBinding extends AbstractBinding {
     }
 
     public static class XmlConstants {
-        public static String SERIALIZE        = "serialize";
-        public static String SUPPORT_TAG_NAME = "binding.jvm";
-        public static String BINDING_TYPE     = "jvm";
+        public static String SERIALIZE                 = "serialize";
+        public static String SUPPORT_TAG_NAME          = "binding.jvm";
+        public static BindingTypeEnum BINDING_TYPE     = BindingTypeEnum.JVM;
     }
 }

@@ -168,7 +168,7 @@ public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor, 
             .getBindingConverter(new BindingType(sofaReferenceAnnotation.binding().bindingType()));
         if (bindingConverter == null) {
             throw new ServiceRuntimeException(ErrorCode.convert("01-00200", sofaReferenceAnnotation
-                .binding().bindingType()));
+                .binding().bindingType().getType()));
         }
 
         BindingConverterContext bindingConverterContext = new BindingConverterContext();

@@ -19,6 +19,7 @@ package com.alipay.sofa.rpc.boot.test.config;
 import java.lang.reflect.Field;
 import java.util.Map;
 
+import com.alipay.sofa.runtime.api.model.BindingTypeEnum;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -49,7 +50,7 @@ public class SofaBootRpcPropertiesTest {
     @Autowired
     private SofaBootRpcProperties   sofaBootRpcProperties;
 
-    @SofaReference(jvmFirst = false, binding = @SofaReferenceBinding(bindingType = "bolt"))
+    @SofaReference(jvmFirst = false, binding = @SofaReferenceBinding(bindingType = BindingTypeEnum.BOLT))
     private SampleFacade            sampleFacade;
 
     @Autowired

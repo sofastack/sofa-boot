@@ -46,6 +46,7 @@ import com.alipay.sofa.runtime.api.client.ClientFactory;
 import com.alipay.sofa.runtime.api.client.ServiceClient;
 import com.alipay.sofa.runtime.api.client.param.BindingParam;
 import com.alipay.sofa.runtime.api.client.param.ServiceParam;
+import com.alipay.sofa.runtime.api.model.BindingTypeEnum;
 import com.alipay.sofa.runtime.spi.binding.Binding;
 import io.grpc.examples.helloworld.HelloReply;
 import io.grpc.examples.helloworld.HelloRequest;
@@ -128,19 +129,19 @@ public class SofaBootRpcAllTest {
     @Qualifier("sofaGreeterTripleRef")
     private SofaGreeterTriple.IGreeter sofaGreeterTripleRef;
 
-    @SofaReference(binding = @SofaReferenceBinding(bindingType = "bolt"), jvmFirst = false, uniqueId = "bolt")
+    @SofaReference(binding = @SofaReferenceBinding(bindingType = BindingTypeEnum.BOLT), jvmFirst = false, uniqueId = "bolt")
     private AnnotationService          annotationService;
 
-    @SofaReference(binding = @SofaReferenceBinding(bindingType = "bolt", serializeType = "protobuf"), jvmFirst = false, uniqueId = "pb")
+    @SofaReference(binding = @SofaReferenceBinding(bindingType = BindingTypeEnum.BOLT, serializeType = "protobuf"), jvmFirst = false, uniqueId = "pb")
     private AnnotationService          annotationServicePb;
 
-    @SofaReference(binding = @SofaReferenceBinding(bindingType = "bolt", loadBalancer = "roundRobin"), uniqueId = "loadbalancer")
+    @SofaReference(binding = @SofaReferenceBinding(bindingType = BindingTypeEnum.BOLT, loadBalancer = "roundRobin"), uniqueId = "loadbalancer")
     private AnnotationService          annotationLoadBalancerService;
 
-    @SofaReference(binding = @SofaReferenceBinding(bindingType = "bolt"), jvmFirst = false, uniqueId = "timeout")
+    @SofaReference(binding = @SofaReferenceBinding(bindingType = BindingTypeEnum.BOLT), jvmFirst = false, uniqueId = "timeout")
     private AnnotationService          annotationProviderTimeoutService;
 
-    @SofaReference(binding = @SofaReferenceBinding(bindingType = "bolt", timeout = 1000), jvmFirst = false, uniqueId = "timeout")
+    @SofaReference(binding = @SofaReferenceBinding(bindingType = BindingTypeEnum.BOLT, timeout = 1000), jvmFirst = false, uniqueId = "timeout")
     private AnnotationService          annotationConsumerTimeoutService;
 
     @SofaClientFactory

@@ -16,6 +16,8 @@
  */
 package com.alipay.sofa.runtime.api.binding;
 
+import com.alipay.sofa.runtime.api.model.BindingTypeEnum;
+
 /**
  * The type of the binding, used to distinguish different types of
  * {@link com.alipay.sofa.runtime.api.client.param.BindingParam}
@@ -33,6 +35,15 @@ public class BindingType {
      */
     public BindingType(String type) {
         this.type = type;
+    }
+
+    /**
+     * Convert from basic binding type enums to binding type.
+     *
+     * @param typeEnum {@link BindingTypeEnum}
+     */
+    public BindingType(BindingTypeEnum typeEnum) {
+        this.type = typeEnum.getType();
     }
 
     /**
