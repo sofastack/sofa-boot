@@ -70,7 +70,7 @@ public class DuplicateModuleTest {
                 .assertTrue(e
                     .getMessage()
                     .contains(
-                        "SOFA-BOOT-01-11006: Overriding module deployment for module name '[com.alipay.sofa.dev]': replacing '[dev-module-0.1.0.jar]' with '[dup-module-0.1.0.jar]'"));
+                        "SOFA-BOOT-01-11006: Cannot register module deployment for module name '[com.alipay.sofa.dev]': replacing '[dev-module-0.1.0.jar]' with '[dup-module-0.1.0.jar]'"));
         }
     }
 
