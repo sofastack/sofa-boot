@@ -71,10 +71,10 @@ public class ApplicationRuntimeModel {
         return this.moduleDeploymentValidator.isModuleDeployment(deploymentDescriptor);
     }
 
-    public void addDeployment(DeploymentDescriptor dd) {
+    public DeploymentDescriptor addDeployment(DeploymentDescriptor dd) {
         deploys.add(dd);
         deployRegistry.add(dd);
-        springPowered.put(dd.getModuleName(), dd);
+        return springPowered.put(dd.getModuleName(), dd);
     }
 
     public List<DeploymentDescriptor> getAllDeployments() {
