@@ -55,7 +55,7 @@ public class SofaRpcLoggerLevelConfigTest {
     }
 
     @Test
-    public void testUserAppLogerLevel() {
+    public void testUserAppLoggerLevel() {
         org.slf4j.Logger userLogger = org.slf4j.LoggerFactory.getLogger("com.user.app.xxx");
         Assert.assertTrue(userLogger.isWarnEnabled());
     }

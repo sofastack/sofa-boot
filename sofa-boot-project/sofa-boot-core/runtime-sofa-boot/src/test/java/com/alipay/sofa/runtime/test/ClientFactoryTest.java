@@ -187,7 +187,7 @@ public class ClientFactoryTest {
     }
 
     /**
-     * test removeService and removeReference methods in in ReferenceClientImpl and ServiceClientImpl
+     * test removeService and removeReference methods in ReferenceClientImpl and ServiceClientImpl
      */
     @Test
     public void testRemoveServiceOrRemoveReference() {

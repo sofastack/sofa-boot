@@ -43,9 +43,9 @@ import java.lang.annotation.Target;
 public @interface SofaService {
 
     /**
-     * The interface type of the SOFA service to be create. Default to the only interface of the annotated Spring bean
+     * The interface type of the SOFA service to be created. Default to the only interface of the annotated Spring bean
      * when not specified. When the annotated Spring bean has more than one interface, this field must be specified.
-     * When you want to create a SOFA service which's interface type is not a java interface but and concrete java
+     * When you want to create a SOFA service which interface type is not a java interface but concrete java
      * class, this field must be specified.
      *
      * @return return interface type

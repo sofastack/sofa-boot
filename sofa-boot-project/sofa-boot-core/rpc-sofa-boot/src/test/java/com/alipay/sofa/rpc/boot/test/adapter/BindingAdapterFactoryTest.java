@@ -24,7 +24,7 @@ import org.junit.Test;
 
 /**
  * @author zhaowang
- * @version : BindingAdatperFactoryTest.java, v 0.1 2020年02月05日 2:46 下午 zhaowang Exp $
+ * @version : BindingAdapterFactoryTest.java, v 0.1 2020年02月05日 2:46 下午 zhaowang Exp $
  */
 public class BindingAdapterFactoryTest {
 

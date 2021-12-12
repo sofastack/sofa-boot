@@ -56,6 +56,6 @@ public class XAnnotatedSpring extends XAnnotatedMember {
             // allow DOM elements as values
             return base;
         }
-        return XMapSpringUtil.getSpringOjbect(this, xaso.getApplicationContext(), base);
+        return XMapSpringUtil.getSpringObject(this, xaso.getApplicationContext(), base);
     }
 }
