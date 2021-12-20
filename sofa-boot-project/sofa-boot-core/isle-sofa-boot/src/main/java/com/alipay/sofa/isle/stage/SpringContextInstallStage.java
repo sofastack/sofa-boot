@@ -43,6 +43,7 @@ import org.springframework.util.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
+import java.util.stream.Collectors;
 
 /**
  * @author linfengqi
@@ -77,6 +78,14 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
             SofaLogger.error(ErrorCode.convert("01-11000"), t);
             throw new DeploymentException(ErrorCode.convert("01-11000"), t);
         }
+
+        if (!sofaModuleProperties.isIgnoreModuleInstallFailure()) {
+            if (!application.getFailed().isEmpty()) {
+                List<String> failedModuleNames = application.getFailed().stream().map(DeploymentDescriptor::getModuleName).collect(Collectors.toList());
+                throw new DeploymentException(ErrorCode.convert("01-11006", failedModuleNames));
+            }
+        }
+
     }
 
     private void doProcess(ApplicationRuntimeModel application) throws Exception {
@@ -170,6 +179,12 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
                 if (deployment.isSpringPowered() && !application.getFailed().contains(deployment)) {
                     Thread.currentThread().setContextClassLoader(deployment.getClassLoader());
                     doRefreshSpringContext(deployment, application);
+                }
+
+                if (!sofaModuleProperties.isIgnoreModuleInstallFailure()) {
+                    if (!application.getFailed().isEmpty()) {
+                        break;
+                    }
                 }
             }
         } finally {
