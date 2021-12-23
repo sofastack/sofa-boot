@@ -36,6 +36,7 @@ public class SofaModuleProperties {
     private boolean     publishEventToParent          = false;
     private boolean     enableIsle                    = true;
     private boolean     allowModuleOverriding         = false;
+    private boolean     ignoreModuleInstallFailure    = false;
 
     public String getActiveProfiles() {
         return activeProfiles;
@@ -91,5 +92,13 @@ public class SofaModuleProperties {
 
     public void setAllowModuleOverriding(boolean allowModuleOverriding) {
         this.allowModuleOverriding = allowModuleOverriding;
+    }
+
+    public boolean isIgnoreModuleInstallFailure() {
+        return ignoreModuleInstallFailure;
+    }
+
+    public void setIgnoreModuleInstallFailure(boolean ignoreModuleInstallFailure) {
+        this.ignoreModuleInstallFailure = ignoreModuleInstallFailure;
     }
 }
