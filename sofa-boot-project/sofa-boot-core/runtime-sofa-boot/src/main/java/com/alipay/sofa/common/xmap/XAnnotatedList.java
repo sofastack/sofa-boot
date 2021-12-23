@@ -79,7 +79,7 @@ public class XAnnotatedList extends XAnnotatedMember {
         if (type != ArrayList.class) {
             if (type.isArray()) {
                 if (componentType.isPrimitive()) {
-                    // primitive arrays cannot be casted to Object[]
+                    // primitive arrays cannot be cast to Object[]
                     return PrimitiveArrays.toPrimitiveArray(values, componentType);
                 } else {
                     return values

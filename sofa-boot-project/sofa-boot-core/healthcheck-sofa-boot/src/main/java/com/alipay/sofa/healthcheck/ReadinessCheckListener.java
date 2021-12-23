@@ -139,7 +139,7 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
         if (isReadinessCheckFinish()) {
             Object payload = event.getPayload();
             if (payload instanceof ReadinessState && payload != readinessState) {
-                // If readinessCheck if performed normally, readinessState won't be null
+                // If readinessCheck is performed normally, readinessState won't be null
                 // it means application is in critical state if it is
                 if (readinessState == null) {
                     AvailabilityChangeEvent.publish(applicationContext,
