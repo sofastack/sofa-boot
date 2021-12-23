@@ -143,6 +143,9 @@ public class SofaBootRpcAllTest {
     @SofaReference(binding = @SofaReferenceBinding(bindingType = "bolt", timeout = 1000), jvmFirst = false, uniqueId = "timeout")
     private AnnotationService          annotationConsumerTimeoutService;
 
+    @SofaReference(binding = @SofaReferenceBinding(bindingType = "bolt"), jvmFirst = false, uniqueId = "composite-annotation")
+    private AnnotationService          compositeAnnotationService;
+
     @SofaClientFactory
     private ClientFactory              clientFactory;
 
@@ -256,6 +259,11 @@ public class SofaBootRpcAllTest {
     @Test
     public void testAnnotation() {
         Assert.assertEquals("Hello, Annotation", annotationService.hello());
+    }
+
+    @Test
+    public void testCompositeAnnotation() {
+        Assert.assertEquals("Hello, Composite Annotation", compositeAnnotationService.hello());
     }
 
     // Encode on serialization should failed

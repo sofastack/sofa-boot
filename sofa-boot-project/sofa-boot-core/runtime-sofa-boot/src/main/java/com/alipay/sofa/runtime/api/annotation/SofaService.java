@@ -16,13 +16,15 @@
  */
 package com.alipay.sofa.runtime.api.annotation;
 
+import org.springframework.stereotype.Component;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation used to create a SOFA service of a spring bean. Sample usage:
+ * Annotation used to create a SOFA service and a spring bean. Sample usage:
  *
  * <pre>
  *
@@ -37,9 +39,11 @@ import java.lang.annotation.Target;
  * </pre>
  *
  * @author xuanbei 18/3/1
+ * @author wangyongxu
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.TYPE, ElementType.METHOD })
+@Component
 public @interface SofaService {
 
     /**
