@@ -25,14 +25,18 @@ import com.alipay.sofa.rpc.boot.log.LoggerConstant;
 import com.alipay.sofa.rpc.boot.log.SofaBootRpcLoggerFactory;
 import com.alipay.sofa.rpc.common.RpcConstants;
 import com.alipay.sofa.rpc.config.ServerConfig;
+import com.alipay.sofa.rpc.config.UserThreadPoolManager;
 import com.alipay.sofa.rpc.log.LogCodes;
 import com.alipay.sofa.rpc.server.Server;
+import com.alipay.sofa.rpc.server.UserThreadPool;
 import com.alipay.sofa.rpc.server.bolt.BoltServer;
 import com.alipay.sofa.rpc.server.triple.TripleServer;
 import org.slf4j.Logger;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -92,6 +96,8 @@ public class ServerConfigContainer {
 
     private RpcThreadPoolMonitor      tripleThreadPoolMonitor = new RpcThreadPoolMonitor(
                                                                   LoggerConstant.TRIPLE_THREAD_LOGGER_NAME);
+    private List<RpcThreadPoolMonitor> customThreadPoolMonitorList = new ArrayList<>();
+
 
     public ServerConfigContainer(SofaBootRpcProperties sofaBootRpcProperties) {
         this.sofaBootRpcProperties = sofaBootRpcProperties;
@@ -156,6 +162,20 @@ public class ServerConfigContainer {
             }
         }
 
+        startCustomThreadPoolMonitor();
+    }
+
+    private void startCustomThreadPoolMonitor(){
+        Map<String, UserThreadPool> userThreadPoolMap = UserThreadPoolManager.getUserThreadPoolMap();
+        if (!userThreadPoolMap.isEmpty()) {
+            for (Map.Entry<String, UserThreadPool> entry : userThreadPoolMap.entrySet()) {
+                RpcThreadPoolMonitor      customThreadPoolMonitor = new RpcThreadPoolMonitor(LoggerConstant.CUSTOM_THREAD_LOGGER_NAME);
+                customThreadPoolMonitorList.add(customThreadPoolMonitor);
+                customThreadPoolMonitor.setPoolName(entry.getKey());
+                customThreadPoolMonitor.setThreadPoolExecutor(entry.getValue().getExecutor());
+                customThreadPoolMonitor.start();
+            }
+        }
     }
 
     /**
@@ -584,6 +604,8 @@ public class ServerConfigContainer {
             tripleThreadPoolMonitor.stop();
         }
 
+        stopCustomThreadPoolMonitor();
+
         destroyServerConfig(boltServerConfig);
         destroyServerConfig(restServerConfig);
         destroyServerConfig(dubboServerConfig);
@@ -600,6 +622,15 @@ public class ServerConfigContainer {
         h2cServerConfig = null;
         tripleServerConfig = null;
         customServerConfigs.clear();
+    }
+
+    private void stopCustomThreadPoolMonitor(){
+        if (!customThreadPoolMonitorList.isEmpty()) {
+            for (RpcThreadPoolMonitor monitor : customThreadPoolMonitorList) {
+                monitor.stop();
+            }
+            customThreadPoolMonitorList.clear();
+        }
     }
 
     private void destroyServerConfig(ServerConfig serverConfig) {
