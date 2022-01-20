@@ -143,6 +143,10 @@ public class RpcThreadPoolMonitor {
         this.poolName = poolName;
     }
 
+    public String getPoolName() {
+        return poolName;
+    }
+
     public void stop() {
         synchronized (this) {
             this.active = false;

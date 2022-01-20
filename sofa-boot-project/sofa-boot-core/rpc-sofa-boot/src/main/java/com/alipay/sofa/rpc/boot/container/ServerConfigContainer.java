@@ -98,6 +98,7 @@ public class ServerConfigContainer {
 
     private RpcThreadPoolMonitor       tripleThreadPoolMonitor     = new RpcThreadPoolMonitor(
                                                                        LoggerConstant.TRIPLE_THREAD_LOGGER_NAME);
+
     private List<RpcThreadPoolMonitor> customThreadPoolMonitorList = new ArrayList<>();
 
     public ServerConfigContainer(SofaBootRpcProperties sofaBootRpcProperties) {
