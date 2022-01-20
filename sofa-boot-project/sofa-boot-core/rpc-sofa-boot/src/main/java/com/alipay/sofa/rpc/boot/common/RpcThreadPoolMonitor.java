@@ -20,8 +20,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.alipay.common.tracer.core.utils.StringUtils;
 import com.alipay.sofa.rpc.common.annotation.VisibleForTesting;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 
 import com.alipay.sofa.rpc.boot.log.SofaBootRpcLoggerFactory;

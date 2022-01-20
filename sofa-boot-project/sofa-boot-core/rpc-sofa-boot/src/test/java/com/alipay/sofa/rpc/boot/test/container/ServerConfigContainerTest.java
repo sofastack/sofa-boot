@@ -194,17 +194,21 @@ public class ServerConfigContainerTest extends ActivelyDestroyTest {
     }
 
     @Test
-    public void testStartCustomThreadPoolMonitor() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, NoSuchFieldException {
+    public void testStartCustomThreadPoolMonitor() throws NoSuchMethodException,
+                                                  IllegalAccessException,
+                                                  InvocationTargetException, NoSuchFieldException {
         UserThreadPoolManager.registerUserThread("service1", new UserThreadPool());
         UserThreadPoolManager.registerUserThread("service2", new UserThreadPool());
         UserThreadPoolManager.registerUserThread("service3", new UserThreadPool("same-name"));
         UserThreadPoolManager.registerUserThread("service4", new UserThreadPool("same-name"));
 
-        Method privateStartMethod = serverConfigContainer.getClass().getDeclaredMethod("startCustomThreadPoolMonitor");
+        Method privateStartMethod = serverConfigContainer.getClass().getDeclaredMethod(
+            "startCustomThreadPoolMonitor");
         privateStartMethod.setAccessible(true);
         privateStartMethod.invoke(serverConfigContainer);
 
-        Field privateField = serverConfigContainer.getClass().getDeclaredField("customThreadPoolMonitorList");
+        Field privateField = serverConfigContainer.getClass().getDeclaredField(
+            "customThreadPoolMonitorList");
         privateField.setAccessible(true);
         Object value = privateField.get(serverConfigContainer);
         List<RpcThreadPoolMonitor> customThreadPoolMonitorList = (List<RpcThreadPoolMonitor>) value;
@@ -212,13 +216,14 @@ public class ServerConfigContainerTest extends ActivelyDestroyTest {
 
         boolean hasHashCode = false;
         for (RpcThreadPoolMonitor monitor : customThreadPoolMonitorList) {
-            if (monitor.getPoolName().contains("same-name-")){
+            if (monitor.getPoolName().contains("same-name-")) {
                 hasHashCode = true;
             }
         }
         Assert.assertTrue(hasHashCode);
 
-        Method privateStopMethod = serverConfigContainer.getClass().getDeclaredMethod("stopCustomThreadPoolMonitor");
+        Method privateStopMethod = serverConfigContainer.getClass().getDeclaredMethod(
+            "stopCustomThreadPoolMonitor");
         privateStopMethod.setAccessible(true);
         privateStopMethod.invoke(serverConfigContainer);
 
