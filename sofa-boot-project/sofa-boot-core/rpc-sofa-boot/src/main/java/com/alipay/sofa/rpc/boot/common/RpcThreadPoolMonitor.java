@@ -54,7 +54,7 @@ public class RpcThreadPoolMonitor {
 
     private Thread             monitor;
 
-    private String            poolName             = "";
+    private String             poolName           = "";
 
     public RpcThreadPoolMonitor(String loggerName) {
         this(null, loggerName, DEFAULT_SLEEP_TIME);
@@ -138,9 +138,11 @@ public class RpcThreadPoolMonitor {
     public void setThreadPoolExecutor(ThreadPoolExecutor threadPoolExecutor) {
         this.threadPoolExecutor = threadPoolExecutor;
     }
+
     public void setPoolName(String poolName) {
         this.poolName = poolName;
     }
+
     public void stop() {
         synchronized (this) {
             this.active = false;
