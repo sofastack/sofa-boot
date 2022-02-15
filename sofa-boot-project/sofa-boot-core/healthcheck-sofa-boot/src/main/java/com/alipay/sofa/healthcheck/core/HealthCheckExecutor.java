@@ -36,8 +36,7 @@ import java.util.concurrent.TimeUnit;
  * @since 3.7.1
  */
 public class HealthCheckExecutor {
-    private static Logger                   logger          = HealthCheckLoggerFactory
-                                                                .getLogger(HealthCheckExecutor.class);
+    private static Logger                   logger          = HealthCheckLoggerFactory.DEFAULT_LOG;
 
     private static final ThreadPoolExecutor THREAD_POOL_REF = createThreadPoolExecutor();
 
