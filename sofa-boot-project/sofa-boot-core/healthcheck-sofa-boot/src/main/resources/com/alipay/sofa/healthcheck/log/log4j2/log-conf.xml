@@ -56,5 +56,10 @@
             <appender-ref ref="ROOT-APPENDER"/>
             <appender-ref ref="ERROR-APPENDER"/>
         </root>
+
+        <logger name="com.alipay.sofa" level="${HEALTH_CHECK_LOG_LEVEL}" additivity="false">
+            <appender-ref ref="ROOT-APPENDER"/>
+            <appender-ref ref="ERROR-APPENDER"/>
+        </logger>
     </loggers>
 </configuration>
