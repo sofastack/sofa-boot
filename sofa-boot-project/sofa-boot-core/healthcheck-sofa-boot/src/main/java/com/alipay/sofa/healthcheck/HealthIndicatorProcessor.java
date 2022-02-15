@@ -58,8 +58,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @version 2.3.0
  */
 public class HealthIndicatorProcessor {
-    private static Logger                          logger                     = HealthCheckLoggerFactory
-                                                                                  .getLogger(HealthIndicatorProcessor.class);
+    private static Logger                          logger                     = HealthCheckLoggerFactory.DEFAULT_LOG;
 
     private static final List<String>              DEFAULT_EXCLUDE_INDICATORS = Arrays
                                                                                   .asList(
