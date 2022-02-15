@@ -16,17 +16,16 @@
  */
 package com.alipay.sofa.healthcheck;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
-
-import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.boot.constant.SofaBootConstants;
+import com.alipay.sofa.boot.error.ErrorCode;
+import com.alipay.sofa.boot.health.NonReadinessCheck;
+import com.alipay.sofa.boot.util.BinaryOperators;
 import com.alipay.sofa.healthcheck.core.HealthCheckExecutor;
+import com.alipay.sofa.healthcheck.core.HealthChecker;
+import com.alipay.sofa.healthcheck.log.HealthCheckLoggerFactory;
+import com.alipay.sofa.healthcheck.util.HealthCheckUtils;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,13 +34,13 @@ import org.springframework.boot.actuate.health.Status;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.Assert;
 
-import com.alipay.sofa.boot.health.NonReadinessCheck;
-import com.alipay.sofa.boot.util.BinaryOperators;
-import com.alipay.sofa.healthcheck.core.HealthChecker;
-import com.alipay.sofa.healthcheck.log.HealthCheckLoggerFactory;
-import com.alipay.sofa.healthcheck.util.HealthCheckUtils;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 /**
  * Used to process all implementations of {@link HealthChecker}
@@ -52,8 +51,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class HealthCheckerProcessor {
 
-    private static Logger                        logger         = HealthCheckLoggerFactory
-                                                                    .getLogger(HealthCheckerProcessor.class);
+    private static Logger                        logger         = HealthCheckLoggerFactory.DEFAULT_LOG;
 
     private ObjectMapper                         objectMapper   = new ObjectMapper();
 

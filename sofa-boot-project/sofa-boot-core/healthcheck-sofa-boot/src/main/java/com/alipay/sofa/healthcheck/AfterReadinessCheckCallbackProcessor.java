@@ -42,8 +42,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class AfterReadinessCheckCallbackProcessor {
 
-    private static Logger                                 logger                  = HealthCheckLoggerFactory
-                                                                                      .getLogger(AfterReadinessCheckCallbackProcessor.class);
+    private static Logger                                 logger                  = HealthCheckLoggerFactory.DEFAULT_LOG;
 
     private ObjectMapper                                  objectMapper            = new ObjectMapper();
 

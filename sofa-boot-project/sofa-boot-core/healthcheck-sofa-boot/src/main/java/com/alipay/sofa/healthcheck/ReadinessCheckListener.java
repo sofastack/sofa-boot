@@ -52,8 +52,7 @@ import com.alipay.sofa.healthcheck.log.HealthCheckLoggerFactory;
  */
 public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
                                    GenericApplicationListener {
-    private static Logger                        logger                     = HealthCheckLoggerFactory
-                                                                                .getLogger(ReadinessCheckListener.class);
+    private static Logger                        logger                     = HealthCheckLoggerFactory.DEFAULT_LOG;
 
     private final StatusAggregator               statusAggregator           = StatusAggregator
                                                                                 .getDefault();
