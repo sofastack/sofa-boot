@@ -24,4 +24,5 @@ public class LoggerConstant {
 
     public static final String BOLT_THREAD_LOGGER_NAME   = "RPC-BOLT-THREADPOOL";
     public static final String TRIPLE_THREAD_LOGGER_NAME = "RPC-TRIPLE-THREADPOOL";
+    public static final String CUSTOM_THREAD_LOGGER_NAME = "RPC-CUSTOM-THREADPOOL";
 }

@@ -21,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.alipay.sofa.rpc.common.annotation.VisibleForTesting;
+import com.alipay.sofa.rpc.common.utils.StringUtils;
 import org.slf4j.Logger;
 
 import com.alipay.sofa.rpc.boot.log.SofaBootRpcLoggerFactory;
@@ -52,6 +53,8 @@ public class RpcThreadPoolMonitor {
     private volatile boolean   active             = true;
 
     private Thread             monitor;
+
+    private String             poolName           = "";
 
     public RpcThreadPoolMonitor(String loggerName) {
         this(null, loggerName, DEFAULT_SLEEP_TIME);
@@ -99,6 +102,9 @@ public class RpcThreadPoolMonitor {
                                             sb.append("active:" + activeSize + ", ");
                                             sb.append("idle:" + (poolSize - activeSize) + ", ");
                                             sb.append("poolSize:" + poolSize);
+                                            if (StringUtils.isNotBlank(poolName)) {
+                                                sb.append(", poolName: " + poolName);
+                                            }
                                             logger.info(sb.toString());
                                         }
                                     } catch (Throwable throwable) {
@@ -131,6 +137,14 @@ public class RpcThreadPoolMonitor {
 
     public void setThreadPoolExecutor(ThreadPoolExecutor threadPoolExecutor) {
         this.threadPoolExecutor = threadPoolExecutor;
+    }
+
+    public void setPoolName(String poolName) {
+        this.poolName = poolName;
+    }
+
+    public String getPoolName() {
+        return poolName;
     }
 
     public void stop() {

@@ -16,6 +16,9 @@
  */
 package com.alipay.sofa.rpc.boot.test.container;
 
+import com.alipay.sofa.rpc.boot.common.RpcThreadPoolMonitor;
+import com.alipay.sofa.rpc.config.UserThreadPoolManager;
+import com.alipay.sofa.rpc.server.UserThreadPool;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -29,6 +32,11 @@ import com.alipay.sofa.rpc.boot.container.ServerConfigContainer;
 import com.alipay.sofa.rpc.boot.test.ActivelyDestroyTest;
 import com.alipay.sofa.rpc.common.RpcConstants;
 import com.alipay.sofa.rpc.config.ServerConfig;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.List;
 
 /**
  * @author <a href="mailto:lw111072@antfin.com">LiWei</a>
@@ -183,5 +191,43 @@ public class ServerConfigContainerTest extends ActivelyDestroyTest {
         Assert.assertEquals(10, serverConfig.getMaxThreads());
         Assert.assertEquals(1, serverConfig.getAccepts());
         Assert.assertEquals(8, serverConfig.getQueues());
+    }
+
+    @Test
+    public void testStartCustomThreadPoolMonitor() throws NoSuchMethodException,
+                                                  IllegalAccessException,
+                                                  InvocationTargetException, NoSuchFieldException {
+        UserThreadPoolManager.registerUserThread("service1", new UserThreadPool());
+        UserThreadPoolManager.registerUserThread("service2", new UserThreadPool());
+        UserThreadPoolManager.registerUserThread("service3", new UserThreadPool("same-name"));
+        UserThreadPoolManager.registerUserThread("service4", new UserThreadPool("same-name"));
+
+        Method privateStartMethod = serverConfigContainer.getClass().getDeclaredMethod(
+            "startCustomThreadPoolMonitor");
+        privateStartMethod.setAccessible(true);
+        privateStartMethod.invoke(serverConfigContainer);
+
+        Field privateField = serverConfigContainer.getClass().getDeclaredField(
+            "customThreadPoolMonitorList");
+        privateField.setAccessible(true);
+        Object value = privateField.get(serverConfigContainer);
+        List<RpcThreadPoolMonitor> customThreadPoolMonitorList = (List<RpcThreadPoolMonitor>) value;
+        Assert.assertEquals(customThreadPoolMonitorList.size(), 4);
+
+        boolean hasHashCode = false;
+        for (RpcThreadPoolMonitor monitor : customThreadPoolMonitorList) {
+            if (monitor.getPoolName().contains("same-name-")) {
+                hasHashCode = true;
+            }
+        }
+        Assert.assertTrue(hasHashCode);
+
+        Method privateStopMethod = serverConfigContainer.getClass().getDeclaredMethod(
+            "stopCustomThreadPoolMonitor");
+        privateStopMethod.setAccessible(true);
+        privateStopMethod.invoke(serverConfigContainer);
+
+        Assert.assertEquals(customThreadPoolMonitorList.size(), 0);
+
     }
 }
