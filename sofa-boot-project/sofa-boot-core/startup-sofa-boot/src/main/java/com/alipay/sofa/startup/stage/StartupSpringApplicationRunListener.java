@@ -71,10 +71,14 @@ public class StartupSpringApplicationRunListener implements SpringApplicationRun
 
     @Override
     public void contextPrepared(ConfigurableApplicationContext context) {
-        BaseStat stat = new BaseStat();
+        ChildrenStat<BaseStat> stat = new ChildrenStat<>();
         stat.setName(APPLICATION_CONTEXT_PREPARE_STAGE);
         stat.setStartTime(environmentPrepareStage.getEndTime());
         stat.setEndTime(System.currentTimeMillis());
+        if (this.application instanceof StartupSpringApplication) {
+            stat.setChildren(((StartupSpringApplication) this.application)
+                .getInitializerStartupStatList());
+        }
         this.applicationContextPrepareStage = stat;
     }
 

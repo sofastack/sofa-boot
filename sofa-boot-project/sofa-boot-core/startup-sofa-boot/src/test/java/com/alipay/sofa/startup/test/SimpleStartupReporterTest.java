@@ -67,8 +67,9 @@ public class SimpleStartupReporterTest {
         Assert.assertTrue(environmentPrepareStage.getCost() > 0);
         Assert.assertEquals(jvmStartingStage.getEndTime(), environmentPrepareStage.getStartTime());
 
-        BaseStat applicationContextPrepareStage = startupReporter.getStageNyName(BootStageConstants.APPLICATION_CONTEXT_PREPARE_STAGE);
+        ChildrenStat<?> applicationContextPrepareStage = (ChildrenStat<?>) startupReporter.getStageNyName(BootStageConstants.APPLICATION_CONTEXT_PREPARE_STAGE);
         Assert.assertNotNull(applicationContextPrepareStage);
+        Assert.assertTrue(applicationContextPrepareStage.getChildren().isEmpty());
         Assert.assertTrue(applicationContextPrepareStage.getCost() > 0);
         Assert.assertEquals(environmentPrepareStage.getEndTime(), applicationContextPrepareStage.getStartTime());
 
