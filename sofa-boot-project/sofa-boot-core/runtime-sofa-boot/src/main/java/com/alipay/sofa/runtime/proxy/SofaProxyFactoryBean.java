@@ -22,7 +22,7 @@ import org.springframework.beans.factory.BeanFactory;
 /**
  *
  * @author ruoshan
- * @since 2.6.1
+ * @since 3.12.0
  */
 public class SofaProxyFactoryBean extends ProxyFactoryBean {
 

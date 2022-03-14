@@ -27,7 +27,7 @@ import org.springframework.core.PriorityOrdered;
 /**
  *
  * @author ruoshan
- * @since 2.6.1
+ * @since 3.12.0
  */
 public class ProxyBeanFactoryPostProcessor implements BeanFactoryPostProcessor, PriorityOrdered {
 
