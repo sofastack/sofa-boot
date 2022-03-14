@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.infra.proxy.bean;
+package com.alipay.sofa.runtime.test.proxy;
+
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ImportResource;
 
 /**
- *
- * @author ruoshan
- * @since 2.6.1
+ * @author huzijie
+ * @version ProxySpringBootApplication.java, v 0.1 2022年03月14日 3:31 PM huzijie Exp $
  */
-public interface ProxyTestBeanFacade {
-
-    boolean isPostProcessed();
-
-    void setPostProcessed(boolean postProcessed);
+@ImportResource({ "classpath*:META-INF/proxy/*.xml" })
+@SpringBootApplication
+public class ProxySpringBootApplication {
 }

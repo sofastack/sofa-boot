@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.infra.proxy;
+package com.alipay.sofa.runtime.test.proxy;
 
-import com.alipay.sofa.infra.base.SofaBootWebSpringBootApplication;
-import com.alipay.sofa.infra.proxy.bean.ProxyTestBeanFacade;
+import com.alipay.sofa.runtime.proxy.SofaProxyFactoryBean;
+import com.alipay.sofa.runtime.test.proxy.bean.ProxyTestBeanFacade;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,6 +25,7 @@ import org.springframework.aop.framework.ProxyFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
@@ -32,9 +33,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @author ruoshan
  * @since 2.6.1
  */
-@SpringBootTest(classes = SofaBootWebSpringBootApplication.class)
+@SpringBootTest(classes = ProxySpringBootApplication.class)
 @RunWith(SpringJUnit4ClassRunner.class)
-public class ProxyFactoryBeanTest {
+@TestPropertySource(properties = { "spring.application.name=test",
+                                  "com.alipay.sofa.proxy.bean.enabled=true" })
+public class SofaProxyFactoryBeanTest {
 
     @Autowired
     private ProxyTestBeanFacade proxyTestBean;
@@ -65,11 +68,12 @@ public class ProxyFactoryBeanTest {
 
     @Test
     public void test() {
-        Assert.assertFalse(proxyTestBean.isPostProcessed());
-        Assert.assertFalse(proxyFactoryBean1 instanceof SofaProxyFactoryBean);
-        Assert.assertFalse(proxyFactoryBean2 instanceof SofaProxyFactoryBean);
-        Assert.assertFalse(proxyFactoryBean3 instanceof SofaProxyFactoryBean);
-        Assert.assertFalse(proxyFactoryBean4 instanceof SofaProxyFactoryBean);
+        Assert.assertTrue(proxyTestBean.isPostProcessed());
+        Assert.assertTrue(proxyFactoryBean1 instanceof SofaProxyFactoryBean);
+        Assert.assertTrue(proxyFactoryBean2 instanceof SofaProxyFactoryBean);
+        Assert.assertTrue(proxyFactoryBean3 instanceof SofaProxyFactoryBean);
+        Assert.assertTrue(proxyFactoryBean4 instanceof SofaProxyFactoryBean);
+        // only proxy xml bean
         Assert.assertFalse(proxyFactoryBean5 instanceof SofaProxyFactoryBean);
         Assert.assertFalse(proxyFactoryBean6 instanceof SofaProxyFactoryBean);
     }

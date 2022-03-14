@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.infra.proxy;
+package com.alipay.sofa.runtime.proxy;
 
 import org.springframework.aop.framework.ProxyFactoryBean;
 import org.springframework.beans.BeansException;
@@ -22,17 +22,19 @@ import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.core.PriorityOrdered;
 
 /**
  *
  * @author ruoshan
  * @since 2.6.1
  */
-public class ProxyBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
+public class ProxyBeanFactoryPostProcessor implements BeanFactoryPostProcessor, PriorityOrdered {
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory)
                                                                                    throws BeansException {
+        boolean updateProxyBean = false;
         for (String beanName : beanFactory.getBeanNamesForType(ProxyFactoryBean.class, true, false)) {
             String transformedBeanName = BeanFactoryUtils.transformedBeanName(beanName);
             if (beanFactory.containsBeanDefinition(transformedBeanName)) {
@@ -52,9 +54,18 @@ public class ProxyBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
                         beanDefinition.getPropertyValues().get("targetClass"));
                     beanDefinition.getConstructorArgumentValues().addIndexedArgumentValue(3,
                         beanFactory);
+                    updateProxyBean = true;
                 }
             }
         }
+        if (updateProxyBean) {
+            // must clear metadata cache
+            beanFactory.clearMetadataCache();
+        }
     }
 
+    @Override
+    public int getOrder() {
+        return 0;
+    }
 }

@@ -14,10 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.infra.proxy;
+package com.alipay.sofa.runtime.test.proxy;
 
-import com.alipay.sofa.infra.proxy.bean.ProxyTestBeanFacade;
+import com.alipay.sofa.runtime.proxy.ProxyBeanFactoryPostProcessor;
+import com.alipay.sofa.runtime.test.proxy.bean.ProxyTestBeanFacade;
+import com.alipay.sofa.runtime.test.proxy.bean.ProxyTestBeanFactoryPostProcessor;
+import com.alipay.sofa.runtime.test.proxy.bean.ProxyTestBeanImpl;
 import org.springframework.aop.framework.ProxyFactoryBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -30,17 +34,29 @@ import org.springframework.context.annotation.Configuration;
 public class ProxyConfiguration {
 
     @Bean
+    public static ProxyTestBeanFactoryPostProcessor proxyTestBeanFactoryPostProcessor() {
+        return new ProxyTestBeanFactoryPostProcessor();
+    }
+
+    @Bean
+    @ConditionalOnProperty(prefix = "com.alipay.sofa.proxy.bean", name = "enabled", havingValue = "true")
+    public static ProxyBeanFactoryPostProcessor proxyBeanFactoryPostProcessor() {
+        return new ProxyBeanFactoryPostProcessor();
+    }
+
+    @Bean
     public ProxyFactoryBean proxyFactoryBean5(ProxyTestBeanFacade proxyTestBean) {
         ProxyFactoryBean proxyFactoryBean = new ProxyFactoryBean();
         proxyFactoryBean.setInterfaces(ProxyTestBeanFacade.class);
         proxyFactoryBean.setTarget(proxyTestBean);
-        return new ProxyFactoryBean();
+        return proxyFactoryBean;
     }
 
     @Bean
     public static ProxyFactoryBean proxyFactoryBean6() {
         ProxyFactoryBean proxyFactoryBean = new ProxyFactoryBean();
         proxyFactoryBean.setInterfaces(ProxyTestBeanFacade.class);
-        return new ProxyFactoryBean();
+        proxyFactoryBean.setTarget(new ProxyTestBeanImpl());
+        return proxyFactoryBean;
     }
 }

@@ -4,15 +4,15 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 
-    <bean id="proxyTestBean" class="com.alipay.sofa.infra.proxy.bean.ProxyTestBeanImpl" />
+    <bean id="proxyTestBean" class="com.alipay.sofa.runtime.test.proxy.bean.ProxyTestBeanImpl" />
 
     <bean id="proxyFactoryBean1" class="org.springframework.aop.framework.ProxyFactoryBean" >
-        <property name="proxyInterfaces" value="com.alipay.sofa.infra.proxy.bean.ProxyTestBeanFacade" />
+        <property name="proxyInterfaces" value="com.alipay.sofa.runtime.test.proxy.bean.ProxyTestBeanFacade" />
         <property name="target" ref="proxyTestBean" />
     </bean>
 
     <bean id="proxyFactoryBean2" class="org.springframework.aop.framework.ProxyFactoryBean" >
-        <property name="interfaces" value="com.alipay.sofa.infra.proxy.bean.ProxyTestBeanFacade" />
+        <property name="interfaces" value="com.alipay.sofa.runtime.test.proxy.bean.ProxyTestBeanFacade" />
         <property name="target" ref="proxyTestBean" />
     </bean>
 
@@ -23,9 +23,9 @@
 
     <bean id="proxyFactoryBean4" class="org.springframework.aop.framework.ProxyFactoryBean" >
         <property name="target" ref="proxyTestBean" />
-        <property name="targetClass" value="com.alipay.sofa.infra.proxy.bean.ProxyTestBeanFacade"/>
+        <property name="targetClass" value="com.alipay.sofa.runtime.test.proxy.bean.ProxyTestBeanFacade"/>
     </bean>
 
-    <bean class="com.alipay.sofa.infra.proxy.bean.ProxyTestPostProcessor" />
+    <bean class="com.alipay.sofa.runtime.test.proxy.bean.ProxyTestPostProcessor" />
 
 </beans>

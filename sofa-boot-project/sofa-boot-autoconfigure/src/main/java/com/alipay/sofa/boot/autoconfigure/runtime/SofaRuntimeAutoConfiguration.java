@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.boot.autoconfigure.runtime;
 
+import com.alipay.sofa.runtime.proxy.ProxyBeanFactoryPostProcessor;
 import com.alipay.sofa.runtime.SofaFramework;
 import com.alipay.sofa.runtime.api.client.ReferenceClient;
 import com.alipay.sofa.runtime.api.client.ServiceClient;
@@ -40,6 +41,7 @@ import com.alipay.sofa.runtime.spring.ServiceBeanFactoryPostProcessor;
 import com.alipay.sofa.runtime.spring.async.AsyncTaskExecutionListener;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -133,6 +135,12 @@ public class SofaRuntimeAutoConfiguration {
     public static ServiceBeanFactoryPostProcessor serviceBeanFactoryPostProcessor(SofaRuntimeContext sofaRuntimeContext,
                                                                                   BindingConverterFactory bindingConverterFactory) {
         return new ServiceBeanFactoryPostProcessor(sofaRuntimeContext, bindingConverterFactory);
+    }
+
+    @Bean
+    @ConditionalOnProperty(prefix = "com.alipay.sofa.proxy.bean", name = "enabled", havingValue = "true")
+    public static ProxyBeanFactoryPostProcessor proxyBeanFactoryPostProcessor() {
+        return new ProxyBeanFactoryPostProcessor();
     }
 
     public static <T> Set<T> getClassesByServiceLoader(Class<T> clazz) {
