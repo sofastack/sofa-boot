@@ -16,14 +16,11 @@
  */
 package com.alipay.sofa.boot.startup;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 2020/11/23
  */
-public class BeanStat {
+public class BeanStat extends ChildrenStat<BeanStat> {
     private static final String LAST_PREFIX        = "└─";
     private static final String MIDDLE_PREFIX      = "├─";
     private static final String INDENT_PREFIX      = "│   ";
@@ -40,12 +37,6 @@ public class BeanStat {
     private String              beanType;
     private String              extensionProperty;
 
-    private List<BeanStat>      children           = new ArrayList<BeanStat>();
-
-    public void addChild(BeanStat beanStat) {
-        children.add(beanStat);
-    }
-
     public void startRefresh() {
         beanRefreshStartTime = System.currentTimeMillis();
     }
@@ -55,7 +46,7 @@ public class BeanStat {
         refreshElapsedTime = beanRefreshEndTime - beanRefreshStartTime;
 
         long childRefreshTime = 0;
-        for (BeanStat child : children) {
+        for (BeanStat child : getChildren()) {
             childRefreshTime += child.getRealRefreshElapsedTime();
         }
         realRefreshElapsedTime = refreshElapsedTime - childRefreshTime;
@@ -99,14 +90,6 @@ public class BeanStat {
 
     public void setRealRefreshElapsedTime(long realRefreshElapsedTime) {
         this.realRefreshElapsedTime = realRefreshElapsedTime;
-    }
-
-    public List<BeanStat> getChildren() {
-        return children;
-    }
-
-    public void setChildren(List<BeanStat> children) {
-        this.children = children;
     }
 
     public long getInitTime() {
@@ -154,10 +137,10 @@ public class BeanStat {
         rtn.append(indent).append(last ? LAST_PREFIX : MIDDLE_PREFIX).append(beanClassName)
             .append("  [").append(refreshElapsedTime).append("ms]");
 
-        int size = children.size();
+        int size = getChildren().size();
         for (int i = 0; i < size; ++i) {
             rtn.append("\n").append(
-                children.get(i).toString(indent + (last ? EMPTY_INDEX_PREFIX : INDENT_PREFIX),
+                getChildren().get(i).toString(indent + (last ? EMPTY_INDEX_PREFIX : INDENT_PREFIX),
                     i == size - 1));
         }
         return rtn.toString();

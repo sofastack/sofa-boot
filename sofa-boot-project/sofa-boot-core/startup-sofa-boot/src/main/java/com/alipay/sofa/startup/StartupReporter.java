@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.startup;
 
-import com.alipay.sofa.boot.startup.StageStat;
+import com.alipay.sofa.boot.startup.BaseStat;
 import org.springframework.core.env.Environment;
 
 import java.lang.management.ManagementFactory;
@@ -44,15 +44,15 @@ public class StartupReporter {
     public void applicationBootFinish() {
         startupStaticsModel.setApplicationBootElapsedTime(ManagementFactory.getRuntimeMXBean()
             .getUptime());
-        startupStaticsModel.getStageStats().sort((o1, o2) -> o1.getStageStartTime() - o2.getStageStartTime() > 0 ? 1 : -1);
+        startupStaticsModel.getStageStats().sort((o1, o2) -> o1.getStartTime() - o2.getStartTime() > 0 ? 1 : -1);
     }
 
     /**
      * Add common startup stat to report
-     * @param stageStat the added CommonStartupStat
+     * @param stat the added CommonStartupStat
      */
-    public void addCommonStartupStat(StageStat stageStat) {
-        startupStaticsModel.getStageStats().add(stageStat);
+    public void addCommonStartupStat(BaseStat stat) {
+        startupStaticsModel.getStageStats().add(stat);
     }
 
     /**
@@ -60,8 +60,8 @@ public class StartupReporter {
      * @param stageName stageName
      * @return the reported stage, return null if can't find the stage
      */
-    public StageStat getStageNyName(String stageName) {
-        return startupStaticsModel.getStageStats().stream().filter(commonStartupStat -> commonStartupStat.getStageName().equals(stageName))
+    public BaseStat getStageNyName(String stageName) {
+        return startupStaticsModel.getStageStats().stream().filter(commonStartupStat -> commonStartupStat.getName().equals(stageName))
                 .findFirst().orElse(null);
     }
 
@@ -74,10 +74,10 @@ public class StartupReporter {
     }
 
     public static class StartupStaticsModel {
-        private String          appName;
-        private long            applicationBootElapsedTime = 0;
-        private long            applicationBootTime;
-        private List<StageStat> stageStats                 = new ArrayList<StageStat>();
+        private String         appName;
+        private long           applicationBootElapsedTime = 0;
+        private long           applicationBootTime;
+        private List<BaseStat> stageStats                 = new ArrayList<>();
 
         public String getAppName() {
             return appName;
@@ -103,11 +103,11 @@ public class StartupReporter {
             this.applicationBootTime = applicationBootTime;
         }
 
-        public List<StageStat> getStageStats() {
+        public List<BaseStat> getStageStats() {
             return stageStats;
         }
 
-        public void setStageStats(List<StageStat> stageStats) {
+        public void setStageStats(List<BaseStat> stageStats) {
             this.stageStats = stageStats;
         }
     }
