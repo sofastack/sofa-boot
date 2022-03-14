@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.startup.stage;
 
-import com.alipay.sofa.boot.startup.ContextRefreshStageStat;
+import com.alipay.sofa.boot.startup.ChildrenStat;
 import com.alipay.sofa.boot.startup.ModuleStat;
 import com.alipay.sofa.runtime.log.SofaLogger;
 import com.alipay.sofa.startup.StartupReporter;
@@ -28,8 +28,6 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.Ordered;
 import org.springframework.core.PriorityOrdered;
-
-import java.util.Collections;
 
 import static com.alipay.sofa.boot.startup.BootStageConstants.APPLICATION_CONTEXT_REFRESH_STAGE;
 
@@ -43,11 +41,11 @@ public class StartupContextRefreshedListener implements ApplicationListener<Cont
                                             ApplicationContextAware, PriorityOrdered {
     public static final String ROOT_MODULE_NAME = "ROOT_APPLICATION_CONTEXT";
     private ApplicationContext applicationContext;
-    private StartupReporter    startupReporter;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         if (applicationContext.equals(event.getApplicationContext())) {
+            StartupReporter startupReporter;
             try {
                 startupReporter = applicationContext.getBean(StartupReporter.class);
             } catch (NoSuchBeanDefinitionException e) {
@@ -56,24 +54,24 @@ public class StartupContextRefreshedListener implements ApplicationListener<Cont
                 return;
             }
             // init ContextRefreshStageStat
-            ContextRefreshStageStat stageStat = new ContextRefreshStageStat();
-            stageStat.setStageName(APPLICATION_CONTEXT_REFRESH_STAGE);
-            stageStat.setStageEndTime(System.currentTimeMillis());
+            ChildrenStat<ModuleStat> stat = new ChildrenStat<>();
+            stat.setName(APPLICATION_CONTEXT_REFRESH_STAGE);
+            stat.setEndTime(System.currentTimeMillis());
 
             // build root ModuleStat
             ModuleStat rootModuleStat = new ModuleStat();
-            rootModuleStat.setModuleName(ROOT_MODULE_NAME);
-            rootModuleStat.setModuleEndTime(stageStat.getStageEndTime());
+            rootModuleStat.setName(ROOT_MODULE_NAME);
+            rootModuleStat.setEndTime(stat.getEndTime());
             rootModuleStat.setThreadName(Thread.currentThread().getName());
 
             // getBeanStatList from BeanCostBeanPostProcessor
             BeanCostBeanPostProcessor beanCostBeanPostProcessor = applicationContext
                 .getBean(BeanCostBeanPostProcessor.class);
-            rootModuleStat.setBeanStats((beanCostBeanPostProcessor.getBeanStatList()));
+            rootModuleStat.setChildren((beanCostBeanPostProcessor.getBeanStatList()));
 
             // report ContextRefreshStageStat
-            stageStat.setModuleStats(Collections.singletonList(rootModuleStat));
-            startupReporter.addCommonStartupStat(stageStat);
+            stat.addChild(rootModuleStat);
+            startupReporter.addCommonStartupStat(stat);
         }
     }
 

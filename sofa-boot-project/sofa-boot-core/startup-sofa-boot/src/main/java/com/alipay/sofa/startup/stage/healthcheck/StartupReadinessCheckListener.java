@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.startup.stage.healthcheck;
 
-import com.alipay.sofa.boot.startup.StageStat;
+import com.alipay.sofa.boot.startup.BaseStat;
 import com.alipay.sofa.healthcheck.ReadinessCheckListener;
 import com.alipay.sofa.startup.StartupReporter;
 
@@ -35,11 +35,11 @@ public class StartupReadinessCheckListener extends ReadinessCheckListener {
 
     @Override
     public void readinessHealthCheck() {
-        StageStat stageStat = new StageStat();
-        stageStat.setStageName(HEALTH_CHECK_STAGE);
-        stageStat.setStageStartTime(System.currentTimeMillis());
+        BaseStat stat = new BaseStat();
+        stat.setName(HEALTH_CHECK_STAGE);
+        stat.setStartTime(System.currentTimeMillis());
         super.readinessHealthCheck();
-        stageStat.setStageEndTime(System.currentTimeMillis());
-        startupReporter.addCommonStartupStat(stageStat);
+        stat.setEndTime(System.currentTimeMillis());
+        startupReporter.addCommonStartupStat(stat);
     }
 }

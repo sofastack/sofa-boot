@@ -16,25 +16,48 @@
  */
 package com.alipay.sofa.boot.startup;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-
 /**
- * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
- * Created on 2020/11/23
+ * @author huzijie
+ * @version BaseStat.java, v 0.1 2022年03月14日 12:08 PM huzijie Exp $
  */
-public class ContextRefreshStageStat extends StageStat {
-    private List<ModuleStat> moduleStats = new CopyOnWriteArrayList<ModuleStat>();
+public class BaseStat {
 
-    public void appendModuleStat(ModuleStat moduleStat) {
-        moduleStats.add(moduleStat);
+    private String name;
+    private long   startTime;
+    private long   endTime;
+    private long   cost;
+
+    public String getName() {
+        return name;
     }
 
-    public List<ModuleStat> getModuleStats() {
-        return moduleStats;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setModuleStats(List<ModuleStat> moduleStats) {
-        this.moduleStats = moduleStats;
+    public long getStartTime() {
+        return startTime;
     }
+
+    public void setStartTime(long startTime) {
+        this.startTime = startTime;
+    }
+
+    public long getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(long endTime) {
+        this.endTime = endTime;
+        this.cost = this.endTime - this.startTime;
+    }
+
+    public long getCost() {
+        return cost;
+    }
+
+    public void setCost(long cost) {
+        this.cost = cost;
+    }
+
 }

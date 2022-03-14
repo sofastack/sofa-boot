@@ -18,45 +18,43 @@ package com.alipay.sofa.startup.test;
 
 import com.alipay.sofa.boot.startup.BaseStat;
 import com.alipay.sofa.boot.startup.BootStageConstants;
-import com.alipay.sofa.healthcheck.HealthCheckProperties;
-import com.alipay.sofa.runtime.configure.SofaRuntimeConfigurationProperties;
+import com.alipay.sofa.boot.startup.ChildrenStat;
 import com.alipay.sofa.startup.StartupReporter;
 import com.alipay.sofa.startup.test.configuration.SofaStartupAutoConfiguration;
-import com.alipay.sofa.startup.test.configuration.SofaStartupHealthCheckAutoConfiguration;
 import com.alipay.sofa.startup.test.spring.StartupApplication;
+import com.alipay.sofa.startup.test.spring.StartupSpringBootContextLoader;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.List;
 
 /**
  * @author huzijie
- * @version StartupReporterTest.java, v 0.1 2021年01月04日 8:31 下午 huzijie Exp $
+ * @version InitializerStartupReporterTest.java, v 0.1 2022年03月14日 2:37 PM huzijie Exp $
  */
 @SpringBootTest(classes = StartupApplication.class, webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @RunWith(SpringRunner.class)
-@Import(value = { SofaStartupAutoConfiguration.class, SofaStartupHealthCheckAutoConfiguration.class })
-@EnableConfigurationProperties({ HealthCheckProperties.class,
-                                SofaRuntimeConfigurationProperties.class })
-public class HealthCheckStartupReporterTest {
+@Import(SofaStartupAutoConfiguration.class)
+@ContextConfiguration(loader = StartupSpringBootContextLoader.class)
+public class InitializerStartupReporterTest {
+
     @Autowired
     private StartupReporter startupReporter;
 
     @Test
     public void testStartupReporter() {
-        Assert.assertNotNull(startupReporter);
-        StartupReporter.StartupStaticsModel startupStaticsModel = startupReporter.report();
-        Assert.assertNotNull(startupStaticsModel);
-        Assert.assertEquals(6, startupStaticsModel.getStageStats().size());
-
-        BaseStat healthCheckStage = startupReporter
-            .getStageNyName(BootStageConstants.HEALTH_CHECK_STAGE);
-        Assert.assertNotNull(healthCheckStage);
-        Assert.assertTrue(healthCheckStage.getCost() > 0);
-
+        ChildrenStat<BaseStat> applicationContextPrepareStage = (ChildrenStat<BaseStat>) startupReporter.getStageNyName(BootStageConstants.APPLICATION_CONTEXT_PREPARE_STAGE);
+        Assert.assertNotNull(applicationContextPrepareStage);
+        List<BaseStat> baseStatList = applicationContextPrepareStage.getChildren();
+        Assert.assertFalse(baseStatList.isEmpty());
+        Assert.assertTrue(baseStatList.stream().anyMatch(stat -> stat.getName().equals("com.alipay.sofa.runtime.SofaRuntimeSpringContextInitializer")));
+        Assert.assertTrue(baseStatList.stream().filter(stat -> stat.getName().equals("com.alipay.sofa.startup.test.beans.StartupInitializer")).findFirst().get()
+                .getCost() >= 10);
     }
 }

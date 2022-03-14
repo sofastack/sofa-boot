@@ -14,20 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.boot.startup;
+package com.alipay.sofa.startup.test.spring;
+
+import com.alipay.sofa.startup.stage.StartupSpringApplication;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.test.context.SpringBootContextLoader;
 
 /**
- * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
- * Created on 2020/11/23
+ * @author huzijie
+ * @version StartupSpringBootContextLoader.java, v 0.1 2022年03月14日 2:51 PM huzijie Exp $
  */
-public class ModuleStat extends ChildrenStat<BeanStat> {
-    private String threadName;
+public class StartupSpringBootContextLoader extends SpringBootContextLoader {
 
-    public String getThreadName() {
-        return threadName;
-    }
-
-    public void setThreadName(String threadName) {
-        this.threadName = threadName;
+    @Override
+    protected SpringApplication getSpringApplication() {
+        return new StartupSpringApplication(new Class[0]);
     }
 }
