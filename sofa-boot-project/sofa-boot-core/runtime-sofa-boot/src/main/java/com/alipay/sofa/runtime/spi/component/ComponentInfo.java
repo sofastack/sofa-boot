@@ -46,8 +46,8 @@ public interface ComponentInfo extends Component {
     ComponentName getName();
 
     /**
-     * get component create in which {@link ApplicationContext}
-     * <p> default for compatibility </>
+     * get component create in which {@link ApplicationContext}, default for compatibility
+     *
      * @return component applicationContext
      */
     default ApplicationContext getApplicationContext() {
@@ -55,8 +55,8 @@ public interface ComponentInfo extends Component {
     }
 
     /**
-     * set component create in which {@link ApplicationContext}
-     * <p> default for compatibility </>
+     * set component create in which {@link ApplicationContext}, default for compatibility
+     *
      * @param applicationContext applicationContext
      */
     default void setApplicationContext(ApplicationContext applicationContext) {}
