@@ -24,6 +24,7 @@ import com.alipay.sofa.runtime.model.ComponentType;
 import com.alipay.sofa.runtime.spi.component.AbstractComponent;
 import com.alipay.sofa.runtime.spi.component.Implementation;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 
 import java.util.Map;
@@ -51,6 +52,11 @@ public class SpringContextComponent extends AbstractComponent {
     @Override
     public Map<String, Property> getProperties() {
         return null;
+    }
+
+    @Override
+    public ApplicationContext getApplicationContext() {
+        return (ApplicationContext) implementation.getTarget();
     }
 
     @Override

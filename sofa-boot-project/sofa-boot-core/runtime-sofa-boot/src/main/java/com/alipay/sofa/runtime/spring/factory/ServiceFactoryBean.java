@@ -67,6 +67,7 @@ public class ServiceFactoryBean extends AbstractContractFactoryBean {
 
         ComponentInfo componentInfo = new ServiceComponent(implementation, service,
             bindingAdapterFactory, sofaRuntimeContext);
+        componentInfo.setApplicationContext(applicationContext);
         sofaRuntimeContext.getComponentManager().register(componentInfo);
     }
 
