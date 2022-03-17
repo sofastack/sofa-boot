@@ -17,10 +17,12 @@
 package com.alipay.sofa.boot.actuator.autoconfigure.beans;
 
 import com.alipay.sofa.boot.actuator.beans.IsleBeansEndpoint;
+import com.alipay.sofa.boot.autoconfigure.isle.SofaModuleAutoConfiguration;
 import com.alipay.sofa.isle.ApplicationRuntimeModel;
 import org.springframework.boot.actuate.autoconfigure.beans.BeansEndpointAutoConfiguration;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.boot.actuate.beans.BeansEndpoint;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -35,6 +37,7 @@ import org.springframework.context.annotation.Configuration;
  * @version IsleBeansEndpointAutoConfiguration.java, v 0.1 2022年03月17日 11:03 AM huzijie Exp $
  */
 @AutoConfigureBefore(BeansEndpointAutoConfiguration.class)
+@AutoConfigureAfter(SofaModuleAutoConfiguration.class)
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnAvailableEndpoint(endpoint = BeansEndpoint.class)
 @ConditionalOnClass(ApplicationRuntimeModel.class)
