@@ -22,6 +22,7 @@ import com.alipay.sofa.runtime.SofaFramework;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -39,6 +40,7 @@ public class ComponentsEndpointAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
+    @ConditionalOnBean(SofaRuntimeContext.class)
     public SofaBootComponentsEndPoint sofaBootComponentsEndPoint(SofaRuntimeContext sofaRuntimeContext) {
         return new SofaBootComponentsEndPoint(sofaRuntimeContext);
     }
