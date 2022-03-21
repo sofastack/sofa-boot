@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.alipay.sofa.healthcheck.HealthCheckProperties;
+import com.alipay.sofa.healthcheck.core.HealthCheckExecutor;
 import com.alipay.sofa.runtime.configure.SofaRuntimeConfigurationProperties;
 import org.junit.Test;
 import org.springframework.boot.SpringApplication;
@@ -106,6 +107,11 @@ public class HealthCheckConfigurationTest {
         @Bean
         public HealthIndicatorProcessor healthIndicatorProcessor() {
             return new HealthIndicatorProcessor();
+        }
+
+        @Bean
+        public HealthCheckExecutor healthCheckExecutor(HealthCheckProperties properties) {
+            return new HealthCheckExecutor(properties);
         }
     }
 }

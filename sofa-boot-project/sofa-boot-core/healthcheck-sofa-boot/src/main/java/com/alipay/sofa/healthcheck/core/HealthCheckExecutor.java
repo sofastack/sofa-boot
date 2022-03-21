@@ -19,6 +19,7 @@ package com.alipay.sofa.healthcheck.core;
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.util.NamedThreadFactory;
 import com.alipay.sofa.common.thread.SofaThreadPoolExecutor;
+import com.alipay.sofa.healthcheck.HealthCheckProperties;
 import com.alipay.sofa.healthcheck.log.HealthCheckLoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.boot.actuate.health.Health;
@@ -36,23 +37,31 @@ import java.util.concurrent.TimeUnit;
  * @since 3.7.1
  */
 public class HealthCheckExecutor {
-    private static Logger                   logger          = HealthCheckLoggerFactory.DEFAULT_LOG;
+    private static final Logger      logger = HealthCheckLoggerFactory.DEFAULT_LOG;
 
-    private static final ThreadPoolExecutor THREAD_POOL_REF = createThreadPoolExecutor();
+    private final ThreadPoolExecutor executor;
 
-    public static Future<Health> submitTask(Callable<Health> callable) {
-        return THREAD_POOL_REF.submit(callable);
-    }
-
-    /**
-     * Create thread pool to execute health check.
-     * @return thread pool to execute health check.
-     */
-    private static ThreadPoolExecutor createThreadPoolExecutor() {
-        logger.info("Create health-check thread pool, corePoolSize: 1, maxPoolSize: 1.");
-        return new SofaThreadPoolExecutor(1, 1, 30, TimeUnit.SECONDS,
-            new SynchronousQueue<Runnable>(), new NamedThreadFactory("health-check"),
+    public HealthCheckExecutor(HealthCheckProperties properties) {
+        int threadPoolSize;
+        if (properties.isHealthCheckParallelEnable()) {
+            threadPoolSize = Runtime.getRuntime().availableProcessors() * 5;
+        } else {
+            threadPoolSize = 1;
+        }
+        this.executor = new SofaThreadPoolExecutor(threadPoolSize, threadPoolSize, 30,
+            TimeUnit.SECONDS, new SynchronousQueue<>(), new NamedThreadFactory("health-check"),
             new ThreadPoolExecutor.CallerRunsPolicy(), "health-check",
             SofaBootConstants.SOFABOOT_SPACE_NAME);
+        logger.info("Create health-check thread pool, corePoolSize: {}, maxPoolSize: {}.",
+            threadPoolSize, threadPoolSize);
     }
+
+    public Future<Health> submitTask(Callable<Health> callable) {
+        return executor.submit(callable);
+    }
+
+    public void executeTask(Runnable runnable) {
+        executor.execute(runnable);
+    }
+
 }

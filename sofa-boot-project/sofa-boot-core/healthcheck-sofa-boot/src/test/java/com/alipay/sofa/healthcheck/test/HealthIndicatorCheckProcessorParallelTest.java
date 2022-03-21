@@ -16,12 +16,13 @@
  */
 package com.alipay.sofa.healthcheck.test;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
+import com.alipay.sofa.healthcheck.AfterReadinessCheckCallbackProcessor;
 import com.alipay.sofa.healthcheck.HealthCheckProperties;
+import com.alipay.sofa.healthcheck.HealthCheckerProcessor;
+import com.alipay.sofa.healthcheck.HealthIndicatorProcessor;
+import com.alipay.sofa.healthcheck.ReadinessCheckListener;
 import com.alipay.sofa.healthcheck.core.HealthCheckExecutor;
+import com.alipay.sofa.healthcheck.test.bean.TestHealthIndicator;
 import com.alipay.sofa.runtime.configure.SofaRuntimeConfigurationProperties;
 import org.junit.Assert;
 import org.junit.Test;
@@ -29,24 +30,21 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.actuate.health.Health;
-import org.springframework.boot.actuate.health.Status;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.alipay.sofa.healthcheck.AfterReadinessCheckCallbackProcessor;
-import com.alipay.sofa.healthcheck.HealthCheckerProcessor;
-import com.alipay.sofa.healthcheck.HealthIndicatorProcessor;
-import com.alipay.sofa.healthcheck.ReadinessCheckListener;
-import com.alipay.sofa.healthcheck.test.bean.DiskHealthIndicator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * @author liangen
  * @author qilong.zql
  * @version 2.3.0
  */
-public class HealthIndicatorCheckProcessorTest {
+public class HealthIndicatorCheckProcessorParallelTest {
 
     private ApplicationContext applicationContext;
 
@@ -55,8 +53,13 @@ public class HealthIndicatorCheckProcessorTest {
             SofaRuntimeConfigurationProperties.class })
     static class HealthIndicatorConfiguration {
         @Bean
-        public DiskHealthIndicator diskHealthIndicator(@Value("${disk-health-indicator.health}") boolean health) {
-            return new DiskHealthIndicator(health);
+        public TestHealthIndicator testAHealthIndicator(@Value("${disk-health-indicator.health}") boolean health) {
+            return new TestHealthIndicator(health);
+        }
+
+        @Bean
+        public TestHealthIndicator testBHealthIndicator(@Value("${disk-health-indicator.health}") boolean health) {
+            return new TestHealthIndicator(health);
         }
 
         @Bean
@@ -81,6 +84,7 @@ public class HealthIndicatorCheckProcessorTest {
 
         @Bean
         public HealthCheckExecutor healthCheckExecutor(HealthCheckProperties properties) {
+            properties.setHealthCheckParallelEnable(true);
             return new HealthCheckExecutor(properties);
         }
     }
@@ -92,12 +96,8 @@ public class HealthIndicatorCheckProcessorTest {
             .getBean(HealthIndicatorProcessor.class);
         HashMap<String, Health> hashMap = new HashMap<>();
         boolean result = healthIndicatorProcessor.readinessHealthCheck(hashMap);
-        Health diskHealth = hashMap.get("disk");
         Assert.assertTrue(result);
-        Assert.assertEquals(1, hashMap.size());
-        Assert.assertNotNull(diskHealth);
-        Assert.assertEquals(diskHealth.getStatus(), Status.UP);
-        Assert.assertEquals("hard disk is ok", diskHealth.getDetails().get("disk"));
+        Assert.assertEquals(2, hashMap.size());
     }
 
     @Test
@@ -107,12 +107,8 @@ public class HealthIndicatorCheckProcessorTest {
         HealthIndicatorProcessor healthIndicatorProcessor = applicationContext
             .getBean(HealthIndicatorProcessor.class);
         boolean result = healthIndicatorProcessor.readinessHealthCheck(hashMap);
-        Health diskHealth = hashMap.get("disk");
         Assert.assertFalse(result);
-        Assert.assertEquals(1, hashMap.size());
-        Assert.assertNotNull(diskHealth);
-        Assert.assertEquals(diskHealth.getStatus(), Status.DOWN);
-        Assert.assertEquals("hard disk is bad", diskHealth.getDetails().get("disk"));
+        Assert.assertEquals(2, hashMap.size());
     }
 
     private void initApplicationContext(boolean health) {
