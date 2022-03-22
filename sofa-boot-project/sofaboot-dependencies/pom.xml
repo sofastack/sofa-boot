@@ -46,7 +46,7 @@
 
         <resteasy.version>3.6.3.Final</resteasy.version>
         <curator.version>4.0.1</curator.version>
-        <dubbo.version>2.6.7</dubbo.version>
+        <dubbo.version>2.6.9</dubbo.version>
         <zkclient.version>0.11</zkclient.version>
         <nacos.version>1.0.0</nacos.version>
         <swagger.version>2.0.0</swagger.version>
