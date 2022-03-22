@@ -17,9 +17,11 @@
 package com.alipay.sofa.startup.test.configuration;
 
 import com.alipay.sofa.healthcheck.AfterReadinessCheckCallbackProcessor;
+import com.alipay.sofa.healthcheck.HealthCheckProperties;
 import com.alipay.sofa.healthcheck.HealthCheckerProcessor;
 import com.alipay.sofa.healthcheck.HealthIndicatorProcessor;
 import com.alipay.sofa.healthcheck.ReadinessCheckListener;
+import com.alipay.sofa.healthcheck.core.HealthCheckExecutor;
 import com.alipay.sofa.startup.StartupReporter;
 import com.alipay.sofa.startup.stage.healthcheck.StartupReadinessCheckListener;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -55,5 +57,10 @@ public class SofaStartupHealthCheckAutoConfiguration {
     @Bean
     public AfterReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor() {
         return new AfterReadinessCheckCallbackProcessor();
+    }
+
+    @Bean
+    public HealthCheckExecutor healthCheckExecutor(HealthCheckProperties properties) {
+        return new HealthCheckExecutor(properties);
     }
 }
