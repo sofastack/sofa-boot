@@ -207,14 +207,15 @@ public class SofaRpcTestAutoConfiguration {
 
     @Bean
     @ConditionalOnProperty(name = "com.alipay.sofa.rpc.mock-url")
-    public ConsumerMockProcessor consumerMockProcessor() {
-        return new ConsumerMockProcessor("");
+    public ConsumerMockProcessor consumerMockProcessor(Environment environment) {
+        return new ConsumerMockProcessor(environment.getProperty("com.alipay.sofa.rpc.mock-url"));
     }
 
     @Bean
     @ConditionalOnProperty(name = "com.alipay.sofa.rpc.dynamic-config")
-    public DynamicConfigProcessor dynamicConfigProcessor() {
-        return new DynamicConfigProcessor("");
+    public DynamicConfigProcessor dynamicConfigProcessor(Environment environment) {
+        return new DynamicConfigProcessor(
+            environment.getProperty("com.alipay.sofa.rpc.dynamic-config"));
     }
 
     @Bean
