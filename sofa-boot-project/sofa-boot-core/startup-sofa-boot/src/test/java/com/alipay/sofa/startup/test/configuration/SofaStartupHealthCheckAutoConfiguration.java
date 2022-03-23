@@ -17,9 +17,11 @@
 package com.alipay.sofa.startup.test.configuration;
 
 import com.alipay.sofa.healthcheck.AfterReadinessCheckCallbackProcessor;
+import com.alipay.sofa.healthcheck.HealthCheckProperties;
 import com.alipay.sofa.healthcheck.HealthCheckerProcessor;
 import com.alipay.sofa.healthcheck.HealthIndicatorProcessor;
 import com.alipay.sofa.healthcheck.ReadinessCheckListener;
+import com.alipay.sofa.runtime.configure.SofaRuntimeConfigurationProperties;
 import com.alipay.sofa.startup.StartupReporter;
 import com.alipay.sofa.startup.stage.healthcheck.StartupReadinessCheckListener;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -27,6 +29,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.SearchStrategy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 
 /**
  * @author huzijie
@@ -38,8 +41,16 @@ public class SofaStartupHealthCheckAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(value = ReadinessCheckListener.class, search = SearchStrategy.CURRENT)
-    public StartupReadinessCheckListener startupReadinessCheckListener(StartupReporter startupReporter) {
-        return new StartupReadinessCheckListener(startupReporter);
+    public StartupReadinessCheckListener startupReadinessCheckListener(Environment environment,
+                                                                       HealthCheckerProcessor healthCheckerProcessor,
+                                                                       HealthIndicatorProcessor healthIndicatorProcessor,
+                                                                       AfterReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor,
+                                                                       SofaRuntimeConfigurationProperties sofaRuntimeConfigurationProperties,
+                                                                       HealthCheckProperties healthCheckProperties,
+                                                                       StartupReporter startupReporter) {
+        return new StartupReadinessCheckListener(environment, healthCheckerProcessor,
+            healthIndicatorProcessor, afterReadinessCheckCallbackProcessor,
+            sofaRuntimeConfigurationProperties, healthCheckProperties, startupReporter);
     }
 
     @Bean
@@ -48,8 +59,8 @@ public class SofaStartupHealthCheckAutoConfiguration {
     }
 
     @Bean
-    public HealthIndicatorProcessor healthIndicatorProcessor() {
-        return new HealthIndicatorProcessor();
+    public HealthIndicatorProcessor healthIndicatorProcessor(HealthCheckProperties properties) {
+        return new HealthIndicatorProcessor(properties);
     }
 
     @Bean

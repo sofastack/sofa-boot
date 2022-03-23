@@ -17,7 +17,6 @@
 package com.alipay.sofa.boot.actuator.health;
 
 import com.alipay.sofa.healthcheck.ReadinessCheckListener;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
 import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
 
@@ -27,8 +26,12 @@ import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
  */
 @Endpoint(id = "triggerReadinessCallback")
 public class ManualReadinessCallbackEndPoint {
-    @Autowired
-    private ReadinessCheckListener readinessCheckListener;
+
+    private final ReadinessCheckListener readinessCheckListener;
+
+    public ManualReadinessCallbackEndPoint(ReadinessCheckListener readinessCheckListener) {
+        this.readinessCheckListener = readinessCheckListener;
+    }
 
     @ReadOperation
     public ReadinessCheckListener.ManualReadinessCallbackResult trigger() {

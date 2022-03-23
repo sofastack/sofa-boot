@@ -28,7 +28,6 @@ import com.alipay.sofa.isle.profile.SofaModuleProfileChecker;
 import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
 import com.alipay.sofa.runtime.log.SofaLogger;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.core.io.UrlResource;
 
@@ -45,16 +44,17 @@ import java.util.Properties;
  * @version $Id: ModelCreatingStage.java, v 0.1 2012-3-16 14:17:48 fengqi.lin Exp $
  */
 public class ModelCreatingStage extends AbstractPipelineStage {
-    private final boolean              allowModuleOverriding;
+    private final boolean                    allowModuleOverriding;
 
-    @Autowired
-    protected SofaModuleProfileChecker sofaModuleProfileChecker;
+    protected final SofaModuleProfileChecker sofaModuleProfileChecker;
 
-    public ModelCreatingStage(AbstractApplicationContext applicationContext) {
+    public ModelCreatingStage(AbstractApplicationContext applicationContext,
+                              SofaModuleProfileChecker sofaModuleProfileChecker) {
         super(applicationContext);
         SofaModuleProperties sofaModuleProperties = applicationContext
             .getBean(SofaModuleProperties.class);
         this.allowModuleOverriding = sofaModuleProperties.isAllowModuleOverriding();
+        this.sofaModuleProfileChecker = sofaModuleProfileChecker;
     }
 
     @Override

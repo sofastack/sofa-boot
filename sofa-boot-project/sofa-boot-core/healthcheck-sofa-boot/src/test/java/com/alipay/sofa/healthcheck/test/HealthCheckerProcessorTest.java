@@ -50,6 +50,7 @@ import com.alipay.sofa.healthcheck.test.bean.DiskHealthChecker;
 import com.alipay.sofa.healthcheck.test.bean.MemoryHealthChecker;
 import com.alipay.sofa.healthcheck.test.bean.NetworkHealthChecker;
 import com.alipay.sofa.healthcheck.util.HealthCheckUtils;
+import org.springframework.core.env.Environment;
 
 /**
  * @author liangen
@@ -88,8 +89,15 @@ public class HealthCheckerProcessorTest {
         }
 
         @Bean
-        public ReadinessCheckListener readinessCheckListener() {
-            return new ReadinessCheckListener();
+        public ReadinessCheckListener readinessCheckListener(Environment environment,
+                                                             HealthCheckerProcessor healthCheckerProcessor,
+                                                             HealthIndicatorProcessor healthIndicatorProcessor,
+                                                             AfterReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor,
+                                                             SofaRuntimeConfigurationProperties sofaRuntimeConfigurationProperties,
+                                                             HealthCheckProperties healthCheckProperties) {
+            return new ReadinessCheckListener(environment, healthCheckerProcessor,
+                healthIndicatorProcessor, afterReadinessCheckCallbackProcessor,
+                sofaRuntimeConfigurationProperties, healthCheckProperties);
         }
 
         @Bean
@@ -98,8 +106,8 @@ public class HealthCheckerProcessorTest {
         }
 
         @Bean
-        public HealthIndicatorProcessor healthIndicatorProcessor() {
-            return new HealthIndicatorProcessor();
+        public HealthIndicatorProcessor healthIndicatorProcessor(HealthCheckProperties properties) {
+            return new HealthIndicatorProcessor(properties);
         }
     }
 

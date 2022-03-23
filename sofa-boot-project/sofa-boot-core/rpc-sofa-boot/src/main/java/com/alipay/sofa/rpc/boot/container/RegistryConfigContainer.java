@@ -26,12 +26,9 @@ import com.alipay.sofa.rpc.common.SofaOptions;
 import com.alipay.sofa.rpc.common.utils.StringUtils;
 import com.alipay.sofa.rpc.config.RegistryConfig;
 import com.alipay.sofa.rpc.log.LogCodes;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 
-import javax.annotation.Resource;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -43,19 +40,16 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class RegistryConfigContainer {
 
-    private static final String                     DEFAULT_REGISTRY  = "DEFAULT";
+    private static final String                     DEFAULT_REGISTRY = "DEFAULT";
 
-    @Autowired
-    private SofaBootRpcProperties                   sofaBootRpcProperties;
+    private final SofaBootRpcProperties             sofaBootRpcProperties;
 
-    @Resource(name = "registryConfigMap")
-    private Map<String, RegistryConfigureProcessor> registryConfigMap = new HashMap<String, RegistryConfigureProcessor>(
-                                                                          4);
+    private Map<String, RegistryConfigureProcessor> registryConfigMap;
 
     /**
      * for cache
      */
-    private Map<String, RegistryConfig>             registryConfigs   = new ConcurrentHashMap<String, RegistryConfig>();
+    private Map<String, RegistryConfig>             registryConfigs  = new ConcurrentHashMap<String, RegistryConfig>();
 
     /**
      * for custom extends
@@ -67,7 +61,10 @@ public class RegistryConfigContainer {
      */
     private String                                  customDefaultRegistryAddress;
 
-    public RegistryConfigContainer() {
+    public RegistryConfigContainer(SofaBootRpcProperties sofaBootRpcProperties,
+                                   Map<String, RegistryConfigureProcessor> registryConfigMap) {
+        this.sofaBootRpcProperties = sofaBootRpcProperties;
+        this.registryConfigMap = registryConfigMap;
         customDefaultRegistry = SofaConfigs.getOrDefault(SofaBootRpcConfigKeys.DEFAULT_REGISTRY);
         if (StringUtils.isNotBlank(customDefaultRegistry)) {
             customDefaultRegistryAddress = System.getProperty(customDefaultRegistry);

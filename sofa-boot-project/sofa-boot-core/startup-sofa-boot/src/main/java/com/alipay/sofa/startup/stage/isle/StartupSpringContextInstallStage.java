@@ -20,6 +20,7 @@ import com.alipay.sofa.boot.startup.ContextRefreshStageStat;
 import com.alipay.sofa.boot.startup.ModuleStat;
 import com.alipay.sofa.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
+import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
 import com.alipay.sofa.isle.spring.factory.BeanLoadCostBeanFactory;
 import com.alipay.sofa.isle.stage.SpringContextInstallStage;
 import com.alipay.sofa.startup.StartupReporter;
@@ -40,8 +41,9 @@ public class StartupSpringContextInstallStage extends SpringContextInstallStage 
     private ContextRefreshStageStat contextRefreshStageStat;
 
     public StartupSpringContextInstallStage(AbstractApplicationContext applicationContext,
+                                            SofaModuleProperties sofaModuleProperties,
                                             StartupReporter startupReporter) {
-        super(applicationContext);
+        super(applicationContext, sofaModuleProperties);
         this.startupReporter = startupReporter;
     }
 

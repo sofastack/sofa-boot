@@ -70,14 +70,18 @@ public class PipelineStageTest {
     static class StageTestConfiguration {
         @Bean
         @ConditionalOnMissingBean
-        public ModelCreatingStage modelCreatingStage(ApplicationContext applicationContext) {
-            return new ModelCreatingStage((AbstractApplicationContext) applicationContext);
+        public ModelCreatingStage modelCreatingStage(ApplicationContext applicationContext,
+                                                     SofaModuleProfileChecker sofaModuleProfileChecker) {
+            return new ModelCreatingStage((AbstractApplicationContext) applicationContext,
+                sofaModuleProfileChecker);
         }
 
         @Bean
         @ConditionalOnMissingBean
-        public SpringContextInstallStage springContextInstallStage(ApplicationContext applicationContext) {
-            return new SpringContextInstallStage((AbstractApplicationContext) applicationContext);
+        public SpringContextInstallStage springContextInstallStage(ApplicationContext applicationContext,
+                                                                   SofaModuleProperties sofaModuleProperties) {
+            return new SpringContextInstallStage((AbstractApplicationContext) applicationContext,
+                sofaModuleProperties);
         }
 
         @Bean
@@ -88,14 +92,14 @@ public class PipelineStageTest {
 
         @Bean
         @ConditionalOnMissingBean
-        public PipelineContext pipelineContext() {
-            return new DefaultPipelineContext();
+        public PipelineContext pipelineContext(List<PipelineStage> stageList) {
+            return new DefaultPipelineContext(stageList);
         }
 
         @Bean
         @ConditionalOnMissingBean
-        public SofaModuleProfileChecker sofaModuleProfileChecker() {
-            return new DefaultSofaModuleProfileChecker();
+        public SofaModuleProfileChecker sofaModuleProfileChecker(SofaModuleProperties sofaModuleProperties) {
+            return new DefaultSofaModuleProfileChecker(sofaModuleProperties);
         }
 
         @Bean

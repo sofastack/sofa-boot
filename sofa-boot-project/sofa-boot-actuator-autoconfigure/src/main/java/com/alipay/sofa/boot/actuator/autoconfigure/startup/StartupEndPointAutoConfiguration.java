@@ -38,7 +38,7 @@ public class StartupEndPointAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     @ConditionalOnAvailableEndpoint(endpoint = SofaBootStartupEndPoint.class)
-    public SofaBootStartupEndPoint sofaBootStartupEndPoint() {
-        return new SofaBootStartupEndPoint();
+    public SofaBootStartupEndPoint sofaBootStartupEndPoint(StartupReporter startupReporter) {
+        return new SofaBootStartupEndPoint(startupReporter);
     }
 }

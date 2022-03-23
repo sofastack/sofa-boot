@@ -26,6 +26,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -163,8 +164,11 @@ public class SpringContextInstallStageTest {
         }
 
         @Bean
-        public SpringContextInstallStage springContextInstallStage(ApplicationContext applicationContext) {
-            return new SpringContextInstallStage((AbstractApplicationContext) applicationContext);
+        @ConditionalOnMissingBean
+        public SpringContextInstallStage springContextInstallStage(ApplicationContext applicationContext,
+                                                                   SofaModuleProperties sofaModuleProperties) {
+            return new SpringContextInstallStage((AbstractApplicationContext) applicationContext,
+                sofaModuleProperties);
         }
 
         @Bean

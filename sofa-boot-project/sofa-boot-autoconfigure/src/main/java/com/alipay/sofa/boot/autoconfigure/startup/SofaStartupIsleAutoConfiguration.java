@@ -18,6 +18,8 @@ package com.alipay.sofa.boot.autoconfigure.startup;
 
 import com.alipay.sofa.boot.autoconfigure.isle.SofaModuleAutoConfiguration;
 import com.alipay.sofa.isle.ApplicationRuntimeModel;
+import com.alipay.sofa.isle.profile.SofaModuleProfileChecker;
+import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
 import com.alipay.sofa.isle.stage.ModelCreatingStage;
 import com.alipay.sofa.isle.stage.SpringContextInstallStage;
 import com.alipay.sofa.startup.StartupReporter;
@@ -46,16 +48,18 @@ public class SofaStartupIsleAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(value = SpringContextInstallStage.class, search = SearchStrategy.CURRENT)
     public StartupSpringContextInstallStage startupSpringContextInstallStage(ApplicationContext applicationContext,
+                                                                             SofaModuleProperties sofaModuleProperties,
                                                                              StartupReporter startupReporter) {
         return new StartupSpringContextInstallStage(
-            (AbstractApplicationContext) applicationContext, startupReporter);
+            (AbstractApplicationContext) applicationContext, sofaModuleProperties, startupReporter);
     }
 
     @Bean
     @ConditionalOnMissingBean(value = ModelCreatingStage.class, search = SearchStrategy.CURRENT)
     public StartupModelCreatingStage startupModelCreatingStage(ApplicationContext applicationContext,
+                                                               SofaModuleProfileChecker sofaModuleProfileChecker,
                                                                StartupReporter startupReporter) {
         return new StartupModelCreatingStage((AbstractApplicationContext) applicationContext,
-            startupReporter);
+            sofaModuleProfileChecker, startupReporter);
     }
 }

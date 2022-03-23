@@ -21,6 +21,7 @@ import com.alipay.sofa.isle.spring.SofaModuleContextLifecycle;
 import com.alipay.sofa.isle.stage.DefaultPipelineContext;
 import com.alipay.sofa.isle.stage.ModelCreatingStage;
 import com.alipay.sofa.isle.stage.PipelineContext;
+import com.alipay.sofa.isle.stage.PipelineStage;
 import com.alipay.sofa.isle.test.util.AddCustomJar;
 import com.alipay.sofa.isle.test.util.SeparateClassLoaderTestRunner;
 import org.junit.Assert;
@@ -36,6 +37,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
 /**
  * @author huzijie
@@ -81,14 +83,14 @@ public class DuplicateModuleTest {
 
         @Bean
         @ConditionalOnMissingBean
-        public PipelineContext pipelineContext() {
-            return new DefaultPipelineContext();
+        public PipelineContext pipelineContext(List<PipelineStage> stageList) {
+            return new DefaultPipelineContext(stageList);
         }
 
         @Bean
         @ConditionalOnMissingBean
-        public SofaModuleContextLifecycle sofaModuleContextLifecycle() {
-            return new SofaModuleContextLifecycle();
+        public SofaModuleContextLifecycle sofaModuleContextLifecycle(PipelineContext pipelineContext) {
+            return new SofaModuleContextLifecycle(pipelineContext);
         }
     }
 

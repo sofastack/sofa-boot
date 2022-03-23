@@ -26,6 +26,7 @@ import com.alipay.sofa.healthcheck.HealthCheckerProcessor;
 import com.alipay.sofa.healthcheck.HealthCheckProperties;
 import com.alipay.sofa.healthcheck.HealthIndicatorProcessor;
 import com.alipay.sofa.healthcheck.ReadinessCheckListener;
+import org.springframework.core.env.Environment;
 
 /**
  * @author qilong.zql
@@ -36,8 +37,15 @@ import com.alipay.sofa.healthcheck.ReadinessCheckListener;
                                 SofaRuntimeConfigurationProperties.class })
 public class HealthcheckTestConfiguration {
     @Bean
-    public ReadinessCheckListener readinessCheckListener() {
-        return new ReadinessCheckListener();
+    public ReadinessCheckListener readinessCheckListener(Environment environment,
+                                                         HealthCheckerProcessor healthCheckerProcessor,
+                                                         HealthIndicatorProcessor healthIndicatorProcessor,
+                                                         AfterReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor,
+                                                         SofaRuntimeConfigurationProperties sofaRuntimeConfigurationProperties,
+                                                         HealthCheckProperties healthCheckProperties) {
+        return new ReadinessCheckListener(environment, healthCheckerProcessor,
+            healthIndicatorProcessor, afterReadinessCheckCallbackProcessor,
+            sofaRuntimeConfigurationProperties, healthCheckProperties);
     }
 
     @Bean
@@ -46,8 +54,8 @@ public class HealthcheckTestConfiguration {
     }
 
     @Bean
-    public HealthIndicatorProcessor healthIndicatorProcessor() {
-        return new HealthIndicatorProcessor();
+    public HealthIndicatorProcessor healthIndicatorProcessor(HealthCheckProperties properties) {
+        return new HealthIndicatorProcessor(properties);
     }
 
     @Bean

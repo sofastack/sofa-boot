@@ -27,11 +27,11 @@ import com.alipay.sofa.healthcheck.util.HealthCheckUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.BeansException;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.Status;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.util.Assert;
 
 import java.util.LinkedHashMap;
@@ -49,21 +49,18 @@ import java.util.stream.Collectors;
  * @author qilong.zql
  * @since 2.3.0
  */
-public class HealthCheckerProcessor {
+public class HealthCheckerProcessor implements ApplicationContextAware {
 
-    private static Logger                        logger         = HealthCheckLoggerFactory.DEFAULT_LOG;
+    private static final Logger                  logger         = HealthCheckLoggerFactory.DEFAULT_LOG;
 
-    private ObjectMapper                         objectMapper   = new ObjectMapper();
+    private final ObjectMapper                   objectMapper   = new ObjectMapper();
 
-    private AtomicBoolean                        isInitiated    = new AtomicBoolean(false);
+    private final AtomicBoolean                  isInitiated    = new AtomicBoolean(false);
 
-    @Autowired
     private ApplicationContext                   applicationContext;
 
     private LinkedHashMap<String, HealthChecker> healthCheckers = null;
 
-    @Value("${" + SofaBootConstants.SOFABOOT_HEALTH_CHECK_DEFAULT_TIMEOUT + ":"
-           + SofaBootConstants.SOFABOOT_HEALTH_CHECK_DEFAULT_TIMEOUT_VALUE + "}")
     private int                                  defaultTimeout;
 
     public void init() {
@@ -203,5 +200,13 @@ public class HealthCheckerProcessor {
             logger.error(ErrorCode.convert("01-23003", checkType), ex);
         }
         return !healthChecker.isStrictCheck() || result;
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+        this.defaultTimeout = Integer.parseInt(applicationContext.getEnvironment().getProperty(
+            SofaBootConstants.SOFABOOT_HEALTH_CHECK_DEFAULT_TIMEOUT,
+            String.valueOf(SofaBootConstants.SOFABOOT_HEALTH_CHECK_DEFAULT_TIMEOUT_VALUE)));
     }
 }

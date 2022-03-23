@@ -17,25 +17,13 @@
 package com.alipay.sofa.boot.actuator.autoconfigure.health;
 
 import com.alipay.sofa.boot.actuator.health.ManualReadinessCallbackEndPoint;
-import com.alipay.sofa.boot.constant.SofaBootConstants;
-import com.alipay.sofa.healthcheck.HealthCheckProperties;
-import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
-import org.springframework.boot.actuate.autoconfigure.health.HealthEndpointAutoConfiguration;
-import org.springframework.boot.actuate.autoconfigure.health.HealthEndpointProperties;
-import org.springframework.boot.actuate.health.HttpCodeStatusMapper;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
 import com.alipay.sofa.boot.actuator.health.MultiApplicationHealthIndicator;
 import com.alipay.sofa.boot.actuator.health.ReadinessEndpointWebExtension;
 import com.alipay.sofa.boot.actuator.health.SofaBootHealthIndicator;
 import com.alipay.sofa.boot.actuator.health.SofaBootReadinessEndpoint;
+import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.healthcheck.AfterReadinessCheckCallbackProcessor;
+import com.alipay.sofa.healthcheck.HealthCheckProperties;
 import com.alipay.sofa.healthcheck.HealthCheckerProcessor;
 import com.alipay.sofa.healthcheck.HealthIndicatorProcessor;
 import com.alipay.sofa.healthcheck.ReadinessCheckListener;
@@ -44,7 +32,23 @@ import com.alipay.sofa.healthcheck.impl.ComponentHealthChecker;
 import com.alipay.sofa.healthcheck.impl.ModuleHealthChecker;
 import com.alipay.sofa.healthcheck.impl.SofaRuntimeHealthChecker;
 import com.alipay.sofa.isle.stage.ModelCreatingStage;
+import com.alipay.sofa.runtime.configure.SofaRuntimeConfigurationProperties;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
+import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
+import org.springframework.boot.actuate.autoconfigure.health.HealthEndpointAutoConfiguration;
+import org.springframework.boot.actuate.autoconfigure.health.HealthEndpointProperties;
+import org.springframework.boot.actuate.health.HealthIndicator;
+import org.springframework.boot.actuate.health.HttpCodeStatusMapper;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
+
+import java.util.List;
 
 /**
  * @author qilong.zql
@@ -57,16 +61,23 @@ public class SofaBootHealthCheckAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public ReadinessCheckListener readinessCheckListener() {
-        return new ReadinessCheckListener();
+    public ReadinessCheckListener readinessCheckListener(Environment environment,
+                                                         HealthCheckerProcessor healthCheckerProcessor,
+                                                         HealthIndicatorProcessor healthIndicatorProcessor,
+                                                         AfterReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor,
+                                                         SofaRuntimeConfigurationProperties sofaRuntimeConfigurationProperties,
+                                                         HealthCheckProperties healthCheckProperties) {
+        return new ReadinessCheckListener(environment, healthCheckerProcessor,
+            healthIndicatorProcessor, afterReadinessCheckCallbackProcessor,
+            sofaRuntimeConfigurationProperties, healthCheckProperties);
     }
 
     @Bean
     @ConditionalOnMissingBean
     @ConditionalOnAvailableEndpoint(endpoint = ManualReadinessCallbackEndPoint.class)
     @ConditionalOnProperty(prefix = SofaBootConstants.PREFIX, name = "manualReadinessCallback", havingValue = "true")
-    public ManualReadinessCallbackEndPoint manualReadinessCallbackEndPoint() {
-        return new ManualReadinessCallbackEndPoint();
+    public ManualReadinessCallbackEndPoint manualReadinessCallbackEndPoint(ReadinessCheckListener readinessCheckListener) {
+        return new ManualReadinessCallbackEndPoint(readinessCheckListener);
     }
 
     @Bean
@@ -75,8 +86,8 @@ public class SofaBootHealthCheckAutoConfiguration {
     }
 
     @Bean
-    public HealthIndicatorProcessor healthIndicatorProcessor() {
-        return new HealthIndicatorProcessor();
+    public HealthIndicatorProcessor healthIndicatorProcessor(HealthCheckProperties properties) {
+        return new HealthIndicatorProcessor(properties);
     }
 
     @Bean
@@ -85,14 +96,18 @@ public class SofaBootHealthCheckAutoConfiguration {
     }
 
     @Bean
-    public SofaBootHealthIndicator sofaBootHealthIndicator() {
-        return new SofaBootHealthIndicator();
+    public SofaBootHealthIndicator sofaBootHealthIndicator(HealthCheckerProcessor healthCheckerProcessor,
+                                                           ReadinessCheckListener readinessCheckListener) {
+        return new SofaBootHealthIndicator(healthCheckerProcessor, readinessCheckListener);
     }
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Bean
-    public SofaRuntimeHealthChecker defaultRuntimeHealthChecker(SofaRuntimeContext sofaRuntimeContext) {
-        return new SofaRuntimeHealthChecker(sofaRuntimeContext);
+    public SofaRuntimeHealthChecker defaultRuntimeHealthChecker(SofaRuntimeContext sofaRuntimeContext,
+                                                                List<HealthIndicator> healthIndicators,
+                                                                ReadinessCheckListener readinessCheckListener) {
+        return new SofaRuntimeHealthChecker(sofaRuntimeContext, healthIndicators,
+            readinessCheckListener);
     }
 
     @Bean
@@ -104,8 +119,8 @@ public class SofaBootHealthCheckAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     @ConditionalOnAvailableEndpoint(endpoint = SofaBootReadinessEndpoint.class)
-    public SofaBootReadinessEndpoint sofaBootReadinessCheckEndpoint() {
-        return new SofaBootReadinessEndpoint();
+    public SofaBootReadinessEndpoint sofaBootReadinessCheckEndpoint(ReadinessCheckListener readinessCheckListener) {
+        return new SofaBootReadinessEndpoint(readinessCheckListener);
     }
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
@@ -131,8 +146,9 @@ public class SofaBootHealthCheckAutoConfiguration {
         @Bean
         @ConditionalOnMissingBean
         @ConditionalOnAvailableEndpoint(endpoint = ReadinessEndpointWebExtension.class)
-        public ReadinessEndpointWebExtension readinessEndpointWebExtension() {
-            return new ReadinessEndpointWebExtension();
+        public ReadinessEndpointWebExtension readinessEndpointWebExtension(SofaBootReadinessEndpoint delegate,
+                                                                           HttpCodeStatusMapper statusMapper) {
+            return new ReadinessEndpointWebExtension(delegate, statusMapper);
         }
 
         @Bean

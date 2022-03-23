@@ -17,6 +17,7 @@
 package com.alipay.sofa.startup.stage.isle;
 
 import com.alipay.sofa.boot.startup.StageStat;
+import com.alipay.sofa.isle.profile.SofaModuleProfileChecker;
 import com.alipay.sofa.isle.stage.ModelCreatingStage;
 import com.alipay.sofa.startup.StartupReporter;
 import org.springframework.context.support.AbstractApplicationContext;
@@ -31,8 +32,9 @@ public class StartupModelCreatingStage extends ModelCreatingStage {
     private final StartupReporter startupReporter;
 
     public StartupModelCreatingStage(AbstractApplicationContext applicationContext,
+                                     SofaModuleProfileChecker sofaModuleProfileChecker,
                                      StartupReporter startupReporter) {
-        super(applicationContext);
+        super(applicationContext, sofaModuleProfileChecker);
         this.startupReporter = startupReporter;
     }
 

@@ -42,6 +42,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.AbstractApplicationContext;
 
+import java.util.List;
+
 /**
  * @author huzijie
  * @version SofaStartupIsleAutoConfiguration.java, v 0.1 2021年01月04日 7:07 下午 huzijie Exp $
@@ -54,23 +56,25 @@ public class SofaStartupIsleAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(value = SpringContextInstallStage.class, search = SearchStrategy.CURRENT)
     public StartupSpringContextInstallStage startupSpringContextInstallStage(ApplicationContext applicationContext,
+                                                                             SofaModuleProperties sofaModuleProperties,
                                                                              StartupReporter startupReporter) {
         return new StartupSpringContextInstallStage(
-            (AbstractApplicationContext) applicationContext, startupReporter);
+            (AbstractApplicationContext) applicationContext, sofaModuleProperties, startupReporter);
     }
 
     @Bean
     @ConditionalOnMissingBean(value = ModelCreatingStage.class, search = SearchStrategy.CURRENT)
     public StartupModelCreatingStage startupModelCreatingStage(ApplicationContext applicationContext,
+                                                               SofaModuleProfileChecker sofaModuleProfileChecker,
                                                                StartupReporter startupReporter) {
         return new TestModelCreatingStage((AbstractApplicationContext) applicationContext,
-            startupReporter);
+            sofaModuleProfileChecker, startupReporter);
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public SofaModuleContextLifecycle sofaModuleContextLifecycle() {
-        return new SofaModuleContextLifecycle();
+    public SofaModuleContextLifecycle sofaModuleContextLifecycle(PipelineContext pipelineContext) {
+        return new SofaModuleContextLifecycle(pipelineContext);
     }
 
     @Bean
@@ -81,14 +85,14 @@ public class SofaStartupIsleAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public PipelineContext pipelineContext() {
-        return new DefaultPipelineContext();
+    public PipelineContext pipelineContext(List<PipelineStage> stageList) {
+        return new DefaultPipelineContext(stageList);
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public SofaModuleProfileChecker sofaModuleProfileChecker() {
-        return new DefaultSofaModuleProfileChecker();
+    public SofaModuleProfileChecker sofaModuleProfileChecker(SofaModuleProperties sofaModuleProperties) {
+        return new DefaultSofaModuleProfileChecker(sofaModuleProperties);
     }
 
     @Bean
