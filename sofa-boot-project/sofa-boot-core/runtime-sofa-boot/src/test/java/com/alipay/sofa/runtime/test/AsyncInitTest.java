@@ -70,7 +70,9 @@ public class AsyncInitTest {
     @Configuration(proxyBeanMethods = false)
     @ImportResource({ "classpath*:META-INF/async/*.xml" })
     @Import(SofaRuntimeTestConfiguration.class)
-    @TestPropertySource(properties = "async.config=false")
+    @TestPropertySource(properties = { "async.config=false",
+            "com.alipay.sofa.boot.asyncInitBeanCoreSize=20",
+            "com.alipay.sofa.boot.asyncInitBeanMaxSize=20" })
     static class AsyncInitTestConfiguration {
 
         @Bean(initMethod = "init")
