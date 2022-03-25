@@ -55,11 +55,13 @@ public class AsyncInitTest {
             if (bean.getPrintTime() > max) {
                 max = bean.getPrintTime();
             }
-            Assert.assertTrue(bean.getThreadName().contains("async-init-bean"));
+            String threadName = bean.getThreadName();
+            Assert.assertTrue(threadName, threadName.contains("async-init-bean"));
         }
         for (int i = 13; i <= 16; i++) {
             TimeWasteBean bean = ctx.getBean("testBean" + i, TimeWasteBean.class);
-            Assert.assertFalse(bean.getThreadName().contains("async-init-bean"));
+            String threadName = bean.getThreadName();
+            Assert.assertFalse(threadName, threadName.contains("async-init-bean"));
         }
         Assert.assertTrue("max:" + max + ", min:" + min, max - min < 5000);
         TimeWasteBean.resetCount();
