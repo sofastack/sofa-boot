@@ -17,7 +17,8 @@
     <bean id="testBean8" class="com.alipay.sofa.runtime.test.beans.TimeWasteBean" init-method="init" sofa:async-init="true"/>
     <bean id="testBean9" class="com.alipay.sofa.runtime.test.beans.TimeWasteBean" init-method="init" sofa:async-init="true"/>
     <bean id="testBean10" class="com.alipay.sofa.runtime.test.beans.TimeWasteBean" init-method="init" sofa:async-init="true"/>
-    <bean id="noAsyncInit" class="com.alipay.sofa.runtime.test.beans.TimeWasteBean" init-method="init"/>
-    <bean id="asyncInitFalse" class="com.alipay.sofa.runtime.test.beans.TimeWasteBean" init-method="init" sofa:async-init="false"/>
-    <bean id="noInitMethod" class="com.alipay.sofa.runtime.test.beans.TimeWasteBean" sofa:async-init="true"/>
+    <bean id="testBean11" class="com.alipay.sofa.runtime.test.AsyncInitTest.TimeWasteBeanChild" init-method="init"/>
+    <bean id="testBean15" class="com.alipay.sofa.runtime.test.beans.TimeWasteBean" init-method="init"/>
+    <bean id="testBean16" class="com.alipay.sofa.runtime.test.beans.TimeWasteBean" init-method="init" sofa:async-init="false"/>
+    <bean id="testBean17" class="com.alipay.sofa.runtime.test.beans.TimeWasteBean" sofa:async-init="true"/>
 </beans>
