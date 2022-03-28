@@ -22,6 +22,7 @@ import com.alipay.sofa.boot.startup.StageStat;
 import com.alipay.sofa.runtime.log.SofaLogger;
 import com.alipay.sofa.startup.StartupReporter;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import org.springframework.boot.ConfigurableBootstrapContext;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.SpringApplicationRunListener;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -52,7 +53,7 @@ public class StartupSpringApplicationRunListener implements SpringApplicationRun
     }
 
     @Override
-    public void starting() {
+    public void starting(ConfigurableBootstrapContext bootstrapContext) {
         StageStat stageStat = new StageStat();
         stageStat.setStageName(JVM_STARTING_STAGE);
         stageStat.setStageStartTime(ManagementFactory.getRuntimeMXBean().getStartTime());
@@ -61,7 +62,8 @@ public class StartupSpringApplicationRunListener implements SpringApplicationRun
     }
 
     @Override
-    public void environmentPrepared(ConfigurableEnvironment environment) {
+    public void environmentPrepared(ConfigurableBootstrapContext bootstrapContext,
+                                    ConfigurableEnvironment environment) {
         StageStat stageStat = new StageStat();
         stageStat.setStageName(ENVIRONMENT_PREPARE_STAGE);
         stageStat.setStageStartTime(jvmStartingStage.getStageEndTime());
