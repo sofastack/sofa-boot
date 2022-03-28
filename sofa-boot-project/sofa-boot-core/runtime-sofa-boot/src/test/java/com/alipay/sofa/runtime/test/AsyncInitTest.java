@@ -37,8 +37,8 @@ import org.springframework.test.context.junit4.SpringRunner;
  */
 @RunWith(SpringRunner.class)
 @TestPropertySource(properties = { "async.config=false",
-        "com.alipay.sofa.boot.asyncInitBeanCoreSize=20",
-        "com.alipay.sofa.boot.asyncInitBeanMaxSize=20" })
+                                  "com.alipay.sofa.boot.asyncInitBeanCoreSize=20",
+                                  "com.alipay.sofa.boot.asyncInitBeanMaxSize=20" })
 public class AsyncInitTest {
 
     @Autowired
