@@ -24,8 +24,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.SmartLifecycle;
 import org.springframework.core.Ordered;
 import org.springframework.core.PriorityOrdered;
 
@@ -37,43 +36,10 @@ import static com.alipay.sofa.boot.startup.BootStageConstants.APPLICATION_CONTEX
  * @author Zhijie
  * @since 2020/7/20
  */
-public class StartupContextRefreshedListener implements ApplicationListener<ContextRefreshedEvent>,
+public class StartupContextRefreshedListener implements SmartLifecycle,
                                             ApplicationContextAware, PriorityOrdered {
     public static final String ROOT_MODULE_NAME = "ROOT_APPLICATION_CONTEXT";
     private ApplicationContext applicationContext;
-
-    @Override
-    public void onApplicationEvent(ContextRefreshedEvent event) {
-        if (applicationContext.equals(event.getApplicationContext())) {
-            StartupReporter startupReporter;
-            try {
-                startupReporter = applicationContext.getBean(StartupReporter.class);
-            } catch (NoSuchBeanDefinitionException e) {
-                // just happen in unit tests
-                SofaLogger.warn("Failed to found bean StartupReporter", e);
-                return;
-            }
-            // init ContextRefreshStageStat
-            ChildrenStat<ModuleStat> stat = new ChildrenStat<>();
-            stat.setName(APPLICATION_CONTEXT_REFRESH_STAGE);
-            stat.setEndTime(System.currentTimeMillis());
-
-            // build root ModuleStat
-            ModuleStat rootModuleStat = new ModuleStat();
-            rootModuleStat.setName(ROOT_MODULE_NAME);
-            rootModuleStat.setEndTime(stat.getEndTime());
-            rootModuleStat.setThreadName(Thread.currentThread().getName());
-
-            // getBeanStatList from BeanCostBeanPostProcessor
-            BeanCostBeanPostProcessor beanCostBeanPostProcessor = applicationContext
-                .getBean(BeanCostBeanPostProcessor.class);
-            rootModuleStat.setChildren((beanCostBeanPostProcessor.getBeanStatList()));
-
-            // report ContextRefreshStageStat
-            stat.addChild(rootModuleStat);
-            startupReporter.addCommonStartupStat(stat);
-        }
-    }
 
     @Override
     public int getOrder() {
@@ -83,5 +49,46 @@ public class StartupContextRefreshedListener implements ApplicationListener<Cont
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
+    }
+
+    @Override
+    public void start() {
+        StartupReporter startupReporter;
+        try {
+            startupReporter = applicationContext.getBean(StartupReporter.class);
+        } catch (NoSuchBeanDefinitionException e) {
+            // just happen in unit tests
+            SofaLogger.warn("Failed to found bean StartupReporter", e);
+            return;
+        }
+        // init ContextRefreshStageStat
+        ChildrenStat<ModuleStat> stat = new ChildrenStat<>();
+        stat.setName(APPLICATION_CONTEXT_REFRESH_STAGE);
+        stat.setEndTime(System.currentTimeMillis());
+
+        // build root ModuleStat
+        ModuleStat rootModuleStat = new ModuleStat();
+        rootModuleStat.setName(ROOT_MODULE_NAME);
+        rootModuleStat.setEndTime(stat.getEndTime());
+        rootModuleStat.setThreadName(Thread.currentThread().getName());
+
+        // getBeanStatList from BeanCostBeanPostProcessor
+        BeanCostBeanPostProcessor beanCostBeanPostProcessor = applicationContext
+                .getBean(BeanCostBeanPostProcessor.class);
+        rootModuleStat.setChildren((beanCostBeanPostProcessor.getBeanStatList()));
+
+        // report ContextRefreshStageStat
+        stat.addChild(rootModuleStat);
+        startupReporter.addCommonStartupStat(stat);
+    }
+
+    @Override
+    public void stop() {
+
+    }
+
+    @Override
+    public boolean isRunning() {
+        return false;
     }
 }
