@@ -43,8 +43,8 @@ import java.lang.annotation.Target;
 public @interface SofaAsyncInit {
 
     /**
-     * Enable the bean created async init
+     * Whether init-method async invoke should occur.
      */
-    String value() default "true";
+    boolean value() default true;
 
 }

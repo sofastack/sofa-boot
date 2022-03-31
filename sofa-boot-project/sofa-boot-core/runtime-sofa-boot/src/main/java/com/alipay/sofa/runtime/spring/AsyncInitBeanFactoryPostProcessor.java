@@ -179,8 +179,7 @@ public class AsyncInitBeanFactoryPostProcessor implements BeanFactoryPostProcess
             .wrap(sofaAsyncInitAnnotation).withBinder(binder);
         sofaAsyncInitAnnotation = wrapperBuilder.build();
 
-        String value = sofaAsyncInitAnnotation.value();
-        if (Boolean.parseBoolean(value)) {
+        if (sofaAsyncInitAnnotation.value()) {
             AsyncInitBeanHolder.registerAsyncInitBean(moduleName, beanId,
                 beanDefinition.getInitMethodName());
         }

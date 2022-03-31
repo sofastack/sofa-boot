@@ -49,7 +49,7 @@ public class AsyncInitTest {
         long min = Long.MAX_VALUE;
         long max = Long.MIN_VALUE;
 
-        Assert.assertEquals(16, TimeWasteBean.getCount());
+        Assert.assertEquals(15, TimeWasteBean.getCount());
         for (int i = 1; i <= 12; i++) {
             TimeWasteBean bean = ctx.getBean("testBean" + i, TimeWasteBean.class);
             if (bean.getPrintTime() < min) {
@@ -61,7 +61,7 @@ public class AsyncInitTest {
             String threadName = bean.getThreadName();
             Assert.assertTrue(threadName, threadName.contains("async-init-bean"));
         }
-        for (int i = 13; i <= 16; i++) {
+        for (int i = 13; i <= 15; i++) {
             TimeWasteBean bean = ctx.getBean("testBean" + i, TimeWasteBean.class);
             String threadName = bean.getThreadName();
             Assert.assertFalse(threadName, threadName.contains("async-init-bean"));
@@ -82,14 +82,8 @@ public class AsyncInitTest {
         }
 
         @Bean(initMethod = "init")
-        @SofaAsyncInit("false")
+        @SofaAsyncInit(false)
         public TimeWasteBean testBean13() {
-            return new TimeWasteBean();
-        }
-
-        @Bean(initMethod = "init")
-        @SofaAsyncInit("${async.config}")
-        public TimeWasteBean testBean14() {
             return new TimeWasteBean();
         }
 
