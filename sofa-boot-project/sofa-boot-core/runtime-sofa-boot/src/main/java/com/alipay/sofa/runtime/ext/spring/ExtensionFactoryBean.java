@@ -90,6 +90,7 @@ public class ExtensionFactoryBean extends AbstractExtFactoryBean {
                                                                     + this.getPoint());
     }
 
+    @Deprecated
     public void setBeanClassLoader(ClassLoader classLoader) {
         throw new UnsupportedOperationException("Not support setBeanClassLoader for security");
     }
