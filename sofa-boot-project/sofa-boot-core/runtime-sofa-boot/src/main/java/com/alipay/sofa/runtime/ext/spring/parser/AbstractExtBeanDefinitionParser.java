@@ -40,6 +40,7 @@ public abstract class AbstractExtBeanDefinitionParser extends
                                                                                                SofaBootTagNameSupport {
     public static final String  REF                       = "ref";
 
+    // duplicated from 3.11.1
     private static final String BEAN_CLASS_LOADER         = "beanClassLoader";
 
     private static final String BEAN_CLASS_LOADER_WRAPPER = "beanClassLoaderWrapper";
