@@ -55,7 +55,8 @@ public abstract class AbstractExtBeanDefinitionParser extends
         builder.getBeanDefinition().setResource(res);
         builder.getRawBeanDefinition().setResource(res);
 
-        configBeanClassLoader(parserContext, builder);
+        // not support setClassloder since spring framework 5.2.20.RELEASE
+        //configBeanClassLoader(parserContext, builder);
 
         // parse attributes
         parseAttribute(element, parserContext, builder);

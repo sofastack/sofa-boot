@@ -52,11 +52,11 @@ public class CommonContextBean implements ApplicationContextAware, BeanNameAware
     }
 
     public void setBeanClassLoader(ClassLoader beanClassLoader) {
-        this.beanClassLoader = beanClassLoader;
+        throw new UnsupportedOperationException("Not support setBeanClassLoader for security");
     }
 
     public ClassLoader getBeanClassLoader() {
-        return beanClassLoader;
+        throw new UnsupportedOperationException("Not support getBeanClassLoader for security");
     }
 
     public void setBeanName(String beanName) {

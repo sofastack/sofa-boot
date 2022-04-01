@@ -88,7 +88,7 @@ public class ExtensionFactoryBean extends AbstractExtFactoryBean {
     }
 
     public void setBeanClassLoader(ClassLoader classLoader) {
-        this.classLoader = classLoader;
+        throw new UnsupportedOperationException("Not support setBeanClassLoader for security");
     }
 
     public void setContribution(String[] contribution) throws Exception {
