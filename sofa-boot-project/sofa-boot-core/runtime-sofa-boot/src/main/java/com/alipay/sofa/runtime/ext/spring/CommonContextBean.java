@@ -35,6 +35,7 @@ public class CommonContextBean implements ApplicationContextAware, BeanNameAware
 
     protected String                          beanName;
     protected ClassLoader                     beanClassLoader;
+    protected ClassLoaderWrapper              beanClassLoaderWrapper;
     protected ConfigurableListableBeanFactory configurableListableBeanFactory;
     @Autowired
     protected SofaRuntimeContext              sofaRuntimeContext;
@@ -57,6 +58,14 @@ public class CommonContextBean implements ApplicationContextAware, BeanNameAware
 
     public ClassLoader getBeanClassLoader() {
         throw new UnsupportedOperationException("Not support getBeanClassLoader for security");
+    }
+
+    public ClassLoaderWrapper getBeanClassLoaderWrapper() {
+        return beanClassLoaderWrapper;
+    }
+
+    public void setBeanClassLoaderWrapper(ClassLoaderWrapper beanClassLoaderWrapper) {
+        this.beanClassLoaderWrapper = beanClassLoaderWrapper;
     }
 
     public void setBeanName(String beanName) {

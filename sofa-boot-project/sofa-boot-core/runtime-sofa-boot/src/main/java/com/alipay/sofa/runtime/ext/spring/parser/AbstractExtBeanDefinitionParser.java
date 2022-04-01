@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.runtime.ext.spring.parser;
 
+import com.alipay.sofa.runtime.ext.spring.ClassLoaderWrapper;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.springframework.core.Conventions;
@@ -37,9 +38,11 @@ public abstract class AbstractExtBeanDefinitionParser extends
                                                      AbstractSingleExtPointBeanDefinitionParser
                                                                                                implements
                                                                                                SofaBootTagNameSupport {
-    public static final String  REF               = "ref";
+    public static final String  REF                       = "ref";
 
-    private static final String BEAN_CLASS_LOADER = "beanClassLoader";
+    private static final String BEAN_CLASS_LOADER         = "beanClassLoader";
+
+    private static final String BEAN_CLASS_LOADER_WRAPPER = "beanClassLoaderWrapper";
 
     /**
      *
@@ -55,8 +58,7 @@ public abstract class AbstractExtBeanDefinitionParser extends
         builder.getBeanDefinition().setResource(res);
         builder.getRawBeanDefinition().setResource(res);
 
-        // not support setClassloder since spring framework 5.2.20.RELEASE
-        //configBeanClassLoader(parserContext, builder);
+        configBeanClassLoader(parserContext, builder);
 
         // parse attributes
         parseAttribute(element, parserContext, builder);
@@ -67,7 +69,10 @@ public abstract class AbstractExtBeanDefinitionParser extends
 
     protected void configBeanClassLoader(ParserContext parserContext, BeanDefinitionBuilder builder) {
         ClassLoader beanClassLoader = parserContext.getReaderContext().getBeanClassLoader();
-        builder.addPropertyValue(BEAN_CLASS_LOADER, beanClassLoader);
+        // not support setClassLoder since spring framework 5.2.20.RELEASE
+
+        builder
+            .addPropertyValue(BEAN_CLASS_LOADER_WRAPPER, new ClassLoaderWrapper(beanClassLoader));
     }
 
     protected void parseAttribute(Element element, ParserContext parserContext,
