@@ -34,7 +34,7 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 public class CommonContextBean implements ApplicationContextAware, BeanNameAware, InitializingBean {
 
     protected String                          beanName;
-    protected ClassLoader                     beanClassLoader;
+    protected ClassLoaderWrapper              beanClassLoaderWrapper;
     protected ConfigurableListableBeanFactory configurableListableBeanFactory;
     @Autowired
     protected SofaRuntimeContext              sofaRuntimeContext;
@@ -51,12 +51,22 @@ public class CommonContextBean implements ApplicationContextAware, BeanNameAware
             .getAutowireCapableBeanFactory();
     }
 
+    @Deprecated
     public void setBeanClassLoader(ClassLoader beanClassLoader) {
-        this.beanClassLoader = beanClassLoader;
+        throw new UnsupportedOperationException("Not support setBeanClassLoader for security");
     }
 
+    @Deprecated
     public ClassLoader getBeanClassLoader() {
-        return beanClassLoader;
+        throw new UnsupportedOperationException("Not support getBeanClassLoader for security");
+    }
+
+    public ClassLoaderWrapper getBeanClassLoaderWrapper() {
+        return beanClassLoaderWrapper;
+    }
+
+    public void setBeanClassLoaderWrapper(ClassLoaderWrapper beanClassLoaderWrapper) {
+        this.beanClassLoaderWrapper = beanClassLoaderWrapper;
     }
 
     public void setBeanName(String beanName) {
