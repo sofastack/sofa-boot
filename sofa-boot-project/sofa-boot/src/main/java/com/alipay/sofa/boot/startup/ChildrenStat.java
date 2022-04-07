@@ -16,18 +16,26 @@
  */
 package com.alipay.sofa.boot.startup;
 
-/**
- * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
- * Created on 2020/11/23
- */
-public class ModuleStat extends ChildrenStat<BeanStat> {
-    private String threadName;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-    public String getThreadName() {
-        return threadName;
+/**
+ * @author huzijie
+ * @version ChildrenStat.java, v 0.1 2022年03月14日 12:18 PM huzijie Exp $
+ */
+public class ChildrenStat<T extends BaseStat> extends BaseStat {
+
+    private List<T> children = new CopyOnWriteArrayList<>();
+
+    public void addChild(T child) {
+        this.children.add(child);
     }
 
-    public void setThreadName(String threadName) {
-        this.threadName = threadName;
+    public List<T> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<T> children) {
+        this.children = children;
     }
 }

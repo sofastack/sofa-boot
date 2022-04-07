@@ -14,20 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.boot.startup;
+package com.alipay.sofa.startup.test.beans;
+
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
 
 /**
- * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
- * Created on 2020/11/23
+ * @author huzijie
+ * @version StartupInitializer.java, v 0.1 2022年03月14日 2:41 PM huzijie Exp $
  */
-public class ModuleStat extends ChildrenStat<BeanStat> {
-    private String threadName;
+public class StartupInitializer implements
+                               ApplicationContextInitializer<ConfigurableApplicationContext> {
 
-    public String getThreadName() {
-        return threadName;
-    }
-
-    public void setThreadName(String threadName) {
-        this.threadName = threadName;
+    @Override
+    public void initialize(ConfigurableApplicationContext applicationContext) {
+        try {
+            Thread.sleep(10);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
