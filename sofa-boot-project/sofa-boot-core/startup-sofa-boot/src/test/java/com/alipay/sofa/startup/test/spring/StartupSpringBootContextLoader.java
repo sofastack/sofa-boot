@@ -14,23 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.actuator.autoconfigure.test;
+package com.alipay.sofa.startup.test.spring;
 
-import com.alipay.sofa.isle.ApplicationRuntimeModel;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import com.alipay.sofa.startup.stage.StartupSpringApplication;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.test.context.SpringBootContextLoader;
 
 /**
- * @author qilong.zql
- * @since 3.2.0
+ * @author huzijie
+ * @version StartupSpringBootContextLoader.java, v 0.1 2022年03月14日 2:51 PM huzijie Exp $
  */
-@EnableAutoConfiguration
-@Configuration(proxyBeanMethods = false)
-public class EmptyConfiguration {
+public class StartupSpringBootContextLoader extends SpringBootContextLoader {
 
-    @Bean
-    public ApplicationRuntimeModel applicationRuntimeModel() {
-        return new ApplicationRuntimeModel();
+    @Override
+    protected SpringApplication getSpringApplication() {
+        return new StartupSpringApplication(new Class[0]);
     }
 }

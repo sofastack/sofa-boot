@@ -14,23 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.actuator.autoconfigure.test;
+package com.alipay.sofa.boot.startup;
 
-import com.alipay.sofa.isle.ApplicationRuntimeModel;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * @author qilong.zql
- * @since 3.2.0
+ * @author huzijie
+ * @version ChildrenStat.java, v 0.1 2022年03月14日 12:18 PM huzijie Exp $
  */
-@EnableAutoConfiguration
-@Configuration(proxyBeanMethods = false)
-public class EmptyConfiguration {
+public class ChildrenStat<T extends BaseStat> extends BaseStat {
 
-    @Bean
-    public ApplicationRuntimeModel applicationRuntimeModel() {
-        return new ApplicationRuntimeModel();
+    private List<T> children = new CopyOnWriteArrayList<>();
+
+    public void addChild(T child) {
+        this.children.add(child);
+    }
+
+    public List<T> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<T> children) {
+        this.children = children;
     }
 }

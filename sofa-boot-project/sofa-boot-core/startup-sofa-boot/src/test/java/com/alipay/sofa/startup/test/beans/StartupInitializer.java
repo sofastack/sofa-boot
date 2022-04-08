@@ -14,23 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.actuator.autoconfigure.test;
+package com.alipay.sofa.startup.test.beans;
 
-import com.alipay.sofa.isle.ApplicationRuntimeModel;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
 
 /**
- * @author qilong.zql
- * @since 3.2.0
+ * @author huzijie
+ * @version StartupInitializer.java, v 0.1 2022年03月14日 2:41 PM huzijie Exp $
  */
-@EnableAutoConfiguration
-@Configuration(proxyBeanMethods = false)
-public class EmptyConfiguration {
+public class StartupInitializer implements
+                               ApplicationContextInitializer<ConfigurableApplicationContext> {
 
-    @Bean
-    public ApplicationRuntimeModel applicationRuntimeModel() {
-        return new ApplicationRuntimeModel();
+    @Override
+    public void initialize(ConfigurableApplicationContext applicationContext) {
+        try {
+            Thread.sleep(10);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

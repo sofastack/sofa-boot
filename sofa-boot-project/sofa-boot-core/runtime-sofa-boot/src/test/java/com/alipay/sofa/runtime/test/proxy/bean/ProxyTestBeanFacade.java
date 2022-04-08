@@ -14,23 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.actuator.autoconfigure.test;
-
-import com.alipay.sofa.isle.ApplicationRuntimeModel;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+package com.alipay.sofa.runtime.test.proxy.bean;
 
 /**
- * @author qilong.zql
- * @since 3.2.0
+ *
+ * @author ruoshan
+ * @since 2.6.1
  */
-@EnableAutoConfiguration
-@Configuration(proxyBeanMethods = false)
-public class EmptyConfiguration {
+public interface ProxyTestBeanFacade {
 
-    @Bean
-    public ApplicationRuntimeModel applicationRuntimeModel() {
-        return new ApplicationRuntimeModel();
-    }
+    boolean isPostProcessed();
+
+    void setPostProcessed(boolean postProcessed);
 }

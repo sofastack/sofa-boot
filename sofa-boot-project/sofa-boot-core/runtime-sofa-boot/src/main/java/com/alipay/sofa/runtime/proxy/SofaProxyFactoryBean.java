@@ -14,23 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.actuator.autoconfigure.test;
+package com.alipay.sofa.runtime.proxy;
 
-import com.alipay.sofa.isle.ApplicationRuntimeModel;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.aop.framework.ProxyFactoryBean;
+import org.springframework.beans.factory.BeanFactory;
 
 /**
- * @author qilong.zql
- * @since 3.2.0
+ *
+ * @author ruoshan
+ * @since 3.12.0
  */
-@EnableAutoConfiguration
-@Configuration(proxyBeanMethods = false)
-public class EmptyConfiguration {
+public class SofaProxyFactoryBean extends ProxyFactoryBean {
 
-    @Bean
-    public ApplicationRuntimeModel applicationRuntimeModel() {
-        return new ApplicationRuntimeModel();
+    public SofaProxyFactoryBean(Class<?>[] proxyInterfaces, String targetName,
+                                Class<?> targetClass, BeanFactory beanFactory) {
+        if (proxyInterfaces != null) {
+            setInterfaces(proxyInterfaces);
+        }
+        setTargetName(targetName);
+        setTargetClass(targetClass);
+        setBeanFactory(beanFactory);
     }
 }

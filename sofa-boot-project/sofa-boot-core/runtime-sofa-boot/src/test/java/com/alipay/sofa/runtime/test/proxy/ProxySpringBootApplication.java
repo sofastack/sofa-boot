@@ -14,23 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.actuator.autoconfigure.test;
+package com.alipay.sofa.runtime.test.proxy;
 
-import com.alipay.sofa.isle.ApplicationRuntimeModel;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ImportResource;
 
 /**
- * @author qilong.zql
- * @since 3.2.0
+ * @author huzijie
+ * @version ProxySpringBootApplication.java, v 0.1 2022年03月14日 3:31 PM huzijie Exp $
  */
-@EnableAutoConfiguration
-@Configuration(proxyBeanMethods = false)
-public class EmptyConfiguration {
-
-    @Bean
-    public ApplicationRuntimeModel applicationRuntimeModel() {
-        return new ApplicationRuntimeModel();
-    }
+@ImportResource({ "classpath*:META-INF/proxy/*.xml" })
+@SpringBootApplication
+public class ProxySpringBootApplication {
 }
