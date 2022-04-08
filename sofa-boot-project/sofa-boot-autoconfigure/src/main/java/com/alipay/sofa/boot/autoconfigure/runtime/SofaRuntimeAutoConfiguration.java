@@ -34,6 +34,7 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
+import com.alipay.sofa.runtime.spring.AsyncInitBeanFactoryPostProcessor;
 import com.alipay.sofa.runtime.spring.AsyncProxyBeanPostProcessor;
 import com.alipay.sofa.runtime.spring.JvmFilterPostProcessor;
 import com.alipay.sofa.runtime.spring.RuntimeContextBeanFactoryPostProcessor;
@@ -69,6 +70,12 @@ public class SofaRuntimeAutoConfiguration {
     @ConditionalOnMissingBean
     public static AsyncProxyBeanPostProcessor asyncProxyBeanPostProcessor() {
         return new AsyncProxyBeanPostProcessor();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public static AsyncInitBeanFactoryPostProcessor asyncInitBeanFactoryPostProcessor() {
+        return new AsyncInitBeanFactoryPostProcessor();
     }
 
     @Bean
