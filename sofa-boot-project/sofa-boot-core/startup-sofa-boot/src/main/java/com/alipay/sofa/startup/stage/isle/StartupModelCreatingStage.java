@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.startup.stage.isle;
 
-import com.alipay.sofa.boot.startup.StageStat;
+import com.alipay.sofa.boot.startup.BaseStat;
 import com.alipay.sofa.isle.profile.SofaModuleProfileChecker;
 import com.alipay.sofa.isle.stage.ModelCreatingStage;
 import com.alipay.sofa.startup.StartupReporter;
@@ -40,14 +40,14 @@ public class StartupModelCreatingStage extends ModelCreatingStage {
 
     @Override
     protected void doProcess() throws Exception {
-        StageStat stageStat = new StageStat();
-        stageStat.setStageName(ISLE_MODEL_CREATING_STAGE);
-        stageStat.setStageStartTime(System.currentTimeMillis());
+        BaseStat stat = new BaseStat();
+        stat.setName(ISLE_MODEL_CREATING_STAGE);
+        stat.setStartTime(System.currentTimeMillis());
         try {
             super.doProcess();
         } finally {
-            stageStat.setStageEndTime(System.currentTimeMillis());
-            startupReporter.addCommonStartupStat(stageStat);
+            stat.setEndTime(System.currentTimeMillis());
+            startupReporter.addCommonStartupStat(stat);
         }
     }
 }

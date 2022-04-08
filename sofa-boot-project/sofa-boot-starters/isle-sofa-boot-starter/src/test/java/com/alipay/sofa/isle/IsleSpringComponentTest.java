@@ -54,6 +54,10 @@ public class IsleSpringComponentTest implements SofaRuntimeContextAware {
             SpringContextComponent.SPRING_COMPONENT_TYPE, "com.alipay.sofa.isle.module2");
         Assert.assertNotNull(componentManager.getComponentInfo(componentName1));
         Assert.assertNotNull(componentManager.getComponentInfo(componentName2));
+        Assert.assertEquals("com.alipay.sofa.isle.module1",
+            componentManager.getComponentInfo(componentName1).getApplicationContext().getId());
+        Assert.assertEquals("com.alipay.sofa.isle.module2",
+            componentManager.getComponentInfo(componentName2).getApplicationContext().getId());
     }
 
     @Override

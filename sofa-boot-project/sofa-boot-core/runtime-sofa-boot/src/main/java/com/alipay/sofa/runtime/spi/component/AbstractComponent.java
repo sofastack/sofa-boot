@@ -22,6 +22,7 @@ import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.model.ComponentStatus;
 import com.alipay.sofa.runtime.spi.binding.Binding;
 import com.alipay.sofa.runtime.spi.health.HealthResult;
+import org.springframework.context.ApplicationContext;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -46,6 +47,8 @@ public abstract class AbstractComponent implements ComponentInfo {
 
     protected Exception          e;
 
+    protected ApplicationContext applicationContext;
+
     @Override
     public SofaRuntimeContext getContext() {
         return sofaRuntimeContext;
@@ -59,6 +62,16 @@ public abstract class AbstractComponent implements ComponentInfo {
     @Override
     public ComponentName getName() {
         return componentName;
+    }
+
+    @Override
+    public ApplicationContext getApplicationContext() {
+        return applicationContext;
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
     }
 
     @Override

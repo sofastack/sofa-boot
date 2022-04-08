@@ -32,6 +32,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
 
@@ -77,7 +78,10 @@ public class BeanHierarchyTest {
                 }
             }
         }
-
+        ApplicationContext applicationContext = application.getResolvedDeployments().get(0)
+            .getApplicationContext();
+        String moduleName = applicationContext.getId();
+        Assert.assertEquals("com.alipay.module", moduleName);
     }
 
     private void refreshApplication(ApplicationRuntimeModel application) throws Exception {

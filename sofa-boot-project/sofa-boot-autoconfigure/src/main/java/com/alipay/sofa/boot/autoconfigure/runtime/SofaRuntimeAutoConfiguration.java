@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.boot.autoconfigure.runtime;
 
+import com.alipay.sofa.runtime.proxy.ProxyBeanFactoryPostProcessor;
 import com.alipay.sofa.runtime.SofaFramework;
 import com.alipay.sofa.runtime.api.client.ReferenceClient;
 import com.alipay.sofa.runtime.api.client.ServiceClient;
@@ -33,6 +34,7 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
+import com.alipay.sofa.runtime.spring.AsyncInitBeanFactoryPostProcessor;
 import com.alipay.sofa.runtime.spring.AsyncProxyBeanPostProcessor;
 import com.alipay.sofa.runtime.spring.JvmFilterPostProcessor;
 import com.alipay.sofa.runtime.spring.RuntimeContextBeanFactoryPostProcessor;
@@ -40,6 +42,7 @@ import com.alipay.sofa.runtime.spring.ServiceBeanFactoryPostProcessor;
 import com.alipay.sofa.runtime.spring.async.AsyncTaskExecutionListener;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -67,6 +70,12 @@ public class SofaRuntimeAutoConfiguration {
     @ConditionalOnMissingBean
     public static AsyncProxyBeanPostProcessor asyncProxyBeanPostProcessor() {
         return new AsyncProxyBeanPostProcessor();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public static AsyncInitBeanFactoryPostProcessor asyncInitBeanFactoryPostProcessor() {
+        return new AsyncInitBeanFactoryPostProcessor();
     }
 
     @Bean
@@ -133,6 +142,12 @@ public class SofaRuntimeAutoConfiguration {
     public static ServiceBeanFactoryPostProcessor serviceBeanFactoryPostProcessor(SofaRuntimeContext sofaRuntimeContext,
                                                                                   BindingConverterFactory bindingConverterFactory) {
         return new ServiceBeanFactoryPostProcessor(sofaRuntimeContext, bindingConverterFactory);
+    }
+
+    @Bean
+    @ConditionalOnProperty(prefix = "com.alipay.sofa.proxy.bean", name = "enabled", havingValue = "true")
+    public static ProxyBeanFactoryPostProcessor proxyBeanFactoryPostProcessor() {
+        return new ProxyBeanFactoryPostProcessor();
     }
 
     public static <T> Set<T> getClassesByServiceLoader(Class<T> clazz) {

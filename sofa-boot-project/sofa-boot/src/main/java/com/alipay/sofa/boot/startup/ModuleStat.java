@@ -16,52 +16,12 @@
  */
 package com.alipay.sofa.boot.startup;
 
-import java.util.List;
-
 /**
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 2020/11/23
  */
-public class ModuleStat {
-    private long           moduleStartTime;
-    private long           moduleEndTime;
-    private long           elapsedTime;
-    private String         moduleName;
-    private String         threadName;
-
-    private List<BeanStat> beanStats;
-
-    public String getModuleName() {
-        return moduleName;
-    }
-
-    public void setModuleName(String moduleName) {
-        this.moduleName = moduleName;
-    }
-
-    public long getModuleStartTime() {
-        return moduleStartTime;
-    }
-
-    public void setModuleStartTime(long moduleStartTime) {
-        this.moduleStartTime = moduleStartTime;
-    }
-
-    public long getModuleEndTime() {
-        return moduleEndTime;
-    }
-
-    public void setModuleEndTime(long moduleEndTime) {
-        this.moduleEndTime = moduleEndTime;
-    }
-
-    public long getElapsedTime() {
-        return elapsedTime;
-    }
-
-    public void setElapsedTime(long elapsedTime) {
-        this.elapsedTime = elapsedTime;
-    }
+public class ModuleStat extends ChildrenStat<BeanStat> {
+    private String threadName;
 
     public String getThreadName() {
         return threadName;
@@ -69,13 +29,5 @@ public class ModuleStat {
 
     public void setThreadName(String threadName) {
         this.threadName = threadName;
-    }
-
-    public List<BeanStat> getBeanStats() {
-        return beanStats;
-    }
-
-    public void setBeanStats(List<BeanStat> beanStats) {
-        this.beanStats = beanStats;
     }
 }

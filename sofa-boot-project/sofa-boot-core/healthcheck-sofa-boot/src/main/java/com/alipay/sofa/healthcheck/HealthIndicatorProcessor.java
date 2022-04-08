@@ -43,6 +43,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -80,12 +81,16 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
 
     private final HealthCheckProperties            healthCheckProperties;
 
+    private final HealthCheckExecutor              healthCheckExecutor;
+
     private Set<Class<?>>                          excludedIndicators;
 
     private int                                    defaultTimeout;
 
-    public HealthIndicatorProcessor(HealthCheckProperties healthCheckProperties) {
+    public HealthIndicatorProcessor(HealthCheckProperties healthCheckProperties,
+                                    HealthCheckExecutor healthCheckExecutor) {
         this.healthCheckProperties = healthCheckProperties;
+        this.healthCheckExecutor = healthCheckExecutor;
     }
 
     public void init() {
@@ -155,9 +160,33 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
                 .collect(Collectors.joining(","));
         logger.info("SOFABoot HealthChecker readiness check {} item: {}.",
                 healthIndicators.size(), checkComponentNames);
-        boolean result = healthIndicators.entrySet().stream()
-                .map(entry -> doHealthCheck(entry.getKey(), entry.getValue(), healthMap))
-                .reduce(true, BinaryOperators.andBoolean());
+        boolean result;
+        if (healthCheckProperties.isHealthCheckParallelEnable()) {
+            CountDownLatch countDownLatch = new CountDownLatch(healthIndicators.size());
+            AtomicBoolean parallelResult = new AtomicBoolean(true);
+            healthIndicators.forEach((key, value) -> healthCheckExecutor.executeTask(() -> {
+                try {
+                    if (!doHealthCheck(key, value, healthMap, false)) {
+                        parallelResult.set(false);
+                    }
+                } catch (Throwable t) {
+                    logger.error(ErrorCode.convert("01-21003"), t);
+                } finally {
+                    countDownLatch.countDown();
+                }
+            }));
+            boolean finished = false;
+            try {
+                finished = countDownLatch.await(healthCheckProperties.getHealthCheckParallelTimeout(), TimeUnit.MILLISECONDS);
+            } catch (InterruptedException e) {
+                logger.error(ErrorCode.convert("01-21004"), e);
+            }
+            result = finished && parallelResult.get();
+        } else {
+            result = healthIndicators.entrySet().stream()
+                    .map(entry -> doHealthCheck(entry.getKey(), entry.getValue(), healthMap, true))
+                    .reduce(true, BinaryOperators.andBoolean());
+        }
         if (result) {
             logger.info("SOFABoot HealthIndicator readiness check result: success.");
         } else {
@@ -167,7 +196,7 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
     }
 
     public boolean doHealthCheck(String beanId, HealthIndicator healthIndicator,
-                                 Map<String, Health> healthMap) {
+                                 Map<String, Health> healthMap, boolean wait) {
         Assert.notNull(healthMap, () -> "HealthMap must not be null");
 
         boolean result;
@@ -180,9 +209,13 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
             timeout = defaultTimeout;
         }
         try {
-            Future<Health> future = HealthCheckExecutor
-                    .submitTask(healthIndicator::health);
-            health = future.get(timeout, TimeUnit.MILLISECONDS);
+            if (wait) {
+                Future<Health> future = healthCheckExecutor
+                        .submitTask(healthIndicator::health);
+                health = future.get(timeout, TimeUnit.MILLISECONDS);
+            } else {
+                health = healthIndicator.health();
+            }
             Status status = health.getStatus();
             result = status.equals(Status.UP);
             if (result) {

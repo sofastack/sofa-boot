@@ -36,6 +36,7 @@ import org.springframework.util.Assert;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -62,6 +63,16 @@ public class HealthCheckerProcessor implements ApplicationContextAware {
     private LinkedHashMap<String, HealthChecker> healthCheckers = null;
 
     private int                                  defaultTimeout;
+
+    private final HealthCheckProperties          healthCheckProperties;
+
+    private final HealthCheckExecutor            healthCheckExecutor;
+
+    public HealthCheckerProcessor(HealthCheckProperties healthCheckProperties,
+                                  HealthCheckExecutor healthCheckExecutor) {
+        this.healthCheckProperties = healthCheckProperties;
+        this.healthCheckExecutor = healthCheckExecutor;
+    }
 
     public void init() {
         if (isInitiated.compareAndSet(false, true)) {
@@ -92,9 +103,33 @@ public class HealthCheckerProcessor implements ApplicationContextAware {
                 .map(HealthChecker::getComponentName).collect(Collectors.joining(","));
         logger.info("SOFABoot HealthChecker liveness check {} item: {}.",
                 healthCheckers.size(), checkComponentNames);
-        boolean result = healthCheckers.entrySet().stream()
-                .map(entry -> doHealthCheck(entry.getKey(), entry.getValue(), false, healthMap, false))
-                .reduce(true, BinaryOperators.andBoolean());
+        boolean result;
+        if (healthCheckProperties.isHealthCheckParallelEnable()) {
+            CountDownLatch countDownLatch = new CountDownLatch(healthCheckers.size());
+            AtomicBoolean parallelResult = new AtomicBoolean(true);
+            healthCheckers.forEach((key, value) -> healthCheckExecutor.executeTask(() -> {
+                try {
+                    if (!doHealthCheck(key, value, false, healthMap, false, false)) {
+                        parallelResult.set(false);
+                    }
+                } catch (Throwable t) {
+                    logger.error(ErrorCode.convert("01-22001"), t);
+                } finally {
+                    countDownLatch.countDown();
+                }
+            }));
+            boolean finished = false;
+            try {
+                finished = countDownLatch.await(healthCheckProperties.getHealthCheckParallelTimeout(), TimeUnit.MILLISECONDS);
+            } catch (InterruptedException e) {
+                logger.error(ErrorCode.convert("01-22002"), e);
+            }
+            result = finished && parallelResult.get();
+        } else {
+            result = healthCheckers.entrySet().stream()
+                    .map(entry -> doHealthCheck(entry.getKey(), entry.getValue(), false, healthMap, false, true))
+                    .reduce(true, BinaryOperators.andBoolean());
+        }
         if (result) {
             logger.info("SOFABoot HealthChecker liveness check result: success.");
         } else {
@@ -120,9 +155,33 @@ public class HealthCheckerProcessor implements ApplicationContextAware {
                 .map(HealthChecker::getComponentName).collect(Collectors.joining(","));
         logger.info("SOFABoot HealthChecker readiness check {} item: {}.",
                 healthCheckers.size(), checkComponentNames);
-        boolean result = readinessHealthCheckers.entrySet().stream()
-                .map(entry -> doHealthCheck(entry.getKey(), entry.getValue(), true, healthMap, true))
-                .reduce(true, BinaryOperators.andBoolean());
+        boolean result;
+        if (healthCheckProperties.isHealthCheckParallelEnable()) {
+            CountDownLatch countDownLatch = new CountDownLatch(healthCheckers.size());
+            AtomicBoolean parallelResult = new AtomicBoolean(true);
+            healthCheckers.forEach((String key, HealthChecker value) -> healthCheckExecutor.executeTask(() -> {
+                try {
+                    if (!doHealthCheck(key, value, false, healthMap, true, false)) {
+                        parallelResult.set(false);
+                    }
+                } catch (Throwable t) {
+                    logger.error(ErrorCode.convert("01-22004"), t);
+                } finally {
+                    countDownLatch.countDown();
+                }
+            }));
+            boolean finished = false;
+            try {
+                finished = countDownLatch.await(healthCheckProperties.getHealthCheckParallelTimeout(), TimeUnit.MILLISECONDS);
+            } catch (InterruptedException e) {
+                logger.error(ErrorCode.convert("01-22005"), e);
+            }
+            result = finished && parallelResult.get();
+        } else {
+            result = readinessHealthCheckers.entrySet().stream()
+                    .map(entry -> doHealthCheck(entry.getKey(), entry.getValue(), true, healthMap, true, true))
+                    .reduce(true, BinaryOperators.andBoolean());
+        }
         if (result) {
             logger.info("SOFABoot HealthChecker readiness check result: success.");
         } else {
@@ -138,10 +197,11 @@ public class HealthCheckerProcessor implements ApplicationContextAware {
      * @param isRetry Whether retry when check failed, true for readiness and false for liveness.
      * @param healthMap Used to save the information of {@link HealthChecker}.
      * @param isReadiness Mark whether invoked during readiness.
+     * @param wait Whether wait for result
      * @return health check passes or not
      */
     private boolean doHealthCheck(String beanId, HealthChecker healthChecker, boolean isRetry,
-                                  Map<String, Health> healthMap, boolean isReadiness) {
+                                      Map<String, Health> healthMap, boolean isReadiness, boolean wait) {
         Assert.notNull(healthMap, "HealthMap must not be null");
 
         Health health;
@@ -154,9 +214,13 @@ public class HealthCheckerProcessor implements ApplicationContextAware {
             timeout = defaultTimeout;
         }
         do {
-            Future<Health> future = HealthCheckExecutor.submitTask(healthChecker::isHealthy);
             try {
-                health = future.get(timeout, TimeUnit.MILLISECONDS);
+                if (wait) {
+                    Future<Health> future = healthCheckExecutor.submitTask(healthChecker::isHealthy);
+                    health = future.get(timeout, TimeUnit.MILLISECONDS);
+                } else {
+                    health = healthChecker.isHealthy();
+                }
             }  catch (TimeoutException e) {
                 logger.error(
                         "Timeout occurred while doing HealthChecker[{}] {} check, the timeout value is: {}ms.",

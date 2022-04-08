@@ -180,7 +180,7 @@ public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor, 
             sofaReferenceAnnotation.binding(), bindingConverterContext);
         reference.addBinding(binding);
         return ReferenceRegisterHelper.registerReference(reference, bindingAdapterFactory,
-            sofaRuntimeContext);
+            sofaRuntimeContext, applicationContext);
     }
 
     @Override
