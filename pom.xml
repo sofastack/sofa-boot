@@ -39,6 +39,7 @@
     <properties>
         <revision>3.12.0-SNAPSHOT</revision>
         <sofa.boot.version>${revision}</sofa.boot.version>
+        <spring.version>5.3.18</spring.version>
         <!--maven plugin-->
         <maven.staging.plugin>1.6.7</maven.staging.plugin>
         <maven.gpg.pluign>1.5</maven.gpg.pluign>
