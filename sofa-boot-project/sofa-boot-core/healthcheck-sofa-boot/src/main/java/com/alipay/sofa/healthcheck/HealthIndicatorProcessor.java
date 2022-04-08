@@ -38,7 +38,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
-import org.springframework.boot.actuate.health.HealthIndicatorNameFactory;
+import org.springframework.boot.actuate.health.HealthContributorNameFactory;
 import org.springframework.boot.actuate.health.ReactiveHealthIndicator;
 import org.springframework.boot.actuate.health.Status;
 import org.springframework.context.ApplicationContext;
@@ -243,7 +243,7 @@ public class HealthIndicatorProcessor {
     }
 
     /**
-     * refer to {@link HealthIndicatorNameFactory#apply(String)}
+     * refer to {@link HealthContributorNameFactory#apply(String)}
      */
     public String getKey(String name) {
         int index = name.toLowerCase().indexOf("healthindicator");
