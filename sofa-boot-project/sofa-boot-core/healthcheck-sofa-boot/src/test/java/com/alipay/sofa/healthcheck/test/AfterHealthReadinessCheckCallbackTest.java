@@ -21,6 +21,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.alipay.sofa.healthcheck.HealthCheckProperties;
+import com.alipay.sofa.healthcheck.core.HealthCheckExecutor;
 import com.alipay.sofa.healthcheck.core.HealthChecker;
 import com.alipay.sofa.healthcheck.test.bean.ApplicationHealthCheckCallback;
 import com.alipay.sofa.healthcheck.test.bean.FailedHealthCheck;
@@ -178,6 +179,11 @@ public class AfterHealthReadinessCheckCallbackTest {
         @Bean
         public HealthIndicatorProcessor healthIndicatorProcessor() {
             return new HealthIndicatorProcessor();
+        }
+
+        @Bean
+        public HealthCheckExecutor healthCheckExecutor(HealthCheckProperties properties) {
+            return new HealthCheckExecutor(properties);
         }
     }
 

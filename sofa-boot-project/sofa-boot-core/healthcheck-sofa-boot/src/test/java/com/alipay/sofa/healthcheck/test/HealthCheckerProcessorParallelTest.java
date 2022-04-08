@@ -16,15 +16,19 @@
  */
 package com.alipay.sofa.healthcheck.test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.alipay.sofa.boot.constant.SofaBootConstants;
+import com.alipay.sofa.healthcheck.AfterReadinessCheckCallbackProcessor;
 import com.alipay.sofa.healthcheck.HealthCheckProperties;
+import com.alipay.sofa.healthcheck.HealthCheckerProcessor;
+import com.alipay.sofa.healthcheck.HealthIndicatorProcessor;
+import com.alipay.sofa.healthcheck.ReadinessCheckListener;
 import com.alipay.sofa.healthcheck.core.HealthCheckExecutor;
+import com.alipay.sofa.healthcheck.core.HealthChecker;
 import com.alipay.sofa.healthcheck.impl.ComponentHealthChecker;
+import com.alipay.sofa.healthcheck.test.bean.DiskHealthChecker;
+import com.alipay.sofa.healthcheck.test.bean.MemoryHealthChecker;
+import com.alipay.sofa.healthcheck.test.bean.NetworkHealthChecker;
+import com.alipay.sofa.healthcheck.util.HealthCheckUtils;
 import com.alipay.sofa.runtime.component.impl.StandardSofaRuntimeManager;
 import com.alipay.sofa.runtime.configure.SofaRuntimeConfigurationProperties;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
@@ -41,23 +45,18 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.alipay.sofa.boot.constant.SofaBootConstants;
-import com.alipay.sofa.healthcheck.AfterReadinessCheckCallbackProcessor;
-import com.alipay.sofa.healthcheck.HealthCheckerProcessor;
-import com.alipay.sofa.healthcheck.HealthIndicatorProcessor;
-import com.alipay.sofa.healthcheck.ReadinessCheckListener;
-import com.alipay.sofa.healthcheck.core.HealthChecker;
-import com.alipay.sofa.healthcheck.test.bean.DiskHealthChecker;
-import com.alipay.sofa.healthcheck.test.bean.MemoryHealthChecker;
-import com.alipay.sofa.healthcheck.test.bean.NetworkHealthChecker;
-import com.alipay.sofa.healthcheck.util.HealthCheckUtils;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author liangen
  * @author qilong.zql
  * @version 2.3.0
  */
-public class HealthCheckerProcessorTest {
+public class HealthCheckerProcessorParallelTest {
 
     private ApplicationContext applicationContext;
 
@@ -105,6 +104,7 @@ public class HealthCheckerProcessorTest {
 
         @Bean
         public HealthCheckExecutor healthCheckExecutor(HealthCheckProperties properties) {
+            properties.setHealthCheckParallelEnable(true);
             return new HealthCheckExecutor(properties);
         }
     }
@@ -123,28 +123,6 @@ public class HealthCheckerProcessorTest {
     }
 
     @Test
-    public void testReadinessCheckComponentForRetry() {
-        initApplicationContext(0, true, 20);
-        HashMap<String, Health> hashMap = new HashMap<>();
-        HealthCheckerProcessor healthCheckerProcessor = applicationContext
-            .getBean(HealthCheckerProcessor.class);
-        MemoryHealthChecker memoryHealthChecker = applicationContext
-            .getBean(MemoryHealthChecker.class);
-        boolean result = healthCheckerProcessor.readinessHealthCheck(hashMap);
-        Health memoryHealth = hashMap.get("memoryHealthChecker");
-        Health networkHealth = hashMap.get("networkHealthChecker");
-        Assert.assertTrue(result);
-        Assert.assertEquals(6, memoryHealthChecker.getCount());
-        Assert.assertEquals(3, hashMap.size());
-        Assert.assertNotNull(memoryHealth);
-        Assert.assertNotNull(networkHealth);
-        Assert.assertEquals(memoryHealth.getStatus(), Status.UP);
-        Assert.assertEquals(networkHealth.getStatus(), Status.UP);
-        Assert.assertEquals("memory is ok", memoryHealth.getDetails().get("memory"));
-        Assert.assertEquals("network is ok", networkHealth.getDetails().get("network"));
-    }
-
-    @Test
     public void testReadinessCheckComponentForStrict() {
         initApplicationContext(0, true, 4);
         HashMap<String, Health> hashMap = new HashMap<>();
@@ -156,7 +134,7 @@ public class HealthCheckerProcessorTest {
         Health memoryHealth = hashMap.get("memoryHealthChecker");
         Health networkHealth = hashMap.get("networkHealthChecker");
         Assert.assertFalse(result);
-        Assert.assertEquals(4, memoryHealthChecker.getCount());
+        Assert.assertEquals(1, memoryHealthChecker.getCount());
         Assert.assertEquals(3, hashMap.size());
         Assert.assertNotNull(memoryHealth);
         Assert.assertNotNull(networkHealth);
@@ -178,7 +156,7 @@ public class HealthCheckerProcessorTest {
         Health memoryHealth = hashMap.get("memoryHealthChecker");
         Health networkHealth = hashMap.get("networkHealthChecker");
         Assert.assertTrue(result);
-        Assert.assertEquals(4, memoryHealthChecker.getCount());
+        Assert.assertEquals(1, memoryHealthChecker.getCount());
         Assert.assertEquals(3, hashMap.size());
         Assert.assertNotNull(memoryHealth);
         Assert.assertNotNull(networkHealth);
