@@ -34,6 +34,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -68,8 +69,15 @@ public class HealthIndicatorCheckProcessorParallelTest {
         }
 
         @Bean
-        public ReadinessCheckListener readinessCheckListener() {
-            return new ReadinessCheckListener();
+        public ReadinessCheckListener readinessCheckListener(Environment environment,
+                                                             HealthCheckerProcessor healthCheckerProcessor,
+                                                             HealthIndicatorProcessor healthIndicatorProcessor,
+                                                             AfterReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor,
+                                                             SofaRuntimeConfigurationProperties sofaRuntimeConfigurationProperties,
+                                                             HealthCheckProperties healthCheckProperties) {
+            return new ReadinessCheckListener(environment, healthCheckerProcessor,
+                healthIndicatorProcessor, afterReadinessCheckCallbackProcessor,
+                sofaRuntimeConfigurationProperties, healthCheckProperties);
         }
 
         @Bean
