@@ -58,8 +58,11 @@ public class ExtensionFactoryBean extends AbstractExtFactoryBean {
             throw new IllegalArgumentException("'point' have to be specified");
         }
 
-        if (classLoader == null) {
+        if (getBeanClassLoaderWrapper() == null
+            || getBeanClassLoaderWrapper().getInnerClassLoader() == null) {
             classLoader = Thread.currentThread().getContextClassLoader();
+        } else {
+            classLoader = getBeanClassLoaderWrapper().getInnerClassLoader();
         }
 
         try {
@@ -87,8 +90,9 @@ public class ExtensionFactoryBean extends AbstractExtFactoryBean {
                                                                     + this.getPoint());
     }
 
+    @Deprecated
     public void setBeanClassLoader(ClassLoader classLoader) {
-        this.classLoader = classLoader;
+        throw new UnsupportedOperationException("Not support setBeanClassLoader for security");
     }
 
     public void setContribution(String[] contribution) throws Exception {
