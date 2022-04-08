@@ -26,7 +26,9 @@ import java.util.List;
  */
 @ConfigurationProperties(prefix = "com.alipay.sofa.boot")
 public class HealthCheckProperties {
-    private boolean      healthCheckInsulator = false;
+    private boolean      healthCheckInsulator       = false;
+    private boolean      healthCheckParallelEnable  = false;
+    private long         healthCheckParallelTimeout = 120 * 1000;
 
     private List<String> excludedIndicators;
 
@@ -44,5 +46,21 @@ public class HealthCheckProperties {
 
     public void setExcludedIndicators(List<String> excludedIndicators) {
         this.excludedIndicators = excludedIndicators;
+    }
+
+    public boolean isHealthCheckParallelEnable() {
+        return healthCheckParallelEnable;
+    }
+
+    public void setHealthCheckParallelEnable(boolean healthCheckParallelEnable) {
+        this.healthCheckParallelEnable = healthCheckParallelEnable;
+    }
+
+    public long getHealthCheckParallelTimeout() {
+        return healthCheckParallelTimeout;
+    }
+
+    public void setHealthCheckParallelTimeout(long healthCheckParallelTimeout) {
+        this.healthCheckParallelTimeout = healthCheckParallelTimeout;
     }
 }

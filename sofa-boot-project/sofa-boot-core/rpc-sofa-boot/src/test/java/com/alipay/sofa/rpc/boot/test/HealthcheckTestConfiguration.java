@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.rpc.boot.test;
 
+import com.alipay.sofa.healthcheck.core.HealthCheckExecutor;
 import com.alipay.sofa.runtime.configure.SofaRuntimeConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -53,5 +54,10 @@ public class HealthcheckTestConfiguration {
     @Bean
     public AfterReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor() {
         return new AfterReadinessCheckCallbackProcessor();
+    }
+
+    @Bean
+    public HealthCheckExecutor healthCheckExecutor(HealthCheckProperties properties) {
+        return new HealthCheckExecutor(properties);
     }
 }

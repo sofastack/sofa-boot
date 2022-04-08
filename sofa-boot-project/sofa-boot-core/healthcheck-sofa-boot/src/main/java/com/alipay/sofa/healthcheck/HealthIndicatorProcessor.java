@@ -22,6 +22,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -58,7 +59,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @version 2.3.0
  */
 public class HealthIndicatorProcessor {
-    private static Logger                          logger                     = HealthCheckLoggerFactory.DEFAULT_LOG;
+    private static final Logger                    logger                     = HealthCheckLoggerFactory.DEFAULT_LOG;
 
     private static final List<String>              DEFAULT_EXCLUDE_INDICATORS = Arrays
                                                                                   .asList(
@@ -66,9 +67,9 @@ public class HealthIndicatorProcessor {
                                                                                       "org.springframework.boot.actuate.availability.ReadinessStateHealthIndicator",
                                                                                       "org.springframework.boot.actuate.availability.LivenessStateHealthIndicator");
 
-    private ObjectMapper                           objectMapper               = new ObjectMapper();
+    private final ObjectMapper                     objectMapper               = new ObjectMapper();
 
-    private AtomicBoolean                          isInitiated                = new AtomicBoolean(
+    private final AtomicBoolean                    isInitiated                = new AtomicBoolean(
                                                                                   false);
 
     private LinkedHashMap<String, HealthIndicator> healthIndicators           = null;
@@ -88,6 +89,9 @@ public class HealthIndicatorProcessor {
     @Value("${" + SofaBootConstants.SOFABOOT_HEALTH_CHECK_DEFAULT_TIMEOUT + ":"
            + SofaBootConstants.SOFABOOT_HEALTH_CHECK_DEFAULT_TIMEOUT_VALUE + "}")
     private int                                    defaultTimeout;
+
+    @Autowired
+    private HealthCheckExecutor                    healthCheckExecutor;
 
     public void init() {
         if (isInitiated.compareAndSet(false, true)) {
@@ -156,9 +160,33 @@ public class HealthIndicatorProcessor {
                 .collect(Collectors.joining(","));
         logger.info("SOFABoot HealthChecker readiness check {} item: {}.",
                 healthIndicators.size(), checkComponentNames);
-        boolean result = healthIndicators.entrySet().stream()
-                .map(entry -> doHealthCheck(entry.getKey(), entry.getValue(), healthMap))
-                .reduce(true, BinaryOperators.andBoolean());
+        boolean result;
+        if (healthCheckProperties.isHealthCheckParallelEnable()) {
+            CountDownLatch countDownLatch = new CountDownLatch(healthIndicators.size());
+            AtomicBoolean parallelResult = new AtomicBoolean(true);
+            healthIndicators.forEach((key, value) -> healthCheckExecutor.executeTask(() -> {
+                try {
+                    if (!doHealthCheck(key, value, healthMap, false)) {
+                        parallelResult.set(false);
+                    }
+                } catch (Throwable t) {
+                    logger.error(ErrorCode.convert("01-21003"), t);
+                } finally {
+                    countDownLatch.countDown();
+                }
+            }));
+            boolean finished = false;
+            try {
+                finished = countDownLatch.await(healthCheckProperties.getHealthCheckParallelTimeout(), TimeUnit.MILLISECONDS);
+            } catch (InterruptedException e) {
+                logger.error(ErrorCode.convert("01-21004"), e);
+            }
+            result = finished && parallelResult.get();
+        } else {
+            result = healthIndicators.entrySet().stream()
+                    .map(entry -> doHealthCheck(entry.getKey(), entry.getValue(), healthMap, true))
+                    .reduce(true, BinaryOperators.andBoolean());
+        }
         if (result) {
             logger.info("SOFABoot HealthIndicator readiness check result: success.");
         } else {
@@ -168,7 +196,7 @@ public class HealthIndicatorProcessor {
     }
 
     public boolean doHealthCheck(String beanId, HealthIndicator healthIndicator,
-                                 Map<String, Health> healthMap) {
+                                 Map<String, Health> healthMap, boolean wait) {
         Assert.notNull(healthMap, () -> "HealthMap must not be null");
 
         boolean result;
@@ -181,9 +209,13 @@ public class HealthIndicatorProcessor {
             timeout = defaultTimeout;
         }
         try {
-            Future<Health> future = HealthCheckExecutor
-                    .submitTask(healthIndicator::health);
-            health = future.get(timeout, TimeUnit.MILLISECONDS);
+            if (wait) {
+                Future<Health> future = healthCheckExecutor
+                        .submitTask(healthIndicator::health);
+                health = future.get(timeout, TimeUnit.MILLISECONDS);
+            } else {
+                health = healthIndicator.health();
+            }
             Status status = health.getStatus();
             result = status.equals(Status.UP);
             if (result) {
