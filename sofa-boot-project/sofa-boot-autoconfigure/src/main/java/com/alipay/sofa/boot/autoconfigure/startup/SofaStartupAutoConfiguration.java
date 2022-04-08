@@ -19,6 +19,7 @@ package com.alipay.sofa.boot.autoconfigure.startup;
 import com.alipay.sofa.startup.StartupProperties;
 import com.alipay.sofa.startup.StartupReporter;
 import com.alipay.sofa.startup.stage.BeanCostBeanPostProcessor;
+import com.alipay.sofa.startup.stage.StartupContextRefreshedListener;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -46,5 +47,11 @@ public class SofaStartupAutoConfiguration {
     public BeanCostBeanPostProcessor beanCostBeanPostProcessor(StartupProperties startupProperties) {
         return new BeanCostBeanPostProcessor(startupProperties.getBeanInitCostThreshold(),
             startupProperties.isSkipSofaBean());
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public StartupContextRefreshedListener startupContextRefreshedListener() {
+        return new StartupContextRefreshedListener();
     }
 }

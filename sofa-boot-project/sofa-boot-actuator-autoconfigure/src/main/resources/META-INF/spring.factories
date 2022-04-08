@@ -3,4 +3,5 @@ com.alipay.sofa.boot.actuator.autoconfigure.version.VersionEndpointAutoConfigura
 com.alipay.sofa.boot.actuator.autoconfigure.health.SofaBootHealthCheckAutoConfiguration,\
 com.alipay.sofa.boot.actuator.autoconfigure.startup.StartupEndPointAutoConfiguration,\
 com.alipay.sofa.boot.actuator.autoconfigure.startup.StartupHealthCheckStageConfiguration,\
+com.alipay.sofa.boot.actuator.autoconfigure.components.ComponentsEndpointAutoConfiguration,\
 com.alipay.sofa.boot.actuator.autoconfigure.beans.IsleBeansEndpointAutoConfiguration

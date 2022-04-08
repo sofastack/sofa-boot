@@ -60,7 +60,7 @@ public class ReferenceFactoryBean extends AbstractContractFactoryBean {
 
         reference.addBinding(bindings.get(0));
         proxy = ReferenceRegisterHelper.registerReference(reference, bindingAdapterFactory,
-            sofaRuntimeContext);
+            sofaRuntimeContext, applicationContext);
     }
 
     @Override

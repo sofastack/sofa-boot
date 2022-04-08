@@ -1,5 +1,3 @@
 #SpringApplicationRunListener
 org.springframework.boot.SpringApplicationRunListener=\
   com.alipay.sofa.startup.stage.StartupSpringApplicationRunListener
-org.springframework.context.ApplicationListener=\
-  com.alipay.sofa.startup.stage.StartupContextRefreshedListener

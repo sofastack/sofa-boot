@@ -26,6 +26,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -57,7 +58,11 @@ public class ComponentManagerTest {
         ComponentName componentName = ComponentNameFactory.createComponentName(
             SERVICE_COMPONENT_TYPE, SampleService.class, "");
         ComponentInfo componentInfo = componentManager.getComponentInfo(componentName);
+        GenericApplicationContext applicationContext = new GenericApplicationContext();
+        applicationContext.setId("testModuleName");
+        componentInfo.setApplicationContext(applicationContext);
         componentManager.register(componentInfo);
+        Assert.assertEquals("testModuleName", componentInfo.getApplicationContext().getId());
     }
 
     @Test
