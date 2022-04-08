@@ -36,8 +36,8 @@ import static com.alipay.sofa.boot.startup.BootStageConstants.APPLICATION_CONTEX
  * @author Zhijie
  * @since 2020/7/20
  */
-public class StartupContextRefreshedListener implements SmartLifecycle,
-                                            ApplicationContextAware, PriorityOrdered {
+public class StartupContextRefreshedListener implements SmartLifecycle, ApplicationContextAware,
+                                            PriorityOrdered {
     public static final String ROOT_MODULE_NAME = "ROOT_APPLICATION_CONTEXT";
     private ApplicationContext applicationContext;
 
@@ -74,7 +74,7 @@ public class StartupContextRefreshedListener implements SmartLifecycle,
 
         // getBeanStatList from BeanCostBeanPostProcessor
         BeanCostBeanPostProcessor beanCostBeanPostProcessor = applicationContext
-                .getBean(BeanCostBeanPostProcessor.class);
+            .getBean(BeanCostBeanPostProcessor.class);
         rootModuleStat.setChildren((beanCostBeanPostProcessor.getBeanStatList()));
 
         // report ContextRefreshStageStat
