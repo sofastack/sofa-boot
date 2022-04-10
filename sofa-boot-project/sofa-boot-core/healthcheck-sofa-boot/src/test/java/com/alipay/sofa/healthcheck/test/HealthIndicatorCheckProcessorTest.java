@@ -40,6 +40,7 @@ import com.alipay.sofa.healthcheck.HealthCheckerProcessor;
 import com.alipay.sofa.healthcheck.HealthIndicatorProcessor;
 import com.alipay.sofa.healthcheck.ReadinessCheckListener;
 import com.alipay.sofa.healthcheck.test.bean.DiskHealthIndicator;
+import org.springframework.core.env.Environment;
 
 /**
  * @author liangen
@@ -65,18 +66,27 @@ public class HealthIndicatorCheckProcessorTest {
         }
 
         @Bean
-        public ReadinessCheckListener readinessCheckListener() {
-            return new ReadinessCheckListener();
+        public ReadinessCheckListener readinessCheckListener(Environment environment,
+                                                             HealthCheckerProcessor healthCheckerProcessor,
+                                                             HealthIndicatorProcessor healthIndicatorProcessor,
+                                                             AfterReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor,
+                                                             SofaRuntimeConfigurationProperties sofaRuntimeConfigurationProperties,
+                                                             HealthCheckProperties healthCheckProperties) {
+            return new ReadinessCheckListener(environment, healthCheckerProcessor,
+                healthIndicatorProcessor, afterReadinessCheckCallbackProcessor,
+                sofaRuntimeConfigurationProperties, healthCheckProperties);
         }
 
         @Bean
-        public HealthCheckerProcessor healthCheckerProcessor() {
-            return new HealthCheckerProcessor();
+        public HealthCheckerProcessor healthCheckerProcessor(HealthCheckProperties healthCheckProperties,
+                                                             HealthCheckExecutor healthCheckExecutor) {
+            return new HealthCheckerProcessor(healthCheckProperties, healthCheckExecutor);
         }
 
         @Bean
-        public HealthIndicatorProcessor healthIndicatorProcessor() {
-            return new HealthIndicatorProcessor();
+        public HealthIndicatorProcessor healthIndicatorProcessor(HealthCheckProperties properties,
+                                                                 HealthCheckExecutor healthCheckExecutor) {
+            return new HealthIndicatorProcessor(properties, healthCheckExecutor);
         }
 
         @Bean

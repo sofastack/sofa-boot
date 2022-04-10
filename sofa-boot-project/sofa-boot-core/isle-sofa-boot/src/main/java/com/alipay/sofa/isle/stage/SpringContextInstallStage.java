@@ -34,7 +34,6 @@ import com.alipay.sofa.runtime.spi.component.Implementation;
 import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
 import com.alipay.sofa.runtime.spring.SpringContextComponent;
 import com.alipay.sofa.runtime.spring.SpringContextImplementation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
@@ -42,7 +41,12 @@ import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Future;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -52,19 +56,20 @@ import java.util.stream.Collectors;
  * @version $Id: SpringContextInstallStage.java, v 0.1 2012-3-16 21:17:48 fengqi.lin Exp $
  */
 public class SpringContextInstallStage extends AbstractPipelineStage {
-    private static final String  SYMBOLIC1                       = "  ├─ ";
-    private static final String  SYMBOLIC2                       = "  └─ ";
+    private static final String        SYMBOLIC1                       = "  ├─ ";
+    private static final String        SYMBOLIC2                       = "  └─ ";
 
-    private static final int     DEFAULT_REFRESH_TASK_QUEUE_SIZE = 1000;
+    private static final int           DEFAULT_REFRESH_TASK_QUEUE_SIZE = 1000;
 
-    private static final int     CPU_COUNT                       = Runtime.getRuntime()
-                                                                     .availableProcessors(); ;
+    private static final int           CPU_COUNT                       = Runtime.getRuntime()
+                                                                           .availableProcessors(); ;
 
-    @Autowired
-    private SofaModuleProperties sofaModuleProperties;
+    private final SofaModuleProperties sofaModuleProperties;
 
-    public SpringContextInstallStage(AbstractApplicationContext applicationContext) {
+    public SpringContextInstallStage(AbstractApplicationContext applicationContext,
+                                     SofaModuleProperties sofaModuleProperties) {
         super(applicationContext);
+        this.sofaModuleProperties = sofaModuleProperties;
     }
 
     @Override

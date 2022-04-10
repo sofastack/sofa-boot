@@ -21,7 +21,6 @@ import com.alipay.sofa.rpc.config.AbstractInterfaceConfig;
 import com.alipay.sofa.rpc.config.ConsumerConfig;
 import com.alipay.sofa.rpc.config.ProviderConfig;
 import com.alipay.sofa.rpc.dynamic.DynamicConfigKeys;
-import org.springframework.beans.factory.annotation.Value;
 
 /**
  * @author zhaowang
@@ -29,8 +28,11 @@ import org.springframework.beans.factory.annotation.Value;
  */
 public class DynamicConfigProcessor implements ConsumerConfigProcessor, ProviderConfigProcessor {
 
-    @Value("${com.alipay.sofa.rpc.dynamic-config}")
     private String dynamicConfig;
+
+    public DynamicConfigProcessor(String dynamicConfig) {
+        this.dynamicConfig = dynamicConfig;
+    }
 
     @Override
     public void processorConsumer(ConsumerConfig consumerConfig) {

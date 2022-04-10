@@ -16,9 +16,6 @@
  */
 package com.alipay.sofa.rpc.boot.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-
 import com.alipay.sofa.rpc.boot.common.SofaBootRpcParserUtil;
 import com.alipay.sofa.rpc.client.aft.FaultToleranceConfig;
 import com.alipay.sofa.rpc.client.aft.FaultToleranceConfigManager;
@@ -29,10 +26,13 @@ import com.alipay.sofa.rpc.client.aft.FaultToleranceConfigManager;
  * @author <a href="mailto:lw111072@antfin.com">LiWei</a>
  */
 public class FaultToleranceConfigurator {
-    @Autowired
     private SofaBootRpcProperties sofaBootRpcProperties;
-    @Value("${" + SofaBootRpcConfigConstants.APP_NAME + "}")
     private String                appName;
+
+    public FaultToleranceConfigurator(SofaBootRpcProperties sofaBootRpcProperties, String appName) {
+        this.sofaBootRpcProperties = sofaBootRpcProperties;
+        this.appName = appName;
+    }
 
     /**
      * 解析并生效自动故障剔除配置参数

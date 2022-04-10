@@ -41,6 +41,7 @@ public class ExtensionPointFactoryBean extends AbstractExtFactoryBean {
     /* contributions for the extension point */
     private String[] contribution;
 
+    @Override
     public void afterPropertiesSet() throws Exception {
         super.afterPropertiesSet();
         Assert.notNull(beanFactory, "required property 'beanFactory' has not been set");

@@ -16,18 +16,16 @@
  */
 package com.alipay.sofa.isle.profile;
 
-import java.util.HashSet;
-import java.util.Set;
-
+import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.error.ErrorCode;
+import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
+import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
-import com.alipay.sofa.boot.constant.SofaBootConstants;
-import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
-import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author yangguanchao
@@ -36,9 +34,12 @@ import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
  */
 public class DefaultSofaModuleProfileChecker implements SofaModuleProfileChecker, InitializingBean {
 
-    @Autowired
-    private SofaModuleProperties sofaModuleProperties;
-    private Set<String>          activeProfiles = new HashSet<>();
+    private final SofaModuleProperties sofaModuleProperties;
+    private Set<String>                activeProfiles = new HashSet<>();
+
+    public DefaultSofaModuleProfileChecker(SofaModuleProperties sofaModuleProperties) {
+        this.sofaModuleProperties = sofaModuleProperties;
+    }
 
     @Override
     public void afterPropertiesSet() throws Exception {

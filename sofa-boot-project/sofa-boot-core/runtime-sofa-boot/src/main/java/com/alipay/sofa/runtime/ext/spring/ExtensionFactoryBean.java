@@ -48,6 +48,7 @@ public class ExtensionFactoryBean extends AbstractExtFactoryBean {
 
     private ClassLoader classLoader;
 
+    @Override
     public void afterPropertiesSet() throws Exception {
         super.afterPropertiesSet();
         Assert.notNull(applicationContext,

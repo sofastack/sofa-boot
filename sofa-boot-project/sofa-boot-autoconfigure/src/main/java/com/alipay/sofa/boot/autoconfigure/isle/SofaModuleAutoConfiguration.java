@@ -18,6 +18,7 @@ package com.alipay.sofa.boot.autoconfigure.isle;
 
 import com.alipay.sofa.isle.spring.SofaModuleContextLifecycle;
 import com.alipay.sofa.isle.spring.share.SofaModulePostProcessorShareManager;
+import com.alipay.sofa.isle.stage.PipelineStage;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -38,6 +39,8 @@ import com.alipay.sofa.isle.stage.ModuleLogOutputStage;
 import com.alipay.sofa.isle.stage.PipelineContext;
 import com.alipay.sofa.isle.stage.SpringContextInstallStage;
 
+import java.util.List;
+
 /**
  * @author xuanbei 18/3/12
  */
@@ -55,20 +58,24 @@ public class SofaModuleAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public SofaModuleContextLifecycle sofaModuleContextLifecycle() {
-        return new SofaModuleContextLifecycle();
+    public SofaModuleContextLifecycle sofaModuleContextLifecycle(PipelineContext pipelineContext) {
+        return new SofaModuleContextLifecycle(pipelineContext);
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public ModelCreatingStage modelCreatingStage(ApplicationContext applicationContext) {
-        return new ModelCreatingStage((AbstractApplicationContext) applicationContext);
+    public ModelCreatingStage modelCreatingStage(ApplicationContext applicationContext,
+                                                 SofaModuleProfileChecker sofaModuleProfileChecker) {
+        return new ModelCreatingStage((AbstractApplicationContext) applicationContext,
+            sofaModuleProfileChecker);
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public SpringContextInstallStage springContextInstallStage(ApplicationContext applicationContext) {
-        return new SpringContextInstallStage((AbstractApplicationContext) applicationContext);
+    public SpringContextInstallStage springContextInstallStage(ApplicationContext applicationContext,
+                                                               SofaModuleProperties sofaModuleProperties) {
+        return new SpringContextInstallStage((AbstractApplicationContext) applicationContext,
+            sofaModuleProperties);
     }
 
     @Bean
@@ -79,14 +86,14 @@ public class SofaModuleAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public PipelineContext pipelineContext() {
-        return new DefaultPipelineContext();
+    public PipelineContext pipelineContext(List<PipelineStage> stageList) {
+        return new DefaultPipelineContext(stageList);
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public SofaModuleProfileChecker sofaModuleProfileChecker() {
-        return new DefaultSofaModuleProfileChecker();
+    public SofaModuleProfileChecker sofaModuleProfileChecker(SofaModuleProperties sofaModuleProperties) {
+        return new DefaultSofaModuleProfileChecker(sofaModuleProperties);
     }
 
     @Bean

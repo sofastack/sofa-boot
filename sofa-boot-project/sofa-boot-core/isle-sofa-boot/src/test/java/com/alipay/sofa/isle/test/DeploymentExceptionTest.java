@@ -23,6 +23,7 @@ import java.net.URL;
 import java.util.Collections;
 import java.util.Properties;
 
+import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
 import org.junit.Test;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -66,6 +67,6 @@ public class DeploymentExceptionTest {
         when(applicationContext.getEnvironment()).thenReturn(environment);
         when(environment.getProperty(SofaBootConstants.APP_NAME_KEY)).thenReturn("testCase");
 
-        new SpringContextInstallStage(applicationContext).process();
+        new SpringContextInstallStage(applicationContext, new SofaModuleProperties()).process();
     }
 }

@@ -16,14 +16,6 @@
  */
 package com.alipay.sofa.rpc.boot.runtime.adapter.helper;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
-
 import com.alipay.sofa.rpc.boot.common.SofaBootRpcRuntimeException;
 import com.alipay.sofa.rpc.boot.config.SofaBootRpcConfigConstants;
 import com.alipay.sofa.rpc.boot.container.RegistryConfigContainer;
@@ -42,6 +34,11 @@ import com.alipay.sofa.rpc.config.UserThreadPoolManager;
 import com.alipay.sofa.rpc.filter.Filter;
 import com.alipay.sofa.rpc.server.UserThreadPool;
 import com.alipay.sofa.runtime.spi.binding.Contract;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * ProviderConfig 工厂。
@@ -49,12 +46,17 @@ import com.alipay.sofa.runtime.spi.binding.Contract;
  * @author <a href="mailto:lw111072@antfin.com">LiWei</a>
  */
 public class ProviderConfigHelper {
-    @Autowired
-    private ServerConfigContainer   serverConfigContainer;
-    @Autowired
-    private RegistryConfigContainer registryConfigContainer;
-    @Value("${" + SofaBootRpcConfigConstants.APP_NAME + "}")
-    private String                  appName;
+
+    private final ServerConfigContainer   serverConfigContainer;
+    private final RegistryConfigContainer registryConfigContainer;
+    private final String                  appName;
+
+    public ProviderConfigHelper(ServerConfigContainer serverConfigContainer,
+                                RegistryConfigContainer registryConfigContainer, String appName) {
+        this.serverConfigContainer = serverConfigContainer;
+        this.registryConfigContainer = registryConfigContainer;
+        this.appName = appName;
+    }
 
     /**
      * 获取 ProviderConfig

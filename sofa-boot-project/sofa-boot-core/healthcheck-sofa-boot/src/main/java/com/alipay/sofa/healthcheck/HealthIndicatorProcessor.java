@@ -16,6 +16,27 @@
  */
 package com.alipay.sofa.healthcheck;
 
+import com.alipay.sofa.boot.constant.SofaBootConstants;
+import com.alipay.sofa.boot.error.ErrorCode;
+import com.alipay.sofa.boot.util.BinaryOperators;
+import com.alipay.sofa.healthcheck.core.HealthCheckExecutor;
+import com.alipay.sofa.healthcheck.log.HealthCheckLoggerFactory;
+import com.alipay.sofa.healthcheck.util.HealthCheckUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.springframework.aop.framework.AopProxyUtils;
+import org.springframework.beans.BeansException;
+import org.springframework.boot.actuate.health.Health;
+import org.springframework.boot.actuate.health.HealthIndicator;
+import org.springframework.boot.actuate.health.HealthContributorNameFactory;
+import org.springframework.boot.actuate.health.ReactiveHealthIndicator;
+import org.springframework.boot.actuate.health.Status;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.core.env.Environment;
+import org.springframework.util.Assert;
+import org.springframework.util.ClassUtils;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -29,28 +50,6 @@ import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
-import com.alipay.sofa.boot.error.ErrorCode;
-import com.alipay.sofa.boot.constant.SofaBootConstants;
-import com.alipay.sofa.healthcheck.core.HealthCheckExecutor;
-import org.slf4j.Logger;
-import org.springframework.aop.framework.AopProxyUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.actuate.health.Health;
-import org.springframework.boot.actuate.health.HealthIndicator;
-import org.springframework.boot.actuate.health.HealthContributorNameFactory;
-import org.springframework.boot.actuate.health.ReactiveHealthIndicator;
-import org.springframework.boot.actuate.health.Status;
-import org.springframework.context.ApplicationContext;
-import org.springframework.core.env.Environment;
-import org.springframework.util.Assert;
-import org.springframework.util.ClassUtils;
-
-import com.alipay.sofa.boot.util.BinaryOperators;
-import com.alipay.sofa.healthcheck.log.HealthCheckLoggerFactory;
-import com.alipay.sofa.healthcheck.util.HealthCheckUtils;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 /**
  * Used to process all implementations of {@link HealthIndicator}
  *
@@ -58,8 +57,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @author qilong.zql
  * @version 2.3.0
  */
-public class HealthIndicatorProcessor {
-    private static final Logger                    logger                     = HealthCheckLoggerFactory.DEFAULT_LOG;
+public class HealthIndicatorProcessor implements ApplicationContextAware {
+    private static Logger                          logger                     = HealthCheckLoggerFactory.DEFAULT_LOG;
 
     private static final List<String>              DEFAULT_EXCLUDE_INDICATORS = Arrays
                                                                                   .asList(
@@ -74,24 +73,25 @@ public class HealthIndicatorProcessor {
 
     private LinkedHashMap<String, HealthIndicator> healthIndicators           = null;
 
-    @Autowired
     private ApplicationContext                     applicationContext;
 
     private Environment                            environment;
 
     private final static String                    REACTOR_CLASS              = "reactor.core.publisher.Mono";
 
-    @Autowired
-    private HealthCheckProperties                  healthCheckProperties;
+    private final HealthCheckProperties            healthCheckProperties;
+
+    private final HealthCheckExecutor              healthCheckExecutor;
 
     private Set<Class<?>>                          excludedIndicators;
 
-    @Value("${" + SofaBootConstants.SOFABOOT_HEALTH_CHECK_DEFAULT_TIMEOUT + ":"
-           + SofaBootConstants.SOFABOOT_HEALTH_CHECK_DEFAULT_TIMEOUT_VALUE + "}")
     private int                                    defaultTimeout;
 
-    @Autowired
-    private HealthCheckExecutor                    healthCheckExecutor;
+    public HealthIndicatorProcessor(HealthCheckProperties healthCheckProperties,
+                                    HealthCheckExecutor healthCheckExecutor) {
+        this.healthCheckProperties = healthCheckProperties;
+        this.healthCheckExecutor = healthCheckExecutor;
+    }
 
     public void init() {
         if (isInitiated.compareAndSet(false, true)) {
@@ -251,5 +251,13 @@ public class HealthIndicatorProcessor {
             return name.substring(0, index);
         }
         return name;
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+        this.defaultTimeout = Integer.parseInt(applicationContext.getEnvironment().getProperty(
+            SofaBootConstants.SOFABOOT_HEALTH_CHECK_DEFAULT_TIMEOUT,
+            String.valueOf(SofaBootConstants.SOFABOOT_HEALTH_CHECK_DEFAULT_TIMEOUT_VALUE)));
     }
 }
