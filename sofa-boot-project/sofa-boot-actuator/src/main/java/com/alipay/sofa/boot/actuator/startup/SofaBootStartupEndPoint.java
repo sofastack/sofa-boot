@@ -19,6 +19,8 @@ package com.alipay.sofa.boot.actuator.startup;
 import com.alipay.sofa.startup.StartupReporter;
 import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
 import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
+import org.springframework.boot.actuate.endpoint.annotation.WriteOperation;
+import org.springframework.boot.actuate.startup.StartupEndpoint;
 
 /**
  * Display the time cost details used in startup
@@ -38,5 +40,10 @@ public class SofaBootStartupEndPoint {
     @ReadOperation
     public StartupReporter.StartupStaticsModel startup() {
         return startupReporter.report();
+    }
+
+    @WriteOperation
+    public StartupEndpoint.StartupResponse startupForSpringBoot() {
+        throw new UnsupportedOperationException("Please use GET method instead");
     }
 }
