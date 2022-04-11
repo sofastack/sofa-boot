@@ -21,11 +21,9 @@ import com.alipay.sofa.boot.autoconfigure.startup.SofaStartupAutoConfiguration;
 import com.alipay.sofa.startup.StartupReporter;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.boot.actuate.autoconfigure.startup.StartupEndpointAutoConfiguration;
-import org.springframework.boot.actuate.startup.StartupEndpoint;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.context.metrics.buffering.BufferingApplicationStartup;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -44,12 +42,5 @@ public class StartupEndPointAutoConfiguration {
     @ConditionalOnAvailableEndpoint(endpoint = SofaBootStartupEndPoint.class)
     public SofaBootStartupEndPoint sofaBootStartupEndPoint(StartupReporter startupReporter) {
         return new SofaBootStartupEndPoint(startupReporter);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    @ConditionalOnAvailableEndpoint(endpoint = SofaBootStartupEndPoint.class)
-    public StartupEndpoint startupEndpoint() {
-        return new StartupEndpoint(new BufferingApplicationStartup(0));
     }
 }
