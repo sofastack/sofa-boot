@@ -16,20 +16,16 @@
  */
 package com.alipay.sofa.boot.listener;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.StreamSupport;
-
+import com.alipay.sofa.boot.constant.SofaBootConstants;
+import com.alipay.sofa.boot.util.SofaBootEnvUtils;
+import com.alipay.sofa.common.log.env.LogEnvUtils;
 import org.springframework.boot.Banner;
+import org.springframework.boot.ConfigurableBootstrapContext;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.context.config.ConfigFileApplicationListener;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
+import org.springframework.boot.env.EnvironmentPostProcessorApplicationListener;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -40,9 +36,13 @@ import org.springframework.core.env.StandardEnvironment;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
-import com.alipay.sofa.boot.constant.SofaBootConstants;
-import com.alipay.sofa.boot.util.SofaBootEnvUtils;
-import com.alipay.sofa.common.log.env.LogEnvUtils;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.StreamSupport;
 
 /**
  * @author qilong.zql
@@ -126,12 +126,13 @@ public class SofaBootstrapRunListener implements
                     .registerShutdownHook(false).logStartupInfo(false).web(WebApplicationType.NONE)
                     .listeners().initializers().build(event.getArgs());
 
+            ConfigurableBootstrapContext bootstrapContext = event.getBootstrapContext();
             ApplicationEnvironmentPreparedEvent bootstrapEvent = new ApplicationEnvironmentPreparedEvent(
-                    bootstrapApplication, event.getArgs(), bootstrapEnvironment);
+                    bootstrapContext, bootstrapApplication, event.getArgs(), bootstrapEnvironment);
 
             application.getListeners().stream()
-                    .filter(listener -> listener instanceof ConfigFileApplicationListener)
-                    .forEach(listener -> ((ConfigFileApplicationListener) listener)
+                    .filter(listener -> listener instanceof EnvironmentPostProcessorApplicationListener)
+                    .forEach(listener -> ((EnvironmentPostProcessorApplicationListener) listener)
                             .onApplicationEvent(bootstrapEvent));
 
             assemblyLogSetting(bootstrapEnvironment);
