@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.boot.actuator.beans;
 
+import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -36,26 +37,26 @@ import java.util.Map;
  */
 public class IsleBeansEndpoint extends BeansEndpoint {
 
-    private final ApplicationRuntimeModel applicationRuntimeModel;
+    private final ConfigurableApplicationContext context;
 
     /**
      * Creates a new {@code BeansEndpoint} that will describe the beans in the given
      * {@code context} and all of its ancestors.
      *
      * @param context the application context
-     * @param applicationRuntimeModel the isle runtime model
      * @see ConfigurableApplicationContext#getParent()
      */
-    public IsleBeansEndpoint(ConfigurableApplicationContext context,
-                             ApplicationRuntimeModel applicationRuntimeModel) {
+    public IsleBeansEndpoint(ConfigurableApplicationContext context) {
         super(context);
-        this.applicationRuntimeModel = applicationRuntimeModel;
+        this.context = context;
     }
 
     @ReadOperation
     @Override
     public ApplicationBeans beans() {
         ApplicationBeans applicationBeans = super.beans();
+        ApplicationRuntimeModel applicationRuntimeModel = context.getBean(
+            SofaBootConstants.APPLICATION, ApplicationRuntimeModel.class);
         Map<String, ContextBeans> moduleApplicationContexts = getModuleApplicationContexts(applicationRuntimeModel);
         applicationBeans.getContexts().putAll(moduleApplicationContexts);
         return applicationBeans;

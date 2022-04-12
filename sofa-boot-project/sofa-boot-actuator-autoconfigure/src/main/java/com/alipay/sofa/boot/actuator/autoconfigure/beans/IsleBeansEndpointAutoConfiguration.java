@@ -24,7 +24,6 @@ import org.springframework.boot.actuate.autoconfigure.endpoint.condition.Conditi
 import org.springframework.boot.actuate.beans.BeansEndpoint;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -46,10 +45,8 @@ public class IsleBeansEndpointAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    @ConditionalOnBean(ApplicationRuntimeModel.class)
-    public BeansEndpoint beansEndpoint(ConfigurableApplicationContext applicationContext,
-                                       ApplicationRuntimeModel applicationRuntimeModel) {
-        return new IsleBeansEndpoint(applicationContext, applicationRuntimeModel);
+    public BeansEndpoint beansEndpoint(ConfigurableApplicationContext applicationContext) {
+        return new IsleBeansEndpoint(applicationContext);
     }
 
 }
