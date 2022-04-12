@@ -92,13 +92,13 @@ public class SofaBootComponentsEndpointTest {
         SofaBootComponentsEndPoint.ApplicationComponents applicationComponents = sofaBootComponentsEndPoint
             .components();
         Assert.assertNotNull(applicationComponents);
-        Map<ComponentType, Collection<SofaBootComponentsEndPoint.ComponentDisplayInfo>> componentTypeCollectionMap = applicationComponents
+        Map<String, Collection<SofaBootComponentsEndPoint.ComponentDisplayInfo>> componentTypeCollectionMap = applicationComponents
             .getComponentsInfoMap();
         Assert.assertNotNull(componentTypeCollectionMap);
         Assert.assertEquals(2, componentTypeCollectionMap.size());
 
         Collection<SofaBootComponentsEndPoint.ComponentDisplayInfo> serviceComponentCollection = componentTypeCollectionMap
-            .get(ServiceComponent.SERVICE_COMPONENT_TYPE);
+            .get(ServiceComponent.SERVICE_COMPONENT_TYPE.getName());
         Assert.assertEquals(1, serviceComponents.size());
         Assert.assertTrue(serviceComponentCollection instanceof List);
         Assert.assertEquals("testSofaService",
@@ -109,7 +109,7 @@ public class SofaBootComponentsEndpointTest {
                 .get(0).getApplicationId());
 
         Collection<SofaBootComponentsEndPoint.ComponentDisplayInfo> extComponentCollection = componentTypeCollectionMap
-            .get(ExtensionComponent.EXTENSION_COMPONENT_TYPE);
+            .get(ExtensionComponent.EXTENSION_COMPONENT_TYPE.getName());
         Assert.assertEquals(1, extComponentCollection.size());
         Assert.assertTrue(extComponentCollection instanceof List);
         Assert.assertEquals("testSofaExt",

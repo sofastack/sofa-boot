@@ -16,9 +16,7 @@
  */
 package com.alipay.sofa.actuator.autoconfigure.test;
 
-import com.alipay.sofa.isle.ApplicationRuntimeModel;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -28,9 +26,4 @@ import org.springframework.context.annotation.Configuration;
 @EnableAutoConfiguration
 @Configuration(proxyBeanMethods = false)
 public class EmptyConfiguration {
-
-    @Bean
-    public ApplicationRuntimeModel applicationRuntimeModel() {
-        return new ApplicationRuntimeModel();
-    }
 }

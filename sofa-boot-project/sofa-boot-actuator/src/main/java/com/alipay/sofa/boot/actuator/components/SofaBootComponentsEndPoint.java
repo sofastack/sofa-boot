@@ -50,7 +50,7 @@ public class SofaBootComponentsEndPoint {
     @ReadOperation
     public ApplicationComponents components() {
         ComponentManager componentManager = sofaRuntimeContext.getComponentManager();
-        Map<ComponentType, Collection<ComponentDisplayInfo>> componentsInfoMap = new HashMap<>();
+        Map<String, Collection<ComponentDisplayInfo>> componentsInfoMap = new HashMap<>();
         Collection<ComponentType> componentTypes = componentManager.getComponentTypes();
         componentTypes.forEach(componentType -> {
             Collection<ComponentInfo> componentInfos = componentManager.getComponentInfosByType(componentType);
@@ -58,20 +58,20 @@ public class SofaBootComponentsEndPoint {
                     .map(componentInfo -> new ComponentDisplayInfo(componentInfo.getName().getName(),
                             componentInfo.getApplicationContext().getId()))
                     .collect(Collectors.toList());
-            componentsInfoMap.put(componentType, componentDisplayInfos);
+            componentsInfoMap.put(componentType.getName(), componentDisplayInfos);
         });
         return new ApplicationComponents(componentsInfoMap);
     }
 
     public static final class ApplicationComponents {
 
-        private final Map<ComponentType, Collection<ComponentDisplayInfo>> componentsInfoMap;
+        private final Map<String, Collection<ComponentDisplayInfo>> componentsInfoMap;
 
-        private ApplicationComponents(Map<ComponentType, Collection<ComponentDisplayInfo>> componentsInfoMap) {
+        private ApplicationComponents(Map<String, Collection<ComponentDisplayInfo>> componentsInfoMap) {
             this.componentsInfoMap = componentsInfoMap;
         }
 
-        public Map<ComponentType, Collection<ComponentDisplayInfo>> getComponentsInfoMap() {
+        public Map<String, Collection<ComponentDisplayInfo>> getComponentsInfoMap() {
             return this.componentsInfoMap;
         }
     }

@@ -49,7 +49,6 @@ public class IsleBeanEndpointAutoConfiguration {
         JsonNode rootNode = objectMapper.readTree(response.getBody());
         JsonNode contextNode = rootNode.get("contexts");
         Assert.assertNotNull(contextNode);
-        Assert.assertEquals(2, contextNode.size());
-        Assert.assertNotNull(contextNode.get("bootstrap"));
+        Assert.assertEquals(1, contextNode.size());
     }
 }

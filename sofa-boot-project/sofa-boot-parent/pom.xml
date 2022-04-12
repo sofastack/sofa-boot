@@ -30,7 +30,7 @@
         <maven.surefire.plugin>2.22.2</maven.surefire.plugin>
 
         <!-- for dependencyManagement -->
-        <spring.cloud.starter.openfeign.version>2.1.0.RELEASE</spring.cloud.starter.openfeign.version>
+        <spring.cloud.starter.openfeign.version>3.0.5</spring.cloud.starter.openfeign.version>
         <javax.servlet.version>3.1.0</javax.servlet.version>
         <tomcat.version>9.0.54</tomcat.version>
         <jetty.version>9.4.26.v20200117</jetty.version>
