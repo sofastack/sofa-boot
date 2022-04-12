@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.boot.actuator.beans;
 
+import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
 import org.junit.Assert;
@@ -47,6 +48,7 @@ public class IsleBeanEndpointTest {
         ApplicationRuntimeModel model = new ApplicationRuntimeModel();
         model.addInstalled(new MockDeploymentDescriptor("A"));
         model.addInstalled(new MockDeploymentDescriptor("B"));
+        context.getBeanFactory().registerSingleton(SofaBootConstants.APPLICATION, model);
         IsleBeansEndpoint isleBeansEndpoint = new IsleBeansEndpoint(context);
         BeansEndpoint.ApplicationBeans applicationBeans = isleBeansEndpoint.beans();
         Assert.assertNotNull(applicationBeans);
