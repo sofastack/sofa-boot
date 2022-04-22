@@ -17,11 +17,11 @@ repositories {
 dependencies {
     implementation localGroovy()
     implementation gradleApi()
-    implementation 'org.springframework.boot:spring-boot-gradle-plugin:2.3.9.RELEASE'
-    implementation 'org.springframework.boot:spring-boot-loader-tools:2.3.9.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-gradle-plugin:2.4.13'
+    implementation 'org.springframework.boot:spring-boot-loader-tools:2.4.13'
     implementation 'io.spring.gradle:dependency-management-plugin:1.0.11.RELEASE'
     implementation "org.apache.commons:commons-compress:1.19"
-    implementation "org.springframework:spring-core:5.2.13.RELEASE"
+    implementation "org.springframework:spring-core:5.3.18"
     testImplementation 'junit:junit:4.13.1'
     testImplementation gradleTestKit()
 }
