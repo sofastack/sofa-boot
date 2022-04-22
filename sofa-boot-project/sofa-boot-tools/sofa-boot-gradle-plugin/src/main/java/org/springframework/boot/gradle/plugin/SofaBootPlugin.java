@@ -16,6 +16,14 @@
  */
 package org.springframework.boot.gradle.plugin;
 
+import com.alipay.sofa.boot.gradle.plugin.Marker;
+import org.gradle.api.GradleException;
+import org.gradle.api.Plugin;
+import org.gradle.api.Project;
+import org.gradle.api.artifacts.Configuration;
+import org.gradle.util.GradleVersion;
+import org.springframework.boot.gradle.dsl.SpringBootExtension;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.JarURLConnection;
@@ -23,18 +31,9 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
-
-import org.gradle.api.GradleException;
-import org.gradle.api.Plugin;
-import org.gradle.api.Project;
-import org.gradle.api.artifacts.Configuration;
-import org.gradle.api.artifacts.ResolvableDependencies;
-import org.gradle.util.GradleVersion;
-import org.springframework.boot.gradle.dsl.SpringBootExtension;
-
-import com.alipay.sofa.boot.gradle.plugin.Marker;
 
 /**
  * Gradle plugin for SOFA Boot. (Origin from {@link SpringBootPlugin})
@@ -70,7 +69,6 @@ public class SofaBootPlugin implements Plugin<Project> {
         createExtension(project);
         Configuration bootArchives = createBootArchivesConfiguration(project);
         registerPluginActions(project, bootArchives);
-        unregisterUnresolvedDependenciesAnalyzer(project);
     }
 
     private void verifyGradleVersion() {
@@ -92,6 +90,7 @@ public class SofaBootPlugin implements Plugin<Project> {
         Configuration bootArchives = project.getConfigurations().create(
             BOOT_ARCHIVES_CONFIGURATION_NAME);
         bootArchives.setDescription("Configuration for Spring Boot archive artifacts.");
+        bootArchives.setCanBeResolved(false);
         return bootArchives;
     }
 
@@ -105,29 +104,18 @@ public class SofaBootPlugin implements Plugin<Project> {
                 new SofaDependencyManagementPluginAction(), new ApplicationPluginAction(),
                 new KotlinPluginAction());
         for (PluginApplicationAction action : actions) {
-            Class<? extends Plugin<? extends Project>> pluginClass = action
-                    .getPluginClass();
-            if (pluginClass != null) {
-                project.getPlugins().withType(pluginClass,
-                        (plugin) -> action.execute(project));
-            }
+            withPluginClassOfAction(action,
+                    (pluginClass) -> project.getPlugins().withType(pluginClass, (plugin) -> action.execute(project)));
         }
     }
 
-    private void unregisterUnresolvedDependenciesAnalyzer(Project project) {
-        UnresolvedDependenciesAnalyzer unresolvedDependenciesAnalyzer = new UnresolvedDependenciesAnalyzer();
-        project.getConfigurations().all((configuration) -> {
-            ResolvableDependencies incoming = configuration.getIncoming();
-            incoming.afterResolve((resolvableDependencies) -> {
-                if (incoming.equals(resolvableDependencies)) {
-                    unresolvedDependenciesAnalyzer.analyze(configuration
-                            .getResolvedConfiguration().getLenientConfiguration()
-                            .getUnresolvedModuleDependencies());
-                }
-            });
-        });
-        project.getGradle().buildFinished(
-                (buildResult) -> unresolvedDependenciesAnalyzer.buildFinished(project));
+    private void withPluginClassOfAction(PluginApplicationAction action,
+                                         Consumer<Class<? extends Plugin<? extends Project>>> consumer) {
+        try {
+            consumer.accept(action.getPluginClass());
+        } catch (Throwable ex) {
+            // Plugin class unavailable. Continue.
+        }
     }
 
     // This method always returns null when executing gradle test
