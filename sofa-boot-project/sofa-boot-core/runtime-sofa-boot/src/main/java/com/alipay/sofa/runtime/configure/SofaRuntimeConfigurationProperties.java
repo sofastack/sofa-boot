@@ -16,10 +16,9 @@
  */
 package com.alipay.sofa.runtime.configure;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.runtime.SofaRuntimeProperties;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * SofaRuntimeConfigurationProperties is exported by SOFA Runtime plugin in Ark.
@@ -112,6 +111,26 @@ public class SofaRuntimeConfigurationProperties {
 
     public boolean isServiceInterfaceTypeCheck() {
         return SofaRuntimeProperties.isServiceInterfaceTypeCheck();
+    }
+
+    public void setSkipAllComponentShutdown(boolean skipAllComponentShutdown) {
+        SofaRuntimeProperties.setSkipAllComponentShutdown(Thread.currentThread()
+            .getContextClassLoader(), skipAllComponentShutdown);
+    }
+
+    public boolean isSkipAllComponentShutdown() {
+        return SofaRuntimeProperties.isSkipAllComponentShutdown(Thread.currentThread()
+            .getContextClassLoader());
+    }
+
+    public void setSkipCommonComponentShutdown(boolean skipCommonComponentShutdown) {
+        SofaRuntimeProperties.setSkipCommonComponentShutdown(Thread.currentThread()
+            .getContextClassLoader(), skipCommonComponentShutdown);
+    }
+
+    public boolean isSkipCommonComponentShutdown() {
+        return SofaRuntimeProperties.isSkipCommonComponentShutdown(Thread.currentThread()
+            .getContextClassLoader());
     }
 
 }

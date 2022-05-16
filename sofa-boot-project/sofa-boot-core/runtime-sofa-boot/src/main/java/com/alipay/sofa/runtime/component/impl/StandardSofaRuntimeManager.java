@@ -21,6 +21,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.boot.health.RuntimeHealthChecker;
+import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
 import com.alipay.sofa.runtime.spi.component.ComponentManager;
@@ -50,7 +51,12 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager, Applicati
 
     public StandardSofaRuntimeManager(String appName, ClassLoader appClassLoader,
                                       ClientFactoryInternal clientFactoryInternal) {
-        componentManager = new ComponentManagerImpl(clientFactoryInternal);
+        boolean skipAllComponentShutdown = SofaRuntimeProperties
+            .isSkipAllComponentShutdown(appClassLoader);
+        boolean skipCommonComponentShutdown = SofaRuntimeProperties
+            .isSkipCommonComponentShutdown(appClassLoader);
+        componentManager = new ComponentManagerImpl(clientFactoryInternal,
+            skipAllComponentShutdown, skipCommonComponentShutdown);
         this.appName = appName;
         this.appClassLoader = appClassLoader;
         this.sofaRuntimeContext = new SofaRuntimeContext(this, componentManager,

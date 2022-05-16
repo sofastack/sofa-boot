@@ -47,11 +47,17 @@ public class ComponentManagerImpl implements ComponentManager {
     protected ConcurrentMap<ComponentType, Map<ComponentName, ComponentInfo>> resolvedRegistry;
     /** client factory */
     private ClientFactoryInternal                                             clientFactoryInternal;
+    private final boolean                                                     skipAllComponentShutdown;
+    private final boolean                                                     skipCommonComponentShutdown;
 
-    public ComponentManagerImpl(ClientFactoryInternal clientFactoryInternal) {
+    public ComponentManagerImpl(ClientFactoryInternal clientFactoryInternal,
+                                boolean skipAllComponentShutdown,
+                                boolean skipCommonComponentShutdown) {
         this.registry = new ConcurrentHashMap(16);
         this.resolvedRegistry = new ConcurrentHashMap(16);
         this.clientFactoryInternal = clientFactoryInternal;
+        this.skipAllComponentShutdown = skipAllComponentShutdown;
+        this.skipCommonComponentShutdown = skipCommonComponentShutdown;
     }
 
     public Collection<ComponentInfo> getComponentInfos() {
@@ -88,6 +94,9 @@ public class ComponentManagerImpl implements ComponentManager {
 
     @Override
     public void shutdown() {
+        if (skipAllComponentShutdown) {
+            return;
+        }
         List<ComponentInfo> elems = new ArrayList<>(registry.values());
         // shutdown spring contexts first
         List<ComponentInfo> springContextComponents = elems.stream()
@@ -105,6 +114,9 @@ public class ComponentManagerImpl implements ComponentManager {
             elems.removeAll(springContextComponents);
         }
 
+        if (skipCommonComponentShutdown) {
+            return;
+        }
         // shutdown remaining components
         for (ComponentInfo ri : elems) {
             try {
