@@ -37,7 +37,7 @@
     <description>SOFABoot Build</description>
 
     <properties>
-        <revision>3.12.1</revision>
+        <revision>3.12.2-SNAPSHOT</revision>
         <sofa.boot.version>${revision}</sofa.boot.version>
         <spring-framework.version>5.3.18</spring-framework.version>
         <!--maven plugin-->
