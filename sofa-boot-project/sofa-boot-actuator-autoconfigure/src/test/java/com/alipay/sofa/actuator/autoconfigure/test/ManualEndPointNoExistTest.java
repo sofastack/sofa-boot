@@ -33,7 +33,7 @@ import org.springframework.test.context.junit4.SpringRunner;
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = EmptyConfiguration.class)
 @RunWith(SpringRunner.class)
-public class EndPointTest {
+public class ManualEndPointNoExistTest {
     @Autowired
     private TestRestTemplate restTemplate;
 

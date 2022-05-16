@@ -20,6 +20,7 @@ import com.alipay.sofa.healthcheck.ReadinessCheckListener;
 import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
 import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
 import org.springframework.boot.actuate.health.Health;
+import org.springframework.lang.Nullable;
 
 /**
  * The health check HTTP checker for start status.
@@ -38,7 +39,11 @@ public class SofaBootReadinessEndpoint {
     }
 
     @ReadOperation
-    public Health health() {
-        return readinessCheckListener.aggregateReadinessHealth();
+    public Health health(@Nullable String showDetail) {
+        Health health = readinessCheckListener.aggregateReadinessHealth();
+        if (showDetail == null || Boolean.parseBoolean(showDetail)) {
+            return health;
+        }
+        return new Health.Builder(health.getStatus()).build();
     }
 }
