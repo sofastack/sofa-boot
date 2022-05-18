@@ -17,6 +17,7 @@
 package com.alipay.sofa.runtime.component.impl;
 
 import com.alipay.sofa.boot.error.ErrorCode;
+import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.log.SofaLogger;
@@ -47,17 +48,14 @@ public class ComponentManagerImpl implements ComponentManager {
     protected ConcurrentMap<ComponentType, Map<ComponentName, ComponentInfo>> resolvedRegistry;
     /** client factory */
     private ClientFactoryInternal                                             clientFactoryInternal;
-    private final boolean                                                     skipAllComponentShutdown;
-    private final boolean                                                     skipCommonComponentShutdown;
+    private final ClassLoader                                                 appClassLoader;
 
     public ComponentManagerImpl(ClientFactoryInternal clientFactoryInternal,
-                                boolean skipAllComponentShutdown,
-                                boolean skipCommonComponentShutdown) {
+                                ClassLoader appClassLoader) {
         this.registry = new ConcurrentHashMap(16);
         this.resolvedRegistry = new ConcurrentHashMap(16);
         this.clientFactoryInternal = clientFactoryInternal;
-        this.skipAllComponentShutdown = skipAllComponentShutdown;
-        this.skipCommonComponentShutdown = skipCommonComponentShutdown;
+        this.appClassLoader = appClassLoader;
     }
 
     public Collection<ComponentInfo> getComponentInfos() {
@@ -94,7 +92,7 @@ public class ComponentManagerImpl implements ComponentManager {
 
     @Override
     public void shutdown() {
-        if (skipAllComponentShutdown) {
+        if (SofaRuntimeProperties.isSkipAllComponentShutdown(appClassLoader)) {
             return;
         }
         List<ComponentInfo> elems = new ArrayList<>(registry.values());
@@ -114,7 +112,7 @@ public class ComponentManagerImpl implements ComponentManager {
             elems.removeAll(springContextComponents);
         }
 
-        if (skipCommonComponentShutdown) {
+        if (SofaRuntimeProperties.isSkipCommonComponentShutdown(appClassLoader)) {
             return;
         }
         // shutdown remaining components
