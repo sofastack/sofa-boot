@@ -25,8 +25,6 @@ import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.SmartLifecycle;
-import org.springframework.core.Ordered;
-import org.springframework.core.PriorityOrdered;
 
 import static com.alipay.sofa.boot.startup.BootStageConstants.APPLICATION_CONTEXT_REFRESH_STAGE;
 
@@ -36,15 +34,9 @@ import static com.alipay.sofa.boot.startup.BootStageConstants.APPLICATION_CONTEX
  * @author Zhijie
  * @since 2020/7/20
  */
-public class StartupContextRefreshedListener implements SmartLifecycle, ApplicationContextAware,
-                                            PriorityOrdered {
+public class StartupContextRefreshedListener implements SmartLifecycle, ApplicationContextAware {
     public static final String ROOT_MODULE_NAME = "ROOT_APPLICATION_CONTEXT";
     private ApplicationContext applicationContext;
-
-    @Override
-    public int getOrder() {
-        return Ordered.HIGHEST_PRECEDENCE;
-    }
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -90,5 +82,10 @@ public class StartupContextRefreshedListener implements SmartLifecycle, Applicat
     @Override
     public boolean isRunning() {
         return false;
+    }
+
+    @Override
+    public int getPhase() {
+        return Integer.MIN_VALUE;
     }
 }
