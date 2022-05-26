@@ -168,6 +168,9 @@ public class BeanLoadCostBeanFactory extends DefaultListableBeanFactory {
             } else if (o1 == null) {
                 return -1;
             }
+            if (o2.getRealRefreshElapsedTime() == o1.getRealRefreshElapsedTime()) {
+                return 0;
+            }
             return o2.getRealRefreshElapsedTime() > o1.getRealRefreshElapsedTime() ? 1 : -1;
         });
         int size = beanStats.size();
