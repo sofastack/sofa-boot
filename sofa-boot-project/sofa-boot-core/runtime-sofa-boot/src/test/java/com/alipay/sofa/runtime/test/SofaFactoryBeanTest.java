@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.runtime.test;
 
+import com.alipay.sofa.runtime.service.binding.JvmBindingInterface;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -66,6 +67,11 @@ public class SofaFactoryBeanTest {
     public void testParameterSampleService() {
         Assert.assertEquals(serviceViaBeanMethod, parameterSampleService);
         Assert.assertNotEquals(sampleService, parameterSampleService);
+    }
+
+    @Test
+    public void TestJvmBindingInterface() {
+        Assert.assertTrue(ctx.getBean("reference1") instanceof JvmBindingInterface);
     }
 
     @Test
