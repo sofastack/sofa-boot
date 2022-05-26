@@ -17,6 +17,7 @@
 package com.alipay.sofa.runtime.test;
 
 import com.alipay.sofa.runtime.service.binding.JvmBindingInterface;
+import com.alipay.sofa.runtime.test.beans.facade.SampleNoService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -71,7 +72,12 @@ public class SofaFactoryBeanTest {
 
     @Test
     public void TestJvmBindingInterface() {
+        // Jdk 代理类添加接口
         Assert.assertTrue(ctx.getBean("reference1") instanceof JvmBindingInterface);
+
+        // Cglib 代理类不受影响
+        Assert.assertFalse(ctx.getBean("reference4") instanceof JvmBindingInterface);
+        Assert.assertTrue(ctx.getBean("reference4") instanceof SampleNoService);
     }
 
     @Test

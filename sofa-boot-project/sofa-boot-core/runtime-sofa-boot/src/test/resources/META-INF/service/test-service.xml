@@ -25,4 +25,5 @@
     <sofa:reference id="reference3" interface="com.alipay.sofa.runtime.test.beans.facade.SampleService"/>
 
     <sofa:reference id="xmlServiceWithoutInterface" interface="com.alipay.sofa.runtime.test.beans.service.ServiceWithoutInterface" unique-id="serviceWithoutInterface"/>
+    <sofa:reference id="reference4" interface="com.alipay.sofa.runtime.test.beans.facade.SampleNoService"/>
 </beans>
