@@ -124,11 +124,11 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
             ProxyFactory factory = new ProxyFactory();
             if (javaClass.isInterface()) {
                 factory.addInterface(javaClass);
+                factory.addInterface(JvmBindingInterface.class);
             } else {
                 factory.setTargetClass(javaClass);
                 factory.setProxyTargetClass(true);
             }
-            factory.addInterface(JvmBindingInterface.class);
             factory.addAdvice(handler);
             return factory.getProxy(newClassLoader);
         } finally {
