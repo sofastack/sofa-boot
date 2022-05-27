@@ -74,7 +74,6 @@ public class SofaBindingTest {
         Assert.assertTrue(ctx.getBean("reference4") instanceof SampleNoService);
     }
 
-
     @Test
     public void testServiceBinding() {
         ComponentManager componentManager = sofaRuntimeContext.getComponentManager();
