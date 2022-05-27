@@ -23,7 +23,7 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
-import org.springframework.core.Ordered;
+import org.springframework.core.PriorityOrdered;
 
 /**
  * 更新 ProxyFactoryBean 以避免被提前初始化
@@ -32,7 +32,8 @@ import org.springframework.core.Ordered;
  * @author ruoshan
  * @since 3.12.0
  */
-public class ProxyBeanFactoryPostProcessor implements BeanDefinitionRegistryPostProcessor, Ordered {
+public class ProxyBeanFactoryPostProcessor implements BeanDefinitionRegistryPostProcessor,
+                                          PriorityOrdered {
 
     @Override
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry)
@@ -78,6 +79,6 @@ public class ProxyBeanFactoryPostProcessor implements BeanDefinitionRegistryPost
 
     @Override
     public int getOrder() {
-        return Ordered.HIGHEST_PRECEDENCE;
+        return PriorityOrdered.HIGHEST_PRECEDENCE;
     }
 }
