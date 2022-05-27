@@ -44,7 +44,12 @@ public class StartupReporter {
     public void applicationBootFinish() {
         startupStaticsModel.setApplicationBootElapsedTime(ManagementFactory.getRuntimeMXBean()
             .getUptime());
-        startupStaticsModel.getStageStats().sort((o1, o2) -> o1.getStartTime() - o2.getStartTime() > 0 ? 1 : -1);
+        startupStaticsModel.getStageStats().sort((o1, o2) -> {
+            if (o1.getStartTime() == o2.getStartTime()) {
+                return 0;
+            }
+            return o1.getStartTime() > o2.getStartTime() ? 1 : -1;
+        });
     }
 
     /**
