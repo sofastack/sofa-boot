@@ -25,12 +25,6 @@
         <property name="target" ref="proxyTestBean" />
         <property name="targetClass" value="com.alipay.sofa.runtime.test.proxy.bean.ProxyTestBeanFacade"/>
     </bean>
-    
-    <bean id="proxyFactoryBean7" class="com.alipay.sofa.runtime.proxy.SofaProxyFactoryBean" >
-        <constructor-arg value="com.alipay.sofa.runtime.test.proxy.bean.ProxyTestBeanFacade" />
-        <property name="target" ref="proxyTestBean" />
-        <property name="targetClass" value="com.alipay.sofa.runtime.test.proxy.bean.ProxyTestBeanFacade"/>
-    </bean>
 
     <bean class="com.alipay.sofa.runtime.test.proxy.bean.ProxyTestPostProcessor" />
 

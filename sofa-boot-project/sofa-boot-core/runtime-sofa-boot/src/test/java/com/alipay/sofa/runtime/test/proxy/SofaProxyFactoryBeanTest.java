@@ -66,10 +66,6 @@ public class SofaProxyFactoryBeanTest {
     @Qualifier("&proxyFactoryBean6")
     private ProxyFactoryBean    proxyFactoryBean6;
 
-    @Autowired
-    @Qualifier("&proxyFactoryBean7")
-    private ProxyFactoryBean    proxyFactoryBean7;
-
     @Test
     public void test() {
         Assert.assertTrue(proxyTestBean.isPostProcessed());
@@ -77,7 +73,6 @@ public class SofaProxyFactoryBeanTest {
         Assert.assertTrue(proxyFactoryBean2 instanceof SofaProxyFactoryBean);
         Assert.assertTrue(proxyFactoryBean3 instanceof SofaProxyFactoryBean);
         Assert.assertTrue(proxyFactoryBean4 instanceof SofaProxyFactoryBean);
-        Assert.assertTrue(proxyFactoryBean7 instanceof SofaProxyFactoryBean);
         // only proxy xml bean
         Assert.assertFalse(proxyFactoryBean5 instanceof SofaProxyFactoryBean);
         Assert.assertFalse(proxyFactoryBean6 instanceof SofaProxyFactoryBean);

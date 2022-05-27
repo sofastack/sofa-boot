@@ -26,12 +26,6 @@ import org.springframework.beans.factory.BeanFactory;
  */
 public class SofaProxyFactoryBean extends ProxyFactoryBean {
 
-    public SofaProxyFactoryBean(Class<?>[] proxyInterfaces) {
-        if (proxyInterfaces != null) {
-            setInterfaces(proxyInterfaces);
-        }
-    }
-
     public SofaProxyFactoryBean(Class<?>[] proxyInterfaces, String targetName,
                                 Class<?> targetClass, BeanFactory beanFactory) {
         if (proxyInterfaces != null) {
