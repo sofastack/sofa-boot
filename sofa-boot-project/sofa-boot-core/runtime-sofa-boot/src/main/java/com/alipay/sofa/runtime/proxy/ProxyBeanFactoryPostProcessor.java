@@ -20,25 +20,28 @@ import org.springframework.aop.framework.ProxyFactoryBean;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.core.PriorityOrdered;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
+import org.springframework.core.Ordered;
 
 /**
- *
+ * 更新 ProxyFactoryBean 以避免被提前初始化
+ * <p> 这里必须实现 BeanDefinitionRegistryPostProcessor 接口且声明最高优先级的 Ordered，
+ * 否则如果其他 BeanDefinitionRegistryPostProcessor 使用了构造函数注入则会导致 ProxyFactoryBean 被提前初始化
  * @author ruoshan
  * @since 3.12.0
  */
-public class ProxyBeanFactoryPostProcessor implements BeanFactoryPostProcessor, PriorityOrdered {
+public class ProxyBeanFactoryPostProcessor implements BeanDefinitionRegistryPostProcessor, Ordered {
 
     @Override
-    public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory)
-                                                                                   throws BeansException {
+    public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry)
+                                                                                  throws BeansException {
         boolean updateProxyBean = false;
-        for (String beanName : beanFactory.getBeanNamesForType(ProxyFactoryBean.class, true, false)) {
+        for (String beanName : registry.getBeanDefinitionNames()) {
             String transformedBeanName = BeanFactoryUtils.transformedBeanName(beanName);
-            if (beanFactory.containsBeanDefinition(transformedBeanName)) {
-                BeanDefinition beanDefinition = beanFactory.getBeanDefinition(transformedBeanName);
+            if (registry.containsBeanDefinition(transformedBeanName)) {
+                BeanDefinition beanDefinition = registry.getBeanDefinition(transformedBeanName);
                 if (ProxyFactoryBean.class.getName().equals(beanDefinition.getBeanClassName())) {
                     beanDefinition.setBeanClassName(SofaProxyFactoryBean.class.getName());
                     Object proxyInterfaces = beanDefinition.getPropertyValues().get(
@@ -52,20 +55,29 @@ public class ProxyBeanFactoryPostProcessor implements BeanFactoryPostProcessor, 
                         beanDefinition.getPropertyValues().get("targetName"));
                     beanDefinition.getConstructorArgumentValues().addIndexedArgumentValue(2,
                         beanDefinition.getPropertyValues().get("targetClass"));
-                    beanDefinition.getConstructorArgumentValues().addIndexedArgumentValue(3,
-                        beanFactory);
+                    // must be true
+                    if (registry instanceof ConfigurableListableBeanFactory) {
+                        beanDefinition.getConstructorArgumentValues().addIndexedArgumentValue(3,
+                            registry);
+                    }
                     updateProxyBean = true;
                 }
             }
         }
-        if (updateProxyBean) {
+        if (updateProxyBean && registry instanceof ConfigurableListableBeanFactory) {
             // must clear metadata cache
-            beanFactory.clearMetadataCache();
+            ((ConfigurableListableBeanFactory) registry).clearMetadataCache();
         }
     }
 
     @Override
+    public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory)
+                                                                                   throws BeansException {
+
+    }
+
+    @Override
     public int getOrder() {
-        return 0;
+        return Ordered.HIGHEST_PRECEDENCE;
     }
 }
