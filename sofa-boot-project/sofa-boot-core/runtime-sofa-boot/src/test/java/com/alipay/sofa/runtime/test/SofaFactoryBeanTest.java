@@ -16,8 +16,15 @@
  */
 package com.alipay.sofa.runtime.test;
 
-import com.alipay.sofa.runtime.service.binding.JvmBindingInterface;
-import com.alipay.sofa.runtime.test.beans.facade.SampleNoService;
+import com.alipay.sofa.runtime.api.annotation.SofaReference;
+import com.alipay.sofa.runtime.api.annotation.SofaService;
+import com.alipay.sofa.runtime.spring.bean.SofaBeanNameGenerator;
+import com.alipay.sofa.runtime.spring.factory.ReferenceFactoryBean;
+import com.alipay.sofa.runtime.spring.factory.ServiceFactoryBean;
+import com.alipay.sofa.runtime.test.beans.facade.SampleService;
+import com.alipay.sofa.runtime.test.beans.service.DefaultSampleService;
+import com.alipay.sofa.runtime.test.beans.service.ServiceWithoutInterface;
+import com.alipay.sofa.runtime.test.configuration.RuntimeConfiguration;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,16 +37,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import com.alipay.sofa.runtime.api.annotation.SofaReference;
-import com.alipay.sofa.runtime.api.annotation.SofaService;
-import com.alipay.sofa.runtime.spring.bean.SofaBeanNameGenerator;
-import com.alipay.sofa.runtime.spring.factory.ReferenceFactoryBean;
-import com.alipay.sofa.runtime.spring.factory.ServiceFactoryBean;
-import com.alipay.sofa.runtime.test.beans.facade.SampleService;
-import com.alipay.sofa.runtime.test.beans.service.DefaultSampleService;
-import com.alipay.sofa.runtime.test.beans.service.ServiceWithoutInterface;
-import com.alipay.sofa.runtime.test.configuration.RuntimeConfiguration;
 
 /**
  * @author qilong.zql
@@ -68,16 +65,6 @@ public class SofaFactoryBeanTest {
     public void testParameterSampleService() {
         Assert.assertEquals(serviceViaBeanMethod, parameterSampleService);
         Assert.assertNotEquals(sampleService, parameterSampleService);
-    }
-
-    @Test
-    public void TestJvmBindingInterface() {
-        // Jdk 代理类添加接口
-        Assert.assertTrue(ctx.getBean("reference1") instanceof JvmBindingInterface);
-
-        // Cglib 代理类不受影响
-        Assert.assertFalse(ctx.getBean("reference4") instanceof JvmBindingInterface);
-        Assert.assertTrue(ctx.getBean("reference4") instanceof SampleNoService);
     }
 
     @Test
