@@ -35,6 +35,7 @@ import com.alipay.sofa.runtime.log.SofaLogger;
 import com.alipay.sofa.runtime.spring.async.AsyncInitBeanHolder;
 import com.alipay.sofa.runtime.spring.async.AsyncTaskExecutor;
 import com.alipay.sofa.runtime.spring.parser.AsyncInitBeanDefinitionDecorator;
+import org.springframework.core.PriorityOrdered;
 
 /**
  * @author qilong.zql
@@ -42,7 +43,7 @@ import com.alipay.sofa.runtime.spring.parser.AsyncInitBeanDefinitionDecorator;
  * @since 2.6.0
  */
 public class AsyncProxyBeanPostProcessor implements BeanPostProcessor, ApplicationContextAware,
-                                        InitializingBean {
+                                        InitializingBean, PriorityOrdered {
 
     private ApplicationContext applicationContext;
 
@@ -85,6 +86,11 @@ public class AsyncProxyBeanPostProcessor implements BeanPostProcessor, Applicati
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
+    }
+
+    @Override
+    public int getOrder() {
+        return PriorityOrdered.HIGHEST_PRECEDENCE;
     }
 
     class AsyncInitializeBeanMethodInvoker implements MethodInterceptor {
