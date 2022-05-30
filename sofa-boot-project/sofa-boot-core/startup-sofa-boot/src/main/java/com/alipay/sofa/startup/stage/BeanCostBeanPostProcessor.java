@@ -48,6 +48,7 @@ public class BeanCostBeanPostProcessor implements BeanPostProcessor {
                                                                                throws BeansException {
         if (!skipSofaBean || isNotSofaBean(bean)) {
             BeanStat beanStat = new BeanStat();
+            beanStat.setName(beanName);
             String beanClassName = getBeanName(bean, beanName);
             beanStat.setBeanClassName(beanClassName);
             beanStat.startRefresh();
