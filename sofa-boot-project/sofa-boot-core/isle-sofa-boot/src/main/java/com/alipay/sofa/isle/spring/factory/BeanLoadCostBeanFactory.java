@@ -102,6 +102,7 @@ public class BeanLoadCostBeanFactory extends DefaultListableBeanFactory {
                                                                                                  throws BeanCreationException {
         Stack<BeanStat> parentStack = parentStackThreadLocal.get();
         BeanStat bs = new BeanStat();
+        bs.setName(beanName);
         if (parentStack == null) {
             parentStack = new Stack<>();
             parentStackThreadLocal.set(parentStack);
