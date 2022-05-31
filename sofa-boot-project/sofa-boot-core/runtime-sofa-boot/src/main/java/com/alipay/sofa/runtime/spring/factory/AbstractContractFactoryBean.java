@@ -83,8 +83,14 @@ public abstract class AbstractContractFactoryBean implements InitializingBean, F
                 DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory
                     .newInstance();
                 documentBuilderFactory.setNamespaceAware(true);
-                InputSource inputSource = new InputSource(new ByteArrayInputStream(element
-                    .getValue().getBytes()));
+                InputSource inputSource;
+                if (documentEncoding != null) {
+                    inputSource = new InputSource(new ByteArrayInputStream(element.getValue()
+                        .getBytes(documentEncoding)));
+                } else {
+                    inputSource = new InputSource(new ByteArrayInputStream(element.getValue()
+                        .getBytes()));
+                }
                 inputSource.setEncoding(documentEncoding);
                 Element node = documentBuilderFactory.newDocumentBuilder().parse(inputSource)
                     .getDocumentElement();
