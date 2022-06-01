@@ -27,9 +27,6 @@ import org.springframework.boot.actuate.health.Status;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.Environment;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * ComponentInfo Health Checker
  * {@link ComponentInfo}
@@ -52,23 +49,15 @@ public class ComponentHealthChecker implements HealthChecker, EnvironmentAware {
     public Health isHealthy() {
         boolean allPassed = true;
         Health.Builder builder = new Health.Builder();
-        List<Pair> passedComponent = new ArrayList<>();
 
         for (ComponentInfo componentInfo : sofaRuntimeContext.getComponentManager().getComponents()) {
             HealthResult healthy = componentInfo.isHealthy();
             String healthReport = healthy.getHealthReport();
-            if (healthy.isHealthy()) {
-                passedComponent.add(new Pair(healthy.getHealthName(), StringUtils
-                    .hasText(healthReport) ? healthReport : "passed"));
-            } else {
+            if (!healthy.isHealthy()) {
                 allPassed = false;
                 builder.withDetail(healthy.getHealthName(),
                     StringUtils.hasText(healthReport) ? healthReport : "failed");
             }
-        }
-
-        for (Pair pair : passedComponent) {
-            builder.withDetail(pair.key, pair.value);
         }
 
         if (allPassed) {
