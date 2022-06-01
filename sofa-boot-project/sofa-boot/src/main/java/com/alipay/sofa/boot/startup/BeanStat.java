@@ -39,6 +39,7 @@ public class BeanStat extends ChildrenStat<BeanStat> {
 
     public void startRefresh() {
         beanRefreshStartTime = System.currentTimeMillis();
+        setStartTime(beanRefreshStartTime);
     }
 
     public void finishRefresh() {
@@ -50,6 +51,7 @@ public class BeanStat extends ChildrenStat<BeanStat> {
             childRefreshTime += child.getRealRefreshElapsedTime();
         }
         realRefreshElapsedTime = refreshElapsedTime - childRefreshTime;
+        setEndTime(beanRefreshEndTime);
     }
 
     public String getBeanClassName() {
