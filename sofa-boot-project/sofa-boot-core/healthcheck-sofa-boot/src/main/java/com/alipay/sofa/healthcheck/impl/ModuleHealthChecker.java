@@ -64,14 +64,6 @@ public class ModuleHealthChecker implements ApplicationContextAware, HealthCheck
         ApplicationRuntimeModel application = applicationContext.getBean(
             SofaBootConstants.APPLICATION, ApplicationRuntimeModel.class);
 
-        for (DeploymentDescriptor deploymentDescriptor : application.getInstalled()) {
-            builder.withDetail(deploymentDescriptor.getName(), "passed");
-        }
-
-        for (DeploymentDescriptor deploymentDescriptor : application.getAllInactiveDeployments()) {
-            builder.withDetail(deploymentDescriptor.getName(), "inactive");
-        }
-
         for (DeploymentDescriptor deploymentDescriptor : application.getFailed()) {
             builder.withDetail(deploymentDescriptor.getName(), "failed");
         }

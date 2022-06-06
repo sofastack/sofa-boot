@@ -256,9 +256,15 @@ public class HealthCheckerProcessor implements ApplicationContextAware {
         healthMap.put(beanId, health);
         try {
             if (!result) {
-                logger.error(ErrorCode.convert("01-23001", beanId, checkType, retryCount,
-                    objectMapper.writeValueAsString(health.getDetails()),
-                    healthChecker.isStrictCheck()));
+                if (healthChecker.isStrictCheck()) {
+                    logger.error(ErrorCode.convert("01-23001", beanId, checkType, retryCount,
+                            objectMapper.writeValueAsString(health.getDetails()),
+                            healthChecker.isStrictCheck()));
+                } else {
+                    logger.warn(ErrorCode.convert("01-23001", beanId, checkType, retryCount,
+                            objectMapper.writeValueAsString(health.getDetails()),
+                            healthChecker.isStrictCheck()));
+                }
             }
         } catch (JsonProcessingException ex) {
             logger.error(ErrorCode.convert("01-23003", checkType), ex);
