@@ -16,8 +16,12 @@
  */
 package com.alipay.sofa.rpc.boot.context;
 
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ApplicationContextEvent;
 import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.context.event.ContextStoppedEvent;
 
@@ -29,9 +33,11 @@ import com.alipay.sofa.rpc.boot.container.ServerConfigContainer;
  *
  * @author <a href="mailto:lw111072@antfin.com">LiWei</a>
  */
-public class ApplicationContextClosedListener implements ApplicationListener {
+public class ApplicationContextClosedListener implements ApplicationListener,
+                                             ApplicationContextAware {
     private final ProviderConfigContainer providerConfigContainer;
     private final ServerConfigContainer   serverConfigContainer;
+    private ApplicationContext            applicationContext;
 
     public ApplicationContextClosedListener(ProviderConfigContainer providerConfigContainer,
                                             ServerConfigContainer serverConfigContainer) {
@@ -42,8 +48,16 @@ public class ApplicationContextClosedListener implements ApplicationListener {
     @Override
     public void onApplicationEvent(ApplicationEvent event) {
         if ((event instanceof ContextClosedEvent) || (event instanceof ContextStoppedEvent)) {
-            providerConfigContainer.unExportAllProviderConfig();
-            serverConfigContainer.closeAllServer();
+            if (applicationContext
+                .equals(((ApplicationContextEvent) event).getApplicationContext())) {
+                providerConfigContainer.unExportAllProviderConfig();
+                serverConfigContainer.closeAllServer();
+            }
         }
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
     }
 }
