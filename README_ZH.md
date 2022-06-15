@@ -74,7 +74,7 @@ SOFABoot 的示例工程 [sofaboot-samples](https://github.com/sofastack-guides/
 请参考 [SOFABoot 官方文档](http://www.sofastack.tech/sofa-boot/docs/Home)。
 
 ### 源码解析
-- SOFABoot HealthCheck 机制解析
+- [SOFABoot HealthCheck 机制解析](https://deploy-preview-949--sofastack-preview.netlify.app/projects/sofa-boot/sofaboot-healthcheck-mechanism-explained/)
 
 ## 八、开源许可
 
