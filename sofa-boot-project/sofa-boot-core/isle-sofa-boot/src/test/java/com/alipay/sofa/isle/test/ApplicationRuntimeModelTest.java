@@ -41,6 +41,7 @@ public class ApplicationRuntimeModelTest {
     public void test() throws Exception {
         // new ApplicationRuntimeModel Instance
         ApplicationRuntimeModel application = new ApplicationRuntimeModel();
+
         application.setAppName("testCase");
         application.setModuleDeploymentValidator(new DefaultModuleDeploymentValidator());
 
@@ -97,9 +98,12 @@ public class ApplicationRuntimeModelTest {
         jarUrl = new URL("jar:file:/demo/path/demo.jar!/isle-module.config");
         dd = DeploymentBuilder.build(jarUrl, props, deploymentDescriptorConfiguration,
             ApplicationRuntimeModelTest.class.getClassLoader());
+
         Assert.assertTrue(dd instanceof JarDeploymentDescriptor);
         Assert.assertTrue(application.isModuleDeployment(dd));
+
         application.addDeployment(dd);
+
         Assert.assertEquals(0, application.getDeployRegistry().getPendingEntries().size());
     }
 }

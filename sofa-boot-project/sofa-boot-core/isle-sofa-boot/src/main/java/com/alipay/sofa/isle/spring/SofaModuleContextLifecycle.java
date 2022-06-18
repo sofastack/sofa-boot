@@ -32,6 +32,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author xuanbei 18/3/12
  */
 public class SofaModuleContextLifecycle implements SmartLifecycle {
+
+
+
+    //增强spring
     private AtomicBoolean         isleRefreshed = new AtomicBoolean(false);
 
     private final PipelineContext pipelineContext;
@@ -39,6 +43,10 @@ public class SofaModuleContextLifecycle implements SmartLifecycle {
     public SofaModuleContextLifecycle(PipelineContext pipelineContext) {
         this.pipelineContext = pipelineContext;
     }
+
+
+
+
 
     @Override
     public void start() {
@@ -61,6 +69,9 @@ public class SofaModuleContextLifecycle implements SmartLifecycle {
         return isleRefreshed.get();
     }
 
+
+
+    //增强spring
     @Override
     public int getPhase() {
         return -100;
