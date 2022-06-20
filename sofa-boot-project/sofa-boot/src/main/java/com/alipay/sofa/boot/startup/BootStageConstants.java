@@ -16,9 +16,12 @@
  */
 package com.alipay.sofa.boot.startup;
 
+import org.springframework.boot.ConfigurableBootstrapContext;
 import org.springframework.boot.SpringApplicationRunListener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
+
+import java.time.Duration;
 
 /**
  * @author huzijie
@@ -27,18 +30,18 @@ import org.springframework.core.env.ConfigurableEnvironment;
 public class BootStageConstants {
 
     /**
-     * The running stage since JVM started to {@link SpringApplicationRunListener#starting()}
+     * The running stage since JVM started to {@link SpringApplicationRunListener#started(ConfigurableApplicationContext, Duration)} ()}
      */
     public static final String JVM_STARTING_STAGE                = "JvmStartingStage";
 
     /**
-     * The running stage since {@link SpringApplicationRunListener#starting()} to
-     * {@link SpringApplicationRunListener#environmentPrepared(ConfigurableEnvironment)}}
+     * The running stage since {@link SpringApplicationRunListener#started(ConfigurableApplicationContext, Duration)} ()} to
+     * {@link SpringApplicationRunListener#environmentPrepared(ConfigurableBootstrapContext, ConfigurableEnvironment)} (ConfigurableEnvironment)}}
      */
     public static final String ENVIRONMENT_PREPARE_STAGE         = "EnvironmentPrepareStage";
 
     /**
-     * The running stage since {@link SpringApplicationRunListener#environmentPrepared(ConfigurableEnvironment)} to
+     * The running stage since {@link SpringApplicationRunListener#environmentPrepared(ConfigurableBootstrapContext, ConfigurableEnvironment)} (ConfigurableEnvironment)} to
      * {@link SpringApplicationRunListener#contextPrepared(ConfigurableApplicationContext)}}
      */
     public static final String APPLICATION_CONTEXT_PREPARE_STAGE = "ApplicationContextPrepareStage";

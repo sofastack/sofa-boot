@@ -30,6 +30,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
 
 import java.lang.management.ManagementFactory;
+import java.time.Duration;
 
 import static com.alipay.sofa.boot.startup.BootStageConstants.*;
 
@@ -94,7 +95,7 @@ public class StartupSpringApplicationRunListener implements SpringApplicationRun
     }
 
     @Override
-    public void started(ConfigurableApplicationContext context) {
+    public void started(ConfigurableApplicationContext context, Duration timeTaken) {
         StartupReporter startupReporter;
         try {
             startupReporter = context.getBean(StartupReporter.class);
@@ -121,16 +122,6 @@ public class StartupSpringApplicationRunListener implements SpringApplicationRun
         startupReporter.addCommonStartupStat(applicationContextPrepareStage);
         startupReporter.addCommonStartupStat(applicationContextLoadStage);
         startupReporter.applicationBootFinish();
-    }
-
-    @Override
-    public void running(ConfigurableApplicationContext context) {
-
-    }
-
-    @Override
-    public void failed(ConfigurableApplicationContext context, Throwable exception) {
-
     }
 
     @Override
