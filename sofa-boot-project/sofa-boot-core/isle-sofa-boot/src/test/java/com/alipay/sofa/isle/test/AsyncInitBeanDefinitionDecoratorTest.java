@@ -21,7 +21,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 
 import com.alipay.sofa.boot.constant.SofaBootConstants;
-import com.alipay.sofa.isle.spring.factory.BeanLoadCostBeanFactory;
+import com.alipay.sofa.runtime.factory.BeanLoadCostBeanFactory;
 import com.alipay.sofa.runtime.spring.parser.AsyncInitBeanDefinitionDecorator;
 
 /**

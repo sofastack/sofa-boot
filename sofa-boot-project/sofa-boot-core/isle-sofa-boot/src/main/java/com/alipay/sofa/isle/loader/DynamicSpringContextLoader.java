@@ -20,8 +20,8 @@ import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
 import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
-import com.alipay.sofa.isle.spring.context.SofaModuleApplicationContext;
-import com.alipay.sofa.isle.spring.factory.BeanLoadCostBeanFactory;
+import com.alipay.sofa.runtime.context.SofaApplicationContext;
+import com.alipay.sofa.runtime.factory.BeanLoadCostBeanFactory;
 import com.alipay.sofa.runtime.log.SofaLogger;
 import org.springframework.beans.CachedIntrospectionResults;
 import org.springframework.beans.PropertyEditorRegistrar;
@@ -62,7 +62,7 @@ public class DynamicSpringContextLoader implements SpringContextLoader {
         beanFactory
             .setAutowireCandidateResolver(new QualifierAnnotationAutowireCandidateResolver());
         GenericApplicationContext ctx = sofaModuleProperties.isPublishEventToParent() ? new GenericApplicationContext(
-            beanFactory) : new SofaModuleApplicationContext(beanFactory);
+            beanFactory) : new SofaApplicationContext(beanFactory);
         ctx.setId(deployment.getModuleName());
         String activeProfiles = sofaModuleProperties.getActiveProfiles();
         if (StringUtils.hasText(activeProfiles)) {

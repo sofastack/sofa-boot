@@ -21,7 +21,7 @@ import com.alipay.sofa.boot.startup.ModuleStat;
 import com.alipay.sofa.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
 import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
-import com.alipay.sofa.isle.spring.factory.BeanLoadCostBeanFactory;
+import com.alipay.sofa.runtime.factory.BeanLoadCostBeanFactory;
 import com.alipay.sofa.isle.stage.SpringContextInstallStage;
 import com.alipay.sofa.startup.StartupReporter;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.isle.spring.factory;
+package com.alipay.sofa.runtime.factory;
 
 import java.security.AccessController;
 import java.security.PrivilegedActionException;
@@ -44,21 +44,24 @@ public class BeanLoadCostBeanFactory extends DefaultListableBeanFactory {
 
     private long                                beanLoadCost;
 
-    private String                              moduleName;
+    /**
+     * The unique id of the BeanFactory.
+     * Similar to the id of the {@link org.springframework.context.support.AbstractApplicationContext}
+     */
+    private String                              id;
 
     private static ThreadLocal<Stack<BeanStat>> parentStackThreadLocal = new ThreadLocal<>();
 
     private BeanStatExtension                   beanStatExtension;
 
-    public BeanLoadCostBeanFactory(long beanCost, String moduleName) {
+    public BeanLoadCostBeanFactory(long beanCost, String id) {
         this.beanLoadCost = beanCost;
-        this.moduleName = moduleName;
+        this.id = id;
     }
 
-    public BeanLoadCostBeanFactory(long beanCost, String moduleName,
-                                   BeanStatExtension beanStatExtension) {
+    public BeanLoadCostBeanFactory(long beanCost, String id, BeanStatExtension beanStatExtension) {
         this.beanLoadCost = beanCost;
-        this.moduleName = moduleName;
+        this.id = id;
         this.beanStatExtension = beanStatExtension;
     }
 
@@ -155,8 +158,8 @@ public class BeanLoadCostBeanFactory extends DefaultListableBeanFactory {
         return beanStats;
     }
 
-    public String getModuleName() {
-        return moduleName;
+    public String getId() {
+        return id;
     }
 
     public String outputBeanStats(String indent) {
