@@ -105,9 +105,9 @@ public class DynamicSpringContextLoader implements SpringContextLoader {
         }
     }
 
-    private void setUpParentSpringContext(GenericApplicationContext applicationContext,
-                                          DeploymentDescriptor deployment,
-                                          ApplicationRuntimeModel application) {
+    protected void setUpParentSpringContext(GenericApplicationContext applicationContext,
+                                            DeploymentDescriptor deployment,
+                                            ApplicationRuntimeModel application) {
         ConfigurableApplicationContext parentSpringContext = getSpringParent(deployment,
             application);
         if (parentSpringContext != null) {
@@ -121,8 +121,8 @@ public class DynamicSpringContextLoader implements SpringContextLoader {
         }
     }
 
-    private ConfigurableApplicationContext getSpringParent(DeploymentDescriptor deployment,
-                                                           ApplicationRuntimeModel application) {
+    protected ConfigurableApplicationContext getSpringParent(DeploymentDescriptor deployment,
+                                                             ApplicationRuntimeModel application) {
         ConfigurableApplicationContext parentSpringContext = null;
         if (deployment.getSpringParent() != null) {
             String springParent = deployment.getSpringParent();
@@ -143,7 +143,7 @@ public class DynamicSpringContextLoader implements SpringContextLoader {
     }
 
     @SuppressWarnings("unchecked")
-    private void addPostProcessors(DefaultListableBeanFactory beanFactory) {
+    protected void addPostProcessors(DefaultListableBeanFactory beanFactory) {
         Map<String, BeanDefinition> processors = (Map<String, BeanDefinition>) rootApplicationContext
             .getBean(SofaBootConstants.PROCESSORS_OF_ROOT_APPLICATION_CONTEXT);
         for (Map.Entry<String, BeanDefinition> entry : processors.entrySet()) {
@@ -153,7 +153,7 @@ public class DynamicSpringContextLoader implements SpringContextLoader {
         }
     }
 
-    private BeanStatExtension getBeanStatExtension() {
+    protected BeanStatExtension getBeanStatExtension() {
         try {
             return this.rootApplicationContext.getBean(BeanStatExtension.class);
         } catch (Throwable e) {
