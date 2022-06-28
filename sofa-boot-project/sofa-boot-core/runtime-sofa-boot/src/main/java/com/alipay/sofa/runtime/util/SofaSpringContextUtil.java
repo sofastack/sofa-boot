@@ -38,7 +38,9 @@ public class SofaSpringContextUtil {
      */
     public static DefaultListableBeanFactory createBeanFactory(ClassLoader beanClassLoader, Supplier<DefaultListableBeanFactory> beanFactoryCreator) {
         DefaultListableBeanFactory beanFactory = beanFactoryCreator.get();
-        beanFactory.setAutowireCandidateResolver(new QualifierAnnotationAutowireCandidateResolver());
+        if (!(beanFactory.getAutowireCandidateResolver() instanceof QualifierAnnotationAutowireCandidateResolver)) {
+            beanFactory.setAutowireCandidateResolver(new QualifierAnnotationAutowireCandidateResolver());
+        }
         beanFactory.setParameterNameDiscoverer(new LocalVariableTableParameterNameDiscoverer());
         beanFactory.setBeanClassLoader(beanClassLoader);
         beanFactory.addPropertyEditorRegistrar(registry -> {
