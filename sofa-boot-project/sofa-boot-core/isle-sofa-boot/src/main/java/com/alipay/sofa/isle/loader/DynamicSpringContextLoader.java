@@ -106,8 +106,8 @@ public class DynamicSpringContextLoader implements SpringContextLoader {
     }
 
     protected void setUpParentSpringContext(GenericApplicationContext applicationContext,
-                                          DeploymentDescriptor deployment,
-                                          ApplicationRuntimeModel application) {
+                                            DeploymentDescriptor deployment,
+                                            ApplicationRuntimeModel application) {
         ConfigurableApplicationContext parentSpringContext = getSpringParent(deployment,
             application);
         if (parentSpringContext != null) {
@@ -122,7 +122,7 @@ public class DynamicSpringContextLoader implements SpringContextLoader {
     }
 
     protected ConfigurableApplicationContext getSpringParent(DeploymentDescriptor deployment,
-                                                           ApplicationRuntimeModel application) {
+                                                             ApplicationRuntimeModel application) {
         ConfigurableApplicationContext parentSpringContext = null;
         if (deployment.getSpringParent() != null) {
             String springParent = deployment.getSpringParent();
