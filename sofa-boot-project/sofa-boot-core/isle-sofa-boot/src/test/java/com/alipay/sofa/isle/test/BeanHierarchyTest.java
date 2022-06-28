@@ -27,7 +27,7 @@ import com.alipay.sofa.isle.deployment.impl.FileDeploymentDescriptor;
 import com.alipay.sofa.isle.loader.DynamicSpringContextLoader;
 import com.alipay.sofa.isle.loader.SpringContextLoader;
 import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
-import com.alipay.sofa.isle.spring.factory.BeanLoadCostBeanFactory;
+import com.alipay.sofa.runtime.factory.BeanLoadCostBeanFactory;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.BeanFactory;

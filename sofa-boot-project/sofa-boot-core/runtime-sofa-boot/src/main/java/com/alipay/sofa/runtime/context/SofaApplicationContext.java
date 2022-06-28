@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.isle.spring.context;
+package com.alipay.sofa.runtime.context;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -30,11 +30,11 @@ import org.springframework.core.ResolvableType;
 import org.springframework.util.Assert;
 
 /**
- * ApplicationContext which won't publish event via parent context.
+ * ApplicationContext which won't publish event to its parent context.
  *
  * @author xuanbei 18/3/5
  */
-public class SofaModuleApplicationContext extends GenericApplicationContext {
+public class SofaApplicationContext extends GenericApplicationContext {
     private static final Method getApplicationEventMulticasterMethod;
     private static final Field  earlyApplicationEventsField;
     static {
@@ -51,12 +51,12 @@ public class SofaModuleApplicationContext extends GenericApplicationContext {
     }
 
     /**
-     * Create a new SofaModuleApplicationContext with the given DefaultListableBeanFactory.
+     * Create a new SofaApplicationContext with the given DefaultListableBeanFactory.
      * @param beanFactory the DefaultListableBeanFactory instance to use for this context
      * @see #registerBeanDefinition
      * @see #refresh
      */
-    public SofaModuleApplicationContext(DefaultListableBeanFactory beanFactory) {
+    public SofaApplicationContext(DefaultListableBeanFactory beanFactory) {
         super(beanFactory);
     }
 
