@@ -16,9 +16,8 @@
  */
 package com.alipay.sofa.runtime.util;
 
-import com.alipay.sofa.boot.startup.BeanStatExtension;
-import com.alipay.sofa.runtime.factory.BeanLoadCostBeanFactory;
 import org.springframework.beans.factory.annotation.QualifierAnnotationAutowireCandidateResolver;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.beans.propertyeditors.ClassArrayEditor;
 import org.springframework.beans.propertyeditors.ClassEditor;
@@ -26,20 +25,19 @@ import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.core.io.ResourceLoader;
 
+import java.util.function.Supplier;
+
 /**
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 28/06/2022
  */
-public class SpringContextUtil {
+public class SofaSpringContextUtil {
     /**
-     * @param beanLoadCost 记录 bean 耗时的最低 threshold
-     * @param factoryId BeanFactory 的 id
      * @param beanClassLoader 加载 bean 的类加载器
-     * @param beanStatExtension 可以是 null
+     * @param beanFactoryCreator 提供初始 BeanFactory 的创建器
      */
-    public static BeanLoadCostBeanFactory createBeanFactory(long beanLoadCost, String factoryId, ClassLoader beanClassLoader,
-                                                            BeanStatExtension beanStatExtension) {
-        BeanLoadCostBeanFactory beanFactory = new BeanLoadCostBeanFactory(beanLoadCost, factoryId, beanStatExtension);
+    public static DefaultListableBeanFactory createBeanFactory(ClassLoader beanClassLoader, Supplier<DefaultListableBeanFactory> beanFactoryCreator) {
+        DefaultListableBeanFactory beanFactory = beanFactoryCreator.get();
         beanFactory.setAutowireCandidateResolver(new QualifierAnnotationAutowireCandidateResolver());
         beanFactory.setParameterNameDiscoverer(new LocalVariableTableParameterNameDiscoverer());
         beanFactory.setBeanClassLoader(beanClassLoader);
@@ -50,25 +48,32 @@ public class SpringContextUtil {
         return beanFactory;
     }
 
-    public static BeanLoadCostBeanFactory createBeanFactory(String factoryId) {
-        return createBeanFactory(100, factoryId, SpringContextUtil.class.getClassLoader(), null);
-    }
-
+    /**
+     * @param allowBeanOverriding 是否允许 bean 覆盖
+     * @param contextId Spring 上下文的 unique id
+     * @param resourceLoader 资源文件的类加载器
+     * @param contextCreator 提供初始上下文的创建器
+     */
     public static GenericApplicationContext createApplicationContext(boolean allowBeanOverriding,
                                                                      String contextId,
                                                                      ClassLoader resourceLoader,
-                                                                     ApplicationContextCreator creator) {
-        GenericApplicationContext ctx = creator.create();
+                                                                     Supplier<GenericApplicationContext> contextCreator) {
+        GenericApplicationContext ctx = contextCreator.get();
         ctx.setId(contextId);
         ctx.setClassLoader(resourceLoader);
         ctx.setAllowBeanDefinitionOverriding(allowBeanOverriding);
         return ctx;
     }
 
+    /**
+     * @param beanClassLoader 加载 bean 的类加载器
+     * @param resourceLoader 资源加载器
+     * @param definitionReaderCreator 提供初始 BeanDefinitionReader 的创建器
+     */
     public static XmlBeanDefinitionReader createBeanDefinitionReader(ClassLoader beanClassLoader,
                                                                      ResourceLoader resourceLoader,
-                                                                     BeanDefinitionReaderCreator creator) {
-        XmlBeanDefinitionReader beanDefinitionReader = creator.create();
+                                                                     Supplier<XmlBeanDefinitionReader> definitionReaderCreator) {
+        XmlBeanDefinitionReader beanDefinitionReader = definitionReaderCreator.get();
         beanDefinitionReader.setNamespaceAware(true);
         beanDefinitionReader.setBeanClassLoader(beanClassLoader);
         beanDefinitionReader.setResourceLoader(resourceLoader);

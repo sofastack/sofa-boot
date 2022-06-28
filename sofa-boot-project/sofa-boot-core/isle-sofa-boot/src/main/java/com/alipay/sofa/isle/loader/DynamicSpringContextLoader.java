@@ -24,7 +24,7 @@ import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
 import com.alipay.sofa.runtime.context.SofaApplicationContext;
 import com.alipay.sofa.runtime.factory.BeanLoadCostBeanFactory;
 import com.alipay.sofa.runtime.log.SofaLogger;
-import com.alipay.sofa.runtime.util.SpringContextUtil;
+import com.alipay.sofa.runtime.util.SofaSpringContextUtil;
 import org.springframework.beans.CachedIntrospectionResults;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
@@ -58,11 +58,12 @@ public class DynamicSpringContextLoader implements SpringContextLoader {
         CachedIntrospectionResults.acceptClassLoader(moduleClassLoader);
 
         // 创建上下文
-        BeanLoadCostBeanFactory beanFactory = SpringContextUtil.createBeanFactory(sofaModuleProperties.getBeanLoadCost(), moduleName, moduleClassLoader, getBeanStatExtension());
-        GenericApplicationContext ctx = SpringContextUtil.createApplicationContext(
+        DefaultListableBeanFactory beanFactory = SofaSpringContextUtil.createBeanFactory(moduleClassLoader,
+                () -> createBeanFactory(sofaModuleProperties.getBeanLoadCost(), moduleName));
+        GenericApplicationContext ctx = SofaSpringContextUtil.createApplicationContext(
                 sofaModuleProperties.isAllowBeanDefinitionOverriding(),
                 moduleName, moduleClassLoader, () -> createApplicationContext(sofaModuleProperties, beanFactory));
-        XmlBeanDefinitionReader beanDefinitionReader = SpringContextUtil.createBeanDefinitionReader(moduleClassLoader,
+        XmlBeanDefinitionReader beanDefinitionReader = SofaSpringContextUtil.createBeanDefinitionReader(moduleClassLoader,
                 ctx, () -> createXmlBeanDefinitionReader(ctx));
 
         // 设置 SOFA 模块相关的内容
@@ -77,6 +78,10 @@ public class DynamicSpringContextLoader implements SpringContextLoader {
         // 加载 bean 定义，添加 BPP
         loadBeanDefinitions(deployment, beanDefinitionReader);
         addPostProcessors(beanFactory);
+    }
+
+    protected DefaultListableBeanFactory createBeanFactory(long beanLoadCost, String factoryId) {
+        return new BeanLoadCostBeanFactory(beanLoadCost, factoryId, getBeanStatExtension());
     }
 
     protected XmlBeanDefinitionReader createXmlBeanDefinitionReader(BeanDefinitionRegistry registry) {
