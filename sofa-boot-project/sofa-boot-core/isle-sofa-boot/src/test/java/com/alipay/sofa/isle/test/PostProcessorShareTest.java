@@ -18,10 +18,10 @@ package com.alipay.sofa.isle.test;
 
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.util.BeanDefinitionUtil;
-import com.alipay.sofa.isle.spring.SofaModuleBeanFactoryPostProcessor;
-import com.alipay.sofa.isle.spring.share.SofaModulePostProcessorShareFilter;
-import com.alipay.sofa.isle.spring.share.SofaModulePostProcessorShareManager;
-import com.alipay.sofa.isle.spring.share.UnshareSofaModulePostProcessor;
+import com.alipay.sofa.runtime.spring.SofaModuleBeanFactoryPostProcessor;
+import com.alipay.sofa.runtime.spring.share.SofaModulePostProcessorShareFilter;
+import com.alipay.sofa.runtime.spring.share.SofaModulePostProcessorShareManager;
+import com.alipay.sofa.runtime.spring.share.UnshareSofaModulePostProcessor;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

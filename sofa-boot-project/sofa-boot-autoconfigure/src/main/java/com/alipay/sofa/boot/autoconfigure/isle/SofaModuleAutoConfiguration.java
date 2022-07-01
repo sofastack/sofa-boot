@@ -17,7 +17,6 @@
 package com.alipay.sofa.boot.autoconfigure.isle;
 
 import com.alipay.sofa.isle.spring.SofaModuleContextLifecycle;
-import com.alipay.sofa.isle.spring.share.SofaModulePostProcessorShareManager;
 import com.alipay.sofa.isle.stage.PipelineStage;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -32,7 +31,6 @@ import com.alipay.sofa.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.isle.profile.DefaultSofaModuleProfileChecker;
 import com.alipay.sofa.isle.profile.SofaModuleProfileChecker;
 import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
-import com.alipay.sofa.isle.spring.SofaModuleBeanFactoryPostProcessor;
 import com.alipay.sofa.isle.stage.DefaultPipelineContext;
 import com.alipay.sofa.isle.stage.ModelCreatingStage;
 import com.alipay.sofa.isle.stage.ModuleLogOutputStage;
@@ -49,13 +47,6 @@ import java.util.List;
 @ConditionalOnClass(ApplicationRuntimeModel.class)
 @ConditionalOnProperty(value = "com.alipay.sofa.boot.enable-isle", matchIfMissing = true)
 public class SofaModuleAutoConfiguration {
-
-    @Bean
-    @ConditionalOnMissingBean
-    public static SofaModuleBeanFactoryPostProcessor sofaModuleBeanFactoryPostProcessor(SofaModulePostProcessorShareManager shareManager) {
-        return new SofaModuleBeanFactoryPostProcessor(shareManager);
-    }
-
     @Bean
     @ConditionalOnMissingBean
     public SofaModuleContextLifecycle sofaModuleContextLifecycle(PipelineContext pipelineContext) {
@@ -94,12 +85,5 @@ public class SofaModuleAutoConfiguration {
     @ConditionalOnMissingBean
     public SofaModuleProfileChecker sofaModuleProfileChecker(SofaModuleProperties sofaModuleProperties) {
         return new DefaultSofaModuleProfileChecker(sofaModuleProperties);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public SofaModulePostProcessorShareManager sofaModulePostProcessorShareManager(ApplicationContext applicationContext) {
-        return new SofaModulePostProcessorShareManager(
-            (AbstractApplicationContext) applicationContext);
     }
 }

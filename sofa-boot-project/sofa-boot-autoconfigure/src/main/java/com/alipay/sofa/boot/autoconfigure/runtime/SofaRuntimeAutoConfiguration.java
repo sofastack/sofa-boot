@@ -39,13 +39,17 @@ import com.alipay.sofa.runtime.spring.AsyncProxyBeanPostProcessor;
 import com.alipay.sofa.runtime.spring.JvmFilterPostProcessor;
 import com.alipay.sofa.runtime.spring.RuntimeContextBeanFactoryPostProcessor;
 import com.alipay.sofa.runtime.spring.ServiceBeanFactoryPostProcessor;
+import com.alipay.sofa.runtime.spring.SofaModuleBeanFactoryPostProcessor;
 import com.alipay.sofa.runtime.spring.async.AsyncTaskExecutionListener;
+import com.alipay.sofa.runtime.spring.share.SofaModulePostProcessorShareManager;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.core.env.Environment;
 
 import java.util.HashSet;
@@ -135,6 +139,23 @@ public class SofaRuntimeAutoConfiguration {
     @ConditionalOnMissingBean
     public static JvmFilterPostProcessor jvmFilterPostProcessor() {
         return new JvmFilterPostProcessor();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    @ConditionalOnClass(name = "com.alipay.sofa.isle.ApplicationRuntimeModel")
+    @ConditionalOnProperty(value = "com.alipay.sofa.boot.enable-isle", matchIfMissing = true)
+    public static SofaModuleBeanFactoryPostProcessor sofaModuleBeanFactoryPostProcessor(SofaModulePostProcessorShareManager shareManager) {
+        return new SofaModuleBeanFactoryPostProcessor(shareManager);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    @ConditionalOnClass(name = "com.alipay.sofa.isle.ApplicationRuntimeModel")
+    @ConditionalOnProperty(value = "com.alipay.sofa.boot.enable-isle", matchIfMissing = true)
+    public SofaModulePostProcessorShareManager sofaModulePostProcessorShareManager(ApplicationContext applicationContext) {
+        return new SofaModulePostProcessorShareManager(
+            (AbstractApplicationContext) applicationContext);
     }
 
     @Bean
