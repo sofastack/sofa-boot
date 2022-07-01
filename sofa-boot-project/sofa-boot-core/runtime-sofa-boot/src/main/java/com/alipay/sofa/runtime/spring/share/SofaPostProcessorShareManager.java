@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.isle.spring.share;
+package com.alipay.sofa.runtime.spring.share;
 
 import org.springframework.context.support.AbstractApplicationContext;
 
@@ -25,7 +25,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * Created by TomorJM on 2019-10-09.
  */
-public class SofaModulePostProcessorShareManager {
+public class SofaPostProcessorShareManager {
 
     private AbstractApplicationContext context;
 
@@ -33,9 +33,9 @@ public class SofaModulePostProcessorShareManager {
 
     private static List<String>        filterBeanNameList = new CopyOnWriteArrayList<>();
 
-    public SofaModulePostProcessorShareManager(AbstractApplicationContext applicationContext) {
+    public SofaPostProcessorShareManager(AbstractApplicationContext applicationContext) {
         this.context = applicationContext;
-        Map<String, SofaModulePostProcessorShareFilter> map = context.getBeansOfType(SofaModulePostProcessorShareFilter.class);
+        Map<String, SofaPostProcessorShareFilter> map = context.getBeansOfType(SofaPostProcessorShareFilter.class);
         map.forEach((k, v) -> {
             this.filterClassList.addAll(v.filterBeanFactoryPostProcessorClass());
             this.filterClassList.addAll(v.filterBeanPostProcessorClass());
@@ -46,7 +46,7 @@ public class SofaModulePostProcessorShareManager {
     public boolean unableToShare(Class<?> cls) {
         return cls != null
                && (this.filterClassList.contains(cls) || cls
-                   .isAnnotationPresent(UnshareSofaModulePostProcessor.class));
+                   .isAnnotationPresent(UnshareSofaPostProcessor.class));
     }
 
     public boolean unableToShare(String beanName) {

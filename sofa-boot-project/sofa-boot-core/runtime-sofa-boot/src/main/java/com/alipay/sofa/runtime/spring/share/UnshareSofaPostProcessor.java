@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.isle.spring.share;
+package com.alipay.sofa.runtime.spring.share;
 
 import java.lang.annotation.*;
 
@@ -26,5 +26,5 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.TYPE })
 @Inherited
-public @interface UnshareSofaModulePostProcessor {
+public @interface UnshareSofaPostProcessor {
 }

@@ -20,9 +20,9 @@ import com.alipay.sofa.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.isle.profile.DefaultSofaModuleProfileChecker;
 import com.alipay.sofa.isle.profile.SofaModuleProfileChecker;
 import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
-import com.alipay.sofa.isle.spring.SofaModuleBeanFactoryPostProcessor;
+import com.alipay.sofa.runtime.spring.SofaShareBeanFactoryPostProcessor;
 import com.alipay.sofa.isle.spring.SofaModuleContextLifecycle;
-import com.alipay.sofa.isle.spring.share.SofaModulePostProcessorShareManager;
+import com.alipay.sofa.runtime.spring.share.SofaPostProcessorShareManager;
 import com.alipay.sofa.isle.stage.*;
 import com.alipay.sofa.runtime.SofaFramework;
 import com.alipay.sofa.runtime.client.impl.ClientFactoryImpl;
@@ -97,15 +97,14 @@ public class SofaStartupIsleAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public SofaModulePostProcessorShareManager sofaModulePostProcessorShareManager(ApplicationContext applicationContext) {
-        return new SofaModulePostProcessorShareManager(
-            (AbstractApplicationContext) applicationContext);
+    public SofaPostProcessorShareManager sofaModulePostProcessorShareManager(ApplicationContext applicationContext) {
+        return new SofaPostProcessorShareManager((AbstractApplicationContext) applicationContext);
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public static SofaModuleBeanFactoryPostProcessor sofaModuleBeanFactoryPostProcessor(SofaModulePostProcessorShareManager shareManager) {
-        return new SofaModuleBeanFactoryPostProcessor(shareManager);
+    public static SofaShareBeanFactoryPostProcessor sofaModuleBeanFactoryPostProcessor(SofaPostProcessorShareManager shareManager) {
+        return new SofaShareBeanFactoryPostProcessor(shareManager);
     }
 
     @Bean(destroyMethod = "")
