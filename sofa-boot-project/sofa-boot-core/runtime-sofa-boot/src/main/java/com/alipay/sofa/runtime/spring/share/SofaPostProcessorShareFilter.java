@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * Created by TomorJM on 2019-10-09.
  */
-public interface SofaModulePostProcessorShareFilter {
+public interface SofaPostProcessorShareFilter {
 
     /**
      * filter {@link BeanPostProcessor} to avoid being added to submodules

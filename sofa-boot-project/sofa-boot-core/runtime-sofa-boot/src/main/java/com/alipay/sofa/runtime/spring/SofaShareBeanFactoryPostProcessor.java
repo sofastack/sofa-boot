@@ -17,7 +17,7 @@
 package com.alipay.sofa.runtime.spring;
 
 import com.alipay.sofa.boot.util.BeanDefinitionUtil;
-import com.alipay.sofa.runtime.spring.share.SofaModulePostProcessorShareManager;
+import com.alipay.sofa.runtime.spring.share.SofaPostProcessorShareManager;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
@@ -42,7 +42,7 @@ import java.util.Set;
  * @author xuanbei 18/3/26
  */
 @Order
-public class SofaModuleBeanFactoryPostProcessor implements BeanFactoryPostProcessor,
+public class SofaShareBeanFactoryPostProcessor implements BeanFactoryPostProcessor,
                                                EnvironmentAware {
     /** spring will add automatically  **/
     private final String[]                      whiteNameList = new String[] {
@@ -50,12 +50,12 @@ public class SofaModuleBeanFactoryPostProcessor implements BeanFactoryPostProces
             ConfigurationClassPostProcessor.class.getName() + ".importRegistry",
             ConfigurationClassPostProcessor.class.getName() + ".enhancedConfigurationProcessor" };
 
-    private SofaModulePostProcessorShareManager sofaModulePostProcessorShareManager;
+    private SofaPostProcessorShareManager sofaPostProcessorShareManager;
 
     private Boolean                             isShareParentContextPostProcessors;
 
-    public SofaModuleBeanFactoryPostProcessor(SofaModulePostProcessorShareManager shareManager) {
-        this.sofaModulePostProcessorShareManager = shareManager;
+    public SofaShareBeanFactoryPostProcessor(SofaPostProcessorShareManager shareManager) {
+        this.sofaPostProcessorShareManager = shareManager;
     }
 
     @Override
@@ -86,8 +86,8 @@ public class SofaModuleBeanFactoryPostProcessor implements BeanFactoryPostProces
             if (notInWhiteNameList(beanName) && allBeanDefinitionNames.contains(beanName)) {
                 BeanDefinition beanDefinition = beanFactory.getBeanDefinition(beanName);
                 Class cls = BeanDefinitionUtil.resolveBeanClassType(beanDefinition);
-                if (sofaModulePostProcessorShareManager.unableToShare(cls)
-                    || sofaModulePostProcessorShareManager.unableToShare(beanName)) {
+                if (sofaPostProcessorShareManager.unableToShare(cls)
+                    || sofaPostProcessorShareManager.unableToShare(beanName)) {
                     continue;
                 }
                 map.put(beanName, beanFactory.getBeanDefinition(beanName));

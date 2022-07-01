@@ -17,7 +17,7 @@
 package com.alipay.sofa.isle.test;
 
 import com.alipay.sofa.isle.spring.SofaModuleContextLifecycle;
-import com.alipay.sofa.runtime.spring.share.SofaModulePostProcessorShareManager;
+import com.alipay.sofa.runtime.spring.share.SofaPostProcessorShareManager;
 import com.alipay.sofa.isle.stage.PipelineStage;
 import com.alipay.sofa.runtime.SofaFramework;
 import com.alipay.sofa.runtime.client.impl.ClientFactoryImpl;
@@ -43,7 +43,7 @@ import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
 import com.alipay.sofa.isle.profile.DefaultSofaModuleProfileChecker;
 import com.alipay.sofa.isle.profile.SofaModuleProfileChecker;
 import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
-import com.alipay.sofa.runtime.spring.SofaModuleBeanFactoryPostProcessor;
+import com.alipay.sofa.runtime.spring.SofaShareBeanFactoryPostProcessor;
 import com.alipay.sofa.isle.stage.DefaultPipelineContext;
 import com.alipay.sofa.isle.stage.ModelCreatingStage;
 import com.alipay.sofa.isle.stage.ModuleLogOutputStage;
@@ -86,8 +86,8 @@ public class FailModuleTest {
     @EnableConfigurationProperties(SofaModuleProperties.class)
     public static class FailModuleTestConfiguration {
         @Bean
-        public static SofaModuleBeanFactoryPostProcessor sofaModuleBeanFactoryPostProcessor(SofaModulePostProcessorShareManager shareManager) {
-            return new SofaModuleBeanFactoryPostProcessor(shareManager);
+        public static SofaShareBeanFactoryPostProcessor sofaModuleBeanFactoryPostProcessor(SofaPostProcessorShareManager shareManager) {
+            return new SofaShareBeanFactoryPostProcessor(shareManager);
         }
 
         @Bean
@@ -132,8 +132,8 @@ public class FailModuleTest {
 
         @Bean
         @ConditionalOnMissingBean
-        public SofaModulePostProcessorShareManager sofaModulePostProcessorShareManager(ApplicationContext applicationContext) {
-            return new SofaModulePostProcessorShareManager(
+        public SofaPostProcessorShareManager sofaModulePostProcessorShareManager(ApplicationContext applicationContext) {
+            return new SofaPostProcessorShareManager(
                 (AbstractApplicationContext) applicationContext);
         }
 
