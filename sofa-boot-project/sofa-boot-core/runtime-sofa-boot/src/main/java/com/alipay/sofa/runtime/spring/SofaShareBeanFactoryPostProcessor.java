@@ -43,16 +43,16 @@ import java.util.Set;
  */
 @Order
 public class SofaShareBeanFactoryPostProcessor implements BeanFactoryPostProcessor,
-                                               EnvironmentAware {
+                                              EnvironmentAware {
     /** spring will add automatically  **/
-    private final String[]                      whiteNameList = new String[] {
+    private final String[]                whiteNameList = new String[] {
             ConfigurationClassPostProcessor.class.getName() + ".importAwareProcessor",
             ConfigurationClassPostProcessor.class.getName() + ".importRegistry",
             ConfigurationClassPostProcessor.class.getName() + ".enhancedConfigurationProcessor" };
 
     private SofaPostProcessorShareManager sofaPostProcessorShareManager;
 
-    private Boolean                             isShareParentContextPostProcessors;
+    private Boolean                       isShareParentContextPostProcessors;
 
     public SofaShareBeanFactoryPostProcessor(SofaPostProcessorShareManager shareManager) {
         this.sofaPostProcessorShareManager = shareManager;

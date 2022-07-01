@@ -98,8 +98,7 @@ public class SofaStartupIsleAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public SofaPostProcessorShareManager sofaModulePostProcessorShareManager(ApplicationContext applicationContext) {
-        return new SofaPostProcessorShareManager(
-            (AbstractApplicationContext) applicationContext);
+        return new SofaPostProcessorShareManager((AbstractApplicationContext) applicationContext);
     }
 
     @Bean

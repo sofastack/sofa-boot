@@ -154,8 +154,7 @@ public class SofaRuntimeAutoConfiguration {
     @ConditionalOnClass(name = "com.alipay.sofa.isle.ApplicationRuntimeModel")
     @ConditionalOnProperty(value = "com.alipay.sofa.boot.enable-isle", matchIfMissing = true)
     public SofaPostProcessorShareManager sofaModulePostProcessorShareManager(ApplicationContext applicationContext) {
-        return new SofaPostProcessorShareManager(
-            (AbstractApplicationContext) applicationContext);
+        return new SofaPostProcessorShareManager((AbstractApplicationContext) applicationContext);
     }
 
     @Bean
