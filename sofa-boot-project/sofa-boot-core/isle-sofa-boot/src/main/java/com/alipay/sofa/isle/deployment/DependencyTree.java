@@ -16,6 +16,8 @@
  */
 package com.alipay.sofa.isle.deployment;
 
+import com.alipay.sofa.boot.error.ErrorCode;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -251,6 +253,9 @@ public class DependencyTree<K, T> implements Iterable<DependencyTree.Entry<K, T>
             if (dependsOnMe == null) {
                 dependsOnMe = new HashSet<>();
             }
+            if (this.equals(entry)) {
+                throw new IllegalArgumentException(ErrorCode.convert("01-12001", this.getKey()));
+            }
             dependsOnMe.add(entry);
         }
 
@@ -261,6 +266,9 @@ public class DependencyTree<K, T> implements Iterable<DependencyTree.Entry<K, T>
         public void addDependency(Entry<K, T> entry) {
             if (dependencies == null) {
                 dependencies = new CopyOnWriteArraySet<>();
+            }
+            if (this.equals(entry)) {
+                throw new IllegalArgumentException(ErrorCode.convert("01-12001", this.getKey()));
             }
             dependencies.add(entry);
         }
