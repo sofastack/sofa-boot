@@ -40,7 +40,7 @@ public class HealthCheckUtils {
             comparatorToUse = ((DefaultListableBeanFactory) beanFactory).getDependencyComparator();
         }
         ObjectProvider<HealthCheckerComparatorProvider> objectProvider = beanFactory.getBeanProvider(HealthCheckerComparatorProvider.class);
-        HealthCheckerComparatorProvider healthCheckerComparatorProvider = objectProvider.getIfAvailable();
+        HealthCheckerComparatorProvider healthCheckerComparatorProvider = objectProvider.getIfUnique();
         if (healthCheckerComparatorProvider != null) {
             comparatorToUse = healthCheckerComparatorProvider.getComparator();
         }
