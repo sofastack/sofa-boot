@@ -23,7 +23,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.alipay.sofa.healthcheck.core.HealthCheckerComparatorProvider;
 import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.core.OrderComparator;
 
@@ -36,6 +38,11 @@ public class HealthCheckUtils {
         Comparator<Object> comparatorToUse = null;
         if (beanFactory instanceof DefaultListableBeanFactory) {
             comparatorToUse = ((DefaultListableBeanFactory) beanFactory).getDependencyComparator();
+        }
+        ObjectProvider<HealthCheckerComparatorProvider> objectProvider = beanFactory.getBeanProvider(HealthCheckerComparatorProvider.class);
+        HealthCheckerComparatorProvider healthCheckerComparatorProvider = objectProvider.getIfAvailable();
+        if (healthCheckerComparatorProvider != null) {
+            comparatorToUse = healthCheckerComparatorProvider.getComparator();
         }
         if (comparatorToUse == null) {
             comparatorToUse = OrderComparator.INSTANCE;
