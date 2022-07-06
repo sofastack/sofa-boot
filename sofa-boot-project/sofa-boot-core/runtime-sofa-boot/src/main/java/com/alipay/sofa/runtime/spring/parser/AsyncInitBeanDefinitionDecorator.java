@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.runtime.spring.parser;
 
+import com.alipay.sofa.runtime.factory.BeanLoadCostBeanFactory;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
@@ -37,10 +38,6 @@ import com.alipay.sofa.runtime.spring.async.AsyncInitBeanHolder;
  */
 public class AsyncInitBeanDefinitionDecorator implements BeanDefinitionDecorator,
                                              SofaBootTagNameSupport {
-
-    private static final String BEAN_LOAD_COST_FACTORY_CLASS = "com.alipay.sofa.isle.spring.factory.BeanLoadCostBeanFactory";
-    private static final String GET_MODULE_NAME_METHOD       = "getModuleName";
-
     @Override
     public BeanDefinitionHolder decorate(Node node, BeanDefinitionHolder definition,
                                          ParserContext parserContext) {
@@ -65,15 +62,14 @@ public class AsyncInitBeanDefinitionDecorator implements BeanDefinitionDecorator
         BeanDefinitionRegistry registry = parserContext.getRegistry();
         if (registry instanceof AbstractApplicationContext) {
             BeanFactory beanFactory = ((AbstractApplicationContext) registry).getBeanFactory();
-            if (isBeanLoadCostBeanFactory(beanFactory.getClass())) {
-                return getModuleNameFromBeanFactory(beanFactory);
+            if (beanFactory instanceof BeanLoadCostBeanFactory) {
+                return ((BeanLoadCostBeanFactory) beanFactory).getId();
             }
         }
 
-        if (isBeanLoadCostBeanFactory(registry.getClass())) {
-            return getModuleNameFromBeanFactory(registry);
+        if (registry instanceof BeanLoadCostBeanFactory) {
+            return ((BeanLoadCostBeanFactory) registry).getId();
         }
-
         return SofaBootConstants.ROOT_APPLICATION_CONTEXT;
     }
 
@@ -81,22 +77,6 @@ public class AsyncInitBeanDefinitionDecorator implements BeanDefinitionDecorator
         if (factoryClass == null) {
             return false;
         }
-        if (BEAN_LOAD_COST_FACTORY_CLASS.equals(factoryClass.getName())) {
-            return true;
-        }
-
-        if (!Object.class.equals(factoryClass)) {
-            return isBeanLoadCostBeanFactory(factoryClass.getSuperclass());
-        }
-
-        return false;
-    }
-
-    public static String getModuleNameFromBeanFactory(Object factory) {
-        try {
-            return (String) factory.getClass().getMethod(GET_MODULE_NAME_METHOD).invoke(factory);
-        } catch (Throwable e) {
-            return SofaBootConstants.ROOT_APPLICATION_CONTEXT;
-        }
+        return BeanLoadCostBeanFactory.class.isAssignableFrom(factoryClass);
     }
 }
