@@ -22,9 +22,9 @@ import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.boot.util.BeanDefinitionUtil;
 import com.alipay.sofa.runtime.api.annotation.SofaAsyncInit;
+import com.alipay.sofa.runtime.factory.BeanLoadCostBeanFactory;
 import com.alipay.sofa.runtime.log.SofaLogger;
 import com.alipay.sofa.runtime.spring.async.AsyncInitBeanHolder;
-import com.alipay.sofa.runtime.spring.parser.AsyncInitBeanDefinitionDecorator;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.BeanFactory;
@@ -198,8 +198,8 @@ public class AsyncInitBeanFactoryPostProcessor implements BeanFactoryPostProcess
     private String getModuleName(ApplicationContext applicationContext) {
         BeanFactory beanFactory = ((AbstractApplicationContext) applicationContext)
             .getBeanFactory();
-        if (AsyncInitBeanDefinitionDecorator.isBeanLoadCostBeanFactory(beanFactory.getClass())) {
-            return AsyncInitBeanDefinitionDecorator.getModuleNameFromBeanFactory(beanFactory);
+        if (beanFactory instanceof BeanLoadCostBeanFactory) {
+            return ((BeanLoadCostBeanFactory) beanFactory).getId();
         }
         return SofaBootConstants.ROOT_APPLICATION_CONTEXT;
     }
