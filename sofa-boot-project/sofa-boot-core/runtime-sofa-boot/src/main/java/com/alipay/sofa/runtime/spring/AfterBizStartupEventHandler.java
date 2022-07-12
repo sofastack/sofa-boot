@@ -35,6 +35,6 @@ public class AfterBizStartupEventHandler implements EventHandler<AfterBizStartup
 
     @Override
     public int getPriority() {
-        return PriorityOrdered.DEFAULT_PRECEDENCE;
+        return PriorityOrdered.LOWEST_PRECEDENCE;
     }
 }
