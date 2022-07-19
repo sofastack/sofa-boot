@@ -16,24 +16,27 @@
  */
 package com.alipay.sofa.isle;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
-
 import com.alipay.sofa.isle.deployment.DeployRegistry;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
 import com.alipay.sofa.isle.deployment.ModuleDeploymentValidator;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
+import org.springframework.context.ApplicationContext;
+import org.springframework.lang.NonNull;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * contains all deployments of the application
  *
  * @author khotyn 7/25/14 8:15 PM
  */
-public class ApplicationRuntimeModel {
+public class ApplicationRuntimeModel implements IsleDeploymentModel {
     /** deploys */
     private final List<DeploymentDescriptor>        deploys         = new ArrayList<>();
     /** inactive deploys */
@@ -130,5 +133,13 @@ public class ApplicationRuntimeModel {
 
     public List<DeploymentDescriptor> getInstalled() {
         return installed;
+    }
+
+    @Override
+    @NonNull
+    public Map<String, ApplicationContext> getModuleApplicationContextMap() {
+        Map<String, ApplicationContext> result = new HashMap<>(8);
+        installed.forEach(deploymentDescriptor -> result.put(deploymentDescriptor.getModuleName(), deploymentDescriptor.getApplicationContext()));
+        return result;
     }
 }
