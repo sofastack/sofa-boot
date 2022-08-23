@@ -62,7 +62,7 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
     private static final int           DEFAULT_REFRESH_TASK_QUEUE_SIZE = 1000;
 
     private static final int           CPU_COUNT                       = Runtime.getRuntime()
-                                                                           .availableProcessors(); ;
+                                                                           .availableProcessors();
 
     private final SofaModuleProperties sofaModuleProperties;
 
@@ -156,18 +156,31 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
     private String getErrorMessageByApplicationModule(ApplicationRuntimeModel application) {
         StringBuilder sbError = new StringBuilder(512);
         if (application.getDeployRegistry().getPendingEntries().size() > 0) {
-            sbError.append("\n").append(ErrorCode.convert("01-12000")).append(".)").append("(")
-                .append(application.getDeployRegistry().getPendingEntries().size())
-                .append(") >>>>>>>>\n");
+            sbError.append("\n").append(ErrorCode.convert("01-12000")).append("(")
+                    .append(application.getDeployRegistry().getPendingEntries().size())
+                    .append(") >>>>>>>>\n");
+
+            for (DependencyTree.Entry<String, DeploymentDescriptor> entry : application
+                    .getDeployRegistry().getPendingEntries()) {
+                if (application.getAllDeployments().contains(entry.get())) {
+                    sbError.append("[").append(entry.getKey()).append("]").append(" depends on ")
+                            .append(entry.getWaitsFor())
+                            .append(", but the latter can not be resolved.").append("\n");
+                }
+            }
         }
 
-        for (DependencyTree.Entry<String, DeploymentDescriptor> entry : application
-            .getDeployRegistry().getPendingEntries()) {
-            if (application.getAllDeployments().contains(entry.get())) {
-                sbError.append("[").append(entry.getKey()).append("]").append(" depends on ")
-                    .append(entry.getWaitsFor()).append(", but the latter can not be resolved.")
-                    .append("\n");
+        if (application.getDeployRegistry().getMissingRequirements().size() > 0) {
+            sbError.append("Missing modules").append("(")
+                    .append(application.getDeployRegistry().getMissingRequirements().size())
+                    .append(") >>>>>>>>\n");
+
+            for (DependencyTree.Entry<String, DeploymentDescriptor> entry : application
+                    .getDeployRegistry().getMissingRequirements()) {
+                sbError.append("[").append(entry.getKey()).append("]").append("\n");
             }
+
+            sbError.append("Please add the corresponding modules.").append("\n");
         }
 
         return sbError.toString();
