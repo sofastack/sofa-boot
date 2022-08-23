@@ -179,7 +179,6 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
                     .getDeployRegistry().getMissingRequirements()) {
                 sbError.append("[").append(entry.getKey()).append("]").append("\n");
             }
-
             sbError.append("Please add the corresponding modules.").append("\n");
         }
 
