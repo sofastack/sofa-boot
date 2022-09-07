@@ -30,6 +30,7 @@ import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.log.SofaLogger;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
+import com.alipay.sofa.runtime.spi.component.ComponentManager;
 import com.alipay.sofa.runtime.spi.component.Implementation;
 import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
 import com.alipay.sofa.runtime.spring.SpringContextComponent;
@@ -40,6 +41,7 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -84,10 +86,20 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
             throw new DeploymentException(ErrorCode.convert("01-11000"), t);
         }
 
-        if (!sofaModuleProperties.isIgnoreModuleInstallFailure()) {
-            if (!application.getFailed().isEmpty()) {
-                List<String> failedModuleNames = application.getFailed().stream().map(DeploymentDescriptor::getModuleName).collect(Collectors.toList());
+        if (!application.getFailed().isEmpty()) {
+            List<String> failedModuleNames = application.getFailed().stream().map(DeploymentDescriptor::getModuleName).collect(Collectors.toList());
+            if(!sofaModuleProperties.isIgnoreModuleInstallFailure()) {
                 throw new DeploymentException(ErrorCode.convert("01-11007", failedModuleNames));
+            }
+            // remove component when module install failure
+            if(sofaModuleProperties.isRemoveComponentWhenModuleInstallFailure()){
+                ComponentManager componentManager = application.getSofaRuntimeContext().getComponentManager();
+                Collection<ComponentInfo> componentInfos = componentManager.getComponents();
+                for(ComponentInfo componentInfo : componentInfos) {
+                    if(failedModuleNames.contains(componentInfo.getApplicationContext().getId())){
+                        componentManager.unregister(componentInfo);
+                    }
+                }
             }
         }
 

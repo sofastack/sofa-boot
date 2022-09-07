@@ -27,19 +27,20 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @ConfigurationProperties(prefix = PREFIX)
 public class SofaModuleProperties {
-    static final String PREFIX                         = "com.alipay.sofa.boot";
+    static final String PREFIX                                  = "com.alipay.sofa.boot";
 
     private String      activeProfiles;
-    private long        beanLoadCost                   = 100;
-    private boolean     allowBeanDefinitionOverriding  = false;
-    private boolean     moduleStartUpParallel          = true;
-    private boolean     publishEventToParent           = false;
-    private boolean     enableIsle                     = true;
-    private boolean     allowModuleOverriding          = false;
-    private boolean     ignoreModuleInstallFailure     = false;
-    private float       parallelRefreshCoreCountFactor = 5.0f;
-    private long        parallelRefreshTimeout         = 60;
-    private long        parallelRefreshCheckPeriod     = 30;
+    private long        beanLoadCost                            = 100;
+    private boolean     allowBeanDefinitionOverriding           = false;
+    private boolean     moduleStartUpParallel                   = true;
+    private boolean     publishEventToParent                    = false;
+    private boolean     enableIsle                              = true;
+    private boolean     allowModuleOverriding                   = false;
+    private boolean     ignoreModuleInstallFailure              = false;
+    private boolean     removeComponentWhenModuleInstallFailure = true;
+    private float       parallelRefreshCoreCountFactor          = 5.0f;
+    private long        parallelRefreshTimeout                  = 60;
+    private long        parallelRefreshCheckPeriod              = 30;
 
     public String getActiveProfiles() {
         return activeProfiles;
@@ -127,5 +128,13 @@ public class SofaModuleProperties {
 
     public void setParallelRefreshCheckPeriod(long parallelRefreshCheckPeriod) {
         this.parallelRefreshCheckPeriod = parallelRefreshCheckPeriod;
+    }
+
+    public boolean isRemoveComponentWhenModuleInstallFailure() {
+        return removeComponentWhenModuleInstallFailure;
+    }
+
+    public void setRemoveComponentWhenModuleInstallFailure(boolean removeComponentWhenModuleInstallFailure) {
+        this.removeComponentWhenModuleInstallFailure = removeComponentWhenModuleInstallFailure;
     }
 }
