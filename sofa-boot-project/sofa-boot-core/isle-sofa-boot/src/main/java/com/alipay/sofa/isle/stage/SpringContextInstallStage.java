@@ -92,12 +92,16 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
                 throw new DeploymentException(ErrorCode.convert("01-11007", failedModuleNames));
             }
             // remove component when module install failure
-            if(sofaModuleProperties.isRemoveComponentWhenModuleInstallFailure()){
+            if(sofaModuleProperties.isUnregisterComponentWhenModuleInstallFailure()){
                 ComponentManager componentManager = application.getSofaRuntimeContext().getComponentManager();
                 Collection<ComponentInfo> componentInfos = componentManager.getComponents();
                 for(ComponentInfo componentInfo : componentInfos) {
-                    if(failedModuleNames.contains(componentInfo.getApplicationContext().getId())){
-                        componentManager.unregister(componentInfo);
+                    try{
+                        if(failedModuleNames.contains(componentInfo.getApplicationContext().getId())){
+                            componentManager.unregister(componentInfo);
+                        }
+                    }catch (Exception e) {
+                        throw new RuntimeException(ErrorCode.convert("01-11008", componentInfo.getName(), failedModuleNames.toString()), e);
                     }
                 }
             }
