@@ -81,8 +81,7 @@ public class SpringContextInstallStageTest {
         try {
             springContextInstallStage.process();
         } catch (Exception e) {
-            Assert.assertTrue(e.getMessage().contains("01-11008"));
-            Assert.assertTrue(e.getMessage().contains("testComponent"));
+            Assert.fail();
         }
     }
 

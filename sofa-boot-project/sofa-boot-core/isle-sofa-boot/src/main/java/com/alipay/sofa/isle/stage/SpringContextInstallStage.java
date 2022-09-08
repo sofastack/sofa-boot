@@ -27,6 +27,7 @@ import com.alipay.sofa.isle.deployment.DeploymentException;
 import com.alipay.sofa.isle.loader.DynamicSpringContextLoader;
 import com.alipay.sofa.isle.loader.SpringContextLoader;
 import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
+import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.log.SofaLogger;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
@@ -94,14 +95,14 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
             // remove component when module install failure
             if(sofaModuleProperties.isUnregisterComponentWhenModuleInstallFailure()){
                 ComponentManager componentManager = application.getSofaRuntimeContext().getComponentManager();
-                Collection<ComponentInfo> componentInfos = componentManager.getComponents();
+                Collection<ComponentInfo> componentInfos = componentManager.getComponents().stream().filter(c -> c.getApplicationContext()!=null).collect(Collectors.toList());
                 for(ComponentInfo componentInfo : componentInfos) {
                     try{
                         if(failedModuleNames.contains(componentInfo.getApplicationContext().getId())){
                             componentManager.unregister(componentInfo);
                         }
-                    }catch (Exception e) {
-                        throw new RuntimeException(ErrorCode.convert("01-11008", componentInfo.getName(), failedModuleNames.toString()), e);
+                    }catch (ServiceRuntimeException e) {
+                        SofaLogger.error(ErrorCode.convert("01-03001", componentInfo.getName()), e);
                     }
                 }
             }
