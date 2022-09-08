@@ -28,6 +28,7 @@ import com.alipay.sofa.runtime.client.impl.ClientFactoryImpl;
 import com.alipay.sofa.runtime.component.impl.StandardSofaRuntimeManager;
 import com.alipay.sofa.runtime.ext.component.ExtensionPointComponent;
 import com.alipay.sofa.runtime.ext.component.ExtensionPointImpl;
+import com.alipay.sofa.runtime.model.ComponentStatus;
 import com.alipay.sofa.runtime.service.client.ReferenceClientImpl;
 import com.alipay.sofa.runtime.service.client.ServiceClientImpl;
 import com.alipay.sofa.runtime.service.impl.BindingAdapterFactoryImpl;
@@ -67,6 +68,9 @@ public class SpringContextInstallStageTest {
     @Autowired
     private SofaModuleProperties      moduleProperties;
 
+    private static ComponentInfo      component;
+    private static ComponentInfo      componentWithContext;
+
     @Test
     public void testQuickFailure() {
         try {
@@ -80,6 +84,8 @@ public class SpringContextInstallStageTest {
         moduleProperties.setIgnoreModuleInstallFailure(true);
         try {
             springContextInstallStage.process();
+            Assert.assertEquals(component.getState(), ComponentStatus.ACTIVATED);
+            Assert.assertEquals(componentWithContext.getState(), ComponentStatus.UNREGISTERED);
         } catch (Exception e) {
             Assert.fail();
         }
@@ -180,11 +186,10 @@ public class SpringContextInstallStageTest {
             });
 
             Implementation implementation = new DefaultImplementation("test");
-            ComponentInfo component = new ExtensionPointComponent(new ExtensionPointImpl(
-                "testComponent", null), model.getSofaRuntimeContext(), implementation);
-            ComponentInfo componentWithContext = new ExtensionPointComponent(
-                new ExtensionPointImpl("testComponentWithContext", null),
+            component = new ExtensionPointComponent(new ExtensionPointImpl("testComponent", null),
                 model.getSofaRuntimeContext(), implementation);
+            componentWithContext = new ExtensionPointComponent(new ExtensionPointImpl(
+                "testComponentWithContext", null), model.getSofaRuntimeContext(), implementation);
             componentWithContext.setApplicationContext(sofaRuntimeManager
                 .getRootApplicationContext());
             model.getSofaRuntimeContext().getComponentManager().register(component);

@@ -95,14 +95,14 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
             // remove component when module install failure
             if(sofaModuleProperties.isUnregisterComponentWhenModuleInstallFailure()){
                 ComponentManager componentManager = application.getSofaRuntimeContext().getComponentManager();
-                Collection<ComponentInfo> componentInfos = componentManager.getComponents().stream().filter(c -> c.getApplicationContext()!=null).collect(Collectors.toList());
+                Collection<ComponentInfo> componentInfos = componentManager.getComponents();
                 for(ComponentInfo componentInfo : componentInfos) {
-                    try{
-                        if(failedModuleNames.contains(componentInfo.getApplicationContext().getId())){
+                    if(componentInfo.getApplicationContext() != null && failedModuleNames.contains(componentInfo.getApplicationContext().getId())){
+                        try{
                             componentManager.unregister(componentInfo);
+                        }catch (ServiceRuntimeException e) {
+                            SofaLogger.error(ErrorCode.convert("01-03001", componentInfo.getName()), e);
                         }
-                    }catch (ServiceRuntimeException e) {
-                        SofaLogger.error(ErrorCode.convert("01-03001", componentInfo.getName()), e);
                     }
                 }
             }
