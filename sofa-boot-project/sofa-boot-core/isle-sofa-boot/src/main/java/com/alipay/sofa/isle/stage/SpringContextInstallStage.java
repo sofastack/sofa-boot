@@ -44,12 +44,7 @@ import org.springframework.util.StringUtils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Future;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 /**
@@ -87,24 +82,10 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
             throw new DeploymentException(ErrorCode.convert("01-11000"), t);
         }
 
-        if (!application.getFailed().isEmpty()) {
-            List<String> failedModuleNames = application.getFailed().stream().map(DeploymentDescriptor::getModuleName).collect(Collectors.toList());
-            if(!sofaModuleProperties.isIgnoreModuleInstallFailure()) {
+        if (!sofaModuleProperties.isIgnoreModuleInstallFailure()) {
+            if (!application.getFailed().isEmpty()) {
+                List<String> failedModuleNames = application.getFailed().stream().map(DeploymentDescriptor::getModuleName).collect(Collectors.toList());
                 throw new DeploymentException(ErrorCode.convert("01-11007", failedModuleNames));
-            }
-            // remove component when module install failure
-            if(sofaModuleProperties.isUnregisterComponentWhenModuleInstallFailure()){
-                ComponentManager componentManager = application.getSofaRuntimeContext().getComponentManager();
-                Collection<ComponentInfo> componentInfos = componentManager.getComponents();
-                for(ComponentInfo componentInfo : componentInfos) {
-                    if(componentInfo.getApplicationContext() != null && failedModuleNames.contains(componentInfo.getApplicationContext().getId())){
-                        try{
-                            componentManager.unregister(componentInfo);
-                        }catch (ServiceRuntimeException e) {
-                            SofaLogger.error(ErrorCode.convert("01-03001", componentInfo.getName()), e);
-                        }
-                    }
-                }
             }
         }
 
@@ -346,6 +327,7 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
             } catch (Throwable t) {
                 SofaLogger.error(ErrorCode.convert("01-11002", deployment.getName()), t);
                 application.addFailed(deployment);
+                unRegisterComponent(application, ctx);
             } finally {
                 deployment.deployFinish();
             }
@@ -353,6 +335,23 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
             String errorMsg = ErrorCode.convert("01-11003", deployment.getName());
             application.addFailed(deployment);
             SofaLogger.error(errorMsg, new RuntimeException(errorMsg));
+        }
+    }
+
+    private void unRegisterComponent(ApplicationRuntimeModel application,
+                                     ConfigurableApplicationContext ctx) {
+        if (sofaModuleProperties.isUnregisterComponentWhenModuleInstallFailure()) {
+            ComponentManager componentManager = application.getSofaRuntimeContext()
+                .getComponentManager();
+            Collection<ComponentInfo> componentInfos = componentManager
+                .getComponentByApplication(ctx);
+            for (ComponentInfo componentInfo : componentInfos) {
+                try {
+                    componentManager.unregister(componentInfo);
+                } catch (ServiceRuntimeException e) {
+                    SofaLogger.error(ErrorCode.convert("01-03001", componentInfo.getName()), e);
+                }
+            }
         }
     }
 

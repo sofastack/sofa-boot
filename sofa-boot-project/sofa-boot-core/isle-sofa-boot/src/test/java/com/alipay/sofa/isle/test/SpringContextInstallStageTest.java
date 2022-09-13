@@ -21,24 +21,6 @@ import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
 import com.alipay.sofa.isle.deployment.DeploymentException;
 import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
 import com.alipay.sofa.isle.stage.SpringContextInstallStage;
-import com.alipay.sofa.runtime.SofaFramework;
-import com.alipay.sofa.runtime.api.client.ReferenceClient;
-import com.alipay.sofa.runtime.api.client.ServiceClient;
-import com.alipay.sofa.runtime.client.impl.ClientFactoryImpl;
-import com.alipay.sofa.runtime.component.impl.StandardSofaRuntimeManager;
-import com.alipay.sofa.runtime.ext.component.ExtensionPointComponent;
-import com.alipay.sofa.runtime.ext.component.ExtensionPointImpl;
-import com.alipay.sofa.runtime.model.ComponentStatus;
-import com.alipay.sofa.runtime.service.client.ReferenceClientImpl;
-import com.alipay.sofa.runtime.service.client.ServiceClientImpl;
-import com.alipay.sofa.runtime.service.impl.BindingAdapterFactoryImpl;
-import com.alipay.sofa.runtime.service.impl.BindingConverterFactoryImpl;
-import com.alipay.sofa.runtime.spi.binding.BindingAdapter;
-import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
-import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
-import com.alipay.sofa.runtime.spi.component.*;
-import com.alipay.sofa.runtime.spi.service.BindingConverter;
-import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -50,11 +32,11 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.AbstractApplicationContext;
-import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author huzijie
@@ -68,9 +50,6 @@ public class SpringContextInstallStageTest {
     @Autowired
     private SofaModuleProperties      moduleProperties;
 
-    private static ComponentInfo      component;
-    private static ComponentInfo      componentWithContext;
-
     @Test
     public void testQuickFailure() {
         try {
@@ -79,13 +58,11 @@ public class SpringContextInstallStageTest {
         } catch (Exception e) {
             Assert.assertTrue(e instanceof DeploymentException);
             Assert.assertTrue(e.getMessage().contains("01-11007"));
-            Assert.assertTrue(e.getMessage().contains("isle-test"));
+            Assert.assertTrue(e.getMessage().contains("testFailModule"));
         }
         moduleProperties.setIgnoreModuleInstallFailure(true);
         try {
             springContextInstallStage.process();
-            Assert.assertEquals(component.getState(), ComponentStatus.ACTIVATED);
-            Assert.assertEquals(componentWithContext.getState(), ComponentStatus.UNREGISTERED);
         } catch (Exception e) {
             Assert.fail();
         }
@@ -95,13 +72,12 @@ public class SpringContextInstallStageTest {
     static class SpringContextInstallConfiguration {
 
         @Bean("SOFABOOT-APPLICATION")
-        public ApplicationRuntimeModel applicationRuntimeModel(SofaRuntimeManager sofaRuntimeManager) {
+        public ApplicationRuntimeModel applicationRuntimeModel() {
             ApplicationRuntimeModel model = new ApplicationRuntimeModel();
-            model.setSofaRuntimeContext(sofaRuntimeManager.getSofaRuntimeContext());
             model.addFailed(new DeploymentDescriptor() {
                 @Override
                 public String getModuleName() {
-                    return "isle-test";
+                    return "testFailModule";
                 }
 
                 @Override
@@ -184,16 +160,6 @@ public class SpringContextInstallStageTest {
                     return 0;
                 }
             });
-
-            Implementation implementation = new DefaultImplementation("test");
-            component = new ExtensionPointComponent(new ExtensionPointImpl("testComponent", null),
-                model.getSofaRuntimeContext(), implementation);
-            componentWithContext = new ExtensionPointComponent(new ExtensionPointImpl(
-                "testComponentWithContext", null), model.getSofaRuntimeContext(), implementation);
-            componentWithContext.setApplicationContext(sofaRuntimeManager
-                .getRootApplicationContext());
-            model.getSofaRuntimeContext().getComponentManager().register(component);
-            model.getSofaRuntimeContext().getComponentManager().register(componentWithContext);
             return model;
         }
 
@@ -213,55 +179,6 @@ public class SpringContextInstallStageTest {
         @Bean
         public AutowiredAnnotationBeanPostProcessor autowiredAnnotationBeanPostProcessor() {
             return new AutowiredAnnotationBeanPostProcessor();
-        }
-
-        @Bean
-        @ConditionalOnMissingBean
-        public static BindingConverterFactory bindingConverterFactory() {
-            BindingConverterFactory bindingConverterFactory = new BindingConverterFactoryImpl();
-            bindingConverterFactory
-                .addBindingConverters(getClassesByServiceLoader(BindingConverter.class));
-            return bindingConverterFactory;
-        }
-
-        @Bean
-        @ConditionalOnMissingBean
-        public static BindingAdapterFactory bindingAdapterFactory() {
-            BindingAdapterFactory bindingAdapterFactory = new BindingAdapterFactoryImpl();
-            bindingAdapterFactory
-                .addBindingAdapters(getClassesByServiceLoader(BindingAdapter.class));
-            return bindingAdapterFactory;
-        }
-
-        @Bean
-        @ConditionalOnMissingBean
-        public static SofaRuntimeManager sofaRuntimeManager(Environment environment,
-                                                            BindingConverterFactory bindingConverterFactory,
-                                                            BindingAdapterFactory bindingAdapterFactory) {
-            ClientFactoryInternal clientFactoryInternal = new ClientFactoryImpl();
-            SofaRuntimeManager sofaRuntimeManager = new StandardSofaRuntimeManager(
-                environment.getProperty("spring.application.name"), Thread.currentThread()
-                    .getContextClassLoader(), clientFactoryInternal);
-            sofaRuntimeManager.getComponentManager().registerComponentClient(
-                ReferenceClient.class,
-                new ReferenceClientImpl(sofaRuntimeManager.getSofaRuntimeContext(),
-                    bindingConverterFactory, bindingAdapterFactory));
-            sofaRuntimeManager.getComponentManager().registerComponentClient(
-                ServiceClient.class,
-                new ServiceClientImpl(sofaRuntimeManager.getSofaRuntimeContext(),
-                    bindingConverterFactory, bindingAdapterFactory));
-            SofaFramework.registerSofaRuntimeManager(sofaRuntimeManager);
-            return sofaRuntimeManager;
-        }
-
-        public static <T> Set<T> getClassesByServiceLoader(Class<T> clazz) {
-            ServiceLoader<T> serviceLoader = ServiceLoader.load(clazz);
-
-            Set<T> result = new HashSet<>();
-            for (T t : serviceLoader) {
-                result.add(t);
-            }
-            return result;
         }
     }
 }
