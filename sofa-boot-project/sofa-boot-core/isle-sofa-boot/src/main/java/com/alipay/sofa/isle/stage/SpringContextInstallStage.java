@@ -27,9 +27,11 @@ import com.alipay.sofa.isle.deployment.DeploymentException;
 import com.alipay.sofa.isle.loader.DynamicSpringContextLoader;
 import com.alipay.sofa.isle.loader.SpringContextLoader;
 import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
+import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.log.SofaLogger;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
+import com.alipay.sofa.runtime.spi.component.ComponentManager;
 import com.alipay.sofa.runtime.spi.component.Implementation;
 import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
 import com.alipay.sofa.runtime.spring.SpringContextComponent;
@@ -40,13 +42,9 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Future;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 /**
@@ -329,6 +327,7 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
             } catch (Throwable t) {
                 SofaLogger.error(ErrorCode.convert("01-11002", deployment.getName()), t);
                 application.addFailed(deployment);
+                unRegisterComponent(application, ctx);
             } finally {
                 deployment.deployFinish();
             }
@@ -336,6 +335,23 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
             String errorMsg = ErrorCode.convert("01-11003", deployment.getName());
             application.addFailed(deployment);
             SofaLogger.error(errorMsg, new RuntimeException(errorMsg));
+        }
+    }
+
+    private void unRegisterComponent(ApplicationRuntimeModel application,
+                                     ConfigurableApplicationContext ctx) {
+        if (sofaModuleProperties.isUnregisterComponentWhenModuleInstallFailure()) {
+            ComponentManager componentManager = application.getSofaRuntimeContext()
+                .getComponentManager();
+            Collection<ComponentInfo> componentInfos = componentManager
+                .getComponentInfosByApplicationContext(ctx);
+            for (ComponentInfo componentInfo : componentInfos) {
+                try {
+                    componentManager.unregister(componentInfo);
+                } catch (ServiceRuntimeException e) {
+                    SofaLogger.error(ErrorCode.convert("01-03001", componentInfo.getName()), e);
+                }
+            }
         }
     }
 

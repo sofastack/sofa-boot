@@ -19,6 +19,7 @@ package com.alipay.sofa.runtime.spi.component;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.model.ComponentType;
+import org.springframework.context.ApplicationContext;
 
 import java.util.Collection;
 
@@ -113,4 +114,12 @@ public interface ComponentManager {
      * @param componentName component name
      */
     void resolvePendingResolveComponent(ComponentName componentName);
+
+    /**
+     * get components by component application
+     *
+     * @param application component application
+     * @return components
+     */
+    Collection<ComponentInfo> getComponentInfosByApplicationContext(ApplicationContext application);
 }
