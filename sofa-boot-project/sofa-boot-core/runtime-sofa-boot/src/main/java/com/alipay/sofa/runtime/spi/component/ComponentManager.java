@@ -121,5 +121,5 @@ public interface ComponentManager {
      * @param application component application
      * @return components
      */
-    Collection<ComponentInfo> getComponentInfosByApplication(ApplicationContext application);
+    Collection<ComponentInfo> getComponentInfosByApplicationContext(ApplicationContext application);
 }

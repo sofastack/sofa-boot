@@ -240,7 +240,7 @@ public class ComponentManagerImpl implements ComponentManager {
     }
 
     @Override
-    public Collection<ComponentInfo> getComponentInfosByApplication(ApplicationContext application) {
+    public Collection<ComponentInfo> getComponentInfosByApplicationContext(ApplicationContext application) {
         List<ComponentInfo> componentInfos = new ArrayList<>();
 
         for (ComponentInfo componentInfo : registry.values()) {

@@ -344,7 +344,7 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
             ComponentManager componentManager = application.getSofaRuntimeContext()
                 .getComponentManager();
             Collection<ComponentInfo> componentInfos = componentManager
-                .getComponentInfosByApplication(ctx);
+                .getComponentInfosByApplicationContext(ctx);
             for (ComponentInfo componentInfo : componentInfos) {
                 try {
                     componentManager.unregister(componentInfo);
