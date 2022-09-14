@@ -79,7 +79,13 @@ public class ReferenceFactoryBean extends AbstractContractFactoryBean {
 
     @Override
     public Class<?> getObjectType() {
-        return getInterfaceClass();
+        try {
+            Class<?> type = getInterfaceClass();
+            return type != null ? type : ReferenceFactoryBean.class;
+        } catch (Throwable t) {
+            // Class not found
+            return ReferenceFactoryBean.class;
+        }
     }
 
     @Override
