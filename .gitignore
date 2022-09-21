@@ -21,6 +21,7 @@ velocity.log
 logs
 .m2
 **/.flattened-pom.xml
+*.log
 
 # gradle related ignore in sub directories
 .gradle
