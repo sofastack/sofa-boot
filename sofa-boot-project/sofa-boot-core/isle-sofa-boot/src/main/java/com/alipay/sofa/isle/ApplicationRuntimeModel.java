@@ -30,6 +30,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
 /**
  * contains all deployments of the application
@@ -38,23 +39,27 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class ApplicationRuntimeModel implements IsleDeploymentModel {
     /** deploys */
-    private final List<DeploymentDescriptor>        deploys         = new ArrayList<>();
+    private final List<DeploymentDescriptor>        deploys                = new ArrayList<>();
+    /** deploys with spring power */
+    private final List<DeploymentDescriptor>        deploysWithSpringPower = new ArrayList<>();
     /** inactive deploys */
-    private final List<DeploymentDescriptor>        inactiveDeploys = new ArrayList<>();
+    private final List<DeploymentDescriptor>        inactiveDeploys        = new ArrayList<>();
     /** failed deployments */
-    private final List<DeploymentDescriptor>        failed          = new CopyOnWriteArrayList<>();
+    private final List<DeploymentDescriptor>        failed                 = new CopyOnWriteArrayList<>();
     /** installed deployments */
-    private final List<DeploymentDescriptor>        installed       = new CopyOnWriteArrayList<>();
+    private final List<DeploymentDescriptor>        installed              = new CopyOnWriteArrayList<>();
     /** module name to deployment */
-    private final Map<String, DeploymentDescriptor> springPowered   = new LinkedHashMap<>();
+    private final Map<String, DeploymentDescriptor> springPowered          = new LinkedHashMap<>();
     /** deploy registry */
-    private final DeployRegistry                    deployRegistry  = new DeployRegistry();
+    private final DeployRegistry                    deployRegistry         = new DeployRegistry();
     /** module deployment validator */
     private ModuleDeploymentValidator               moduleDeploymentValidator;
     /** application name */
     private String                                  appName;
     /** resolved deployments */
     private List<DeploymentDescriptor>              resolvedDeployments;
+    /** resolved deployments with spring power*/
+    private List<DeploymentDescriptor>              resolvedDeploymentsWithSpringPower;
 
     private SofaRuntimeContext                      sofaRuntimeContext;
 
@@ -77,12 +82,19 @@ public class ApplicationRuntimeModel implements IsleDeploymentModel {
     public DeploymentDescriptor addDeployment(DeploymentDescriptor dd) {
         deploys.add(dd);
         deployRegistry.add(dd);
+        if (dd.isSpringPowered()) {
+            deploysWithSpringPower.add(dd);
+        }
         return springPowered.put(dd.getModuleName(), dd);
     }
 
     public List<DeploymentDescriptor> getAllDeployments() {
         Collections.sort(deploys);
         return deploys;
+    }
+
+    public List<DeploymentDescriptor> getAllDeploymentsWithSpringPower() {
+        return deploysWithSpringPower;
     }
 
     public void addInactiveDeployment(DeploymentDescriptor dd) {
@@ -109,6 +121,15 @@ public class ApplicationRuntimeModel implements IsleDeploymentModel {
 
         resolvedDeployments = deployRegistry.getResolvedObjects();
         return resolvedDeployments;
+    }
+
+    public List<DeploymentDescriptor> getResolvedDeploymentsWithSpringPower() {
+        if (resolvedDeploymentsWithSpringPower != null) {
+            return resolvedDeploymentsWithSpringPower;
+        }
+
+        resolvedDeploymentsWithSpringPower = deployRegistry.getResolvedObjects().stream().filter(deploysWithSpringPower::contains).collect(Collectors.toList());
+        return resolvedDeploymentsWithSpringPower;
     }
 
     public DeployRegistry getDeployRegistry() {

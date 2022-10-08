@@ -135,10 +135,10 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
             writeMessageToStringBuilder(stringBuilder, application.getAllInactiveDeployments(),
                 "All unactivated module list");
         }
-        writeMessageToStringBuilder(stringBuilder, application.getAllDeployments(),
+        writeMessageToStringBuilder(stringBuilder, application.getAllDeploymentsWithSpringPower(),
             "All activated module list");
-        writeMessageToStringBuilder(stringBuilder, application.getResolvedDeployments(),
-            "Modules that could install");
+        writeMessageToStringBuilder(stringBuilder,
+            application.getResolvedDeploymentsWithSpringPower(), "Modules that could install");
         SofaLogger.info(stringBuilder.toString());
 
         String errorMessage = getErrorMessageByApplicationModule(application);
