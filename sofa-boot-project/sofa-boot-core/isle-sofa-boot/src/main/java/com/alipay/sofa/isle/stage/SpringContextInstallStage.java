@@ -128,7 +128,7 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
         }
     }
 
-    private void outputModulesMessage(ApplicationRuntimeModel application)
+    protected void outputModulesMessage(ApplicationRuntimeModel application)
                                                                           throws DeploymentException {
         StringBuilder stringBuilder = new StringBuilder();
         if (application.getAllInactiveDeployments().size() > 0) {
@@ -366,7 +366,7 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
         application.getSofaRuntimeContext().getComponentManager().register(componentInfo);
     }
 
-    private void writeMessageToStringBuilder(StringBuilder sb, List<DeploymentDescriptor> deploys,
+    protected void writeMessageToStringBuilder(StringBuilder sb, List<DeploymentDescriptor> deploys,
                                              String info) {
         int size = deploys.size();
         sb.append("\n").append(info).append("(").append(size).append(") >>>>>>>\n");
