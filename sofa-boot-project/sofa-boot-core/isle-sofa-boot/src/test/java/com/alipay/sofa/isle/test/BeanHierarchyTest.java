@@ -45,8 +45,7 @@ import java.util.Properties;
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 2020/10/15
  */
-public class
-BeanHierarchyTest {
+public class BeanHierarchyTest {
     @Test
     public void test() throws Exception {
         ApplicationRuntimeModel application = new ApplicationRuntimeModel();
