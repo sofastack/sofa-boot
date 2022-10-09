@@ -17,6 +17,7 @@
 package com.alipay.sofa.isle;
 
 import com.alipay.sofa.isle.profile.SofaModuleProfileChecker;
+import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
 import com.alipay.sofa.isle.stage.ModelCreatingStage;
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.spi.component.ComponentManager;
@@ -71,9 +72,10 @@ public class IsleSpringComponentTest implements SofaRuntimeContextAware {
         @Bean
         @ConditionalOnMissingBean
         public ModelCreatingStage modelCreatingStage(ApplicationContext applicationContext,
+                                                     SofaModuleProperties sofaModuleProperties,
                                                      SofaModuleProfileChecker checker) {
             return new TestModelCreatingStage((AbstractApplicationContext) applicationContext,
-                checker, "module1", "module2");
+                sofaModuleProperties, checker, "module1", "module2");
         }
     }
 }
