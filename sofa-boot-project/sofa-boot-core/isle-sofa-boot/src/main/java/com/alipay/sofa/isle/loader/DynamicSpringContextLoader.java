@@ -44,15 +44,17 @@ import java.util.Map;
  */
 public class DynamicSpringContextLoader implements SpringContextLoader {
     protected final ConfigurableApplicationContext rootApplicationContext;
+    private final SofaModuleProperties             sofaModuleProperties;
 
-    public DynamicSpringContextLoader(ApplicationContext applicationContext) {
+    public DynamicSpringContextLoader(ApplicationContext applicationContext,
+                                      SofaModuleProperties sofaModuleProperties) {
         this.rootApplicationContext = (ConfigurableApplicationContext) applicationContext;
+        this.sofaModuleProperties = sofaModuleProperties;
     }
 
     @Override
     public void loadSpringContext(DeploymentDescriptor deployment,
-                                  ApplicationRuntimeModel application) throws Exception {
-        SofaModuleProperties sofaModuleProperties = rootApplicationContext.getBean(SofaModuleProperties.class);
+                                  ApplicationRuntimeModel application) {
         String moduleName= deployment.getModuleName();
         ClassLoader moduleClassLoader = deployment.getClassLoader();
         CachedIntrospectionResults.acceptClassLoader(moduleClassLoader);

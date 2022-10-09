@@ -104,7 +104,7 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
     }
 
     protected SpringContextLoader createSpringContextLoader() {
-        return new DynamicSpringContextLoader(applicationContext);
+        return new DynamicSpringContextLoader(applicationContext, sofaModuleProperties);
     }
 
     protected void installSpringContext(ApplicationRuntimeModel application,
