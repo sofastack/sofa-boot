@@ -46,7 +46,7 @@ public class ApplicationRuntimeModel implements IsleDeploymentModel {
     /** installed deployments */
     private final List<DeploymentDescriptor>        installed       = new CopyOnWriteArrayList<>();
     /** module name to deployment */
-    private final Map<String, DeploymentDescriptor> deploymentMap = new LinkedHashMap<>();
+    private final Map<String, DeploymentDescriptor> deploymentMap   = new LinkedHashMap<>();
     /** deploy registry */
     private final DeployRegistry                    deployRegistry  = new DeployRegistry();
     /** module deployment validator */
