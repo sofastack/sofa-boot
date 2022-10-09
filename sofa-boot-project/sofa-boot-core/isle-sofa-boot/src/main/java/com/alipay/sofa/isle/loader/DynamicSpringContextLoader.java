@@ -128,7 +128,7 @@ public class DynamicSpringContextLoader implements SpringContextLoader {
             String springParent = deployment.getSpringParent();
 
             if (StringUtils.hasText(springParent)) {
-                DeploymentDescriptor parent = application.getSpringPoweredDeployment(springParent);
+                DeploymentDescriptor parent = application.getDeploymentByName(springParent);
                 if (parent != null) {
                     parentSpringContext = (ConfigurableApplicationContext) parent
                         .getApplicationContext();
