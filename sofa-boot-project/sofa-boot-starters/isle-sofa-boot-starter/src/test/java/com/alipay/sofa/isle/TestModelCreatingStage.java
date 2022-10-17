@@ -21,6 +21,7 @@ import com.alipay.sofa.isle.deployment.DeploymentBuilder;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptorConfiguration;
 import com.alipay.sofa.isle.profile.SofaModuleProfileChecker;
+import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
 import com.alipay.sofa.isle.stage.ModelCreatingStage;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.core.io.UrlResource;
@@ -39,8 +40,9 @@ public class TestModelCreatingStage extends ModelCreatingStage {
     private final String[] modulePrefixes;
 
     public TestModelCreatingStage(AbstractApplicationContext applicationContext,
+                                  SofaModuleProperties sofaModuleProperties,
                                   SofaModuleProfileChecker checker, String... modulePrefixes) {
-        super(applicationContext, checker);
+        super(applicationContext, sofaModuleProperties, checker);
         this.modulePrefixes = modulePrefixes;
     }
 

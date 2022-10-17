@@ -57,9 +57,10 @@ public class SofaStartupIsleAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(value = ModelCreatingStage.class, search = SearchStrategy.CURRENT)
     public StartupModelCreatingStage startupModelCreatingStage(ApplicationContext applicationContext,
+                                                               SofaModuleProperties sofaModuleProperties,
                                                                SofaModuleProfileChecker sofaModuleProfileChecker,
                                                                StartupReporter startupReporter) {
         return new StartupModelCreatingStage((AbstractApplicationContext) applicationContext,
-            sofaModuleProfileChecker, startupReporter);
+            sofaModuleProperties, sofaModuleProfileChecker, startupReporter);
     }
 }

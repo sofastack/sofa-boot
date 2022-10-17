@@ -49,10 +49,9 @@ public class ModelCreatingStage extends AbstractPipelineStage {
     protected final SofaModuleProfileChecker sofaModuleProfileChecker;
 
     public ModelCreatingStage(AbstractApplicationContext applicationContext,
+                              SofaModuleProperties sofaModuleProperties,
                               SofaModuleProfileChecker sofaModuleProfileChecker) {
         super(applicationContext);
-        SofaModuleProperties sofaModuleProperties = applicationContext
-            .getBean(SofaModuleProperties.class);
         this.allowModuleOverriding = sofaModuleProperties.isAllowModuleOverriding();
         this.sofaModuleProfileChecker = sofaModuleProfileChecker;
     }
