@@ -46,7 +46,7 @@ public class ApplicationRuntimeModel implements IsleDeploymentModel {
     /** installed deployments */
     private final List<DeploymentDescriptor>        installed       = new CopyOnWriteArrayList<>();
     /** module name to deployment */
-    private final Map<String, DeploymentDescriptor> springPowered   = new LinkedHashMap<>();
+    private final Map<String, DeploymentDescriptor> deploymentMap   = new LinkedHashMap<>();
     /** deploy registry */
     private final DeployRegistry                    deployRegistry  = new DeployRegistry();
     /** module deployment validator */
@@ -77,7 +77,7 @@ public class ApplicationRuntimeModel implements IsleDeploymentModel {
     public DeploymentDescriptor addDeployment(DeploymentDescriptor dd) {
         deploys.add(dd);
         deployRegistry.add(dd);
-        return springPowered.put(dd.getModuleName(), dd);
+        return deploymentMap.put(dd.getModuleName(), dd);
     }
 
     public List<DeploymentDescriptor> getAllDeployments() {
@@ -115,8 +115,8 @@ public class ApplicationRuntimeModel implements IsleDeploymentModel {
         return deployRegistry;
     }
 
-    public DeploymentDescriptor getSpringPoweredDeployment(String springParent) {
-        return springPowered.get(springParent);
+    public DeploymentDescriptor getDeploymentByName(String springParent) {
+        return deploymentMap.get(springParent);
     }
 
     public void addFailed(DeploymentDescriptor failed) {

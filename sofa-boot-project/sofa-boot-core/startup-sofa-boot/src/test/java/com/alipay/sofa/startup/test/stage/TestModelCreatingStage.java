@@ -22,6 +22,7 @@ import com.alipay.sofa.isle.deployment.DeploymentBuilder;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptorConfiguration;
 import com.alipay.sofa.isle.profile.SofaModuleProfileChecker;
+import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
 import com.alipay.sofa.startup.StartupReporter;
 import com.alipay.sofa.startup.stage.isle.StartupModelCreatingStage;
 import org.springframework.context.support.AbstractApplicationContext;
@@ -39,9 +40,10 @@ import java.util.Properties;
  */
 public class TestModelCreatingStage extends StartupModelCreatingStage {
     public TestModelCreatingStage(AbstractApplicationContext applicationContext,
+                                  SofaModuleProperties sofaModuleProperties,
                                   SofaModuleProfileChecker sofaModuleProfileChecker,
                                   StartupReporter startupReporter) {
-        super(applicationContext, sofaModuleProfileChecker, startupReporter);
+        super(applicationContext, sofaModuleProperties, sofaModuleProfileChecker, startupReporter);
     }
 
     @Override
