@@ -119,6 +119,11 @@ public class ApplicationRuntimeModel implements IsleDeploymentModel {
         return deploymentMap.get(springParent);
     }
 
+    @Deprecated
+    public DeploymentDescriptor getSpringPoweredDeployment(String springParent) {
+        return deploymentMap.get(springParent);
+    }
+
     public void addFailed(DeploymentDescriptor failed) {
         this.failed.add(failed);
     }
