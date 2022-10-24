@@ -86,8 +86,8 @@ public class FailModuleTest {
     @EnableConfigurationProperties(SofaModuleProperties.class)
     public static class FailModuleTestConfiguration {
         @Bean
-        public static SofaShareBeanFactoryPostProcessor sofaModuleBeanFactoryPostProcessor(SofaPostProcessorShareManager shareManager) {
-            return new SofaShareBeanFactoryPostProcessor(shareManager);
+        public static SofaShareBeanFactoryPostProcessor sofaModuleBeanFactoryPostProcessor() {
+            return new SofaShareBeanFactoryPostProcessor();
         }
 
         @Bean
@@ -133,9 +133,8 @@ public class FailModuleTest {
 
         @Bean
         @ConditionalOnMissingBean
-        public SofaPostProcessorShareManager sofaModulePostProcessorShareManager(ApplicationContext applicationContext) {
-            return new SofaPostProcessorShareManager(
-                (AbstractApplicationContext) applicationContext);
+        public SofaPostProcessorShareManager sofaModulePostProcessorShareManager() {
+            return new SofaPostProcessorShareManager();
         }
 
         @Bean(destroyMethod = "")

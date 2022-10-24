@@ -16,6 +16,10 @@
  */
 package com.alipay.sofa.runtime.spring.share;
 
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.support.AbstractApplicationContext;
 
 import java.util.List;
@@ -25,17 +29,26 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * Created by TomorJM on 2019-10-09.
  */
-public class SofaPostProcessorShareManager {
+public class SofaPostProcessorShareManager implements ApplicationContextAware, InitializingBean {
 
     private AbstractApplicationContext context;
 
-    private static List<Class>         filterClassList    = new CopyOnWriteArrayList<>();
+    private List<Class>                filterClassList    = new CopyOnWriteArrayList<>();
 
-    private static List<String>        filterBeanNameList = new CopyOnWriteArrayList<>();
+    private List<String>               filterBeanNameList = new CopyOnWriteArrayList<>();
 
+    public SofaPostProcessorShareManager() {
+    }
+
+    @Deprecated
     public SofaPostProcessorShareManager(AbstractApplicationContext applicationContext) {
         this.context = applicationContext;
-        Map<String, SofaPostProcessorShareFilter> map = context.getBeansOfType(SofaPostProcessorShareFilter.class);
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        Map<String, SofaPostProcessorShareFilter> map = context.getBeansOfType(SofaPostProcessorShareFilter.class,
+                true, false);
         map.forEach((k, v) -> {
             this.filterClassList.addAll(v.filterBeanFactoryPostProcessorClass());
             this.filterClassList.addAll(v.filterBeanPostProcessorClass());
@@ -53,4 +66,8 @@ public class SofaPostProcessorShareManager {
         return this.filterBeanNameList.contains(beanName);
     }
 
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.context = (AbstractApplicationContext) applicationContext;
+    }
 }

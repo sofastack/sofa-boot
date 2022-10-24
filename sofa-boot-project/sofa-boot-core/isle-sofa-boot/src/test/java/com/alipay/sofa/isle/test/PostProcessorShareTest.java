@@ -36,9 +36,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -72,15 +72,14 @@ public class PostProcessorShareTest {
 
         @Bean
         @ConditionalOnMissingBean
-        public SofaPostProcessorShareManager sofaModulePostProcessorShareManager(ApplicationContext applicationContext) {
-            return new SofaPostProcessorShareManager(
-                (AbstractApplicationContext) applicationContext);
+        public SofaPostProcessorShareManager sofaModulePostProcessorShareManager() {
+            return new SofaPostProcessorShareManager();
         }
 
         @Bean
         @ConditionalOnMissingBean
-        public static SofaShareBeanFactoryPostProcessor sofaModuleBeanFactoryPostProcessor(SofaPostProcessorShareManager shareManager) {
-            return new SofaShareBeanFactoryPostProcessor(shareManager);
+        public static SofaShareBeanFactoryPostProcessor sofaModuleBeanFactoryPostProcessor() {
+            return new SofaShareBeanFactoryPostProcessor();
         }
 
         @Bean

@@ -23,6 +23,8 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.ConfigurationClassPostProcessor;
 import org.springframework.core.annotation.Order;
@@ -43,7 +45,7 @@ import java.util.Set;
  */
 @Order
 public class SofaShareBeanFactoryPostProcessor implements BeanFactoryPostProcessor,
-                                              EnvironmentAware {
+                                              EnvironmentAware, ApplicationContextAware {
     /** spring will add automatically  **/
     private final String[]                whiteNameList = new String[] {
             ConfigurationClassPostProcessor.class.getName() + ".importAwareProcessor",
@@ -54,6 +56,10 @@ public class SofaShareBeanFactoryPostProcessor implements BeanFactoryPostProcess
 
     private Boolean                       isShareParentContextPostProcessors;
 
+    public SofaShareBeanFactoryPostProcessor() {
+    }
+
+    @Deprecated
     public SofaShareBeanFactoryPostProcessor(SofaPostProcessorShareManager shareManager) {
         this.sofaPostProcessorShareManager = shareManager;
     }
@@ -80,7 +86,7 @@ public class SofaShareBeanFactoryPostProcessor implements BeanFactoryPostProcess
         Set<String> allBeanDefinitionNames = new HashSet<>(Arrays.asList(beanFactory
             .getBeanDefinitionNames()));
 
-        String[] beanNamesForType = beanFactory.getBeanNamesForType(type);
+        String[] beanNamesForType = beanFactory.getBeanNamesForType(type, true, false);
 
         for (String beanName : beanNamesForType) {
             if (notInWhiteNameList(beanName) && allBeanDefinitionNames.contains(beanName)) {
@@ -111,5 +117,11 @@ public class SofaShareBeanFactoryPostProcessor implements BeanFactoryPostProcess
         this.isShareParentContextPostProcessors = environment.getProperty(
             SofaBootConstants.SOFABOOT_SHARE_PARENT_CONTEXT_POST_PROCESSOR_ENABLED, Boolean.class,
             SofaBootConstants.SOFABOOT_SHARE_PARENT_CONTEXT_POST_PROCESSOR_DEFAULT_ENABLED);
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.sofaPostProcessorShareManager = applicationContext.getBean(
+            "sofaModulePostProcessorShareManager", SofaPostProcessorShareManager.class);
     }
 }
