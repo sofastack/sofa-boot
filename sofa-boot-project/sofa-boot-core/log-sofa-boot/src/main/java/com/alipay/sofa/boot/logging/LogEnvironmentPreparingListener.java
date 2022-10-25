@@ -38,8 +38,6 @@ public class LogEnvironmentPreparingListener
                                             implements
                                             ApplicationListener<ApplicationEnvironmentPreparedEvent>,
                                             Ordered {
-    private static final String TEST_INDICATOR_CLASS = "org.springframework.boot.test.context.SpringBootContextLoader";
-
     @Override
     public void onApplicationEvent(ApplicationEnvironmentPreparedEvent event) {
         defaultConsoleLoggers();
