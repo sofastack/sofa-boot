@@ -24,6 +24,7 @@ import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
 import com.alipay.sofa.runtime.context.SofaApplicationContext;
 import com.alipay.sofa.runtime.factory.BeanLoadCostBeanFactory;
 import com.alipay.sofa.runtime.log.SofaLogger;
+import com.alipay.sofa.runtime.spring.singleton.SingletonSofaPostProcessor;
 import com.alipay.sofa.runtime.util.SofaSpringContextUtil;
 import org.springframework.beans.CachedIntrospectionResults;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -33,6 +34,7 @@ import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.io.Resource;
 import org.springframework.util.StringUtils;
 
@@ -150,7 +152,16 @@ public class DynamicSpringContextLoader implements SpringContextLoader {
             .getBean(SofaBootConstants.PROCESSORS_OF_ROOT_APPLICATION_CONTEXT);
         for (Map.Entry<String, BeanDefinition> entry : processors.entrySet()) {
             if (!beanFactory.containsBeanDefinition(entry.getKey())) {
-                beanFactory.registerBeanDefinition(entry.getKey(), entry.getValue());
+                Class<?> type = rootApplicationContext.getType(entry.getKey());
+                if (type != null
+                    && AnnotationUtils.findAnnotation(type, SingletonSofaPostProcessor.class) != null) {
+                    // 复用单例
+                    beanFactory.registerSingleton(entry.getKey(),
+                        rootApplicationContext.getBean(entry.getKey()));
+                } else {
+                    // 注册 BeanDefinition
+                    beanFactory.registerBeanDefinition(entry.getKey(), entry.getValue());
+                }
             }
         }
     }

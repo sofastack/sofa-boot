@@ -18,6 +18,7 @@ package com.alipay.sofa.runtime.spring;
 
 import com.alipay.sofa.boot.util.BeanDefinitionUtil;
 import com.alipay.sofa.runtime.spring.share.SofaPostProcessorShareManager;
+import com.alipay.sofa.runtime.spring.singleton.SingletonSofaPostProcessor;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
@@ -44,6 +45,7 @@ import java.util.Set;
  * @author xuanbei 18/3/26
  */
 @Order
+@SingletonSofaPostProcessor
 public class SofaShareBeanFactoryPostProcessor implements BeanFactoryPostProcessor,
                                               EnvironmentAware, ApplicationContextAware {
     /** spring will add automatically  **/
