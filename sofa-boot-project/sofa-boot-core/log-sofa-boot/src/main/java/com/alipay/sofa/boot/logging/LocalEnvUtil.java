@@ -22,12 +22,22 @@ package com.alipay.sofa.boot.logging;
  */
 public class LocalEnvUtil {
     private static boolean LOCAL_ENV;
+    private static boolean TEST_ENV;
 
     static {
         // Currently supports for detection of IDEA IntelliJ
         try {
             Class.forName("com.intellij.rt.execution.application.AppMainV2");
             LOCAL_ENV = true;
+            StackTraceElement[] stackTrace = new RuntimeException().getStackTrace();
+            for (StackTraceElement stackTraceElement : stackTrace) {
+                if ("loadContext".equals(stackTraceElement.getMethodName())
+                    && "org.springframework.boot.test.context.SpringBootContextLoader"
+                        .equals(stackTraceElement.getClassName())) {
+                    TEST_ENV = true;
+                    break;
+                }
+            }
         } catch (ClassNotFoundException e) {
             LOCAL_ENV = false;
         }
@@ -35,5 +45,9 @@ public class LocalEnvUtil {
 
     public static boolean isLocalEnv() {
         return LOCAL_ENV;
+    }
+
+    public static boolean isTestEnv() {
+        return TEST_ENV;
     }
 }

@@ -26,7 +26,6 @@ import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.EnumerablePropertySource;
 import org.springframework.core.env.PropertySource;
-import org.springframework.util.ClassUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -83,7 +82,7 @@ public class LogEnvironmentPreparingListener
     }
 
     private void defaultConsoleLoggers() {
-        if (LocalEnvUtil.isLocalEnv() || ClassUtils.isPresent(TEST_INDICATOR_CLASS, null)) {
+        if (LocalEnvUtil.isLocalEnv() || LocalEnvUtil.isTestEnv()) {
             CommonLoggingConfigurations.loadExternalConfiguration(
                 Constants.SOFA_MIDDLEWARE_ALL_LOG_CONSOLE_SWITCH, "true");
         }
