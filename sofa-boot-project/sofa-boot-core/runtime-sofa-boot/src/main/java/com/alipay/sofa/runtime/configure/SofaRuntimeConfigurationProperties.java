@@ -133,4 +133,12 @@ public class SofaRuntimeConfigurationProperties {
             .getContextClassLoader());
     }
 
+    public void setServiceNameWithBeanId(boolean serviceNameWithBeanId) {
+        SofaRuntimeProperties.setServiceNameWithBeanId(serviceNameWithBeanId);
+    }
+
+    public boolean isServiceNameWithBeanId() {
+        return SofaRuntimeProperties.isServiceNameWithBeanId();
+    }
+
 }
