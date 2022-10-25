@@ -16,10 +16,10 @@
  */
 package com.alipay.sofa.runtime.spring;
 
+import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.util.BeanDefinitionUtil;
 import com.alipay.sofa.runtime.spring.share.SofaPostProcessorShareManager;
 import com.alipay.sofa.runtime.spring.share.UnshareSofaPostProcessor;
-import com.alipay.sofa.runtime.spring.singleton.SingletonSofaPostProcessor;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
@@ -30,8 +30,6 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.ConfigurationClassPostProcessor;
 import org.springframework.core.annotation.Order;
-
-import com.alipay.sofa.boot.constant.SofaBootConstants;
 import org.springframework.core.env.Environment;
 
 import java.util.Arrays;
