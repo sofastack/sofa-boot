@@ -29,17 +29,17 @@ public class LocalEnvUtil {
         try {
             Class.forName("com.intellij.rt.execution.application.AppMainV2");
             LOCAL_ENV = true;
-            StackTraceElement[] stackTrace = new RuntimeException().getStackTrace();
-            for (StackTraceElement stackTraceElement : stackTrace) {
-                if ("loadContext".equals(stackTraceElement.getMethodName())
-                    && "org.springframework.boot.test.context.SpringBootContextLoader"
-                        .equals(stackTraceElement.getClassName())) {
-                    TEST_ENV = true;
-                    break;
-                }
-            }
         } catch (ClassNotFoundException e) {
             LOCAL_ENV = false;
+        }
+        StackTraceElement[] stackTrace = new RuntimeException().getStackTrace();
+        for (StackTraceElement stackTraceElement : stackTrace) {
+            if ("loadContext".equals(stackTraceElement.getMethodName())
+                    && "org.springframework.boot.test.context.SpringBootContextLoader"
+                    .equals(stackTraceElement.getClassName())) {
+                TEST_ENV = true;
+                break;
+            }
         }
     }
 
