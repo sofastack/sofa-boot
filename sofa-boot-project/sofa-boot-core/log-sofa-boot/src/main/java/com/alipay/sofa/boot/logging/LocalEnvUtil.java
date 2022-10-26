@@ -32,6 +32,7 @@ public class LocalEnvUtil {
         } catch (ClassNotFoundException e) {
             LOCAL_ENV = false;
         }
+        // Detection of test environment
         StackTraceElement[] stackTrace = new RuntimeException().getStackTrace();
         for (StackTraceElement stackTraceElement : stackTrace) {
             if ("loadContext".equals(stackTraceElement.getMethodName())
