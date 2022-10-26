@@ -36,7 +36,7 @@ public class LocalEnvUtil {
         StackTraceElement[] stackTrace = new RuntimeException().getStackTrace();
         for (StackTraceElement stackTraceElement : stackTrace) {
             if ("loadContext".equals(stackTraceElement.getMethodName())
-                    && "org.springframework.boot.test.context.SpringBootContextLoader"
+                && "org.springframework.boot.test.context.SpringBootContextLoader"
                     .equals(stackTraceElement.getClassName())) {
                 TEST_ENV = true;
                 break;
