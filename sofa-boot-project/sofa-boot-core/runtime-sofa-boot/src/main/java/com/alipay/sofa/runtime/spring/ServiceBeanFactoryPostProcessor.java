@@ -88,6 +88,10 @@ public class ServiceBeanFactoryPostProcessor implements BeanDefinitionRegistryPo
     private BindingConverterFactory bindingConverterFactory;
     private Environment             environment;
 
+    public ServiceBeanFactoryPostProcessor() {
+    }
+
+    @Deprecated
     public ServiceBeanFactoryPostProcessor(SofaRuntimeContext sofaRuntimeContext,
                                            BindingConverterFactory bindingConverterFactory) {
         this.sofaRuntimeContext = sofaRuntimeContext;
@@ -382,6 +386,10 @@ public class ServiceBeanFactoryPostProcessor implements BeanDefinitionRegistryPo
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
+        this.sofaRuntimeContext = applicationContext.getBean("sofaRuntimeContext",
+            SofaRuntimeContext.class);
+        this.bindingConverterFactory = applicationContext.getBean("bindingConverterFactory",
+            BindingConverterFactory.class);
     }
 
     @Override

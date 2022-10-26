@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.runtime.proxy;
 
+import com.alipay.sofa.runtime.spring.singleton.SingletonSofaPostProcessor;
 import org.springframework.aop.framework.ProxyFactoryBean;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactoryUtils;
@@ -32,6 +33,7 @@ import org.springframework.core.PriorityOrdered;
  * @author ruoshan
  * @since 3.12.0
  */
+@SingletonSofaPostProcessor
 public class ProxyBeanFactoryPostProcessor implements BeanDefinitionRegistryPostProcessor,
                                           PriorityOrdered {
 

@@ -94,17 +94,13 @@ public class RuntimeConfiguration {
     }
 
     @Bean
-    public static RuntimeContextBeanFactoryPostProcessor runtimeContextBeanFactoryPostProcessor(BindingAdapterFactory bindingAdapterFactory,
-                                                                                                BindingConverterFactory bindingConverterFactory,
-                                                                                                SofaRuntimeContext sofaRuntimeContext) {
-        return new RuntimeContextBeanFactoryPostProcessor(bindingAdapterFactory,
-            bindingConverterFactory, sofaRuntimeContext);
+    public static RuntimeContextBeanFactoryPostProcessor runtimeContextBeanFactoryPostProcessor() {
+        return new RuntimeContextBeanFactoryPostProcessor();
     }
 
     @Bean
-    public static ServiceBeanFactoryPostProcessor serviceBeanFactoryPostProcessor(SofaRuntimeContext sofaRuntimeContext,
-                                                                                  BindingConverterFactory bindingConverterFactory) {
-        return new ServiceBeanFactoryPostProcessor(sofaRuntimeContext, bindingConverterFactory);
+    public static ServiceBeanFactoryPostProcessor serviceBeanFactoryPostProcessor() {
+        return new ServiceBeanFactoryPostProcessor();
     }
 
     public static <T> Set<T> getClassesByServiceLoader(Class<T> clazz) {
