@@ -38,6 +38,8 @@ public class SofaRuntimeProperties {
     private static boolean                                       serviceInterfaceTypeCheck      = false;
     private static boolean                                       dynamicJvmServiceCacheEnable   = false;
 
+    private static boolean                                       serviceNameWithBeanId          = false;
+
     public static boolean isManualReadinessCallback(ClassLoader classLoader) {
         return manualReadinessCallbackMap.get(classLoader) != null
                && manualReadinessCallbackMap.get(classLoader);
@@ -154,5 +156,13 @@ public class SofaRuntimeProperties {
     public static void setSkipCommonComponentShutdown(ClassLoader classLoader,
                                                       boolean skipCommonComponentShutdown) {
         skipCommonComponentShutdownMap.putIfAbsent(classLoader, skipCommonComponentShutdown);
+    }
+
+    public static boolean isServiceNameWithBeanId() {
+        return serviceNameWithBeanId;
+    }
+
+    public static void setServiceNameWithBeanId(boolean serviceNameWithBeanId) {
+        SofaRuntimeProperties.serviceNameWithBeanId = serviceNameWithBeanId;
     }
 }
