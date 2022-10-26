@@ -301,7 +301,7 @@ public class ServiceBeanFactoryPostProcessor implements BeanDefinitionRegistryPo
 
         BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition();
         String serviceId = SofaBeanNameGenerator.generateSofaServiceBeanName(interfaceType,
-            sofaServiceAnnotation.uniqueId());
+            sofaServiceAnnotation.uniqueId(), beanId);
 
         if (!registry.containsBeanDefinition(serviceId)) {
             builder.getRawBeanDefinition().setScope(beanDefinition.getScope());
