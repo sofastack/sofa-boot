@@ -159,7 +159,7 @@ public class SofaRuntimeAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnProperty(prefix = "com.alipay.sofa.proxy.bean", name = "enabled", havingValue = "true")
+    @ConditionalOnProperty(prefix = "com.alipay.sofa.proxy.bean", name = "enabled", havingValue = "true", matchIfMissing = true)
     public static ProxyBeanFactoryPostProcessor proxyBeanFactoryPostProcessor() {
         return new ProxyBeanFactoryPostProcessor();
     }
