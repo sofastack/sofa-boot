@@ -19,16 +19,21 @@ package com.alipay.sofa.startup.test.configuration;
 import com.alipay.sofa.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.isle.profile.DefaultSofaModuleProfileChecker;
 import com.alipay.sofa.isle.profile.SofaModuleProfileChecker;
-import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
-import com.alipay.sofa.runtime.spring.SofaShareBeanFactoryPostProcessor;
 import com.alipay.sofa.isle.spring.SofaModuleContextLifecycle;
-import com.alipay.sofa.runtime.spring.share.SofaPostProcessorShareManager;
-import com.alipay.sofa.isle.stage.*;
+import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
+import com.alipay.sofa.isle.stage.DefaultPipelineContext;
+import com.alipay.sofa.isle.stage.ModelCreatingStage;
+import com.alipay.sofa.isle.stage.ModuleLogOutputStage;
+import com.alipay.sofa.isle.stage.PipelineContext;
+import com.alipay.sofa.isle.stage.PipelineStage;
+import com.alipay.sofa.isle.stage.SpringContextInstallStage;
 import com.alipay.sofa.runtime.SofaFramework;
 import com.alipay.sofa.runtime.client.impl.ClientFactoryImpl;
 import com.alipay.sofa.runtime.component.impl.StandardSofaRuntimeManager;
 import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
+import com.alipay.sofa.runtime.spring.SofaShareBeanFactoryPostProcessor;
+import com.alipay.sofa.runtime.spring.share.SofaPostProcessorShareManager;
 import com.alipay.sofa.startup.StartupReporter;
 import com.alipay.sofa.startup.stage.isle.StartupModelCreatingStage;
 import com.alipay.sofa.startup.stage.isle.StartupSpringContextInstallStage;
@@ -98,14 +103,14 @@ public class SofaStartupIsleAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public SofaPostProcessorShareManager sofaModulePostProcessorShareManager(ApplicationContext applicationContext) {
-        return new SofaPostProcessorShareManager((AbstractApplicationContext) applicationContext);
+    public SofaPostProcessorShareManager sofaModulePostProcessorShareManager() {
+        return new SofaPostProcessorShareManager();
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public static SofaShareBeanFactoryPostProcessor sofaModuleBeanFactoryPostProcessor(SofaPostProcessorShareManager shareManager) {
-        return new SofaShareBeanFactoryPostProcessor(shareManager);
+    public static SofaShareBeanFactoryPostProcessor sofaModuleBeanFactoryPostProcessor() {
+        return new SofaShareBeanFactoryPostProcessor();
     }
 
     @Bean(destroyMethod = "")
