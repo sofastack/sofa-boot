@@ -40,13 +40,14 @@ import com.alipay.sofa.runtime.spring.parser.AbstractContractDefinitionParser;
 import com.alipay.sofa.runtime.spring.parser.ServiceDefinitionParser;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.FatalBeanException;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.annotation.AnnotatedGenericBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
-import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -56,7 +57,6 @@ import org.springframework.context.annotation.ScannedGenericBeanDefinition;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 import org.springframework.core.type.MethodMetadata;
 import org.springframework.core.type.StandardMethodMetadata;
@@ -79,9 +79,9 @@ import java.util.stream.Stream;
  * @author qilong.zql
  * @since 3.1.0
  */
-@Order(Ordered.HIGHEST_PRECEDENCE + 10)
-public class ServiceBeanFactoryPostProcessor implements BeanDefinitionRegistryPostProcessor,
-                                            ApplicationContextAware, EnvironmentAware {
+public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor,
+                                            ApplicationContextAware, EnvironmentAware,
+                                            InitializingBean, Ordered {
     private final PlaceHolderBinder binder = new DefaultPlaceHolderBinder();
     private ApplicationContext      applicationContext;
     private SofaRuntimeContext      sofaRuntimeContext;
@@ -99,15 +99,11 @@ public class ServiceBeanFactoryPostProcessor implements BeanDefinitionRegistryPo
     }
 
     @Override
-    public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
-        Arrays.stream(registry.getBeanDefinitionNames())
-                .collect(Collectors.toMap(Function.identity(), registry::getBeanDefinition))
-                .forEach((key, value) -> transformSofaBeanDefinition(key, value, registry));
-    }
-
-    @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory)
                                                                                    throws BeansException {
+        Arrays.stream(beanFactory.getBeanDefinitionNames())
+                .collect(Collectors.toMap(Function.identity(), beanFactory::getBeanDefinition))
+                .forEach((key, value) -> transformSofaBeanDefinition(key, value, (BeanDefinitionRegistry) beanFactory));
     }
 
     /**
@@ -386,15 +382,24 @@ public class ServiceBeanFactoryPostProcessor implements BeanDefinitionRegistryPo
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
-        this.sofaRuntimeContext = applicationContext.getBean("sofaRuntimeContext",
-            SofaRuntimeContext.class);
-        this.bindingConverterFactory = applicationContext.getBean("bindingConverterFactory",
-            BindingConverterFactory.class);
     }
 
     @Override
     public void setEnvironment(Environment environment) {
         this.environment = environment;
+    }
+
+    @Override
+    public int getOrder() {
+        return Ordered.HIGHEST_PRECEDENCE + 10;
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        this.sofaRuntimeContext = applicationContext.getBean("sofaRuntimeContext",
+            SofaRuntimeContext.class);
+        this.bindingConverterFactory = applicationContext.getBean("bindingConverterFactory",
+            BindingConverterFactory.class);
     }
 
     class DefaultPlaceHolderBinder implements PlaceHolderBinder {
