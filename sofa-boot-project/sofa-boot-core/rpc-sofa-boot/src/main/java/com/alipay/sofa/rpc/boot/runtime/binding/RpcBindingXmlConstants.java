@@ -35,6 +35,7 @@ public class RpcBindingXmlConstants {
     public static final String TAG_TIMEOUT           = "timeout";
     public static final String TAG_ADDRESS_WAIT_TIME = "address-wait-time";
     public static final String TAG_CONNECT_TIMEOUT   = "connect.timeout";
+    public static final String TAG_CONNECT_NUM       = "connect.num";
     public static final String TAG_RETRIES           = "retries";
     public static final String TAG_TYPE              = "type";
     public static final String TAG_CALLBACK_CLASS    = "callback-class";
