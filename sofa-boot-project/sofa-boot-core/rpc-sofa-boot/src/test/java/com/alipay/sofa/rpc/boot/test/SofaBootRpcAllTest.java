@@ -22,6 +22,7 @@ import com.alipay.sofa.rpc.api.future.SofaResponseFuture;
 import com.alipay.sofa.rpc.boot.container.ConsumerConfigContainer;
 import com.alipay.sofa.rpc.boot.runtime.param.RestBindingParam;
 import com.alipay.sofa.rpc.boot.test.bean.annotation.AnnotationService;
+import com.alipay.sofa.rpc.boot.test.bean.connectionnum.ConnectionNumService;
 import com.alipay.sofa.rpc.boot.test.bean.direct.DirectService;
 import com.alipay.sofa.rpc.boot.test.bean.dubbo.DubboService;
 import com.alipay.sofa.rpc.boot.test.bean.filter.FilterService;
@@ -125,6 +126,9 @@ public class SofaBootRpcAllTest {
     private LazyService                lazyServiceDubbo;
 
     @Autowired
+    private ConnectionNumService       connectionNumService;
+
+    @Autowired
     @Qualifier("sofaGreeterTripleRef")
     private SofaGreeterTriple.IGreeter sofaGreeterTripleRef;
 
@@ -142,6 +146,9 @@ public class SofaBootRpcAllTest {
 
     @SofaReference(binding = @SofaReferenceBinding(bindingType = "bolt", timeout = 1000), jvmFirst = false, uniqueId = "timeout")
     private AnnotationService          annotationConsumerTimeoutService;
+
+    @SofaReference(binding = @SofaReferenceBinding(bindingType = "rest", connectionNum = 100), jvmFirst = false, uniqueId = "connectionNum")
+    private AnnotationService          annotationConsumerConnectionNumService;
 
     @SofaClientFactory
     private ClientFactory              clientFactory;
@@ -254,6 +261,11 @@ public class SofaBootRpcAllTest {
     }
 
     @Test
+    public void testConnectionNum() {
+        Assert.assertEquals("100", connectionNumService.sayConnectionNum("100"));
+    }
+
+    @Test
     public void testAnnotation() {
         Assert.assertEquals("Hello, Annotation", annotationService.hello());
     }
@@ -289,6 +301,26 @@ public class SofaBootRpcAllTest {
         }
 
         Assert.assertTrue("Found roundrobin reference", found);
+    }
+
+    @Test
+    public void testConnectionNumAnnotation() throws NoSuchFieldException, IllegalAccessException {
+        Field consumerConfigMapField = ConsumerConfigContainer.class
+            .getDeclaredField("consumerConfigMap");
+        consumerConfigMapField.setAccessible(true);
+        ConcurrentMap<Binding, ConsumerConfig> consumerConfigMap = (ConcurrentMap<Binding, ConsumerConfig>) consumerConfigMapField
+            .get(consumerConfigContainer);
+
+        boolean found = false;
+        for (ConsumerConfig consumerConfig : consumerConfigMap.values()) {
+            if ("connectionNum".equals(consumerConfig.getUniqueId())
+                && AnnotationService.class.getName().equals(consumerConfig.getInterfaceId())) {
+                found = true;
+                Assert.assertEquals(100, consumerConfig.getConnectionNum());
+            }
+        }
+
+        Assert.assertTrue("Found connectionNum = 100 reference", found);
     }
 
     @Test
