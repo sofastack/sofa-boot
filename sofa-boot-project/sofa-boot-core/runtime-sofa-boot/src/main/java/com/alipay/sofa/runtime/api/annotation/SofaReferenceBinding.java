@@ -101,6 +101,13 @@ public @interface SofaReferenceBinding {
     String registry() default "";
 
     /**
+     * the number of long connections per ref
+     *
+     * @return
+     */
+    int connectionNum() default 1;
+
+    /**
      * delay init connection
      *
      * @return

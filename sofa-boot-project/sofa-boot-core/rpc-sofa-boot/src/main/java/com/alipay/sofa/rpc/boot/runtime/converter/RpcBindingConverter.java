@@ -275,6 +275,7 @@ public abstract class RpcBindingConverter implements BindingConverter<RpcBinding
         if (StringUtils.hasText(loadBalancer)) {
             param.setLoadBalancer(loadBalancer);
         }
+
         if (connectionNum != null) {
             param.setConnectionNum(connectionNum);
         }
@@ -554,6 +555,7 @@ public abstract class RpcBindingConverter implements BindingConverter<RpcBinding
         if (StringUtils.hasText(callbackRef)) {
             bindingParam.setCallbackHandler(applicationContext.getBean(callbackRef));
         }
+        bindingParam.setConnectionNum(sofaReferenceBindingAnnotation.connectionNum());
         bindingParam.setLazy(sofaReferenceBindingAnnotation.lazy());
 
         String registryAlias = sofaReferenceBindingAnnotation.registry();

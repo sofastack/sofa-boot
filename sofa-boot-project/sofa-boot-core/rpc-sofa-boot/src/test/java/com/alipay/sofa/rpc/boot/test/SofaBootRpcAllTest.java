@@ -22,6 +22,7 @@ import com.alipay.sofa.rpc.api.future.SofaResponseFuture;
 import com.alipay.sofa.rpc.boot.container.ConsumerConfigContainer;
 import com.alipay.sofa.rpc.boot.runtime.param.RestBindingParam;
 import com.alipay.sofa.rpc.boot.test.bean.annotation.AnnotationService;
+import com.alipay.sofa.rpc.boot.test.bean.connectionnum.ConnectionNumService;
 import com.alipay.sofa.rpc.boot.test.bean.direct.DirectService;
 import com.alipay.sofa.rpc.boot.test.bean.dubbo.DubboService;
 import com.alipay.sofa.rpc.boot.test.bean.filter.FilterService;
@@ -125,6 +126,9 @@ public class SofaBootRpcAllTest {
     private LazyService                lazyServiceDubbo;
 
     @Autowired
+    private ConnectionNumService       connectionNumService;
+
+    @Autowired
     @Qualifier("sofaGreeterTripleRef")
     private SofaGreeterTriple.IGreeter sofaGreeterTripleRef;
 
@@ -142,6 +146,9 @@ public class SofaBootRpcAllTest {
 
     @SofaReference(binding = @SofaReferenceBinding(bindingType = "bolt", timeout = 1000), jvmFirst = false, uniqueId = "timeout")
     private AnnotationService          annotationConsumerTimeoutService;
+
+    @SofaReference(binding = @SofaReferenceBinding(bindingType = "rest", connectionNum = 100), jvmFirst = false, uniqueId = "connectionNum")
+    private AnnotationService          annotationConsumerConnectionNumService;
 
     @SofaClientFactory
     private ClientFactory              clientFactory;
@@ -287,8 +294,31 @@ public class SofaBootRpcAllTest {
                 Assert.assertEquals("roundRobin", consumerConfig.getLoadBalancer());
             }
         }
-
         Assert.assertTrue("Found roundrobin reference", found);
+    }
+
+    @Test
+    public void testConnectionNum() throws NoSuchFieldException, IllegalAccessException {
+        Field consumerConfigMapField = ConsumerConfigContainer.class
+            .getDeclaredField("consumerConfigMap");
+        consumerConfigMapField.setAccessible(true);
+        ConcurrentMap<Binding, ConsumerConfig> consumerConfigMap = (ConcurrentMap<Binding, ConsumerConfig>) consumerConfigMapField
+            .get(consumerConfigContainer);
+
+        boolean found1 = false;
+        boolean found2 = false;
+        for (ConsumerConfig consumerConfig : consumerConfigMap.values()) {
+            if ("connectionNum".equals(consumerConfig.getUniqueId())
+                && AnnotationService.class.getName().equals(consumerConfig.getInterfaceId())) {
+                found1 = true;
+                Assert.assertEquals(100, consumerConfig.getConnectionNum());
+            } else if (connectionNumService.getClass().getName().startsWith(consumerConfig.getInterfaceId())) {
+                found2 = true;
+                Assert.assertEquals(300, consumerConfig.getConnectionNum());
+            }
+        }
+        Assert.assertTrue("Found annotation reference", found1);
+        Assert.assertTrue("Found xml reference", found2);
     }
 
     @Test
