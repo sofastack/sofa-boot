@@ -294,7 +294,7 @@ public class SofaBootRpcAllTest {
                 Assert.assertEquals("roundRobin", consumerConfig.getLoadBalancer());
             }
         }
-        
+
         Assert.assertTrue("Found roundrobin reference", found);
     }
 
