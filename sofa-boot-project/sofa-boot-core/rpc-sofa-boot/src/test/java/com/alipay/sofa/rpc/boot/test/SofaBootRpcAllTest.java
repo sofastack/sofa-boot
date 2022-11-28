@@ -313,7 +313,8 @@ public class SofaBootRpcAllTest {
                 && AnnotationService.class.getName().equals(consumerConfig.getInterfaceId())) {
                 found1 = true;
                 Assert.assertEquals(100, consumerConfig.getConnectionNum());
-            } else if (connectionNumService.getClass().getName().startsWith(consumerConfig.getInterfaceId())) {
+            } else if (connectionNumService.getClass().getName()
+                .startsWith(consumerConfig.getInterfaceId())) {
                 found2 = true;
                 Assert.assertEquals(300, consumerConfig.getConnectionNum());
             }
