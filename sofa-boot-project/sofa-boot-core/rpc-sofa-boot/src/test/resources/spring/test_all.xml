@@ -162,6 +162,18 @@
         </sofa:binding.dubbo>
     </sofa:reference>
 
+    <!-- connectionNum -->
+    <bean id="connectionNumServiceImpl" class="com.alipay.sofa.rpc.boot.test.bean.connectionnum.ConnectionNumServiceImpl"/>
+    <sofa:service ref="connectionNumServiceImpl" interface="com.alipay.sofa.rpc.boot.test.bean.connectionnum.ConnectionNumService">
+        <sofa:binding.rest/>
+    </sofa:service>
+
+    <sofa:reference jvm-first="false" id="connectionNumService" interface="com.alipay.sofa.rpc.boot.test.bean.connectionnum.ConnectionNumService">
+        <sofa:binding.rest>
+            <sofa:global-attrs connect.num="300"/>
+        </sofa:binding.rest>
+    </sofa:reference>
+
 
     <!-- invoke sync-->
     <bean id="sofaGreeterTripleImpl" class="com.alipay.sofa.rpc.boot.test.bean.triple.TripleGreeterImpl"/>
