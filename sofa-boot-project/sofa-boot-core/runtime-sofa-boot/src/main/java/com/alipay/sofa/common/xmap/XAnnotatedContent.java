@@ -16,9 +16,7 @@
  */
 package com.alipay.sofa.common.xmap;
 
-import java.io.IOException;
-import java.util.List;
-
+import com.alipay.sofa.common.xmap.annotation.XContent;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentFragment;
 import org.w3c.dom.Element;
@@ -26,8 +24,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.ranges.DocumentRange;
 import org.w3c.dom.ranges.Range;
 
-import com.alipay.sofa.common.xmap.annotation.XContent;
-import com.sun.org.apache.xml.internal.serialize.OutputFormat;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * @author <a href="mailto:bs@nuxeo.com">Bogdan Stefanescu</a>
@@ -36,14 +34,14 @@ import com.sun.org.apache.xml.internal.serialize.OutputFormat;
  */
 public class XAnnotatedContent extends XAnnotatedMember {
 
-    private static final OutputFormat DEFAULT_FORMAT = new OutputFormat();
-
-    static {
-        DEFAULT_FORMAT.setOmitXMLDeclaration(true);
-        DEFAULT_FORMAT.setIndenting(true);
-        DEFAULT_FORMAT.setMethod("xml");
-        DEFAULT_FORMAT.setEncoding("UTF-8");
-    }
+    //    private static final OutputFormat DEFAULT_FORMAT = new OutputFormat();
+    //
+    //    static {
+    //        DEFAULT_FORMAT.setOmitXMLDeclaration(true);
+    //        DEFAULT_FORMAT.setIndenting(true);
+    //        DEFAULT_FORMAT.setMethod("xml");
+    //        DEFAULT_FORMAT.setEncoding("UTF-8");
+    //    }
 
     public XAnnotatedContent(XMap xmap, XSetter setter, XGetter getter, XContent anno) {
         super(xmap, setter, getter);
@@ -69,7 +67,7 @@ public class XAnnotatedContent extends XAnnotatedMember {
         range.setEndAfter(el.getLastChild());
         DocumentFragment fragment = range.cloneContents();
         boolean asDOM = setter.getType() == DocumentFragment.class;
-        return asDOM ? fragment : DOMSerializer.toString(fragment, DEFAULT_FORMAT);
+        return asDOM ? fragment : DOMSerializer.toString(fragment);
     }
 
     @Override

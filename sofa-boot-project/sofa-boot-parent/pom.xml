@@ -16,18 +16,16 @@
     <properties>
         <main.user.dir>${basedir}/../..</main.user.dir>
         <project.encoding>UTF-8</project.encoding>
-        <java.version>1.8</java.version>
+        <project.build.encoding>UTF-8</project.build.encoding>
+        <java.version>17</java.version>
 
-        <sofa.version.maven.plugin>1.0.1</sofa.version.maven.plugin>
+        <!-- todo 统一放到 dependencies 里管理 -->
+        <!-- plugin dependencyManagement -->
         <license.maven.plugin>3.0</license.maven.plugin>
         <maven.java.formatter.plugin>0.4</maven.java.formatter.plugin>
-        <maven.pmd.plugin.version>3.13.0</maven.pmd.plugin.version>
+        <maven.pmd.plugin.version>3.19.0</maven.pmd.plugin.version>
         <maven.checkstyle.plugin.version>3.1.2</maven.checkstyle.plugin.version>
-        <maven.compiler.plugin>3.1</maven.compiler.plugin>
-        <maven.source.plugin>3.0.0</maven.source.plugin>
-        <maven.javadoc.plugin>2.9.1</maven.javadoc.plugin>
         <jacoco.maven.plugin>0.8.7</jacoco.maven.plugin>
-        <maven.surefire.plugin>2.22.2</maven.surefire.plugin>
 
         <!-- for dependencyManagement -->
         <spring.cloud.starter.openfeign.version>3.0.5</spring.cloud.starter.openfeign.version>
@@ -48,21 +46,9 @@
         <junit.version>4.13.1</junit.version>
     </properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-
     <dependencyManagement>
         <dependencies>
+            <!-- todo 统一放到 dependencies 里管理 -->
             <!--provided-->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
@@ -291,29 +277,8 @@
             </plugin>
 
             <plugin>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>sofa-version-maven-plugin</artifactId>
-                <version>${sofa.version.maven.plugin}</version>
-                <configuration>
-                    <dotGitDirectory>${main.user.dir}/.git</dotGitDirectory>
-                    <defaultPropertiesFileEntries>
-                        <Doc-Url>http://www.sofastack.tech/sofa-boot/docs/Home</Doc-Url>
-                    </defaultPropertiesFileEntries>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>gen</goal>
-                            <goal>write</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven.compiler.plugin}</version>
                 <configuration>
                     <encoding>${project.encoding}</encoding>
                     <source>${java.version}</source>
@@ -324,7 +289,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>${maven.source.plugin}</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -373,75 +337,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <profiles>
-        <profile>
-            <id>jdk8</id>
-            <activation>
-                <jdk>1.8</jdk>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <version>${maven.surefire.plugin}</version>
-                        <dependencies>
-                            <dependency>
-                                <groupId>org.ow2.asm</groupId>
-                                <artifactId>asm</artifactId>
-                                <version>6.2</version>
-                            </dependency>
-                        </dependencies>
-                        <configuration>
-                            <runOrder>alphabetical</runOrder>
-                            <reuseForks>false</reuseForks>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <profile>
-            <id>jdk11</id>
-            <activation>
-                <jdk>11</jdk>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <version>${maven.surefire.plugin}</version>
-                        <dependencies>
-                            <dependency>
-                                <groupId>org.ow2.asm</groupId>
-                                <artifactId>asm</artifactId>
-                                <version>6.2</version>
-                            </dependency>
-                        </dependencies>
-                        <configuration>
-                            <reuseForks>false</reuseForks>
-                            <argLine>@{argLine} -Djdk.attach.allowAttachSelf --add-opens java.base/jdk.internal.loader=ALL-UNNAMED</argLine>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>attach-javadocs</id>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                                <configuration>
-                                    <additionalOptions>-source 8</additionalOptions>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 </project>
