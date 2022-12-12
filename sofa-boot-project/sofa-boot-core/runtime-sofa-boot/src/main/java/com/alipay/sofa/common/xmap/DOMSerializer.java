@@ -16,19 +16,14 @@
  */
 package com.alipay.sofa.common.xmap;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentFragment;
 import org.w3c.dom.Element;
 
-import com.sun.org.apache.xml.internal.serialize.OutputFormat;
-import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
-
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 /**
  * @author <a href="mailto:bs@nuxeo.com">Bogdan Stefanescu</a>
  * @author xi.hux@alipay.com
@@ -40,15 +35,16 @@ public final class DOMSerializer {
     private static final DocumentBuilderFactory BUILDER_FACTORY = DocumentBuilderFactory
                                                                     .newInstance();
 
-    // Default output format which is : no xml declaration, no document type, indent.
-    private static final OutputFormat           DEFAULT_FORMAT  = new OutputFormat();
-
-    static {
-        DEFAULT_FORMAT.setOmitXMLDeclaration(false);
-        DEFAULT_FORMAT.setIndenting(true);
-        DEFAULT_FORMAT.setMethod("xml");
-        DEFAULT_FORMAT.setEncoding("UTF-8");
-    }
+    //
+    //    // Default output format which is : no xml declaration, no document type, indent.
+    //    private static final OutputFormat           DEFAULT_FORMAT  = new OutputFormat();
+    //
+    //    static {
+    //        DEFAULT_FORMAT.setOmitXMLDeclaration(false);
+    //        DEFAULT_FORMAT.setIndenting(true);
+    //        DEFAULT_FORMAT.setMethod("xml");
+    //        DEFAULT_FORMAT.setEncoding("UTF-8");
+    //    }
 
     private DOMSerializer() {
     }
@@ -58,64 +54,36 @@ public final class DOMSerializer {
     }
 
     public static String toString(Element element) throws IOException {
-        return toString(element, DEFAULT_FORMAT);
-    }
-
-    public static String toString(Element element, OutputFormat format) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        write(element, format, baos);
+        write(element, baos);
         return baos.toString();
     }
 
     public static String toString(DocumentFragment fragment) throws IOException {
-        return toString(fragment, DEFAULT_FORMAT);
-    }
-
-    public static String toString(DocumentFragment fragment, OutputFormat format)
-                                                                                 throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        write(fragment, format, baos);
+        write(fragment, baos);
         return baos.toString();
     }
 
     public static String toString(Document doc) throws IOException {
-        return toString(doc, DEFAULT_FORMAT);
-    }
-
-    public static String toString(Document doc, OutputFormat format) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        write(doc, format, baos);
+        write(doc, baos);
         return baos.toString();
     }
 
     public static void write(Element element, OutputStream out) throws IOException {
-        write(element, DEFAULT_FORMAT, out);
-    }
-
-    public static void write(Element element, OutputFormat format, OutputStream out)
-                                                                                    throws IOException {
-        XMLSerializer serializer = new XMLSerializer(out, format);
-        serializer.asDOMSerializer().serialize(element);
+        //        LSSerializer serializer = new LSSerializerImpl();
+        //        serializer.writeToString().serialize(element);
     }
 
     public static void write(DocumentFragment fragment, OutputStream out) throws IOException {
-        write(fragment, DEFAULT_FORMAT, out);
-    }
-
-    public static void write(DocumentFragment fragment, OutputFormat format, OutputStream out)
-                                                                                              throws IOException {
-        XMLSerializer serializer = new XMLSerializer(out, format);
-        serializer.asDOMSerializer().serialize(fragment);
+        //        XMLSerializer serializer = new XMLSerializer(out, format);
+        //        serializer.asDOMSerializer().serialize(fragment);
     }
 
     public static void write(Document doc, OutputStream out) throws IOException {
-        write(doc, DEFAULT_FORMAT, out);
-    }
-
-    public static void write(Document doc, OutputFormat format, OutputStream out)
-                                                                                 throws IOException {
-        XMLSerializer serializer = new XMLSerializer(out, format);
-        serializer.asDOMSerializer().serialize(doc);
+        //        XMLSerializer serializer = new XMLSerializer(out, format);
+        //        serializer.asDOMSerializer().serialize(doc);
     }
 
 }
