@@ -16,12 +16,12 @@
     <properties>
         <main.user.dir>${basedir}/../..</main.user.dir>
         <project.encoding>UTF-8</project.encoding>
-        <java.version>1.8</java.version>
+        <java.version>17</java.version>
 
         <sofa.version.maven.plugin>1.0.1</sofa.version.maven.plugin>
         <license.maven.plugin>3.0</license.maven.plugin>
         <maven.java.formatter.plugin>0.4</maven.java.formatter.plugin>
-        <maven.pmd.plugin.version>3.13.0</maven.pmd.plugin.version>
+        <maven.pmd.plugin.version>3.19.0</maven.pmd.plugin.version>
         <maven.checkstyle.plugin.version>3.1.2</maven.checkstyle.plugin.version>
         <maven.compiler.plugin>3.1</maven.compiler.plugin>
         <maven.source.plugin>3.0.0</maven.source.plugin>
