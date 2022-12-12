@@ -7,7 +7,7 @@ description = "SOFABoot Gradle Plugin"
 
 group 'com.alipay.sofa'
 
-sourceCompatibility = 1.8
+sourceCompatibility = 17
 
 repositories {
     mavenLocal()
