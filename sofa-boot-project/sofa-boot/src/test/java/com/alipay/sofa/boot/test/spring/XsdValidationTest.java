@@ -22,10 +22,10 @@ import org.springframework.beans.factory.xml.DefaultDocumentLoader;
 import org.springframework.beans.factory.xml.DelegatingEntityResolver;
 import org.springframework.beans.factory.xml.DocumentLoader;
 import org.springframework.util.xml.XmlValidationModeDetector;
+import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
-
-import com.sun.org.apache.xml.internal.utils.DefaultErrorHandler;
 
 /**
  * XML validation with rpc.xsd
@@ -78,7 +78,22 @@ public class XsdValidationTest {
         DocumentLoader documentLoader = new DefaultDocumentLoader();
         documentLoader.loadDocument(new InputSource(this.getClass().getClassLoader()
             .getResourceAsStream(xml)), new DelegatingEntityResolver(this.getClass()
-            .getClassLoader()), new DefaultErrorHandler(),
-            XmlValidationModeDetector.VALIDATION_XSD, true);
+            .getClassLoader()), new ErrorHandler() {
+            @Override
+            public void warning(SAXParseException exception) throws SAXException {
+                System.out.println(exception.toString());
+            }
+
+            @Override
+            public void error(SAXParseException exception) throws SAXException {
+                System.out.println(exception.toString());
+            }
+
+            @Override
+            public void fatalError(SAXParseException exception) throws SAXException {
+                System.out.println(exception.toString());
+
+            }
+        }, XmlValidationModeDetector.VALIDATION_XSD, true);
     }
 }
