@@ -17,7 +17,7 @@
 package com.alipay.sofa.boot.autoconfigure.isle;
 
 import com.alipay.sofa.isle.spring.SofaModuleContextLifecycle;
-import com.alipay.sofa.isle.spring.share.SofaModulePostProcessorShareManager;
+import com.alipay.sofa.isle.stage.PipelineStage;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -31,12 +31,13 @@ import com.alipay.sofa.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.isle.profile.DefaultSofaModuleProfileChecker;
 import com.alipay.sofa.isle.profile.SofaModuleProfileChecker;
 import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
-import com.alipay.sofa.isle.spring.SofaModuleBeanFactoryPostProcessor;
 import com.alipay.sofa.isle.stage.DefaultPipelineContext;
 import com.alipay.sofa.isle.stage.ModelCreatingStage;
 import com.alipay.sofa.isle.stage.ModuleLogOutputStage;
 import com.alipay.sofa.isle.stage.PipelineContext;
 import com.alipay.sofa.isle.stage.SpringContextInstallStage;
+
+import java.util.List;
 
 /**
  * @author xuanbei 18/3/12
@@ -46,29 +47,27 @@ import com.alipay.sofa.isle.stage.SpringContextInstallStage;
 @ConditionalOnClass(ApplicationRuntimeModel.class)
 @ConditionalOnProperty(value = "com.alipay.sofa.boot.enable-isle", matchIfMissing = true)
 public class SofaModuleAutoConfiguration {
-
     @Bean
     @ConditionalOnMissingBean
-    public static SofaModuleBeanFactoryPostProcessor sofaModuleBeanFactoryPostProcessor(SofaModulePostProcessorShareManager shareManager) {
-        return new SofaModuleBeanFactoryPostProcessor(shareManager);
+    public SofaModuleContextLifecycle sofaModuleContextLifecycle(PipelineContext pipelineContext) {
+        return new SofaModuleContextLifecycle(pipelineContext);
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public SofaModuleContextLifecycle sofaModuleContextLifecycle() {
-        return new SofaModuleContextLifecycle();
+    public ModelCreatingStage modelCreatingStage(ApplicationContext applicationContext,
+                                                 SofaModuleProperties sofaModuleProperties,
+                                                 SofaModuleProfileChecker sofaModuleProfileChecker) {
+        return new ModelCreatingStage((AbstractApplicationContext) applicationContext,
+            sofaModuleProperties, sofaModuleProfileChecker);
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public ModelCreatingStage modelCreatingStage(ApplicationContext applicationContext) {
-        return new ModelCreatingStage((AbstractApplicationContext) applicationContext);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public SpringContextInstallStage springContextInstallStage(ApplicationContext applicationContext) {
-        return new SpringContextInstallStage((AbstractApplicationContext) applicationContext);
+    public SpringContextInstallStage springContextInstallStage(ApplicationContext applicationContext,
+                                                               SofaModuleProperties sofaModuleProperties) {
+        return new SpringContextInstallStage((AbstractApplicationContext) applicationContext,
+            sofaModuleProperties);
     }
 
     @Bean
@@ -79,20 +78,13 @@ public class SofaModuleAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public PipelineContext pipelineContext() {
-        return new DefaultPipelineContext();
+    public PipelineContext pipelineContext(List<PipelineStage> stageList) {
+        return new DefaultPipelineContext(stageList);
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public SofaModuleProfileChecker sofaModuleProfileChecker() {
-        return new DefaultSofaModuleProfileChecker();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public SofaModulePostProcessorShareManager sofaModulePostProcessorShareManager(ApplicationContext applicationContext) {
-        return new SofaModulePostProcessorShareManager(
-            (AbstractApplicationContext) applicationContext);
+    public SofaModuleProfileChecker sofaModuleProfileChecker(SofaModuleProperties sofaModuleProperties) {
+        return new DefaultSofaModuleProfileChecker(sofaModuleProperties);
     }
 }

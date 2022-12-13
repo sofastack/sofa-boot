@@ -72,7 +72,7 @@ public class ExtensionParam {
     /**
      * Get the target bean name of extension
      *
-     * @return The target target bean name of extension
+     * @return The target bean name of extension
      */
     public String getTargetInstanceName() {
         return targetInstanceName;
@@ -81,7 +81,7 @@ public class ExtensionParam {
     /**
      * Set the target bean name of extension
      *
-     * @param targetInstanceName The the target bean name of extension
+     * @param targetInstanceName The target bean name of extension
      */
     public void setTargetInstanceName(String targetInstanceName) {
         this.targetInstanceName = targetInstanceName;

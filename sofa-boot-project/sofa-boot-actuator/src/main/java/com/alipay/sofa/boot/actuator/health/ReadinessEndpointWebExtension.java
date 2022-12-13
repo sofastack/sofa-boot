@@ -16,13 +16,12 @@
  */
 package com.alipay.sofa.boot.actuator.health;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.endpoint.SecurityContext;
 import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
 import org.springframework.boot.actuate.endpoint.web.WebEndpointResponse;
 import org.springframework.boot.actuate.endpoint.web.annotation.EndpointWebExtension;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HttpCodeStatusMapper;
+import org.springframework.lang.Nullable;
 
 /**
  * @author qilong.zql
@@ -30,16 +29,18 @@ import org.springframework.boot.actuate.health.HttpCodeStatusMapper;
  */
 @EndpointWebExtension(endpoint = SofaBootReadinessEndpoint.class)
 public class ReadinessEndpointWebExtension {
+    private final SofaBootReadinessEndpoint delegate;
+    private final HttpCodeStatusMapper      statusMapper;
 
-    @Autowired
-    private SofaBootReadinessEndpoint delegate;
-
-    @Autowired
-    private HttpCodeStatusMapper      statusMapper;
+    public ReadinessEndpointWebExtension(SofaBootReadinessEndpoint delegate,
+                                         HttpCodeStatusMapper statusMapper) {
+        this.delegate = delegate;
+        this.statusMapper = statusMapper;
+    }
 
     @ReadOperation
-    public WebEndpointResponse<Health> getHealth(SecurityContext securityContext) {
-        Health result = delegate.health();
+    public WebEndpointResponse<Health> getHealth(@Nullable String showDetail) {
+        Health result = delegate.health(showDetail);
         return new WebEndpointResponse<>(result, statusMapper.getStatusCode(result.getStatus()));
     }
 }

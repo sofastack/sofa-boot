@@ -28,6 +28,7 @@ import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.ComponentManager;
 import com.alipay.sofa.runtime.spi.component.DefaultImplementation;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
+import org.springframework.context.ApplicationContext;
 
 /**
  * reference register helper
@@ -38,6 +39,14 @@ public class ReferenceRegisterHelper {
     public static Object registerReference(Reference reference,
                                            BindingAdapterFactory bindingAdapterFactory,
                                            SofaRuntimeContext sofaRuntimeContext) {
+        return registerReference(reference, bindingAdapterFactory, sofaRuntimeContext, null);
+
+    }
+
+    public static Object registerReference(Reference reference,
+                                           BindingAdapterFactory bindingAdapterFactory,
+                                           SofaRuntimeContext sofaRuntimeContext,
+                                           ApplicationContext applicationContext) {
         Binding binding = (Binding) reference.getBindings().toArray()[0];
 
         if (!binding.getBindingType().equals(JvmBinding.JVM_BINDING_TYPE)
@@ -57,6 +66,7 @@ public class ReferenceRegisterHelper {
         }
 
         ComponentInfo componentInfo = componentManager.registerAndGet(referenceComponent);
+        componentInfo.setApplicationContext(applicationContext);
         return componentInfo.getImplementation().getTarget();
 
     }

@@ -23,6 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 import com.alipay.sofa.boot.error.ErrorCode;
+import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.component.Property;
 import com.alipay.sofa.runtime.log.SofaLogger;
@@ -77,6 +78,20 @@ public class ServiceComponent extends AbstractComponent {
         return super.resolve();
     }
 
+    @Override
+    public void register() {
+        Object target = service.getTarget();
+        if (SofaRuntimeProperties.isServiceInterfaceTypeCheck()) {
+            Class<?> interfaceType = service.getInterfaceType();
+            if (!interfaceType.isAssignableFrom(target.getClass())) {
+                throw new ServiceRuntimeException(ErrorCode.convert("01-00104", service,
+                    target.getClass(), interfaceType));
+            }
+        }
+
+        super.register();
+    }
+
     private void resolveBinding() {
 
         Object target = service.getTarget();
@@ -103,8 +118,8 @@ public class ServiceComponent extends AbstractComponent {
                     bindingAdapter.preOutBinding(service, binding, target, getContext());
                 } catch (Throwable t) {
                     allPassed = false;
-                    SofaLogger.error(ErrorCode.convert("01-00002", binding.getBindingType()),
-                        service, t);
+                    SofaLogger.error(
+                        ErrorCode.convert("01-00002", binding.getBindingType(), service), t);
                     continue;
                 }
                 SofaLogger.info(" <<PreOut Binding [{}] Ends - {}.", binding.getBindingType(),
@@ -153,8 +168,8 @@ public class ServiceComponent extends AbstractComponent {
                 } catch (Throwable t) {
                     allPassed = false;
                     binding.setHealthy(false);
-                    SofaLogger.error(ErrorCode.convert("01-00004", binding.getBindingType()),
-                        service, t);
+                    SofaLogger.error(
+                        ErrorCode.convert("01-00004", binding.getBindingType(), service), t);
                     continue;
                 }
                 if (!Boolean.FALSE.equals(outBindingResult)) {
@@ -201,8 +216,8 @@ public class ServiceComponent extends AbstractComponent {
                     bindingAdapter.preUnoutBinding(service, binding, target, getContext());
                 } catch (Throwable t) {
                     allPassed = false;
-                    SofaLogger.error(ErrorCode.convert("01-00006", binding.getBindingType()),
-                        service, t);
+                    SofaLogger.error(
+                        ErrorCode.convert("01-00006", binding.getBindingType(), service), t);
                     continue;
                 }
                 SofaLogger.info(" <<Pre un-out Binding [{}] Ends - {}.", binding.getBindingType(),
@@ -258,8 +273,8 @@ public class ServiceComponent extends AbstractComponent {
                     bindingAdapter.postUnoutBinding(service, binding, target, getContext());
                 } catch (Throwable t) {
                     allPassed = false;
-                    SofaLogger.error(ErrorCode.convert("01-00008", binding.getBindingType()),
-                        service, t);
+                    SofaLogger.error(
+                        ErrorCode.convert("01-00008", binding.getBindingType(), service), t);
                     continue;
                 }
                 SofaLogger.info(" <<Post un-out Binding [{}] Ends - {}.", binding.getBindingType(),

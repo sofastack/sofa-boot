@@ -45,7 +45,7 @@ public @interface XNodeList {
     boolean trim() default true;
 
     /**
-     * The type of a collection object.
+     * The type of collection object.
      *
      * @return the type of items
      */

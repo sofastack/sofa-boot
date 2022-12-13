@@ -16,32 +16,32 @@
  */
 package com.alipay.sofa.healthcheck;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
-
-import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.boot.constant.SofaBootConstants;
-import com.alipay.sofa.healthcheck.core.HealthCheckExecutor;
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.actuate.health.Health;
-import org.springframework.boot.actuate.health.Status;
-import org.springframework.context.ApplicationContext;
-import org.springframework.util.Assert;
-
+import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.boot.health.NonReadinessCheck;
 import com.alipay.sofa.boot.util.BinaryOperators;
+import com.alipay.sofa.healthcheck.core.HealthCheckExecutor;
 import com.alipay.sofa.healthcheck.core.HealthChecker;
 import com.alipay.sofa.healthcheck.log.HealthCheckLoggerFactory;
 import com.alipay.sofa.healthcheck.util.HealthCheckUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.springframework.beans.BeansException;
+import org.springframework.boot.actuate.health.Health;
+import org.springframework.boot.actuate.health.Status;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.util.Assert;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 /**
  * Used to process all implementations of {@link HealthChecker}
@@ -50,23 +50,29 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @author qilong.zql
  * @since 2.3.0
  */
-public class HealthCheckerProcessor {
+public class HealthCheckerProcessor implements ApplicationContextAware {
 
-    private static Logger                        logger         = HealthCheckLoggerFactory
-                                                                    .getLogger(HealthCheckerProcessor.class);
+    private static final Logger                  logger         = HealthCheckLoggerFactory.DEFAULT_LOG;
 
-    private ObjectMapper                         objectMapper   = new ObjectMapper();
+    private final ObjectMapper                   objectMapper   = new ObjectMapper();
 
-    private AtomicBoolean                        isInitiated    = new AtomicBoolean(false);
+    private final AtomicBoolean                  isInitiated    = new AtomicBoolean(false);
 
-    @Autowired
     private ApplicationContext                   applicationContext;
 
     private LinkedHashMap<String, HealthChecker> healthCheckers = null;
 
-    @Value("${" + SofaBootConstants.SOFABOOT_HEALTH_CHECK_DEFAULT_TIMEOUT + ":"
-           + SofaBootConstants.SOFABOOT_HEALTH_CHECK_DEFAULT_TIMEOUT_VALUE + "}")
     private int                                  defaultTimeout;
+
+    private final HealthCheckProperties          healthCheckProperties;
+
+    private final HealthCheckExecutor            healthCheckExecutor;
+
+    public HealthCheckerProcessor(HealthCheckProperties healthCheckProperties,
+                                  HealthCheckExecutor healthCheckExecutor) {
+        this.healthCheckProperties = healthCheckProperties;
+        this.healthCheckExecutor = healthCheckExecutor;
+    }
 
     public void init() {
         if (isInitiated.compareAndSet(false, true)) {
@@ -97,9 +103,33 @@ public class HealthCheckerProcessor {
                 .map(HealthChecker::getComponentName).collect(Collectors.joining(","));
         logger.info("SOFABoot HealthChecker liveness check {} item: {}.",
                 healthCheckers.size(), checkComponentNames);
-        boolean result = healthCheckers.entrySet().stream()
-                .map(entry -> doHealthCheck(entry.getKey(), entry.getValue(), false, healthMap, false))
-                .reduce(true, BinaryOperators.andBoolean());
+        boolean result;
+        if (healthCheckProperties.isHealthCheckParallelEnable()) {
+            CountDownLatch countDownLatch = new CountDownLatch(healthCheckers.size());
+            AtomicBoolean parallelResult = new AtomicBoolean(true);
+            healthCheckers.forEach((key, value) -> healthCheckExecutor.executeTask(() -> {
+                try {
+                    if (!doHealthCheck(key, value, false, healthMap, false, false)) {
+                        parallelResult.set(false);
+                    }
+                } catch (Throwable t) {
+                    logger.error(ErrorCode.convert("01-22001"), t);
+                } finally {
+                    countDownLatch.countDown();
+                }
+            }));
+            boolean finished = false;
+            try {
+                finished = countDownLatch.await(healthCheckProperties.getHealthCheckParallelTimeout(), TimeUnit.MILLISECONDS);
+            } catch (InterruptedException e) {
+                logger.error(ErrorCode.convert("01-22002"), e);
+            }
+            result = finished && parallelResult.get();
+        } else {
+            result = healthCheckers.entrySet().stream()
+                    .map(entry -> doHealthCheck(entry.getKey(), entry.getValue(), false, healthMap, false, true))
+                    .reduce(true, BinaryOperators.andBoolean());
+        }
         if (result) {
             logger.info("SOFABoot HealthChecker liveness check result: success.");
         } else {
@@ -125,9 +155,33 @@ public class HealthCheckerProcessor {
                 .map(HealthChecker::getComponentName).collect(Collectors.joining(","));
         logger.info("SOFABoot HealthChecker readiness check {} item: {}.",
                 healthCheckers.size(), checkComponentNames);
-        boolean result = readinessHealthCheckers.entrySet().stream()
-                .map(entry -> doHealthCheck(entry.getKey(), entry.getValue(), true, healthMap, true))
-                .reduce(true, BinaryOperators.andBoolean());
+        boolean result;
+        if (healthCheckProperties.isHealthCheckParallelEnable()) {
+            CountDownLatch countDownLatch = new CountDownLatch(healthCheckers.size());
+            AtomicBoolean parallelResult = new AtomicBoolean(true);
+            healthCheckers.forEach((String key, HealthChecker value) -> healthCheckExecutor.executeTask(() -> {
+                try {
+                    if (!doHealthCheck(key, value, false, healthMap, true, false)) {
+                        parallelResult.set(false);
+                    }
+                } catch (Throwable t) {
+                    logger.error(ErrorCode.convert("01-22004"), t);
+                } finally {
+                    countDownLatch.countDown();
+                }
+            }));
+            boolean finished = false;
+            try {
+                finished = countDownLatch.await(healthCheckProperties.getHealthCheckParallelTimeout(), TimeUnit.MILLISECONDS);
+            } catch (InterruptedException e) {
+                logger.error(ErrorCode.convert("01-22005"), e);
+            }
+            result = finished && parallelResult.get();
+        } else {
+            result = readinessHealthCheckers.entrySet().stream()
+                    .map(entry -> doHealthCheck(entry.getKey(), entry.getValue(), true, healthMap, true, true))
+                    .reduce(true, BinaryOperators.andBoolean());
+        }
         if (result) {
             logger.info("SOFABoot HealthChecker readiness check result: success.");
         } else {
@@ -143,10 +197,11 @@ public class HealthCheckerProcessor {
      * @param isRetry Whether retry when check failed, true for readiness and false for liveness.
      * @param healthMap Used to save the information of {@link HealthChecker}.
      * @param isReadiness Mark whether invoked during readiness.
+     * @param wait Whether wait for result
      * @return health check passes or not
      */
     private boolean doHealthCheck(String beanId, HealthChecker healthChecker, boolean isRetry,
-                                  Map<String, Health> healthMap, boolean isReadiness) {
+                                      Map<String, Health> healthMap, boolean isReadiness, boolean wait) {
         Assert.notNull(healthMap, "HealthMap must not be null");
 
         Health health;
@@ -159,9 +214,13 @@ public class HealthCheckerProcessor {
             timeout = defaultTimeout;
         }
         do {
-            Future<Health> future = HealthCheckExecutor.submitTask(healthChecker::isHealthy);
             try {
-                health = future.get(timeout, TimeUnit.MILLISECONDS);
+                if (wait) {
+                    Future<Health> future = healthCheckExecutor.submitTask(healthChecker::isHealthy);
+                    health = future.get(timeout, TimeUnit.MILLISECONDS);
+                } else {
+                    health = healthChecker.isHealthy();
+                }
             }  catch (TimeoutException e) {
                 logger.error(
                         "Timeout occurred while doing HealthChecker[{}] {} check, the timeout value is: {}ms.",
@@ -197,13 +256,27 @@ public class HealthCheckerProcessor {
         healthMap.put(beanId, health);
         try {
             if (!result) {
-                logger.error(ErrorCode.convert("01-23001", beanId, checkType, retryCount,
-                    objectMapper.writeValueAsString(health.getDetails()),
-                    healthChecker.isStrictCheck()));
+                if (healthChecker.isStrictCheck()) {
+                    logger.error(ErrorCode.convert("01-23001", beanId, checkType, retryCount,
+                            objectMapper.writeValueAsString(health.getDetails()),
+                            healthChecker.isStrictCheck()));
+                } else {
+                    logger.warn(ErrorCode.convert("01-23001", beanId, checkType, retryCount,
+                            objectMapper.writeValueAsString(health.getDetails()),
+                            healthChecker.isStrictCheck()));
+                }
             }
         } catch (JsonProcessingException ex) {
             logger.error(ErrorCode.convert("01-23003", checkType), ex);
         }
         return !healthChecker.isStrictCheck() || result;
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+        this.defaultTimeout = Integer.parseInt(applicationContext.getEnvironment().getProperty(
+            SofaBootConstants.SOFABOOT_HEALTH_CHECK_DEFAULT_TIMEOUT,
+            String.valueOf(SofaBootConstants.SOFABOOT_HEALTH_CHECK_DEFAULT_TIMEOUT_VALUE)));
     }
 }

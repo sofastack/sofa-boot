@@ -16,8 +16,7 @@
  */
 package com.alipay.sofa.boot.env;
 
-import java.util.Properties;
-
+import com.alipay.sofa.boot.constant.SofaBootConstants;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.env.EnvironmentPostProcessor;
 import org.springframework.core.Ordered;
@@ -26,7 +25,7 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.PropertiesPropertySource;
 import org.springframework.util.StringUtils;
 
-import com.alipay.sofa.boot.constant.SofaBootConstants;
+import java.util.Properties;
 
 /**
  * Used to reset some special key property, such as management.endpoints.web.exposure.include and

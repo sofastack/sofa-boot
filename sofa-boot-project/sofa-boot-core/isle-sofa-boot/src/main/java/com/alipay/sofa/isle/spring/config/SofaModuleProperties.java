@@ -16,9 +16,9 @@
  */
 package com.alipay.sofa.isle.spring.config;
 
-import static com.alipay.sofa.isle.spring.config.SofaModuleProperties.PREFIX;
-
 import org.springframework.boot.context.properties.ConfigurationProperties;
+
+import static com.alipay.sofa.isle.spring.config.SofaModuleProperties.PREFIX;
 
 /**
  * Properties
@@ -27,14 +27,20 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @ConfigurationProperties(prefix = PREFIX)
 public class SofaModuleProperties {
-    static final String PREFIX                        = "com.alipay.sofa.boot";
+    static final String PREFIX                                      = "com.alipay.sofa.boot";
 
     private String      activeProfiles;
-    private long        beanLoadCost                  = 100;
-    private boolean     allowBeanDefinitionOverriding = false;
-    private boolean     moduleStartUpParallel         = true;
-    private boolean     publishEventToParent          = false;
-    private boolean     enableIsle                    = true;
+    private long        beanLoadCost                                = 100;
+    private boolean     allowBeanDefinitionOverriding               = false;
+    private boolean     moduleStartUpParallel                       = true;
+    private boolean     publishEventToParent                        = false;
+    private boolean     enableIsle                                  = true;
+    private boolean     allowModuleOverriding                       = false;
+    private boolean     ignoreModuleInstallFailure                  = false;
+    private boolean     unregisterComponentWhenModuleInstallFailure = true;
+    private float       parallelRefreshCoreCountFactor              = 5.0f;
+    private long        parallelRefreshTimeout                      = 60;
+    private long        parallelRefreshCheckPeriod                  = 30;
 
     public String getActiveProfiles() {
         return activeProfiles;
@@ -82,5 +88,53 @@ public class SofaModuleProperties {
 
     public void setEnableIsle(boolean enableIsle) {
         this.enableIsle = enableIsle;
+    }
+
+    public boolean isAllowModuleOverriding() {
+        return allowModuleOverriding;
+    }
+
+    public void setAllowModuleOverriding(boolean allowModuleOverriding) {
+        this.allowModuleOverriding = allowModuleOverriding;
+    }
+
+    public boolean isIgnoreModuleInstallFailure() {
+        return ignoreModuleInstallFailure;
+    }
+
+    public void setIgnoreModuleInstallFailure(boolean ignoreModuleInstallFailure) {
+        this.ignoreModuleInstallFailure = ignoreModuleInstallFailure;
+    }
+
+    public float getParallelRefreshCoreCountFactor() {
+        return parallelRefreshCoreCountFactor;
+    }
+
+    public void setParallelRefreshCoreCountFactor(float parallelRefreshCoreCountFactor) {
+        this.parallelRefreshCoreCountFactor = parallelRefreshCoreCountFactor;
+    }
+
+    public long getParallelRefreshTimeout() {
+        return parallelRefreshTimeout;
+    }
+
+    public void setParallelRefreshTimeout(long parallelRefreshTimeout) {
+        this.parallelRefreshTimeout = parallelRefreshTimeout;
+    }
+
+    public long getParallelRefreshCheckPeriod() {
+        return parallelRefreshCheckPeriod;
+    }
+
+    public void setParallelRefreshCheckPeriod(long parallelRefreshCheckPeriod) {
+        this.parallelRefreshCheckPeriod = parallelRefreshCheckPeriod;
+    }
+
+    public boolean isUnregisterComponentWhenModuleInstallFailure() {
+        return unregisterComponentWhenModuleInstallFailure;
+    }
+
+    public void setUnregisterComponentWhenModuleInstallFailure(boolean unregisterComponentWhenModuleInstallFailure) {
+        this.unregisterComponentWhenModuleInstallFailure = unregisterComponentWhenModuleInstallFailure;
     }
 }

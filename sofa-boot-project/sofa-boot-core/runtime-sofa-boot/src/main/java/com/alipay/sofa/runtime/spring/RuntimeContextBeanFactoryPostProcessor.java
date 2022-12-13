@@ -43,6 +43,10 @@ public class RuntimeContextBeanFactoryPostProcessor implements BeanFactoryPostPr
     private SofaRuntimeContext      sofaRuntimeContext;
     private ApplicationContext      applicationContext;
 
+    public RuntimeContextBeanFactoryPostProcessor() {
+    }
+
+    @Deprecated
     public RuntimeContextBeanFactoryPostProcessor(BindingAdapterFactory bindingAdapterFactory,
                                                   BindingConverterFactory bindingConverterFactory,
                                                   SofaRuntimeContext sofaRuntimeContext) {
@@ -77,5 +81,11 @@ public class RuntimeContextBeanFactoryPostProcessor implements BeanFactoryPostPr
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
+        this.bindingAdapterFactory = applicationContext.getBean("bindingAdapterFactory",
+            BindingAdapterFactory.class);
+        this.bindingConverterFactory = applicationContext.getBean("bindingConverterFactory",
+            BindingConverterFactory.class);
+        this.sofaRuntimeContext = applicationContext.getBean("sofaRuntimeContext",
+            SofaRuntimeContext.class);
     }
 }

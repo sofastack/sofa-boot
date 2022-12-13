@@ -16,15 +16,13 @@
  */
 package com.alipay.sofa.runtime.ext.spring;
 
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-
-import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 
 /**
  *
@@ -34,9 +32,8 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 public class CommonContextBean implements ApplicationContextAware, BeanNameAware, InitializingBean {
 
     protected String                          beanName;
-    protected ClassLoader                     beanClassLoader;
+    protected ClassLoaderWrapper              beanClassLoaderWrapper;
     protected ConfigurableListableBeanFactory configurableListableBeanFactory;
-    @Autowired
     protected SofaRuntimeContext              sofaRuntimeContext;
     protected ApplicationContext              applicationContext;
 
@@ -45,20 +42,33 @@ public class CommonContextBean implements ApplicationContextAware, BeanNameAware
         // ignore
     }
 
+    @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
         configurableListableBeanFactory = (ConfigurableListableBeanFactory) applicationContext
             .getAutowireCapableBeanFactory();
+        this.sofaRuntimeContext = applicationContext.getBean(SofaRuntimeContext.class);
     }
 
+    @Deprecated
     public void setBeanClassLoader(ClassLoader beanClassLoader) {
-        this.beanClassLoader = beanClassLoader;
+        throw new UnsupportedOperationException("Not support setBeanClassLoader for security");
     }
 
+    @Deprecated
     public ClassLoader getBeanClassLoader() {
-        return beanClassLoader;
+        throw new UnsupportedOperationException("Not support getBeanClassLoader for security");
     }
 
+    public ClassLoaderWrapper getBeanClassLoaderWrapper() {
+        return beanClassLoaderWrapper;
+    }
+
+    public void setBeanClassLoaderWrapper(ClassLoaderWrapper beanClassLoaderWrapper) {
+        this.beanClassLoaderWrapper = beanClassLoaderWrapper;
+    }
+
+    @Override
     public void setBeanName(String beanName) {
         this.beanName = beanName;
     }

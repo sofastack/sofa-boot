@@ -80,7 +80,7 @@ public class LogEnvironmentPreparingListener
     }
 
     private void defaultConsoleLoggers() {
-        if (LocalEnvUtil.isLocalEnv()) {
+        if (LocalEnvUtil.isLocalEnv() || LocalEnvUtil.isTestEnv()) {
             CommonLoggingConfigurations.loadExternalConfiguration(
                 Constants.SOFA_MIDDLEWARE_ALL_LOG_CONSOLE_SWITCH, "true");
         }

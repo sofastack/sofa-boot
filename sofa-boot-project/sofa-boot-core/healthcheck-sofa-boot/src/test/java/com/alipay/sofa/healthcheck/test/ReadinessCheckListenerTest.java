@@ -17,6 +17,7 @@
 package com.alipay.sofa.healthcheck.test;
 
 import com.alipay.sofa.healthcheck.HealthCheckProperties;
+import com.alipay.sofa.healthcheck.core.HealthCheckExecutor;
 import com.alipay.sofa.runtime.configure.SofaRuntimeConfigurationProperties;
 import org.junit.Assert;
 import org.junit.Test;
@@ -35,6 +36,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.env.Environment;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -89,18 +91,32 @@ public class ReadinessCheckListenerTest {
         }
 
         @Bean
-        public ReadinessCheckListener readinessCheckListener() {
-            return new ReadinessCheckListener();
+        public ReadinessCheckListener readinessCheckListener(Environment environment,
+                                                             HealthCheckerProcessor healthCheckerProcessor,
+                                                             HealthIndicatorProcessor healthIndicatorProcessor,
+                                                             AfterReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor,
+                                                             SofaRuntimeConfigurationProperties sofaRuntimeConfigurationProperties,
+                                                             HealthCheckProperties healthCheckProperties) {
+            return new ReadinessCheckListener(environment, healthCheckerProcessor,
+                healthIndicatorProcessor, afterReadinessCheckCallbackProcessor,
+                sofaRuntimeConfigurationProperties, healthCheckProperties);
         }
 
         @Bean
-        public HealthCheckerProcessor healthCheckerProcessor() {
-            return new HealthCheckerProcessor();
+        public HealthCheckerProcessor healthCheckerProcessor(HealthCheckProperties healthCheckProperties,
+                                                             HealthCheckExecutor healthCheckExecutor) {
+            return new HealthCheckerProcessor(healthCheckProperties, healthCheckExecutor);
         }
 
         @Bean
-        public HealthIndicatorProcessor healthIndicatorProcessor() {
-            return new HealthIndicatorProcessor();
+        public HealthIndicatorProcessor healthIndicatorProcessor(HealthCheckProperties properties,
+                                                                 HealthCheckExecutor healthCheckExecutor) {
+            return new HealthIndicatorProcessor(properties, healthCheckExecutor);
+        }
+
+        @Bean
+        public HealthCheckExecutor healthCheckExecutor(HealthCheckProperties properties) {
+            return new HealthCheckExecutor(properties);
         }
     }
 

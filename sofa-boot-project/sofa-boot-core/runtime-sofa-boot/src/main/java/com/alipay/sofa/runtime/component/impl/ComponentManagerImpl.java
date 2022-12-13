@@ -17,6 +17,7 @@
 package com.alipay.sofa.runtime.component.impl;
 
 import com.alipay.sofa.boot.error.ErrorCode;
+import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.log.SofaLogger;
@@ -26,12 +27,9 @@ import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.ComponentManager;
 import com.alipay.sofa.runtime.spring.SpringContextComponent;
+import org.springframework.context.ApplicationContext;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
@@ -47,11 +45,14 @@ public class ComponentManagerImpl implements ComponentManager {
     protected ConcurrentMap<ComponentType, Map<ComponentName, ComponentInfo>> resolvedRegistry;
     /** client factory */
     private ClientFactoryInternal                                             clientFactoryInternal;
+    private final ClassLoader                                                 appClassLoader;
 
-    public ComponentManagerImpl(ClientFactoryInternal clientFactoryInternal) {
+    public ComponentManagerImpl(ClientFactoryInternal clientFactoryInternal,
+                                ClassLoader appClassLoader) {
         this.registry = new ConcurrentHashMap(16);
         this.resolvedRegistry = new ConcurrentHashMap(16);
         this.clientFactoryInternal = clientFactoryInternal;
+        this.appClassLoader = appClassLoader;
     }
 
     public Collection<ComponentInfo> getComponentInfos() {
@@ -88,6 +89,9 @@ public class ComponentManagerImpl implements ComponentManager {
 
     @Override
     public void shutdown() {
+        if (SofaRuntimeProperties.isSkipAllComponentShutdown(appClassLoader)) {
+            return;
+        }
         List<ComponentInfo> elems = new ArrayList<>(registry.values());
         // shutdown spring contexts first
         List<ComponentInfo> springContextComponents = elems.stream()
@@ -105,6 +109,9 @@ public class ComponentManagerImpl implements ComponentManager {
             elems.removeAll(springContextComponents);
         }
 
+        if (SofaRuntimeProperties.isSkipCommonComponentShutdown(appClassLoader)) {
+            return;
+        }
         // shutdown remaining components
         for (ComponentInfo ri : elems) {
             try {
@@ -230,6 +237,19 @@ public class ComponentManagerImpl implements ComponentManager {
                 SofaLogger.error(ErrorCode.convert("01-03005", componentInfo.getName()), t);
             }
         }
+    }
+
+    @Override
+    public Collection<ComponentInfo> getComponentInfosByApplicationContext(ApplicationContext application) {
+        List<ComponentInfo> componentInfos = new ArrayList<>();
+
+        for (ComponentInfo componentInfo : registry.values()) {
+            if (Objects.equals(application, componentInfo.getApplicationContext())) {
+                componentInfos.add(componentInfo);
+            }
+        }
+
+        return componentInfos;
     }
 
     private void typeRegistry(ComponentInfo componentInfo) {

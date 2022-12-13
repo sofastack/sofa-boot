@@ -22,6 +22,7 @@ import com.alipay.sofa.healthcheck.HealthCheckProperties;
 import com.alipay.sofa.healthcheck.HealthCheckerProcessor;
 import com.alipay.sofa.healthcheck.HealthIndicatorProcessor;
 import com.alipay.sofa.healthcheck.ReadinessCheckListener;
+import com.alipay.sofa.healthcheck.core.HealthCheckExecutor;
 import com.alipay.sofa.healthcheck.core.HealthChecker;
 import com.alipay.sofa.runtime.configure.SofaRuntimeConfigurationProperties;
 import org.junit.Test;
@@ -31,6 +32,7 @@ import org.springframework.boot.actuate.health.Status;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 
 /**
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
@@ -47,18 +49,27 @@ public class HealthCheckInsulatorTest {
         }
 
         @Bean
-        public HealthCheckerProcessor healthCheckerProcessor() {
-            return new HealthCheckerProcessor();
+        public HealthCheckerProcessor healthCheckerProcessor(HealthCheckProperties healthCheckProperties,
+                                                             HealthCheckExecutor healthCheckExecutor) {
+            return new HealthCheckerProcessor(healthCheckProperties, healthCheckExecutor);
         }
 
         @Bean
-        public HealthIndicatorProcessor healthIndicatorProcessor() {
-            return new HealthIndicatorProcessor();
+        public HealthIndicatorProcessor healthIndicatorProcessor(HealthCheckProperties properties,
+                                                                 HealthCheckExecutor healthCheckExecutor) {
+            return new HealthIndicatorProcessor(properties, healthCheckExecutor);
         }
 
         @Bean
-        public ReadinessCheckListener readinessCheckListener() {
-            return new ReadinessCheckListener();
+        public ReadinessCheckListener readinessCheckListener(Environment environment,
+                                                             HealthCheckerProcessor healthCheckerProcessor,
+                                                             HealthIndicatorProcessor healthIndicatorProcessor,
+                                                             AfterReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor,
+                                                             SofaRuntimeConfigurationProperties sofaRuntimeConfigurationProperties,
+                                                             HealthCheckProperties healthCheckProperties) {
+            return new ReadinessCheckListener(environment, healthCheckerProcessor,
+                healthIndicatorProcessor, afterReadinessCheckCallbackProcessor,
+                sofaRuntimeConfigurationProperties, healthCheckProperties);
         }
 
         @Bean
@@ -75,6 +86,11 @@ public class HealthCheckInsulatorTest {
                     return "myHealthChecker";
                 }
             };
+        }
+
+        @Bean
+        public HealthCheckExecutor healthCheckExecutor(HealthCheckProperties properties) {
+            return new HealthCheckExecutor(properties);
         }
     }
 

@@ -24,6 +24,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
@@ -116,8 +117,9 @@ public class SofaModuleProfileCheckerTest {
     @EnableConfigurationProperties(SofaModuleProperties.class)
     static class SofaModuleProfileCheckerTestConfiguration {
         @Bean
-        public SofaModuleProfileChecker sofaModuleProfileChecker() {
-            return new DefaultSofaModuleProfileChecker();
+        @ConditionalOnMissingBean
+        public SofaModuleProfileChecker sofaModuleProfileChecker(SofaModuleProperties sofaModuleProperties) {
+            return new DefaultSofaModuleProfileChecker(sofaModuleProperties);
         }
     }
 }

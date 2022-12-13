@@ -19,6 +19,7 @@ package com.alipay.sofa.runtime.spring;
 import java.lang.reflect.Method;
 import java.util.concurrent.CountDownLatch;
 
+import com.alipay.sofa.runtime.factory.BeanLoadCostBeanFactory;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.aop.framework.ProxyFactory;
@@ -34,7 +35,7 @@ import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.runtime.log.SofaLogger;
 import com.alipay.sofa.runtime.spring.async.AsyncInitBeanHolder;
 import com.alipay.sofa.runtime.spring.async.AsyncTaskExecutor;
-import com.alipay.sofa.runtime.spring.parser.AsyncInitBeanDefinitionDecorator;
+import org.springframework.core.PriorityOrdered;
 
 /**
  * @author qilong.zql
@@ -42,7 +43,7 @@ import com.alipay.sofa.runtime.spring.parser.AsyncInitBeanDefinitionDecorator;
  * @since 2.6.0
  */
 public class AsyncProxyBeanPostProcessor implements BeanPostProcessor, ApplicationContextAware,
-                                        InitializingBean {
+                                        InitializingBean, PriorityOrdered {
 
     private ApplicationContext applicationContext;
 
@@ -75,8 +76,8 @@ public class AsyncProxyBeanPostProcessor implements BeanPostProcessor, Applicati
     public void afterPropertiesSet() {
         ConfigurableBeanFactory beanFactory = ((AbstractApplicationContext) applicationContext)
             .getBeanFactory();
-        if (AsyncInitBeanDefinitionDecorator.isBeanLoadCostBeanFactory(beanFactory.getClass())) {
-            moduleName = AsyncInitBeanDefinitionDecorator.getModuleNameFromBeanFactory(beanFactory);
+        if (beanFactory instanceof BeanLoadCostBeanFactory) {
+            moduleName = ((BeanLoadCostBeanFactory) beanFactory).getId();
         } else {
             moduleName = SofaBootConstants.ROOT_APPLICATION_CONTEXT;
         }
@@ -85,6 +86,11 @@ public class AsyncProxyBeanPostProcessor implements BeanPostProcessor, Applicati
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
+    }
+
+    @Override
+    public int getOrder() {
+        return PriorityOrdered.HIGHEST_PRECEDENCE;
     }
 
     class AsyncInitializeBeanMethodInvoker implements MethodInterceptor {

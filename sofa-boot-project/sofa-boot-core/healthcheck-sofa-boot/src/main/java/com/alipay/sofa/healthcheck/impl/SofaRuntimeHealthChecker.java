@@ -16,29 +16,31 @@
  */
 package com.alipay.sofa.healthcheck.impl;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.health.HealthIndicator;
-import org.springframework.boot.actuate.health.Status;
-
 import com.alipay.sofa.boot.health.RuntimeHealthChecker;
 import com.alipay.sofa.healthcheck.ReadinessCheckListener;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
+import org.springframework.boot.actuate.health.HealthIndicator;
+import org.springframework.boot.actuate.health.Status;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * @author qilong.zql
  * @since 2.5.0
  */
+@Component
 public class SofaRuntimeHealthChecker implements RuntimeHealthChecker {
-    @Autowired
-    private List<HealthIndicator>  healthIndicators;
 
-    @Autowired
-    private ReadinessCheckListener readinessCheckListener;
+    private final List<HealthIndicator>  healthIndicators;
+    private final ReadinessCheckListener readinessCheckListener;
 
-    public SofaRuntimeHealthChecker(SofaRuntimeContext sofaRuntimeContext) {
+    public SofaRuntimeHealthChecker(SofaRuntimeContext sofaRuntimeContext,
+                                    List<HealthIndicator> healthIndicators,
+                                    ReadinessCheckListener readinessCheckListener) {
         sofaRuntimeContext.getSofaRuntimeManager().registerRuntimeHealthChecker(this);
+        this.healthIndicators = healthIndicators;
+        this.readinessCheckListener = readinessCheckListener;
     }
 
     @Override

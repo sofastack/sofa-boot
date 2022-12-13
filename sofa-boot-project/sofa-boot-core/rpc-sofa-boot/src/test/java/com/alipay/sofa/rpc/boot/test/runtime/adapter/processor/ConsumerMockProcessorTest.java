@@ -31,7 +31,7 @@ import org.junit.Test;
 public class ConsumerMockProcessorTest {
 
     public static final String    MOCK_URL  = "mock";
-    private ConsumerMockProcessor processor = new ConsumerMockProcessor();
+    private ConsumerMockProcessor processor = new ConsumerMockProcessor("");
 
     @Before
     public void before() {

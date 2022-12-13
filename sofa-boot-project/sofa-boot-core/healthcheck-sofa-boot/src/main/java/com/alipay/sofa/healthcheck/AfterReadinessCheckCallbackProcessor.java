@@ -16,22 +16,22 @@
  */
 package com.alipay.sofa.healthcheck;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import com.alipay.sofa.boot.error.ErrorCode;
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.health.Health;
-import org.springframework.boot.actuate.health.Status;
-import org.springframework.context.ApplicationContext;
-import org.springframework.util.Assert;
-
 import com.alipay.sofa.healthcheck.log.HealthCheckLoggerFactory;
 import com.alipay.sofa.healthcheck.startup.ReadinessCheckCallback;
 import com.alipay.sofa.healthcheck.util.HealthCheckUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.springframework.beans.BeansException;
+import org.springframework.boot.actuate.health.Health;
+import org.springframework.boot.actuate.health.Status;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.util.Assert;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Used to check {@link ReadinessCheckCallback}
@@ -40,16 +40,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @author qiong.zql
  * @version 2.3.0
  */
-public class AfterReadinessCheckCallbackProcessor {
+public class AfterReadinessCheckCallbackProcessor implements ApplicationContextAware {
 
-    private static Logger                                 logger                  = HealthCheckLoggerFactory
-                                                                                      .getLogger(AfterReadinessCheckCallbackProcessor.class);
+    private static final Logger                           logger                  = HealthCheckLoggerFactory.DEFAULT_LOG;
 
-    private ObjectMapper                                  objectMapper            = new ObjectMapper();
+    private final ObjectMapper                            objectMapper            = new ObjectMapper();
 
-    private AtomicBoolean                                 isInitiated             = new AtomicBoolean(
+    private final AtomicBoolean                           isInitiated             = new AtomicBoolean(
                                                                                       false);
-    @Autowired
     private ApplicationContext                            applicationContext;
 
     private LinkedHashMap<String, ReadinessCheckCallback> readinessCheckCallbacks = null;
@@ -127,5 +125,10 @@ public class AfterReadinessCheckCallbackProcessor {
             healthMap.put(beanId, health);
         }
         return result;
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
     }
 }

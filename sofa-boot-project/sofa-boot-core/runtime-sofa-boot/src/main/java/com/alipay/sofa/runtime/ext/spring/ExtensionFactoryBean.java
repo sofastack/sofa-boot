@@ -16,16 +16,15 @@
  */
 package com.alipay.sofa.runtime.ext.spring;
 
-import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
-import org.w3c.dom.Element;
-
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.ext.component.ExtensionComponent;
 import com.alipay.sofa.runtime.ext.component.ExtensionPointComponent;
 import com.alipay.sofa.runtime.log.SofaLogger;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
+import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
+import org.w3c.dom.Element;
 
 /**
  *
@@ -49,6 +48,7 @@ public class ExtensionFactoryBean extends AbstractExtFactoryBean {
 
     private ClassLoader classLoader;
 
+    @Override
     public void afterPropertiesSet() throws Exception {
         super.afterPropertiesSet();
         Assert.notNull(applicationContext,
@@ -59,8 +59,11 @@ public class ExtensionFactoryBean extends AbstractExtFactoryBean {
             throw new IllegalArgumentException("'point' have to be specified");
         }
 
-        if (classLoader == null) {
+        if (getBeanClassLoaderWrapper() == null
+            || getBeanClassLoaderWrapper().getInnerClassLoader() == null) {
             classLoader = Thread.currentThread().getContextClassLoader();
+        } else {
+            classLoader = getBeanClassLoaderWrapper().getInnerClassLoader();
         }
 
         try {
@@ -78,6 +81,7 @@ public class ExtensionFactoryBean extends AbstractExtFactoryBean {
 
         ComponentInfo componentInfo = new ExtensionComponent(extensionBuilder.getExtension(),
             sofaRuntimeContext);
+        componentInfo.setApplicationContext(applicationContext);
         sofaRuntimeContext.getComponentManager().register(componentInfo);
     }
 
@@ -87,8 +91,9 @@ public class ExtensionFactoryBean extends AbstractExtFactoryBean {
                                                                     + this.getPoint());
     }
 
+    @Deprecated
     public void setBeanClassLoader(ClassLoader classLoader) {
-        this.classLoader = classLoader;
+        throw new UnsupportedOperationException("Not support setBeanClassLoader for security");
     }
 
     public void setContribution(String[] contribution) throws Exception {

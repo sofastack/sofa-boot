@@ -20,8 +20,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 
-import com.alipay.sofa.boot.constant.SofaBootConstants;
-import com.alipay.sofa.isle.spring.factory.BeanLoadCostBeanFactory;
+import com.alipay.sofa.runtime.factory.BeanLoadCostBeanFactory;
 import com.alipay.sofa.runtime.spring.parser.AsyncInitBeanDefinitionDecorator;
 
 /**
@@ -37,8 +36,7 @@ public class AsyncInitBeanDefinitionDecoratorTest {
         BeanLoadCostBeanFactory beanFactory = new BeanLoadCostBeanFactory(10, moduleName);
         Assert.assertTrue(AsyncInitBeanDefinitionDecorator.isBeanLoadCostBeanFactory(beanFactory
             .getClass()));
-        Assert.assertEquals(moduleName,
-            AsyncInitBeanDefinitionDecorator.getModuleNameFromBeanFactory(beanFactory));
+        Assert.assertEquals(moduleName, beanFactory.getId());
     }
 
     @Test
@@ -46,8 +44,6 @@ public class AsyncInitBeanDefinitionDecoratorTest {
         DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
         Assert.assertFalse(AsyncInitBeanDefinitionDecorator.isBeanLoadCostBeanFactory(beanFactory
             .getClass()));
-        Assert.assertEquals(SofaBootConstants.ROOT_APPLICATION_CONTEXT,
-            AsyncInitBeanDefinitionDecorator.getModuleNameFromBeanFactory(beanFactory));
     }
 
 }

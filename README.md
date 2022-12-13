@@ -44,7 +44,7 @@ While Spring Boot health indicators are practical real-time exposure of applicat
 Therefore, readiness check is an indispensable part of deployment automation in production environment and SOFABoot provides the readiness check for application out of box.
 For reliable application startup, all SOFAStack middleware services won't reveal themselves (e.g., RPC services publishing to Service Registry) until readiness check passes.
 
-Platform PAAS can also make use of the readiness check result via URL `http://localhost:8080/health/readiness` to control gracefully external traffic originating such as gateway, load balancer, etc.
+Platform PaaS can also make use of the readiness check result via URL `http://localhost:8080/health/readiness` to control gracefully external traffic originating such as gateway, load balancer, etc.
 
 ### Class Isolation
 Aimed to solve class or dependency conflicts, [SOFAArk](https://github.com/sofastack/sofa-ark) is created.

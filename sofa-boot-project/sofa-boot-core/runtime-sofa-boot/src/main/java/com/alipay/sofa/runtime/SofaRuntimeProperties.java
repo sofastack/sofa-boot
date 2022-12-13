@@ -16,9 +16,9 @@
  */
 package com.alipay.sofa.runtime;
 
-import java.util.concurrent.ConcurrentHashMap;
-
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
+
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author qilong.zql
@@ -31,9 +31,14 @@ public class SofaRuntimeProperties {
     private static final ConcurrentHashMap<ClassLoader, Boolean> disableJvmFirstMap             = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<ClassLoader, Boolean> skipJvmSerializeMap            = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<ClassLoader, Boolean> extensionFailureInsulatingMap  = new ConcurrentHashMap<>();
-
     private static final ConcurrentHashMap<ClassLoader, Boolean> manualReadinessCallbackMap     = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<ClassLoader, Boolean> skipAllComponentShutdownMap    = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<ClassLoader, Boolean> skipCommonComponentShutdownMap = new ConcurrentHashMap<>();
     private static boolean                                       jvmFilterEnable                = false;
+    private static boolean                                       serviceInterfaceTypeCheck      = false;
+    private static boolean                                       dynamicJvmServiceCacheEnable   = false;
+
+    private static boolean                                       serviceNameWithBeanId          = false;
 
     public static boolean isManualReadinessCallback(ClassLoader classLoader) {
         return manualReadinessCallbackMap.get(classLoader) != null
@@ -51,6 +56,22 @@ public class SofaRuntimeProperties {
 
     public static void setJvmFilterEnable(boolean jvmFilterEnable) {
         SofaRuntimeProperties.jvmFilterEnable = jvmFilterEnable;
+    }
+
+    public static boolean isDynamicJvmServiceCacheEnable() {
+        return dynamicJvmServiceCacheEnable;
+    }
+
+    public static void setDynamicJvmServiceCacheEnable(boolean dynamicJvmServiceCacheEnable) {
+        SofaRuntimeProperties.dynamicJvmServiceCacheEnable = dynamicJvmServiceCacheEnable;
+    }
+
+    public static boolean isServiceInterfaceTypeCheck() {
+        return serviceInterfaceTypeCheck;
+    }
+
+    public static void setServiceInterfaceTypeCheck(boolean serviceInterfaceTypeCheck) {
+        SofaRuntimeProperties.serviceInterfaceTypeCheck = serviceInterfaceTypeCheck;
     }
 
     public static boolean isSkipJvmReferenceHealthCheck(SofaRuntimeContext sofaRuntimeContext) {
@@ -115,5 +136,33 @@ public class SofaRuntimeProperties {
 
     public static void setSkipJvmSerialize(ClassLoader classLoader, boolean skipJvmSerialize) {
         skipJvmSerializeMap.putIfAbsent(classLoader, skipJvmSerialize);
+    }
+
+    public static boolean isSkipAllComponentShutdown(ClassLoader classLoader) {
+        return skipAllComponentShutdownMap.get(classLoader) != null
+               && skipAllComponentShutdownMap.get(classLoader);
+    }
+
+    public static void setSkipAllComponentShutdown(ClassLoader classLoader,
+                                                   boolean skipAllComponentShutdown) {
+        skipAllComponentShutdownMap.putIfAbsent(classLoader, skipAllComponentShutdown);
+    }
+
+    public static boolean isSkipCommonComponentShutdown(ClassLoader classLoader) {
+        return skipCommonComponentShutdownMap.get(classLoader) != null
+               && skipCommonComponentShutdownMap.get(classLoader);
+    }
+
+    public static void setSkipCommonComponentShutdown(ClassLoader classLoader,
+                                                      boolean skipCommonComponentShutdown) {
+        skipCommonComponentShutdownMap.putIfAbsent(classLoader, skipCommonComponentShutdown);
+    }
+
+    public static boolean isServiceNameWithBeanId() {
+        return serviceNameWithBeanId;
+    }
+
+    public static void setServiceNameWithBeanId(boolean serviceNameWithBeanId) {
+        SofaRuntimeProperties.serviceNameWithBeanId = serviceNameWithBeanId;
     }
 }

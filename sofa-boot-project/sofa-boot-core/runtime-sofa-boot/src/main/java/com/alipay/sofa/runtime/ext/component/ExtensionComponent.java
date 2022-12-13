@@ -136,7 +136,31 @@ public class ExtensionComponent extends AbstractComponent {
             healthResult.setHealthy(true);
             return healthResult;
         }
-        return super.isHealthy();
+
+        HealthResult healthResult = new HealthResult(componentName.getRawName());
+        //表示 loadContributions 异常的 Extension
+        if (e != null) {
+            healthResult.setHealthy(false);
+            healthResult.setHealthReport("Extension loadContributions error: " + e.getMessage());
+            return healthResult;
+        }
+        //表示注册成功的 Extension
+        if (isActivated()) {
+            healthResult.setHealthy(true);
+            return healthResult;
+        }
+        //表示对应的 ExtensionPoint 未注册
+        if (!isResolved()) {
+            healthResult.setHealthy(false);
+            healthResult.setHealthReport("Can not find corresponding ExtensionPoint: "
+                                         + extension.getTargetComponentName().getName());
+            return healthResult;
+        } else {
+            // 表示 registerExtension 异常的 Extension
+            healthResult.setHealthy(false);
+            healthResult.setHealthReport("Extension registerExtension error");
+            return healthResult;
+        }
     }
 
     public Extension getExtension() {
@@ -154,8 +178,9 @@ public class ExtensionComponent extends AbstractComponent {
                     .getAppClassLoader())) {
                     this.e = e;
                 }
-                SofaLogger.error(ErrorCode.convert("01-01002"), extensionPoint.getName(),
-                    extension.getComponentName(), e);
+                SofaLogger.error(
+                    ErrorCode.convert("01-01002", extensionPoint.getName(),
+                        extension.getComponentName()), e);
             }
         }
     }

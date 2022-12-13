@@ -65,14 +65,17 @@ public class ModelCreatingStageTest implements ApplicationContextAware {
     static class ModelCreatingStageTestConfiguration {
         @Bean
         @ConditionalOnMissingBean
-        public ModelCreatingStage modelCreatingStage(ApplicationContext applicationContext) {
-            return new ModelCreatingStage((AbstractApplicationContext) applicationContext);
+        public ModelCreatingStage modelCreatingStage(ApplicationContext applicationContext,
+                                                     SofaModuleProperties sofaModuleProperties,
+                                                     SofaModuleProfileChecker sofaModuleProfileChecker) {
+            return new ModelCreatingStage((AbstractApplicationContext) applicationContext,
+                sofaModuleProperties, sofaModuleProfileChecker);
         }
 
         @Bean
         @ConditionalOnMissingBean
-        public SofaModuleProfileChecker sofaModuleProfileChecker() {
-            return new DefaultSofaModuleProfileChecker();
+        public SofaModuleProfileChecker sofaModuleProfileChecker(SofaModuleProperties sofaModuleProperties) {
+            return new DefaultSofaModuleProfileChecker(sofaModuleProperties);
         }
 
         @Bean

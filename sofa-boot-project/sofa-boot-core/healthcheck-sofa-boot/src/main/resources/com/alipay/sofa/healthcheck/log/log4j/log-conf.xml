@@ -39,6 +39,13 @@
         </layout>
     </appender>
 
+
+    <logger name="com.alipay.sofa" additivity="false">
+        <level value="${logging.level.com.alipay.sofa.healthcheck}"/>
+        <appender-ref ref="ROOT-APPENDER"/>
+        <appender-ref ref="ERROR-APPENDER"/>
+    </logger>
+
     <root>
         <level value="${logging.level.com.alipay.sofa.healthcheck}"/>
         <appender-ref ref="ROOT-APPENDER"/>

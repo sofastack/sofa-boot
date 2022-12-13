@@ -16,10 +16,9 @@
  */
 package com.alipay.sofa.runtime.configure;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.runtime.SofaRuntimeProperties;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * SofaRuntimeConfigurationProperties is exported by SOFA Runtime plugin in Ark.
@@ -46,6 +45,14 @@ public class SofaRuntimeConfigurationProperties {
 
     public void setJvmFilterEnable(boolean jvmFilterEnable) {
         SofaRuntimeProperties.setJvmFilterEnable(jvmFilterEnable);
+    }
+
+    public boolean isDynamicJvmServiceCacheEnable() {
+        return SofaRuntimeProperties.isDynamicJvmServiceCacheEnable();
+    }
+
+    public void setDynamicJvmServiceCacheEnable(boolean dynamicJvmServiceCacheEnable) {
+        SofaRuntimeProperties.setDynamicJvmServiceCacheEnable(dynamicJvmServiceCacheEnable);
     }
 
     public void setSkipJvmReferenceHealthCheck(boolean skipJvmReferenceHealthCheck) {
@@ -96,6 +103,42 @@ public class SofaRuntimeConfigurationProperties {
     public boolean isSkipExtensionHealthCheck() {
         return SofaRuntimeProperties.isSkipExtensionHealthCheck(Thread.currentThread()
             .getContextClassLoader());
+    }
+
+    public void setServiceInterfaceTypeCheck(boolean serviceInterfaceTypeCheck) {
+        SofaRuntimeProperties.setServiceInterfaceTypeCheck(serviceInterfaceTypeCheck);
+    }
+
+    public boolean isServiceInterfaceTypeCheck() {
+        return SofaRuntimeProperties.isServiceInterfaceTypeCheck();
+    }
+
+    public void setSkipAllComponentShutdown(boolean skipAllComponentShutdown) {
+        SofaRuntimeProperties.setSkipAllComponentShutdown(Thread.currentThread()
+            .getContextClassLoader(), skipAllComponentShutdown);
+    }
+
+    public boolean isSkipAllComponentShutdown() {
+        return SofaRuntimeProperties.isSkipAllComponentShutdown(Thread.currentThread()
+            .getContextClassLoader());
+    }
+
+    public void setSkipCommonComponentShutdown(boolean skipCommonComponentShutdown) {
+        SofaRuntimeProperties.setSkipCommonComponentShutdown(Thread.currentThread()
+            .getContextClassLoader(), skipCommonComponentShutdown);
+    }
+
+    public boolean isSkipCommonComponentShutdown() {
+        return SofaRuntimeProperties.isSkipCommonComponentShutdown(Thread.currentThread()
+            .getContextClassLoader());
+    }
+
+    public void setServiceNameWithBeanId(boolean serviceNameWithBeanId) {
+        SofaRuntimeProperties.setServiceNameWithBeanId(serviceNameWithBeanId);
+    }
+
+    public boolean isServiceNameWithBeanId() {
+        return SofaRuntimeProperties.isServiceNameWithBeanId();
     }
 
 }

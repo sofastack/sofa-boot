@@ -32,7 +32,7 @@ public class DynamicConfigProcessorTest {
 
     public static final String     CONFIG    = "config";
     public static final String     ANOTHER   = "another";
-    private DynamicConfigProcessor processor = new DynamicConfigProcessor();
+    private DynamicConfigProcessor processor = new DynamicConfigProcessor("");
 
     @Test
     public void test() {

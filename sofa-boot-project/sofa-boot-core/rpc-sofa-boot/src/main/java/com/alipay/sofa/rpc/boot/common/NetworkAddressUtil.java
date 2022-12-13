@@ -43,7 +43,7 @@ public class NetworkAddressUtil {
     private static String          DEFAULT_HOST_NAME    = "app";
 
     /**
-     * this method should be invoked fisrt
+     * this method should be invoked first
      *
      * @param enabledIpRange
      * @param bindNetworkInterface

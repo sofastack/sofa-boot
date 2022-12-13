@@ -16,11 +16,12 @@
  */
 package com.alipay.sofa.startup.stage.isle;
 
-import com.alipay.sofa.boot.startup.ContextRefreshStageStat;
+import com.alipay.sofa.boot.startup.ChildrenStat;
 import com.alipay.sofa.boot.startup.ModuleStat;
 import com.alipay.sofa.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
-import com.alipay.sofa.isle.spring.factory.BeanLoadCostBeanFactory;
+import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
+import com.alipay.sofa.runtime.factory.BeanLoadCostBeanFactory;
 import com.alipay.sofa.isle.stage.SpringContextInstallStage;
 import com.alipay.sofa.startup.StartupReporter;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -36,24 +37,25 @@ import static com.alipay.sofa.boot.startup.BootStageConstants.ISLE_SPRING_CONTEX
  * @since 2020/7/8
  */
 public class StartupSpringContextInstallStage extends SpringContextInstallStage {
-    private final StartupReporter   startupReporter;
-    private ContextRefreshStageStat contextRefreshStageStat;
+    private final StartupReporter    startupReporter;
+    private ChildrenStat<ModuleStat> contextRefreshStageStat;
 
     public StartupSpringContextInstallStage(AbstractApplicationContext applicationContext,
+                                            SofaModuleProperties sofaModuleProperties,
                                             StartupReporter startupReporter) {
-        super(applicationContext);
+        super(applicationContext, sofaModuleProperties);
         this.startupReporter = startupReporter;
     }
 
     @Override
     protected void doProcess() throws Exception {
-        contextRefreshStageStat = new ContextRefreshStageStat();
-        contextRefreshStageStat.setStageName(ISLE_SPRING_CONTEXT_INSTALL_STAGE);
-        contextRefreshStageStat.setStageStartTime(System.currentTimeMillis());
+        contextRefreshStageStat = new ChildrenStat<>();
+        contextRefreshStageStat.setName(ISLE_SPRING_CONTEXT_INSTALL_STAGE);
+        contextRefreshStageStat.setStartTime(System.currentTimeMillis());
         try {
             super.doProcess();
         } finally {
-            contextRefreshStageStat.setStageEndTime(System.currentTimeMillis());
+            contextRefreshStageStat.setEndTime(System.currentTimeMillis());
             startupReporter.addCommonStartupStat(contextRefreshStageStat);
         }
     }
@@ -63,21 +65,21 @@ public class StartupSpringContextInstallStage extends SpringContextInstallStage 
                                           ApplicationRuntimeModel application) {
 
         ModuleStat moduleStat = new ModuleStat();
-        moduleStat.setModuleName(deployment.getModuleName());
-        moduleStat.setModuleStartTime(System.currentTimeMillis());
+        moduleStat.setName(deployment.getModuleName());
+        moduleStat.setStartTime(System.currentTimeMillis());
 
         super.doRefreshSpringContext(deployment, application);
 
-        moduleStat.setModuleEndTime(System.currentTimeMillis());
-        moduleStat.setElapsedTime(moduleStat.getModuleEndTime() - moduleStat.getModuleStartTime());
+        moduleStat.setEndTime(System.currentTimeMillis());
+        moduleStat.setCost(moduleStat.getEndTime() - moduleStat.getStartTime());
         moduleStat.setThreadName(Thread.currentThread().getName());
         ConfigurableApplicationContext ctx = (ConfigurableApplicationContext) deployment
             .getApplicationContext();
         ConfigurableListableBeanFactory beanFactory = ctx.getBeanFactory();
         if (beanFactory instanceof BeanLoadCostBeanFactory) {
-            moduleStat.setBeanStats(((BeanLoadCostBeanFactory) beanFactory).getBeanStats());
+            moduleStat.setChildren(((BeanLoadCostBeanFactory) beanFactory).getBeanStats());
         }
 
-        contextRefreshStageStat.appendModuleStat(moduleStat);
+        contextRefreshStageStat.addChild(moduleStat);
     }
 }

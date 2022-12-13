@@ -20,6 +20,7 @@ import com.alipay.sofa.boot.actuator.startup.SofaBootStartupEndPoint;
 import com.alipay.sofa.boot.autoconfigure.startup.SofaStartupAutoConfiguration;
 import com.alipay.sofa.startup.StartupReporter;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
+import org.springframework.boot.actuate.autoconfigure.startup.StartupEndpointAutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -32,13 +33,14 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnClass(StartupReporter.class)
-@AutoConfigureBefore(SofaStartupAutoConfiguration.class)
+@AutoConfigureBefore(value = { SofaStartupAutoConfiguration.class,
+                              StartupEndpointAutoConfiguration.class })
 public class StartupEndPointAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
     @ConditionalOnAvailableEndpoint(endpoint = SofaBootStartupEndPoint.class)
-    public SofaBootStartupEndPoint sofaBootStartupEndPoint() {
-        return new SofaBootStartupEndPoint();
+    public SofaBootStartupEndPoint sofaBootStartupEndPoint(StartupReporter startupReporter) {
+        return new SofaBootStartupEndPoint(startupReporter);
     }
 }

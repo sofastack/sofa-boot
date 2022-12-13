@@ -16,9 +16,8 @@
  */
 package com.alipay.sofa.healthcheck.log;
 
-import org.slf4j.Logger;
-
 import com.alipay.sofa.common.log.LoggerSpaceManager;
+import org.slf4j.Logger;
 
 /**
  * @author liangen
@@ -27,6 +26,9 @@ import com.alipay.sofa.common.log.LoggerSpaceManager;
 public class HealthCheckLoggerFactory {
 
     private static final String HEALTH_CHECK_LOG_SPACE = "com.alipay.sofa.healthcheck";
+
+    public static final Logger  DEFAULT_LOG            = HealthCheckLoggerFactory
+                                                           .getLogger("com.alipay.sofa");
 
     /***
      * Get the log object

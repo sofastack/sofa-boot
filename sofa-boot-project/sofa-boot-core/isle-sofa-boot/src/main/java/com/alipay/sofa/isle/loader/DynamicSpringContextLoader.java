@@ -16,30 +16,29 @@
  */
 package com.alipay.sofa.isle.loader;
 
-import java.util.Map;
-
-import org.springframework.beans.CachedIntrospectionResults;
-import org.springframework.beans.PropertyEditorRegistrar;
-import org.springframework.beans.PropertyEditorRegistry;
-import org.springframework.beans.factory.annotation.QualifierAnnotationAutowireCandidateResolver;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.beans.factory.support.DefaultListableBeanFactory;
-import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
-import org.springframework.beans.propertyeditors.ClassArrayEditor;
-import org.springframework.beans.propertyeditors.ClassEditor;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.support.GenericApplicationContext;
-import org.springframework.core.io.Resource;
-import org.springframework.util.StringUtils;
-
 import com.alipay.sofa.boot.constant.SofaBootConstants;
+import com.alipay.sofa.boot.startup.BeanStatExtension;
 import com.alipay.sofa.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
 import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
-import com.alipay.sofa.isle.spring.context.SofaModuleApplicationContext;
-import com.alipay.sofa.isle.spring.factory.BeanLoadCostBeanFactory;
+import com.alipay.sofa.runtime.context.SofaApplicationContext;
+import com.alipay.sofa.runtime.factory.BeanLoadCostBeanFactory;
 import com.alipay.sofa.runtime.log.SofaLogger;
+import com.alipay.sofa.runtime.spring.singleton.SingletonSofaPostProcessor;
+import com.alipay.sofa.runtime.util.SofaSpringContextUtil;
+import org.springframework.beans.CachedIntrospectionResults;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.core.io.Resource;
+import org.springframework.util.StringUtils;
+
+import java.util.Map;
 
 /**
  *
@@ -47,55 +46,58 @@ import com.alipay.sofa.runtime.log.SofaLogger;
  */
 public class DynamicSpringContextLoader implements SpringContextLoader {
     protected final ConfigurableApplicationContext rootApplicationContext;
+    private final SofaModuleProperties             sofaModuleProperties;
 
-    public DynamicSpringContextLoader(ApplicationContext applicationContext) {
+    public DynamicSpringContextLoader(ApplicationContext applicationContext,
+                                      SofaModuleProperties sofaModuleProperties) {
         this.rootApplicationContext = (ConfigurableApplicationContext) applicationContext;
+        this.sofaModuleProperties = sofaModuleProperties;
     }
 
     @Override
     public void loadSpringContext(DeploymentDescriptor deployment,
-                                  ApplicationRuntimeModel application) throws Exception {
-        SofaModuleProperties sofaModuleProperties = rootApplicationContext
-            .getBean(SofaModuleProperties.class);
+                                  ApplicationRuntimeModel application) {
+        String moduleName= deployment.getModuleName();
+        ClassLoader moduleClassLoader = deployment.getClassLoader();
+        CachedIntrospectionResults.acceptClassLoader(moduleClassLoader);
 
-        BeanLoadCostBeanFactory beanFactory = new BeanLoadCostBeanFactory(
-            sofaModuleProperties.getBeanLoadCost(), deployment.getModuleName());
-        beanFactory
-            .setAutowireCandidateResolver(new QualifierAnnotationAutowireCandidateResolver());
-        GenericApplicationContext ctx = sofaModuleProperties.isPublishEventToParent() ? new GenericApplicationContext(
-            beanFactory) : new SofaModuleApplicationContext(beanFactory);
+        // 创建上下文
+        DefaultListableBeanFactory beanFactory = SofaSpringContextUtil.createBeanFactory(moduleClassLoader,
+                () -> createBeanFactory(sofaModuleProperties.getBeanLoadCost(), moduleName));
+        GenericApplicationContext ctx = SofaSpringContextUtil.createApplicationContext(
+                sofaModuleProperties.isAllowBeanDefinitionOverriding(),
+                moduleName, moduleClassLoader, () -> createApplicationContext(sofaModuleProperties, beanFactory));
+        XmlBeanDefinitionReader beanDefinitionReader = SofaSpringContextUtil.createBeanDefinitionReader(moduleClassLoader,
+                ctx, () -> createXmlBeanDefinitionReader(ctx));
+
+        // 设置 SOFA 模块相关的内容
         String activeProfiles = sofaModuleProperties.getActiveProfiles();
         if (StringUtils.hasText(activeProfiles)) {
             String[] profiles = activeProfiles.split(SofaBootConstants.PROFILE_SEPARATOR);
             ctx.getEnvironment().setActiveProfiles(profiles);
         }
         setUpParentSpringContext(ctx, deployment, application);
-        final ClassLoader moduleClassLoader = deployment.getClassLoader();
-        ctx.setClassLoader(moduleClassLoader);
-        CachedIntrospectionResults.acceptClassLoader(moduleClassLoader);
-
-        // set allowBeanDefinitionOverriding
-        ctx.setAllowBeanDefinitionOverriding(sofaModuleProperties.isAllowBeanDefinitionOverriding());
-
-        ctx.getBeanFactory().setBeanClassLoader(moduleClassLoader);
-        ctx.getBeanFactory().addPropertyEditorRegistrar(new PropertyEditorRegistrar() {
-
-            public void registerCustomEditors(PropertyEditorRegistry registry) {
-                registry.registerCustomEditor(Class.class, new ClassEditor(moduleClassLoader));
-                registry.registerCustomEditor(Class[].class,
-                    new ClassArrayEditor(moduleClassLoader));
-            }
-        });
         deployment.setApplicationContext(ctx);
 
-        XmlBeanDefinitionReader beanDefinitionReader = new XmlBeanDefinitionReader(ctx);
-        beanDefinitionReader.setValidating(true);
-        beanDefinitionReader.setNamespaceAware(true);
-        beanDefinitionReader
-            .setBeanClassLoader(deployment.getApplicationContext().getClassLoader());
-        beanDefinitionReader.setResourceLoader(ctx);
+        // 加载 bean 定义，添加 BPP
         loadBeanDefinitions(deployment, beanDefinitionReader);
         addPostProcessors(beanFactory);
+    }
+
+    protected DefaultListableBeanFactory createBeanFactory(long beanLoadCost, String factoryId) {
+        return new BeanLoadCostBeanFactory(beanLoadCost, factoryId, getBeanStatExtension());
+    }
+
+    protected XmlBeanDefinitionReader createXmlBeanDefinitionReader(BeanDefinitionRegistry registry) {
+        XmlBeanDefinitionReader beanDefinitionReader = new XmlBeanDefinitionReader(registry);
+        beanDefinitionReader.setValidating(true);
+        return beanDefinitionReader;
+    }
+
+    protected GenericApplicationContext createApplicationContext(SofaModuleProperties sofaModuleProperties,
+                                                                 DefaultListableBeanFactory beanFactory) {
+        return sofaModuleProperties.isPublishEventToParent() ? new GenericApplicationContext(
+            beanFactory) : new SofaApplicationContext(beanFactory);
     }
 
     protected void loadBeanDefinitions(DeploymentDescriptor deployment,
@@ -107,26 +109,30 @@ public class DynamicSpringContextLoader implements SpringContextLoader {
         }
     }
 
-    private void setUpParentSpringContext(GenericApplicationContext applicationContext,
-                                          DeploymentDescriptor deployment,
-                                          ApplicationRuntimeModel application) {
+    protected void setUpParentSpringContext(GenericApplicationContext applicationContext,
+                                            DeploymentDescriptor deployment,
+                                            ApplicationRuntimeModel application) {
         ConfigurableApplicationContext parentSpringContext = getSpringParent(deployment,
             application);
         if (parentSpringContext != null) {
             applicationContext.setParent(parentSpringContext);
+            applicationContext.getEnvironment().setConversionService(
+                parentSpringContext.getEnvironment().getConversionService());
         } else {
             applicationContext.setParent(this.rootApplicationContext);
+            applicationContext.getEnvironment().setConversionService(
+                this.rootApplicationContext.getEnvironment().getConversionService());
         }
     }
 
-    private ConfigurableApplicationContext getSpringParent(DeploymentDescriptor deployment,
-                                                           ApplicationRuntimeModel application) {
+    protected ConfigurableApplicationContext getSpringParent(DeploymentDescriptor deployment,
+                                                             ApplicationRuntimeModel application) {
         ConfigurableApplicationContext parentSpringContext = null;
         if (deployment.getSpringParent() != null) {
             String springParent = deployment.getSpringParent();
 
             if (StringUtils.hasText(springParent)) {
-                DeploymentDescriptor parent = application.getSpringPoweredDeployment(springParent);
+                DeploymentDescriptor parent = application.getDeploymentByName(springParent);
                 if (parent != null) {
                     parentSpringContext = (ConfigurableApplicationContext) parent
                         .getApplicationContext();
@@ -141,13 +147,30 @@ public class DynamicSpringContextLoader implements SpringContextLoader {
     }
 
     @SuppressWarnings("unchecked")
-    private void addPostProcessors(DefaultListableBeanFactory beanFactory) {
+    protected void addPostProcessors(DefaultListableBeanFactory beanFactory) {
         Map<String, BeanDefinition> processors = (Map<String, BeanDefinition>) rootApplicationContext
             .getBean(SofaBootConstants.PROCESSORS_OF_ROOT_APPLICATION_CONTEXT);
         for (Map.Entry<String, BeanDefinition> entry : processors.entrySet()) {
             if (!beanFactory.containsBeanDefinition(entry.getKey())) {
-                beanFactory.registerBeanDefinition(entry.getKey(), entry.getValue());
+                Class<?> type = rootApplicationContext.getType(entry.getKey());
+                if (type != null
+                    && AnnotationUtils.findAnnotation(type, SingletonSofaPostProcessor.class) != null) {
+                    // 复用单例
+                    beanFactory.registerSingleton(entry.getKey(),
+                        rootApplicationContext.getBean(entry.getKey()));
+                } else {
+                    // 注册 BeanDefinition
+                    beanFactory.registerBeanDefinition(entry.getKey(), entry.getValue());
+                }
             }
+        }
+    }
+
+    protected BeanStatExtension getBeanStatExtension() {
+        try {
+            return this.rootApplicationContext.getBean(BeanStatExtension.class);
+        } catch (Throwable e) {
+            return null;
         }
     }
 }

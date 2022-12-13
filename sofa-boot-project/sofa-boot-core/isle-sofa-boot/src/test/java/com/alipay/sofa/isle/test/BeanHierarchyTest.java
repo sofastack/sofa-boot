@@ -27,11 +27,12 @@ import com.alipay.sofa.isle.deployment.impl.FileDeploymentDescriptor;
 import com.alipay.sofa.isle.loader.DynamicSpringContextLoader;
 import com.alipay.sofa.isle.loader.SpringContextLoader;
 import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
-import com.alipay.sofa.isle.spring.factory.BeanLoadCostBeanFactory;
+import com.alipay.sofa.runtime.factory.BeanLoadCostBeanFactory;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
 
@@ -77,7 +78,10 @@ public class BeanHierarchyTest {
                 }
             }
         }
-
+        ApplicationContext applicationContext = application.getResolvedDeployments().get(0)
+            .getApplicationContext();
+        String moduleName = applicationContext.getId();
+        Assert.assertEquals("com.alipay.module", moduleName);
     }
 
     private void refreshApplication(ApplicationRuntimeModel application) throws Exception {
@@ -91,7 +95,7 @@ public class BeanHierarchyTest {
         rootBeanFactory.registerSingleton(SofaBootConstants.PROCESSORS_OF_ROOT_APPLICATION_CONTEXT,
             new HashMap<>());
         SpringContextLoader springContextLoader = new DynamicSpringContextLoader(
-            rootApplicationContext);
+            rootApplicationContext, sofaModuleProperties);
 
         for (DeploymentDescriptor dd : application.getResolvedDeployments()) {
             if (dd.isSpringPowered()) {

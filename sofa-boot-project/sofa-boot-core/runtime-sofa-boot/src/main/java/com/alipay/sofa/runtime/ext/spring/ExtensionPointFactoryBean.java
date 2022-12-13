@@ -16,16 +16,15 @@
  */
 package com.alipay.sofa.runtime.ext.spring;
 
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
-
 import com.alipay.sofa.runtime.ext.component.ExtensionPointComponent;
 import com.alipay.sofa.runtime.log.SofaLogger;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.Implementation;
 import com.alipay.sofa.runtime.spi.spring.SpringImplementationImpl;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 /**
  * Extension point factory bean
@@ -42,6 +41,7 @@ public class ExtensionPointFactoryBean extends AbstractExtFactoryBean {
     /* contributions for the extension point */
     private String[] contribution;
 
+    @Override
     public void afterPropertiesSet() throws Exception {
         super.afterPropertiesSet();
         Assert.notNull(beanFactory, "required property 'beanFactory' has not been set");
@@ -104,6 +104,7 @@ public class ExtensionPointFactoryBean extends AbstractExtFactoryBean {
             applicationContext);
         ComponentInfo extensionPointComponent = new ExtensionPointComponent(
             extensionPointBuilder.getExtensionPoint(), sofaRuntimeContext, implementation);
+        extensionPointComponent.setApplicationContext(applicationContext);
         sofaRuntimeContext.getComponentManager().register(extensionPointComponent);
     }
 

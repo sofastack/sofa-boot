@@ -16,7 +16,9 @@
  */
 package com.alipay.sofa.startup.stage.isle;
 
-import com.alipay.sofa.boot.startup.StageStat;
+import com.alipay.sofa.boot.startup.BaseStat;
+import com.alipay.sofa.isle.profile.SofaModuleProfileChecker;
+import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
 import com.alipay.sofa.isle.stage.ModelCreatingStage;
 import com.alipay.sofa.startup.StartupReporter;
 import org.springframework.context.support.AbstractApplicationContext;
@@ -31,21 +33,23 @@ public class StartupModelCreatingStage extends ModelCreatingStage {
     private final StartupReporter startupReporter;
 
     public StartupModelCreatingStage(AbstractApplicationContext applicationContext,
+                                     SofaModuleProperties sofaModuleProperties,
+                                     SofaModuleProfileChecker sofaModuleProfileChecker,
                                      StartupReporter startupReporter) {
-        super(applicationContext);
+        super(applicationContext, sofaModuleProperties, sofaModuleProfileChecker);
         this.startupReporter = startupReporter;
     }
 
     @Override
     protected void doProcess() throws Exception {
-        StageStat stageStat = new StageStat();
-        stageStat.setStageName(ISLE_MODEL_CREATING_STAGE);
-        stageStat.setStageStartTime(System.currentTimeMillis());
+        BaseStat stat = new BaseStat();
+        stat.setName(ISLE_MODEL_CREATING_STAGE);
+        stat.setStartTime(System.currentTimeMillis());
         try {
             super.doProcess();
         } finally {
-            stageStat.setStageEndTime(System.currentTimeMillis());
-            startupReporter.addCommonStartupStat(stageStat);
+            stat.setEndTime(System.currentTimeMillis());
+            startupReporter.addCommonStartupStat(stat);
         }
     }
 }

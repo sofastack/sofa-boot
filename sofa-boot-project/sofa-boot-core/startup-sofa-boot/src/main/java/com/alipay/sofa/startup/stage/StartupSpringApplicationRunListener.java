@@ -16,12 +16,13 @@
  */
 package com.alipay.sofa.startup.stage;
 
-import com.alipay.sofa.boot.startup.ContextRefreshStageStat;
+import com.alipay.sofa.boot.startup.BaseStat;
+import com.alipay.sofa.boot.startup.ChildrenStat;
 import com.alipay.sofa.boot.startup.ModuleStat;
-import com.alipay.sofa.boot.startup.StageStat;
 import com.alipay.sofa.runtime.log.SofaLogger;
 import com.alipay.sofa.startup.StartupReporter;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import org.springframework.boot.ConfigurableBootstrapContext;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.SpringApplicationRunListener;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -29,6 +30,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
 
 import java.lang.management.ManagementFactory;
+import java.time.Duration;
 
 import static com.alipay.sofa.boot.startup.BootStageConstants.*;
 
@@ -41,10 +43,10 @@ import static com.alipay.sofa.boot.startup.BootStageConstants.*;
 public class StartupSpringApplicationRunListener implements SpringApplicationRunListener, Ordered {
     private final SpringApplication application;
     private final String[]          args;
-    private StageStat               jvmStartingStage;
-    private StageStat               environmentPrepareStage;
-    private StageStat               applicationContextPrepareStage;
-    private StageStat               applicationContextLoadStage;
+    private BaseStat                jvmStartingStage;
+    private BaseStat                environmentPrepareStage;
+    private BaseStat                applicationContextPrepareStage;
+    private BaseStat                applicationContextLoadStage;
 
     public StartupSpringApplicationRunListener(SpringApplication sa, String[] args) {
         this.application = sa;
@@ -52,43 +54,48 @@ public class StartupSpringApplicationRunListener implements SpringApplicationRun
     }
 
     @Override
-    public void starting() {
-        StageStat stageStat = new StageStat();
-        stageStat.setStageName(JVM_STARTING_STAGE);
-        stageStat.setStageStartTime(ManagementFactory.getRuntimeMXBean().getStartTime());
-        stageStat.setStageEndTime(System.currentTimeMillis());
-        this.jvmStartingStage = stageStat;
+    public void starting(ConfigurableBootstrapContext bootstrapContext) {
+        BaseStat stat = new BaseStat();
+        stat.setName(JVM_STARTING_STAGE);
+        stat.setStartTime(ManagementFactory.getRuntimeMXBean().getStartTime());
+        stat.setEndTime(System.currentTimeMillis());
+        this.jvmStartingStage = stat;
     }
 
     @Override
-    public void environmentPrepared(ConfigurableEnvironment environment) {
-        StageStat stageStat = new StageStat();
-        stageStat.setStageName(ENVIRONMENT_PREPARE_STAGE);
-        stageStat.setStageStartTime(jvmStartingStage.getStageEndTime());
-        stageStat.setStageEndTime(System.currentTimeMillis());
-        this.environmentPrepareStage = stageStat;
+    public void environmentPrepared(ConfigurableBootstrapContext bootstrapContext,
+                                    ConfigurableEnvironment environment) {
+        BaseStat stat = new BaseStat();
+        stat.setName(ENVIRONMENT_PREPARE_STAGE);
+        stat.setStartTime(jvmStartingStage.getEndTime());
+        stat.setEndTime(System.currentTimeMillis());
+        this.environmentPrepareStage = stat;
     }
 
     @Override
     public void contextPrepared(ConfigurableApplicationContext context) {
-        StageStat stageStat = new StageStat();
-        stageStat.setStageName(APPLICATION_CONTEXT_PREPARE_STAGE);
-        stageStat.setStageStartTime(environmentPrepareStage.getStageEndTime());
-        stageStat.setStageEndTime(System.currentTimeMillis());
-        this.applicationContextPrepareStage = stageStat;
+        ChildrenStat<BaseStat> stat = new ChildrenStat<>();
+        stat.setName(APPLICATION_CONTEXT_PREPARE_STAGE);
+        stat.setStartTime(environmentPrepareStage.getEndTime());
+        stat.setEndTime(System.currentTimeMillis());
+        if (this.application instanceof StartupSpringApplication) {
+            stat.setChildren(((StartupSpringApplication) this.application)
+                .getInitializerStartupStatList());
+        }
+        this.applicationContextPrepareStage = stat;
     }
 
     @Override
     public void contextLoaded(ConfigurableApplicationContext context) {
-        StageStat stageStat = new StageStat();
-        stageStat.setStageName(APPLICATION_CONTEXT_LOAD_STAGE);
-        stageStat.setStageStartTime(applicationContextPrepareStage.getStageEndTime());
-        stageStat.setStageEndTime(System.currentTimeMillis());
-        this.applicationContextLoadStage = stageStat;
+        BaseStat stat = new BaseStat();
+        stat.setName(APPLICATION_CONTEXT_LOAD_STAGE);
+        stat.setStartTime(applicationContextPrepareStage.getEndTime());
+        stat.setEndTime(System.currentTimeMillis());
+        this.applicationContextLoadStage = stat;
     }
 
     @Override
-    public void started(ConfigurableApplicationContext context) {
+    public void started(ConfigurableApplicationContext context, Duration timeTaken) {
         StartupReporter startupReporter;
         try {
             startupReporter = context.getBean(StartupReporter.class);
@@ -98,16 +105,16 @@ public class StartupSpringApplicationRunListener implements SpringApplicationRun
             return;
         }
         // refresh applicationRefreshStage
-        ContextRefreshStageStat applicationRefreshStage = (ContextRefreshStageStat) startupReporter
+        ChildrenStat<ModuleStat> applicationRefreshStage = (ChildrenStat<ModuleStat>) startupReporter
             .getStageNyName(APPLICATION_CONTEXT_REFRESH_STAGE);
-        applicationRefreshStage.setStageStartTime(applicationContextLoadStage.getStageEndTime());
-        applicationRefreshStage.setElapsedTime(applicationRefreshStage.getStageEndTime()
-                                               - applicationRefreshStage.getStageStartTime());
+        applicationRefreshStage.setStartTime(applicationContextLoadStage.getEndTime());
+        applicationRefreshStage.setCost(applicationRefreshStage.getEndTime()
+                                        - applicationRefreshStage.getStartTime());
 
         // init rootModuleStat
-        ModuleStat rootModule = applicationRefreshStage.getModuleStats().get(0);
-        rootModule.setModuleStartTime(applicationRefreshStage.getStageStartTime());
-        rootModule.setElapsedTime(rootModule.getModuleEndTime() - rootModule.getModuleStartTime());
+        ModuleStat rootModule = applicationRefreshStage.getChildren().get(0);
+        rootModule.setStartTime(applicationRefreshStage.getStartTime());
+        rootModule.setCost(rootModule.getEndTime() - rootModule.getStartTime());
 
         // report all stage
         startupReporter.addCommonStartupStat(jvmStartingStage);
@@ -115,16 +122,6 @@ public class StartupSpringApplicationRunListener implements SpringApplicationRun
         startupReporter.addCommonStartupStat(applicationContextPrepareStage);
         startupReporter.addCommonStartupStat(applicationContextLoadStage);
         startupReporter.applicationBootFinish();
-    }
-
-    @Override
-    public void running(ConfigurableApplicationContext context) {
-
-    }
-
-    @Override
-    public void failed(ConfigurableApplicationContext context, Throwable exception) {
-
     }
 
     @Override

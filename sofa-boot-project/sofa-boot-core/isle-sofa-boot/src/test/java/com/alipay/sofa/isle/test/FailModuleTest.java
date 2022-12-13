@@ -17,7 +17,8 @@
 package com.alipay.sofa.isle.test;
 
 import com.alipay.sofa.isle.spring.SofaModuleContextLifecycle;
-import com.alipay.sofa.isle.spring.share.SofaModulePostProcessorShareManager;
+import com.alipay.sofa.runtime.spring.share.SofaPostProcessorShareManager;
+import com.alipay.sofa.isle.stage.PipelineStage;
 import com.alipay.sofa.runtime.SofaFramework;
 import com.alipay.sofa.runtime.client.impl.ClientFactoryImpl;
 import com.alipay.sofa.runtime.component.impl.StandardSofaRuntimeManager;
@@ -42,7 +43,7 @@ import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
 import com.alipay.sofa.isle.profile.DefaultSofaModuleProfileChecker;
 import com.alipay.sofa.isle.profile.SofaModuleProfileChecker;
 import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
-import com.alipay.sofa.isle.spring.SofaModuleBeanFactoryPostProcessor;
+import com.alipay.sofa.runtime.spring.SofaShareBeanFactoryPostProcessor;
 import com.alipay.sofa.isle.stage.DefaultPipelineContext;
 import com.alipay.sofa.isle.stage.ModelCreatingStage;
 import com.alipay.sofa.isle.stage.ModuleLogOutputStage;
@@ -50,6 +51,8 @@ import com.alipay.sofa.isle.stage.PipelineContext;
 import com.alipay.sofa.isle.stage.SpringContextInstallStage;
 import com.alipay.sofa.isle.test.util.AddCustomJar;
 import com.alipay.sofa.isle.test.util.SeparateClassLoaderTestRunner;
+
+import java.util.List;
 
 /**
  * @author ruoshan
@@ -83,26 +86,31 @@ public class FailModuleTest {
     @EnableConfigurationProperties(SofaModuleProperties.class)
     public static class FailModuleTestConfiguration {
         @Bean
-        public static SofaModuleBeanFactoryPostProcessor sofaModuleBeanFactoryPostProcessor(SofaModulePostProcessorShareManager shareManager) {
-            return new SofaModuleBeanFactoryPostProcessor(shareManager);
+        public static SofaShareBeanFactoryPostProcessor sofaModuleBeanFactoryPostProcessor() {
+            return new SofaShareBeanFactoryPostProcessor();
         }
 
         @Bean
         @ConditionalOnMissingBean
-        public SofaModuleContextLifecycle sofaModuleContextLifecycle() {
-            return new SofaModuleContextLifecycle();
+        public SofaModuleContextLifecycle sofaModuleContextLifecycle(PipelineContext pipelineContext) {
+            return new SofaModuleContextLifecycle(pipelineContext);
         }
 
         @Bean
         @ConditionalOnMissingBean
-        public ModelCreatingStage modelCreatingStage(ApplicationContext applicationContext) {
-            return new ModelCreatingStage((AbstractApplicationContext) applicationContext);
+        public ModelCreatingStage modelCreatingStage(ApplicationContext applicationContext,
+                                                     SofaModuleProperties sofaModuleProperties,
+                                                     SofaModuleProfileChecker sofaModuleProfileChecker) {
+            return new ModelCreatingStage((AbstractApplicationContext) applicationContext,
+                sofaModuleProperties, sofaModuleProfileChecker);
         }
 
         @Bean
         @ConditionalOnMissingBean
-        public SpringContextInstallStage springContextInstallStage(ApplicationContext applicationContext) {
-            return new SpringContextInstallStage((AbstractApplicationContext) applicationContext);
+        public SpringContextInstallStage springContextInstallStage(ApplicationContext applicationContext,
+                                                                   SofaModuleProperties sofaModuleProperties) {
+            return new SpringContextInstallStage((AbstractApplicationContext) applicationContext,
+                sofaModuleProperties);
         }
 
         @Bean
@@ -113,21 +121,20 @@ public class FailModuleTest {
 
         @Bean
         @ConditionalOnMissingBean
-        public PipelineContext pipelineContext() {
-            return new DefaultPipelineContext();
+        public PipelineContext pipelineContext(List<PipelineStage> stageList) {
+            return new DefaultPipelineContext(stageList);
         }
 
         @Bean
         @ConditionalOnMissingBean
-        public SofaModuleProfileChecker sofaModuleProfileChecker() {
-            return new DefaultSofaModuleProfileChecker();
+        public SofaModuleProfileChecker sofaModuleProfileChecker(SofaModuleProperties sofaModuleProperties) {
+            return new DefaultSofaModuleProfileChecker(sofaModuleProperties);
         }
 
         @Bean
         @ConditionalOnMissingBean
-        public SofaModulePostProcessorShareManager sofaModulePostProcessorShareManager(ApplicationContext applicationContext) {
-            return new SofaModulePostProcessorShareManager(
-                (AbstractApplicationContext) applicationContext);
+        public SofaPostProcessorShareManager sofaModulePostProcessorShareManager() {
+            return new SofaPostProcessorShareManager();
         }
 
         @Bean(destroyMethod = "")

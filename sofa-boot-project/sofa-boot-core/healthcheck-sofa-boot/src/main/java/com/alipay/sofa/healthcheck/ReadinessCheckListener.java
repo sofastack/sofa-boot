@@ -16,16 +16,12 @@
  */
 package com.alipay.sofa.healthcheck;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
-
+import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.error.ErrorCode;
+import com.alipay.sofa.healthcheck.log.HealthCheckLoggerFactory;
 import com.alipay.sofa.runtime.configure.SofaRuntimeConfigurationProperties;
 import org.slf4j.Logger;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.Status;
 import org.springframework.boot.actuate.health.StatusAggregator;
@@ -42,8 +38,10 @@ import org.springframework.core.env.Environment;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import com.alipay.sofa.boot.constant.SofaBootConstants;
-import com.alipay.sofa.healthcheck.log.HealthCheckLoggerFactory;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 /**
  * Health check start checker.
@@ -52,46 +50,53 @@ import com.alipay.sofa.healthcheck.log.HealthCheckLoggerFactory;
  */
 public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
                                    GenericApplicationListener {
-    private static Logger                        logger                     = HealthCheckLoggerFactory
-                                                                                .getLogger(ReadinessCheckListener.class);
+    private static Logger                              logger                     = HealthCheckLoggerFactory.DEFAULT_LOG;
 
-    private final StatusAggregator               statusAggregator           = StatusAggregator
-                                                                                .getDefault();
+    private final StatusAggregator                     statusAggregator           = StatusAggregator
+                                                                                      .getDefault();
 
-    protected ApplicationContext                 applicationContext;
+    protected ApplicationContext                       applicationContext;
 
-    @Autowired
-    private Environment                          environment;
+    private final Environment                          environment;
 
-    @Autowired
-    private HealthCheckerProcessor               healthCheckerProcessor;
+    private final HealthCheckerProcessor               healthCheckerProcessor;
 
-    @Autowired
-    private HealthIndicatorProcessor             healthIndicatorProcessor;
+    private final HealthIndicatorProcessor             healthIndicatorProcessor;
 
-    @Autowired
-    private AfterReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor;
+    private final AfterReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor;
 
-    @Autowired
-    private SofaRuntimeConfigurationProperties   sofaRuntimeConfigurationProperties;
+    private final SofaRuntimeConfigurationProperties   sofaRuntimeConfigurationProperties;
 
-    @Autowired
-    private HealthCheckProperties                healthCheckProperties;
+    private final HealthCheckProperties                healthCheckProperties;
 
-    private boolean                              healthCheckerStatus        = true;
+    private boolean                                    healthCheckerStatus        = true;
 
-    private Map<String, Health>                  healthCheckerDetails       = new HashMap<>();
+    private Map<String, Health>                        healthCheckerDetails       = new HashMap<>();
 
-    private boolean                              healthIndicatorStatus      = true;
+    private boolean                                    healthIndicatorStatus      = true;
 
-    private Map<String, Health>                  healthIndicatorDetails     = new HashMap<>();
+    private Map<String, Health>                        healthIndicatorDetails     = new HashMap<>();
 
-    private boolean                              healthCallbackStatus       = true;
-    private boolean                              readinessCheckFinish       = false;
-    private AtomicBoolean                        readinessCallbackTriggered = new AtomicBoolean(
-                                                                                false);
+    private boolean                                    healthCallbackStatus       = true;
+    private boolean                                    readinessCheckFinish       = false;
+    private AtomicBoolean                              readinessCallbackTriggered = new AtomicBoolean(
+                                                                                      false);
 
-    private ReadinessState                       readinessState;
+    private ReadinessState                             readinessState;
+
+    public ReadinessCheckListener(Environment environment,
+                                  HealthCheckerProcessor healthCheckerProcessor,
+                                  HealthIndicatorProcessor healthIndicatorProcessor,
+                                  AfterReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor,
+                                  SofaRuntimeConfigurationProperties sofaRuntimeConfigurationProperties,
+                                  HealthCheckProperties healthCheckProperties) {
+        this.environment = environment;
+        this.healthCheckerProcessor = healthCheckerProcessor;
+        this.healthIndicatorProcessor = healthIndicatorProcessor;
+        this.afterReadinessCheckCallbackProcessor = afterReadinessCheckCallbackProcessor;
+        this.sofaRuntimeConfigurationProperties = sofaRuntimeConfigurationProperties;
+        this.healthCheckProperties = healthCheckProperties;
+    }
 
     @Override
     public void setApplicationContext(ApplicationContext ctx) throws BeansException {
@@ -139,7 +144,7 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
         if (isReadinessCheckFinish()) {
             Object payload = event.getPayload();
             if (payload instanceof ReadinessState && payload != readinessState) {
-                // If readinessCheck if performed normally, readinessState won't be null
+                // If readinessCheck is performed normally, readinessState won't be null
                 // it means application is in critical state if it is
                 if (readinessState == null) {
                     AvailabilityChangeEvent.publish(applicationContext,

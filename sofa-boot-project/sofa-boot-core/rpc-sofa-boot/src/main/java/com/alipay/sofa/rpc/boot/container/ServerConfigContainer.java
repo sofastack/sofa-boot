@@ -25,15 +25,21 @@ import com.alipay.sofa.rpc.boot.log.LoggerConstant;
 import com.alipay.sofa.rpc.boot.log.SofaBootRpcLoggerFactory;
 import com.alipay.sofa.rpc.common.RpcConstants;
 import com.alipay.sofa.rpc.config.ServerConfig;
+import com.alipay.sofa.rpc.config.UserThreadPoolManager;
 import com.alipay.sofa.rpc.log.LogCodes;
 import com.alipay.sofa.rpc.server.Server;
+import com.alipay.sofa.rpc.server.UserThreadPool;
 import com.alipay.sofa.rpc.server.bolt.BoltServer;
 import com.alipay.sofa.rpc.server.triple.TripleServer;
 import org.slf4j.Logger;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -44,54 +50,56 @@ import java.util.concurrent.ThreadPoolExecutor;
  */
 public class ServerConfigContainer {
 
-    private static final Logger       LOGGER                  = SofaBootRpcLoggerFactory
-                                                                  .getLogger(ServerConfigContainer.class);
+    private static final Logger        LOGGER                      = SofaBootRpcLoggerFactory
+                                                                       .getLogger(ServerConfigContainer.class);
 
-    private SofaBootRpcProperties     sofaBootRpcProperties;
+    private SofaBootRpcProperties      sofaBootRpcProperties;
     /**
      * bolt ServerConfig
      */
-    private volatile ServerConfig     boltServerConfig;
-    private final Object              BOLT_LOCK               = new Object();
+    private volatile ServerConfig      boltServerConfig;
+    private final Object               BOLT_LOCK                   = new Object();
 
     /**
      * rest ServerConfig
      */
-    private volatile ServerConfig     restServerConfig;
-    private final Object              REST_LOCK               = new Object();
+    private volatile ServerConfig      restServerConfig;
+    private final Object               REST_LOCK                   = new Object();
 
     /**
      * dubbo ServerConfig
      */
-    private volatile ServerConfig     dubboServerConfig;
-    private final Object              DUBBO_LOCK              = new Object();
+    private volatile ServerConfig      dubboServerConfig;
+    private final Object               DUBBO_LOCK                  = new Object();
 
     /**
      * h2c ServerConfig
      */
-    private volatile ServerConfig     h2cServerConfig;
-    private final Object              H2C_LOCK                = new Object();
+    private volatile ServerConfig      h2cServerConfig;
+    private final Object               H2C_LOCK                    = new Object();
 
     /**
      * http ServerConfig
      */
-    private volatile ServerConfig     httpServerConfig;
-    private final Object              HTTP_LOCK               = new Object();
+    private volatile ServerConfig      httpServerConfig;
+    private final Object               HTTP_LOCK                   = new Object();
 
     /**
      * http ServerConfig
      */
-    private volatile ServerConfig     tripleServerConfig;
-    private final Object              TRIPLE_LOCK             = new Object();
+    private volatile ServerConfig      tripleServerConfig;
+    private final Object               TRIPLE_LOCK                 = new Object();
 
     //custom server configs
-    private Map<String, ServerConfig> customServerConfigs     = new ConcurrentHashMap<String, ServerConfig>();
+    private Map<String, ServerConfig>  customServerConfigs         = new ConcurrentHashMap<String, ServerConfig>();
 
-    private RpcThreadPoolMonitor      boltThreadPoolMonitor   = new RpcThreadPoolMonitor(
-                                                                  LoggerConstant.BOLT_THREAD_LOGGER_NAME);
+    private RpcThreadPoolMonitor       boltThreadPoolMonitor       = new RpcThreadPoolMonitor(
+                                                                       LoggerConstant.BOLT_THREAD_LOGGER_NAME);
 
-    private RpcThreadPoolMonitor      tripleThreadPoolMonitor = new RpcThreadPoolMonitor(
-                                                                  LoggerConstant.TRIPLE_THREAD_LOGGER_NAME);
+    private RpcThreadPoolMonitor       tripleThreadPoolMonitor     = new RpcThreadPoolMonitor(
+                                                                       LoggerConstant.TRIPLE_THREAD_LOGGER_NAME);
+
+    private List<RpcThreadPoolMonitor> customThreadPoolMonitorList = new ArrayList<>();
 
     public ServerConfigContainer(SofaBootRpcProperties sofaBootRpcProperties) {
         this.sofaBootRpcProperties = sofaBootRpcProperties;
@@ -156,6 +164,29 @@ public class ServerConfigContainer {
             }
         }
 
+        startCustomThreadPoolMonitor();
+    }
+
+    private void startCustomThreadPoolMonitor() {
+        Set<UserThreadPool> userThreadPoolSet = UserThreadPoolManager.getUserThreadPoolSet();
+        if (!userThreadPoolSet.isEmpty()) {
+            Set<String> poolNames = new HashSet<>();
+            for (UserThreadPool pool : userThreadPoolSet) {
+                RpcThreadPoolMonitor customThreadPoolMonitor = new RpcThreadPoolMonitor(
+                    LoggerConstant.CUSTOM_THREAD_LOGGER_NAME);
+                customThreadPoolMonitorList.add(customThreadPoolMonitor);
+                if (poolNames.contains(pool.getThreadPoolName())) {
+                    //use to distinguish some UserThreadPools set same poolName
+                    customThreadPoolMonitor.setPoolName(pool.getThreadPoolName() + "-"
+                                                        + pool.hashCode());
+                } else {
+                    customThreadPoolMonitor.setPoolName(pool.getThreadPoolName());
+                }
+                customThreadPoolMonitor.setThreadPoolExecutor(pool.getExecutor());
+                customThreadPoolMonitor.start();
+                poolNames.add(pool.getThreadPoolName());
+            }
+        }
     }
 
     /**
@@ -584,6 +615,8 @@ public class ServerConfigContainer {
             tripleThreadPoolMonitor.stop();
         }
 
+        stopCustomThreadPoolMonitor();
+
         destroyServerConfig(boltServerConfig);
         destroyServerConfig(restServerConfig);
         destroyServerConfig(dubboServerConfig);
@@ -600,6 +633,15 @@ public class ServerConfigContainer {
         h2cServerConfig = null;
         tripleServerConfig = null;
         customServerConfigs.clear();
+    }
+
+    private void stopCustomThreadPoolMonitor() {
+        if (!customThreadPoolMonitorList.isEmpty()) {
+            for (RpcThreadPoolMonitor monitor : customThreadPoolMonitorList) {
+                monitor.stop();
+            }
+            customThreadPoolMonitorList.clear();
+        }
     }
 
     private void destroyServerConfig(ServerConfig serverConfig) {

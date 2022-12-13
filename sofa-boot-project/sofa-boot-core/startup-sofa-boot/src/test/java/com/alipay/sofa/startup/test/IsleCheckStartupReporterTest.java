@@ -16,7 +16,11 @@
  */
 package com.alipay.sofa.startup.test;
 
-import com.alipay.sofa.boot.startup.*;
+import com.alipay.sofa.boot.startup.BaseStat;
+import com.alipay.sofa.boot.startup.BeanStat;
+import com.alipay.sofa.boot.startup.BootStageConstants;
+import com.alipay.sofa.boot.startup.ChildrenStat;
+import com.alipay.sofa.boot.startup.ModuleStat;
 import com.alipay.sofa.runtime.ext.spring.ExtensionFactoryBean;
 import com.alipay.sofa.runtime.ext.spring.ExtensionPointFactoryBean;
 import com.alipay.sofa.runtime.spring.factory.ReferenceFactoryBean;
@@ -58,23 +62,23 @@ public class IsleCheckStartupReporterTest {
         Assert.assertNotNull(startupStaticsModel);
         Assert.assertEquals(7, startupStaticsModel.getStageStats().size());
 
-        StageStat isleModelCreatingStage = startupReporter.getStageNyName(BootStageConstants.ISLE_MODEL_CREATING_STAGE);
+        BaseStat isleModelCreatingStage = startupReporter.getStageNyName(BootStageConstants.ISLE_MODEL_CREATING_STAGE);
         Assert.assertNotNull(isleModelCreatingStage);
-        Assert.assertTrue(isleModelCreatingStage.getElapsedTime() > 0);
+        Assert.assertTrue(isleModelCreatingStage.getCost() > 0);
 
-        StageStat isleSpringContextInstallStage = startupReporter.getStageNyName(BootStageConstants.ISLE_SPRING_CONTEXT_INSTALL_STAGE);
+        BaseStat isleSpringContextInstallStage = startupReporter.getStageNyName(BootStageConstants.ISLE_SPRING_CONTEXT_INSTALL_STAGE);
         Assert.assertNotNull(isleSpringContextInstallStage);
-        Assert.assertTrue(isleSpringContextInstallStage.getElapsedTime() > 0);
+        Assert.assertTrue(isleSpringContextInstallStage.getCost() > 0);
 
-        Assert.assertTrue(isleSpringContextInstallStage instanceof ContextRefreshStageStat);
-        Assert.assertEquals(1, ((ContextRefreshStageStat) isleSpringContextInstallStage).getModuleStats().size());
-        ModuleStat moduleStat = ((ContextRefreshStageStat) isleSpringContextInstallStage).getModuleStats().get(0);
+        Assert.assertTrue(isleSpringContextInstallStage instanceof ChildrenStat);
+        Assert.assertEquals(1, ((ChildrenStat<?>) isleSpringContextInstallStage).getChildren().size());
+        ModuleStat moduleStat = (ModuleStat) ((ChildrenStat<?>) isleSpringContextInstallStage).getChildren().get(0);
         Assert.assertNotNull(moduleStat);
-        Assert.assertEquals("testModule", moduleStat.getModuleName());
-        Assert.assertTrue(moduleStat.getModuleEndTime() > moduleStat.getModuleStartTime());
-        Assert.assertEquals(moduleStat.getElapsedTime(), moduleStat.getModuleEndTime() - moduleStat.getModuleStartTime());
+        Assert.assertEquals("testModule", moduleStat.getName());
+        Assert.assertTrue(moduleStat.getEndTime() > moduleStat.getStartTime());
+        Assert.assertEquals(moduleStat.getCost(), moduleStat.getEndTime() - moduleStat.getStartTime());
 
-        List<BeanStat> beanStats = moduleStat.getBeanStats();
+        List<BeanStat> beanStats = moduleStat.getChildren();
         Assert.assertNotNull(beanStats);
         Assert.assertTrue(beanStats.size() >= 4);
 

@@ -16,17 +16,15 @@
  */
 package com.alipay.sofa.boot.actuator.health;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.health.Health;
-import org.springframework.boot.actuate.health.HealthIndicator;
-
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.health.NonReadinessCheck;
 import com.alipay.sofa.healthcheck.HealthCheckerProcessor;
 import com.alipay.sofa.healthcheck.ReadinessCheckListener;
+import org.springframework.boot.actuate.health.Health;
+import org.springframework.boot.actuate.health.HealthIndicator;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The liveness health check.
@@ -37,13 +35,17 @@ import com.alipay.sofa.healthcheck.ReadinessCheckListener;
  */
 public class SofaBootHealthIndicator implements HealthIndicator, NonReadinessCheck {
 
-    private static final String    CHECK_RESULT_PREFIX = "Middleware";
+    private static final String          CHECK_RESULT_PREFIX = "Middleware";
 
-    @Autowired
-    private HealthCheckerProcessor healthCheckerProcessor;
+    private final HealthCheckerProcessor healthCheckerProcessor;
 
-    @Autowired
-    private ReadinessCheckListener readinessCheckListener;
+    private final ReadinessCheckListener readinessCheckListener;
+
+    public SofaBootHealthIndicator(HealthCheckerProcessor healthCheckerProcessor,
+                                   ReadinessCheckListener readinessCheckListener) {
+        this.healthCheckerProcessor = healthCheckerProcessor;
+        this.readinessCheckListener = readinessCheckListener;
+    }
 
     @Override
     public Health health() {

@@ -16,8 +16,8 @@
  */
 package com.alipay.sofa.startup.test;
 
+import com.alipay.sofa.boot.startup.BaseStat;
 import com.alipay.sofa.boot.startup.BootStageConstants;
-import com.alipay.sofa.boot.startup.StageStat;
 import com.alipay.sofa.healthcheck.HealthCheckProperties;
 import com.alipay.sofa.runtime.configure.SofaRuntimeConfigurationProperties;
 import com.alipay.sofa.startup.StartupReporter;
@@ -53,10 +53,10 @@ public class HealthCheckStartupReporterTest {
         Assert.assertNotNull(startupStaticsModel);
         Assert.assertEquals(6, startupStaticsModel.getStageStats().size());
 
-        StageStat healthCheckStage = startupReporter
+        BaseStat healthCheckStage = startupReporter
             .getStageNyName(BootStageConstants.HEALTH_CHECK_STAGE);
         Assert.assertNotNull(healthCheckStage);
-        Assert.assertTrue(healthCheckStage.getElapsedTime() > 0);
+        Assert.assertTrue(healthCheckStage.getCost() > 0);
 
     }
 }

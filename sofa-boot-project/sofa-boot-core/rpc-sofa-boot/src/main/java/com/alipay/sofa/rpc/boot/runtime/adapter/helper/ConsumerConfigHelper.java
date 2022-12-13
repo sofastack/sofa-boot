@@ -77,6 +77,7 @@ public class ConsumerConfigHelper {
         Object callbackHandler = param.getCallbackHandler();
         String genericInterface = param.getGenericInterface();
         String loadBalancer = param.getLoadBalancer();
+        Integer connectionNum = param.getConnectionNum();
         Boolean lazy = param.getLazy();
         Boolean check = param.getCheck();
         String mockMode = param.getMockMode();
@@ -118,6 +119,9 @@ public class ConsumerConfigHelper {
         }
         if (StringUtils.hasText(loadBalancer)) {
             consumerConfig.setLoadBalancer(loadBalancer);
+        }
+        if (connectionNum != null) {
+            consumerConfig.setConnectionNum(connectionNum);
         }
         if (lazy != null) {
             consumerConfig.setLazy(lazy);

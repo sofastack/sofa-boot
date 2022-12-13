@@ -207,6 +207,8 @@ public abstract class RpcBindingConverter implements BindingConverter<RpcBinding
             .getAttribute(RpcBindingXmlConstants.TAG_ADDRESS_WAIT_TIME));
         Integer connectTimeout = SofaBootRpcParserUtil.parseInteger(element
             .getAttribute(RpcBindingXmlConstants.TAG_CONNECT_TIMEOUT));
+        Integer connectionNum = SofaBootRpcParserUtil.parseInteger(element
+            .getAttribute(RpcBindingXmlConstants.TAG_CONNECT_NUM));
         Integer retries = SofaBootRpcParserUtil.parseInteger(element
             .getAttribute(RpcBindingXmlConstants.TAG_RETRIES));
         String type = element.getAttribute(RpcBindingXmlConstants.TAG_TYPE);
@@ -272,6 +274,10 @@ public abstract class RpcBindingConverter implements BindingConverter<RpcBinding
         }
         if (StringUtils.hasText(loadBalancer)) {
             param.setLoadBalancer(loadBalancer);
+        }
+
+        if (connectionNum != null) {
+            param.setConnectionNum(connectionNum);
         }
         if (lazy != null) {
             param.setLazy(lazy);
@@ -549,6 +555,7 @@ public abstract class RpcBindingConverter implements BindingConverter<RpcBinding
         if (StringUtils.hasText(callbackRef)) {
             bindingParam.setCallbackHandler(applicationContext.getBean(callbackRef));
         }
+        bindingParam.setConnectionNum(sofaReferenceBindingAnnotation.connectionNum());
         bindingParam.setLazy(sofaReferenceBindingAnnotation.lazy());
 
         String registryAlias = sofaReferenceBindingAnnotation.registry();

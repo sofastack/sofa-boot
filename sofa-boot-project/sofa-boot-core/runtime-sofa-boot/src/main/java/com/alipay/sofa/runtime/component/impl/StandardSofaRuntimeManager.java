@@ -16,9 +16,6 @@
  */
 package com.alipay.sofa.runtime.component.impl;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-
 import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.boot.health.RuntimeHealthChecker;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
@@ -31,6 +28,9 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.support.AbstractApplicationContext;
+
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Default Sofa Runtime Manager
@@ -50,7 +50,7 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager, Applicati
 
     public StandardSofaRuntimeManager(String appName, ClassLoader appClassLoader,
                                       ClientFactoryInternal clientFactoryInternal) {
-        componentManager = new ComponentManagerImpl(clientFactoryInternal);
+        componentManager = new ComponentManagerImpl(clientFactoryInternal, appClassLoader);
         this.appName = appName;
         this.appClassLoader = appClassLoader;
         this.sofaRuntimeContext = new SofaRuntimeContext(this, componentManager,

@@ -25,7 +25,6 @@ import com.alipay.sofa.rpc.boot.container.ServerConfigContainer;
 import com.alipay.sofa.rpc.boot.context.event.SofaBootRpcStartEvent;
 import com.alipay.sofa.rpc.config.ProviderConfig;
 import com.alipay.sofa.rpc.event.LookoutSubscriber;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.util.CollectionUtils;
 
@@ -40,22 +39,26 @@ import java.util.Collection;
  */
 public class SofaBootRpcStartListener implements ApplicationListener<SofaBootRpcStartEvent> {
 
-    @Autowired
-    private SofaBootRpcProperties        sofaBootRpcProperties;
+    private final SofaBootRpcProperties        sofaBootRpcProperties;
 
-    @Autowired
-    protected ProviderConfigContainer    providerConfigContainer;
+    protected final ProviderConfigContainer    providerConfigContainer;
 
-    @Autowired
-    protected FaultToleranceConfigurator faultToleranceConfigurator;
+    protected final FaultToleranceConfigurator faultToleranceConfigurator;
 
-    @Autowired
-    protected ServerConfigContainer      serverConfigContainer;
+    protected final ServerConfigContainer      serverConfigContainer;
 
-    @Autowired
-    protected RegistryConfigContainer    registryConfigContainer;
+    protected final RegistryConfigContainer    registryConfigContainer;
 
-    public SofaBootRpcStartListener() {
+    public SofaBootRpcStartListener(SofaBootRpcProperties sofaBootRpcProperties,
+                                    ProviderConfigContainer providerConfigContainer,
+                                    FaultToleranceConfigurator faultToleranceConfigurator,
+                                    ServerConfigContainer serverConfigContainer,
+                                    RegistryConfigContainer registryConfigContainer) {
+        this.sofaBootRpcProperties = sofaBootRpcProperties;
+        this.providerConfigContainer = providerConfigContainer;
+        this.faultToleranceConfigurator = faultToleranceConfigurator;
+        this.serverConfigContainer = serverConfigContainer;
+        this.registryConfigContainer = registryConfigContainer;
     }
 
     @Override

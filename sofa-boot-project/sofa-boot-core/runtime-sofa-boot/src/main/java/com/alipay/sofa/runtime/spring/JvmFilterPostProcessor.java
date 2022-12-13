@@ -19,14 +19,17 @@ package com.alipay.sofa.runtime.spring;
 import com.alipay.sofa.runtime.SofaRuntimeUtils;
 import com.alipay.sofa.runtime.filter.JvmFilterHolder;
 import com.alipay.sofa.runtime.filter.JvmFilter;
+import com.alipay.sofa.runtime.spring.singleton.SingletonSofaPostProcessor;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.core.PriorityOrdered;
 
 /**
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 2020/8/18
  */
-public class JvmFilterPostProcessor implements BeanPostProcessor {
+@SingletonSofaPostProcessor
+public class JvmFilterPostProcessor implements BeanPostProcessor, PriorityOrdered {
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName)
                                                                               throws BeansException {
@@ -37,5 +40,10 @@ public class JvmFilterPostProcessor implements BeanPostProcessor {
         }
 
         return bean;
+    }
+
+    @Override
+    public int getOrder() {
+        return PriorityOrdered.HIGHEST_PRECEDENCE;
     }
 }

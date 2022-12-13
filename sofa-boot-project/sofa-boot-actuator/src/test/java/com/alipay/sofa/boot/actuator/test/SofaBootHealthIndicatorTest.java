@@ -22,10 +22,8 @@ import com.alipay.sofa.healthcheck.ReadinessCheckListener;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
+import org.junit.runners.BlockJUnit4ClassRunner;
 import org.mockito.Mockito;
-import org.mockito.Spy;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.Status;
 
@@ -33,19 +31,15 @@ import org.springframework.boot.actuate.health.Status;
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 2020/9/8
  */
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(BlockJUnit4ClassRunner.class)
 public class SofaBootHealthIndicatorTest {
-    @Spy
-    private HealthCheckerProcessor  healthCheckerProcessor;
-
-    @Spy
-    private ReadinessCheckListener  readinessCheckListener;
-
-    @InjectMocks
-    private SofaBootHealthIndicator sofaBootHealthIndicator;
 
     @Test
     public void testUp() {
+        HealthCheckerProcessor healthCheckerProcessor = Mockito.mock(HealthCheckerProcessor.class);
+        ReadinessCheckListener readinessCheckListener = Mockito.mock(ReadinessCheckListener.class);
+        SofaBootHealthIndicator sofaBootHealthIndicator = new SofaBootHealthIndicator(
+            healthCheckerProcessor, readinessCheckListener);
         Mockito.doReturn(true).when(readinessCheckListener).isReadinessCheckFinish();
         Mockito.doReturn(true).when(healthCheckerProcessor).livenessHealthCheck(Mockito.anyMap());
         Health health = sofaBootHealthIndicator.health();
@@ -54,6 +48,10 @@ public class SofaBootHealthIndicatorTest {
 
     @Test
     public void testDown() {
+        HealthCheckerProcessor healthCheckerProcessor = Mockito.mock(HealthCheckerProcessor.class);
+        ReadinessCheckListener readinessCheckListener = Mockito.mock(ReadinessCheckListener.class);
+        SofaBootHealthIndicator sofaBootHealthIndicator = new SofaBootHealthIndicator(
+            healthCheckerProcessor, readinessCheckListener);
         Mockito.doReturn(true).when(readinessCheckListener).isReadinessCheckFinish();
         Mockito.doReturn(false).when(healthCheckerProcessor).livenessHealthCheck(Mockito.anyMap());
         Health health = sofaBootHealthIndicator.health();

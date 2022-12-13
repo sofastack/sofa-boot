@@ -64,6 +64,11 @@
         </encoder>
     </appender>
 
+    <logger name="com.alipay.sofa" level="${logging.level.com.alipay.boot.healthcheck}" additivity="false">
+        <appender-ref ref="ROOT-APPENDER"/>
+        <appender-ref ref="ERROR-APPENDER"/>
+    </logger>
+
     <root level="${logging.level.com.alipay.boot.healthcheck}">
         <appender-ref ref="ROOT-APPENDER"/>
         <appender-ref ref="ERROR-APPENDER"/>

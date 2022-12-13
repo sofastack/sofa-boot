@@ -16,14 +16,29 @@
  */
 package com.alipay.sofa.runtime.test;
 
-import java.util.Collection;
-import java.util.HashMap;
-
+import com.alipay.sofa.runtime.api.annotation.SofaReference;
+import com.alipay.sofa.runtime.api.annotation.SofaReferenceBinding;
+import com.alipay.sofa.runtime.api.annotation.SofaService;
+import com.alipay.sofa.runtime.api.annotation.SofaServiceBinding;
+import com.alipay.sofa.runtime.api.binding.BindingType;
+import com.alipay.sofa.runtime.service.binding.JvmBinding;
+import com.alipay.sofa.runtime.service.binding.JvmBindingInterface;
+import com.alipay.sofa.runtime.service.component.ReferenceComponent;
+import com.alipay.sofa.runtime.service.component.ServiceComponent;
+import com.alipay.sofa.runtime.spi.component.ComponentInfo;
+import com.alipay.sofa.runtime.spi.component.ComponentManager;
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
+import com.alipay.sofa.runtime.test.beans.facade.SampleNoService;
+import com.alipay.sofa.runtime.test.beans.facade.SampleService;
+import com.alipay.sofa.runtime.test.beans.service.DefaultSampleService;
+import com.alipay.sofa.runtime.test.configuration.RuntimeConfiguration;
+import com.alipay.sofa.runtime.test.util.ComponentNameUtil;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -31,21 +46,8 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.alipay.sofa.runtime.api.annotation.SofaReference;
-import com.alipay.sofa.runtime.api.annotation.SofaReferenceBinding;
-import com.alipay.sofa.runtime.api.annotation.SofaService;
-import com.alipay.sofa.runtime.api.annotation.SofaServiceBinding;
-import com.alipay.sofa.runtime.api.binding.BindingType;
-import com.alipay.sofa.runtime.service.binding.JvmBinding;
-import com.alipay.sofa.runtime.service.component.ReferenceComponent;
-import com.alipay.sofa.runtime.service.component.ServiceComponent;
-import com.alipay.sofa.runtime.spi.component.ComponentInfo;
-import com.alipay.sofa.runtime.spi.component.ComponentManager;
-import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
-import com.alipay.sofa.runtime.test.beans.facade.SampleService;
-import com.alipay.sofa.runtime.test.beans.service.DefaultSampleService;
-import com.alipay.sofa.runtime.test.configuration.RuntimeConfiguration;
-import com.alipay.sofa.runtime.test.util.ComponentNameUtil;
+import java.util.Collection;
+import java.util.HashMap;
 
 /**
  * @author qilong.zql
@@ -57,7 +59,20 @@ import com.alipay.sofa.runtime.test.util.ComponentNameUtil;
 public class SofaBindingTest {
 
     @Autowired
+    private ApplicationContext ctx;
+
+    @Autowired
     private SofaRuntimeContext sofaRuntimeContext;
+
+    @Test
+    public void TestJvmBindingInterface() {
+        // Jdk 代理类添加接口
+        Assert.assertTrue(ctx.getBean("reference1") instanceof JvmBindingInterface);
+
+        // Cglib 代理类不受影响
+        Assert.assertFalse(ctx.getBean("reference4") instanceof JvmBindingInterface);
+        Assert.assertTrue(ctx.getBean("reference4") instanceof SampleNoService);
+    }
 
     @Test
     public void testServiceBinding() {

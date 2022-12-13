@@ -16,10 +16,13 @@
  */
 package com.alipay.sofa.runtime.spring.bean;
 
+import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.util.StringUtils;
 
 import com.alipay.sofa.runtime.spring.parser.AbstractContractDefinitionParser;
+
+import static com.alipay.sofa.runtime.spring.parser.ServiceDefinitionParser.BEAN_ID;
 
 /**
  * @author qilong.zql
@@ -39,11 +42,30 @@ public class SofaBeanNameGenerator {
         }
         String uniqueId = (String) definition.getPropertyValues().get(
             AbstractContractDefinitionParser.UNIQUE_ID_PROPERTY);
-        return generateSofaServiceBeanName(interfaceName, uniqueId);
+        return generateSofaServiceBeanName(interfaceName, uniqueId, (String) definition
+            .getPropertyValues().get(BEAN_ID));
     }
 
     public static String generateSofaServiceBeanName(Class<?> interfaceType, String uniqueId) {
         return generateSofaServiceBeanName(interfaceType.getCanonicalName(), uniqueId);
+    }
+
+    public static String generateSofaServiceBeanName(String interfaceName, String uniqueId,
+                                                     String beanId) {
+        if (SofaRuntimeProperties.isServiceNameWithBeanId() && StringUtils.hasText(beanId)) {
+            return generateSofaServiceBeanName(interfaceName, uniqueId) + ":" + beanId;
+        } else {
+            return generateSofaServiceBeanName(interfaceName, uniqueId);
+        }
+    }
+
+    public static String generateSofaServiceBeanName(Class<?> interfaceType, String uniqueId,
+                                                     String beanId) {
+        if (SofaRuntimeProperties.isServiceNameWithBeanId() && StringUtils.hasText(beanId)) {
+            return generateSofaServiceBeanName(interfaceType, uniqueId) + ":" + beanId;
+        } else {
+            return generateSofaServiceBeanName(interfaceType, uniqueId);
+        }
     }
 
     public static String generateSofaServiceBeanName(String interfaceName, String uniqueId) {

@@ -18,8 +18,8 @@ package com.alipay.sofa.rpc.boot.config;
 
 import com.alipay.sofa.rpc.common.SofaOptions;
 import com.google.common.base.CaseFormat;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.Environment;
 import org.springframework.util.StringUtils;
 
@@ -30,10 +30,9 @@ import java.util.Map;
  * @author khotyn
  */
 @ConfigurationProperties(SofaBootRpcProperties.PREFIX)
-public class SofaBootRpcProperties {
+public class SofaBootRpcProperties implements EnvironmentAware {
     public static final String  PREFIX     = "com.alipay.sofa.rpc";
 
-    @Autowired
     private Environment         environment;
 
     /**
@@ -899,10 +898,6 @@ public class SofaBootRpcProperties {
         return environment;
     }
 
-    public void setEnvironment(Environment environment) {
-        this.environment = environment;
-    }
-
     public boolean isRestSwagger() {
         return restSwagger;
     }
@@ -941,5 +936,10 @@ public class SofaBootRpcProperties {
 
     public void setBoltProcessInIoThread(Boolean boltProcessInIoThread) {
         this.boltProcessInIoThread = boltProcessInIoThread;
+    }
+
+    @Override
+    public void setEnvironment(Environment environment) {
+        this.environment = environment;
     }
 }

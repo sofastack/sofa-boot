@@ -16,8 +16,15 @@
  */
 package com.alipay.sofa.isle.test;
 
-import java.util.List;
-
+import com.alipay.sofa.isle.profile.DefaultSofaModuleProfileChecker;
+import com.alipay.sofa.isle.profile.SofaModuleProfileChecker;
+import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
+import com.alipay.sofa.isle.stage.DefaultPipelineContext;
+import com.alipay.sofa.isle.stage.ModelCreatingStage;
+import com.alipay.sofa.isle.stage.ModuleLogOutputStage;
+import com.alipay.sofa.isle.stage.SpringContextInstallStage;
+import com.alipay.sofa.isle.stage.PipelineContext;
+import com.alipay.sofa.isle.stage.PipelineStage;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,15 +39,7 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.alipay.sofa.isle.profile.DefaultSofaModuleProfileChecker;
-import com.alipay.sofa.isle.profile.SofaModuleProfileChecker;
-import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
-import com.alipay.sofa.isle.stage.DefaultPipelineContext;
-import com.alipay.sofa.isle.stage.ModelCreatingStage;
-import com.alipay.sofa.isle.stage.ModuleLogOutputStage;
-import com.alipay.sofa.isle.stage.PipelineContext;
-import com.alipay.sofa.isle.stage.PipelineStage;
-import com.alipay.sofa.isle.stage.SpringContextInstallStage;
+import java.util.List;
 
 /**
  * @author qilong.zql
@@ -70,14 +69,19 @@ public class PipelineStageTest {
     static class StageTestConfiguration {
         @Bean
         @ConditionalOnMissingBean
-        public ModelCreatingStage modelCreatingStage(ApplicationContext applicationContext) {
-            return new ModelCreatingStage((AbstractApplicationContext) applicationContext);
+        public ModelCreatingStage modelCreatingStage(ApplicationContext applicationContext,
+                                                     SofaModuleProperties sofaModuleProperties,
+                                                     SofaModuleProfileChecker sofaModuleProfileChecker) {
+            return new ModelCreatingStage((AbstractApplicationContext) applicationContext,
+                sofaModuleProperties, sofaModuleProfileChecker);
         }
 
         @Bean
         @ConditionalOnMissingBean
-        public SpringContextInstallStage springContextInstallStage(ApplicationContext applicationContext) {
-            return new SpringContextInstallStage((AbstractApplicationContext) applicationContext);
+        public SpringContextInstallStage springContextInstallStage(ApplicationContext applicationContext,
+                                                                   SofaModuleProperties sofaModuleProperties) {
+            return new SpringContextInstallStage((AbstractApplicationContext) applicationContext,
+                sofaModuleProperties);
         }
 
         @Bean
@@ -88,14 +92,14 @@ public class PipelineStageTest {
 
         @Bean
         @ConditionalOnMissingBean
-        public PipelineContext pipelineContext() {
-            return new DefaultPipelineContext();
+        public PipelineContext pipelineContext(List<PipelineStage> stageList) {
+            return new DefaultPipelineContext(stageList);
         }
 
         @Bean
         @ConditionalOnMissingBean
-        public SofaModuleProfileChecker sofaModuleProfileChecker() {
-            return new DefaultSofaModuleProfileChecker();
+        public SofaModuleProfileChecker sofaModuleProfileChecker(SofaModuleProperties sofaModuleProperties) {
+            return new DefaultSofaModuleProfileChecker(sofaModuleProperties);
         }
 
         @Bean

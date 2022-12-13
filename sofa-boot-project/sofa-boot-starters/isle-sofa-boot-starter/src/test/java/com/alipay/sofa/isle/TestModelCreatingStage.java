@@ -16,20 +16,21 @@
  */
 package com.alipay.sofa.isle;
 
+import com.alipay.sofa.boot.constant.SofaBootConstants;
+import com.alipay.sofa.isle.deployment.DeploymentBuilder;
+import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
+import com.alipay.sofa.isle.deployment.DeploymentDescriptorConfiguration;
+import com.alipay.sofa.isle.profile.SofaModuleProfileChecker;
+import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
+import com.alipay.sofa.isle.stage.ModelCreatingStage;
+import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.core.io.UrlResource;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Properties;
-
-import com.alipay.sofa.isle.stage.ModelCreatingStage;
-import org.springframework.context.support.AbstractApplicationContext;
-import org.springframework.core.io.UrlResource;
-
-import com.alipay.sofa.boot.constant.SofaBootConstants;
-import com.alipay.sofa.isle.deployment.DeploymentBuilder;
-import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
-import com.alipay.sofa.isle.deployment.DeploymentDescriptorConfiguration;
 
 /**
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
@@ -39,8 +40,9 @@ public class TestModelCreatingStage extends ModelCreatingStage {
     private final String[] modulePrefixes;
 
     public TestModelCreatingStage(AbstractApplicationContext applicationContext,
-                                  String... modulePrefixes) {
-        super(applicationContext);
+                                  SofaModuleProperties sofaModuleProperties,
+                                  SofaModuleProfileChecker checker, String... modulePrefixes) {
+        super(applicationContext, sofaModuleProperties, checker);
         this.modulePrefixes = modulePrefixes;
     }
 

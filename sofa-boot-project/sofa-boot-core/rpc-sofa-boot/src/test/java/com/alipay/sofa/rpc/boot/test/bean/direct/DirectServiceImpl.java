@@ -21,7 +21,7 @@ package com.alipay.sofa.rpc.boot.test.bean.direct;
  */
 public class DirectServiceImpl implements DirectService {
     @Override
-    public String sayDirect(String stirng) {
-        return stirng;
+    public String sayDirect(String string) {
+        return string;
     }
 }

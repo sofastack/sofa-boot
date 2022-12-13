@@ -54,7 +54,7 @@ public class XMapSpringUtil {
      * @param base element base
      * @return
      */
-    public static Object getSpringOjbect(XAnnotatedMember xam,
+    public static Object getSpringObject(XAnnotatedMember xam,
                                          ApplicationContext applicationContext, Element base) {
         String val = DOMHelper.getNodeValue(base, xam.path);
         if (val != null && val.length() > 0) {
