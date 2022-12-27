@@ -43,6 +43,8 @@ public abstract class RpcBindingParam implements BindingParam {
 
     protected Integer                    connectTimeout;
 
+    protected Integer                    connectionNum;
+
     protected Integer                    retries;
 
     protected String                     type;
@@ -142,6 +144,24 @@ public abstract class RpcBindingParam implements BindingParam {
      */
     public void setConnectTimeout(Integer connectTimeout) {
         this.connectTimeout = connectTimeout;
+    }
+
+    /**
+     * Getter method for property <code>connectionNum</code>.
+     *
+     * @return property value of connectionNum
+     */
+    public Integer getConnectionNum() {
+        return connectionNum;
+    }
+
+    /**
+     * Setter method for property <code>connectionNum</code>.
+     *
+     * @param connectionNum value to be assigned to property connectionNum
+     */
+    public void setConnectionNum(Integer connectionNum) {
+        this.connectionNum = connectionNum;
     }
 
     /**
@@ -488,6 +508,10 @@ public abstract class RpcBindingParam implements BindingParam {
             : that.connectTimeout != null) {
             return false;
         }
+        if (connectionNum != null ? !connectionNum.equals(that.connectionNum)
+            : that.connectionNum != null) {
+            return false;
+        }
         if (retries != null ? !retries.equals(that.retries) : that.retries != null) {
             return false;
         }
@@ -557,6 +581,7 @@ public abstract class RpcBindingParam implements BindingParam {
         int result = timeout != null ? timeout.hashCode() : 0;
         result = 31 * result + (addressWaitTime != null ? addressWaitTime.hashCode() : 0);
         result = 31 * result + (connectTimeout != null ? connectTimeout.hashCode() : 0);
+        result = 31 * result + (connectionNum != null ? connectionNum.hashCode() : 0);
         result = 31 * result + (retries != null ? retries.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (callbackClass != null ? callbackClass.hashCode() : 0);
