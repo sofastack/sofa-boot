@@ -16,7 +16,11 @@
  */
 package com.alipay.sofa.healthcheck.test;
 
-import com.alipay.sofa.healthcheck.*;
+import com.alipay.sofa.healthcheck.AfterReadinessCheckCallbackProcessor;
+import com.alipay.sofa.healthcheck.HealthCheckProperties;
+import com.alipay.sofa.healthcheck.HealthCheckerProcessor;
+import com.alipay.sofa.healthcheck.HealthIndicatorProcessor;
+import com.alipay.sofa.healthcheck.ReadinessCheckListener;
 import com.alipay.sofa.healthcheck.core.HealthCheckExecutor;
 import com.alipay.sofa.healthcheck.test.bean.DiskHealthIndicator;
 import com.alipay.sofa.healthcheck.test.bean.TimeoutHealthIndicator;
@@ -128,7 +132,8 @@ public class HealthIndicatorCheckProcessorTest {
         Health timeoutHealth = hashMap.get("timeout");
         Assert.assertNotNull(timeoutHealth);
         Assert.assertEquals(Status.UNKNOWN, timeoutHealth.getStatus());
-        Assert.assertEquals("java.util.concurrent.TimeoutException: null", timeoutHealth.getDetails().get("error"));
+        Assert.assertEquals("java.util.concurrent.TimeoutException: null", timeoutHealth
+            .getDetails().get("error"));
     }
 
     private void initApplicationContext(boolean health) {
@@ -136,7 +141,8 @@ public class HealthIndicatorCheckProcessorTest {
         properties.put("disk-health-indicator.health", health);
         properties.put("timeout-health-indicator.health", true);
         if (!health) {
-            properties.put("com.alipay.sofa.healthcheck.indicator.timeout.timeoutHealthIndicator", "1");
+            properties.put("com.alipay.sofa.healthcheck.indicator.timeout.timeoutHealthIndicator",
+                "1");
         }
         properties.put("com.alipay.sofa.healthcheck.skip.indicator", "true");
         properties.put("spring.application.name", "HealthIndicatorCheckProcessorTest");
