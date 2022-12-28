@@ -158,7 +158,7 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
         logger.info("Begin SOFABoot HealthIndicator readiness check.");
         String checkComponentNames = healthIndicators.keySet().stream()
                 .collect(Collectors.joining(","));
-        logger.info("SOFABoot HealthChecker readiness check {} item: {}.",
+        logger.info("SOFABoot HealthIndicator readiness check {} item: {}.",
                 healthIndicators.size(), checkComponentNames);
         boolean result;
         if (healthCheckProperties.isHealthCheckParallelEnable()) {
@@ -225,19 +225,21 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
                         ErrorCode.convert("01-21001",
                         beanId, status, objectMapper.writeValueAsString(health.getDetails())));
             }
-            healthMap.put(getKey(beanId), health);
         } catch (TimeoutException e) {
             result = false;
             logger.error(
                     "HealthIndicator[{}] readiness check fail; the status is: {}; the detail is: timeout, the timeout value is: {}ms.",
                     beanId, Status.UNKNOWN, timeout);
+            health = new Health.Builder().withException(e).status(Status.UNKNOWN).build();
         } catch (Exception e) {
             result = false;
             logger.error(
                     ErrorCode.convert("01-21002",
                             healthIndicator.getClass()),
                     e);
+            health = new Health.Builder().withException(e).status(Status.DOWN).build();
         }
+        healthMap.put(getKey(beanId), health);
 
         return result;
     }
