@@ -30,6 +30,8 @@
         <maven.surefire.plugin>2.22.2</maven.surefire.plugin>
 
         <!-- for dependencyManagement -->
+        <spring.cloud.stream.version>2.1.0.RELEASE</spring.cloud.stream.version>
+        <rocketmq.spring.boot.starter.version>2.0.2</rocketmq.spring.boot.starter.version>
         <spring.cloud.starter.openfeign.version>3.0.5</spring.cloud.starter.openfeign.version>
         <javax.servlet.version>3.1.0</javax.servlet.version>
         <tomcat.version>9.0.54</tomcat.version>
@@ -68,6 +70,20 @@
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-starter-openfeign</artifactId>
                 <version>${spring.cloud.starter.openfeign.version}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-stream</artifactId>
+                <version>${spring.cloud.stream.version}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.rocketmq</groupId>
+                <artifactId>rocketmq-spring-boot-starter</artifactId>
+                <version>${rocketmq.spring.boot.starter.version}</version>
                 <scope>provided</scope>
             </dependency>
 
