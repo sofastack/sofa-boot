@@ -21,11 +21,12 @@
     <dependencies>
         <dependency>
             <groupId>com.alipay.sofa</groupId>
-            <artifactId>sofa-rpc-all</artifactId>
+            <artifactId>sofa-boot-starter</artifactId>
         </dependency>
+
         <dependency>
             <groupId>com.alipay.sofa</groupId>
-            <artifactId>sofa-boot</artifactId>
+            <artifactId>sofa-rpc-all</artifactId>
         </dependency>
 
         <dependency>
@@ -42,12 +43,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure-processor</artifactId>
-            <optional>true</optional>
-        </dependency>
-
-        <dependency>
-            <groupId>com.alipay.sofa</groupId>
-            <artifactId>healthcheck-sofa-boot</artifactId>
             <optional>true</optional>
         </dependency>
 

@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.autoconfigure.test.startup;
 
-import com.alipay.sofa.boot.autoconfigure.startup.SofaStartupAutoConfiguration;
+import com.alipay.sofa.boot.actuator.autoconfigure.startup.SofaStartupAutoConfiguration;
 import com.alipay.sofa.startup.StartupProperties;
 import com.alipay.sofa.startup.StartupReporter;
 import com.alipay.sofa.startup.stage.BeanCostBeanPostProcessor;

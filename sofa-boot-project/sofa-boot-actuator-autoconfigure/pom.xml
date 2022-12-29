@@ -27,18 +27,6 @@
 
         <dependency>
             <groupId>com.alipay.sofa</groupId>
-            <artifactId>sofa-boot-autoconfigure</artifactId>
-        </dependency>
-
-        <!-- Optional -->
-        <dependency>
-            <groupId>com.alipay.sofa</groupId>
-            <artifactId>healthcheck-sofa-boot</artifactId>
-            <optional>true</optional>
-        </dependency>
-
-        <dependency>
-            <groupId>com.alipay.sofa</groupId>
             <artifactId>runtime-sofa-boot</artifactId>
             <optional>true</optional>
         </dependency>
@@ -46,12 +34,6 @@
         <dependency>
             <groupId>com.alipay.sofa</groupId>
             <artifactId>isle-sofa-boot</artifactId>
-            <optional>true</optional>
-        </dependency>
-
-        <dependency>
-            <groupId>com.alipay.sofa</groupId>
-            <artifactId>startup-sofa-boot</artifactId>
             <optional>true</optional>
         </dependency>
 

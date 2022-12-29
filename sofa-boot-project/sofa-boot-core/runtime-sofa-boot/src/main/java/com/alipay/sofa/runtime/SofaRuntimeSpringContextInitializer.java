@@ -20,7 +20,7 @@ import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import com.alipay.sofa.boot.util.SofaBootEnvUtils;
-import com.alipay.sofa.runtime.log.SofaLogger;
+import com.alipay.sofa.boot.log.SofaLogger;
 
 /**
  * @author xuanbei 18/3/13

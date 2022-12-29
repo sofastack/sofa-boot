@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.boot.actuator.test;
 
-import com.alipay.sofa.boot.actuator.health.MultiApplicationHealthIndicator;
 import com.alipay.sofa.runtime.SofaFramework;
 import com.alipay.sofa.runtime.component.impl.StandardSofaRuntimeManager;
 import org.junit.Assert;

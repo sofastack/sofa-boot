@@ -16,10 +16,10 @@
  */
 package com.alipay.sofa.boot.autoconfigure.tracer;
 
-import com.alipay.sofa.tracer.boot.flexible.aop.SofaTracerAdvisingBeanPostProcessor;
-import com.alipay.sofa.tracer.boot.flexible.processor.MethodInvocationProcessor;
-import com.alipay.sofa.tracer.boot.flexible.processor.SofaTracerIntroductionInterceptor;
-import com.alipay.sofa.tracer.boot.flexible.processor.SofaTracerMethodInvocationProcessor;
+import com.alipay.sofa.tracer.test.flexible.aop.SofaTracerAdvisingBeanPostProcessor;
+import com.alipay.sofa.tracer.test.flexible.processor.MethodInvocationProcessor;
+import com.alipay.sofa.tracer.test.flexible.processor.SofaTracerIntroductionInterceptor;
+import com.alipay.sofa.tracer.test.flexible.processor.SofaTracerMethodInvocationProcessor;
 import io.opentracing.Tracer;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;

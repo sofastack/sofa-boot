@@ -18,6 +18,7 @@
         <java.version>17</java.version>
         <project.encoding>UTF-8</project.encoding>
         <project.build.encoding>UTF-8</project.build.encoding>
+        <spring-cloud.version>4.0.0</spring-cloud.version>
 
         <!--starter-->
         <sofa.ark.version>1.1.5</sofa.ark.version>
@@ -111,6 +112,13 @@
 
     <dependencyManagement>
         <dependencies>
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-context</artifactId>
+                <version>${spring-cloud.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>sofa-boot</artifactId>
@@ -137,7 +145,7 @@
 
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
-                <artifactId>healthcheck-sofa-boot</artifactId>
+                <artifactId>runtime-sofa-boot</artifactId>
                 <version>${sofa.boot.version}</version>
             </dependency>
 
@@ -152,13 +160,6 @@
                 <artifactId>isle-sofa-boot</artifactId>
                 <version>${sofa.boot.version}</version>
             </dependency>
-
-            <dependency>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>test-sofa-boot</artifactId>
-                <version>${sofa.boot.version}</version>
-            </dependency>
-
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>rpc-sofa-boot</artifactId>
@@ -170,38 +171,20 @@
                 <artifactId>tracer-sofa-boot</artifactId>
                 <version>${sofa.boot.version}</version>
             </dependency>
-
-            <dependency>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>log-sofa-boot</artifactId>
-                <version>${sofa.boot.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>startup-sofa-boot</artifactId>
-                <version>${sofa.boot.version}</version>
-            </dependency>
-
             <!-- starter management begin -->
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
-                <artifactId>healthcheck-sofa-boot-starter</artifactId>
+                <artifactId>sofa-boot-starter</artifactId>
                 <version>${sofa.boot.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
-                <artifactId>startup-sofa-boot-starter</artifactId>
+                <artifactId>actuator-sofa-boot-starter</artifactId>
                 <version>${sofa.boot.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>runtime-sofa-boot-starter</artifactId>
-                <version>${sofa.boot.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>test-sofa-boot-starter</artifactId>
                 <version>${sofa.boot.version}</version>
             </dependency>
             <dependency>
@@ -221,12 +204,6 @@
             </dependency>
 
             <dependency>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>log-sofa-boot-starter</artifactId>
-                <version>${sofa.boot.version}</version>
-            </dependency>
-
-            <dependency>
                 <groupId>com.alipay.sofa.lookout</groupId>
                 <artifactId>lookout-sofa-boot-starter</artifactId>
                 <version>${sofa.lookout.version}</version>
@@ -237,25 +214,6 @@
                 <version>${sofa.ark.version}</version>
             </dependency>
             <!-- starter management end -->
-
-            <!-- Ark Plugin Management begin -->
-            <dependency>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>runtime-sofa-boot-plugin</artifactId>
-                <version>${sofa.boot.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>rpc-sofa-boot-plugin</artifactId>
-                <version>${sofa.boot.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>tracer-sofa-boot-plugin</artifactId>
-                <version>${sofa.boot.version}</version>
-            </dependency>
 
             <!--tracer and its extension plugin-->
             <dependency>

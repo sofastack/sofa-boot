@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Support display beans in sofa modules
  * @author huzijie
  * @version IsleBeansEndpoint.java, v 0.1 2022年03月17日 11:10 AM huzijie Exp $
  */

@@ -21,7 +21,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 import com.alipay.sofa.boot.error.ErrorCode;
-import com.alipay.sofa.runtime.log.SofaLogger;
+import com.alipay.sofa.boot.log.SofaLogger;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.ApplicationContext;

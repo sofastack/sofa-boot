@@ -27,12 +27,12 @@ import org.springframework.lang.Nullable;
  * @author qilong.zql
  * @since 3.0.0
  */
-@EndpointWebExtension(endpoint = SofaBootReadinessEndpoint.class)
+@EndpointWebExtension(endpoint = ReadinessEndpoint.class)
 public class ReadinessEndpointWebExtension {
-    private final SofaBootReadinessEndpoint delegate;
+    private final ReadinessEndpoint delegate;
     private final HttpCodeStatusMapper      statusMapper;
 
-    public ReadinessEndpointWebExtension(SofaBootReadinessEndpoint delegate,
+    public ReadinessEndpointWebExtension(ReadinessEndpoint delegate,
                                          HttpCodeStatusMapper statusMapper) {
         this.delegate = delegate;
         this.statusMapper = statusMapper;

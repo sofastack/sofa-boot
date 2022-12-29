@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.boot.actuator.health;
 
-import com.alipay.sofa.healthcheck.ReadinessCheckListener;
 import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
 import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
 

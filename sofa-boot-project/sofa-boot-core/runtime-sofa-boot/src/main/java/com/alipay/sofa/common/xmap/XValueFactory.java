@@ -25,7 +25,7 @@ import java.util.Map;
 
 import org.w3c.dom.Node;
 
-import com.alipay.sofa.runtime.log.SofaLogger;
+import com.alipay.sofa.boot.log.SofaLogger;
 
 /**
  * Value factories are used to decode values from XML strings.

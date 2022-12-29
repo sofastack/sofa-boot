@@ -19,7 +19,7 @@
         <!-- Compile -->
         <dependency>
             <groupId>com.alipay.sofa</groupId>
-            <artifactId>sofa-boot</artifactId>
+            <artifactId>sofa-boot-starter</artifactId>
         </dependency>
 
         <dependency>

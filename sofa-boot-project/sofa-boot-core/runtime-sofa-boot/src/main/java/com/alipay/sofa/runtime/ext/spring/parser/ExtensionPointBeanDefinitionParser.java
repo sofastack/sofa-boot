@@ -29,7 +29,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.alipay.sofa.runtime.ext.spring.ExtensionPointFactoryBean;
-import com.alipay.sofa.runtime.log.SofaLogger;
+import com.alipay.sofa.boot.log.SofaLogger;
 import com.alipay.sofa.runtime.spi.util.ParserUtils;
 
 /**

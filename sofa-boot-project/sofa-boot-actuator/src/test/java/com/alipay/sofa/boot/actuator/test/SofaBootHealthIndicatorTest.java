@@ -17,8 +17,8 @@
 package com.alipay.sofa.boot.actuator.test;
 
 import com.alipay.sofa.boot.actuator.health.SofaBootHealthIndicator;
-import com.alipay.sofa.healthcheck.HealthCheckerProcessor;
-import com.alipay.sofa.healthcheck.ReadinessCheckListener;
+import com.alipay.sofa.boot.actuator.health.HealthCheckerProcessor;
+import com.alipay.sofa.boot.actuator.health.ReadinessCheckListener;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

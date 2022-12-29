@@ -18,8 +18,8 @@ package com.alipay.sofa.autoconfigure.test.startup;
 
 import com.alipay.sofa.boot.autoconfigure.isle.SofaModuleAutoConfiguration;
 import com.alipay.sofa.boot.autoconfigure.runtime.SofaRuntimeAutoConfiguration;
-import com.alipay.sofa.boot.autoconfigure.startup.SofaStartupAutoConfiguration;
-import com.alipay.sofa.boot.autoconfigure.startup.SofaStartupIsleAutoConfiguration;
+import com.alipay.sofa.boot.actuator.autoconfigure.startup.SofaStartupAutoConfiguration;
+import com.alipay.sofa.boot.actuator.autoconfigure.startup.SofaStartupIsleAutoConfiguration;
 import com.alipay.sofa.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.isle.stage.ModelCreatingStage;
 import com.alipay.sofa.isle.stage.SpringContextInstallStage;

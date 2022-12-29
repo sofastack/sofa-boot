@@ -1,1 +1,0 @@
-org.springframework.context.ApplicationListener=com.alipay.sofa.tracer.boot.base.ConfigurationHolderListener

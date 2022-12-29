@@ -26,7 +26,7 @@ import com.alipay.sofa.isle.deployment.DeploymentException;
 import com.alipay.sofa.isle.deployment.impl.DefaultModuleDeploymentValidator;
 import com.alipay.sofa.isle.profile.SofaModuleProfileChecker;
 import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
-import com.alipay.sofa.runtime.log.SofaLogger;
+import com.alipay.sofa.boot.log.SofaLogger;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.core.io.UrlResource;

@@ -20,11 +20,6 @@
             <groupId>com.alipay.sofa</groupId>
             <artifactId>rpc-sofa-boot</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>com.alipay.sofa</groupId>
-            <artifactId>sofa-boot-autoconfigure</artifactId>
-        </dependency>
     </dependencies>
 
 </project>
