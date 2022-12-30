@@ -38,6 +38,7 @@ import com.alipay.sofa.isle.stage.ModelCreatingStage;
 import com.alipay.sofa.isle.stage.SpringContextInstallStage;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -45,6 +46,7 @@ import org.springframework.boot.autoconfigure.condition.SearchStrategy;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.core.env.Environment;
 
@@ -76,7 +78,8 @@ public class StartupAutoConfiguration {
         return new StartupContextRefreshedListener();
     }
 
-    @AutoConfiguration(before = HealthAutoConfiguration.class)
+    @Configuration(proxyBeanMethods = false)
+    @AutoConfigureBefore(HealthAutoConfiguration.class)
     @ConditionalOnAvailableEndpoint(endpoint = ReadinessEndpoint.class)
     static class StartupHealthAutoConfiguration {
 
@@ -99,7 +102,8 @@ public class StartupAutoConfiguration {
         }
     }
 
-    @AutoConfiguration(before = SofaModuleAutoConfiguration.class)
+    @Configuration(proxyBeanMethods = false)
+    @AutoConfigureBefore(SofaModuleAutoConfiguration.class)
     @ConditionalOnClass({ ApplicationRuntimeModel.class })
     @ConditionalOnProperty(value = "com.alipay.sofa.boot.enable-isle", matchIfMissing = true)
     static class StartupIsleAutoConfiguration {
