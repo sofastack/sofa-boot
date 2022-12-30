@@ -16,10 +16,10 @@
  */
 package com.alipay.sofa.boot.actuator.health;
 
-import com.alipay.sofa.boot.actuator.health.log.HealthCheckLoggerFactory;
 import com.alipay.sofa.boot.actuator.health.util.HealthCheckUtils;
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.error.ErrorCode;
+import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import com.alipay.sofa.boot.util.BinaryOperators;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -58,7 +58,7 @@ import java.util.stream.Collectors;
  * @version 2.3.0
  */
 public class HealthIndicatorProcessor implements ApplicationContextAware {
-    private static Logger                          logger                     = HealthCheckLoggerFactory.DEFAULT_LOG;
+    private static Logger                          logger                     = SofaBootLoggerFactory.getLogger(HealthIndicatorProcessor.class);
 
     private static final List<String>              DEFAULT_EXCLUDE_INDICATORS = Arrays
                                                                                   .asList(

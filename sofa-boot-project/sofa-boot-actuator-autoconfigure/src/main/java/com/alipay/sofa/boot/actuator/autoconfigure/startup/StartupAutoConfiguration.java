@@ -38,7 +38,6 @@ import com.alipay.sofa.isle.stage.ModelCreatingStage;
 import com.alipay.sofa.isle.stage.SpringContextInstallStage;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -46,7 +45,6 @@ import org.springframework.boot.autoconfigure.condition.SearchStrategy;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.core.env.Environment;
 
@@ -67,7 +65,7 @@ public class StartupAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public BeanCostBeanPostProcessor beanCostBeanPostProcessor(StartupProperties startupProperties) {
+    public static BeanCostBeanPostProcessor beanCostBeanPostProcessor(StartupProperties startupProperties) {
         return new BeanCostBeanPostProcessor(startupProperties.getBeanInitCostThreshold(),
             startupProperties.isSkipSofaBean());
     }
@@ -78,8 +76,7 @@ public class StartupAutoConfiguration {
         return new StartupContextRefreshedListener();
     }
 
-    @Configuration(proxyBeanMethods = false)
-    @AutoConfigureBefore(HealthAutoConfiguration.class)
+    @AutoConfiguration(before = HealthAutoConfiguration.class)
     @ConditionalOnAvailableEndpoint(endpoint = ReadinessEndpoint.class)
     static class StartupHealthAutoConfiguration {
 
@@ -92,18 +89,17 @@ public class StartupAutoConfiguration {
                                                                            HealthProperties healthCheckProperties,
                                                                            StartupReporter startupReporter) {
             StartupReadinessCheckListener readinessCheckListener = new StartupReadinessCheckListener(
-                environment, healthCheckerProcessor, healthIndicatorProcessor,
-                afterReadinessCheckCallbackProcessor, startupReporter);
+                    environment, healthCheckerProcessor, healthIndicatorProcessor,
+                    afterReadinessCheckCallbackProcessor, startupReporter);
             readinessCheckListener.setManualReadinessCallback(healthCheckProperties
-                .isManualReadinessCallback());
+                    .isManualReadinessCallback());
             readinessCheckListener.setThrowExceptionWhenHealthCheckFailed(healthCheckProperties
-                .isInsulator());
+                    .isInsulator());
             return readinessCheckListener;
         }
     }
 
-    @Configuration(proxyBeanMethods = false)
-    @AutoConfigureBefore(SofaModuleAutoConfiguration.class)
+    @AutoConfiguration(before = SofaModuleAutoConfiguration.class)
     @ConditionalOnClass({ ApplicationRuntimeModel.class })
     @ConditionalOnProperty(value = "com.alipay.sofa.boot.enable-isle", matchIfMissing = true)
     static class StartupIsleAutoConfiguration {

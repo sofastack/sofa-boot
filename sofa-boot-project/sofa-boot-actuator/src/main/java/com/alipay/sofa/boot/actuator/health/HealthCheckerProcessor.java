@@ -17,11 +17,11 @@
 package com.alipay.sofa.boot.actuator.health;
 
 import com.alipay.sofa.boot.actuator.health.core.HealthChecker;
-import com.alipay.sofa.boot.actuator.health.log.HealthCheckLoggerFactory;
 import com.alipay.sofa.boot.actuator.health.util.HealthCheckUtils;
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.boot.health.NonReadinessCheck;
+import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import com.alipay.sofa.boot.util.BinaryOperators;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -52,7 +52,7 @@ import java.util.stream.Collectors;
  */
 public class HealthCheckerProcessor implements ApplicationContextAware {
 
-    private static final Logger                  logger         = HealthCheckLoggerFactory.DEFAULT_LOG;
+    private static final Logger                  logger         = SofaBootLoggerFactory.getLogger(HealthCheckerProcessor.class);
 
     private final ObjectMapper                   objectMapper   = new ObjectMapper();
 

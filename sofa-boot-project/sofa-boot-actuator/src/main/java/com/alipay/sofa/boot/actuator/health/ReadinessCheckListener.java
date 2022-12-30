@@ -18,7 +18,7 @@ package com.alipay.sofa.boot.actuator.health;
 
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.error.ErrorCode;
-import com.alipay.sofa.boot.actuator.health.log.HealthCheckLoggerFactory;
+import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.BeansException;
 import org.springframework.boot.actuate.health.Health;
@@ -49,7 +49,7 @@ import java.util.stream.Collectors;
  */
 public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
                                    GenericApplicationListener {
-    private static Logger                              logger                              = HealthCheckLoggerFactory.DEFAULT_LOG;
+    private static Logger                              logger                              = SofaBootLoggerFactory.getLogger(ReadinessCheckListener.class);
 
     private final StatusAggregator                     statusAggregator                    = StatusAggregator
                                                                                                .getDefault();

@@ -29,6 +29,7 @@ import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.log.SofaLogger;
 import com.alipay.sofa.boot.util.NamedThreadFactory;
 import com.alipay.sofa.common.thread.SofaThreadPoolExecutor;
+import com.alipay.sofa.isle.stage.ModelCreatingStage;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.boot.actuate.health.HealthIndicator;
@@ -37,6 +38,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.SearchStrategy;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -57,7 +59,7 @@ import java.util.concurrent.TimeUnit;
 public class HealthAutoConfiguration {
 
     @Bean
-    @ConditionalOnMissingBean
+    @ConditionalOnMissingBean(value = ReadinessCheckListener.class, search = SearchStrategy.CURRENT)
     public ReadinessCheckListener readinessCheckListener(Environment environment,
                                                          HealthCheckerProcessor healthCheckerProcessor,
                                                          HealthIndicatorProcessor healthIndicatorProcessor,
@@ -135,6 +137,7 @@ public class HealthAutoConfiguration {
 
         @Bean
         @ConditionalOnMissingBean
+        @ConditionalOnBean(ModelCreatingStage.class)
         public ModuleHealthChecker sofaModuleHealthChecker() {
             return new ModuleHealthChecker();
         }

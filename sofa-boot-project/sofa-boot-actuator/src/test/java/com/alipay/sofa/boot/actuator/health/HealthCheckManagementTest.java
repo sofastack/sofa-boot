@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.boot.actuator.health;
 
+import com.alipay.sofa.boot.constant.SofaBootConstants;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,9 +29,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import com.alipay.sofa.actuator.autoconfigure.test.listener.HighOrderApplicationListener;
-import com.alipay.sofa.boot.constant.SofaBootConstants;
 
 /**
  * Attention:

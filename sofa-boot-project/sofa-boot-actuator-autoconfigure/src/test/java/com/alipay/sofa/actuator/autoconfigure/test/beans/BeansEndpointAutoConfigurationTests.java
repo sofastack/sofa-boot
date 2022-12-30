@@ -19,6 +19,7 @@ package com.alipay.sofa.actuator.autoconfigure.test.beans;
 import com.alipay.sofa.boot.actuator.autoconfigure.beans.IsleBeansEndpointAutoConfiguration;
 import com.alipay.sofa.boot.actuator.beans.IsleBeansEndpoint;
 import com.alipay.sofa.boot.autoconfigure.isle.SofaModuleAutoConfiguration;
+import com.alipay.sofa.boot.autoconfigure.runtime.SofaRuntimeAutoConfiguration;
 import com.alipay.sofa.isle.ApplicationRuntimeModel;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
@@ -38,7 +39,8 @@ public class BeansEndpointAutoConfigurationTests {
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
                                                              .withConfiguration(AutoConfigurations
                                                                  .of(IsleBeansEndpointAutoConfiguration.class,
-                                                                     SofaModuleAutoConfiguration.class));
+                                                                     SofaModuleAutoConfiguration.class,
+																		 SofaRuntimeAutoConfiguration.class));
 
     @Test
 	void runShouldHaveEndpointBean() {

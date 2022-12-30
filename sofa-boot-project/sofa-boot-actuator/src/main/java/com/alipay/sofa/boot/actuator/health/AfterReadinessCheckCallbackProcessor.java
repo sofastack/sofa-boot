@@ -16,10 +16,10 @@
  */
 package com.alipay.sofa.boot.actuator.health;
 
-import com.alipay.sofa.boot.error.ErrorCode;
-import com.alipay.sofa.boot.actuator.health.log.HealthCheckLoggerFactory;
 import com.alipay.sofa.boot.actuator.health.startup.ReadinessCheckCallback;
 import com.alipay.sofa.boot.actuator.health.util.HealthCheckUtils;
+import com.alipay.sofa.boot.error.ErrorCode;
+import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.springframework.beans.BeansException;
@@ -42,7 +42,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class AfterReadinessCheckCallbackProcessor implements ApplicationContextAware {
 
-    private static final Logger                           logger                  = HealthCheckLoggerFactory.DEFAULT_LOG;
+    private static final Logger                           logger                  = SofaBootLoggerFactory.getLogger(AfterReadinessCheckCallbackProcessor.class);
 
     private final ObjectMapper                            objectMapper            = new ObjectMapper();
 

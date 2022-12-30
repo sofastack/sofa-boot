@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.boot.actuator.health.manual;
 
+import com.alipay.sofa.boot.actuator.EmptyConfiguration;
 import com.alipay.sofa.boot.actuator.health.ReadinessCheckListener;
 import org.junit.Assert;
 import org.junit.Test;
