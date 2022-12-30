@@ -51,8 +51,7 @@ public class SofaTracerRocketMqProducerPostProcessorTest {
     public void postProcessAfterInitialization() {
         DefaultMQProducerImpl producer = defaultMQProducer.getDefaultMQProducerImpl();
         Assert.assertTrue(producer.hasSendMessageHook());
-        Field field = ReflectionUtils.findField(DefaultMQProducerImpl.class,
-                "sendMessageHookList");
+        Field field = ReflectionUtils.findField(DefaultMQProducerImpl.class, "sendMessageHookList");
         Assert.assertNotNull(field);
         field.setAccessible(true);
         Object value = ReflectionUtils.getField(field, producer);

@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.boot.autoconfigure.tracer;
 
-import com.alipay.sofa.tracer.test.zipkin.properties.ZipkinSofaTracerProperties;
+import com.alipay.sofa.tracer.boot.zipkin.properties.ZipkinSofaTracerProperties;
 import com.alipay.sofa.tracer.plugins.zipkin.ZipkinSofaTracerRestTemplateCustomizer;
 import com.alipay.sofa.tracer.plugins.zipkin.ZipkinSofaTracerSpanRemoteReporter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;

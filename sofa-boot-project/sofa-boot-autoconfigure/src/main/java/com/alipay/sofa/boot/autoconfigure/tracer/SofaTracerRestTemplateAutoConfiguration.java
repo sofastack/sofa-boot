@@ -16,8 +16,8 @@
  */
 package com.alipay.sofa.boot.autoconfigure.tracer;
 
-import com.alipay.sofa.tracer.test.resttemplate.SofaTracerRestTemplateEnhance;
-import com.alipay.sofa.tracer.test.resttemplate.processor.SofaTracerRestTemplateBeanPostProcessor;
+import com.alipay.sofa.tracer.boot.resttemplate.SofaTracerRestTemplateEnhance;
+import com.alipay.sofa.tracer.boot.resttemplate.processor.SofaTracerRestTemplateBeanPostProcessor;
 import com.sofa.alipay.tracer.plugins.rest.RestTemplateTracer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

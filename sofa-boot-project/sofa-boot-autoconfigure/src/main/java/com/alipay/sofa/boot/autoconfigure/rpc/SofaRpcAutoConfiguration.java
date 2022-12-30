@@ -185,7 +185,7 @@ public class SofaRpcAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingClass({"com.alipay.sofa.boot.actuator.health.startup.ReadinessCheckCallback"})
+    @ConditionalOnMissingClass({ "com.alipay.sofa.boot.actuator.health.startup.ReadinessCheckCallback" })
     @ConditionalOnClass(SofaBootRpcProperties.class)
     public ApplicationContextRefreshedListener applicationContextRefreshedListener() {
         return new ApplicationContextRefreshedListener();

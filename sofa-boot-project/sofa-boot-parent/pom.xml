@@ -42,8 +42,6 @@
         <druid.version>1.0.12</druid.version>
         <c3p0.version>0.9.1.1</c3p0.version>
         <common.dbcp.version>1.4</common.dbcp.version>
-
-        <jmockit.version>1.40</jmockit.version>
     </properties>
 
     <dependencies>

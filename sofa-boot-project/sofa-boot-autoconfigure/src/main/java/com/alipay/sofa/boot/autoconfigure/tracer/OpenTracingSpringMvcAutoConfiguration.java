@@ -17,7 +17,7 @@
 package com.alipay.sofa.boot.autoconfigure.tracer;
 
 import com.alipay.sofa.tracer.boot.properties.SofaTracerProperties;
-import com.alipay.sofa.tracer.test.springmvc.properties.OpenTracingSpringMvcProperties;
+import com.alipay.sofa.tracer.boot.springmvc.properties.OpenTracingSpringMvcProperties;
 import com.alipay.sofa.tracer.plugins.springmvc.SpringMvcSofaTracerFilter;
 import com.alipay.sofa.tracer.plugins.webflux.WebfluxSofaTracerFilter;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;

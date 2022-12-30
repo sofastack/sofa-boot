@@ -63,10 +63,12 @@ public class HealthAutoConfiguration {
                                                          HealthIndicatorProcessor healthIndicatorProcessor,
                                                          AfterReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor,
                                                          HealthProperties healthCheckProperties) {
-        ReadinessCheckListener readinessCheckListener = new ReadinessCheckListener(environment, healthCheckerProcessor,
-            healthIndicatorProcessor, afterReadinessCheckCallbackProcessor);
-        readinessCheckListener.setManualReadinessCallback(healthCheckProperties.isManualReadinessCallback());
-        readinessCheckListener.setThrowExceptionWhenHealthCheckFailed(healthCheckProperties.isInsulator());
+        ReadinessCheckListener readinessCheckListener = new ReadinessCheckListener(environment,
+            healthCheckerProcessor, healthIndicatorProcessor, afterReadinessCheckCallbackProcessor);
+        readinessCheckListener.setManualReadinessCallback(healthCheckProperties
+            .isManualReadinessCallback());
+        readinessCheckListener.setThrowExceptionWhenHealthCheckFailed(healthCheckProperties
+            .isInsulator());
         return readinessCheckListener;
     }
 
@@ -74,9 +76,11 @@ public class HealthAutoConfiguration {
     @ConditionalOnMissingBean
     public HealthCheckerProcessor healthCheckerProcessor(HealthProperties healthCheckProperties,
                                                          ThreadPoolExecutor healthCheckExecutor) {
-        HealthCheckerProcessor healthCheckerProcessor = new HealthCheckerProcessor(healthCheckExecutor);
+        HealthCheckerProcessor healthCheckerProcessor = new HealthCheckerProcessor(
+            healthCheckExecutor);
         healthCheckerProcessor.setParallelCheck(healthCheckProperties.isParallelCheck());
-        healthCheckerProcessor.setParallelCheckTimeout(healthCheckProperties.getParallelCheckTimeout());
+        healthCheckerProcessor.setParallelCheckTimeout(healthCheckProperties
+            .getParallelCheckTimeout());
         return healthCheckerProcessor;
     }
 
@@ -84,10 +88,13 @@ public class HealthAutoConfiguration {
     @ConditionalOnMissingBean
     public HealthIndicatorProcessor healthIndicatorProcessor(HealthProperties healthCheckProperties,
                                                              ThreadPoolExecutor healthCheckExecutor) {
-        HealthIndicatorProcessor healthIndicatorProcessor = new HealthIndicatorProcessor(healthCheckExecutor);
-        healthIndicatorProcessor.initExcludedIndicators(healthCheckProperties.getExcludedIndicators());
+        HealthIndicatorProcessor healthIndicatorProcessor = new HealthIndicatorProcessor(
+            healthCheckExecutor);
+        healthIndicatorProcessor.initExcludedIndicators(healthCheckProperties
+            .getExcludedIndicators());
         healthIndicatorProcessor.setParallelCheck(healthCheckProperties.isParallelCheck());
-        healthIndicatorProcessor.setParallelCheckTimeout(healthCheckProperties.getParallelCheckTimeout());
+        healthIndicatorProcessor.setParallelCheckTimeout(healthCheckProperties
+            .getParallelCheckTimeout());
         return healthIndicatorProcessor;
     }
 
@@ -114,11 +121,11 @@ public class HealthAutoConfiguration {
             threadPoolSize = 1;
         }
         SofaLogger.info("Create health-check thread pool, corePoolSize: {}, maxPoolSize: {}.",
-                threadPoolSize, threadPoolSize);
-        return new SofaThreadPoolExecutor(threadPoolSize, threadPoolSize, 30,
-                TimeUnit.SECONDS, new SynchronousQueue<>(), new NamedThreadFactory("health-check"),
-                new ThreadPoolExecutor.CallerRunsPolicy(), "health-check",
-                SofaBootConstants.SOFABOOT_SPACE_NAME);
+            threadPoolSize, threadPoolSize);
+        return new SofaThreadPoolExecutor(threadPoolSize, threadPoolSize, 30, TimeUnit.SECONDS,
+            new SynchronousQueue<>(), new NamedThreadFactory("health-check"),
+            new ThreadPoolExecutor.CallerRunsPolicy(), "health-check",
+            SofaBootConstants.SOFABOOT_SPACE_NAME);
     }
 
     @Configuration(proxyBeanMethods = false)
@@ -149,7 +156,8 @@ public class HealthAutoConfiguration {
         public SofaRuntimeHealthChecker defaultRuntimeHealthChecker(SofaRuntimeContext sofaRuntimeContext,
                                                                     List<HealthIndicator> healthIndicators,
                                                                     ReadinessCheckListener readinessCheckListener) {
-            return new SofaRuntimeHealthChecker(sofaRuntimeContext, healthIndicators, readinessCheckListener);
+            return new SofaRuntimeHealthChecker(sofaRuntimeContext, healthIndicators,
+                readinessCheckListener);
         }
     }
 }

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.tracer.test.zipkin.properties;
+package com.alipay.sofa.tracer.boot.zipkin.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

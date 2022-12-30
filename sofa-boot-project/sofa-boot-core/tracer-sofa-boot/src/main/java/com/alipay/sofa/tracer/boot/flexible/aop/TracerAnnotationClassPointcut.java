@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.tracer.test.flexible.aop;
+package com.alipay.sofa.tracer.boot.flexible.aop;
 
 import com.alipay.sofa.tracer.plugin.flexible.annotations.Tracer;
 import org.springframework.aop.ClassFilter;

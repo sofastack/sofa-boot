@@ -32,6 +32,12 @@
         <!-- Optional -->
         <dependency>
             <groupId>com.alipay.sofa</groupId>
+            <artifactId>sofa-boot-actuator</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
             <artifactId>runtime-sofa-boot</artifactId>
             <optional>true</optional>
         </dependency>
@@ -181,11 +187,6 @@
             <scope>provided</scope>
         </dependency>
         <!--Test-->
-        <dependency>
-            <groupId>org.jmockit</groupId>
-            <artifactId>jmockit</artifactId>
-            <scope>test</scope>
-        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

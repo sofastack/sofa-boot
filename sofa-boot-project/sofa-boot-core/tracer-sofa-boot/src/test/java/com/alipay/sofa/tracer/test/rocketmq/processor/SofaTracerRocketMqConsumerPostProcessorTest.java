@@ -54,17 +54,18 @@ public class SofaTracerRocketMqConsumerPostProcessorTest {
     @Test
     public void postProcessAfterInitialization() {
         DefaultMQPushConsumer consumer = defaultRocketMQListenerContainer.getConsumer();
-        DefaultMQPushConsumerImpl defaultMQPushConsumerImpl = consumer.getDefaultMQPushConsumerImpl();
+        DefaultMQPushConsumerImpl defaultMQPushConsumerImpl = consumer
+            .getDefaultMQPushConsumerImpl();
         Assert.assertTrue(defaultMQPushConsumerImpl.hasHook());
         Field field = ReflectionUtils.findField(DefaultMQPushConsumerImpl.class,
-                "consumeMessageHookList");
+            "consumeMessageHookList");
         Assert.assertNotNull(field);
         field.setAccessible(true);
         Object value = ReflectionUtils.getField(field, defaultMQPushConsumerImpl);
         Assert.assertTrue(value instanceof ArrayList);
         ArrayList<ConsumeMessageHook> consumeMessageHookList = (ArrayList<ConsumeMessageHook>) value;
-        ConsumeMessageHook consumeMessageHook = consumeMessageHookList.get(
-                consumeMessageHookList.size() - 1);
+        ConsumeMessageHook consumeMessageHook = consumeMessageHookList.get(consumeMessageHookList
+            .size() - 1);
         Assert.assertTrue(consumeMessageHook instanceof SofaTracerConsumeMessageHook);
     }
 
@@ -79,7 +80,7 @@ public class SofaTracerRocketMqConsumerPostProcessorTest {
         public DefaultRocketMQListenerContainer defaultRocketMQListenerContainer() {
             MockListener mockListener = new MockListener();
             RocketMQMessageListener annotation = AnnotationUtils.findAnnotation(MockListener.class,
-                    RocketMQMessageListener.class);
+                RocketMQMessageListener.class);
             DefaultRocketMQListenerContainer container = new DefaultRocketMQListenerContainer();
             DefaultMQPushConsumer consumer = new DefaultMQPushConsumer();
             container.setConsumer(consumer);

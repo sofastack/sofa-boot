@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.tracer.test.resttemplate;
+package com.alipay.sofa.tracer.boot.resttemplate;
 
 import com.alipay.common.tracer.core.tracer.AbstractTracer;
 import com.sofa.alipay.tracer.plugins.rest.SofaTracerRestTemplateBuilder;

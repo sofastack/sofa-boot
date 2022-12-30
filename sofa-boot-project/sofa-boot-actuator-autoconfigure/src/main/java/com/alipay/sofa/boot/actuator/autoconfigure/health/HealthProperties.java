@@ -30,22 +30,22 @@ public class HealthProperties {
     /**
      * 健康检查失败时抛出异常
      */
-    private boolean insulator = false;
+    private boolean      insulator               = false;
 
     /**
      * 并行健康检查
      */
-    private boolean parallelCheck = false;
+    private boolean      parallelCheck           = false;
 
     /**
      * 并行健康检查超时时间，单位 ms
      */
-    private long parallelCheckTimeout = 120 * 1000;
+    private long         parallelCheckTimeout    = 120 * 1000;
 
     /**
      * 手动触发 readinessCallBack
      */
-    private boolean manualReadinessCallback = false;
+    private boolean      manualReadinessCallback = false;
 
     /**
      * 排除 HealthIndicator 组件列表

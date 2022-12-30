@@ -91,17 +91,20 @@ public class StartupAutoConfiguration {
                                                                            AfterReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor,
                                                                            HealthProperties healthCheckProperties,
                                                                            StartupReporter startupReporter) {
-            StartupReadinessCheckListener readinessCheckListener = new StartupReadinessCheckListener(environment, healthCheckerProcessor,
-                    healthIndicatorProcessor, afterReadinessCheckCallbackProcessor, startupReporter);
-            readinessCheckListener.setManualReadinessCallback(healthCheckProperties.isManualReadinessCallback());
-            readinessCheckListener.setThrowExceptionWhenHealthCheckFailed(healthCheckProperties.isInsulator());
+            StartupReadinessCheckListener readinessCheckListener = new StartupReadinessCheckListener(
+                environment, healthCheckerProcessor, healthIndicatorProcessor,
+                afterReadinessCheckCallbackProcessor, startupReporter);
+            readinessCheckListener.setManualReadinessCallback(healthCheckProperties
+                .isManualReadinessCallback());
+            readinessCheckListener.setThrowExceptionWhenHealthCheckFailed(healthCheckProperties
+                .isInsulator());
             return readinessCheckListener;
         }
     }
 
     @Configuration(proxyBeanMethods = false)
     @AutoConfigureBefore(SofaModuleAutoConfiguration.class)
-    @ConditionalOnClass({ ApplicationRuntimeModel.class})
+    @ConditionalOnClass({ ApplicationRuntimeModel.class })
     @ConditionalOnProperty(value = "com.alipay.sofa.boot.enable-isle", matchIfMissing = true)
     static class StartupIsleAutoConfiguration {
 
@@ -111,7 +114,8 @@ public class StartupAutoConfiguration {
                                                                                  SofaModuleProperties sofaModuleProperties,
                                                                                  StartupReporter startupReporter) {
             return new StartupSpringContextInstallStage(
-                    (AbstractApplicationContext) applicationContext, sofaModuleProperties, startupReporter);
+                (AbstractApplicationContext) applicationContext, sofaModuleProperties,
+                startupReporter);
         }
 
         @Bean
@@ -121,7 +125,7 @@ public class StartupAutoConfiguration {
                                                                    SofaModuleProfileChecker sofaModuleProfileChecker,
                                                                    StartupReporter startupReporter) {
             return new StartupModelCreatingStage((AbstractApplicationContext) applicationContext,
-                    sofaModuleProperties, sofaModuleProfileChecker, startupReporter);
+                sofaModuleProperties, sofaModuleProfileChecker, startupReporter);
         }
     }
 }

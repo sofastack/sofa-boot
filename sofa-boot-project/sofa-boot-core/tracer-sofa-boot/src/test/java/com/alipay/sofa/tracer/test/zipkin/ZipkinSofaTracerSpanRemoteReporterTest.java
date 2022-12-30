@@ -35,7 +35,7 @@ import com.alipay.common.tracer.core.listener.SpanReportListener;
 import com.alipay.common.tracer.core.listener.SpanReportListenerHolder;
 import com.alipay.common.tracer.core.span.SofaTracerSpan;
 import com.alipay.sofa.tracer.test.zipkin.mock.MockAbstractTracer;
-import com.alipay.sofa.tracer.test.zipkin.properties.ZipkinSofaTracerProperties;
+import com.alipay.sofa.tracer.boot.zipkin.properties.ZipkinSofaTracerProperties;
 import com.alipay.sofa.tracer.plugins.zipkin.ZipkinSofaTracerRestTemplateCustomizer;
 import com.alipay.sofa.tracer.plugins.zipkin.ZipkinSofaTracerSpanRemoteReporter;
 import com.alipay.sofa.tracer.plugins.zipkin.adapter.ZipkinV2SpanAdapter;

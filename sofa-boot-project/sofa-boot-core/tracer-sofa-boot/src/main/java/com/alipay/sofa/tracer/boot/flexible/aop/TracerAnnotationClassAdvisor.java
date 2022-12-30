@@ -14,19 +14,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.tracer.test.zipkin.properties;
+package com.alipay.sofa.tracer.boot.flexible.aop;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-
-import com.alipay.common.tracer.core.samplers.SamplerProperties;
+import org.aopalliance.aop.Advice;
+import org.aopalliance.intercept.MethodInterceptor;
+import org.springframework.aop.Pointcut;
+import org.springframework.aop.support.AbstractPointcutAdvisor;
 
 /**
- * ZipkinSofaTracerSamplerProperties
- *
- * @author yangguanchao
- * @since 2018/05/01
- */
-@ConfigurationProperties("com.alipay.sofa.tracer.sampler")
-public class ZipkinSofaTracerSamplerProperties extends SamplerProperties {
+ * @author guolei.sgl (guolei.sgl@antfin.com) 2019/8/9 3:17 PM
+ **/
+public class TracerAnnotationClassAdvisor extends AbstractPointcutAdvisor {
+
+    private Advice   advice;
+
+    private Pointcut pointcut;
+
+    public TracerAnnotationClassAdvisor(MethodInterceptor interceptor) {
+        this.advice = interceptor;
+        this.pointcut = new TracerAnnotationClassPointcut();
+    }
+
+    @Override
+    public Pointcut getPointcut() {
+        return this.pointcut;
+    }
+
+    @Override
+    public Advice getAdvice() {
+        return this.advice;
+    }
 
 }

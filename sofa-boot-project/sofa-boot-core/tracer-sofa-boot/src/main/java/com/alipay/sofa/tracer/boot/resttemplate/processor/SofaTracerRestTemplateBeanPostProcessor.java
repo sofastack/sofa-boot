@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.tracer.test.resttemplate.processor;
+package com.alipay.sofa.tracer.boot.resttemplate.processor;
 
-import com.alipay.sofa.tracer.test.resttemplate.SofaTracerRestTemplateEnhance;
+import com.alipay.sofa.tracer.boot.resttemplate.SofaTracerRestTemplateEnhance;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.web.client.RestTemplate;

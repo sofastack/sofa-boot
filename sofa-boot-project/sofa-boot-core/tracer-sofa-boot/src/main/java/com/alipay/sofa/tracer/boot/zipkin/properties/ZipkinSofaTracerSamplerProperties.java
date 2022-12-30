@@ -14,22 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.tracer.test.datasource.properties;
+package com.alipay.sofa.tracer.boot.zipkin.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import com.alipay.common.tracer.core.samplers.SamplerProperties;
+
 /**
- * @author qilong.zql 18/9/4-下午1:41
+ * ZipkinSofaTracerSamplerProperties
+ *
+ * @author yangguanchao
+ * @since 2018/05/01
  */
-@ConfigurationProperties("com.alipay.sofa.tracer.datasource")
-public class SofaTracerDataSourceProperties {
-    private boolean enable;
+@ConfigurationProperties("com.alipay.sofa.tracer.sampler")
+public class ZipkinSofaTracerSamplerProperties extends SamplerProperties {
 
-    public boolean isEnable() {
-        return enable;
-    }
-
-    public void setEnable(boolean enable) {
-        this.enable = enable;
-    }
 }

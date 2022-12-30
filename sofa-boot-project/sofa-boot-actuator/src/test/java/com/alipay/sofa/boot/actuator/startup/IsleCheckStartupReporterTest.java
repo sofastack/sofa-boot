@@ -16,6 +16,11 @@
  */
 package com.alipay.sofa.boot.actuator.startup;
 
+import com.alipay.sofa.boot.actuator.startup.beans.ChildBean;
+import com.alipay.sofa.boot.actuator.startup.beans.ParentBean;
+import com.alipay.sofa.boot.actuator.startup.configuration.SofaStartupAutoConfiguration;
+import com.alipay.sofa.boot.actuator.startup.configuration.SofaStartupIsleAutoConfiguration;
+import com.alipay.sofa.boot.actuator.startup.spring.StartupApplication;
 import com.alipay.sofa.boot.startup.BaseStat;
 import com.alipay.sofa.boot.startup.BeanStat;
 import com.alipay.sofa.boot.startup.BootStageConstants;
@@ -25,12 +30,6 @@ import com.alipay.sofa.runtime.ext.spring.ExtensionFactoryBean;
 import com.alipay.sofa.runtime.ext.spring.ExtensionPointFactoryBean;
 import com.alipay.sofa.runtime.spring.factory.ReferenceFactoryBean;
 import com.alipay.sofa.runtime.spring.factory.ServiceFactoryBean;
-import com.alipay.sofa.startup.StartupReporter;
-import com.alipay.sofa.boot.actuator.startup.beans.ChildBean;
-import com.alipay.sofa.boot.actuator.startup.beans.ParentBean;
-import com.alipay.sofa.boot.actuator.startup.configuration.SofaStartupAutoConfiguration;
-import com.alipay.sofa.boot.actuator.startup.configuration.SofaStartupIsleAutoConfiguration;
-import com.alipay.sofa.boot.actuator.startup.spring.StartupApplication;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -40,9 +39,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
-
-import static com.alipay.sofa.boot.actuator.startup.beans.ChildBean.CHILD_INIT_TIME;
-import static com.alipay.sofa.boot.actuator.startup.beans.ParentBean.PARENT_INIT_TIM;
 
 /**
  * @author huzijie

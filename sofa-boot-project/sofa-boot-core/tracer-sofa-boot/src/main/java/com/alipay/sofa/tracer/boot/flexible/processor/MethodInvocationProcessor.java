@@ -14,35 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.tracer.test.flexible.aop;
+package com.alipay.sofa.tracer.boot.flexible.processor;
 
-import org.aopalliance.aop.Advice;
-import org.aopalliance.intercept.MethodInterceptor;
-import org.springframework.aop.Pointcut;
-import org.springframework.aop.support.AbstractPointcutAdvisor;
+import com.alipay.sofa.tracer.plugin.flexible.annotations.Tracer;
+import org.aopalliance.intercept.MethodInvocation;
 
 /**
- * @author guolei.sgl (guolei.sgl@antfin.com) 2019/8/9 3:17 PM
+ * @author guolei.sgl (guolei.sgl@antfin.com) 2019/8/9 2:50 PM
  **/
-public class TracerAnnotationClassAdvisor extends AbstractPointcutAdvisor {
+public interface MethodInvocationProcessor {
 
-    private Advice   advice;
-
-    private Pointcut pointcut;
-
-    public TracerAnnotationClassAdvisor(MethodInterceptor interceptor) {
-        this.advice = interceptor;
-        this.pointcut = new TracerAnnotationClassPointcut();
-    }
-
-    @Override
-    public Pointcut getPointcut() {
-        return this.pointcut;
-    }
-
-    @Override
-    public Advice getAdvice() {
-        return this.advice;
-    }
-
+    /**
+     * proxy method
+     * @param invocation
+     * @param tracerSpan
+     * @return
+     * @throws Throwable
+     */
+    Object process(MethodInvocation invocation, Tracer tracerSpan) throws Throwable;
 }

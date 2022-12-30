@@ -14,22 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.tracer.test.flexible.processor;
+package com.alipay.sofa.tracer.boot.datasource.properties;
 
-import com.alipay.sofa.tracer.plugin.flexible.annotations.Tracer;
-import org.aopalliance.intercept.MethodInvocation;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * @author guolei.sgl (guolei.sgl@antfin.com) 2019/8/9 2:50 PM
- **/
-public interface MethodInvocationProcessor {
+ * @author qilong.zql 18/9/4-下午1:41
+ */
+@ConfigurationProperties("com.alipay.sofa.tracer.datasource")
+public class SofaTracerDataSourceProperties {
+    private boolean enable;
 
-    /**
-     * proxy method
-     * @param invocation
-     * @param tracerSpan
-     * @return
-     * @throws Throwable
-     */
-    Object process(MethodInvocation invocation, Tracer tracerSpan) throws Throwable;
+    public boolean isEnable() {
+        return enable;
+    }
+
+    public void setEnable(boolean enable) {
+        this.enable = enable;
+    }
 }
