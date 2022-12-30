@@ -59,7 +59,7 @@ import java.util.Set;
  */
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(SofaRuntimeConfigurationProperties.class)
-@ConditionalOnClass(SofaFramework.class)
+@ConditionalOnClass(SofaRuntimeContext.class)
 public class SofaRuntimeAutoConfiguration {
 
     @Bean

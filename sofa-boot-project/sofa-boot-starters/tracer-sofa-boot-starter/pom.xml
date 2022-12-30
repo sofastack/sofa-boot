@@ -18,6 +18,10 @@
     <dependencies>
         <dependency>
             <groupId>com.alipay.sofa</groupId>
+            <artifactId>sofa-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
             <artifactId>tracer-sofa-boot</artifactId>
         </dependency>
     </dependencies>

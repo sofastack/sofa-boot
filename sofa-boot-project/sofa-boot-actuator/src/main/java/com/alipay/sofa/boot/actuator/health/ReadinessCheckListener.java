@@ -49,10 +49,10 @@ import java.util.stream.Collectors;
  */
 public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
                                    GenericApplicationListener {
-    private static Logger                              logger                     = HealthCheckLoggerFactory.DEFAULT_LOG;
+    private static Logger                              logger                              = HealthCheckLoggerFactory.DEFAULT_LOG;
 
-    private final StatusAggregator                     statusAggregator           = StatusAggregator
-                                                                                      .getDefault();
+    private final StatusAggregator                     statusAggregator                    = StatusAggregator
+                                                                                               .getDefault();
 
     protected ApplicationContext                       applicationContext;
 
@@ -64,26 +64,24 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
 
     private final AfterReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor;
 
-    private boolean                                    healthCheckerStatus        = true;
+    private boolean                                    healthCheckerStatus                 = true;
 
-    private Map<String, Health>                        healthCheckerDetails       = new HashMap<>();
+    private Map<String, Health>                        healthCheckerDetails                = new HashMap<>();
 
-    private boolean                                    healthIndicatorStatus      = true;
+    private boolean                                    healthIndicatorStatus               = true;
 
-    private Map<String, Health>                        healthIndicatorDetails     = new HashMap<>();
+    private Map<String, Health>                        healthIndicatorDetails              = new HashMap<>();
 
-    private boolean                                    healthCallbackStatus       = true;
-    private boolean                                    readinessCheckFinish       = false;
-    private AtomicBoolean                              readinessCallbackTriggered = new AtomicBoolean(
-                                                                                      false);
+    private boolean                                    healthCallbackStatus                = true;
+    private boolean                                    readinessCheckFinish                = false;
+    private AtomicBoolean                              readinessCallbackTriggered          = new AtomicBoolean(
+                                                                                               false);
 
     private ReadinessState                             readinessState;
 
-    private boolean manualReadinessCallback = false;
+    private boolean                                    manualReadinessCallback             = false;
 
-    private boolean throwExceptionWhenHealthCheckFailed = false;
-
-
+    private boolean                                    throwExceptionWhenHealthCheckFailed = false;
 
     public ReadinessCheckListener(Environment environment,
                                   HealthCheckerProcessor healthCheckerProcessor,

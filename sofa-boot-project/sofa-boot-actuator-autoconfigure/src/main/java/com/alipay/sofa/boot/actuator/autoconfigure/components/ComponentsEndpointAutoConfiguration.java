@@ -18,7 +18,6 @@ package com.alipay.sofa.boot.actuator.autoconfigure.components;
 
 import com.alipay.sofa.boot.actuator.components.ComponentsEndPoint;
 import com.alipay.sofa.boot.autoconfigure.runtime.SofaRuntimeAutoConfiguration;
-import com.alipay.sofa.runtime.SofaFramework;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -32,7 +31,7 @@ import org.springframework.context.annotation.Bean;
  * @version ComponentsEndpointAutoConfiguration.java, v 0.1 2022年03月17日 3:56 PM huzijie Exp $
  */
 @AutoConfiguration(after = SofaRuntimeAutoConfiguration.class)
-@ConditionalOnClass(SofaFramework.class)
+@ConditionalOnClass(SofaRuntimeContext.class)
 @ConditionalOnAvailableEndpoint(endpoint = ComponentsEndPoint.class)
 public class ComponentsEndpointAutoConfiguration {
 

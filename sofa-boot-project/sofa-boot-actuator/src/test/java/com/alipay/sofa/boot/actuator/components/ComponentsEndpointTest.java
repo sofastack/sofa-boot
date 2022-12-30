@@ -23,7 +23,7 @@ import com.alipay.sofa.runtime.service.component.ServiceComponent;
 import com.alipay.sofa.runtime.spi.component.ComponentManager;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -44,16 +44,16 @@ import java.util.Map;
 public class ComponentsEndpointTest {
 
     @Mock
-    private SofaRuntimeContext         sofaRuntimeContext;
+    private SofaRuntimeContext sofaRuntimeContext;
 
     @Mock
-    private ComponentManager           componentManager;
+    private ComponentManager   componentManager;
 
     @Mock
-    private ServiceComponent           serviceComponent;
+    private ServiceComponent   serviceComponent;
 
     @Mock
-    private ExtensionComponent         extensionComponent;
+    private ExtensionComponent extensionComponent;
 
     @InjectMocks
     private ComponentsEndPoint sofaBootComponentsEndPoint;
@@ -102,11 +102,11 @@ public class ComponentsEndpointTest {
         Assert.assertEquals(1, serviceComponents.size());
         Assert.assertTrue(serviceComponentCollection instanceof List);
         Assert.assertEquals("testSofaService",
-            ((List<ComponentsEndPoint.ComponentDisplayInfo>) serviceComponentCollection)
-                .get(0).getName());
+            ((List<ComponentsEndPoint.ComponentDisplayInfo>) serviceComponentCollection).get(0)
+                .getName());
         Assert.assertEquals("moduleA",
-            ((List<ComponentsEndPoint.ComponentDisplayInfo>) serviceComponentCollection)
-                .get(0).getApplicationId());
+            ((List<ComponentsEndPoint.ComponentDisplayInfo>) serviceComponentCollection).get(0)
+                .getApplicationId());
 
         Collection<ComponentsEndPoint.ComponentDisplayInfo> extComponentCollection = componentTypeCollectionMap
             .get(ExtensionComponent.EXTENSION_COMPONENT_TYPE.getName());

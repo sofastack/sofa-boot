@@ -16,14 +16,12 @@
  */
 package com.alipay.sofa.boot.actuator.startup.stage.health;
 
-import com.alipay.sofa.boot.actuator.startup.StartupReporter;
-import com.alipay.sofa.boot.startup.BaseStat;
 import com.alipay.sofa.boot.actuator.health.AfterReadinessCheckCallbackProcessor;
-import com.alipay.sofa.boot.actuator.health.HealthCheckProperties;
 import com.alipay.sofa.boot.actuator.health.HealthCheckerProcessor;
 import com.alipay.sofa.boot.actuator.health.HealthIndicatorProcessor;
 import com.alipay.sofa.boot.actuator.health.ReadinessCheckListener;
-import com.alipay.sofa.runtime.configure.SofaRuntimeConfigurationProperties;
+import com.alipay.sofa.boot.actuator.startup.StartupReporter;
+import com.alipay.sofa.boot.startup.BaseStat;
 import org.springframework.core.env.Environment;
 
 import static com.alipay.sofa.boot.startup.BootStageConstants.HEALTH_CHECK_STAGE;

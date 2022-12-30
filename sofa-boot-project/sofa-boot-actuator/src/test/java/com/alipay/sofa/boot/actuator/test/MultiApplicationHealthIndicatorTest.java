@@ -19,7 +19,7 @@ package com.alipay.sofa.boot.actuator.test;
 import com.alipay.sofa.runtime.SofaFramework;
 import com.alipay.sofa.runtime.component.impl.StandardSofaRuntimeManager;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.actuate.health.Status;
 
 /**

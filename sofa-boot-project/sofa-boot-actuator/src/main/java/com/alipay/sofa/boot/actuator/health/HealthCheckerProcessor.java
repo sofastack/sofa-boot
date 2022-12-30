@@ -16,13 +16,13 @@
  */
 package com.alipay.sofa.boot.actuator.health;
 
+import com.alipay.sofa.boot.actuator.health.core.HealthChecker;
+import com.alipay.sofa.boot.actuator.health.log.HealthCheckLoggerFactory;
+import com.alipay.sofa.boot.actuator.health.util.HealthCheckUtils;
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.boot.health.NonReadinessCheck;
 import com.alipay.sofa.boot.util.BinaryOperators;
-import com.alipay.sofa.boot.actuator.health.core.HealthChecker;
-import com.alipay.sofa.boot.actuator.health.log.HealthCheckLoggerFactory;
-import com.alipay.sofa.boot.actuator.health.util.HealthCheckUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -64,11 +64,11 @@ public class HealthCheckerProcessor implements ApplicationContextAware {
 
     private int                                  defaultTimeout;
 
-    private final ThreadPoolExecutor            healthCheckExecutor;
+    private final ThreadPoolExecutor             healthCheckExecutor;
 
-    private boolean parallelCheck;
+    private boolean                              parallelCheck;
 
-    private long parallelCheckTimeout;
+    private long                                 parallelCheckTimeout;
 
     public HealthCheckerProcessor(ThreadPoolExecutor healthCheckExecutor) {
         this.healthCheckExecutor = healthCheckExecutor;
@@ -159,7 +159,7 @@ public class HealthCheckerProcessor implements ApplicationContextAware {
         if (parallelCheck) {
             CountDownLatch countDownLatch = new CountDownLatch(healthCheckers.size());
             AtomicBoolean parallelResult = new AtomicBoolean(true);
-            healthCheckers.forEach((String key, HealthChecker value) -> healthCheckExecutor.executeTask(() -> {
+            healthCheckers.forEach((String key, HealthChecker value) -> healthCheckExecutor.execute(() -> {
                 try {
                     if (!doHealthCheck(key, value, false, healthMap, true, false)) {
                         parallelResult.set(false);
@@ -216,7 +216,7 @@ public class HealthCheckerProcessor implements ApplicationContextAware {
         do {
             try {
                 if (wait) {
-                    Future<Health> future = healthCheckExecutor.submitTask(healthChecker::isHealthy);
+                    Future<Health> future = healthCheckExecutor.submit(healthChecker::isHealthy);
                     health = future.get(timeout, TimeUnit.MILLISECONDS);
                 } else {
                     health = healthChecker.isHealthy();

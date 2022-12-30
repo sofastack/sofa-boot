@@ -21,7 +21,13 @@
     <dependencies>
         <dependency>
             <groupId>com.alipay.sofa</groupId>
-            <artifactId>sofa-boot-starter</artifactId>
+            <artifactId>sofa-boot</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>sofa-boot-actuator</artifactId>
+            <optional>true</optional>
         </dependency>
 
         <dependency>

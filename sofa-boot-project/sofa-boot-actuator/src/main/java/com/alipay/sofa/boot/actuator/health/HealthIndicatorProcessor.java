@@ -16,17 +16,18 @@
  */
 package com.alipay.sofa.boot.actuator.health;
 
+import com.alipay.sofa.boot.actuator.health.log.HealthCheckLoggerFactory;
+import com.alipay.sofa.boot.actuator.health.util.HealthCheckUtils;
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.boot.util.BinaryOperators;
-import com.alipay.sofa.boot.actuator.health.log.HealthCheckLoggerFactory;
-import com.alipay.sofa.boot.actuator.health.util.HealthCheckUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.springframework.aop.framework.AopProxyUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthContributorNameFactory;
+import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.actuate.health.ReactiveHealthIndicator;
 import org.springframework.boot.actuate.health.Status;
 import org.springframework.context.ApplicationContext;
@@ -70,7 +71,7 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
     private final AtomicBoolean                    isInitiated                = new AtomicBoolean(
                                                                                   false);
 
-    private LinkedHashMap<String, SofaBootHealthIndicator> healthIndicators           = null;
+    private LinkedHashMap<String, HealthIndicator> healthIndicators           = null;
 
     private ApplicationContext                     applicationContext;
 
@@ -78,15 +79,15 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
 
     private final static String                    REACTOR_CLASS              = "reactor.core.publisher.Mono";
 
-    private final ThreadPoolExecutor              healthCheckExecutor;
+    private final ThreadPoolExecutor               healthCheckExecutor;
 
     private Set<Class<?>>                          excludedIndicators;
 
     private int                                    defaultTimeout;
 
-    private boolean parallelCheck;
+    private boolean                                parallelCheck;
 
-    private long parallelCheckTimeout;
+    private long                                   parallelCheckTimeout;
 
     public HealthIndicatorProcessor(ThreadPoolExecutor healthCheckExecutor) {
         this.healthCheckExecutor = healthCheckExecutor;
@@ -96,8 +97,8 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
         if (isInitiated.compareAndSet(false, true)) {
             Assert.notNull(applicationContext, () -> "Application must not be null");
             environment = applicationContext.getEnvironment();
-            Map<String, SofaBootHealthIndicator> beansOfType = applicationContext
-                    .getBeansOfType(SofaBootHealthIndicator.class);
+            Map<String, HealthIndicator> beansOfType = applicationContext
+                    .getBeansOfType(HealthIndicator.class);
             if (ClassUtils.isPresent(REACTOR_CLASS, null)) {
                 applicationContext.getBeansOfType(ReactiveHealthIndicator.class).forEach(
                         (name, indicator) -> beansOfType.put(name, () -> indicator.health().block()));
@@ -193,7 +194,7 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
         return result;
     }
 
-    public boolean doHealthCheck(String beanId, SofaBootHealthIndicator healthIndicator,
+    public boolean doHealthCheck(String beanId, HealthIndicator healthIndicator,
                                  Map<String, Health> healthMap, boolean wait) {
         Assert.notNull(healthMap, () -> "HealthMap must not be null");
 

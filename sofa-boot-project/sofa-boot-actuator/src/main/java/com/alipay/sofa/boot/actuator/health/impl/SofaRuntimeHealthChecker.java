@@ -16,9 +16,8 @@
  */
 package com.alipay.sofa.boot.actuator.health.impl;
 
-import com.alipay.sofa.boot.actuator.health.SofaBootHealthIndicator;
-import com.alipay.sofa.boot.health.RuntimeHealthChecker;
 import com.alipay.sofa.boot.actuator.health.ReadinessCheckListener;
+import com.alipay.sofa.boot.health.RuntimeHealthChecker;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.actuate.health.Status;
@@ -51,7 +50,7 @@ public class SofaRuntimeHealthChecker implements RuntimeHealthChecker {
 
     @Override
     public boolean isLivenessHealth() {
-        for (SofaBootHealthIndicator healthIndicator : healthIndicators) {
+        for (HealthIndicator healthIndicator : healthIndicators) {
             if (healthIndicator.getClass().getName()
                 .equals("com.alipay.sofa.boot.actuator.health.MultiApplicationHealthIndicator")) {
                 continue;

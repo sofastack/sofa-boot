@@ -27,7 +27,7 @@ import com.alipay.sofa.boot.actuator.startup.beans.InitCostBean;
 import com.alipay.sofa.boot.actuator.startup.configuration.SofaStartupAutoConfiguration;
 import com.alipay.sofa.boot.actuator.startup.spring.StartupApplication;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
