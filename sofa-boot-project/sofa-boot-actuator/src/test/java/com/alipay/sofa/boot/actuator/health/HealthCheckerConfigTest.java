@@ -26,8 +26,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.alipay.sofa.boot.actuator.health.impl.ComponentHealthChecker;
-
 /**
  * @author qilong.zql
  * @since 3.2.0

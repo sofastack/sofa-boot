@@ -21,6 +21,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import java.util.List;
 
 /**
+ * Configuration properties to configure health.
+ *
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 2020/5/18
  */
@@ -35,7 +37,7 @@ public class HealthProperties {
     /**
      * 并行健康检查
      */
-    private boolean      parallelCheck           = false;
+    private boolean      parallelCheck           = true;
 
     /**
      * 并行健康检查超时时间，单位 ms

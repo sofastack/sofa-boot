@@ -26,8 +26,8 @@
 //import org.springframework.test.context.junit4.SpringRunner;
 //
 //import com.alipay.sofa.boot.constant.SofaBootConstants;
-//import com.alipay.sofa.boot.actuator.health.core.HealthChecker;
-//import com.alipay.sofa.boot.actuator.health.impl.ComponentHealthChecker;
+//import com.alipay.sofa.boot.actuator.health.HealthChecker;
+//import com.alipay.sofa.boot.actuator.health.ComponentHealthChecker;
 //
 ///**
 // * @author abby.zh

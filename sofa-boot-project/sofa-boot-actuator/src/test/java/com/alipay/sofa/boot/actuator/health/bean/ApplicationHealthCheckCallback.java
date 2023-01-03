@@ -19,7 +19,7 @@ package com.alipay.sofa.boot.actuator.health.bean;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.context.ApplicationContext;
 
-import com.alipay.sofa.boot.actuator.health.startup.ReadinessCheckCallback;
+import com.alipay.sofa.boot.actuator.health.ReadinessCheckCallback;
 
 /**
  * @author liangen

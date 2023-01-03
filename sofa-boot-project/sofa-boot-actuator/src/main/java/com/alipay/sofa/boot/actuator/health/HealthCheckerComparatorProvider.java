@@ -14,16 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.boot.actuator.health.startup;
+package com.alipay.sofa.boot.actuator.health;
 
-import org.springframework.boot.actuate.health.Health;
-import org.springframework.context.ApplicationContext;
+import java.util.Comparator;
 
 /**
- * @author qilong.zql
- * @since 2.5.0
+ * // todo 补充注释
+ * Provider a user custom Comparator for healthChecker
+ * @author huzijie
+ * @version HealthCheckerComparatorProvider.java, v 0.1 2022年07月05日 11:50 AM huzijie Exp $
  */
-@FunctionalInterface
-public interface ReadinessCheckCallback {
-    Health onHealthy(ApplicationContext applicationContext);
+public interface HealthCheckerComparatorProvider {
+
+    /**
+     * Provider a Comparator
+     * @return
+     */
+    Comparator<Object> getComparator();
 }

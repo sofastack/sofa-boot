@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.actuator.autoconfigure.test.beans;
+package com.alipay.sofa.actuator.autoconfigure.beans;
 
 import com.alipay.sofa.boot.actuator.autoconfigure.beans.IsleBeansEndpointAutoConfiguration;
 import com.alipay.sofa.boot.actuator.beans.IsleBeansEndpoint;

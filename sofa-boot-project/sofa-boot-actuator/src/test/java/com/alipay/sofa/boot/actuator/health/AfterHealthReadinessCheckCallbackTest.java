@@ -16,7 +16,7 @@
 // */
 //package com.alipay.sofa.boot.actuator.health;
 //
-//import com.alipay.sofa.boot.actuator.health.core.HealthChecker;
+//import com.alipay.sofa.boot.actuator.health.HealthChecker;
 //import com.alipay.sofa.boot.actuator.health.bean.ApplicationHealthCheckCallback;
 //import com.alipay.sofa.boot.actuator.health.bean.FailedHealthCheck;
 //import com.alipay.sofa.boot.actuator.health.bean.HighestOrderReadinessCheckCallback;

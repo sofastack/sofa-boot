@@ -19,7 +19,7 @@ package com.alipay.sofa.boot.actuator.health.bean;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.core.PriorityOrdered;
 
-import com.alipay.sofa.boot.actuator.health.core.HealthChecker;
+import com.alipay.sofa.boot.actuator.health.HealthChecker;
 
 /**
  * @author liangen

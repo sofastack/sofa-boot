@@ -33,7 +33,7 @@
 //package com.alipay.sofa.boot.actuator.health;
 //
 //import com.alipay.sofa.boot.actuator.health.HealthCheckProperties;
-//import com.alipay.sofa.boot.actuator.health.core.HealthChecker;
+//import com.alipay.sofa.boot.actuator.health.HealthChecker;
 //import com.alipay.sofa.runtime.configure.SofaRuntimeConfigurationProperties;
 //import org.junit.Test;
 //import org.springframework.boot.SpringApplication;

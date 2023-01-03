@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.boot.actuator.health.bean;
 
-import com.alipay.sofa.boot.actuator.health.core.HealthChecker;
+import com.alipay.sofa.boot.actuator.health.HealthChecker;
 import org.springframework.boot.actuate.health.Health;
 
 public class FailedHealthCheck implements HealthChecker {

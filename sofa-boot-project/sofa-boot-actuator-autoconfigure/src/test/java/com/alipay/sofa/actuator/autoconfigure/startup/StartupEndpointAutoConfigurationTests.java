@@ -14,13 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.actuator.autoconfigure.test.startup;
+package com.alipay.sofa.actuator.autoconfigure.startup;
 
 import com.alipay.sofa.boot.actuator.autoconfigure.startup.StartupAutoConfiguration;
 import com.alipay.sofa.boot.actuator.autoconfigure.startup.StartupEndPointAutoConfiguration;
 import com.alipay.sofa.boot.actuator.startup.StartupEndPoint;
+import com.alipay.sofa.isle.ApplicationRuntimeModel;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
+import org.springframework.boot.test.context.FilteredClassLoader;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -36,7 +38,8 @@ public class StartupEndpointAutoConfigurationTests {
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
                                                              .withConfiguration(AutoConfigurations
                                                                  .of(StartupEndPointAutoConfiguration.class,
-                                                                     StartupAutoConfiguration.class));
+                                                                     StartupAutoConfiguration.class))
+            .withClassLoader(new FilteredClassLoader(ApplicationRuntimeModel.class));
 
     @Test
     void runShouldHaveEndpointBean() {

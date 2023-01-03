@@ -85,4 +85,12 @@ public class BeanCostBeanPostProcessor implements BeanPostProcessor {
     private String getBeanName(Object bean, String beanName) {
         return bean.getClass().getName() + " (" + beanName + ")";
     }
+
+    public long getBeanLoadCost() {
+        return beanLoadCost;
+    }
+
+    public boolean isSkipSofaBean() {
+        return skipSofaBean;
+    }
 }

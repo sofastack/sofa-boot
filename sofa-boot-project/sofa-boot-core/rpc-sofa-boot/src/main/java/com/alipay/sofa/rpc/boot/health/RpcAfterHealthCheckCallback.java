@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.rpc.boot.health;
 
-import com.alipay.sofa.boot.actuator.health.startup.ReadinessCheckCallback;
+import com.alipay.sofa.boot.actuator.health.ReadinessCheckCallback;
 import com.alipay.sofa.rpc.boot.context.event.SofaBootRpcStartAfterEvent;
 import com.alipay.sofa.rpc.boot.context.event.SofaBootRpcStartEvent;
 import org.springframework.boot.actuate.health.Health;

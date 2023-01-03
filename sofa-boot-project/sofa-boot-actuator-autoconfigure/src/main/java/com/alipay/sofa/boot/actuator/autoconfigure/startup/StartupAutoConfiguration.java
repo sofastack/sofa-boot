@@ -16,8 +16,8 @@
  */
 package com.alipay.sofa.boot.actuator.autoconfigure.startup;
 
-import com.alipay.sofa.boot.actuator.autoconfigure.health.HealthAutoConfiguration;
 import com.alipay.sofa.boot.actuator.autoconfigure.health.HealthProperties;
+import com.alipay.sofa.boot.actuator.autoconfigure.health.ReadinessAutoConfiguration;
 import com.alipay.sofa.boot.actuator.health.AfterReadinessCheckCallbackProcessor;
 import com.alipay.sofa.boot.actuator.health.HealthCheckerProcessor;
 import com.alipay.sofa.boot.actuator.health.HealthIndicatorProcessor;
@@ -39,6 +39,7 @@ import com.alipay.sofa.isle.stage.SpringContextInstallStage;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -51,6 +52,8 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.core.env.Environment;
 
 /**
+ * {@link EnableAutoConfiguration Auto-configuration} for startup components.
+ *
  * @author Zhijie
  * @since 2020/7/8
  */
@@ -79,9 +82,9 @@ public class StartupAutoConfiguration {
     }
 
     @Configuration(proxyBeanMethods = false)
-    @AutoConfigureBefore(HealthAutoConfiguration.class)
+    @AutoConfigureBefore(ReadinessAutoConfiguration.class)
     @ConditionalOnAvailableEndpoint(endpoint = ReadinessEndpoint.class)
-    static class StartupHealthAutoConfiguration {
+    public static class StartupHealthAutoConfiguration {
 
         @Bean
         @ConditionalOnMissingBean(value = ReadinessCheckListener.class, search = SearchStrategy.CURRENT)
@@ -106,7 +109,7 @@ public class StartupAutoConfiguration {
     @AutoConfigureBefore(SofaModuleAutoConfiguration.class)
     @ConditionalOnClass({ ApplicationRuntimeModel.class })
     @ConditionalOnProperty(value = "com.alipay.sofa.boot.enable-isle", matchIfMissing = true)
-    static class StartupIsleAutoConfiguration {
+    public static class StartupIsleAutoConfiguration {
 
         @Bean
         @ConditionalOnMissingBean(value = SpringContextInstallStage.class, search = SearchStrategy.CURRENT)

@@ -16,8 +16,6 @@
  */
 package com.alipay.sofa.boot.actuator.health;
 
-import com.alipay.sofa.boot.actuator.health.startup.ReadinessCheckCallback;
-import com.alipay.sofa.boot.actuator.health.util.HealthCheckUtils;
 import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;

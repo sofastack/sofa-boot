@@ -16,11 +16,8 @@
  */
 package com.alipay.sofa.boot.actuator.health;
 
-import com.alipay.sofa.boot.actuator.health.core.HealthCheckerComparatorProvider;
-import com.alipay.sofa.boot.actuator.health.startup.ReadinessCheckCallback;
 import com.alipay.sofa.boot.actuator.health.bean.HighestOrderReadinessCheckCallback;
 import com.alipay.sofa.boot.actuator.health.bean.LowestOrderReadinessCheckCallback;
-import com.alipay.sofa.boot.actuator.health.util.HealthCheckUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

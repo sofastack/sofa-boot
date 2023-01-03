@@ -16,8 +16,6 @@
  */
 package com.alipay.sofa.boot.actuator.health;
 
-import com.alipay.sofa.boot.actuator.health.core.HealthChecker;
-import com.alipay.sofa.boot.actuator.health.util.HealthCheckUtils;
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.boot.health.NonReadinessCheck;
@@ -280,8 +278,16 @@ public class HealthCheckerProcessor implements ApplicationContextAware {
             String.valueOf(SofaBootConstants.SOFABOOT_HEALTH_CHECK_DEFAULT_TIMEOUT_VALUE)));
     }
 
+    public boolean isParallelCheck() {
+        return parallelCheck;
+    }
+
     public void setParallelCheck(boolean parallelCheck) {
         this.parallelCheck = parallelCheck;
+    }
+
+    public long getParallelCheckTimeout() {
+        return parallelCheckTimeout;
     }
 
     public void setParallelCheckTimeout(long parallelCheckTimeout) {

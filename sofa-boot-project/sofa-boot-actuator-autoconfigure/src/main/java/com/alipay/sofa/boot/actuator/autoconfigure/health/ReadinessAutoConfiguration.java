@@ -17,23 +17,28 @@
 package com.alipay.sofa.boot.actuator.autoconfigure.health;
 
 import com.alipay.sofa.boot.actuator.health.AfterReadinessCheckCallbackProcessor;
+import com.alipay.sofa.boot.actuator.health.ComponentHealthChecker;
 import com.alipay.sofa.boot.actuator.health.HealthCheckerProcessor;
 import com.alipay.sofa.boot.actuator.health.HealthIndicatorProcessor;
+import com.alipay.sofa.boot.actuator.health.ModuleHealthChecker;
 import com.alipay.sofa.boot.actuator.health.ReadinessCheckListener;
 import com.alipay.sofa.boot.actuator.health.ReadinessEndpoint;
 import com.alipay.sofa.boot.actuator.health.SofaBootHealthIndicator;
-import com.alipay.sofa.boot.actuator.health.impl.ComponentHealthChecker;
-import com.alipay.sofa.boot.actuator.health.impl.ModuleHealthChecker;
-import com.alipay.sofa.boot.actuator.health.impl.SofaRuntimeHealthChecker;
+import com.alipay.sofa.boot.actuator.health.SofaRuntimeHealthChecker;
+import com.alipay.sofa.boot.autoconfigure.isle.SofaModuleAutoConfiguration;
+import com.alipay.sofa.boot.autoconfigure.runtime.SofaRuntimeAutoConfiguration;
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.log.SofaLogger;
 import com.alipay.sofa.boot.util.NamedThreadFactory;
 import com.alipay.sofa.common.thread.SofaThreadPoolExecutor;
+import com.alipay.sofa.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.isle.stage.ModelCreatingStage;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -50,13 +55,15 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * {@link EnableAutoConfiguration Auto-configuration} for readiness components.
+ *
  * @author qilong.zql
  * @since 2.5.0
  */
 @AutoConfiguration
 @EnableConfigurationProperties(HealthProperties.class)
 @ConditionalOnAvailableEndpoint(endpoint = ReadinessEndpoint.class)
-public class HealthAutoConfiguration {
+public class ReadinessAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(value = ReadinessCheckListener.class, search = SearchStrategy.CURRENT)
@@ -131,9 +138,10 @@ public class HealthAutoConfiguration {
     }
 
     @Configuration(proxyBeanMethods = false)
-    @ConditionalOnClass(name = "com.alipay.sofa.isle.stage.ModelCreatingStage")
+    @AutoConfigureAfter(SofaModuleAutoConfiguration.class)
+    @ConditionalOnClass(ApplicationRuntimeModel.class)
     @ConditionalOnProperty(value = "com.alipay.sofa.boot.enable-isle", matchIfMissing = true)
-    static class SofaModuleHealthIndicatorConfiguration {
+    public static class SofaModuleHealthIndicatorConfiguration {
 
         @Bean
         @ConditionalOnMissingBean
@@ -144,18 +152,20 @@ public class HealthAutoConfiguration {
     }
 
     @Configuration(proxyBeanMethods = false)
-    @ConditionalOnClass(name = "com.alipay.sofa.runtime.spi.component.SofaRuntimeContext")
-    @ConditionalOnBean(SofaRuntimeContext.class)
-    static class SofaRuntimeHealthIndicatorConfiguration {
+    @AutoConfigureAfter(SofaRuntimeAutoConfiguration.class)
+    @ConditionalOnClass(SofaRuntimeContext.class)
+    public static class SofaRuntimeHealthIndicatorConfiguration {
 
         @Bean
         @ConditionalOnMissingBean
+        @ConditionalOnBean(SofaRuntimeContext.class)
         public ComponentHealthChecker sofaComponentHealthChecker(SofaRuntimeContext sofaRuntimeContext) {
             return new ComponentHealthChecker(sofaRuntimeContext);
         }
 
         @Bean
         @ConditionalOnMissingBean
+        @ConditionalOnBean(SofaRuntimeContext.class)
         public SofaRuntimeHealthChecker defaultRuntimeHealthChecker(SofaRuntimeContext sofaRuntimeContext,
                                                                     List<HealthIndicator> healthIndicators,
                                                                     ReadinessCheckListener readinessCheckListener) {

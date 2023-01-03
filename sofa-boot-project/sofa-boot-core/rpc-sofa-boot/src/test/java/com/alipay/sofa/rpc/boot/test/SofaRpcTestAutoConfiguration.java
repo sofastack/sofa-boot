@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.rpc.boot.test;
 
-import com.alipay.sofa.boot.actuator.health.startup.ReadinessCheckCallback;
+import com.alipay.sofa.boot.actuator.health.ReadinessCheckCallback;
 import com.alipay.sofa.rpc.boot.config.ConsulConfigurator;
 import com.alipay.sofa.rpc.boot.config.FaultToleranceConfigurator;
 import com.alipay.sofa.rpc.boot.config.LocalFileConfigurator;
@@ -163,7 +163,7 @@ public class SofaRpcTestAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingClass({ "com.alipay.sofa.boot.actuator.health.startup.ReadinessCheckCallback" })
+    @ConditionalOnMissingClass({"com.alipay.sofa.boot.actuator.health.ReadinessCheckCallback"})
     public ApplicationContextRefreshedListener applicationContextRefreshedListener() {
         return new ApplicationContextRefreshedListener();
     }

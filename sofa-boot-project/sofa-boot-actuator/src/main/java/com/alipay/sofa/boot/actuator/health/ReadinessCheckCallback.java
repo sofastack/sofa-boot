@@ -14,15 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.actuator.autoconfigure.test.health;
+package com.alipay.sofa.boot.actuator.health;
 
-import com.alipay.sofa.boot.actuator.autoconfigure.health.HealthAutoConfiguration;
+import org.springframework.boot.actuate.health.Health;
+import org.springframework.context.ApplicationContext;
 
 /**
- * Tests for {@link HealthAutoConfiguration}.
- *
- * @author huzijie
- * @version HealthAutoConfigurationTests.java, v 0.1 2022年12月30日 2:08 PM huzijie Exp $
+ * // todo 补充注释
+ * @author qilong.zql
+ * @since 2.5.0
  */
-public class HealthAutoConfigurationTests {
+@FunctionalInterface
+public interface ReadinessCheckCallback {
+    Health onHealthy(ApplicationContext applicationContext);
 }

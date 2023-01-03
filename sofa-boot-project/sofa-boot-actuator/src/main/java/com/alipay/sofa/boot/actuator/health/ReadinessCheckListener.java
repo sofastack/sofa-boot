@@ -312,8 +312,16 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
         return readinessCallbackTriggered;
     }
 
+    public boolean isManualReadinessCallback() {
+        return manualReadinessCallback;
+    }
+
     public void setManualReadinessCallback(boolean manualReadinessCallback) {
         this.manualReadinessCallback = manualReadinessCallback;
+    }
+
+    public boolean isThrowExceptionWhenHealthCheckFailed() {
+        return throwExceptionWhenHealthCheckFailed;
     }
 
     public void setThrowExceptionWhenHealthCheckFailed(boolean throwExceptionWhenHealthCheckFailed) {

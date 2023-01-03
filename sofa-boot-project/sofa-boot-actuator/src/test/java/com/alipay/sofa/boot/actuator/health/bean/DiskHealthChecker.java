@@ -20,7 +20,7 @@ import org.springframework.boot.actuate.health.Health;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 
-import com.alipay.sofa.boot.actuator.health.core.HealthChecker;
+import com.alipay.sofa.boot.actuator.health.HealthChecker;
 
 /**
  * @author qilong.zql

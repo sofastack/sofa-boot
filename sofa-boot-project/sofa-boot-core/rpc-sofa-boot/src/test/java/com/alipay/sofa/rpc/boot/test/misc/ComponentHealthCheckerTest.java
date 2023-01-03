@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.rpc.boot.test.misc;
 
-import com.alipay.sofa.boot.actuator.health.impl.ComponentHealthChecker;
+import com.alipay.sofa.boot.actuator.health.ComponentHealthChecker;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import org.junit.Assert;
 import org.junit.Test;

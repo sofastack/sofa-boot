@@ -22,7 +22,7 @@
 //import java.util.List;
 //import java.util.Map;
 //
-//import com.alipay.sofa.boot.actuator.health.impl.ComponentHealthChecker;
+//import com.alipay.sofa.boot.actuator.health.ComponentHealthChecker;
 //import com.alipay.sofa.runtime.component.impl.StandardSofaRuntimeManager;
 //import com.alipay.sofa.runtime.configure.SofaRuntimeConfigurationProperties;
 //import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
@@ -40,11 +40,11 @@
 //import org.springframework.context.annotation.Configuration;
 //
 //import com.alipay.sofa.boot.constant.SofaBootConstants;
-//import com.alipay.sofa.boot.actuator.health.core.HealthChecker;
+//import com.alipay.sofa.boot.actuator.health.HealthChecker;
 //import com.alipay.sofa.boot.actuator.health.bean.DiskHealthChecker;
 //import com.alipay.sofa.boot.actuator.health.bean.MemoryHealthChecker;
 //import com.alipay.sofa.boot.actuator.health.bean.NetworkHealthChecker;
-//import com.alipay.sofa.boot.actuator.health.util.HealthCheckUtils;
+//import com.alipay.sofa.boot.actuator.health.HealthCheckUtils;
 //import org.springframework.core.env.Environment;
 //
 ///**

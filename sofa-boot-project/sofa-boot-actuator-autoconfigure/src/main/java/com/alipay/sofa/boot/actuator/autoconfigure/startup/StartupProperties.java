@@ -19,6 +19,8 @@ package com.alipay.sofa.boot.actuator.autoconfigure.startup;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
+ * Configuration properties to configure startup.
+ *
  * @author Zhijie
  * @since 2020/7/13
  */

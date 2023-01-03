@@ -14,10 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.boot.actuator.health.core;
+package com.alipay.sofa.boot.actuator.health;
 import org.springframework.boot.actuate.health.Health;
 
 /**
+ * // todo 补充注释
  * @author liangen
  * @author qilong.zql
  * @since 2.3.0

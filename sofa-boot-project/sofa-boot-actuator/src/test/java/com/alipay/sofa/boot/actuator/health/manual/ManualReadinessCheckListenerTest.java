@@ -20,7 +20,7 @@
 //import com.alipay.sofa.boot.actuator.health.HealthCheckerProcessor;
 //import com.alipay.sofa.boot.actuator.health.HealthIndicatorProcessor;
 //import com.alipay.sofa.boot.actuator.health.ReadinessCheckListener;
-//import com.alipay.sofa.boot.actuator.health.core.HealthChecker;
+//import com.alipay.sofa.boot.actuator.health.HealthChecker;
 //import com.alipay.sofa.boot.actuator.health.bean.DiskHealthIndicator;
 //import com.alipay.sofa.runtime.configure.SofaRuntimeConfigurationProperties;
 //import org.junit.Assert;

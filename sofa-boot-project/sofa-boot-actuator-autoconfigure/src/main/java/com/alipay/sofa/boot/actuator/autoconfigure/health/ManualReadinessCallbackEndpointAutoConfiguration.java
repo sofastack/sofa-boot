@@ -20,11 +20,14 @@ import com.alipay.sofa.boot.actuator.health.ManualReadinessCallbackEndPoint;
 import com.alipay.sofa.boot.actuator.health.ReadinessCheckListener;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 
 /**
+ * {@link EnableAutoConfiguration Auto-configuration} for {@link ManualReadinessCallbackEndPoint}.
+ *
  * @author huzijie
  * @version ManualReadinessCallbackEndpointAutoConfiguration.java, v 0.1 2022年12月29日 4:56 PM huzijie Exp $
  */

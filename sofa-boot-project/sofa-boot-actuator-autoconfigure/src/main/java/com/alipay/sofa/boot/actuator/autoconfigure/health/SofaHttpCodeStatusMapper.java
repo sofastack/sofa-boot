@@ -26,6 +26,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * SOFABoot custom {@link HttpCodeStatusMapper} backed by map of {@link Status#getCode() status
+ * code} to HTTP status code.
+ *
  * @author huzijie
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 2021/3/22

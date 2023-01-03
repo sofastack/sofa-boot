@@ -21,10 +21,13 @@ import com.alipay.sofa.boot.actuator.startup.StartupReporter;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.boot.actuate.autoconfigure.startup.StartupEndpointAutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 
 /**
+ * {@link EnableAutoConfiguration Auto-configuration} for {@link StartupEndPoint}.
+ *
  * @author Zhijie
  * @since 2020/7/7
  */
