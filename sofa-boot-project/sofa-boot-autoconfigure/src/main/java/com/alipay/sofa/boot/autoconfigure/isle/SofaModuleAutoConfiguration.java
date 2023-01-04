@@ -45,7 +45,7 @@ import java.util.List;
 @AutoConfiguration(after = SofaRuntimeAutoConfiguration.class)
 @EnableConfigurationProperties(SofaModuleProperties.class)
 @ConditionalOnClass(ApplicationRuntimeModel.class)
-@ConditionalOnProperty(value = "com.alipay.sofa.boot.enable-isle", matchIfMissing = true)
+@ConditionalOnProperty(value = "sofa.boot.isle.enable", matchIfMissing = true)
 public class SofaModuleAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean

@@ -28,6 +28,6 @@ public class StartupSpringBootContextLoader extends SpringBootContextLoader {
 
     @Override
     protected SpringApplication getSpringApplication() {
-        return new StartupSpringApplication(new Class[0]);
+        return new StartupSpringApplication();
     }
 }

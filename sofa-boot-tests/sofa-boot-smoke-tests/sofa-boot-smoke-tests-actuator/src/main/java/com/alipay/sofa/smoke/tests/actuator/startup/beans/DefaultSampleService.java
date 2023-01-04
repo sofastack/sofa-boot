@@ -14,15 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.smoke.tests.actuator.startup.beans.service;
+package com.alipay.sofa.smoke.tests.actuator.startup.beans;
 
-import com.alipay.sofa.smoke.tests.actuator.startup.beans.facade.SampleService;
+import com.alipay.sofa.smoke.tests.actuator.startup.beans.SampleService;
 
 /**
  * @author Zhijie
  * @since 2020/7/13
  */
 public class DefaultSampleService implements SampleService {
+
     protected String message;
 
     public DefaultSampleService() {

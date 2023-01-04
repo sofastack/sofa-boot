@@ -16,22 +16,11 @@
  */
 package com.alipay.sofa.smoke.tests.actuator.startup.beans;
 
-import org.springframework.context.ApplicationContextInitializer;
-import org.springframework.context.ConfigurableApplicationContext;
-
 /**
  * @author huzijie
- * @version StartupInitializer.java, v 0.1 2022年03月14日 2:41 PM huzijie Exp $
+ * @version TestService.java, v 0.1 2021年01月05日 10:30 上午 huzijie Exp $
  */
-public class StartupInitializer implements
-                               ApplicationContextInitializer<ConfigurableApplicationContext> {
+public interface TestService {
 
-    @Override
-    public void initialize(ConfigurableApplicationContext applicationContext) {
-        try {
-            Thread.sleep(10);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
+    void test();
 }

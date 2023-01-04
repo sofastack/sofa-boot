@@ -16,39 +16,16 @@
  */
 package com.alipay.sofa.boot.actuator.autoconfigure.startup;
 
-import com.alipay.sofa.boot.actuator.autoconfigure.health.HealthProperties;
-import com.alipay.sofa.boot.actuator.autoconfigure.health.ReadinessAutoConfiguration;
-import com.alipay.sofa.boot.actuator.health.AfterReadinessCheckCallbackProcessor;
-import com.alipay.sofa.boot.actuator.health.HealthCheckerProcessor;
-import com.alipay.sofa.boot.actuator.health.HealthIndicatorProcessor;
-import com.alipay.sofa.boot.actuator.health.ReadinessCheckListener;
-import com.alipay.sofa.boot.actuator.health.ReadinessEndpoint;
-import com.alipay.sofa.boot.actuator.startup.StartupEndPoint;
-import com.alipay.sofa.boot.actuator.startup.StartupReporter;
 import com.alipay.sofa.boot.actuator.startup.BeanCostBeanPostProcessor;
 import com.alipay.sofa.boot.actuator.startup.StartupContextRefreshedListener;
-import com.alipay.sofa.boot.actuator.startup.health.StartupReadinessCheckListener;
-import com.alipay.sofa.boot.actuator.startup.isle.StartupModelCreatingStage;
-import com.alipay.sofa.boot.actuator.startup.isle.StartupSpringContextInstallStage;
-import com.alipay.sofa.boot.autoconfigure.isle.SofaModuleAutoConfiguration;
-import com.alipay.sofa.isle.ApplicationRuntimeModel;
-import com.alipay.sofa.isle.profile.SofaModuleProfileChecker;
-import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
-import com.alipay.sofa.isle.stage.ModelCreatingStage;
-import com.alipay.sofa.isle.stage.SpringContextInstallStage;
+import com.alipay.sofa.boot.actuator.startup.StartupEndPoint;
+import com.alipay.sofa.boot.actuator.startup.StartupReporter;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.condition.SearchStrategy;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.core.env.Environment;
 
 /**
@@ -81,54 +58,4 @@ public class StartupAutoConfiguration {
         return new StartupContextRefreshedListener();
     }
 
-    @Configuration(proxyBeanMethods = false)
-    @AutoConfigureBefore(ReadinessAutoConfiguration.class)
-    @ConditionalOnAvailableEndpoint(endpoint = ReadinessEndpoint.class)
-    public static class StartupHealthAutoConfiguration {
-
-        @Bean
-        @ConditionalOnMissingBean(value = ReadinessCheckListener.class, search = SearchStrategy.CURRENT)
-        public StartupReadinessCheckListener startupReadinessCheckListener(Environment environment,
-                                                                           HealthCheckerProcessor healthCheckerProcessor,
-                                                                           HealthIndicatorProcessor healthIndicatorProcessor,
-                                                                           AfterReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor,
-                                                                           HealthProperties healthCheckProperties,
-                                                                           StartupReporter startupReporter) {
-            StartupReadinessCheckListener readinessCheckListener = new StartupReadinessCheckListener(
-                    environment, healthCheckerProcessor, healthIndicatorProcessor,
-                    afterReadinessCheckCallbackProcessor, startupReporter);
-            readinessCheckListener.setManualReadinessCallback(healthCheckProperties
-                    .isManualReadinessCallback());
-            readinessCheckListener.setThrowExceptionWhenHealthCheckFailed(healthCheckProperties
-                    .isInsulator());
-            return readinessCheckListener;
-        }
-    }
-
-    @Configuration(proxyBeanMethods = false)
-    @AutoConfigureBefore(SofaModuleAutoConfiguration.class)
-    @ConditionalOnClass({ ApplicationRuntimeModel.class })
-    @ConditionalOnProperty(value = "com.alipay.sofa.boot.enable-isle", matchIfMissing = true)
-    public static class StartupIsleAutoConfiguration {
-
-        @Bean
-        @ConditionalOnMissingBean(value = SpringContextInstallStage.class, search = SearchStrategy.CURRENT)
-        public StartupSpringContextInstallStage startupSpringContextInstallStage(ApplicationContext applicationContext,
-                                                                                 SofaModuleProperties sofaModuleProperties,
-                                                                                 StartupReporter startupReporter) {
-            return new StartupSpringContextInstallStage(
-                (AbstractApplicationContext) applicationContext, sofaModuleProperties,
-                startupReporter);
-        }
-
-        @Bean
-        @ConditionalOnMissingBean(value = ModelCreatingStage.class, search = SearchStrategy.CURRENT)
-        public StartupModelCreatingStage startupModelCreatingStage(ApplicationContext applicationContext,
-                                                                   SofaModuleProperties sofaModuleProperties,
-                                                                   SofaModuleProfileChecker sofaModuleProfileChecker,
-                                                                   StartupReporter startupReporter) {
-            return new StartupModelCreatingStage((AbstractApplicationContext) applicationContext,
-                sofaModuleProperties, sofaModuleProfileChecker, startupReporter);
-        }
-    }
 }

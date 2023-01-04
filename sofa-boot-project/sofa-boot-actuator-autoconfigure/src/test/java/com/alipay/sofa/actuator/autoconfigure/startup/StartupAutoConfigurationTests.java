@@ -18,9 +18,11 @@ package com.alipay.sofa.actuator.autoconfigure.startup;
 
 import com.alipay.sofa.boot.actuator.autoconfigure.health.ReadinessAutoConfiguration;
 import com.alipay.sofa.boot.actuator.autoconfigure.startup.StartupAutoConfiguration;
-import com.alipay.sofa.boot.actuator.startup.StartupReporter;
+import com.alipay.sofa.boot.actuator.autoconfigure.startup.StartupHealthAutoConfiguration;
+import com.alipay.sofa.boot.actuator.autoconfigure.startup.StartupIsleAutoConfiguration;
 import com.alipay.sofa.boot.actuator.startup.BeanCostBeanPostProcessor;
 import com.alipay.sofa.boot.actuator.startup.StartupContextRefreshedListener;
+import com.alipay.sofa.boot.actuator.startup.StartupReporter;
 import com.alipay.sofa.boot.actuator.startup.health.StartupReadinessCheckListener;
 import com.alipay.sofa.boot.actuator.startup.isle.StartupModelCreatingStage;
 import com.alipay.sofa.boot.actuator.startup.isle.StartupSpringContextInstallStage;
@@ -94,7 +96,7 @@ public class StartupAutoConfigurationTests {
     @Test
     void runWhenHaveReadinessEndpoints() {
         this.contextRunner
-                .withConfiguration(AutoConfigurations.of(StartupAutoConfiguration.StartupHealthAutoConfiguration.class, ReadinessAutoConfiguration.class))
+                .withConfiguration(AutoConfigurations.of(StartupHealthAutoConfiguration.class, ReadinessAutoConfiguration.class))
                 .withClassLoader(new FilteredClassLoader(ApplicationRuntimeModel.class))
                 .withPropertyValues("management.endpoints.web.exposure.include=readiness,startup")
                 .run((context) -> assertThat(context)
@@ -104,7 +106,7 @@ public class StartupAutoConfigurationTests {
     @Test
     void runWhenHaveIsleClasses() {
         this.contextRunner
-                .withConfiguration(AutoConfigurations.of(StartupAutoConfiguration.StartupIsleAutoConfiguration.class, SofaModuleAutoConfiguration.class, SofaRuntimeAutoConfiguration.class))
+                .withConfiguration(AutoConfigurations.of(StartupIsleAutoConfiguration.class, SofaModuleAutoConfiguration.class, SofaRuntimeAutoConfiguration.class))
                 .run((context) -> assertThat(context).hasSingleBean(StartupSpringContextInstallStage.class)
                         .hasSingleBean(StartupModelCreatingStage.class));
     }

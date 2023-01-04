@@ -17,6 +17,8 @@
 package com.alipay.sofa.actuator.autoconfigure.health;
 
 import com.alipay.sofa.boot.actuator.autoconfigure.health.ReadinessAutoConfiguration;
+import com.alipay.sofa.boot.actuator.autoconfigure.health.ReadinessIsleAutoConfiguration;
+import com.alipay.sofa.boot.actuator.autoconfigure.health.ReadinessRuntimeAutoConfiguration;
 import com.alipay.sofa.boot.actuator.health.AfterReadinessCheckCallbackProcessor;
 import com.alipay.sofa.boot.actuator.health.ComponentHealthChecker;
 import com.alipay.sofa.boot.actuator.health.HealthCheckerProcessor;
@@ -107,7 +109,7 @@ public class ReadinessAutoConfigurationTests {
     @Test
     void runWhenWithIsleConfiguration() {
         this.contextRunner
-                .withConfiguration(AutoConfigurations.of(ReadinessAutoConfiguration.SofaModuleHealthIndicatorConfiguration.class,
+                .withConfiguration(AutoConfigurations.of(ReadinessIsleAutoConfiguration.class,
                         SofaRuntimeAutoConfiguration.class, SofaModuleAutoConfiguration.class))
                 .run((context) -> assertThat(context).hasSingleBean(ModuleHealthChecker.class));
     }
@@ -115,7 +117,7 @@ public class ReadinessAutoConfigurationTests {
     @Test
     void runWhenNotHaveIsleConfigurationWithoutBeans() {
         this.contextRunner
-                .withConfiguration(AutoConfigurations.of(ReadinessAutoConfiguration.SofaModuleHealthIndicatorConfiguration.class,
+                .withConfiguration(AutoConfigurations.of(ReadinessIsleAutoConfiguration.class,
                         SofaRuntimeAutoConfiguration.class, SofaModuleAutoConfiguration.class))
                 .withClassLoader(new FilteredClassLoader(ApplicationRuntimeModel.class))
                 .run((context) -> assertThat(context).doesNotHaveBean(ModuleHealthChecker.class));
@@ -124,14 +126,14 @@ public class ReadinessAutoConfigurationTests {
     @Test
     void runWhenWithRuntimeConfiguration() {
         this.contextRunner
-                .withConfiguration(AutoConfigurations.of(ReadinessAutoConfiguration.SofaRuntimeHealthIndicatorConfiguration.class, SofaRuntimeAutoConfiguration.class))
+                .withConfiguration(AutoConfigurations.of(ReadinessRuntimeAutoConfiguration.class, SofaRuntimeAutoConfiguration.class))
                 .run((context) -> assertThat(context).hasSingleBean(ComponentHealthChecker.class));
     }
 
     @Test
     void runWhenNotHaveRuntimeConfigurationWithoutBeans() {
         this.contextRunner
-                .withConfiguration(AutoConfigurations.of(ReadinessAutoConfiguration.SofaRuntimeHealthIndicatorConfiguration.class,
+                .withConfiguration(AutoConfigurations.of(ReadinessRuntimeAutoConfiguration.class,
                         SofaRuntimeAutoConfiguration.class))
                 .withClassLoader(new FilteredClassLoader(SofaRuntimeContext.class))
                 .run((context) -> assertThat(context).doesNotHaveBean(ComponentHealthChecker.class));

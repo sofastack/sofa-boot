@@ -24,12 +24,14 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @version FatherBean.java, v 0.1 2021年01月04日 9:28 下午 huzijie Exp $
  */
 public class ParentBean implements InitializingBean {
-    public static final int PARENT_INIT_TIM = 30;
+
+    public static final int PARENT_INIT_TIME = 30;
+
     @Autowired
-    ChildBean               childBean;
+    private ChildBean               childBean;
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        Thread.sleep(PARENT_INIT_TIM);
+        Thread.sleep(PARENT_INIT_TIME);
     }
 }

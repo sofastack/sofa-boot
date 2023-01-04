@@ -38,12 +38,13 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Integration tests for startup reporter.
  *
  * @author huzijie
- * @version SimpleStartupReporterTests.java, v 0.1 2021年01月04日 8:31 下午 huzijie Exp $
+ * @version DefaultStageStartupReporterTests.java, v 0.1 2021年01月04日 8:31 下午 huzijie Exp $
  */
 @SpringBootTest(classes = ActuatorSOFABootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-        properties = {"management.endpoints.web.exposure.include=startup"})
+        properties = {"management.endpoints.web.exposure.include=startup",
+                "spring.autoconfigure.exclude=com.alipay.sofa.boot.actuator.autoconfigure.startup.StartupHealthAutoConfiguration,com.alipay.sofa.boot.actuator.autoconfigure.startup.StartupIsleAutoConfiguration"})
 @Import(InitCostBean.class)
-public class SimpleStartupReporterTests {
+public class DefaultStageStartupReporterTests {
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired

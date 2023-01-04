@@ -133,31 +133,4 @@ public class ReadinessAutoConfiguration {
             new ThreadPoolExecutor.CallerRunsPolicy(), "health-check",
             SofaBootConstants.SOFABOOT_SPACE_NAME);
     }
-
-    @Configuration(proxyBeanMethods = false)
-    @AutoConfigureAfter(SofaModuleAutoConfiguration.class)
-    @ConditionalOnClass(ApplicationRuntimeModel.class)
-    @ConditionalOnProperty(value = "com.alipay.sofa.boot.enable-isle", matchIfMissing = true)
-    public static class SofaModuleHealthIndicatorConfiguration {
-
-        @Bean
-        @ConditionalOnMissingBean
-        @ConditionalOnBean(ModelCreatingStage.class)
-        public ModuleHealthChecker sofaModuleHealthChecker() {
-            return new ModuleHealthChecker();
-        }
-    }
-
-    @Configuration(proxyBeanMethods = false)
-    @AutoConfigureAfter(SofaRuntimeAutoConfiguration.class)
-    @ConditionalOnClass(SofaRuntimeContext.class)
-    public static class SofaRuntimeHealthIndicatorConfiguration {
-
-        @Bean
-        @ConditionalOnMissingBean
-        @ConditionalOnBean(SofaRuntimeContext.class)
-        public ComponentHealthChecker sofaComponentHealthChecker(SofaRuntimeContext sofaRuntimeContext) {
-            return new ComponentHealthChecker(sofaRuntimeContext);
-        }
-    }
 }

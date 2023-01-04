@@ -17,13 +17,13 @@
 package com.alipay.sofa.smoke.tests.actuator.startup.beans;
 
 import com.alipay.sofa.service.api.component.Extension;
-import com.alipay.sofa.smoke.tests.actuator.startup.beans.facade.TestService;
 
 /**
  * @author huzijie
  * @version ExtensionBean.java, v 0.1 2021年01月05日 11:17 上午 huzijie Exp $
  */
 public class ExtensionBean implements TestService {
+
     private String word;
 
     @Override

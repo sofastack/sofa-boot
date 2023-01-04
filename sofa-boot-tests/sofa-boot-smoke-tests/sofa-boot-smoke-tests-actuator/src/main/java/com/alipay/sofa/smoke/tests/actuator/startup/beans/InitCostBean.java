@@ -23,6 +23,7 @@ import org.springframework.beans.factory.InitializingBean;
  * @since 2020/7/13
  */
 public class InitCostBean implements InitializingBean {
+
     public static final long INIT_COST_TIME = 120L;
 
     @Override
