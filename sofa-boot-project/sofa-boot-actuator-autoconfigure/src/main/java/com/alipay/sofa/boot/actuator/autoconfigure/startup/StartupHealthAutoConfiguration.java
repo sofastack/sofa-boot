@@ -7,11 +7,13 @@ import com.alipay.sofa.boot.actuator.health.HealthCheckerProcessor;
 import com.alipay.sofa.boot.actuator.health.HealthIndicatorProcessor;
 import com.alipay.sofa.boot.actuator.health.ReadinessCheckListener;
 import com.alipay.sofa.boot.actuator.health.ReadinessEndpoint;
+import com.alipay.sofa.boot.actuator.startup.StartupEndPoint;
 import com.alipay.sofa.boot.actuator.startup.StartupReporter;
 import com.alipay.sofa.boot.actuator.startup.health.StartupReadinessCheckListener;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.SearchStrategy;
 import org.springframework.context.annotation.Bean;
@@ -23,8 +25,9 @@ import org.springframework.core.env.Environment;
  * @author huzijie
  * @version StartupHealthAutoConfiguration.java, v 0.1 2023年01月04日 2:40 PM huzijie Exp $
  */
-@AutoConfiguration(before = ReadinessAutoConfiguration.class)
+@AutoConfiguration(before = ReadinessAutoConfiguration.class, after = StartupAutoConfiguration.class)
 @ConditionalOnAvailableEndpoint(endpoint = ReadinessEndpoint.class)
+@ConditionalOnBean(StartupReporter.class)
 public class StartupHealthAutoConfiguration {
 
     @Bean

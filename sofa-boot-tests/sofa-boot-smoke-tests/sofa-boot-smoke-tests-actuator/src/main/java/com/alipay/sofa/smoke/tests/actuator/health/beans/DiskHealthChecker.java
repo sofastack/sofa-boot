@@ -14,38 +14,42 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.smoke.tests.actuator.health.bean;
+package com.alipay.sofa.smoke.tests.actuator.health.beans;
 
+import com.alipay.sofa.boot.actuator.health.HealthChecker;
 import org.springframework.boot.actuate.health.Health;
-import org.springframework.context.ApplicationContext;
-
-import com.alipay.sofa.boot.actuator.health.ReadinessCheckCallback;
-import org.springframework.core.PriorityOrdered;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 
 /**
- * @author liangen
  * @author qilong.zql
- * @version 2.3.0
+ * @since 3.0.0
  */
-public class MiddlewareHealthCheckCallback implements ReadinessCheckCallback, PriorityOrdered {
+@Order(Ordered.LOWEST_PRECEDENCE - 9)
+public class DiskHealthChecker implements HealthChecker {
 
-    private boolean health;
-
-    public MiddlewareHealthCheckCallback(boolean health) {
-        this.health = health;
+    @Override
+    public Health isHealthy() {
+        return Health.up().withDetail("disk", "disk is ok").build();
     }
 
     @Override
-    public Health onHealthy(ApplicationContext applicationContext) {
-        if (health) {
-            return Health.up().withDetail("server", "server is ok").build();
-        } else {
-            return Health.down().withDetail("server", "server is bad").build();
-        }
+    public String getComponentName() {
+        return "diskHealthChecker";
     }
 
     @Override
-    public int getOrder() {
-        return PriorityOrdered.HIGHEST_PRECEDENCE;
+    public int getRetryCount() {
+        return 0;
+    }
+
+    @Override
+    public long getRetryTimeInterval() {
+        return 0;
+    }
+
+    @Override
+    public boolean isStrictCheck() {
+        return false;
     }
 }

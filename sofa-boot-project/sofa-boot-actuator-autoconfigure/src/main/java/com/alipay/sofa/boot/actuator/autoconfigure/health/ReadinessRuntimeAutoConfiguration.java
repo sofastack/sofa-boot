@@ -1,8 +1,10 @@
 package com.alipay.sofa.boot.actuator.autoconfigure.health;
 
 import com.alipay.sofa.boot.actuator.health.ComponentHealthChecker;
+import com.alipay.sofa.boot.actuator.health.ReadinessEndpoint;
 import com.alipay.sofa.boot.autoconfigure.runtime.SofaRuntimeAutoConfiguration;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
+import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -18,6 +20,7 @@ import org.springframework.context.annotation.Bean;
  */
 @AutoConfiguration(after = SofaRuntimeAutoConfiguration.class)
 @ConditionalOnClass(SofaRuntimeContext.class)
+@ConditionalOnAvailableEndpoint(endpoint = ReadinessEndpoint.class)
 public class ReadinessRuntimeAutoConfiguration {
 
     @Bean

@@ -31,7 +31,7 @@ import org.springframework.context.annotation.Bean;
  * @author huzijie
  * @version ManualReadinessCallbackEndpointAutoConfiguration.java, v 0.1 2022年12月29日 4:56 PM huzijie Exp $
  */
-@AutoConfiguration
+@AutoConfiguration(after = ReadinessAutoConfiguration.class)
 @ConditionalOnAvailableEndpoint(endpoint = ManualReadinessCallbackEndPoint.class)
 public class ManualReadinessCallbackEndpointAutoConfiguration {
 

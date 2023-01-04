@@ -14,32 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.smoke.tests.actuator.health.bean;
+package com.alipay.sofa.smoke.tests.actuator.health.beans;
 
 import com.alipay.sofa.boot.actuator.health.ReadinessCheckCallback;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.context.ApplicationContext;
-import org.springframework.core.PriorityOrdered;
 
 /**
- * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
- * Created on 2020/7/23
+ * @author liangen
+ * @version 2.3.0
  */
-public class LowestOrderReadinessCheckCallback implements ReadinessCheckCallback, PriorityOrdered {
-    private boolean mark = false;
+public class ApplicationHealthCheckCallback implements ReadinessCheckCallback {
 
-    public boolean getMark() {
-        return mark;
+    private boolean mark;
+
+    public ApplicationHealthCheckCallback(boolean mark) {
+        this.mark = mark;
     }
 
     @Override
     public Health onHealthy(ApplicationContext applicationContext) {
         mark = true;
-        return Health.up().build();
+        return Health.up().withDetail("port", "port is ok").build();
     }
 
-    @Override
-    public int getOrder() {
-        return PriorityOrdered.LOWEST_PRECEDENCE;
+    public boolean isMark() {
+        return mark;
     }
 }

@@ -14,19 +14,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.smoke.tests.actuator.health.bean;
+package com.alipay.sofa.smoke.tests.actuator.health.beans;
 
-import com.alipay.sofa.boot.actuator.health.HealthChecker;
 import org.springframework.boot.actuate.health.Health;
+import org.springframework.boot.actuate.health.HealthIndicator;
 
-public class SuccessHealthCheck implements HealthChecker {
-    @Override
-    public Health isHealthy() {
-        return Health.up().withDetail("server", "server is ok").build();
+/**
+ * TimeOutHealthIndicator
+ *
+ * @author xunfang
+ * @version TimeOutHealthIndicator.java, v 0.1 2022/12/27
+ */
+public class TimeoutHealthIndicator implements HealthIndicator {
+
+    private final boolean health;
+
+    public TimeoutHealthIndicator(boolean health) {
+        this.health = health;
     }
 
     @Override
-    public String getComponentName() {
-        return "successHealthCheck";
+    public Health health() {
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if (health) {
+            return Health.up().withDetail("timeout", "timeoutHealthIndicator is ok").build();
+        } else {
+            return Health.down().withDetail("timeout", "timeoutHealthIndicator is bad").build();
+        }
     }
 }

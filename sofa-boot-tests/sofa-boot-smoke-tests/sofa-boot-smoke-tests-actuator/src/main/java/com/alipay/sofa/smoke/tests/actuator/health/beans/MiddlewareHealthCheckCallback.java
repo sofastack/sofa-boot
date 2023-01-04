@@ -14,19 +14,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.smoke.tests.actuator.health.bean;
+package com.alipay.sofa.smoke.tests.actuator.health.beans;
 
-import com.alipay.sofa.boot.actuator.health.HealthChecker;
+import com.alipay.sofa.boot.actuator.health.ReadinessCheckCallback;
 import org.springframework.boot.actuate.health.Health;
+import org.springframework.context.ApplicationContext;
+import org.springframework.core.PriorityOrdered;
 
-public class FailedHealthCheck implements HealthChecker {
-    @Override
-    public Health isHealthy() {
-        return Health.down().withDetail("server", "server is bad").build();
+/**
+ * @author liangen
+ * @author qilong.zql
+ * @version 2.3.0
+ */
+public class MiddlewareHealthCheckCallback implements ReadinessCheckCallback, PriorityOrdered {
+
+    private final boolean health;
+
+    public MiddlewareHealthCheckCallback(boolean health) {
+        this.health = health;
     }
 
     @Override
-    public String getComponentName() {
-        return "failedHealthCheck";
+    public Health onHealthy(ApplicationContext applicationContext) {
+        if (health) {
+            return Health.up().withDetail("server", "server is ok").build();
+        } else {
+            return Health.down().withDetail("server", "server is bad").build();
+        }
+    }
+
+    @Override
+    public int getOrder() {
+        return PriorityOrdered.HIGHEST_PRECEDENCE;
     }
 }

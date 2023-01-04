@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.smoke.tests.actuator.health.bean;
+package com.alipay.sofa.smoke.tests.actuator.health.beans;
 
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
@@ -23,20 +23,21 @@ import org.springframework.boot.actuate.health.HealthIndicator;
  * @author liangen
  * @version 2.3.0
  */
-public class DiskHealthIndicator implements HealthIndicator {
+public class TestHealthIndicator implements HealthIndicator {
 
-    private boolean health;
+    private final boolean health;
 
-    public DiskHealthIndicator(boolean health) {
+    public TestHealthIndicator(boolean health) {
         this.health = health;
     }
 
     @Override
     public Health health() {
+        String name = Thread.currentThread().getName();
         if (health) {
-            return Health.up().withDetail("disk", "hard disk is ok").build();
+            return Health.up().withDetail(name, "hard disk is ok").build();
         } else {
-            return Health.down().withDetail("disk", "hard disk is bad").build();
+            return Health.down().withDetail(name, "hard disk is bad").build();
         }
     }
 }

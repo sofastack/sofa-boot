@@ -14,42 +14,55 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.smoke.tests.actuator.health.bean;
-
-import org.springframework.boot.actuate.health.Health;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
+package com.alipay.sofa.smoke.tests.actuator.health.beans;
 
 import com.alipay.sofa.boot.actuator.health.HealthChecker;
+import org.springframework.boot.actuate.health.Health;
+import org.springframework.core.Ordered;
 
 /**
+ * @author liangen
  * @author qilong.zql
- * @since 3.0.0
+ * @version 2.3.0
  */
-@Order(Ordered.LOWEST_PRECEDENCE - 9)
-public class DiskHealthChecker implements HealthChecker {
+public class NetworkHealthChecker implements HealthChecker, Ordered {
+
+    private final boolean isStrict;
+
+    private final int     retryCount;
+
+    public NetworkHealthChecker(boolean isStrict, int retryCount) {
+        this.isStrict = isStrict;
+        this.retryCount = retryCount;
+    }
+
     @Override
     public Health isHealthy() {
-        return Health.up().withDetail("disk", "disk is ok").build();
+        return Health.up().withDetail("network", "network is ok").build();
     }
 
     @Override
     public String getComponentName() {
-        return "diskHealthChecker";
+        return "networkHealthChecker";
     }
 
     @Override
     public int getRetryCount() {
-        return 0;
+        return retryCount;
     }
 
     @Override
     public long getRetryTimeInterval() {
-        return 0;
+        return 200;
     }
 
     @Override
     public boolean isStrictCheck() {
-        return false;
+        return isStrict;
+    }
+
+    @Override
+    public int getOrder() {
+        return LOWEST_PRECEDENCE - 10;
     }
 }

@@ -14,30 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.smoke.tests.actuator.health.bean;
+package com.alipay.sofa.smoke.tests.actuator.health.beans;
 
+import com.alipay.sofa.boot.actuator.health.HealthChecker;
 import org.springframework.boot.actuate.health.Health;
-import org.springframework.boot.actuate.health.HealthIndicator;
 
-/**
- * @author liangen
- * @version 2.3.0
- */
-public class TestHealthIndicator implements HealthIndicator {
-
-    private boolean health;
-
-    public TestHealthIndicator(boolean health) {
-        this.health = health;
+public class SuccessHealthCheck implements HealthChecker {
+    @Override
+    public Health isHealthy() {
+        return Health.up().withDetail("server", "server is ok").build();
     }
 
     @Override
-    public Health health() {
-        String name = Thread.currentThread().getName();
-        if (health) {
-            return Health.up().withDetail(name, "hard disk is ok").build();
-        } else {
-            return Health.down().withDetail(name, "hard disk is bad").build();
-        }
+    public String getComponentName() {
+        return "successHealthCheck";
     }
 }

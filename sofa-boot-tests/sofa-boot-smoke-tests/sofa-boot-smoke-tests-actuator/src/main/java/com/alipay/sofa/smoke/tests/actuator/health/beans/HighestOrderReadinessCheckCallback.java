@@ -14,35 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.smoke.tests.actuator.health.bean;
+package com.alipay.sofa.smoke.tests.actuator.health.beans;
 
+import com.alipay.sofa.boot.actuator.health.ReadinessCheckCallback;
 import org.springframework.boot.actuate.health.Health;
-import org.springframework.boot.actuate.health.HealthIndicator;
+import org.springframework.context.ApplicationContext;
+import org.springframework.core.PriorityOrdered;
 
 /**
- * TimeOutHealthIndicator
- *
- * @author xunfang
- * @version TimeOutHealthIndicator.java, v 0.1 2022/12/27
+ * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
+ * Created on 2020/7/23
  */
-public class TimeoutHealthIndicator implements HealthIndicator {
-    private boolean health;
+public class HighestOrderReadinessCheckCallback implements ReadinessCheckCallback, PriorityOrdered {
 
-    public TimeoutHealthIndicator(boolean health) {
-        this.health = health;
+    @Override
+    public Health onHealthy(ApplicationContext applicationContext) {
+        return Health.down().build();
     }
 
     @Override
-    public Health health() {
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        if (health) {
-            return Health.up().withDetail("timeout", "timeoutHealthIndicator is ok").build();
-        } else {
-            return Health.down().withDetail("timeout", "timeoutHealthIndicator is bad").build();
-        }
+    public int getOrder() {
+        return PriorityOrdered.HIGHEST_PRECEDENCE;
     }
 }

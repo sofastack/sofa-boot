@@ -14,37 +14,44 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.smoke.tests.actuator.health.bean;
-
-import org.springframework.boot.actuate.health.Health;
-import org.springframework.core.Ordered;
+package com.alipay.sofa.smoke.tests.actuator.health.beans;
 
 import com.alipay.sofa.boot.actuator.health.HealthChecker;
+import org.springframework.boot.actuate.health.Health;
+import org.springframework.core.PriorityOrdered;
 
 /**
  * @author liangen
- * @author qilong.zql
  * @version 2.3.0
  */
-public class NetworkHealthChecker implements HealthChecker, Ordered {
+public class MemoryHealthChecker implements HealthChecker, PriorityOrdered {
 
-    private boolean isStrict;
+    private final boolean isStrict;
 
-    private int     retryCount;
+    private final int     retryCount;
 
-    public NetworkHealthChecker(boolean isStrict, int retryCount) {
+    private int     count;
+
+    public MemoryHealthChecker(int count, boolean isStrict, int retryCount) {
+        this.count = count;
         this.isStrict = isStrict;
         this.retryCount = retryCount;
     }
 
     @Override
     public Health isHealthy() {
-        return Health.up().withDetail("network", "network is ok").build();
+        count++;
+        if (count <= 5) {
+            return Health.down().withDetail("memory", "memory is bad").build();
+
+        } else {
+            return Health.up().withDetail("memory", "memory is ok").build();
+        }
     }
 
     @Override
     public String getComponentName() {
-        return "networkHealthChecker";
+        return "memoryHealthChecker";
     }
 
     @Override
@@ -54,7 +61,7 @@ public class NetworkHealthChecker implements HealthChecker, Ordered {
 
     @Override
     public long getRetryTimeInterval() {
-        return 200;
+        return 100;
     }
 
     @Override
@@ -62,8 +69,12 @@ public class NetworkHealthChecker implements HealthChecker, Ordered {
         return isStrict;
     }
 
+    public int getCount() {
+        return count;
+    }
+
     @Override
     public int getOrder() {
-        return LOWEST_PRECEDENCE - 10;
+        return LOWEST_PRECEDENCE;
     }
 }
