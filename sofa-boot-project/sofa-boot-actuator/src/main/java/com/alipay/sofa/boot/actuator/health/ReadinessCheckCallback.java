@@ -20,11 +20,18 @@ import org.springframework.boot.actuate.health.Health;
 import org.springframework.context.ApplicationContext;
 
 /**
- * // todo 补充注释
+ * Strategy interface used to contribute {@link Health} after readiness check pass.
+ *
  * @author qilong.zql
  * @since 2.5.0
  */
 @FunctionalInterface
 public interface ReadinessCheckCallback {
+
+    /**
+     * trigger check callback
+     * @param applicationContext the applicationc context
+     * @return callback result
+     */
     Health onHealthy(ApplicationContext applicationContext);
 }

@@ -24,7 +24,6 @@ import com.alipay.sofa.boot.actuator.health.ModuleHealthChecker;
 import com.alipay.sofa.boot.actuator.health.ReadinessCheckListener;
 import com.alipay.sofa.boot.actuator.health.ReadinessEndpoint;
 import com.alipay.sofa.boot.actuator.health.SofaBootHealthIndicator;
-import com.alipay.sofa.boot.actuator.health.SofaRuntimeHealthChecker;
 import com.alipay.sofa.boot.autoconfigure.isle.SofaModuleAutoConfiguration;
 import com.alipay.sofa.boot.autoconfigure.runtime.SofaRuntimeAutoConfiguration;
 import com.alipay.sofa.boot.constant.SofaBootConstants;
@@ -35,7 +34,6 @@ import com.alipay.sofa.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.isle.stage.ModelCreatingStage;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
-import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -49,7 +47,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
-import java.util.List;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -161,16 +158,6 @@ public class ReadinessAutoConfiguration {
         @ConditionalOnBean(SofaRuntimeContext.class)
         public ComponentHealthChecker sofaComponentHealthChecker(SofaRuntimeContext sofaRuntimeContext) {
             return new ComponentHealthChecker(sofaRuntimeContext);
-        }
-
-        @Bean
-        @ConditionalOnMissingBean
-        @ConditionalOnBean(SofaRuntimeContext.class)
-        public SofaRuntimeHealthChecker defaultRuntimeHealthChecker(SofaRuntimeContext sofaRuntimeContext,
-                                                                    List<HealthIndicator> healthIndicators,
-                                                                    ReadinessCheckListener readinessCheckListener) {
-            return new SofaRuntimeHealthChecker(sofaRuntimeContext, healthIndicators,
-                readinessCheckListener);
         }
     }
 }

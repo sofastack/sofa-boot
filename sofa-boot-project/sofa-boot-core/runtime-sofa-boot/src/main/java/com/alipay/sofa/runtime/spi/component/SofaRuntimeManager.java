@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.runtime.spi.component;
 
-import com.alipay.sofa.boot.health.RuntimeHealthChecker;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
 import com.alipay.sofa.runtime.spi.spring.RuntimeShutdownAware;
@@ -25,7 +24,7 @@ import org.springframework.context.ApplicationContext;
 /**
  * @author xuanbei 18/2/28
  */
-public interface SofaRuntimeManager extends RuntimeHealthChecker {
+public interface SofaRuntimeManager {
     /**
      * get sofa runtime context
      *
@@ -81,13 +80,6 @@ public interface SofaRuntimeManager extends RuntimeHealthChecker {
      * @param shutdownAware
      */
     void registerShutdownAware(RuntimeShutdownAware shutdownAware);
-
-    /**
-     * register runtime health checker
-     *
-     * @param runtimeHealthChecker
-     */
-    void registerRuntimeHealthChecker(RuntimeHealthChecker runtimeHealthChecker);
 
     /**
      * Get application's Spring context.

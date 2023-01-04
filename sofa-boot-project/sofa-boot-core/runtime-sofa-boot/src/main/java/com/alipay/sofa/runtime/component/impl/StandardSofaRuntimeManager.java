@@ -17,7 +17,6 @@
 package com.alipay.sofa.runtime.component.impl;
 
 import com.alipay.sofa.boot.error.ErrorCode;
-import com.alipay.sofa.boot.health.RuntimeHealthChecker;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
 import com.alipay.sofa.runtime.spi.component.ComponentManager;
@@ -46,7 +45,6 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager, Applicati
     private String                     appName;
     private ClassLoader                appClassLoader;
     private List<RuntimeShutdownAware> runtimeShutdownAwares = new CopyOnWriteArrayList<RuntimeShutdownAware>();
-    private List<RuntimeHealthChecker> runtimeHealthCheckers = new CopyOnWriteArrayList<>();
 
     public StandardSofaRuntimeManager(String appName, ClassLoader appClassLoader,
                                       ClientFactoryInternal clientFactoryInternal) {
@@ -66,26 +64,6 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager, Applicati
     @Override
     public ClientFactoryInternal getClientFactoryInternal() {
         return clientFactoryInternal;
-    }
-
-    @Override
-    public boolean isReadinessHealth() {
-        for (RuntimeHealthChecker runtimeHealthChecker : runtimeHealthCheckers) {
-            if (!runtimeHealthChecker.isReadinessHealth()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    @Override
-    public boolean isLivenessHealth() {
-        for (RuntimeHealthChecker runtimeHealthChecker : runtimeHealthCheckers) {
-            if (!runtimeHealthChecker.isLivenessHealth()) {
-                return false;
-            }
-        }
-        return true;
     }
 
     @Override
@@ -146,11 +124,6 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager, Applicati
     }
 
     @Override
-    public void registerRuntimeHealthChecker(RuntimeHealthChecker runtimeHealthChecker) {
-        runtimeHealthCheckers.add(runtimeHealthChecker);
-    }
-
-    @Override
     public ApplicationContext getRootApplicationContext() {
         return rootApplicationContext;
     }
@@ -160,7 +133,6 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager, Applicati
         sofaRuntimeContext = null;
         clientFactoryInternal = null;
         runtimeShutdownAwares.clear();
-        runtimeHealthCheckers.clear();
     }
 
     @Override

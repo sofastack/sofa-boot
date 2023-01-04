@@ -19,6 +19,7 @@ package com.alipay.sofa.boot.actuator.health;
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
+import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import org.springframework.beans.BeansException;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.Status;
@@ -27,7 +28,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.env.Environment;
 
 /**
- * Abstract Module Health Checker
+ * A {@link HealthChecker} used to check sofa modules health.
  *
  * @author xuanbei 18/5/16
  */

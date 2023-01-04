@@ -29,6 +29,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * HealthCheck Util.
+ *
  * @author qilong.zql
  * @since 3.0.0
  */

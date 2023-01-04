@@ -21,6 +21,7 @@ import com.alipay.sofa.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.boot.actuate.beans.BeansEndpoint;
+import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
 import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -32,7 +33,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Support display beans in sofa modules
+ * {@link Endpoint @Endpoint} to expose details of an application's beans, grouped by
+ * application context, support expose beans in sofa modules.
+ *
  * @author huzijie
  * @version IsleBeansEndpoint.java, v 0.1 2022年03月17日 11:10 AM huzijie Exp $
  */

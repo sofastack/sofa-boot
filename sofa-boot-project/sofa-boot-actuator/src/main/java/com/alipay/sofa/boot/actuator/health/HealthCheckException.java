@@ -17,15 +17,14 @@
 package com.alipay.sofa.boot.actuator.health;
 
 /**
+ * Exception thrown to indicate a HealthCheck fail.
+ *
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 2020/5/18
  */
 public class HealthCheckException extends RuntimeException {
+
     public HealthCheckException(String message) {
         super(message);
-    }
-
-    public HealthCheckException(String message, Throwable cause) {
-        super(message, cause);
     }
 }

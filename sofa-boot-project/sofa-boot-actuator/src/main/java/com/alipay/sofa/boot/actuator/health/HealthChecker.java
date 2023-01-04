@@ -15,10 +15,12 @@
  * limitations under the License.
  */
 package com.alipay.sofa.boot.actuator.health;
+
 import org.springframework.boot.actuate.health.Health;
 
 /**
- * // todo 补充注释
+ * Strategy interface used to contribute {@link Health} to the results returned from the {@link ReadinessEndpoint}.
+ *
  * @author liangen
  * @author qilong.zql
  * @since 2.3.0

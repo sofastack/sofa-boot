@@ -18,7 +18,6 @@ package com.alipay.sofa.boot.actuator.health;
 
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.error.ErrorCode;
-import com.alipay.sofa.boot.health.NonReadinessCheck;
 import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import com.alipay.sofa.boot.util.BinaryOperators;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -42,7 +41,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 /**
- * Used to process all implementations of {@link HealthChecker}
+ * A processor used to process {@link HealthChecker}.
  *
  * @author liangen
  * @author qilong.zql

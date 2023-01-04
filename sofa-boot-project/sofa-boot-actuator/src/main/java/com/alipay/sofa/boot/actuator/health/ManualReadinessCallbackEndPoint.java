@@ -20,6 +20,8 @@ import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
 import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
 
 /**
+ * {@link Endpoint @Endpoint} to trigger readiness callback.
+ *
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 2020/11/17
  */

@@ -17,7 +17,6 @@
 package com.alipay.sofa.boot.actuator.health;
 
 import com.alipay.sofa.boot.constant.SofaBootConstants;
-import com.alipay.sofa.boot.health.NonReadinessCheck;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 
@@ -25,7 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * The liveness health check.
+ * An implement of {@link HealthIndicator} to check result for {@link HealthCheckerProcessor}.
  *
  * @author liangen
  * @author qilong.zql

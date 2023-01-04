@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Collect and report the costs
+ * The base component to collect and report the startup costs
  *
  * @author Zhijie
  * @since 2020/7/8

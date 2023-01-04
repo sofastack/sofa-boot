@@ -1,1 +1,1 @@
-org.springframework.context.ApplicationContextInitializer=com.alipay.sofa.boot.actuator.startup.beans.StartupInitializer
+org.springframework.context.ApplicationContextInitializer=com.alipay.sofa.smoke.tests.actuator.startup.beans.StartupInitializer

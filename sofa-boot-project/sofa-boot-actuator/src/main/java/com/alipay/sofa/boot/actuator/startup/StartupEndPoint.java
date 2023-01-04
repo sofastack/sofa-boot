@@ -22,7 +22,7 @@ import org.springframework.boot.actuate.endpoint.annotation.WriteOperation;
 import org.springframework.boot.actuate.startup.StartupEndpoint;
 
 /**
- * Display the time cost details used in startup
+ * {@link Endpoint @Endpoint} to expose details startup costs.
  *
  * @author Zhijie
  * @since 2020/7/7

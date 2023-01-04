@@ -43,7 +43,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 /**
- * Health check start checker.
+ * An implement of {@link GenericApplicationListener} to trigger readiness check.
+ *
  * @author liangen
  * @author qilong.zql
  */

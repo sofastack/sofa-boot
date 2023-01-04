@@ -32,7 +32,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * Used to check {@link ReadinessCheckCallback}
+ * A processor used to process {@link ReadinessCheckCallback}.
  *
  * @author liangen
  * @author qiong.zql

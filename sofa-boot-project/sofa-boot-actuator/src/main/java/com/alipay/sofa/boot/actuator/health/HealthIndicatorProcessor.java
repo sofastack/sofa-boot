@@ -50,7 +50,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 /**
- * Used to process all implementations of {@link SofaBootHealthIndicator}
+ * A processor used to process {@link HealthIndicator}.
  *
  * @author liangen
  * @author qilong.zql
@@ -61,7 +61,7 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
 
     private static final List<String>              DEFAULT_EXCLUDE_INDICATORS = Arrays
                                                                                   .asList(
-                                                                                      "com.alipay.sofa.boot.health.NonReadinessCheck",
+                                                                                      "com.alipay.sofa.boot.actuator.health.NonReadinessCheck",
                                                                                       "org.springframework.boot.actuate.availability.ReadinessStateHealthIndicator",
                                                                                       "org.springframework.boot.actuate.availability.LivenessStateHealthIndicator");
 

@@ -24,6 +24,8 @@ import org.springframework.boot.actuate.health.HttpCodeStatusMapper;
 import org.springframework.lang.Nullable;
 
 /**
+ * {@link EndpointWebExtension @EndpointWebExtension} for the {@link ReadinessEndpoint}.
+ *
  * @author qilong.zql
  * @since 3.0.0
  */

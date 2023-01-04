@@ -34,7 +34,8 @@ import java.util.Map;
  * Created on 2021/3/22
  */
 public class SofaHttpCodeStatusMapper implements HttpCodeStatusMapper {
-    private SimpleHttpCodeStatusMapper statusMapper;
+
+    private final SimpleHttpCodeStatusMapper statusMapper;
 
     public SofaHttpCodeStatusMapper(HealthEndpointProperties healthEndpointProperties) {
         Map<String, Integer> mapping = new HashMap<>(8);

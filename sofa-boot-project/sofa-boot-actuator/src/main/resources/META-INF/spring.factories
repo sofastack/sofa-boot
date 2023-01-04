@@ -1,3 +1,3 @@
-#SpringApplicationRunListener
+# Startup Listeners
 org.springframework.boot.SpringApplicationRunListener=\
-  com.alipay.sofa.startup.stage.StartupSpringApplicationRunListener
+  com.alipay.sofa.boot.actuator.startup.StartupSpringApplicationRunListener

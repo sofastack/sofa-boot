@@ -29,7 +29,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Display the components registered in {@link SofaRuntimeContext}
+ * {@link Endpoint @Endpoint} to expose details of components registered in {@link SofaRuntimeContext}.
  *
  * @author huzijie
  * @version SofaBootComponentsEndPoint.java, v 0.1 2022年03月17日 3:55 PM huzijie Exp $

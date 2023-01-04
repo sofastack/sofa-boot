@@ -27,8 +27,7 @@ import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.Environment;
 
 /**
- * ComponentInfo Health Checker
- * {@link ComponentInfo}
+ * A {@link HealthChecker} used to check {@link ComponentInfo} health.
  *
  * @author xuanbei 18/5/15
  */
