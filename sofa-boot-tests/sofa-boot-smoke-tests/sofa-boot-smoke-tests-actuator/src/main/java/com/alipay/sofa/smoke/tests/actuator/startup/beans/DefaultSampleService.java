@@ -16,8 +16,6 @@
  */
 package com.alipay.sofa.smoke.tests.actuator.startup.beans;
 
-import com.alipay.sofa.smoke.tests.actuator.startup.beans.SampleService;
-
 /**
  * @author Zhijie
  * @since 2020/7/13

@@ -13,10 +13,6 @@
 
     <artifactId>sofa-boot-autoconfigure</artifactId>
 
-    <properties>
-
-    </properties>
-
     <dependencies>
         <!-- Compile -->
         <dependency>

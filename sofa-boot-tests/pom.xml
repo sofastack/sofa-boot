@@ -13,8 +13,13 @@
 
     <artifactId>sofa-boot-tests</artifactId>
 
+    <properties>
+        <main.user.dir>${basedir}/..</main.user.dir>
+    </properties>
+
     <modules>
         <module>sofa-boot-smoke-tests</module>
     </modules>
+
 
 </project>

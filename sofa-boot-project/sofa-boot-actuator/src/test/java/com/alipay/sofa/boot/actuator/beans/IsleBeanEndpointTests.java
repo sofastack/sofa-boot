@@ -60,12 +60,18 @@ public class IsleBeanEndpointTests {
         BeansEndpoint.ContextBeans contextBeansA = beansMap.get("isle-module-A");
         assertThat(contextBeansA).isNotNull();
         assertThat(contextBeansA.getParentId()).isEqualTo("isle-module-parentA");
-        assertThat(contextBeansA.getBeans().toString().contains("com.alipay.sofa.boot.actuator.beans.IsleBeanEndpointTests$TestBean")).isTrue();
+        assertThat(
+            contextBeansA.getBeans().toString()
+                .contains("com.alipay.sofa.boot.actuator.beans.IsleBeanEndpointTests$TestBean"))
+            .isTrue();
 
         BeansEndpoint.ContextBeans contextBeansB = beansMap.get("isle-module-B");
         assertThat(contextBeansB).isNotNull();
         assertThat(contextBeansB.getParentId()).isEqualTo("isle-module-parentB");
-        assertThat(contextBeansB.getBeans().toString().contains("com.alipay.sofa.boot.actuator.beans.IsleBeanEndpointTests$TestBean")).isTrue();
+        assertThat(
+            contextBeansB.getBeans().toString()
+                .contains("com.alipay.sofa.boot.actuator.beans.IsleBeanEndpointTests$TestBean"))
+            .isTrue();
     }
 
     private static class TestBean {

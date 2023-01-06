@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.boot.actuator.health;
 
-import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import org.slf4j.Logger;
@@ -33,9 +32,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.GenericApplicationListener;
 import org.springframework.core.Ordered;
 import org.springframework.core.ResolvableType;
-import org.springframework.core.env.Environment;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
+import org.springframework.util.Assert;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,56 +47,105 @@ import java.util.stream.Collectors;
  */
 public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
                                    GenericApplicationListener {
-    private static Logger                              logger                              = SofaBootLoggerFactory.getLogger(ReadinessCheckListener.class);
 
-    private final StatusAggregator                     statusAggregator                    = StatusAggregator
-                                                                                               .getDefault();
+    private static final Logger                   logger                              = SofaBootLoggerFactory
+                                                                                          .getLogger(ReadinessCheckListener.class);
 
-    protected ApplicationContext                       applicationContext;
+    /**
+     * health check not ready result key
+     */
+    public static final String                    HEALTH_CHECK_NOT_READY_KEY          = "HEALTH-CHECK-NOT-READY";
 
-    private final Environment                          environment;
+    /**
+     * health check not ready result
+     */
+    public static final String                    HEALTH_CHECK_NOT_READY_MSG          = "App is still in startup process, please try later!";
 
-    private final HealthCheckerProcessor               healthCheckerProcessor;
+    /**
+     * processor for {@link HealthChecker}
+     */
+    private final HealthCheckerProcessor          healthCheckerProcessor;
 
-    private final HealthIndicatorProcessor             healthIndicatorProcessor;
+    /**
+     * processor for {@link org.springframework.boot.actuate.health.HealthIndicator}
+     */
+    private final HealthIndicatorProcessor        healthIndicatorProcessor;
 
-    private final AfterReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor;
+    /**
+     * processor for {@link ReadinessCheckCallback}
+     */
+    private final ReadinessCheckCallbackProcessor readinessCheckCallbackProcessor;
 
-    private boolean                                    healthCheckerStatus                 = true;
+    /**
+     * Check result for healthCheckerProcessor
+     */
+    private boolean                               healthCheckerStatus                 = true;
 
-    private Map<String, Health>                        healthCheckerDetails                = new HashMap<>();
+    /**
+     * Check result details for healthCheckerProcessor
+     */
+    private final Map<String, Health>             healthCheckerDetails                = new HashMap<>();
 
-    private boolean                                    healthIndicatorStatus               = true;
+    /**
+     * Check result for healthIndicatorProcessor
+     */
+    private boolean                               healthIndicatorStatus               = true;
 
-    private Map<String, Health>                        healthIndicatorDetails              = new HashMap<>();
+    /**
+     * Check result for healthIndicatorProcessor
+     */
+    private final Map<String, Health>             healthIndicatorDetails              = new HashMap<>();
 
-    private boolean                                    healthCallbackStatus                = true;
-    private boolean                                    readinessCheckFinish                = false;
-    private AtomicBoolean                              readinessCallbackTriggered          = new AtomicBoolean(
-                                                                                               false);
+    /**
+     * Check result for readinessCheckCallbackProcessor
+     */
+    private boolean                               healthCallbackStatus                = true;
 
-    private ReadinessState                             readinessState;
+    /**
+     * Check result details for readinessCheckCallbackProcessor
+     */
+    private final Map<String, Health>             healthCallbackDetails               = new HashMap<>();
 
-    private boolean                                    manualReadinessCallback             = false;
+    /**
+     * ReadinessCheckCallbackProcessor trigger status
+     */
+    private final AtomicBoolean                   readinessCallbackTriggered          = new AtomicBoolean(
+                                                                                          false);
 
-    private boolean                                    throwExceptionWhenHealthCheckFailed = false;
+    /**
+     * Readiness check finish status
+     */
+    private boolean                               readinessCheckFinish                = false;
 
-    public ReadinessCheckListener(Environment environment,
-                                  HealthCheckerProcessor healthCheckerProcessor,
+    /**
+     * Readiness check result
+     */
+    private ReadinessState                        readinessState;
+
+    protected ApplicationContext                  applicationContext;
+
+    private boolean                               skipAll                             = false;
+
+    private boolean                               skipHealthChecker                   = false;
+
+    private boolean                               skipHealthIndicator                 = false;
+
+    private boolean                               manualReadinessCallback             = false;
+
+    private boolean                               throwExceptionWhenHealthCheckFailed = false;
+
+    public ReadinessCheckListener(HealthCheckerProcessor healthCheckerProcessor,
                                   HealthIndicatorProcessor healthIndicatorProcessor,
-                                  AfterReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor) {
-        this.environment = environment;
+                                  ReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor) {
         this.healthCheckerProcessor = healthCheckerProcessor;
         this.healthIndicatorProcessor = healthIndicatorProcessor;
-        this.afterReadinessCheckCallbackProcessor = afterReadinessCheckCallbackProcessor;
+        this.readinessCheckCallbackProcessor = afterReadinessCheckCallbackProcessor;
     }
 
     @Override
-    public void setApplicationContext(ApplicationContext ctx) throws BeansException {
-        applicationContext = ctx;
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
     }
-
-    private Map<String, Health> healthCallbackDetails = new HashMap<>();
 
     @Override
     public boolean supportsEventType(ResolvableType eventType) {
@@ -130,9 +176,8 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
         if (applicationContext.equals(event.getApplicationContext())) {
             healthCheckerProcessor.init();
             healthIndicatorProcessor.init();
-            afterReadinessCheckCallbackProcessor.init();
+            readinessCheckCallbackProcessor.init();
             readinessHealthCheck();
-            readinessCheckFinish = true;
         }
     }
 
@@ -156,16 +201,17 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
      * Do readiness health check.
      */
     public void readinessHealthCheck() {
-        if (skipAllCheck()) {
+        Assert.notNull(applicationContext, () -> "Application must not be null");
+        if (isSkipAll()) {
             logger.warn("Skip all readiness health check.");
         } else {
-            if (skipComponent()) {
+            if (isSkipHealthChecker()) {
                 logger.warn("Skip HealthChecker health check.");
             } else {
                 healthCheckerStatus = healthCheckerProcessor
                     .readinessHealthCheck(healthCheckerDetails);
             }
-            if (skipIndicator()) {
+            if (isSkipHealthIndicator()) {
                 logger.warn("Skip HealthIndicator health check.");
             } else {
                 healthIndicatorStatus = healthIndicatorProcessor
@@ -181,11 +227,12 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
             if (healthCheckerStatus && healthIndicatorStatus) {
                 readinessCallbackTriggered.set(true);
                 logger.info("Invoking all readiness check callbacks...");
-                healthCallbackStatus = afterReadinessCheckCallbackProcessor
-                    .afterReadinessCheckCallback(healthCallbackDetails);
+                healthCallbackStatus = readinessCheckCallbackProcessor
+                    .readinessCheckCallback(healthCallbackDetails);
             }
         }
         determineReadinessState();
+        readinessCheckFinish = true;
     }
 
     // After invoking readiness callbacks, we will determine readinessState again to include healthCallbackStatus
@@ -193,8 +240,8 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
         if (healthCheckerStatus && healthIndicatorStatus) {
             if (readinessCallbackTriggered.compareAndSet(false, true)) {
                 logger.info("Invoking all readiness callbacks...");
-                healthCallbackStatus = afterReadinessCheckCallbackProcessor
-                    .afterReadinessCheckCallback(healthCallbackDetails);
+                healthCallbackStatus = readinessCheckCallbackProcessor
+                    .readinessCheckCallback(healthCallbackDetails);
                 determineReadinessState();
                 return new ManualReadinessCallbackResult(true,
                     "Readiness callbacks invoked successfully with result: " + healthCallbackStatus);
@@ -224,61 +271,44 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
     }
 
     public Health aggregateReadinessHealth() {
-        Map<String, Health> healths = new HashMap<>();
         if (!isReadinessCheckFinish()) {
-            healths.put(
-                SofaBootConstants.SOFABOOT_HEALTH_CHECK_NOT_READY_KEY,
-                Health
-                    .unknown()
-                    .withDetail(SofaBootConstants.SOFABOOT_HEALTH_CHECK_NOT_READY_KEY,
-                        SofaBootConstants.SOFABOOT_HEALTH_CHECK_NOT_READY_MSG).build());
-        } else {
-            boolean healthCheckerStatus = getHealthCheckerStatus();
-            Map<String, Health> healthCheckerDetails = getHealthCheckerDetails();
-            Map<String, Health> healthIndicatorDetails = getHealthIndicatorDetails();
-
-            boolean afterReadinessCheckCallbackStatus = getHealthCallbackStatus();
-            Map<String, Health> afterReadinessCheckCallbackDetails = getHealthCallbackDetails();
-
-            Health.Builder builder;
-            if (healthCheckerStatus && afterReadinessCheckCallbackStatus) {
-                builder = Health.up();
-            } else {
-                builder = Health.down();
-            }
-            if (!CollectionUtils.isEmpty(healthCheckerDetails)) {
-                builder = builder.withDetail("HealthChecker", healthCheckerDetails);
-            }
-            if (!CollectionUtils.isEmpty(afterReadinessCheckCallbackDetails)) {
-                builder = builder.withDetail("ReadinessCheckCallback",
-                    afterReadinessCheckCallbackDetails);
-            }
-            healths.put("SOFABootReadinessHealthCheckInfo", builder.build());
-
-            // HealthIndicator
-            healths.putAll(healthIndicatorDetails);
+            return Health.unknown().withDetail(HEALTH_CHECK_NOT_READY_KEY,
+                    HEALTH_CHECK_NOT_READY_MSG).build();
         }
-        Status overallStatus = this.statusAggregator.getAggregateStatus(
+        Map<String, Health> healths = new HashMap<>();
+        // 聚合 HealthChecker 的结果
+        boolean healthCheckerStatus = getHealthCheckerStatus();
+        Health healthCheckerResult;
+        if (healthCheckerStatus) {
+            healthCheckerResult = Health.up().withDetails(getHealthCheckerDetails()).build();
+        } else {
+            healthCheckerResult = Health.down().withDetails(getHealthCheckerDetails()).build();
+        }
+        healths.put("HealthCheckerInfo", healthCheckerResult);
+
+        // 聚合 HealthChecker 的结果
+        Health healthIndicatorResult;
+        boolean healthIndicatorStatus = getHealthIndicatorStatus();
+        if (healthIndicatorStatus) {
+            healthIndicatorResult = Health.up().withDetails(getHealthIndicatorDetails()).build();
+        } else {
+            healthIndicatorResult = Health.down().withDetails(getHealthIndicatorDetails()).build();
+        }
+        healths.put("HealthIndicatorInfo", healthIndicatorResult);
+
+
+        // 聚合 ReadinessCallBack 的结果
+        Health healthCallBackResult;
+        boolean healthCallBackStatus = getHealthCallbackStatus();
+        if (healthCallBackStatus) {
+            healthCallBackResult = Health.up().withDetails(getHealthCallbackDetails()).build();
+        } else {
+            healthCallBackResult = Health.down().withDetails(getHealthCheckerDetails()).build();
+        }
+        healths.put("HealthCallBackInfo", healthCallBackResult);
+        Status overallStatus = StatusAggregator.getDefault().getAggregateStatus(
                 healths.values().stream().map(Health::getStatus).collect(Collectors.toSet()));
         return new Health.Builder(overallStatus, healths).build();
-    }
-
-    public boolean skipAllCheck() {
-        String skipAllCheck = environment
-            .getProperty(SofaBootConstants.SOFABOOT_SKIP_ALL_HEALTH_CHECK);
-        return StringUtils.hasText(skipAllCheck) && "true".equalsIgnoreCase(skipAllCheck);
-    }
-
-    public boolean skipComponent() {
-        String skipComponent = environment
-            .getProperty(SofaBootConstants.SOFABOOT_SKIP_COMPONENT_HEALTH_CHECK);
-        return StringUtils.hasText(skipComponent) && "true".equalsIgnoreCase(skipComponent);
-    }
-
-    public boolean skipIndicator() {
-        String skipIndicator = environment
-            .getProperty(SofaBootConstants.SOFABOOT_SKIP_HEALTH_INDICATOR_CHECK);
-        return StringUtils.hasText(skipIndicator) && "true".equalsIgnoreCase(skipIndicator);
     }
 
     public boolean getHealthCheckerStatus() {
@@ -313,6 +343,30 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
         return readinessCallbackTriggered;
     }
 
+    public boolean isSkipAll() {
+        return skipAll;
+    }
+
+    public void setSkipAll(boolean skipAll) {
+        this.skipAll = skipAll;
+    }
+
+    public boolean isSkipHealthChecker() {
+        return skipHealthChecker;
+    }
+
+    public void setSkipHealthChecker(boolean skipHealthChecker) {
+        this.skipHealthChecker = skipHealthChecker;
+    }
+
+    public boolean isSkipHealthIndicator() {
+        return skipHealthIndicator;
+    }
+
+    public void setSkipHealthIndicator(boolean skipHealthIndicator) {
+        this.skipHealthIndicator = skipHealthIndicator;
+    }
+
     public boolean isManualReadinessCallback() {
         return manualReadinessCallback;
     }
@@ -327,6 +381,22 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
 
     public void setThrowExceptionWhenHealthCheckFailed(boolean throwExceptionWhenHealthCheckFailed) {
         this.throwExceptionWhenHealthCheckFailed = throwExceptionWhenHealthCheckFailed;
+    }
+
+    public boolean isHealthCheckerStatus() {
+        return healthCheckerStatus;
+    }
+
+    public boolean isHealthIndicatorStatus() {
+        return healthIndicatorStatus;
+    }
+
+    public boolean isHealthCallbackStatus() {
+        return healthCallbackStatus;
+    }
+
+    public ReadinessState getReadinessState() {
+        return readinessState;
     }
 
     public static class ManualReadinessCallbackResult {

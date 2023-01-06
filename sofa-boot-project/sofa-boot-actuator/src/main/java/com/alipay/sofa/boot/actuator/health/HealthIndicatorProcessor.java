@@ -16,10 +16,8 @@
  */
 package com.alipay.sofa.boot.actuator.health;
 
-import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
-import com.alipay.sofa.boot.util.BinaryOperators;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.springframework.aop.framework.AopProxyUtils;
@@ -31,19 +29,20 @@ import org.springframework.boot.actuate.health.ReactiveHealthIndicator;
 import org.springframework.boot.actuate.health.Status;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.core.env.Environment;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
-import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -57,13 +56,19 @@ import java.util.stream.Collectors;
  * @version 2.3.0
  */
 public class HealthIndicatorProcessor implements ApplicationContextAware {
-    private static Logger                          logger                     = SofaBootLoggerFactory.getLogger(HealthIndicatorProcessor.class);
+
+    private static final Logger                    logger                     = SofaBootLoggerFactory
+                                                                                  .getLogger(HealthIndicatorProcessor.class);
 
     private static final List<String>              DEFAULT_EXCLUDE_INDICATORS = Arrays
                                                                                   .asList(
                                                                                       "com.alipay.sofa.boot.actuator.health.NonReadinessCheck",
                                                                                       "org.springframework.boot.actuate.availability.ReadinessStateHealthIndicator",
                                                                                       "org.springframework.boot.actuate.availability.LivenessStateHealthIndicator");
+
+    private static final String                    REACTOR_CLASS              = "reactor.core.publisher.Mono";
+
+    private static final boolean                   REACTOR_CLASS_EXIST;
 
     private final ObjectMapper                     objectMapper               = new ObjectMapper();
 
@@ -74,31 +79,29 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
 
     private ApplicationContext                     applicationContext;
 
-    private Environment                            environment;
+    private ExecutorService                        healthCheckExecutor;
 
-    private final static String                    REACTOR_CLASS              = "reactor.core.publisher.Mono";
+    private Set<Class<?>>                          excludedIndicators         = new HashSet<>();
 
-    private final ThreadPoolExecutor               healthCheckExecutor;
+    private int                                    globalTimeout;
 
-    private Set<Class<?>>                          excludedIndicators;
-
-    private int                                    defaultTimeout;
+    private Map<String, HealthCheckerConfig>       healthIndicatorConfig;
 
     private boolean                                parallelCheck;
 
     private long                                   parallelCheckTimeout;
 
-    public HealthIndicatorProcessor(ThreadPoolExecutor healthCheckExecutor) {
-        this.healthCheckExecutor = healthCheckExecutor;
+    static {
+        REACTOR_CLASS_EXIST = ClassUtils.isPresent(REACTOR_CLASS, null);
     }
 
     public void init() {
         if (isInitiated.compareAndSet(false, true)) {
             Assert.notNull(applicationContext, () -> "Application must not be null");
-            environment = applicationContext.getEnvironment();
+            Assert.notNull(healthCheckExecutor, () -> "HealthCheckExecutor must not be null");
             Map<String, HealthIndicator> beansOfType = applicationContext
                     .getBeansOfType(HealthIndicator.class);
-            if (ClassUtils.isPresent(REACTOR_CLASS, null)) {
+            if (REACTOR_CLASS_EXIST) {
                 applicationContext.getBeansOfType(ReactiveHealthIndicator.class).forEach(
                         (name, indicator) -> beansOfType.put(name, () -> indicator.health().block()));
             }
@@ -106,17 +109,15 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
             healthIndicators = beansOfType.entrySet().stream().filter(entry -> !isExcluded(entry.getValue()))
                     .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (x, y) -> y, LinkedHashMap::new));
             healthIndicators = HealthCheckUtils.sortMapAccordingToValue(healthIndicators,
-                    applicationContext.getAutowireCapableBeanFactory());
+                    HealthCheckUtils.getComparatorToUse(applicationContext.getAutowireCapableBeanFactory()));
 
-            StringBuilder healthIndicatorInfo = new StringBuilder(512).append("Found ")
-                    .append(healthIndicators.size()).append(" HealthIndicator implementation:")
-                    .append(String.join(",", healthIndicators.keySet()));
-            logger.info(healthIndicatorInfo.toString());
+            String healthIndicatorInfo = "Found " + healthIndicators.size() + " HealthIndicator implementation:" + String.join(",", healthIndicators.keySet());
+            logger.info(healthIndicatorInfo);
         }
     }
 
     public void initExcludedIndicators(List<String> excludes) {
-        if (excludes == null || excludes.size() == 0) {
+        if (CollectionUtils.isEmpty(excludes)) {
             excludes = DEFAULT_EXCLUDE_INDICATORS;
         } else {
             excludes.addAll(DEFAULT_EXCLUDE_INDICATORS);
@@ -154,12 +155,11 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
         Assert.notNull(healthIndicators, () -> "HealthIndicators must not be null.");
 
         logger.info("Begin SOFABoot HealthIndicator readiness check.");
-        String checkComponentNames = healthIndicators.keySet().stream()
-                .collect(Collectors.joining(","));
+        String checkComponentNames = String.join(",", healthIndicators.keySet());
         logger.info("SOFABoot HealthIndicator readiness check {} item: {}.",
                 healthIndicators.size(), checkComponentNames);
         boolean result;
-        if (parallelCheck) {
+        if (isParallelCheck()) {
             CountDownLatch countDownLatch = new CountDownLatch(healthIndicators.size());
             AtomicBoolean parallelResult = new AtomicBoolean(true);
             healthIndicators.forEach((key, value) -> healthCheckExecutor.execute(() -> {
@@ -168,22 +168,29 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
                         parallelResult.set(false);
                     }
                 } catch (Throwable t) {
+                    parallelResult.set(false);
                     logger.error(ErrorCode.convert("01-21003"), t);
+                    healthMap.put(key, new Health.Builder().withException(t).status(Status.DOWN).build());
                 } finally {
                     countDownLatch.countDown();
                 }
             }));
             boolean finished = false;
             try {
-                finished = countDownLatch.await(parallelCheckTimeout, TimeUnit.MILLISECONDS);
+                finished = countDownLatch.await(getParallelCheckTimeout(), TimeUnit.MILLISECONDS);
             } catch (InterruptedException e) {
                 logger.error(ErrorCode.convert("01-21004"), e);
+            }
+            if (!finished) {
+                parallelResult.set(false);
+                healthMap.put("parallelCheck", new Health.Builder().withDetail("timeout", getParallelCheckTimeout())
+                        .status(Status.UNKNOWN).build());
             }
             result = finished && parallelResult.get();
         } else {
             result = healthIndicators.entrySet().stream()
                     .map(entry -> doHealthCheck(entry.getKey(), entry.getValue(), healthMap, true))
-                    .reduce(true, BinaryOperators.andBoolean());
+                    .reduce(true, (a, b) -> a && b);
         }
         if (result) {
             logger.info("SOFABoot HealthIndicator readiness check result: success.");
@@ -200,12 +207,11 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
         boolean result;
         Health health;
         logger.info("HealthIndicator[{}] readiness check start.", beanId);
-        Integer timeout = environment.getProperty(
-                SofaBootConstants.SOFABOOT_INDICATOR_HEALTH_CHECK_TIMEOUT_PREFIX + beanId,
-                Integer.class);
-        if (timeout == null || timeout <= 0) {
-            timeout = defaultTimeout;
-        }
+        int timeout = Optional.ofNullable(getHealthIndicatorConfig())
+                .map(k -> getHealthIndicatorConfig().get(beanId))
+                .map(HealthCheckerConfig::getTimeout)
+                .orElse(getGlobalTimeout());
+        Assert.isTrue(timeout > 0, "HealthIndicator timeout must lager than zero");
         try {
             if (wait) {
                 Future<Health> future = healthCheckExecutor
@@ -228,7 +234,7 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
             logger.error(
                     "HealthIndicator[{}] readiness check fail; the status is: {}; the detail is: timeout, the timeout value is: {}ms.",
                     beanId, Status.UNKNOWN, timeout);
-            health = new Health.Builder().withException(e).status(Status.UNKNOWN).build();
+            health = new Health.Builder().withException(e).withDetail("timeout", timeout).status(Status.UNKNOWN).build();
         } catch (Exception e) {
             result = false;
             logger.error(
@@ -256,9 +262,18 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
-        this.defaultTimeout = Integer.parseInt(applicationContext.getEnvironment().getProperty(
-            SofaBootConstants.SOFABOOT_HEALTH_CHECK_DEFAULT_TIMEOUT,
-            String.valueOf(SofaBootConstants.SOFABOOT_HEALTH_CHECK_DEFAULT_TIMEOUT_VALUE)));
+    }
+
+    public void setHealthCheckExecutor(ExecutorService healthCheckExecutor) {
+        this.healthCheckExecutor = healthCheckExecutor;
+    }
+
+    public int getGlobalTimeout() {
+        return globalTimeout;
+    }
+
+    public void setGlobalTimeout(int globalTimeout) {
+        this.globalTimeout = globalTimeout;
     }
 
     public boolean isParallelCheck() {
@@ -275,5 +290,13 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
 
     public void setParallelCheckTimeout(long parallelCheckTimeout) {
         this.parallelCheckTimeout = parallelCheckTimeout;
+    }
+
+    public Map<String, HealthCheckerConfig> getHealthIndicatorConfig() {
+        return healthIndicatorConfig;
+    }
+
+    public void setHealthIndicatorConfig(Map<String, HealthCheckerConfig> healthIndicatorConfig) {
+        this.healthIndicatorConfig = healthIndicatorConfig;
     }
 }

@@ -16,36 +16,23 @@
  */
 package com.alipay.sofa.boot.actuator.autoconfigure.health;
 
-import com.alipay.sofa.boot.actuator.health.AfterReadinessCheckCallbackProcessor;
-import com.alipay.sofa.boot.actuator.health.ComponentHealthChecker;
+import com.alipay.sofa.boot.actuator.health.ReadinessCheckCallbackProcessor;
 import com.alipay.sofa.boot.actuator.health.HealthCheckerProcessor;
 import com.alipay.sofa.boot.actuator.health.HealthIndicatorProcessor;
-import com.alipay.sofa.boot.actuator.health.ModuleHealthChecker;
 import com.alipay.sofa.boot.actuator.health.ReadinessCheckListener;
 import com.alipay.sofa.boot.actuator.health.ReadinessEndpoint;
 import com.alipay.sofa.boot.actuator.health.SofaBootHealthIndicator;
-import com.alipay.sofa.boot.autoconfigure.isle.SofaModuleAutoConfiguration;
-import com.alipay.sofa.boot.autoconfigure.runtime.SofaRuntimeAutoConfiguration;
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.log.SofaLogger;
 import com.alipay.sofa.boot.util.NamedThreadFactory;
 import com.alipay.sofa.common.thread.SofaThreadPoolExecutor;
-import com.alipay.sofa.isle.ApplicationRuntimeModel;
-import com.alipay.sofa.isle.stage.ModelCreatingStage;
-import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.SearchStrategy;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -64,17 +51,20 @@ public class ReadinessAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(value = ReadinessCheckListener.class, search = SearchStrategy.CURRENT)
-    public ReadinessCheckListener readinessCheckListener(Environment environment,
-                                                         HealthCheckerProcessor healthCheckerProcessor,
+    public ReadinessCheckListener readinessCheckListener(HealthCheckerProcessor healthCheckerProcessor,
                                                          HealthIndicatorProcessor healthIndicatorProcessor,
-                                                         AfterReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor,
+                                                         ReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor,
                                                          HealthProperties healthCheckProperties) {
-        ReadinessCheckListener readinessCheckListener = new ReadinessCheckListener(environment,
+        ReadinessCheckListener readinessCheckListener = new ReadinessCheckListener(
             healthCheckerProcessor, healthIndicatorProcessor, afterReadinessCheckCallbackProcessor);
         readinessCheckListener.setManualReadinessCallback(healthCheckProperties
             .isManualReadinessCallback());
         readinessCheckListener.setThrowExceptionWhenHealthCheckFailed(healthCheckProperties
             .isInsulator());
+        readinessCheckListener.setSkipAll(healthCheckProperties.isSkipAll());
+        readinessCheckListener.setSkipHealthChecker(healthCheckProperties.isSkipHealthChecker());
+        readinessCheckListener
+            .setSkipHealthIndicator(healthCheckProperties.isSkipHealthIndicator());
         return readinessCheckListener;
     }
 
@@ -82,11 +72,15 @@ public class ReadinessAutoConfiguration {
     @ConditionalOnMissingBean
     public HealthCheckerProcessor healthCheckerProcessor(HealthProperties healthCheckProperties,
                                                          ThreadPoolExecutor healthCheckExecutor) {
-        HealthCheckerProcessor healthCheckerProcessor = new HealthCheckerProcessor(
-            healthCheckExecutor);
+        HealthCheckerProcessor healthCheckerProcessor = new HealthCheckerProcessor();
+        healthCheckerProcessor.setHealthCheckExecutor(healthCheckExecutor);
         healthCheckerProcessor.setParallelCheck(healthCheckProperties.isParallelCheck());
         healthCheckerProcessor.setParallelCheckTimeout(healthCheckProperties
             .getParallelCheckTimeout());
+        healthCheckerProcessor.setGlobalTimeout(healthCheckProperties
+            .getGlobalHealthCheckerTimeout());
+        healthCheckerProcessor.setHealthCheckerConfigs(healthCheckProperties
+            .getHealthCheckerConfig());
         return healthCheckerProcessor;
     }
 
@@ -94,20 +88,24 @@ public class ReadinessAutoConfiguration {
     @ConditionalOnMissingBean
     public HealthIndicatorProcessor healthIndicatorProcessor(HealthProperties healthCheckProperties,
                                                              ThreadPoolExecutor healthCheckExecutor) {
-        HealthIndicatorProcessor healthIndicatorProcessor = new HealthIndicatorProcessor(
-            healthCheckExecutor);
+        HealthIndicatorProcessor healthIndicatorProcessor = new HealthIndicatorProcessor();
+        healthIndicatorProcessor.setHealthCheckExecutor(healthCheckExecutor);
         healthIndicatorProcessor.initExcludedIndicators(healthCheckProperties
             .getExcludedIndicators());
         healthIndicatorProcessor.setParallelCheck(healthCheckProperties.isParallelCheck());
         healthIndicatorProcessor.setParallelCheckTimeout(healthCheckProperties
             .getParallelCheckTimeout());
+        healthIndicatorProcessor.setGlobalTimeout(healthCheckProperties
+            .getGlobalHealthIndicatorTimeout());
+        healthIndicatorProcessor.setHealthIndicatorConfig(healthCheckProperties
+            .getHealthIndicatorConfig());
         return healthIndicatorProcessor;
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public AfterReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor() {
-        return new AfterReadinessCheckCallbackProcessor();
+    public ReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor() {
+        return new ReadinessCheckCallbackProcessor();
     }
 
     @Bean

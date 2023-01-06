@@ -104,18 +104,22 @@ public class ComponentsEndpointTests {
             .get(ServiceComponent.SERVICE_COMPONENT_TYPE.getName());
         assertThat(serviceComponents.size()).isEqualTo(1);
         assertThat(serviceComponentCollection).isInstanceOf(List.class);
-        assertThat(((List<ComponentsEndPoint.ComponentDisplayInfo>) serviceComponentCollection).get(0)
+        assertThat(
+            ((List<ComponentsEndPoint.ComponentDisplayInfo>) serviceComponentCollection).get(0)
                 .getName()).isEqualTo("testSofaService");
-        assertThat(((List<ComponentsEndPoint.ComponentDisplayInfo>) serviceComponentCollection).get(0)
+        assertThat(
+            ((List<ComponentsEndPoint.ComponentDisplayInfo>) serviceComponentCollection).get(0)
                 .getApplicationId()).isEqualTo("moduleA");
 
         Collection<ComponentsEndPoint.ComponentDisplayInfo> extComponentCollection = componentTypeCollectionMap
             .get(ExtensionComponent.EXTENSION_COMPONENT_TYPE.getName());
         assertThat(extComponentCollection.size()).isEqualTo(1);
         assertThat(extComponentCollection).isInstanceOf(List.class);
-        assertThat(((List<ComponentsEndPoint.ComponentDisplayInfo>) extComponentCollection).get(0)
+        assertThat(
+            ((List<ComponentsEndPoint.ComponentDisplayInfo>) extComponentCollection).get(0)
                 .getName()).isEqualTo("testSofaExt");
-        assertThat(((List<ComponentsEndPoint.ComponentDisplayInfo>) extComponentCollection).get(0)
+        assertThat(
+            ((List<ComponentsEndPoint.ComponentDisplayInfo>) extComponentCollection).get(0)
                 .getApplicationId()).isEqualTo("moduleB");
     }
 

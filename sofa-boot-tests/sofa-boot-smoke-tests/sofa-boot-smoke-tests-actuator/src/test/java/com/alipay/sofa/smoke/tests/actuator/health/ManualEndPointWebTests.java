@@ -37,13 +37,13 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 2020/11/18
  */
-@SpringBootTest(classes = ActuatorSOFABootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-        properties = {"management.endpoints.web.exposure.include=readiness,triggerReadinessCallback",
-        "sofa.boot.actuator.health.manualReadinessCallback=true"})
+@SpringBootTest(classes = ActuatorSOFABootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {
+                                                                                                                                       "management.endpoints.web.exposure.include=readiness,triggerReadinessCallback",
+                                                                                                                                       "sofa.boot.actuator.health.manualReadinessCallback=true" })
 public class ManualEndPointWebTests {
 
     @Autowired
-    private TestRestTemplate restTemplate;
+    private TestRestTemplate       restTemplate;
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
@@ -69,12 +69,13 @@ public class ManualEndPointWebTests {
         assertThat(response.getBody().getDetails()).contains("already triggered");
 
         // 健康检查失败
-        Field field = ReflectionUtils.findField(ReadinessCheckListener.class, "healthCheckerStatus");
+        Field field = ReflectionUtils
+            .findField(ReadinessCheckListener.class, "healthCheckerStatus");
         assertThat(field).isNotNull();
         ReflectionUtils.makeAccessible(field);
         ReflectionUtils.setField(field, readinessCheckListener, false);
         response = restTemplate.getForEntity("/actuator/triggerReadinessCallback",
-                ReadinessCheckListener.ManualReadinessCallbackResult.class);
+            ReadinessCheckListener.ManualReadinessCallbackResult.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().isSuccess()).isFalse();

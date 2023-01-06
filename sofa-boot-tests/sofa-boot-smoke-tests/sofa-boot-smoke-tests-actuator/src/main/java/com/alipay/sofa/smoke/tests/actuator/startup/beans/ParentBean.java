@@ -28,7 +28,7 @@ public class ParentBean implements InitializingBean {
     public static final int PARENT_INIT_TIME = 30;
 
     @Autowired
-    private ChildBean               childBean;
+    private ChildBean       childBean;
 
     @Override
     public void afterPropertiesSet() throws Exception {

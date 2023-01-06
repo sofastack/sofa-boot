@@ -1,13 +1,28 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.alipay.sofa.boot.actuator.autoconfigure.startup;
 
 import com.alipay.sofa.boot.actuator.autoconfigure.health.HealthProperties;
 import com.alipay.sofa.boot.actuator.autoconfigure.health.ReadinessAutoConfiguration;
-import com.alipay.sofa.boot.actuator.health.AfterReadinessCheckCallbackProcessor;
 import com.alipay.sofa.boot.actuator.health.HealthCheckerProcessor;
 import com.alipay.sofa.boot.actuator.health.HealthIndicatorProcessor;
+import com.alipay.sofa.boot.actuator.health.ReadinessCheckCallbackProcessor;
 import com.alipay.sofa.boot.actuator.health.ReadinessCheckListener;
 import com.alipay.sofa.boot.actuator.health.ReadinessEndpoint;
-import com.alipay.sofa.boot.actuator.startup.StartupEndPoint;
 import com.alipay.sofa.boot.actuator.startup.StartupReporter;
 import com.alipay.sofa.boot.actuator.startup.health.StartupReadinessCheckListener;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
@@ -17,7 +32,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.SearchStrategy;
 import org.springframework.context.annotation.Bean;
-import org.springframework.core.env.Environment;
 
 /**
  * {@link EnableAutoConfiguration Auto-configuration} for startup health components.
@@ -32,19 +46,18 @@ public class StartupHealthAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(value = ReadinessCheckListener.class, search = SearchStrategy.CURRENT)
-    public StartupReadinessCheckListener startupReadinessCheckListener(Environment environment,
-                                                                       HealthCheckerProcessor healthCheckerProcessor,
+    public StartupReadinessCheckListener startupReadinessCheckListener(HealthCheckerProcessor healthCheckerProcessor,
                                                                        HealthIndicatorProcessor healthIndicatorProcessor,
-                                                                       AfterReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor,
+                                                                       ReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor,
                                                                        HealthProperties healthCheckProperties,
                                                                        StartupReporter startupReporter) {
         StartupReadinessCheckListener readinessCheckListener = new StartupReadinessCheckListener(
-                environment, healthCheckerProcessor, healthIndicatorProcessor,
-                afterReadinessCheckCallbackProcessor, startupReporter);
+            healthCheckerProcessor, healthIndicatorProcessor, afterReadinessCheckCallbackProcessor,
+            startupReporter);
         readinessCheckListener.setManualReadinessCallback(healthCheckProperties
-                .isManualReadinessCallback());
+            .isManualReadinessCallback());
         readinessCheckListener.setThrowExceptionWhenHealthCheckFailed(healthCheckProperties
-                .isInsulator());
+            .isInsulator());
         return readinessCheckListener;
     }
 }

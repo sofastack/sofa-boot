@@ -17,7 +17,11 @@
 package com.alipay.sofa.boot.actuator.health;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.Status;
 
@@ -26,32 +30,45 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Tests for {@link SofaBootHealthIndicator}
  *
- * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
- * Created on 2020/9/8
+ * @author huzijie
+ * @version SofaBootHealthIndicatorTests.java, v 0.1 2023年01月04日 12:11 PM huzijie Exp $
  */
+@ExtendWith(MockitoExtension.class)
 public class SofaBootHealthIndicatorTests {
 
+    @InjectMocks
+    private SofaBootHealthIndicator sofaBootHealthIndicator;
+
+    @Mock
+    private HealthCheckerProcessor  healthCheckerProcessor;
+
+    @Mock
+    private ReadinessCheckListener  readinessCheckListener;
+
     @Test
-    public void testUp() {
-        HealthCheckerProcessor healthCheckerProcessor = Mockito.mock(HealthCheckerProcessor.class);
-        ReadinessCheckListener readinessCheckListener = Mockito.mock(ReadinessCheckListener.class);
-        SofaBootHealthIndicator sofaBootHealthIndicator = new SofaBootHealthIndicator(
-            healthCheckerProcessor, readinessCheckListener);
+    public void ReadinessResultFail() {
+        Mockito.doReturn(false).when(readinessCheckListener).isReadinessCheckFinish();
+        Health health = sofaBootHealthIndicator.health();
+        assertThat(health.getStatus()).isEqualTo(Status.DOWN);
+        assertThat(health.getDetails().toString()).isEqualTo(
+            "{HEALTH-CHECK-NOT-READY=App is still in startup process, please try later!}");
+    }
+
+    @Test
+    public void healthResultUp() {
         Mockito.doReturn(true).when(readinessCheckListener).isReadinessCheckFinish();
         Mockito.doReturn(true).when(healthCheckerProcessor).livenessHealthCheck(Mockito.anyMap());
         Health health = sofaBootHealthIndicator.health();
         assertThat(health.getStatus()).isEqualTo(Status.UP);
+        assertThat(health.getDetails().toString()).isEqualTo("{SOFABOOT_HEALTH-INDICATOR={}}");
     }
 
     @Test
-    public void testDown() {
-        HealthCheckerProcessor healthCheckerProcessor = Mockito.mock(HealthCheckerProcessor.class);
-        ReadinessCheckListener readinessCheckListener = Mockito.mock(ReadinessCheckListener.class);
-        SofaBootHealthIndicator sofaBootHealthIndicator = new SofaBootHealthIndicator(
-            healthCheckerProcessor, readinessCheckListener);
+    public void healthResultDown() {
         Mockito.doReturn(true).when(readinessCheckListener).isReadinessCheckFinish();
         Mockito.doReturn(false).when(healthCheckerProcessor).livenessHealthCheck(Mockito.anyMap());
         Health health = sofaBootHealthIndicator.health();
         assertThat(health.getStatus()).isEqualTo(Status.DOWN);
+        assertThat(health.getDetails().toString()).isEqualTo("{SOFABOOT_HEALTH-INDICATOR={}}");
     }
 }

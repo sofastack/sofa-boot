@@ -45,8 +45,9 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author huzijie
  * @version IsleStageStartupReporterTests.java, v 0.1 2021年01月04日 8:31 下午 huzijie Exp $
  */
-@SpringBootTest(classes = ActuatorSOFABootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-        properties = {"management.endpoints.web.exposure.include=startup","com.alipay.sofa.boot.beanLoadCost=1"})
+@SpringBootTest(classes = ActuatorSOFABootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {
+                                                                                                                                       "management.endpoints.web.exposure.include=startup",
+                                                                                                                                       "com.alipay.sofa.boot.beanLoadCost=1" })
 @Import(InitCostBean.class)
 public class IsleStageStartupReporterTests {
 

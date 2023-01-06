@@ -40,9 +40,9 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author huzijie
  * @version DefaultStageStartupReporterTests.java, v 0.1 2021年01月04日 8:31 下午 huzijie Exp $
  */
-@SpringBootTest(classes = ActuatorSOFABootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-        properties = {"management.endpoints.web.exposure.include=startup",
-                "spring.autoconfigure.exclude=com.alipay.sofa.boot.actuator.autoconfigure.startup.StartupHealthAutoConfiguration,com.alipay.sofa.boot.actuator.autoconfigure.startup.StartupIsleAutoConfiguration"})
+@SpringBootTest(classes = ActuatorSOFABootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {
+                                                                                                                                       "management.endpoints.web.exposure.include=startup",
+                                                                                                                                       "spring.autoconfigure.exclude=com.alipay.sofa.boot.actuator.autoconfigure.startup.StartupHealthAutoConfiguration,com.alipay.sofa.boot.actuator.autoconfigure.startup.StartupIsleAutoConfiguration" })
 @Import(InitCostBean.class)
 public class DefaultStageStartupReporterTests {
 
@@ -74,7 +74,7 @@ public class DefaultStageStartupReporterTests {
         assertThat(applicationContextPrepareStage).isNotNull();
         assertThat(applicationContextPrepareStage.getChildren().isEmpty()).isTrue();
         assertThat(applicationContextPrepareStage.getCost() > 0).isTrue();
-        assertThat(environmentPrepareStage.getEndTime()).isEqualTo(applicationContextPrepareStage.getStartTime());;
+        assertThat(environmentPrepareStage.getEndTime()).isEqualTo(applicationContextPrepareStage.getStartTime());
 
         BaseStat applicationContextLoadStage = startupReporter.getStageNyName(BootStageConstants.APPLICATION_CONTEXT_LOAD_STAGE);
         assertThat(applicationContextLoadStage).isNotNull();

@@ -19,13 +19,11 @@ package com.alipay.sofa.boot.actuator.health;
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
-import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import org.springframework.beans.BeansException;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.Status;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.core.env.Environment;
 
 /**
  * A {@link HealthChecker} used to check sofa modules health.
@@ -34,28 +32,13 @@ import org.springframework.core.env.Environment;
  */
 public class ModuleHealthChecker implements ApplicationContextAware, HealthChecker {
 
-    private int                retryCount;
-    private long               retryInterval;
-    private boolean            strictCheck;
-    private int                timeout;
+    public static final String COMPONENT_NAME = "modules";
+
     private ApplicationContext applicationContext;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
-        Environment environment = applicationContext.getEnvironment();
-        this.retryCount = Integer.parseInt(environment.getProperty(
-            SofaBootConstants.SOFABOOT_MODULE_CHECK_RETRY_COUNT,
-            String.valueOf(SofaBootConstants.SOFABOOT_MODULE_CHECK_RETRY_DEFAULT_COUNT)));
-        this.retryInterval = Integer.parseInt(environment.getProperty(
-            SofaBootConstants.SOFABOOT_MODULE_CHECK_RETRY_INTERVAL,
-            String.valueOf(SofaBootConstants.SOFABOOT_MODULE_CHECK_RETRY_DEFAULT_INTERVAL)));
-        this.strictCheck = Boolean.parseBoolean(environment.getProperty(
-            SofaBootConstants.SOFABOOT_MODULE_CHECK_STRICT_ENABLED,
-            String.valueOf(SofaBootConstants.SOFABOOT_MODULE_CHECK_STRICT_DEFAULT_ENABLED)));
-        this.timeout = Integer.parseInt(environment.getProperty(
-            SofaBootConstants.SOFABOOT_MODULE_HEALTH_CHECK_TIMEOUT,
-            String.valueOf(SofaBootConstants.SOFABOOT_MODULE_HEALTH_CHECK_DEFAULT_TIMEOUT)));
     }
 
     @Override
@@ -77,26 +60,26 @@ public class ModuleHealthChecker implements ApplicationContextAware, HealthCheck
 
     @Override
     public String getComponentName() {
-        return "SOFABoot-Modules";
+        return COMPONENT_NAME;
     }
 
     @Override
     public int getRetryCount() {
-        return retryCount;
+        return 0;
     }
 
     @Override
     public long getRetryTimeInterval() {
-        return retryInterval;
+        return 1000;
     }
 
     @Override
     public boolean isStrictCheck() {
-        return strictCheck;
+        return true;
     }
 
     @Override
     public int getTimeout() {
-        return timeout;
+        return 10 * 1000;
     }
 }

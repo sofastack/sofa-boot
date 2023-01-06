@@ -24,6 +24,7 @@ import java.util.Comparator;
  * @author huzijie
  * @version HealthCheckerComparatorProvider.java, v 0.1 2022年07月05日 11:50 AM huzijie Exp $
  */
+@FunctionalInterface
 public interface HealthCheckerComparatorProvider {
 
     /**

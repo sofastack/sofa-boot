@@ -16,12 +16,14 @@
  */
 package com.alipay.sofa.boot.actuator.health;
 
-import com.alipay.sofa.boot.constant.SofaBootConstants;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.alipay.sofa.boot.actuator.health.ReadinessCheckListener.HEALTH_CHECK_NOT_READY_KEY;
+import static com.alipay.sofa.boot.actuator.health.ReadinessCheckListener.HEALTH_CHECK_NOT_READY_MSG;
 
 /**
  * An implement of {@link HealthIndicator} to check result for {@link HealthCheckerProcessor}.
@@ -32,7 +34,7 @@ import java.util.Map;
  */
 public class SofaBootHealthIndicator implements HealthIndicator, NonReadinessCheck {
 
-    private static final String          CHECK_RESULT_PREFIX = "Middleware";
+    public static final String           CHECK_RESULT_PREFIX = "SOFABOOT_HEALTH-INDICATOR";
 
     private final HealthCheckerProcessor healthCheckerProcessor;
 
@@ -47,10 +49,8 @@ public class SofaBootHealthIndicator implements HealthIndicator, NonReadinessChe
     @Override
     public Health health() {
         if (!readinessCheckListener.isReadinessCheckFinish()) {
-            return Health
-                .down()
-                .withDetail(CHECK_RESULT_PREFIX,
-                    SofaBootConstants.SOFABOOT_HEALTH_CHECK_NOT_READY_MSG).build();
+            return Health.down().withDetail(HEALTH_CHECK_NOT_READY_KEY, HEALTH_CHECK_NOT_READY_MSG)
+                .build();
         }
 
         Map<String, Health> healths = new HashMap<>();

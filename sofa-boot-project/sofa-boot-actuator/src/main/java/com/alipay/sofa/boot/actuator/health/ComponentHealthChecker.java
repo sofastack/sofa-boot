@@ -16,27 +16,22 @@
  */
 package com.alipay.sofa.boot.actuator.health;
 
-import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.util.StringUtils;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.health.HealthResult;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.Status;
-import org.springframework.context.EnvironmentAware;
-import org.springframework.core.env.Environment;
 
 /**
  * A {@link HealthChecker} used to check {@link ComponentInfo} health.
  *
  * @author xuanbei 18/5/15
  */
-public class ComponentHealthChecker implements HealthChecker, EnvironmentAware {
+public class ComponentHealthChecker implements HealthChecker {
 
-    private int                      retryCount;
-    private int                      retryInterval;
-    private boolean                  strictCheck;
-    private int                      timeout;
+    public static final String       COMPONENT_NAME = "components";
+
     private final SofaRuntimeContext sofaRuntimeContext;
 
     public ComponentHealthChecker(SofaRuntimeContext sofaRuntimeContext) {
@@ -67,52 +62,26 @@ public class ComponentHealthChecker implements HealthChecker, EnvironmentAware {
 
     @Override
     public String getComponentName() {
-        return "SOFABoot-Components";
+        return COMPONENT_NAME;
     }
 
     @Override
     public int getRetryCount() {
-        return retryCount;
+        return 20;
     }
 
     @Override
     public long getRetryTimeInterval() {
-        return retryInterval;
+        return 1000;
     }
 
     @Override
     public boolean isStrictCheck() {
-        return strictCheck;
+        return true;
     }
 
     @Override
     public int getTimeout() {
-        return timeout;
-    }
-
-    @Override
-    public void setEnvironment(Environment environment) {
-        this.retryCount = Integer.parseInt(environment.getProperty(
-            SofaBootConstants.SOFABOOT_COMPONENT_CHECK_RETRY_COUNT,
-            String.valueOf(SofaBootConstants.SOFABOOT_COMPONENT_CHECK_RETRY_DEFAULT_COUNT)));
-        this.retryInterval = Integer.parseInt(environment.getProperty(
-            SofaBootConstants.SOFABOOT_COMPONENT_CHECK_RETRY_INTERVAL,
-            String.valueOf(SofaBootConstants.SOFABOOT_COMPONENT_CHECK_RETRY_DEFAULT_INTERVAL)));
-        this.strictCheck = Boolean.parseBoolean(environment.getProperty(
-            SofaBootConstants.SOFABOOT_COMPONENT_CHECK_STRICT_ENABLED,
-            String.valueOf(SofaBootConstants.SOFABOOT_COMPONENT_CHECK_STRICT_DEFAULT_ENABLED)));
-        this.timeout = Integer.parseInt(environment.getProperty(
-            SofaBootConstants.SOFABOOT_COMPONENT_HEALTH_CHECK_TIMEOUT,
-            String.valueOf(SofaBootConstants.SOFABOOT_COMPONENT_HEALTH_CHECK_DEFAULT_TIMEOUT)));
-    }
-
-    private static class Pair {
-        public String key;
-        public String value;
-
-        public Pair(String key, String value) {
-            this.key = key;
-            this.value = value;
-        }
+        return 10 * 1000;
     }
 }

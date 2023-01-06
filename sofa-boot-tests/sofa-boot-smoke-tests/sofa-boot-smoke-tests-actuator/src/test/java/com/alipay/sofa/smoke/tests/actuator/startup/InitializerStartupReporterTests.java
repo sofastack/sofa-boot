@@ -37,8 +37,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author huzijie
  * @version InitializerStartupReporterTests.java, v 0.1 2022年03月14日 2:37 PM huzijie Exp $
  */
-@SpringBootTest(classes = ActuatorSOFABootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-        properties = {"management.endpoints.web.exposure.include=startup"})
+@SpringBootTest(classes = ActuatorSOFABootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = { "management.endpoints.web.exposure.include=startup" })
 @ContextConfiguration(loader = StartupSpringBootContextLoader.class)
 public class InitializerStartupReporterTests {
 

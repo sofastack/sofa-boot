@@ -21,7 +21,6 @@ import com.alipay.sofa.smoke.tests.actuator.ActuatorSOFABootApplication;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -37,8 +36,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author huzijie
  * @version IsleBeanEndpointWebTests.java, v 0.1 2022年03月17日 11:43 AM huzijie Exp $
  */
-@SpringBootTest(classes = ActuatorSOFABootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-        properties = {"management.endpoints.web.exposure.include=beans"})
+@SpringBootTest(classes = ActuatorSOFABootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = { "management.endpoints.web.exposure.include=beans" })
 public class IsleBeanEndpointWebTests {
 
     @Autowired
@@ -52,7 +50,11 @@ public class IsleBeanEndpointWebTests {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = objectMapper.readTree(response.getBody());
         JsonNode contextNode = rootNode.get("contexts");
-        Assertions.assertThat(contextNode).isNotNull();
-        Assertions.assertThat(contextNode.size()).isEqualTo(1);
+        assertThat(contextNode).isNotNull();
+        assertThat(contextNode.size()).isEqualTo(2);
+        assertThat(contextNode.get("smoke-tests-actuator")).isNotNull();
+        assertThat(contextNode.get("testModule")).isNotNull();
+        assertThat(response.getBody()).contains("sample");
+        assertThat(response.getBody()).contains("test");
     }
 }
