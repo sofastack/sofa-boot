@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.tracer.test.rocketmq.processor;
 
-import com.alipay.sofa.tracer.boot.rocketmq.processor.SofaTracerRocketMqConsumerPostProcessor;
+import com.alipay.sofa.boot.tracer.rocketmq.RocketMqConsumerPostProcessor;
 import com.alipay.sofa.tracer.plugins.rocketmq.interceptor.SofaTracerConsumeMessageHook;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.hook.ConsumeMessageHook;
@@ -72,8 +72,8 @@ public class SofaTracerRocketMqConsumerPostProcessorTest {
     @Configuration(proxyBeanMethods = false)
     static class SofaTracerRocketMqConsumerPostProcessorTestConfiguration {
         @Bean
-        public SofaTracerRocketMqConsumerPostProcessor sofaTracerRocketMqConsumerPostProcessor() {
-            return new SofaTracerRocketMqConsumerPostProcessor();
+        public RocketMqConsumerPostProcessor sofaTracerRocketMqConsumerPostProcessor() {
+            return new RocketMqConsumerPostProcessor();
         }
 
         @Bean

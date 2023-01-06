@@ -30,7 +30,7 @@ import com.alipay.common.tracer.core.configuration.SofaTracerConfiguration;
 import com.alipay.common.tracer.core.utils.TracerUtils;
 import com.alipay.sofa.tracer.test.base.AbstractTestBase;
 import com.alipay.sofa.tracer.test.base.controller.SampleRestController;
-import com.alipay.sofa.tracer.boot.properties.SofaTracerProperties;
+import com.alipay.sofa.boot.tracer.properties.SofaTracerProperties;
 import com.alipay.sofa.tracer.plugins.springmvc.SpringMvcLogEnum;
 
 /**

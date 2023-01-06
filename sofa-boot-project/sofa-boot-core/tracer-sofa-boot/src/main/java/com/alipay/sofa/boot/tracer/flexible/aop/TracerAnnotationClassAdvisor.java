@@ -14,22 +14,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.tracer.test.base;
+package com.alipay.sofa.boot.tracer.flexible.aop;
 
-import com.alipay.sofa.boot.tracer.properties.SofaTracerProperties;
+import org.aopalliance.aop.Advice;
+import org.aopalliance.intercept.MethodInterceptor;
+import org.springframework.aop.Pointcut;
+import org.springframework.aop.support.AbstractPointcutAdvisor;
 
 /**
- * @author qilong.zql
- * @since 2.2.2
- */
-public class ConfigurationHolder {
-    public static SofaTracerProperties sofaTracerProperties;
+ * @author guolei.sgl (guolei.sgl@antfin.com) 2019/8/9 3:17 PM
+ **/
+public class TracerAnnotationClassAdvisor extends AbstractPointcutAdvisor {
 
-    public static SofaTracerProperties getSofaTracerProperties() {
-        return sofaTracerProperties;
+    private Advice   advice;
+
+    private Pointcut pointcut;
+
+    public TracerAnnotationClassAdvisor(MethodInterceptor interceptor) {
+        this.advice = interceptor;
+        this.pointcut = new TracerAnnotationClassPointcut();
     }
 
-    public static void setSofaTracerProperties(SofaTracerProperties sofaTracerProperties) {
-        ConfigurationHolder.sofaTracerProperties = sofaTracerProperties;
+    @Override
+    public Pointcut getPointcut() {
+        return this.pointcut;
     }
+
+    @Override
+    public Advice getAdvice() {
+        return this.advice;
+    }
+
 }

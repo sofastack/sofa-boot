@@ -31,7 +31,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.alipay.common.tracer.core.appender.file.TimedRollingFileAppender;
 import com.alipay.sofa.tracer.test.base.ConfigurationHolder;
 import com.alipay.sofa.tracer.test.base.SpringBootWebApplication;
-import com.alipay.sofa.tracer.boot.properties.SofaTracerProperties;
+import com.alipay.sofa.boot.tracer.properties.SofaTracerProperties;
 
 /**
  * @author qilong.zql

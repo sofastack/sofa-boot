@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.tracer.test;
 
-import com.alipay.sofa.tracer.boot.springmvc.properties.OpenTracingSpringMvcProperties;
+import com.alipay.sofa.boot.tracer.springmvc.properties.OpenTracingSpringMvcProperties;
 import org.junit.Assert;
 import org.junit.Test;
 

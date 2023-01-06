@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.tracer.test.mongodb;
 
-import com.alipay.sofa.tracer.boot.mongodb.SofaTracerMongoClientSettingsBuilderCustomizer;
+import com.alipay.sofa.boot.tracer.mongodb.SofaTracerMongoClientSettingsBuilderCustomizer;
 import com.alipay.sofa.tracer.plugins.mongodb.SofaTracerCommandListener;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.event.CommandListener;

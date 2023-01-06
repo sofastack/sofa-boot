@@ -23,7 +23,7 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import com.alipay.common.tracer.core.configuration.SofaTracerConfiguration;
 import com.alipay.common.tracer.core.utils.StringUtils;
 import com.alipay.sofa.boot.util.SofaBootEnvUtils;
-import com.alipay.sofa.tracer.boot.properties.SofaTracerProperties;
+import com.alipay.sofa.boot.tracer.properties.SofaTracerProperties;
 
 /**
  * @author qilong.zql

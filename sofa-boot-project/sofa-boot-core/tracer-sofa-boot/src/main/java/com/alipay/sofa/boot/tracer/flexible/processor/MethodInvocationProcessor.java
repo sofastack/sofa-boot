@@ -14,22 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.tracer.test.base;
+package com.alipay.sofa.boot.tracer.flexible.processor;
 
-import com.alipay.sofa.boot.tracer.properties.SofaTracerProperties;
+import com.alipay.sofa.tracer.plugin.flexible.annotations.Tracer;
+import org.aopalliance.intercept.MethodInvocation;
 
 /**
- * @author qilong.zql
- * @since 2.2.2
- */
-public class ConfigurationHolder {
-    public static SofaTracerProperties sofaTracerProperties;
+ * @author guolei.sgl (guolei.sgl@antfin.com) 2019/8/9 2:50 PM
+ **/
+public interface MethodInvocationProcessor {
 
-    public static SofaTracerProperties getSofaTracerProperties() {
-        return sofaTracerProperties;
-    }
-
-    public static void setSofaTracerProperties(SofaTracerProperties sofaTracerProperties) {
-        ConfigurationHolder.sofaTracerProperties = sofaTracerProperties;
-    }
+    /**
+     * proxy method
+     * @param invocation
+     * @param tracerSpan
+     * @return
+     * @throws Throwable
+     */
+    Object process(MethodInvocation invocation, Tracer tracerSpan) throws Throwable;
 }
