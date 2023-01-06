@@ -38,7 +38,8 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
  */
 @Configuration(proxyBeanMethods = false)
 @AutoConfigureAfter(RabbitAutoConfiguration.class)
-@ConditionalOnClass({ Message.class, RabbitTemplate.class })
+@ConditionalOnClass({ Message.class, RabbitTemplate.class, SofaTracerSendMessageAspect.class,
+                     SofaTracerRabbitMqBeanPostProcessor.class })
 @ConditionalOnProperty(prefix = "com.alipay.sofa.tracer.rabbitmq", value = "enable", matchIfMissing = true)
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 public class SofaTracerRabbitMqAutoConfiguration {

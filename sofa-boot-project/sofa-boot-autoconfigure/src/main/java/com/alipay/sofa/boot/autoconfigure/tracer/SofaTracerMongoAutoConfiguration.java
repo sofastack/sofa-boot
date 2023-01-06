@@ -34,7 +34,7 @@ import org.springframework.context.annotation.Configuration;
  **/
 @Configuration(proxyBeanMethods = false)
 @AutoConfigureBefore({ MongoAutoConfiguration.class })
-@ConditionalOnClass({ MongoClient.class })
+@ConditionalOnClass({ MongoClient.class, SofaTracerMongoClientSettingsBuilderCustomizer.class })
 @ConditionalOnProperty(name = "com.alipay.tracer.mongodb.enabled", havingValue = "true", matchIfMissing = true)
 public class SofaTracerMongoAutoConfiguration {
 
