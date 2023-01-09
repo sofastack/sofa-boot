@@ -223,6 +223,21 @@ public class HealthCheckerProcessorParallelTest {
         }
     }
 
+    @Test
+    public void testHealthCheckerParallelTimeout() {
+        initApplicationContextTimeout(0, false, 4);
+
+        HashMap<String, Health> hashMap = new HashMap<>();
+        HealthCheckerProcessor healthCheckerProcessor = applicationContext
+            .getBean(HealthCheckerProcessor.class);
+        boolean result = healthCheckerProcessor.readinessHealthCheck(hashMap);
+        Assert.assertFalse(result);
+        Health timeoutHealth = hashMap.get(SofaBootConstants.SOFABOOT_HEALTH_CHECK_TIMEOUT_KEY);
+        Assert.assertEquals(Status.UNKNOWN, timeoutHealth.getStatus());
+        Assert.assertEquals(SofaBootConstants.SOFABOOT_HEALTH_CHECK_TIMEOUT_MSG, timeoutHealth
+            .getDetails().get(SofaBootConstants.SOFABOOT_HEALTH_CHECK_TIMEOUT_KEY));
+    }
+
     private void initApplicationContext(int count, boolean strict, int retryCount) {
         Map<String, Object> properties = new LinkedHashMap<>();
         properties.put("memory-health-checker.count", count);
@@ -230,6 +245,22 @@ public class HealthCheckerProcessorParallelTest {
         properties.put("memory-health-checker.retry-count", retryCount);
         properties.put("spring.application.name", "HealthCheckerProcessorTest");
         properties.put(SofaBootConstants.SOFABOOT_SKIP_COMPONENT_HEALTH_CHECK, true);
+
+        SpringApplication springApplication = new SpringApplication(
+            HealthCheckerProcessorTestConfiguration.class);
+        springApplication.setDefaultProperties(properties);
+        springApplication.setWebApplicationType(WebApplicationType.NONE);
+        applicationContext = springApplication.run();
+    }
+
+    private void initApplicationContextTimeout(int count, boolean strict, int retryCount) {
+        Map<String, Object> properties = new LinkedHashMap<>();
+        properties.put("memory-health-checker.count", count);
+        properties.put("memory-health-checker.strict", strict);
+        properties.put("memory-health-checker.retry-count", retryCount);
+        properties.put("spring.application.name", "HealthCheckerProcessorTest");
+        properties.put(SofaBootConstants.SOFABOOT_SKIP_COMPONENT_HEALTH_CHECK, true);
+        properties.put("com.alipay.sofa.boot.health-check-parallel-timeout", "1");
 
         SpringApplication springApplication = new SpringApplication(
             HealthCheckerProcessorTestConfiguration.class);

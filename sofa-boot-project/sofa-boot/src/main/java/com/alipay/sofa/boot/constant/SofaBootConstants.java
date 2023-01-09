@@ -201,9 +201,19 @@ public class SofaBootConstants {
     public static final String  SOFABOOT_HEALTH_CHECK_NOT_READY_KEY                          = "HEALTH-CHECK-NOT-READY";
 
     /**
+     * health check timeout key
+     */
+    public static final String  SOFABOOT_HEALTH_CHECK_TIMEOUT_KEY                            = "HEALTH-CHECK-TIMEOUT";
+
+    /**
      * health check not ready result
      */
     public static final String  SOFABOOT_HEALTH_CHECK_NOT_READY_MSG                          = "App is still in startup process, please try later!";
+
+    /**
+     * health check timeout result
+     */
+    public static final String  SOFABOOT_HEALTH_CHECK_TIMEOUT_MSG                            = "Timeout when wait for readiness check result!";
 
     /** framework constants **/
     public static String        APPLICATION                                                  = "SOFABOOT-APPLICATION";
