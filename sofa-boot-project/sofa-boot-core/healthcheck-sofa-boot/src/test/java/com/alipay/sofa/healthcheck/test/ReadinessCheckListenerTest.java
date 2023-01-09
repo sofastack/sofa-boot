@@ -16,10 +16,19 @@
  */
 package com.alipay.sofa.healthcheck.test;
 
+import com.alipay.sofa.healthcheck.AfterReadinessCheckCallbackProcessor;
 import com.alipay.sofa.healthcheck.HealthCheckProperties;
+import com.alipay.sofa.healthcheck.HealthCheckerProcessor;
+import com.alipay.sofa.healthcheck.HealthIndicatorProcessor;
+import com.alipay.sofa.healthcheck.ReadinessCheckListener;
 import com.alipay.sofa.healthcheck.core.HealthCheckExecutor;
+import com.alipay.sofa.healthcheck.test.bean.DiskHealthIndicator;
+import com.alipay.sofa.healthcheck.test.bean.MemoryHealthChecker;
+import com.alipay.sofa.healthcheck.test.bean.MiddlewareHealthCheckCallback;
+import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import com.alipay.sofa.runtime.configure.SofaRuntimeConfigurationProperties;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.BeansException;
@@ -40,13 +49,9 @@ import org.springframework.core.env.Environment;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.alipay.sofa.healthcheck.AfterReadinessCheckCallbackProcessor;
-import com.alipay.sofa.healthcheck.HealthCheckerProcessor;
-import com.alipay.sofa.healthcheck.HealthIndicatorProcessor;
-import com.alipay.sofa.healthcheck.ReadinessCheckListener;
-import com.alipay.sofa.healthcheck.test.bean.DiskHealthIndicator;
-import com.alipay.sofa.healthcheck.test.bean.MemoryHealthChecker;
-import com.alipay.sofa.healthcheck.test.bean.MiddlewareHealthCheckCallback;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author liangen
@@ -117,6 +122,20 @@ public class ReadinessCheckListenerTest {
         @Bean
         public HealthCheckExecutor healthCheckExecutor(HealthCheckProperties properties) {
             return new HealthCheckExecutor(properties);
+        }
+    }
+
+    @BeforeClass
+    public static void beforeClass() {
+        try {
+            Field f1 = SofaRuntimeProperties.class.getDeclaredField("manualReadinessCallbackMap");
+            f1.setAccessible(true);
+            Field modifiers = f1.getClass().getDeclaredField("modifiers");
+            modifiers.setAccessible(true);
+            modifiers.setInt(f1, f1.getModifiers() & ~Modifier.FINAL);
+            f1.set(SofaRuntimeProperties.class, new ConcurrentHashMap<>());
+        } catch (Exception e) {
+            System.out.println(e);
         }
     }
 

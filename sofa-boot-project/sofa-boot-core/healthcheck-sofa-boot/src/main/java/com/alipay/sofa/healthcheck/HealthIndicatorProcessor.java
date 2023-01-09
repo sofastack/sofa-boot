@@ -181,6 +181,9 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
             } catch (InterruptedException e) {
                 logger.error(ErrorCode.convert("01-21004"), e);
             }
+            if (!finished) {
+                healthMap.put(SofaBootConstants.SOFABOOT_HEALTH_CHECK_TIMEOUT_KEY, Health.unknown().withDetail(SofaBootConstants.SOFABOOT_HEALTH_CHECK_TIMEOUT_KEY,SofaBootConstants.SOFABOOT_HEALTH_CHECK_TIMEOUT_MSG).build());
+            }
             result = finished && parallelResult.get();
         } else {
             result = healthIndicators.entrySet().stream()
