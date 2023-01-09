@@ -31,7 +31,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnWebApplication
 @ConditionalOnProperty(prefix = "com.alipay.sofa.tracer.resttemplate", value = "enable", matchIfMissing = true)
-@ConditionalOnClass({ RestTemplateTracer.class, SofaTracerRestTemplateEnhance.class })
+@ConditionalOnClass({ RestTemplateTracer.class, SofaTracerRestTemplateEnhance.class,
+                     SofaTracerRestTemplateBeanPostProcessor.class })
 public class SofaTracerRestTemplateAutoConfiguration {
 
     @Bean

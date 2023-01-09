@@ -36,7 +36,8 @@ import org.springframework.kafka.core.ProducerFactory;
  */
 @Configuration(proxyBeanMethods = false)
 @AutoConfigureAfter(KafkaAutoConfiguration.class)
-@ConditionalOnClass({ ProducerFactory.class, ConsumerFactory.class })
+@ConditionalOnClass({ ProducerFactory.class, ConsumerFactory.class,
+                     KafkaConsumerFactoryPostProcessor.class })
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @ConditionalOnProperty(name = "com.alipay.tracer.kafka.enabled", havingValue = "true", matchIfMissing = true)
 public class SofaTracerKafkaAutoConfiguration {

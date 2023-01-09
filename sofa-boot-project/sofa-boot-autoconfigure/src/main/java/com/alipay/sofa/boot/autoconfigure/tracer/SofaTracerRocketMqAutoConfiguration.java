@@ -36,7 +36,8 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration(proxyBeanMethods = false)
 @AutoConfigureBefore(RocketMQAutoConfiguration.class)
-@ConditionalOnClass({ MQProducer.class, RocketMQListenerContainer.class })
+@ConditionalOnClass({ MQProducer.class, RocketMQListenerContainer.class,
+                     SofaTracerRocketMqProducerPostProcessor.class })
 @ConditionalOnProperty(prefix = "com.alipay.sofa.tracer.rocketmq", value = "enable", matchIfMissing = true)
 public class SofaTracerRocketMqAutoConfiguration {
 
