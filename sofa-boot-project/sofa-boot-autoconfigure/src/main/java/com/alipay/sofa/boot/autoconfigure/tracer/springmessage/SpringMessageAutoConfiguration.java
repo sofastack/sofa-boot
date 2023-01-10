@@ -33,6 +33,7 @@ import org.springframework.messaging.support.ChannelInterceptor;
  * {@link EnableAutoConfiguration Auto-configuration} for spring message.
  *
  * @author guolei.sgl (guolei.sgl@antfin.com) 2019/12/4 10:34 PM
+ * @author huzijie
  * @since 3.9.1
  **/
 @AutoConfiguration
@@ -45,6 +46,8 @@ public class SpringMessageAutoConfiguration {
     @ConditionalOnMissingBean
     public SpringMessageTracerBeanPostProcessor springMessageTracerBeanPostProcessor(Environment environment) {
         String appName = environment.getProperty(SofaTracerConfiguration.TRACER_APPNAME_KEY);
-        return new SpringMessageTracerBeanPostProcessor(appName);
+        SpringMessageTracerBeanPostProcessor springMessageTracerBeanPostProcessor = new SpringMessageTracerBeanPostProcessor();
+        springMessageTracerBeanPostProcessor.setAppName(appName);
+        return springMessageTracerBeanPostProcessor;
     }
 }

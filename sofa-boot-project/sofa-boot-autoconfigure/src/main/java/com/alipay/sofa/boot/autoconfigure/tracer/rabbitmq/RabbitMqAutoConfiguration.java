@@ -36,6 +36,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
  * {@link EnableAutoConfiguration Auto-configuration} for rabbitmq.
  *
  * @author chenchen6  2020/8/09 20:44
+ * @author huzijie
  * @since  3.9.1
  */
 @AutoConfiguration(after = RabbitAutoConfiguration.class)

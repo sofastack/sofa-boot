@@ -19,11 +19,7 @@ package com.alipay.sofa.boot.tracer.rabbitmq;
 import com.sofa.alipay.tracer.plugins.rabbitmq.interceptor.SofaTracerConsumeInterceptor;
 import org.aopalliance.aop.Advice;
 import org.springframework.amqp.rabbit.config.AbstractRabbitListenerContainerFactory;
-import org.springframework.amqp.rabbit.config.DirectRabbitListenerContainerFactory;
-import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer;
-import org.springframework.amqp.rabbit.listener.DirectMessageListenerContainer;
-import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.core.PriorityOrdered;
@@ -32,9 +28,10 @@ import org.springframework.util.ReflectionUtils;
 import java.lang.reflect.Field;
 
 /**
- * SofaTracerRabbitMqBeanPostProcessor.
+ * {@link BeanPostProcessor} to wrapper register tracing interceptor
  *
  * @author chenchen6  2020/8/09 20:44
+ * @author huzijie
  * @since  3.9.1
  */
 public class RabbitMqBeanPostProcessor implements BeanPostProcessor, PriorityOrdered {
@@ -42,28 +39,15 @@ public class RabbitMqBeanPostProcessor implements BeanPostProcessor, PriorityOrd
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName)
                                                                                throws BeansException {
-        if (bean instanceof SimpleRabbitListenerContainerFactory) {
-            SimpleRabbitListenerContainerFactory factory = (SimpleRabbitListenerContainerFactory) bean;
+        if (bean instanceof AbstractRabbitListenerContainerFactory factory) {
             registerTracingInterceptor(factory);
-        } else if (bean instanceof SimpleMessageListenerContainer) {
-            SimpleMessageListenerContainer container = (SimpleMessageListenerContainer) bean;
-            registerTracingInterceptor(container);
-        } else if (bean instanceof DirectRabbitListenerContainerFactory) {
-            DirectRabbitListenerContainerFactory factory = (DirectRabbitListenerContainerFactory) bean;
-            registerTracingInterceptor(factory);
-        } else if (bean instanceof DirectMessageListenerContainer) {
-            DirectMessageListenerContainer container = (DirectMessageListenerContainer) bean;
+        } else if (bean instanceof AbstractMessageListenerContainer container) {
             registerTracingInterceptor(container);
         }
         return bean;
     }
 
-    @Override
-    public Object postProcessAfterInitialization(Object bean, String beanName)
-                                                                              throws BeansException {
-        return bean;
-    }
-
+    @SuppressWarnings("rawtypes")
     private void registerTracingInterceptor(AbstractRabbitListenerContainerFactory factory) {
         Advice[] chain = factory.getAdviceChain();
         Advice[] adviceChainWithTracing = getAdviceChainOrAddInterceptorToChain(chain);

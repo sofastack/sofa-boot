@@ -17,10 +17,10 @@
 package com.alipay.sofa.boot.autoconfigure.tracer.flexible;
 
 import com.alipay.sofa.boot.autoconfigure.tracer.SofaTracerAutoConfiguration;
-import com.alipay.sofa.boot.tracer.flexible.aop.SofaTracerAdvisingBeanPostProcessor;
-import com.alipay.sofa.boot.tracer.flexible.processor.MethodInvocationProcessor;
-import com.alipay.sofa.boot.tracer.flexible.processor.SofaTracerIntroductionInterceptor;
-import com.alipay.sofa.boot.tracer.flexible.processor.SofaTracerMethodInvocationProcessor;
+import com.alipay.sofa.boot.tracer.flexible.MethodInvocationProcessor;
+import com.alipay.sofa.boot.tracer.flexible.SofaTracerAdvisingBeanPostProcessor;
+import com.alipay.sofa.boot.tracer.flexible.SofaTracerIntroductionInterceptor;
+import com.alipay.sofa.boot.tracer.flexible.SofaTracerMethodInvocationProcessor;
 import io.opentracing.Tracer;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -34,11 +34,12 @@ import org.springframework.context.annotation.Bean;
  * {@link EnableAutoConfiguration Auto-configuration} for Flexible.
  *
  * @author guolei.sgl (guolei.sgl@antfin.com) 2019/8/9 3:20 PM
+ * @author huzijie
  **/
 @AutoConfiguration(after = SofaTracerAutoConfiguration.class)
 @ConditionalOnProperty(prefix = "sofa.boot.tracer.flexible", value = "enable", matchIfMissing = true)
 @ConditionalOnBean(Tracer.class)
-@ConditionalOnClass({ com.alipay.sofa.tracer.plugin.flexible.annotations.Tracer.class, SofaTracerIntroductionInterceptor.class})
+@ConditionalOnClass({ Tracer.class, com.alipay.sofa.tracer.plugin.flexible.annotations.Tracer.class, SofaTracerIntroductionInterceptor.class})
 public class FlexibleAutoConfiguration {
 
     @Bean

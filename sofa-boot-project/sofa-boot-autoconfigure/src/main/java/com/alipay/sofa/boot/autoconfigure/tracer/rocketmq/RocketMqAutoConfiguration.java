@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.boot.autoconfigure.tracer.rocketmq;
 
+import com.alipay.common.tracer.core.configuration.SofaTracerConfiguration;
 import com.alipay.sofa.boot.tracer.rocketmq.RocketMqConsumerPostProcessor;
 import com.alipay.sofa.boot.tracer.rocketmq.RocketMqProducerPostProcessor;
 import org.apache.rocketmq.client.producer.MQProducer;
@@ -27,11 +28,13 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.env.Environment;
 
 /**
  * {@link EnableAutoConfiguration Auto-configuration} for rocketmq.
  *
  * @author linnan
+ * @author huzijie
  * @since 3.9.1
  */
 @AutoConfiguration(before = RocketMQAutoConfiguration.class)
@@ -41,13 +44,19 @@ public class RocketMqAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public RocketMqProducerPostProcessor sofaTracerRocketMqProducerPostProcessor() {
-        return new RocketMqProducerPostProcessor();
+    public RocketMqProducerPostProcessor sofaTracerRocketMqProducerPostProcessor(Environment environment) {
+        String appName = environment.getProperty(SofaTracerConfiguration.TRACER_APPNAME_KEY);
+        RocketMqProducerPostProcessor rocketMqProducerPostProcessor = new RocketMqProducerPostProcessor();
+        rocketMqProducerPostProcessor.setAppName(appName);
+        return rocketMqProducerPostProcessor;
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public RocketMqConsumerPostProcessor sofaTracerRocketMqConsumerPostProcessor() {
-        return new RocketMqConsumerPostProcessor();
+    public RocketMqConsumerPostProcessor sofaTracerRocketMqConsumerPostProcessor(Environment environment) {
+        String appName = environment.getProperty(SofaTracerConfiguration.TRACER_APPNAME_KEY);
+        RocketMqConsumerPostProcessor rocketMqConsumerPostProcessor = new RocketMqConsumerPostProcessor();
+        rocketMqConsumerPostProcessor.setAppName(appName);
+        return rocketMqConsumerPostProcessor;
     }
 }

@@ -16,23 +16,23 @@
  */
 package com.alipay.sofa.boot.tracer.feign;
 
+import com.alipay.sofa.tracer.plugins.springcloud.instruments.feign.SofaTracerFeignContext;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.cloud.openfeign.FeignContext;
-
-import com.alipay.sofa.tracer.plugins.springcloud.instruments.feign.SofaTracerFeignContext;
+import org.springframework.util.Assert;
 
 /**
+ * {@link BeanPostProcessor} to wrapper FeignContext in {@link SofaTracerFeignContext}
+ *
  * @author guolei.sgl (guolei.sgl@antfin.com) 2019/3/13 6:08 PM
+ * @author huzijie
  **/
-public class FeignContextBeanPostProcessor implements BeanPostProcessor {
+public class FeignContextBeanPostProcessor implements BeanPostProcessor, BeanFactoryAware {
 
     private BeanFactory beanFactory;
-
-    public FeignContextBeanPostProcessor(BeanFactory beanFactory) {
-        this.beanFactory = beanFactory;
-    }
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName)
@@ -44,8 +44,8 @@ public class FeignContextBeanPostProcessor implements BeanPostProcessor {
     }
 
     @Override
-    public Object postProcessAfterInitialization(Object bean, String beanName)
-                                                                              throws BeansException {
-        return bean;
+    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+        Assert.notNull(beanFactory, "beanFactory must not be null");
+        this.beanFactory = beanFactory;
     }
 }

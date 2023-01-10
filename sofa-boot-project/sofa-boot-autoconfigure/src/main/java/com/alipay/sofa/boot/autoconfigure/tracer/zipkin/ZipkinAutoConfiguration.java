@@ -30,6 +30,7 @@ import org.springframework.web.client.RestTemplate;
  * ZipkinSofaTracerAutoConfiguration
  *
  * @author yangguanchao
+ * @author huzijie
  * @since 2018/05/01
  */
 @AutoConfiguration

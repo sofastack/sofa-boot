@@ -17,7 +17,7 @@
 package com.alipay.sofa.boot.autoconfigure.tracer.resttemplate;
 
 import com.alipay.sofa.boot.tracer.resttemplate.RestTemplateEnhance;
-import com.alipay.sofa.boot.tracer.resttemplate.processor.RestTemplateBeanPostProcessor;
+import com.alipay.sofa.boot.tracer.resttemplate.RestTemplateBeanPostProcessor;
 import com.sofa.alipay.tracer.plugins.rest.RestTemplateTracer;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -25,12 +25,12 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 /**
  * {@link EnableAutoConfiguration Auto-configuration} for resttemplate.
  *
  * @author guolei.sgl (guolei.sgl@antfin.com) 2019/9/11 9:43 PM
+ * @author huzijie
  **/
 @AutoConfiguration
 @ConditionalOnWebApplication

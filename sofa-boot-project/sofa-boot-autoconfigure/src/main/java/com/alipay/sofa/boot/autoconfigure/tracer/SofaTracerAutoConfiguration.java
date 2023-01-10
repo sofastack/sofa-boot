@@ -25,18 +25,19 @@ import com.alipay.common.tracer.core.utils.StringUtils;
 import com.alipay.sofa.tracer.plugin.flexible.FlexibleTracer;
 import io.opentracing.Tracer;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
 /**
- * SofaTracerAutoConfiguration
+ * {@link EnableAutoConfiguration Auto-configuration} for sofa tracer.
  *
  * @author yangguanchao
+ * @author huzijie
  * @since 2018/05/08
  */
 @AutoConfiguration
@@ -63,7 +64,6 @@ public class SofaTracerAutoConfiguration {
             Sampler sampler = SamplerFactory.getSampler();
             return new FlexibleTracer(sampler, reporter);
         }
-        Tracer tracer = new FlexibleTracer();
-        return tracer;
+        return new FlexibleTracer();
     }
 }

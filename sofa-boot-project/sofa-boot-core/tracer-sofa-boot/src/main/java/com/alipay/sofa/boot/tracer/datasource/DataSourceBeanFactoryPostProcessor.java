@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.boot.tracer.datasource;
 
-import com.alipay.common.tracer.core.utils.StringUtils;
 import com.alipay.sofa.tracer.plugins.datasource.SmartDataSource;
 import com.alipay.sofa.tracer.plugins.datasource.utils.DataSourceUtils;
 import org.springframework.beans.BeansException;
@@ -25,13 +24,16 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
-import org.springframework.beans.factory.config.*;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.beans.factory.config.RuntimeBeanReference;
+import org.springframework.beans.factory.config.TypedStringValue;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.RootBeanDefinition;
-import org.springframework.context.EnvironmentAware;
 import org.springframework.core.PriorityOrdered;
-import org.springframework.core.env.Environment;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
 import java.util.Arrays;
@@ -41,15 +43,18 @@ import java.util.Set;
 import static com.alipay.common.tracer.core.configuration.SofaTracerConfiguration.TRACER_APPNAME_KEY;
 
 /**
+ * {@link BeanFactoryPostProcessor} to wrapper datasource in {@link SmartDataSource}
+ *
  * @author qilong.zql
+ * @author huzijie
  * @since 2.2.0
  */
 public class DataSourceBeanFactoryPostProcessor implements BeanFactoryPostProcessor,
-                                               PriorityOrdered, EnvironmentAware {
+                                               PriorityOrdered {
 
     public static final String SOFA_TRACER_DATASOURCE = "s_t_d_s_";
 
-    private Environment        environment;
+    private String appName;
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory)
@@ -117,8 +122,7 @@ public class DataSourceBeanFactoryPostProcessor implements BeanFactoryPostProces
         proxiedBeanDefinition.setDependsOn(transformDatasourceBeanName(beanName));
         MutablePropertyValues originValues = originDataSource.getPropertyValues();
         MutablePropertyValues values = new MutablePropertyValues();
-        String appName = environment.getProperty(TRACER_APPNAME_KEY);
-        Assert.isTrue(!StringUtils.isBlank(appName), TRACER_APPNAME_KEY + " must be configured!");
+        Assert.isTrue(StringUtils.hasText(appName), TRACER_APPNAME_KEY + " must be configured!");
         values.add("appName", appName);
         values.add("delegate", new RuntimeBeanReference(transformDatasourceBeanName(beanName)));
         values.add("dbType",
@@ -143,10 +147,10 @@ public class DataSourceBeanFactoryPostProcessor implements BeanFactoryPostProces
         return SOFA_TRACER_DATASOURCE + originName;
     }
 
-    @Override
-    public void setEnvironment(Environment environment) {
-        this.environment = environment;
+    public void setAppName(String appName) {
+        this.appName = appName;
     }
+
 
     @Override
     public int getOrder() {

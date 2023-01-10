@@ -31,6 +31,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
  * {@link EnableAutoConfiguration Auto-configuration} for redis.
  *
  * @author guolei.sgl (guolei.sgl@antfin.com) 2019/11/19 8:03 PM
+ * @author huzijie
  * @since 3.9.1
  **/
 @AutoConfiguration(after = SofaTracerAutoConfiguration.class)

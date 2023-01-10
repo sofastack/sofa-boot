@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.boot.autoconfigure.tracer.datasource;
 
+import com.alipay.common.tracer.core.configuration.SofaTracerConfiguration;
 import com.alipay.sofa.boot.tracer.datasource.DataSourceBeanFactoryPostProcessor;
 import com.alipay.sofa.boot.tracer.datasource.DataSourceBeanPostProcessor;
 import com.alipay.sofa.tracer.plugins.datasource.SmartDataSource;
@@ -25,11 +26,13 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.env.Environment;
 
 /**
  * {@link EnableAutoConfiguration Auto-configuration} for Datasource.
  *
  * @author qilong.zql
+ * @author huzijie
  * @since 2.2.0
  */
 @AutoConfiguration
@@ -39,13 +42,19 @@ public class DataSourceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public static DataSourceBeanFactoryPostProcessor dataSourceBeanFactoryPostProcessor() {
-        return new DataSourceBeanFactoryPostProcessor();
+    public static DataSourceBeanFactoryPostProcessor dataSourceBeanFactoryPostProcessor(Environment environment) {
+        String appName = environment.getProperty(SofaTracerConfiguration.TRACER_APPNAME_KEY);
+        DataSourceBeanFactoryPostProcessor dataSourceBeanFactoryPostProcessor = new DataSourceBeanFactoryPostProcessor();
+        dataSourceBeanFactoryPostProcessor.setAppName(appName);
+        return dataSourceBeanFactoryPostProcessor;
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public static DataSourceBeanPostProcessor dataSourceBeanPostProcessor() {
-        return new DataSourceBeanPostProcessor();
+    public static DataSourceBeanPostProcessor dataSourceBeanPostProcessor(Environment environment) {
+        String appName = environment.getProperty(SofaTracerConfiguration.TRACER_APPNAME_KEY);
+        DataSourceBeanPostProcessor dataSourceBeanPostProcessor = new DataSourceBeanPostProcessor();
+        dataSourceBeanPostProcessor.setAppName(appName);
+        return dataSourceBeanPostProcessor;
     }
 }

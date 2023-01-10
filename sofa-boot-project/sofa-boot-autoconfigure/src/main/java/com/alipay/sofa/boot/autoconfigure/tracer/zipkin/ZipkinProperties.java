@@ -22,6 +22,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * Configuration properties to configure zipkin tracer.
  *
  * @author guolei.sgl
+ * @author huzijie
  * @since v2.3.0
  */
 @ConfigurationProperties("sofa.boot.tracer.zipkin")

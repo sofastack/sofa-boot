@@ -21,23 +21,27 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.core.PriorityOrdered;
 import org.springframework.integration.channel.AbstractMessageChannel;
+import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
+
+import static com.alipay.common.tracer.core.configuration.SofaTracerConfiguration.TRACER_APPNAME_KEY;
 
 /**
+ * {@link BeanPostProcessor} to add interceptor {@link SofaTracerChannelInterceptor}
+ *
  * @author guolei.sgl (guolei.sgl@antfin.com) 2019/12/4 11:07 AM
+ * @author huzijie
  * @since 3.9.1
  **/
 public class SpringMessageTracerBeanPostProcessor implements BeanPostProcessor, PriorityOrdered {
 
-    private final String appName;
-
-    public SpringMessageTracerBeanPostProcessor(String appName) {
-        this.appName = appName;
-    }
+    private String appName;
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName)
                                                                                throws BeansException {
         if (bean instanceof AbstractMessageChannel) {
+            Assert.isTrue(StringUtils.hasText(appName), TRACER_APPNAME_KEY + " must be configured!");
             ((AbstractMessageChannel) bean).addInterceptor(SofaTracerChannelInterceptor.create(appName));
         }
         return bean;
@@ -46,5 +50,9 @@ public class SpringMessageTracerBeanPostProcessor implements BeanPostProcessor, 
     @Override
     public int getOrder() {
         return LOWEST_PRECEDENCE;
+    }
+
+    public void setAppName(String appName) {
+        this.appName = appName;
     }
 }

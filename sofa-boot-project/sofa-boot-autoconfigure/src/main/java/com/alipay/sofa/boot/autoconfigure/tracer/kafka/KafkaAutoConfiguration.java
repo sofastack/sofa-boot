@@ -16,8 +16,8 @@
  */
 package com.alipay.sofa.boot.autoconfigure.tracer.kafka;
 
-import com.alipay.sofa.boot.tracer.kafka.KafkaConsumerFactoryPostProcessor;
-import com.alipay.sofa.boot.tracer.kafka.KafkaProducerFactoryPostProcessor;
+import com.alipay.sofa.boot.tracer.kafka.KafkaConsumerFactoryBeanPostProcessor;
+import com.alipay.sofa.boot.tracer.kafka.KafkaProducerBeanFactoryPostProcessor;
 import com.sofa.alipay.tracer.plugins.kafkamq.aspect.KafkaListenerSofaTracerAspect;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -32,24 +32,25 @@ import org.springframework.kafka.core.ProducerFactory;
  * {@link EnableAutoConfiguration Auto-configuration} for Kafka.
  *
  * @author chenchen6  2020/9/2 21:56
+ * @author huzijie
  * @since 3.9.1
  */
 @AutoConfiguration(after = org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration.class)
-@ConditionalOnClass({ ProducerFactory.class, KafkaConsumerFactoryPostProcessor.class, KafkaListenerSofaTracerAspect.class })
+@ConditionalOnClass({ ProducerFactory.class, KafkaConsumerFactoryBeanPostProcessor.class, KafkaListenerSofaTracerAspect.class })
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @ConditionalOnProperty(name = "sofa.boot.tracer.kafka.enabled", havingValue = "true", matchIfMissing = true)
 public class KafkaAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public static KafkaConsumerFactoryPostProcessor kafkaConsumerFactoryPostProcessor() {
-        return new KafkaConsumerFactoryPostProcessor();
+    public static KafkaConsumerFactoryBeanPostProcessor kafkaConsumerFactoryPostProcessor() {
+        return new KafkaConsumerFactoryBeanPostProcessor();
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public static KafkaProducerFactoryPostProcessor kafkaProducerFactoryPostProcessor() {
-        return new KafkaProducerFactoryPostProcessor();
+    public static KafkaProducerBeanFactoryPostProcessor kafkaProducerFactoryPostProcessor() {
+        return new KafkaProducerBeanFactoryPostProcessor();
     }
 
     @Bean

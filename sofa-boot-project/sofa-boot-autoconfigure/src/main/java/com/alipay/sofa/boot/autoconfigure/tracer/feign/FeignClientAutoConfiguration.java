@@ -31,6 +31,7 @@ import org.springframework.context.annotation.Bean;
  * {@link EnableAutoConfiguration Auto-configuration} for FeignClient.
  *
  * @author guolei.sgl (guolei.sgl@antfin.com) 2019/3/13 6:04 PM
+ * @author huzijie
  **/
 @AutoConfiguration(before = FeignAutoConfiguration.class)
 @ConditionalOnClass({ Client.class, FeignContextBeanPostProcessor.class,
@@ -39,7 +40,7 @@ import org.springframework.context.annotation.Bean;
 public class FeignClientAutoConfiguration {
 
     @Bean
-    public static FeignContextBeanPostProcessor feignContextBeanPostProcessor(BeanFactory beanFactory) {
-        return new FeignContextBeanPostProcessor(beanFactory);
+    public static FeignContextBeanPostProcessor feignContextBeanPostProcessor() {
+        return new FeignContextBeanPostProcessor();
     }
 }

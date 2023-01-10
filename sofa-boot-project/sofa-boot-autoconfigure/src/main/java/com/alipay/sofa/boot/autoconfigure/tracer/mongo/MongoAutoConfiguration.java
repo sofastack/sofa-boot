@@ -17,33 +17,34 @@
 package com.alipay.sofa.boot.autoconfigure.tracer.mongo;
 
 import com.alipay.common.tracer.core.configuration.SofaTracerConfiguration;
-import com.alipay.sofa.boot.tracer.mongodb.SofaTracerMongoClientSettingsBuilderCustomizer;
+import com.alipay.sofa.boot.tracer.mongodb.SofaTracerCommandListenerCustomizer;
 import com.mongodb.client.MongoClient;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
 /**
  * {@link EnableAutoConfiguration Auto-configuration} for Mongo.
  *
  * @author linnan
+ * @author huzijie
  * @since 3.9.1
  **/
 @AutoConfiguration(before = org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration.class)
-@ConditionalOnClass({ MongoClient.class, SofaTracerMongoClientSettingsBuilderCustomizer.class })
+@ConditionalOnClass({ MongoClient.class, SofaTracerCommandListenerCustomizer.class })
 @ConditionalOnProperty(name = "sofa.boot.tracer.mongodb.enabled", havingValue = "true", matchIfMissing = true)
 public class MongoAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public SofaTracerMongoClientSettingsBuilderCustomizer sofaTracerMongoClientSettingsBuilderCustomizer(Environment environment) {
+    public SofaTracerCommandListenerCustomizer sofaTracerMongoClientSettingsBuilderCustomizer(Environment environment) {
         String appName = environment.getProperty(SofaTracerConfiguration.TRACER_APPNAME_KEY);
-        return new SofaTracerMongoClientSettingsBuilderCustomizer(appName);
+        SofaTracerCommandListenerCustomizer sofaTracerCommandListenerCustomizer = new SofaTracerCommandListenerCustomizer();
+        sofaTracerCommandListenerCustomizer.setAppName(appName);
+        return sofaTracerCommandListenerCustomizer;
     }
 }

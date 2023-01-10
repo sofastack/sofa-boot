@@ -26,6 +26,7 @@ import org.springframework.core.Ordered;
  * Configuration properties to configure open tracing springmvc tracer.
  *
  * @author yangguanchao
+ * @author huzijie
  * @since 2018/04/30
  */
 @ConfigurationProperties("sofa.boot.tracer.springmvc")

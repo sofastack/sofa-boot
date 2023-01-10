@@ -16,40 +16,32 @@
  */
 package com.alipay.sofa.boot.tracer.rocketmq;
 
-import com.alipay.common.tracer.core.configuration.SofaTracerConfiguration;
 import com.alipay.sofa.tracer.plugins.rocketmq.interceptor.SofaTracerSendMessageHook;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.context.EnvironmentAware;
 import org.springframework.core.PriorityOrdered;
-import org.springframework.core.env.Environment;
+import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
+
+import static com.alipay.common.tracer.core.configuration.SofaTracerConfiguration.TRACER_APPNAME_KEY;
 
 /**
+ * {@link BeanPostProcessor} to register send message hook {@link SofaTracerSendMessageHook}
+ *
  * @author linnan
+ * @author huzijie
  * @since 3.9.1
  */
-public class RocketMqProducerPostProcessor implements BeanPostProcessor,
-                                                    EnvironmentAware, PriorityOrdered {
-    private Environment environment;
+public class RocketMqProducerPostProcessor implements BeanPostProcessor, PriorityOrdered {
 
-    @Override
-    public void setEnvironment(Environment environment) {
-        this.environment = environment;
-    }
-
-    @Override
-    public Object postProcessBeforeInitialization(Object bean, String beanName)
-                                                                               throws BeansException {
-        return bean;
-    }
+    private String appName;
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName)
                                                                               throws BeansException {
-        if (bean instanceof DefaultMQProducer) {
-            DefaultMQProducer producer = (DefaultMQProducer) bean;
-            String appName = environment.getProperty(SofaTracerConfiguration.TRACER_APPNAME_KEY);
+        if (bean instanceof DefaultMQProducer producer) {
+            Assert.isTrue(StringUtils.hasText(appName), TRACER_APPNAME_KEY + " must be configured!");
             SofaTracerSendMessageHook hook = new SofaTracerSendMessageHook(appName);
             producer.getDefaultMQProducerImpl().registerSendMessageHook(hook);
             return producer;
@@ -60,5 +52,9 @@ public class RocketMqProducerPostProcessor implements BeanPostProcessor,
     @Override
     public int getOrder() {
         return LOWEST_PRECEDENCE;
+    }
+
+    public void setAppName(String appName) {
+        this.appName = appName;
     }
 }

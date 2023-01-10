@@ -17,7 +17,6 @@
 package com.alipay.sofa.boot.autoconfigure.tracer.springmvc;
 
 import com.alipay.sofa.boot.autoconfigure.tracer.SofaTracerAutoConfiguration;
-import com.alipay.sofa.boot.autoconfigure.tracer.SofaTracerProperties;
 import com.alipay.sofa.tracer.plugins.springmvc.SpringMvcSofaTracerFilter;
 import com.alipay.sofa.tracer.plugins.webflux.WebfluxSofaTracerFilter;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -39,6 +38,7 @@ import java.util.List;
  * {@link EnableAutoConfiguration Auto-configuration} for spring mvc.
  *
  * @author yangguanchao
+ * @author huzijie
  * @since 2018/05/01
  */
 @AutoConfiguration(after = SofaTracerAutoConfiguration.class)
