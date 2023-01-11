@@ -24,15 +24,17 @@ import org.springframework.boot.actuate.health.HttpCodeStatusMapper;
 import org.springframework.lang.Nullable;
 
 /**
+ * {@link EndpointWebExtension @EndpointWebExtension} for the {@link ReadinessEndpoint}.
+ *
  * @author qilong.zql
  * @since 3.0.0
  */
-@EndpointWebExtension(endpoint = SofaBootReadinessEndpoint.class)
+@EndpointWebExtension(endpoint = ReadinessEndpoint.class)
 public class ReadinessEndpointWebExtension {
-    private final SofaBootReadinessEndpoint delegate;
-    private final HttpCodeStatusMapper      statusMapper;
+    private final ReadinessEndpoint    delegate;
+    private final HttpCodeStatusMapper statusMapper;
 
-    public ReadinessEndpointWebExtension(SofaBootReadinessEndpoint delegate,
+    public ReadinessEndpointWebExtension(ReadinessEndpoint delegate,
                                          HttpCodeStatusMapper statusMapper) {
         this.delegate = delegate;
         this.statusMapper = statusMapper;

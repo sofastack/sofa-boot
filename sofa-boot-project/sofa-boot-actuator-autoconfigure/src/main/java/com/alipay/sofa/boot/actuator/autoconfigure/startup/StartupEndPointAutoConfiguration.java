@@ -16,31 +16,28 @@
  */
 package com.alipay.sofa.boot.actuator.autoconfigure.startup;
 
-import com.alipay.sofa.boot.actuator.startup.SofaBootStartupEndPoint;
-import com.alipay.sofa.boot.autoconfigure.startup.SofaStartupAutoConfiguration;
-import com.alipay.sofa.startup.StartupReporter;
+import com.alipay.sofa.boot.actuator.startup.StartupEndPoint;
+import com.alipay.sofa.boot.actuator.startup.StartupReporter;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.boot.actuate.autoconfigure.startup.StartupEndpointAutoConfiguration;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 /**
+ * {@link EnableAutoConfiguration Auto-configuration} for {@link StartupEndPoint}.
+ *
  * @author Zhijie
  * @since 2020/7/7
  */
-@Configuration(proxyBeanMethods = false)
-@ConditionalOnClass(StartupReporter.class)
-@AutoConfigureBefore(value = { SofaStartupAutoConfiguration.class,
-                              StartupEndpointAutoConfiguration.class })
+@AutoConfiguration(before = StartupEndpointAutoConfiguration.class, after = StartupAutoConfiguration.class)
+@ConditionalOnAvailableEndpoint(endpoint = StartupEndPoint.class)
 public class StartupEndPointAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    @ConditionalOnAvailableEndpoint(endpoint = SofaBootStartupEndPoint.class)
-    public SofaBootStartupEndPoint sofaBootStartupEndPoint(StartupReporter startupReporter) {
-        return new SofaBootStartupEndPoint(startupReporter);
+    public StartupEndPoint sofaBootStartupEndPoint(StartupReporter startupReporter) {
+        return new StartupEndPoint(startupReporter);
     }
 }

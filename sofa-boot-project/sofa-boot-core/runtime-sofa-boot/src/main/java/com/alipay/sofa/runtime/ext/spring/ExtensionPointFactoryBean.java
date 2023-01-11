@@ -17,7 +17,7 @@
 package com.alipay.sofa.runtime.ext.spring;
 
 import com.alipay.sofa.runtime.ext.component.ExtensionPointComponent;
-import com.alipay.sofa.runtime.log.SofaLogger;
+import com.alipay.sofa.boot.log.SofaLogger;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.Implementation;
 import com.alipay.sofa.runtime.spi.spring.SpringImplementationImpl;

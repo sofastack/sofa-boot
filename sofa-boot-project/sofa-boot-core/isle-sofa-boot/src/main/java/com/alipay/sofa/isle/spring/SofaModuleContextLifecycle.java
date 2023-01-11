@@ -18,7 +18,7 @@ package com.alipay.sofa.isle.spring;
 
 import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.isle.stage.PipelineContext;
-import com.alipay.sofa.runtime.log.SofaLogger;
+import com.alipay.sofa.boot.log.SofaLogger;
 import org.springframework.context.SmartLifecycle;
 
 import java.util.concurrent.atomic.AtomicBoolean;

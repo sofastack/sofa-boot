@@ -26,12 +26,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * SOFABoot custom {@link HttpCodeStatusMapper} backed by map of {@link Status#getCode() status
+ * code} to HTTP status code.
+ *
  * @author huzijie
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 2021/3/22
  */
 public class SofaHttpCodeStatusMapper implements HttpCodeStatusMapper {
-    private SimpleHttpCodeStatusMapper statusMapper;
+
+    private final SimpleHttpCodeStatusMapper statusMapper;
 
     public SofaHttpCodeStatusMapper(HealthEndpointProperties healthEndpointProperties) {
         Map<String, Integer> mapping = new HashMap<>(8);

@@ -18,12 +18,12 @@ package com.alipay.sofa.boot.spring.namespace.handler;
 
 import java.util.ServiceLoader;
 
+import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.xml.BeanDefinitionDecorator;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 
-import com.alipay.sofa.boot.log.InfraLoggerFactory;
 import com.alipay.sofa.boot.spring.namespace.spi.SofaBootTagNameSupport;
 
 /**
@@ -35,7 +35,7 @@ import com.alipay.sofa.boot.spring.namespace.spi.SofaBootTagNameSupport;
  */
 public class SofaBootNamespaceHandler extends NamespaceHandlerSupport {
 
-    private static final Logger logger = InfraLoggerFactory
+    private static final Logger logger = SofaBootLoggerFactory
                                            .getLogger(SofaBootNamespaceHandler.class);
 
     @Override

@@ -16,36 +16,36 @@
  */
 package com.alipay.sofa.boot.autoconfigure.isle;
 
+import com.alipay.sofa.boot.autoconfigure.runtime.SofaRuntimeAutoConfiguration;
+import com.alipay.sofa.isle.ApplicationRuntimeModel;
+import com.alipay.sofa.isle.profile.DefaultSofaModuleProfileChecker;
+import com.alipay.sofa.isle.profile.SofaModuleProfileChecker;
 import com.alipay.sofa.isle.spring.SofaModuleContextLifecycle;
+import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
+import com.alipay.sofa.isle.stage.DefaultPipelineContext;
+import com.alipay.sofa.isle.stage.ModelCreatingStage;
+import com.alipay.sofa.isle.stage.ModuleLogOutputStage;
+import com.alipay.sofa.isle.stage.PipelineContext;
 import com.alipay.sofa.isle.stage.PipelineStage;
+import com.alipay.sofa.isle.stage.SpringContextInstallStage;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.AbstractApplicationContext;
-
-import com.alipay.sofa.isle.ApplicationRuntimeModel;
-import com.alipay.sofa.isle.profile.DefaultSofaModuleProfileChecker;
-import com.alipay.sofa.isle.profile.SofaModuleProfileChecker;
-import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
-import com.alipay.sofa.isle.stage.DefaultPipelineContext;
-import com.alipay.sofa.isle.stage.ModelCreatingStage;
-import com.alipay.sofa.isle.stage.ModuleLogOutputStage;
-import com.alipay.sofa.isle.stage.PipelineContext;
-import com.alipay.sofa.isle.stage.SpringContextInstallStage;
 
 import java.util.List;
 
 /**
  * @author xuanbei 18/3/12
  */
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration(after = SofaRuntimeAutoConfiguration.class)
 @EnableConfigurationProperties(SofaModuleProperties.class)
 @ConditionalOnClass(ApplicationRuntimeModel.class)
-@ConditionalOnProperty(value = "com.alipay.sofa.boot.enable-isle", matchIfMissing = true)
+@ConditionalOnProperty(value = "sofa.boot.isle.enable", matchIfMissing = true)
 public class SofaModuleAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean

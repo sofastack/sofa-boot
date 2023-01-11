@@ -32,7 +32,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.support.AbstractApplicationContext;
 
 import com.alipay.sofa.boot.constant.SofaBootConstants;
-import com.alipay.sofa.runtime.log.SofaLogger;
+import com.alipay.sofa.boot.log.SofaLogger;
 import com.alipay.sofa.runtime.spring.async.AsyncInitBeanHolder;
 import com.alipay.sofa.runtime.spring.async.AsyncTaskExecutor;
 import org.springframework.core.PriorityOrdered;
