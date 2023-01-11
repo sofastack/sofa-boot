@@ -38,7 +38,7 @@ import org.springframework.context.annotation.Bean;
  */
 @AutoConfiguration(after = SofaModuleAutoConfiguration.class)
 @ConditionalOnClass(ApplicationRuntimeModel.class)
-@ConditionalOnProperty(value = "sofa.boot.isle.enable", matchIfMissing = true)
+@ConditionalOnProperty(value = "sofa.boot.isle.enabled", matchIfMissing = true)
 @ConditionalOnAvailableEndpoint(endpoint = ReadinessEndpoint.class)
 public class ReadinessIsleAutoConfiguration {
 

@@ -19,13 +19,14 @@ package com.alipay.sofa.isle.profile;
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
-import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author yangguanchao
@@ -34,24 +35,17 @@ import java.util.Set;
  */
 public class DefaultSofaModuleProfileChecker implements SofaModuleProfileChecker, InitializingBean {
 
-    private final SofaModuleProperties sofaModuleProperties;
-    private Set<String>                activeProfiles = new HashSet<>();
-
-    public DefaultSofaModuleProfileChecker(SofaModuleProperties sofaModuleProperties) {
-        this.sofaModuleProperties = sofaModuleProperties;
-    }
+    private final Set<String> activeProfiles = new HashSet<>();
+    private List<String> userCustomProfiles;
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        this.activeProfiles.add(SofaBootConstants.DEFAULT_PROFILE_VALUE);
-        String configProfiles = sofaModuleProperties.getActiveProfiles();
-        if (StringUtils.hasText(configProfiles)) {
-            String[] activeConfigProfileList = configProfiles
-                .split(SofaBootConstants.PROFILE_SEPARATOR);
-            for (String sofaProfile : activeConfigProfileList) {
-                validateProfile(sofaProfile);
-                this.activeProfiles.add(sofaProfile.trim());
-            }
+        activeProfiles.add(SofaBootConstants.DEFAULT_PROFILE_VALUE);
+        if (userCustomProfiles != null) {
+            activeProfiles.addAll(userCustomProfiles.stream().map(String::trim).collect(Collectors.toSet()));
+        }
+        for (String sofaProfile : activeProfiles) {
+            validateProfile(sofaProfile);
         }
     }
 
@@ -100,5 +94,13 @@ public class DefaultSofaModuleProfileChecker implements SofaModuleProfileChecker
         }
         activeModuleProfiles = profiles.split(SofaBootConstants.PROFILE_SEPARATOR);
         return activeModuleProfiles;
+    }
+
+    public List<String> getUserCustomProfiles() {
+        return userCustomProfiles;
+    }
+
+    public void setUserCustomProfiles(List<String> userCustomProfiles) {
+        this.userCustomProfiles = userCustomProfiles;
     }
 }

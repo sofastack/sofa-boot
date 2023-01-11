@@ -139,7 +139,7 @@ public class SofaRuntimeAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     @ConditionalOnClass(name = "com.alipay.sofa.isle.ApplicationRuntimeModel")
-    @ConditionalOnProperty(value = "sofa.boot.isle.enable", matchIfMissing = true)
+    @ConditionalOnProperty(value = "sofa.boot.isle.enabled", matchIfMissing = true)
     public static SofaShareBeanFactoryPostProcessor sofaModuleBeanFactoryPostProcessor() {
         return new SofaShareBeanFactoryPostProcessor();
     }
@@ -147,7 +147,7 @@ public class SofaRuntimeAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     @ConditionalOnClass(name = "com.alipay.sofa.isle.ApplicationRuntimeModel")
-    @ConditionalOnProperty(value = "sofa.boot.isle.enable", matchIfMissing = true)
+    @ConditionalOnProperty(value = "sofa.boot.isle.enabled", matchIfMissing = true)
     public SofaPostProcessorShareManager sofaModulePostProcessorShareManager() {
         return new SofaPostProcessorShareManager();
     }

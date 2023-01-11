@@ -18,23 +18,25 @@ package com.alipay.sofa.isle.stage;
 
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.error.ErrorCode;
+import com.alipay.sofa.boot.log.SofaLogger;
 import com.alipay.sofa.isle.ApplicationRuntimeModel;
+import com.alipay.sofa.isle.deployment.DependencyTree;
 import com.alipay.sofa.isle.deployment.DeploymentBuilder;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptorConfiguration;
 import com.alipay.sofa.isle.deployment.DeploymentException;
 import com.alipay.sofa.isle.deployment.impl.DefaultModuleDeploymentValidator;
 import com.alipay.sofa.isle.profile.SofaModuleProfileChecker;
-import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
-import com.alipay.sofa.boot.log.SofaLogger;
-import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
-import org.springframework.context.support.AbstractApplicationContext;
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import org.springframework.core.io.UrlResource;
+import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -44,31 +46,27 @@ import java.util.Properties;
  * @version $Id: ModelCreatingStage.java, v 0.1 2012-3-16 14:17:48 fengqi.lin Exp $
  */
 public class ModelCreatingStage extends AbstractPipelineStage {
-    private final boolean                    allowModuleOverriding;
 
-    protected final SofaModuleProfileChecker sofaModuleProfileChecker;
+    public static final String MODEL_CREATING_STAGE_NAME = "ModelCreatingStage";
 
-    public ModelCreatingStage(AbstractApplicationContext applicationContext,
-                              SofaModuleProperties sofaModuleProperties,
-                              SofaModuleProfileChecker sofaModuleProfileChecker) {
-        super(applicationContext);
-        this.allowModuleOverriding = sofaModuleProperties.isAllowModuleOverriding();
-        this.sofaModuleProfileChecker = sofaModuleProfileChecker;
-    }
+    protected SofaRuntimeContext sofaRuntimeContext;
+
+    protected SofaModuleProfileChecker sofaModuleProfileChecker;
+
+    protected boolean                    allowModuleOverriding;
 
     @Override
     protected void doProcess() throws Exception {
         ApplicationRuntimeModel application = new ApplicationRuntimeModel();
-        application.setAppName(appName);
+        application.setAppName(applicationContext.getEnvironment().getProperty(SofaBootConstants.APP_NAME_KEY));
 
-        SofaRuntimeManager sofaRuntimeManager = applicationContext
-            .getBean(SofaRuntimeManager.class);
-        application.setSofaRuntimeContext(sofaRuntimeManager.getSofaRuntimeContext());
+        Assert.notNull(sofaRuntimeContext,"sofaRuntimeContext must not be null");
+        application.setSofaRuntimeContext(sofaRuntimeContext);
 
         application.setModuleDeploymentValidator(new DefaultModuleDeploymentValidator());
         getAllDeployments(application);
-        applicationContext.getBeanFactory().registerSingleton(SofaBootConstants.APPLICATION,
-            application);
+        outputModulesMessage(application);
+        beanFactory.registerSingleton(SofaBootConstants.APPLICATION, application);
     }
 
     protected void getAllDeployments(ApplicationRuntimeModel application) throws IOException,
@@ -113,13 +111,101 @@ public class ModelCreatingStage extends AbstractPipelineStage {
         }
     }
 
+    protected void outputModulesMessage(ApplicationRuntimeModel application)
+            throws DeploymentException {
+        StringBuilder stringBuilder = new StringBuilder();
+        if (application.getAllInactiveDeployments().size() > 0) {
+            writeMessageToStringBuilder(stringBuilder, application.getAllInactiveDeployments(),
+                    "All unactivated module list");
+        }
+        writeMessageToStringBuilder(stringBuilder, application.getAllDeployments(),
+                "All activated module list");
+        writeMessageToStringBuilder(stringBuilder, application.getResolvedDeployments(),
+                "Modules that could install");
+        SofaLogger.info(stringBuilder.toString());
+
+        String errorMessage = getErrorMessageByApplicationModule(application);
+        if (StringUtils.hasText(errorMessage)) {
+            SofaLogger.error(errorMessage);
+        }
+
+        if (application.getDeployRegistry().getPendingEntries().size() > 0) {
+            throw new DeploymentException(errorMessage.trim());
+        }
+    }
+
+    protected String getErrorMessageByApplicationModule(ApplicationRuntimeModel application) {
+        StringBuilder sbError = new StringBuilder(512);
+        if (application.getDeployRegistry().getPendingEntries().size() > 0) {
+            sbError.append("\n").append(ErrorCode.convert("01-12000")).append("(")
+                    .append(application.getDeployRegistry().getPendingEntries().size())
+                    .append(") >>>>>>>>\n");
+
+            for (DependencyTree.Entry<String, DeploymentDescriptor> entry : application
+                    .getDeployRegistry().getPendingEntries()) {
+                if (application.getAllDeployments().contains(entry.get())) {
+                    sbError.append("[").append(entry.getKey()).append("]").append(" depends on ")
+                            .append(entry.getWaitsFor())
+                            .append(", but the latter can not be resolved.").append("\n");
+                }
+            }
+        }
+
+        if (application.getDeployRegistry().getMissingRequirements().size() > 0) {
+            sbError.append("Missing modules").append("(")
+                    .append(application.getDeployRegistry().getMissingRequirements().size())
+                    .append(") >>>>>>>>\n");
+
+            for (DependencyTree.Entry<String, DeploymentDescriptor> entry : application
+                    .getDeployRegistry().getMissingRequirements()) {
+                sbError.append("[").append(entry.getKey()).append("]").append("\n");
+            }
+
+            sbError.append("Please add the corresponding modules.").append("\n");
+        }
+
+        return sbError.toString();
+    }
+
+    protected void writeMessageToStringBuilder(StringBuilder sb,
+                                               List<DeploymentDescriptor> deploys, String info) {
+        int size = deploys.size();
+        sb.append("\n").append(info).append("(").append(size).append(") >>>>>>>\n");
+
+        for (int i = 0; i < size; ++i) {
+            String symbol = i == size - 1 ? "  └─ " : "  ├─ ";
+            sb.append(symbol).append(deploys.get(i).getName()).append("\n");
+        }
+    }
+
+
+    public SofaRuntimeContext getSofaRuntimeContext() {
+        return sofaRuntimeContext;
+    }
+
+    public void setSofaRuntimeContext(SofaRuntimeContext sofaRuntimeContext) {
+        this.sofaRuntimeContext = sofaRuntimeContext;
+    }
+
+    public SofaModuleProfileChecker getSofaModuleProfileChecker() {
+        return sofaModuleProfileChecker;
+    }
+
+    public void setSofaModuleProfileChecker(SofaModuleProfileChecker sofaModuleProfileChecker) {
+        this.sofaModuleProfileChecker = sofaModuleProfileChecker;
+    }
+
     protected boolean isAllowModuleOverriding() {
         return this.allowModuleOverriding;
     }
 
+    public void setAllowModuleOverriding(boolean allowModuleOverriding) {
+        this.allowModuleOverriding = allowModuleOverriding;
+    }
+
     @Override
     public String getName() {
-        return "ModelCreatingStage";
+        return MODEL_CREATING_STAGE_NAME;
     }
 
     @Override

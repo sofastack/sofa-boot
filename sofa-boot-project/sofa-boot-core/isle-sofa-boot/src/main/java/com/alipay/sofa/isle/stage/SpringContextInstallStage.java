@@ -18,33 +18,32 @@ package com.alipay.sofa.isle.stage;
 
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.error.ErrorCode;
-import com.alipay.sofa.boot.util.NamedThreadFactory;
-import com.alipay.sofa.common.thread.SofaThreadPoolExecutor;
+import com.alipay.sofa.boot.log.SofaLogger;
 import com.alipay.sofa.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.isle.deployment.DependencyTree;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
 import com.alipay.sofa.isle.deployment.DeploymentException;
-import com.alipay.sofa.isle.loader.DynamicSpringContextLoader;
 import com.alipay.sofa.isle.loader.SpringContextLoader;
-import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.component.ComponentName;
-import com.alipay.sofa.boot.log.SofaLogger;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.ComponentManager;
 import com.alipay.sofa.runtime.spi.component.Implementation;
 import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
 import com.alipay.sofa.runtime.spring.SpringContextComponent;
 import com.alipay.sofa.runtime.spring.SpringContextImplementation;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.support.AbstractApplicationContext;
-import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -53,27 +52,33 @@ import java.util.stream.Collectors;
  * @author khotyn
  * @version $Id: SpringContextInstallStage.java, v 0.1 2012-3-16 21:17:48 fengqi.lin Exp $
  */
-public class SpringContextInstallStage extends AbstractPipelineStage {
-    private static final String        SYMBOLIC1                       = "  ├─ ";
-    private static final String        SYMBOLIC2                       = "  └─ ";
+public class SpringContextInstallStage extends AbstractPipelineStage implements InitializingBean {
 
-    private static final int           DEFAULT_REFRESH_TASK_QUEUE_SIZE = 1000;
+    public static final String SOFA_MODULE_REFRESH_EXECUTOR_BEAN_NAME = "sofaModuleRefreshExecutor";
 
-    private static final int           CPU_COUNT                       = Runtime.getRuntime()
-                                                                           .availableProcessors();
+    public static final String SPRING_CONTEXT_INSTALL_STAGE_NAME = "SpringContextInstallStage";
 
-    private final SofaModuleProperties sofaModuleProperties;
+    private SpringContextLoader springContextLoader;
 
-    public SpringContextInstallStage(AbstractApplicationContext applicationContext,
-                                     SofaModuleProperties sofaModuleProperties) {
-        super(applicationContext);
-        this.sofaModuleProperties = sofaModuleProperties;
+    private boolean moduleStartUpParallel;
+
+    private boolean ignoreModuleInstallFailure;
+
+    private boolean unregisterComponentWhenModuleInstallFailure;
+
+    private ExecutorService moduleRefreshExecutorService;
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        if (moduleStartUpParallel) {
+            moduleRefreshExecutorService = (ExecutorService) applicationContext.getBean(SOFA_MODULE_REFRESH_EXECUTOR_BEAN_NAME,
+                    Supplier.class).get();
+        }
     }
 
     @Override
     protected void doProcess() throws Exception {
-        ApplicationRuntimeModel application = applicationContext.getBean(
-            SofaBootConstants.APPLICATION, ApplicationRuntimeModel.class);
+        ApplicationRuntimeModel application = applicationContext.getBean(SofaBootConstants.APPLICATION, ApplicationRuntimeModel.class);
 
         try {
             doProcess(application);
@@ -82,30 +87,24 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
             throw new DeploymentException(ErrorCode.convert("01-11000"), t);
         }
 
-        if (!sofaModuleProperties.isIgnoreModuleInstallFailure()) {
+        if (!ignoreModuleInstallFailure) {
             if (!application.getFailed().isEmpty()) {
                 List<String> failedModuleNames = application.getFailed().stream().map(DeploymentDescriptor::getModuleName).collect(Collectors.toList());
                 throw new DeploymentException(ErrorCode.convert("01-11007", failedModuleNames));
             }
         }
-
     }
 
     private void doProcess(ApplicationRuntimeModel application) throws Exception {
-        outputModulesMessage(application);
-        SpringContextLoader springContextLoader = createSpringContextLoader();
         installSpringContext(application, springContextLoader);
 
-        if (sofaModuleProperties.isModuleStartUpParallel()) {
+        if (moduleStartUpParallel && moduleRefreshExecutorService != null) {
             refreshSpringContextParallel(application);
         } else {
             refreshSpringContext(application);
         }
     }
 
-    protected SpringContextLoader createSpringContextLoader() {
-        return new DynamicSpringContextLoader(applicationContext, sofaModuleProperties);
-    }
 
     protected void installSpringContext(ApplicationRuntimeModel application,
                                         SpringContextLoader springContextLoader) {
@@ -128,62 +127,6 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
         }
     }
 
-    protected void outputModulesMessage(ApplicationRuntimeModel application)
-                                                                            throws DeploymentException {
-        StringBuilder stringBuilder = new StringBuilder();
-        if (application.getAllInactiveDeployments().size() > 0) {
-            writeMessageToStringBuilder(stringBuilder, application.getAllInactiveDeployments(),
-                "All unactivated module list");
-        }
-        writeMessageToStringBuilder(stringBuilder, application.getAllDeployments(),
-            "All activated module list");
-        writeMessageToStringBuilder(stringBuilder, application.getResolvedDeployments(),
-            "Modules that could install");
-        SofaLogger.info(stringBuilder.toString());
-
-        String errorMessage = getErrorMessageByApplicationModule(application);
-        if (StringUtils.hasText(errorMessage)) {
-            SofaLogger.error(errorMessage);
-        }
-
-        if (application.getDeployRegistry().getPendingEntries().size() > 0) {
-            throw new DeploymentException(errorMessage.trim());
-        }
-    }
-
-    protected String getErrorMessageByApplicationModule(ApplicationRuntimeModel application) {
-        StringBuilder sbError = new StringBuilder(512);
-        if (application.getDeployRegistry().getPendingEntries().size() > 0) {
-            sbError.append("\n").append(ErrorCode.convert("01-12000")).append("(")
-                .append(application.getDeployRegistry().getPendingEntries().size())
-                .append(") >>>>>>>>\n");
-
-            for (DependencyTree.Entry<String, DeploymentDescriptor> entry : application
-                .getDeployRegistry().getPendingEntries()) {
-                if (application.getAllDeployments().contains(entry.get())) {
-                    sbError.append("[").append(entry.getKey()).append("]").append(" depends on ")
-                        .append(entry.getWaitsFor())
-                        .append(", but the latter can not be resolved.").append("\n");
-                }
-            }
-        }
-
-        if (application.getDeployRegistry().getMissingRequirements().size() > 0) {
-            sbError.append("Missing modules").append("(")
-                .append(application.getDeployRegistry().getMissingRequirements().size())
-                .append(") >>>>>>>>\n");
-
-            for (DependencyTree.Entry<String, DeploymentDescriptor> entry : application
-                .getDeployRegistry().getMissingRequirements()) {
-                sbError.append("[").append(entry.getKey()).append("]").append("\n");
-            }
-
-            sbError.append("Please add the corresponding modules.").append("\n");
-        }
-
-        return sbError.toString();
-    }
-
     /**
      * start sofa module serial
      * @param application
@@ -197,7 +140,7 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
                     doRefreshSpringContext(deployment, application);
                 }
 
-                if (!sofaModuleProperties.isIgnoreModuleInstallFailure()) {
+                if (!ignoreModuleInstallFailure) {
                     if (!application.getFailed().isEmpty()) {
                         break;
                     }
@@ -216,14 +159,6 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
     private void refreshSpringContextParallel(ApplicationRuntimeModel application) {
         ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
         List<DeploymentDescriptor> coreRoots = new ArrayList<>();
-        int coreSize = (int) (CPU_COUNT * sofaModuleProperties.getParallelRefreshCoreCountFactor());
-        long taskTimeout = sofaModuleProperties.getParallelRefreshTimeout();
-        long period = sofaModuleProperties.getParallelRefreshCheckPeriod();
-        ThreadPoolExecutor executor = new SofaThreadPoolExecutor(coreSize, coreSize, 60,
-            TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(DEFAULT_REFRESH_TASK_QUEUE_SIZE),
-            new NamedThreadFactory("sofa-module-start"), new ThreadPoolExecutor.CallerRunsPolicy(),
-            "sofa-module-start", SofaBootConstants.SOFABOOT_SPACE_NAME, taskTimeout, period,
-            TimeUnit.SECONDS);
         try {
             for (DeploymentDescriptor deployment : application.getResolvedDeployments()) {
                 DependencyTree.Entry entry = application.getDeployRegistry().getEntry(
@@ -233,18 +168,18 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
                 }
             }
             refreshSpringContextParallel(coreRoots, application.getResolvedDeployments().size(),
-                application, executor);
+                application);
 
         } finally {
-            executor.shutdown();
+            moduleRefreshExecutorService.shutdown();
+            moduleRefreshExecutorService = null;
             Thread.currentThread().setContextClassLoader(oldClassLoader);
         }
     }
 
     private void refreshSpringContextParallel(List<DeploymentDescriptor> rootDeployments,
                                               int totalSize,
-                                              final ApplicationRuntimeModel application,
-                                              final ThreadPoolExecutor executor) {
+                                              final ApplicationRuntimeModel application) {
         if (rootDeployments == null || rootDeployments.size() == 0) {
             return;
         }
@@ -253,7 +188,7 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
         List<Future> futures = new CopyOnWriteArrayList<>();
 
         for (final DeploymentDescriptor deployment : rootDeployments) {
-            refreshSpringContextParallel(deployment, application, executor, latch, futures);
+            refreshSpringContextParallel(deployment, application, latch, futures);
         }
 
         try {
@@ -274,40 +209,36 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
 
     private void refreshSpringContextParallel(final DeploymentDescriptor deployment,
                                               final ApplicationRuntimeModel application,
-                                              final ThreadPoolExecutor executor,
                                               final CountDownLatch latch, final List<Future> futures) {
-        futures.add(executor.submit(new Runnable() {
-            @Override
-            public void run() {
-                String oldName = Thread.currentThread().getName();
-                try {
-                    Thread.currentThread().setName(
-                        "sofa-module-start-" + deployment.getModuleName());
-                    Thread.currentThread().setContextClassLoader(deployment.getClassLoader());
-                    if (deployment.isSpringPowered()
-                        && !application.getFailed().contains(deployment)) {
-                        doRefreshSpringContext(deployment, application);
-                    }
-                    DependencyTree.Entry<String, DeploymentDescriptor> entry = application
-                        .getDeployRegistry().getEntry(deployment.getModuleName());
-                    if (entry != null && entry.getDependsOnMe() != null) {
-                        for (final DependencyTree.Entry<String, DeploymentDescriptor> child : entry
-                            .getDependsOnMe()) {
-                            child.getDependencies().remove(entry);
-                            if (child.getDependencies().size() == 0) {
-                                refreshSpringContextParallel(child.get(), application, executor,
-                                    latch, futures);
-                            }
+        futures.add(moduleRefreshExecutorService.submit(() -> {
+            String oldName = Thread.currentThread().getName();
+            try {
+                Thread.currentThread().setName(
+                    "sofa-module-start-" + deployment.getModuleName());
+                Thread.currentThread().setContextClassLoader(deployment.getClassLoader());
+                if (deployment.isSpringPowered()
+                    && !application.getFailed().contains(deployment)) {
+                    doRefreshSpringContext(deployment, application);
+                }
+                DependencyTree.Entry<String, DeploymentDescriptor> entry = application
+                    .getDeployRegistry().getEntry(deployment.getModuleName());
+                if (entry != null && entry.getDependsOnMe() != null) {
+                    for (final DependencyTree.Entry<String, DeploymentDescriptor> child : entry
+                        .getDependsOnMe()) {
+                        child.getDependencies().remove(entry);
+                        if (child.getDependencies().size() == 0) {
+                            refreshSpringContextParallel(child.get(), application,
+                                latch, futures);
                         }
                     }
-                } catch (Throwable t) {
-                    SofaLogger.error(ErrorCode.convert("01-11002", deployment.getName()), t);
-                    throw new RuntimeException(ErrorCode.convert("01-11002", deployment.getName()),
-                        t);
-                } finally {
-                    latch.countDown();
-                    Thread.currentThread().setName(oldName);
                 }
+            } catch (Throwable t) {
+                SofaLogger.error(ErrorCode.convert("01-11002", deployment.getName()), t);
+                throw new RuntimeException(ErrorCode.convert("01-11002", deployment.getName()),
+                    t);
+            } finally {
+                latch.countDown();
+                Thread.currentThread().setName(oldName);
             }
         }));
     }
@@ -340,7 +271,7 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
 
     private void unRegisterComponent(ApplicationRuntimeModel application,
                                      ConfigurableApplicationContext ctx) {
-        if (sofaModuleProperties.isUnregisterComponentWhenModuleInstallFailure()) {
+        if (unregisterComponentWhenModuleInstallFailure) {
             ComponentManager componentManager = application.getSofaRuntimeContext()
                 .getComponentManager();
             Collection<ComponentInfo> componentInfos = componentManager
@@ -366,20 +297,49 @@ public class SpringContextInstallStage extends AbstractPipelineStage {
         application.getSofaRuntimeContext().getComponentManager().register(componentInfo);
     }
 
-    protected void writeMessageToStringBuilder(StringBuilder sb,
-                                               List<DeploymentDescriptor> deploys, String info) {
-        int size = deploys.size();
-        sb.append("\n").append(info).append("(").append(size).append(") >>>>>>>\n");
+    public SpringContextLoader getSpringContextLoader() {
+        return springContextLoader;
+    }
 
-        for (int i = 0; i < size; ++i) {
-            String symbol = i == size - 1 ? SYMBOLIC2 : SYMBOLIC1;
-            sb.append(symbol).append(deploys.get(i).getName()).append("\n");
-        }
+    public void setSpringContextLoader(SpringContextLoader springContextLoader) {
+        this.springContextLoader = springContextLoader;
+    }
+
+    public boolean isIgnoreModuleInstallFailure() {
+        return ignoreModuleInstallFailure;
+    }
+
+    public void setIgnoreModuleInstallFailure(boolean ignoreModuleInstallFailure) {
+        this.ignoreModuleInstallFailure = ignoreModuleInstallFailure;
+    }
+
+    public boolean isModuleStartUpParallel() {
+        return moduleStartUpParallel;
+    }
+
+    public void setModuleStartUpParallel(boolean moduleStartUpParallel) {
+        this.moduleStartUpParallel = moduleStartUpParallel;
+    }
+
+    public boolean isUnregisterComponentWhenModuleInstallFailure() {
+        return unregisterComponentWhenModuleInstallFailure;
+    }
+
+    public void setUnregisterComponentWhenModuleInstallFailure(boolean unregisterComponentWhenModuleInstallFailure) {
+        this.unregisterComponentWhenModuleInstallFailure = unregisterComponentWhenModuleInstallFailure;
+    }
+
+    public ExecutorService getModuleRefreshExecutorService() {
+        return moduleRefreshExecutorService;
+    }
+
+    public void setModuleRefreshExecutorService(ExecutorService moduleRefreshExecutorService) {
+        this.moduleRefreshExecutorService = moduleRefreshExecutorService;
     }
 
     @Override
     public String getName() {
-        return "SpringContextInstallStage";
+        return SPRING_CONTEXT_INSTALL_STAGE_NAME;
     }
 
     @Override

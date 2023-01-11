@@ -16,34 +16,46 @@
  */
 package com.alipay.sofa.isle.stage;
 
-import org.springframework.context.support.AbstractApplicationContext;
-
-import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.log.SofaLogger;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.util.Assert;
 
 /**
  * {@link AbstractPipelineStage} is a common base class for {@link PipelineStage} implementations.
  *
  * @author xuanbei 18/3/1
  */
-public abstract class AbstractPipelineStage implements PipelineStage {
-    protected final ClassLoader                appClassLoader = Thread.currentThread()
-                                                                  .getContextClassLoader();
-    protected final AbstractApplicationContext applicationContext;
-    protected final String                     appName;
-
-    public AbstractPipelineStage(AbstractApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
-        appName = applicationContext.getEnvironment().getProperty(SofaBootConstants.APP_NAME_KEY);
-    }
+public abstract class AbstractPipelineStage implements PipelineStage, ApplicationContextAware, BeanFactoryAware {
+    protected final ClassLoader  appClassLoader = Thread.currentThread().getContextClassLoader();
+    protected ConfigurableApplicationContext applicationContext;
+    protected ConfigurableListableBeanFactory beanFactory;
 
     @Override
     public void process() throws Exception {
-        SofaLogger.info("++++++++++++++++++ {} of {} Start +++++++++++++++++", this.getClass()
-            .getSimpleName(), appName);
+        SofaLogger.info("------------------ {} Start ------------------", this.getClass().getSimpleName());
         doProcess();
-        SofaLogger.info("++++++++++++++++++ {} of {} End +++++++++++++++++", this.getClass()
-            .getSimpleName(), appName);
+        SofaLogger.info("------------------ {} End ------------------", this.getClass().getSimpleName());
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        Assert.isTrue(applicationContext instanceof ConfigurableApplicationContext,
+                "applicationContext must implement ConfigurableApplicationContext");
+        this.applicationContext = (ConfigurableApplicationContext) applicationContext;
+    }
+
+    @Override
+    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+        Assert.isTrue(beanFactory instanceof ConfigurableListableBeanFactory,
+                "beanFactory must implement ConfigurableListableBeanFactory");
+        this.beanFactory = (ConfigurableListableBeanFactory) beanFactory;
     }
 
     /**

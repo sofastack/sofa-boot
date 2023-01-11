@@ -14,22 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.isle.spring.config;
+package com.alipay.sofa.boot.autoconfigure.isle;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import static com.alipay.sofa.isle.spring.config.SofaModuleProperties.PREFIX;
+import java.util.List;
 
 /**
  * Properties
  *
  * @author xuanbei 18/5/6
  */
-@ConfigurationProperties(prefix = PREFIX)
+@ConfigurationProperties("sofa.boot.isle")
 public class SofaModuleProperties {
-    static final String PREFIX                                      = "com.alipay.sofa.boot";
 
-    private String      activeProfiles;
+    private List<String> activeProfiles;
     private long        beanLoadCost                                = 100;
     private boolean     allowBeanDefinitionOverriding               = false;
     private boolean     moduleStartUpParallel                       = true;
@@ -42,11 +41,11 @@ public class SofaModuleProperties {
     private long        parallelRefreshTimeout                      = 60;
     private long        parallelRefreshCheckPeriod                  = 30;
 
-    public String getActiveProfiles() {
+    public List<String> getActiveProfiles() {
         return activeProfiles;
     }
 
-    public void setActiveProfiles(String activeProfiles) {
+    public void setActiveProfiles(List<String> activeProfiles) {
         this.activeProfiles = activeProfiles;
     }
 

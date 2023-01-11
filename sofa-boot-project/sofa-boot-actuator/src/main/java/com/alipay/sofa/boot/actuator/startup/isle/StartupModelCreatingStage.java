@@ -18,10 +18,8 @@ package com.alipay.sofa.boot.actuator.startup.isle;
 
 import com.alipay.sofa.boot.actuator.startup.StartupReporter;
 import com.alipay.sofa.boot.startup.BaseStat;
-import com.alipay.sofa.isle.profile.SofaModuleProfileChecker;
 import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
 import com.alipay.sofa.isle.stage.ModelCreatingStage;
-import org.springframework.context.support.AbstractApplicationContext;
 
 import static com.alipay.sofa.boot.startup.BootStageConstants.ISLE_MODEL_CREATING_STAGE;
 
@@ -32,15 +30,8 @@ import static com.alipay.sofa.boot.startup.BootStageConstants.ISLE_MODEL_CREATIN
  * @version StartupModelCreatingStage.java, v 0.1 2020年12月31日 4:34 下午 huzijie Exp $
  */
 public class StartupModelCreatingStage extends ModelCreatingStage {
-    private final StartupReporter startupReporter;
 
-    public StartupModelCreatingStage(AbstractApplicationContext applicationContext,
-                                     SofaModuleProperties sofaModuleProperties,
-                                     SofaModuleProfileChecker sofaModuleProfileChecker,
-                                     StartupReporter startupReporter) {
-        super(applicationContext, sofaModuleProperties, sofaModuleProfileChecker);
-        this.startupReporter = startupReporter;
-    }
+    private StartupReporter startupReporter;
 
     @Override
     protected void doProcess() throws Exception {
@@ -53,5 +44,13 @@ public class StartupModelCreatingStage extends ModelCreatingStage {
             stat.setEndTime(System.currentTimeMillis());
             startupReporter.addCommonStartupStat(stat);
         }
+    }
+
+    public StartupReporter getStartupReporter() {
+        return startupReporter;
+    }
+
+    public void setStartupReporter(StartupReporter startupReporter) {
+        this.startupReporter = startupReporter;
     }
 }

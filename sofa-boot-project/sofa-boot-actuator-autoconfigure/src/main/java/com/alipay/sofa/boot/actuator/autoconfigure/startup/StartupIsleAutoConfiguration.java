@@ -23,9 +23,10 @@ import com.alipay.sofa.boot.actuator.startup.isle.StartupSpringContextInstallSta
 import com.alipay.sofa.boot.autoconfigure.isle.SofaModuleAutoConfiguration;
 import com.alipay.sofa.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.isle.profile.SofaModuleProfileChecker;
-import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
+import com.alipay.sofa.boot.autoconfigure.isle.SofaModuleProperties;
 import com.alipay.sofa.isle.stage.ModelCreatingStage;
 import com.alipay.sofa.isle.stage.SpringContextInstallStage;
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -44,8 +45,8 @@ import org.springframework.context.support.AbstractApplicationContext;
  * @version StartupIsleAutoConfiguration.java, v 0.1 2023年01月04日 2:40 PM huzijie Exp $
  */
 @AutoConfiguration(before = SofaModuleAutoConfiguration.class)
-@ConditionalOnClass({ ApplicationRuntimeModel.class })
-@ConditionalOnProperty(value = "sofa.boot.isle.enable", matchIfMissing = true)
+@ConditionalOnClass({ ApplicationRuntimeModel.class, SofaRuntimeContext.class })
+@ConditionalOnProperty(value = "sofa.boot.isle.enabled", matchIfMissing = true)
 @ConditionalOnAvailableEndpoint(endpoint = StartupEndPoint.class)
 public class StartupIsleAutoConfiguration {
 
@@ -60,11 +61,15 @@ public class StartupIsleAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(value = ModelCreatingStage.class, search = SearchStrategy.CURRENT)
-    public StartupModelCreatingStage startupModelCreatingStage(ApplicationContext applicationContext,
-                                                               SofaModuleProperties sofaModuleProperties,
+    public StartupModelCreatingStage startupModelCreatingStage(SofaModuleProperties sofaModuleProperties,
+                                                               SofaRuntimeContext sofaRuntimeContext,
                                                                SofaModuleProfileChecker sofaModuleProfileChecker,
                                                                StartupReporter startupReporter) {
-        return new StartupModelCreatingStage((AbstractApplicationContext) applicationContext,
-            sofaModuleProperties, sofaModuleProfileChecker, startupReporter);
+        StartupModelCreatingStage startupModelCreatingStage = new StartupModelCreatingStage();
+        startupModelCreatingStage.setStartupReporter(startupReporter);
+        startupModelCreatingStage.setSofaRuntimeContext(sofaRuntimeContext);
+        startupModelCreatingStage.setSofaModuleProfileChecker(sofaModuleProfileChecker);
+        startupModelCreatingStage.setAllowModuleOverriding(sofaModuleProperties.isAllowModuleOverriding());
+        return startupModelCreatingStage;
     }
 }

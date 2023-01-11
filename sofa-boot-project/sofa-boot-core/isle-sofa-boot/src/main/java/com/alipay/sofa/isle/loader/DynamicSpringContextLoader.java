@@ -17,13 +17,12 @@
 package com.alipay.sofa.isle.loader;
 
 import com.alipay.sofa.boot.constant.SofaBootConstants;
+import com.alipay.sofa.boot.log.SofaLogger;
 import com.alipay.sofa.boot.startup.BeanStatExtension;
 import com.alipay.sofa.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
-import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
 import com.alipay.sofa.runtime.context.SofaApplicationContext;
 import com.alipay.sofa.runtime.factory.BeanLoadCostBeanFactory;
-import com.alipay.sofa.boot.log.SofaLogger;
 import com.alipay.sofa.runtime.spring.singleton.SingletonSofaPostProcessor;
 import com.alipay.sofa.runtime.util.SofaSpringContextUtil;
 import org.springframework.beans.CachedIntrospectionResults;
@@ -36,8 +35,11 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.io.Resource;
+import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -45,13 +47,20 @@ import java.util.Map;
  * @author linfengqi  2011-7-26
  */
 public class DynamicSpringContextLoader implements SpringContextLoader {
-    protected final ConfigurableApplicationContext rootApplicationContext;
-    private final SofaModuleProperties             sofaModuleProperties;
 
-    public DynamicSpringContextLoader(ApplicationContext applicationContext,
-                                      SofaModuleProperties sofaModuleProperties) {
-        this.rootApplicationContext = (ConfigurableApplicationContext) applicationContext;
-        this.sofaModuleProperties = sofaModuleProperties;
+    protected final ConfigurableApplicationContext rootApplicationContext;
+
+    private long beanFactoryLoadCostThreshold;
+
+    private boolean allowBeanOverriding;
+
+    private List<String> activeProfiles = new ArrayList<>();
+
+    private boolean publishEventToParent;
+
+    public DynamicSpringContextLoader(ApplicationContext rootApplicationContext) {
+        Assert.isInstanceOf(ConfigurableApplicationContext.class, "rootApplicationContext must be ConfigurableApplicationContext");
+        this.rootApplicationContext = (ConfigurableApplicationContext) rootApplicationContext;
     }
 
     @Override
@@ -63,19 +72,17 @@ public class DynamicSpringContextLoader implements SpringContextLoader {
 
         // 创建上下文
         DefaultListableBeanFactory beanFactory = SofaSpringContextUtil.createBeanFactory(moduleClassLoader,
-                () -> createBeanFactory(sofaModuleProperties.getBeanLoadCost(), moduleName));
+                () -> createBeanFactory(beanFactoryLoadCostThreshold, moduleName));
         GenericApplicationContext ctx = SofaSpringContextUtil.createApplicationContext(
-                sofaModuleProperties.isAllowBeanDefinitionOverriding(),
-                moduleName, moduleClassLoader, () -> createApplicationContext(sofaModuleProperties, beanFactory));
+                allowBeanOverriding, moduleName, moduleClassLoader, () -> createApplicationContext(beanFactory));
         XmlBeanDefinitionReader beanDefinitionReader = SofaSpringContextUtil.createBeanDefinitionReader(moduleClassLoader,
                 ctx, () -> createXmlBeanDefinitionReader(ctx));
 
         // 设置 SOFA 模块相关的内容
-        String activeProfiles = sofaModuleProperties.getActiveProfiles();
-        if (StringUtils.hasText(activeProfiles)) {
-            String[] profiles = activeProfiles.split(SofaBootConstants.PROFILE_SEPARATOR);
-            ctx.getEnvironment().setActiveProfiles(profiles);
+        if (!activeProfiles.isEmpty()) {
+            ctx.getEnvironment().setActiveProfiles(StringUtils.toStringArray(activeProfiles));
         }
+
         setUpParentSpringContext(ctx, deployment, application);
         deployment.setApplicationContext(ctx);
 
@@ -94,10 +101,8 @@ public class DynamicSpringContextLoader implements SpringContextLoader {
         return beanDefinitionReader;
     }
 
-    protected GenericApplicationContext createApplicationContext(SofaModuleProperties sofaModuleProperties,
-                                                                 DefaultListableBeanFactory beanFactory) {
-        return sofaModuleProperties.isPublishEventToParent() ? new GenericApplicationContext(
-            beanFactory) : new SofaApplicationContext(beanFactory);
+    protected GenericApplicationContext createApplicationContext(DefaultListableBeanFactory beanFactory) {
+        return publishEventToParent ? new GenericApplicationContext(beanFactory) : new SofaApplicationContext(beanFactory);
     }
 
     protected void loadBeanDefinitions(DeploymentDescriptor deployment,
@@ -172,5 +177,37 @@ public class DynamicSpringContextLoader implements SpringContextLoader {
         } catch (Throwable e) {
             return null;
         }
+    }
+
+    public long getBeanFactoryLoadCostThreshold() {
+        return beanFactoryLoadCostThreshold;
+    }
+
+    public void setBeanFactoryLoadCostThreshold(long beanFactoryLoadCostThreshold) {
+        this.beanFactoryLoadCostThreshold = beanFactoryLoadCostThreshold;
+    }
+
+    public boolean isAllowBeanOverriding() {
+        return allowBeanOverriding;
+    }
+
+    public void setAllowBeanOverriding(boolean allowBeanOverriding) {
+        this.allowBeanOverriding = allowBeanOverriding;
+    }
+
+    public List<String> getActiveProfiles() {
+        return activeProfiles;
+    }
+
+    public void setActiveProfiles(List<String> activeProfiles) {
+        this.activeProfiles = activeProfiles;
+    }
+
+    public boolean isPublishEventToParent() {
+        return publishEventToParent;
+    }
+
+    public void setPublishEventToParent(boolean publishEventToParent) {
+        this.publishEventToParent = publishEventToParent;
     }
 }
