@@ -16,15 +16,15 @@
  */
 package com.alipay.sofa.boot.autoconfigure.tracer.resttemplate;
 
-import com.alipay.sofa.boot.tracer.resttemplate.RestTemplateEnhance;
 import com.alipay.sofa.boot.tracer.resttemplate.RestTemplateBeanPostProcessor;
+import com.alipay.sofa.boot.tracer.resttemplate.RestTemplateEnhance;
 import com.sofa.alipay.tracer.plugins.rest.RestTemplateTracer;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * {@link EnableAutoConfiguration Auto-configuration} for resttemplate.
@@ -33,9 +33,8 @@ import org.springframework.context.annotation.Bean;
  * @author huzijie
  **/
 @AutoConfiguration
-@ConditionalOnWebApplication
-@ConditionalOnProperty(name = "sofa.boot.tracer.resttemplate.enable", havingValue = "true", matchIfMissing = true)
-@ConditionalOnClass({ RestTemplateTracer.class, RestTemplateEnhance.class })
+@ConditionalOnProperty(name = "sofa.boot.tracer.resttemplate.enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnClass({ RestTemplateTracer.class, RestTemplateEnhance.class, RestTemplate.class })
 public class RestTemplateAutoConfiguration {
 
     @Bean
@@ -44,7 +43,7 @@ public class RestTemplateAutoConfiguration {
     }
 
     @Bean
-    public RestTemplateBeanPostProcessor sofaTracerRestTemplateBeanPostProcessor(RestTemplateEnhance sofaTracerRestTemplateEnhance) {
+    public static RestTemplateBeanPostProcessor sofaTracerRestTemplateBeanPostProcessor(RestTemplateEnhance sofaTracerRestTemplateEnhance) {
         return new RestTemplateBeanPostProcessor(sofaTracerRestTemplateEnhance);
     }
 }

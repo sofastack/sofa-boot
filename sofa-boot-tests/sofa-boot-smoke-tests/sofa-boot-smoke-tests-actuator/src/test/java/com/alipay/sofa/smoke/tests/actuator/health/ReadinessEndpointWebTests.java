@@ -17,7 +17,7 @@
 package com.alipay.sofa.smoke.tests.actuator.health;
 
 import com.alipay.sofa.boot.actuator.health.ReadinessEndpoint;
-import com.alipay.sofa.smoke.tests.actuator.ActuatorSOFABootApplication;
+import com.alipay.sofa.smoke.tests.actuator.ActuatorSofaBootApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -35,7 +35,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author huzijie
  * @version ReadinessEndpointTest.java, v 0.1 2022年04月28日 11:11 AM huzijie Exp $
  */
-@SpringBootTest(classes = ActuatorSOFABootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = { "management.endpoints.web.exposure.include=readiness" })
+@SpringBootTest(classes = ActuatorSofaBootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = { "management.endpoints.web.exposure.include=readiness" })
 public class ReadinessEndpointWebTests {
 
     @Autowired

@@ -17,7 +17,7 @@
 package com.alipay.sofa.smoke.tests.actuator.components;
 
 import com.alipay.sofa.boot.actuator.components.ComponentsEndPoint;
-import com.alipay.sofa.smoke.tests.actuator.ActuatorSOFABootApplication;
+import com.alipay.sofa.smoke.tests.actuator.ActuatorSofaBootApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,7 +33,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author huzijie
  * @version ComponentsEndpointWebTests.java, v 0.1 2022年03月17日 4:46 PM huzijie Exp $
  */
-@SpringBootTest(classes = ActuatorSOFABootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = { "management.endpoints.web.exposure.include=components" })
+@SpringBootTest(classes = ActuatorSofaBootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = { "management.endpoints.web.exposure.include=components" })
 public class ComponentsEndpointWebTests {
 
     @Autowired

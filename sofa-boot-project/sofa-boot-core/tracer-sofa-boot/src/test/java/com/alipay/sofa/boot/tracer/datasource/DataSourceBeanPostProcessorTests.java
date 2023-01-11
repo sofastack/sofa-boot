@@ -1,3 +1,19 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.alipay.sofa.boot.tracer.datasource;
 
 import com.alibaba.druid.pool.DruidDataSource;
@@ -17,7 +33,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class DataSourceBeanPostProcessorTests {
 
-    private final String testUrl   = "jdbc:oracle:thin:@localhost:1521:orcl";
+    private final String                      testUrl                     = "jdbc:oracle:thin:@localhost:1521:orcl";
 
     private final DataSourceBeanPostProcessor dataSourceBeanPostProcessor = new DataSourceBeanPostProcessor();
 
@@ -29,7 +45,7 @@ public class DataSourceBeanPostProcessorTests {
     public void skipNotSupportedDataSource() {
         EmptyDataSource emptyDataSource = new EmptyDataSource();
         Object bean = dataSourceBeanPostProcessor.postProcessAfterInitialization(emptyDataSource,
-                DataSourceBeanFactoryPostProcessor.SOFA_TRACER_DATASOURCE + "_emptyDataSource");
+            DataSourceBeanFactoryPostProcessor.SOFA_TRACER_DATASOURCE + "_emptyDataSource");
         assertThat(bean).isEqualTo(emptyDataSource);
         assertThat(bean).isNotInstanceOf(SmartDataSource.class);
     }
@@ -38,7 +54,7 @@ public class DataSourceBeanPostProcessorTests {
     public void skipTransformedDataSource() {
         EmptyDataSource emptyDataSource = new EmptyDataSource();
         Object bean = dataSourceBeanPostProcessor.postProcessAfterInitialization(emptyDataSource,
-                DataSourceBeanFactoryPostProcessor.SOFA_TRACER_DATASOURCE + "_emptyDataSource");
+            DataSourceBeanFactoryPostProcessor.SOFA_TRACER_DATASOURCE + "_emptyDataSource");
         assertThat(bean).isEqualTo(emptyDataSource);
         assertThat(bean).isNotInstanceOf(SmartDataSource.class);
     }
@@ -47,7 +63,7 @@ public class DataSourceBeanPostProcessorTests {
     public void skipSmartDataSource() {
         SmartDataSource smartDataSource = new SmartDataSource(new EmptyDataSource());
         Object bean = dataSourceBeanPostProcessor.postProcessAfterInitialization(smartDataSource,
-                "normalBean");
+            "normalBean");
         assertThat(bean).isEqualTo(smartDataSource);
     }
 
@@ -55,7 +71,7 @@ public class DataSourceBeanPostProcessorTests {
     public void skipNoDataSource() {
         Object noDataSource = new Object();
         Object bean = dataSourceBeanPostProcessor.postProcessAfterInitialization(noDataSource,
-                "normalBean");
+            "normalBean");
         assertThat(bean).isEqualTo(noDataSource);
         assertThat(bean).isNotInstanceOf(SmartDataSource.class);
     }
@@ -65,7 +81,7 @@ public class DataSourceBeanPostProcessorTests {
         DruidDataSource dataSource = new DruidDataSource();
         dataSource.setUrl(testUrl);
         Object bean = dataSourceBeanPostProcessor.postProcessAfterInitialization(dataSource,
-                "normalBean");
+            "normalBean");
         assertThat(bean).isNotNull();
         assertThat(bean).isNotEqualTo(dataSource);
         assertThat(bean).isInstanceOf(SmartDataSource.class);
@@ -77,7 +93,7 @@ public class DataSourceBeanPostProcessorTests {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setUrl(testUrl);
         Object bean = dataSourceBeanPostProcessor.postProcessAfterInitialization(dataSource,
-                "normalBean");
+            "normalBean");
         assertThat(bean).isNotNull();
         assertThat(bean).isNotEqualTo(dataSource);
         assertThat(bean).isInstanceOf(SmartDataSource.class);
@@ -89,7 +105,7 @@ public class DataSourceBeanPostProcessorTests {
         org.apache.tomcat.jdbc.pool.DataSource dataSource = new org.apache.tomcat.jdbc.pool.DataSource();
         dataSource.setUrl(testUrl);
         Object bean = dataSourceBeanPostProcessor.postProcessAfterInitialization(dataSource,
-                "normalBean");
+            "normalBean");
         assertThat(bean).isNotNull();
         assertThat(bean).isNotEqualTo(dataSource);
         assertThat(bean).isInstanceOf(SmartDataSource.class);
@@ -101,7 +117,7 @@ public class DataSourceBeanPostProcessorTests {
         ComboPooledDataSource dataSource = new ComboPooledDataSource();
         dataSource.setJdbcUrl(testUrl);
         Object bean = dataSourceBeanPostProcessor.postProcessAfterInitialization(dataSource,
-                "normalBean");
+            "normalBean");
         assertThat(bean).isNotNull();
         assertThat(bean).isNotEqualTo(dataSource);
         assertThat(bean).isInstanceOf(SmartDataSource.class);
@@ -113,7 +129,7 @@ public class DataSourceBeanPostProcessorTests {
         HikariDataSource dataSource = new HikariDataSource();
         dataSource.setJdbcUrl(testUrl);
         Object bean = dataSourceBeanPostProcessor.postProcessAfterInitialization(dataSource,
-                "normalBean");
+            "normalBean");
         assertThat(bean).isNotNull();
         assertThat(bean).isNotEqualTo(dataSource);
         assertThat(bean).isInstanceOf(SmartDataSource.class);

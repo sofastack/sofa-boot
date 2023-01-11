@@ -19,7 +19,7 @@ package com.alipay.sofa.smoke.tests.actuator.startup;
 import com.alipay.sofa.boot.actuator.startup.StartupReporter;
 import com.alipay.sofa.boot.startup.BaseStat;
 import com.alipay.sofa.boot.startup.BootStageConstants;
-import com.alipay.sofa.smoke.tests.actuator.ActuatorSOFABootApplication;
+import com.alipay.sofa.smoke.tests.actuator.ActuatorSofaBootApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,7 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author huzijie
  * @version HealthStageStartupReporterTests.java, v 0.1 2021年01月04日 8:31 下午 huzijie Exp $
  */
-@SpringBootTest(classes = ActuatorSOFABootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {
+@SpringBootTest(classes = ActuatorSofaBootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {
                                                                                                                                        "management.endpoints.web.exposure.include=startup,readiness",
                                                                                                                                        "spring.autoconfigure.exclude=com.alipay.sofa.boot.actuator.autoconfigure.startup.StartupIsleAutoConfiguration" })
 public class HealthStageStartupReporterTests {

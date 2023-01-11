@@ -1,3 +1,19 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.alipay.sofa.boot.tracer.kafka;
 
 import com.sofa.alipay.tracer.plugins.kafkamq.factories.SofaTracerKafkaProducerFactory;
@@ -21,7 +37,8 @@ public class KafkaProducerBeanFactoryPostProcessorTests {
     @Test
     public void wrapKafkaConsumerFactoryBean() {
         ProducerFactory producerFactory = new EmptyProducerFactory();
-        Object bean = kafkaProducerFactoryBeanPostProcessor.postProcessBeforeInitialization(producerFactory, "producerFactory");
+        Object bean = kafkaProducerFactoryBeanPostProcessor.postProcessBeforeInitialization(
+            producerFactory, "producerFactory");
         assertThat(bean).isNotEqualTo(producerFactory);
         assertThat(bean).isInstanceOf(SofaTracerKafkaProducerFactory.class);
     }
@@ -29,7 +46,8 @@ public class KafkaProducerBeanFactoryPostProcessorTests {
     @Test
     public void skipNotKafkaConsumerFactory() {
         Object object = new Object();
-        Object bean = kafkaProducerFactoryBeanPostProcessor.postProcessBeforeInitialization(object, "producerFactory");
+        Object bean = kafkaProducerFactoryBeanPostProcessor.postProcessBeforeInitialization(object,
+            "producerFactory");
         assertThat(bean).isEqualTo(object);
         assertThat(bean).isNotInstanceOf(SofaTracerKafkaProducerFactory.class);
     }
@@ -37,8 +55,10 @@ public class KafkaProducerBeanFactoryPostProcessorTests {
     @Test
     public void skipTransformedKafkaConsumerFactory() {
         ProducerFactory producerFactory = new EmptyProducerFactory();
-        SofaTracerKafkaProducerFactory sofaTracerKafkaProducerFactory = new SofaTracerKafkaProducerFactory(producerFactory);
-        Object bean = kafkaProducerFactoryBeanPostProcessor.postProcessBeforeInitialization(sofaTracerKafkaProducerFactory, "producerFactory");
+        SofaTracerKafkaProducerFactory sofaTracerKafkaProducerFactory = new SofaTracerKafkaProducerFactory(
+            producerFactory);
+        Object bean = kafkaProducerFactoryBeanPostProcessor.postProcessBeforeInitialization(
+            sofaTracerKafkaProducerFactory, "producerFactory");
         assertThat(bean).isEqualTo(sofaTracerKafkaProducerFactory);
     }
 

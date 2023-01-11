@@ -41,8 +41,10 @@ public class SpringMessageTracerBeanPostProcessor implements BeanPostProcessor, 
     public Object postProcessBeforeInitialization(Object bean, String beanName)
                                                                                throws BeansException {
         if (bean instanceof AbstractMessageChannel) {
-            Assert.isTrue(StringUtils.hasText(appName), TRACER_APPNAME_KEY + " must be configured!");
-            ((AbstractMessageChannel) bean).addInterceptor(SofaTracerChannelInterceptor.create(appName));
+            Assert
+                .isTrue(StringUtils.hasText(appName), TRACER_APPNAME_KEY + " must be configured!");
+            ((AbstractMessageChannel) bean).addInterceptor(SofaTracerChannelInterceptor
+                .create(appName));
         }
         return bean;
     }

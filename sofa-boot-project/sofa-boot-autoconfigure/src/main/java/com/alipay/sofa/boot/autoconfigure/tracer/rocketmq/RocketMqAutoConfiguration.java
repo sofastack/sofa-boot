@@ -38,13 +38,14 @@ import org.springframework.core.env.Environment;
  * @since 3.9.1
  */
 @AutoConfiguration(before = RocketMQAutoConfiguration.class)
-@ConditionalOnClass({ MQProducer.class, RocketMQListenerContainer.class, RocketMqProducerPostProcessor.class })
+@ConditionalOnClass({ MQProducer.class, RocketMQListenerContainer.class,
+                     RocketMqProducerPostProcessor.class })
 @ConditionalOnProperty(name = "sofa.boot.tracer.rocketmq.enabled", havingValue = "enable", matchIfMissing = true)
 public class RocketMqAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public RocketMqProducerPostProcessor sofaTracerRocketMqProducerPostProcessor(Environment environment) {
+    public static RocketMqProducerPostProcessor sofaTracerRocketMqProducerPostProcessor(Environment environment) {
         String appName = environment.getProperty(SofaTracerConfiguration.TRACER_APPNAME_KEY);
         RocketMqProducerPostProcessor rocketMqProducerPostProcessor = new RocketMqProducerPostProcessor();
         rocketMqProducerPostProcessor.setAppName(appName);
@@ -53,7 +54,7 @@ public class RocketMqAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public RocketMqConsumerPostProcessor sofaTracerRocketMqConsumerPostProcessor(Environment environment) {
+    public static RocketMqConsumerPostProcessor sofaTracerRocketMqConsumerPostProcessor(Environment environment) {
         String appName = environment.getProperty(SofaTracerConfiguration.TRACER_APPNAME_KEY);
         RocketMqConsumerPostProcessor rocketMqConsumerPostProcessor = new RocketMqConsumerPostProcessor();
         rocketMqConsumerPostProcessor.setAppName(appName);

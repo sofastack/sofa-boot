@@ -16,11 +16,12 @@
  */
 package com.alipay.sofa.boot.autoconfigure.tracer.springmvc;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.alipay.sofa.tracer.plugins.springmvc.SpringMvcSofaTracerFilter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.core.Ordered;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Configuration properties to configure open tracing springmvc tracer.
@@ -32,13 +33,13 @@ import org.springframework.core.Ordered;
 @ConfigurationProperties("sofa.boot.tracer.springmvc")
 public class OpenTracingSpringMvcProperties {
 
-    /***
-     * com.alipay.sofa.tracer.springmvc.filter-order
+    /**
+     * order for {@link SpringMvcSofaTracerFilter}
      */
     private int          filterOrder = Ordered.HIGHEST_PRECEDENCE + 1;
 
     /**
-     * Comma-separated list of urlPatterns to create : com.alipay.sofa.tracer.springmvc.url-patterns=/**,
+     * Url Pattens for {@link SpringMvcSofaTracerFilter}
      */
     private List<String> urlPatterns = new ArrayList<String>();
 

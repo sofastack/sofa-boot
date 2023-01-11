@@ -19,7 +19,6 @@ package com.alipay.sofa.boot.autoconfigure.tracer.feign;
 import com.alipay.sofa.boot.tracer.feign.FeignContextBeanPostProcessor;
 import com.alipay.sofa.tracer.plugins.springcloud.instruments.feign.SofaTracerFeignContext;
 import feign.Client;
-import org.springframework.beans.factory.BeanFactory;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;

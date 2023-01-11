@@ -17,7 +17,7 @@
 package com.alipay.sofa.smoke.tests.actuator.beans;
 
 import com.alipay.sofa.boot.actuator.beans.IsleBeansEndpoint;
-import com.alipay.sofa.smoke.tests.actuator.ActuatorSOFABootApplication;
+import com.alipay.sofa.smoke.tests.actuator.ActuatorSofaBootApplication;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,7 +36,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author huzijie
  * @version IsleBeanEndpointWebTests.java, v 0.1 2022年03月17日 11:43 AM huzijie Exp $
  */
-@SpringBootTest(classes = ActuatorSOFABootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = { "management.endpoints.web.exposure.include=beans" })
+@SpringBootTest(classes = ActuatorSofaBootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = { "management.endpoints.web.exposure.include=beans" })
 public class IsleBeanEndpointWebTests {
 
     @Autowired

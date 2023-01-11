@@ -18,7 +18,7 @@ package com.alipay.sofa.smoke.tests.actuator.health;
 
 import com.alipay.sofa.boot.actuator.health.ManualReadinessCallbackEndPoint;
 import com.alipay.sofa.boot.actuator.health.ReadinessCheckListener;
-import com.alipay.sofa.smoke.tests.actuator.ActuatorSOFABootApplication;
+import com.alipay.sofa.smoke.tests.actuator.ActuatorSofaBootApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -37,7 +37,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 2020/11/18
  */
-@SpringBootTest(classes = ActuatorSOFABootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {
+@SpringBootTest(classes = ActuatorSofaBootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {
                                                                                                                                        "management.endpoints.web.exposure.include=readiness,triggerReadinessCallback",
                                                                                                                                        "sofa.boot.actuator.health.manualReadinessCallback=true" })
 public class ManualEndPointWebTests {

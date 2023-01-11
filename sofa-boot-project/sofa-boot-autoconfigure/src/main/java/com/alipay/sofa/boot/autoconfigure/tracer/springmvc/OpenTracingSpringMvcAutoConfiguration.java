@@ -52,7 +52,7 @@ public class OpenTracingSpringMvcAutoConfiguration {
     static class SpringMvcDelegatingFilterProxyConfiguration {
 
         @Bean
-        public FilterRegistrationBean<SpringMvcSofaTracerFilter> springMvcDelegatingFilterProxy(OpenTracingSpringMvcProperties openTracingSpringMvcProperties) {
+        public FilterRegistrationBean<SpringMvcSofaTracerFilter> springMvcSofaTracerFilter(OpenTracingSpringMvcProperties openTracingSpringMvcProperties) {
             FilterRegistrationBean<SpringMvcSofaTracerFilter> filterRegistrationBean = new FilterRegistrationBean<>();
             SpringMvcSofaTracerFilter filter = new SpringMvcSofaTracerFilter();
             filterRegistrationBean.setFilter(filter);
@@ -71,8 +71,9 @@ public class OpenTracingSpringMvcAutoConfiguration {
 
     @Configuration(proxyBeanMethods = false)
     @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
-    @ConditionalOnClass({WebFilter.class, WebfluxSofaTracerFilter.class})
+    @ConditionalOnClass({ WebFilter.class, WebfluxSofaTracerFilter.class })
     static class WebfluxSofaTracerFilterConfiguration {
+
         @Bean
         @Order(Ordered.HIGHEST_PRECEDENCE + 10)
         public WebFilter webfluxSofaTracerFilter() {

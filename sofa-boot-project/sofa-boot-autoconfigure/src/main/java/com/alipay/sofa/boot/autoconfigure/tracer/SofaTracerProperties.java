@@ -36,28 +36,29 @@ import static com.alipay.common.tracer.core.configuration.SofaTracerConfiguratio
 @ConfigurationProperties("sofa.boot.tracer")
 public class SofaTracerProperties {
 
-    private String              disableDigestLog                 = "false";
+    private String              disableDigestLog          = "false";
 
-    private Map<String, String> disableConfiguration             = new HashMap<String, String>();
+    private Map<String, String> disableConfiguration      = new HashMap<String, String>();
 
-    private String              tracerGlobalRollingPolicy        = TimedRollingFileAppender.DAILY_ROLLING_PATTERN;
+    private String              tracerGlobalRollingPolicy = TimedRollingFileAppender.DAILY_ROLLING_PATTERN;
 
-    private String              tracerGlobalLogReserveDay        = String
-                                                                     .valueOf(DEFAULT_LOG_RESERVE_DAY);
+    private String              tracerGlobalLogReserveDay = String.valueOf(DEFAULT_LOG_RESERVE_DAY);
 
-    private String              statLogInterval                  = String
-                                                                     .valueOf(SofaTracerStatisticReporterManager.DEFAULT_CYCLE_SECONDS);
+    private String              statLogInterval           = String
+                                                              .valueOf(SofaTracerStatisticReporterManager.DEFAULT_CYCLE_SECONDS);
 
-    private String              baggageMaxLength                 = String
-                                                                     .valueOf(SofaTracerConfiguration.PEN_ATTRS_LENGTH_TRESHOLD);
+    private String              baggageMaxLength          = String
+                                                              .valueOf(SofaTracerConfiguration.PEN_ATTRS_LENGTH_TRESHOLD);
 
     private String              samplerName;
-    private float               samplerPercentage                = 100;
+
+    private float               samplerPercentage         = 100;
+
     private String              samplerCustomRuleClassName;
 
     private String              reporterName;
 
-    private boolean             jsonOutput                       = true;
+    private boolean             jsonOutput                = true;
 
     public String getDisableDigestLog() {
         return disableDigestLog;

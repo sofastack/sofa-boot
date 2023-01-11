@@ -31,7 +31,7 @@ import static com.alipay.common.tracer.core.configuration.SofaTracerConfiguratio
  * @author huzijie
  * @since 3.9.1
  */
-public class SofaTracerCommandListenerCustomizer implements MongoClientSettingsBuilderCustomizer{
+public class SofaTracerCommandListenerCustomizer implements MongoClientSettingsBuilderCustomizer {
 
     private String appName;
 

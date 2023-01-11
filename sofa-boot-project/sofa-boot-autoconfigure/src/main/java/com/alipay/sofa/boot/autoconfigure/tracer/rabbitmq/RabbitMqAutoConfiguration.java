@@ -21,7 +21,6 @@ import com.sofa.alipay.tracer.plugins.rabbitmq.aspect.SofaTracerSendMessageAspec
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -29,7 +28,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 /**
@@ -40,8 +38,9 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
  * @since  3.9.1
  */
 @AutoConfiguration(after = RabbitAutoConfiguration.class)
-@ConditionalOnClass({ Message.class, RabbitTemplate.class, SofaTracerSendMessageAspect.class, RabbitMqBeanPostProcessor.class })
-@ConditionalOnProperty(prefix = "sofa.boot.tracer.rabbitmq", value = "enable", matchIfMissing = true)
+@ConditionalOnClass({ Message.class, RabbitTemplate.class, SofaTracerSendMessageAspect.class,
+                     RabbitMqBeanPostProcessor.class })
+@ConditionalOnProperty(name = "sofa.boot.tracer.rabbitmq.enabled", havingValue = "enable", matchIfMissing = true)
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 public class RabbitMqAutoConfiguration {
 

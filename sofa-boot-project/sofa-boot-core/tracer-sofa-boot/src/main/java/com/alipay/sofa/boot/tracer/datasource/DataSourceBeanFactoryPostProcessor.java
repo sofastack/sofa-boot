@@ -54,7 +54,7 @@ public class DataSourceBeanFactoryPostProcessor implements BeanFactoryPostProces
 
     public static final String SOFA_TRACER_DATASOURCE = "s_t_d_s_";
 
-    private String appName;
+    private String             appName;
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory)
@@ -150,7 +150,6 @@ public class DataSourceBeanFactoryPostProcessor implements BeanFactoryPostProces
     public void setAppName(String appName) {
         this.appName = appName;
     }
-
 
     @Override
     public int getOrder() {

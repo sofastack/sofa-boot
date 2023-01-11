@@ -18,11 +18,6 @@ package com.alipay.sofa.boot.autoconfigure.tracer;
 
 import com.alipay.common.tracer.core.listener.SpanReportListener;
 import com.alipay.common.tracer.core.listener.SpanReportListenerHolder;
-import com.alipay.common.tracer.core.reporter.facade.Reporter;
-import com.alipay.common.tracer.core.samplers.Sampler;
-import com.alipay.common.tracer.core.samplers.SamplerFactory;
-import com.alipay.common.tracer.core.utils.StringUtils;
-import com.alipay.sofa.tracer.plugin.flexible.FlexibleTracer;
 import io.opentracing.Tracer;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -42,7 +37,7 @@ import java.util.List;
  */
 @AutoConfiguration
 @EnableConfigurationProperties(SofaTracerProperties.class)
-@ConditionalOnClass({ SpanReportListenerHolder.class, Tracer.class})
+@ConditionalOnClass({ SpanReportListenerHolder.class, Tracer.class })
 public class SofaTracerAutoConfiguration {
 
     @Bean
@@ -53,17 +48,5 @@ public class SofaTracerAutoConfiguration {
             SpanReportListenerHolder.addSpanReportListeners(spanReportListenerList);
         }
         return null;
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public Tracer sofaTracer(SofaTracerProperties sofaTracerProperties) throws Exception {
-        String reporterName = sofaTracerProperties.getReporterName();
-        if (StringUtils.isNotBlank(reporterName)) {
-            Reporter reporter = (Reporter) Class.forName(reporterName).newInstance();
-            Sampler sampler = SamplerFactory.getSampler();
-            return new FlexibleTracer(sampler, reporter);
-        }
-        return new FlexibleTracer();
     }
 }

@@ -38,13 +38,13 @@ import org.springframework.messaging.support.ChannelInterceptor;
  **/
 @AutoConfiguration
 @ConditionalOnClass({ AbstractMessageChannel.class, ChannelInterceptor.class,
-                     DirectWithAttributesChannel.class })
-@ConditionalOnProperty(name = "sofa.tracer.boot.springmessage.enabled", havingValue = "true", matchIfMissing = true)
+                     DirectWithAttributesChannel.class, SpringMessageTracerBeanPostProcessor.class })
+@ConditionalOnProperty(name = "sofa.boot.tracer.springmessage.enabled", havingValue = "true", matchIfMissing = true)
 public class SpringMessageAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public SpringMessageTracerBeanPostProcessor springMessageTracerBeanPostProcessor(Environment environment) {
+    public static SpringMessageTracerBeanPostProcessor springMessageTracerBeanPostProcessor(Environment environment) {
         String appName = environment.getProperty(SofaTracerConfiguration.TRACER_APPNAME_KEY);
         SpringMessageTracerBeanPostProcessor springMessageTracerBeanPostProcessor = new SpringMessageTracerBeanPostProcessor();
         springMessageTracerBeanPostProcessor.setAppName(appName);
