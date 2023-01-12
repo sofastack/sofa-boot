@@ -19,6 +19,7 @@ package com.alipay.sofa.boot.isle;
 import com.alipay.sofa.boot.isle.deployment.DeployRegistry;
 import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptor;
 import com.alipay.sofa.boot.isle.deployment.ModuleDeploymentValidator;
+import com.alipay.sofa.boot.isle.profile.SofaModuleProfileChecker;
 import org.springframework.context.ApplicationContext;
 import org.springframework.lang.NonNull;
 
@@ -50,15 +51,17 @@ public class ApplicationRuntimeModel implements IsleDeploymentModel {
     private final DeployRegistry                    deployRegistry  = new DeployRegistry();
     /** module deployment validator */
     private ModuleDeploymentValidator               moduleDeploymentValidator;
+    /** module profiles checker */
+    protected SofaModuleProfileChecker              sofaModuleProfileChecker;
     /** resolved deployments */
     private List<DeploymentDescriptor>              resolvedDeployments;
 
-    public void setModuleDeploymentValidator(ModuleDeploymentValidator moduleDeploymentValidator) {
-        this.moduleDeploymentValidator = moduleDeploymentValidator;
-    }
-
     public boolean isModuleDeployment(DeploymentDescriptor deploymentDescriptor) {
         return this.moduleDeploymentValidator.isModuleDeployment(deploymentDescriptor);
+    }
+
+    public boolean acceptModule(DeploymentDescriptor deploymentDescriptor) {
+        return this.sofaModuleProfileChecker.acceptModule(deploymentDescriptor);
     }
 
     public DeploymentDescriptor addDeployment(DeploymentDescriptor dd) {
@@ -117,6 +120,23 @@ public class ApplicationRuntimeModel implements IsleDeploymentModel {
 
     public List<DeploymentDescriptor> getInstalled() {
         return installed;
+    }
+
+    public ModuleDeploymentValidator getModuleDeploymentValidator() {
+        return moduleDeploymentValidator;
+    }
+
+
+    public void setModuleDeploymentValidator(ModuleDeploymentValidator moduleDeploymentValidator) {
+        this.moduleDeploymentValidator = moduleDeploymentValidator;
+    }
+
+    public SofaModuleProfileChecker getSofaModuleProfileChecker() {
+        return sofaModuleProfileChecker;
+    }
+
+    public void setSofaModuleProfileChecker(SofaModuleProfileChecker sofaModuleProfileChecker) {
+        this.sofaModuleProfileChecker = sofaModuleProfileChecker;
     }
 
     @Override

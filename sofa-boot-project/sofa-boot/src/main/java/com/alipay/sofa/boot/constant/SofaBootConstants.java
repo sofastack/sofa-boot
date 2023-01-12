@@ -24,26 +24,21 @@ package com.alipay.sofa.boot.constant;
  */
 public class SofaBootConstants {
 
-    /***
-     * 获取应用名: 备注 @Value("${spring.application.name:@null}")
-     */
-    public static final String  APP_NAME_KEY                                                 = "spring.application.name";
 
+    public static final String  APP_NAME_KEY                                                 = "spring.application.name";
     public static final String  SOFA_DEFAULT_PROPERTY_SOURCE                                 = "sofaConfigurationProperties";
     public static final String  SOFA_BOOTSTRAP                                               = "sofaBootstrap";
     public static final String  SPRING_CLOUD_BOOTSTRAP                                       = "bootstrap";
     public static final String  SOFA_HIGH_PRIORITY_CONFIG                                    = "sofaHighPriorityConfig";
+
+    /** sofa boot space name **/
+    public static String        SOFABOOT_SPACE_NAME                                          = "sofa-boot";
 
     /**
      * {@link org.springframework.boot.ResourceBanner#getVersionsMap}
      */
     public static final String  SOFA_BOOT_VERSION                                            = "sofa-boot.version";
     public static final String  SOFA_BOOT_FORMATTED_VERSION                                  = "sofa-boot.formatted-version";
-
-    /**
-     * resource pattern of properties file which is used to save some information of starters.
-     */
-    public static final String  SOFA_BOOT_VERSION_PROPERTIES                                 = "classpath*:META-INF/sofa.versions.properties";
 
     /**
      * Default {@literal management.endpoints.web.exposure.include} value
@@ -62,7 +57,7 @@ public class SofaBootConstants {
     /**
      * sofa configuration prefix
      */
-    public static final String  PREFIX                                                       = "com.alipay.sofa.boot";
+    public static final String  PREFIX                                                       = "sofa.boot";
 
     /**
      * Thread Pool Core Size to execute async bean initialization
@@ -76,22 +71,10 @@ public class SofaBootConstants {
     public static final String  ASYNC_INIT_BEAN_MAX_SIZE                                     = PREFIX
                                                                                                + ".asyncInitBeanMaxSize";
 
-    /**
-     * share parent context post processor config.
-     */
-    public static final String  SOFABOOT_SHARE_PARENT_CONTEXT_POST_PROCESSOR_ENABLED         = "com.alipay.sofa.boot.share.parent.context.post.processor.enabled";
-
-    /**
-     * share parent context post processor config value.
-     */
-    public static final boolean SOFABOOT_SHARE_PARENT_CONTEXT_POST_PROCESSOR_DEFAULT_ENABLED = true;
-
     /** framework constants **/
-    public final static String        APPLICATION                                                  = "SOFABOOT-APPLICATION";
-    public static String        PROCESSORS_OF_ROOT_APPLICATION_CONTEXT                       = "PROCESSORS_OF_ROOT_APPLICATION_CONTEXT";
+    public final static String  APPLICATION                                                  = "SOFABOOT-APPLICATION";
     public static String        SOFA_MODULE_FILE                                             = "sofa-module.properties";
     public static String        SPRING_CONTEXT_PATH                                          = "META-INF/spring";
-    public static String        PROFILE_SEPARATOR                                            = ",";
     public static String        DEFAULT_PROFILE_VALUE                                        = "default";
 
     /** sofa-module.properties keywords **/
@@ -99,6 +82,4 @@ public class SofaBootConstants {
     public static String        MODULE_NAME                                                  = "Module-Name";
     public static String        REQUIRE_MODULE                                               = "Require-Module";
     public static String        MODULE_PROFILE                                               = "Module-Profile";
-
-    public static String        SOFABOOT_SPACE_NAME                                          = "sofa-boot";
 }

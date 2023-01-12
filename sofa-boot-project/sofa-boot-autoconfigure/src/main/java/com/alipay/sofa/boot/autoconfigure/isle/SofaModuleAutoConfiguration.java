@@ -45,7 +45,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.core.env.Environment;
 
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -79,22 +78,20 @@ public class SofaModuleAutoConfiguration {
 
     @Bean(SofaBootConstants.APPLICATION)
     @ConditionalOnMissingBean
-    public ApplicationRuntimeModel applicationRuntimeModel(Environment environment,
-                                                           ModuleDeploymentValidator moduleDeploymentValidator) {
+    public ApplicationRuntimeModel applicationRuntimeModel(ModuleDeploymentValidator moduleDeploymentValidator,
+                                                           SofaModuleProfileChecker sofaModuleProfileChecker) {
         ApplicationRuntimeModel applicationRuntimeModel = new ApplicationRuntimeModel();
-        applicationRuntimeModel.setAppName(environment.getProperty(SofaBootConstants.APP_NAME_KEY));
         applicationRuntimeModel.setModuleDeploymentValidator(moduleDeploymentValidator);
+        applicationRuntimeModel.setSofaModuleProfileChecker(sofaModuleProfileChecker);
         return  applicationRuntimeModel;
     }
 
     @Bean
     @ConditionalOnMissingBean
     public ModelCreatingStage modelCreatingStage(SofaModuleProperties sofaModuleProperties,
-                                                 SofaModuleProfileChecker sofaModuleProfileChecker,
                                                  ApplicationRuntimeModel applicationRuntimeModel) {
         ModelCreatingStage modelCreatingStage = new ModelCreatingStage();
         modelCreatingStage.setApplicationRuntimeModel(applicationRuntimeModel);
-        modelCreatingStage.setSofaModuleProfileChecker(sofaModuleProfileChecker);
         modelCreatingStage.setAllowModuleOverriding(sofaModuleProperties.isAllowModuleOverriding());
         return modelCreatingStage;
     }

@@ -29,18 +29,24 @@ import java.util.List;
 public class SofaModuleProperties {
 
     private List<String> activeProfiles;
-    private long        beanLoadCost                                = 100;
+
     private boolean     allowBeanDefinitionOverriding               = false;
+
     private boolean     moduleStartUpParallel                       = true;
+
     private boolean     publishEventToParent                        = false;
-    private boolean     enableIsle                                  = true;
+
     private boolean     allowModuleOverriding                       = false;
+
     private boolean     ignoreModuleInstallFailure                  = false;
-    private boolean     unregisterComponentWhenModuleInstallFailure = true;
+
+    private boolean     shareParentPostProcessor                    = true;
+
     private float       parallelRefreshCoreCountFactor              = 5.0f;
+
     private long        parallelRefreshTimeout                      = 60;
+
     private long        parallelRefreshCheckPeriod                  = 30;
-    private boolean     shareParentPostProcessor                   = true;
 
     public List<String> getActiveProfiles() {
         return activeProfiles;
@@ -66,28 +72,12 @@ public class SofaModuleProperties {
         this.moduleStartUpParallel = moduleStartUpParallel;
     }
 
-    public long getBeanLoadCost() {
-        return beanLoadCost;
-    }
-
-    public void setBeanLoadCost(long beanLoadCost) {
-        this.beanLoadCost = beanLoadCost;
-    }
-
     public boolean isPublishEventToParent() {
         return publishEventToParent;
     }
 
     public void setPublishEventToParent(boolean publishEventToParent) {
         this.publishEventToParent = publishEventToParent;
-    }
-
-    public boolean isEnableIsle() {
-        return enableIsle;
-    }
-
-    public void setEnableIsle(boolean enableIsle) {
-        this.enableIsle = enableIsle;
     }
 
     public boolean isAllowModuleOverriding() {
@@ -128,14 +118,6 @@ public class SofaModuleProperties {
 
     public void setParallelRefreshCheckPeriod(long parallelRefreshCheckPeriod) {
         this.parallelRefreshCheckPeriod = parallelRefreshCheckPeriod;
-    }
-
-    public boolean isUnregisterComponentWhenModuleInstallFailure() {
-        return unregisterComponentWhenModuleInstallFailure;
-    }
-
-    public void setUnregisterComponentWhenModuleInstallFailure(boolean unregisterComponentWhenModuleInstallFailure) {
-        this.unregisterComponentWhenModuleInstallFailure = unregisterComponentWhenModuleInstallFailure;
     }
 
     public boolean isShareParentPostProcessor() {

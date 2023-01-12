@@ -18,16 +18,15 @@ package com.alipay.sofa.boot.isle.stage;
 
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.error.ErrorCode;
-import com.alipay.sofa.boot.isle.profile.SofaModuleProfileChecker;
-import com.alipay.sofa.boot.log.SofaLogger;
 import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.boot.isle.deployment.DependencyTree;
 import com.alipay.sofa.boot.isle.deployment.DeploymentBuilder;
 import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptor;
 import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptorConfiguration;
 import com.alipay.sofa.boot.isle.deployment.DeploymentException;
+import com.alipay.sofa.boot.isle.profile.SofaModuleProfileChecker;
+import com.alipay.sofa.boot.log.SofaLogger;
 import org.springframework.core.io.UrlResource;
-import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
@@ -49,8 +48,6 @@ public class ModelCreatingStage extends AbstractPipelineStage {
 
     public static final String MODEL_CREATING_STAGE_NAME = "ModelCreatingStage";
 
-    protected SofaModuleProfileChecker sofaModuleProfileChecker;
-
     protected boolean                   allowModuleOverriding;
 
     @Override
@@ -59,14 +56,7 @@ public class ModelCreatingStage extends AbstractPipelineStage {
         outputModulesMessage();
     }
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        super.afterPropertiesSet();
-        Assert.notNull(sofaModuleProfileChecker,"sofaModuleProfileChecker must not be null");
-    }
-
-    protected void getAllDeployments() throws IOException,
-                                                                         DeploymentException {
+    protected void getAllDeployments() throws IOException, DeploymentException {
         Enumeration<URL> urls = appClassLoader.getResources(SofaBootConstants.SOFA_MODULE_FILE);
         if (urls == null || !urls.hasMoreElements()) {
             return;
@@ -84,7 +74,7 @@ public class ModelCreatingStage extends AbstractPipelineStage {
                 deploymentDescriptorConfiguration, appClassLoader);
 
             if (application.isModuleDeployment(dd)) {
-                if (sofaModuleProfileChecker.acceptModule(dd)) {
+                if (application.acceptModule(dd)) {
                     validateDuplicateModule(application.addDeployment(dd), dd);
                 } else {
                     application.addInactiveDeployment(dd);
@@ -171,14 +161,6 @@ public class ModelCreatingStage extends AbstractPipelineStage {
             String symbol = i == size - 1 ? "  └─ " : "  ├─ ";
             sb.append(symbol).append(deploys.get(i).getName()).append("\n");
         }
-    }
-
-    public SofaModuleProfileChecker getSofaModuleProfileChecker() {
-        return sofaModuleProfileChecker;
-    }
-
-    public void setSofaModuleProfileChecker(SofaModuleProfileChecker sofaModuleProfileChecker) {
-        this.sofaModuleProfileChecker = sofaModuleProfileChecker;
     }
 
     protected boolean isAllowModuleOverriding() {

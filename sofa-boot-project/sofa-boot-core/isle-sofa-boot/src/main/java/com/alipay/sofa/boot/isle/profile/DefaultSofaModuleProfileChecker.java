@@ -87,13 +87,13 @@ public class DefaultSofaModuleProfileChecker implements SofaModuleProfileChecker
     }
 
     private String[] getModuleProfiles(DeploymentDescriptor deploymentDescriptor) {
-        String[] activeModuleProfiles = new String[] { SofaBootConstants.DEFAULT_PROFILE_VALUE };
         String profiles = deploymentDescriptor.getProperty(SofaBootConstants.MODULE_PROFILE);
-        if (profiles == null || profiles.length() == 0) {
-            return activeModuleProfiles;
+        if (StringUtils.hasText(profiles)) {
+            return StringUtils.commaDelimitedListToStringArray(profiles);
+        } else {
+            return new String[] { SofaBootConstants.DEFAULT_PROFILE_VALUE };
         }
-        activeModuleProfiles = profiles.split(SofaBootConstants.PROFILE_SEPARATOR);
-        return activeModuleProfiles;
+
     }
 
     public List<String> getUserCustomProfiles() {

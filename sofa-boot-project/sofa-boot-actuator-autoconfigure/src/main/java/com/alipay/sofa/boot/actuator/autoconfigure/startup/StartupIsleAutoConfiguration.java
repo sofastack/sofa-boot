@@ -52,12 +52,10 @@ public class StartupIsleAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(value = ModelCreatingStage.class, search = SearchStrategy.CURRENT)
     public StartupModelCreatingStage startupModelCreatingStage(SofaModuleProperties sofaModuleProperties,
-                                                               SofaModuleProfileChecker sofaModuleProfileChecker,
                                                                ApplicationRuntimeModel applicationRuntimeModel,
                                                                StartupReporter startupReporter) {
         StartupModelCreatingStage startupModelCreatingStage = new StartupModelCreatingStage(startupReporter);
         startupModelCreatingStage.setApplicationRuntimeModel(applicationRuntimeModel);
-        startupModelCreatingStage.setSofaModuleProfileChecker(sofaModuleProfileChecker);
         startupModelCreatingStage.setAllowModuleOverriding(sofaModuleProperties.isAllowModuleOverriding());
         return startupModelCreatingStage;
     }
