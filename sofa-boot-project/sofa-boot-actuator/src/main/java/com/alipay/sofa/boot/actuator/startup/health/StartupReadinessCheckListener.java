@@ -20,7 +20,7 @@ import com.alipay.sofa.boot.actuator.health.ReadinessCheckCallbackProcessor;
 import com.alipay.sofa.boot.actuator.health.HealthCheckerProcessor;
 import com.alipay.sofa.boot.actuator.health.HealthIndicatorProcessor;
 import com.alipay.sofa.boot.actuator.health.ReadinessCheckListener;
-import com.alipay.sofa.boot.actuator.startup.StartupReporter;
+import com.alipay.sofa.boot.startup.StartupReporter;
 import com.alipay.sofa.boot.startup.BaseStat;
 
 import static com.alipay.sofa.boot.startup.BootStageConstants.HEALTH_CHECK_STAGE;
@@ -32,6 +32,7 @@ import static com.alipay.sofa.boot.startup.BootStageConstants.HEALTH_CHECK_STAGE
  * @version StartupReadinessCheckListener.java, v 0.1 2020年12月31日 4:39 下午 huzijie Exp $
  */
 public class StartupReadinessCheckListener extends ReadinessCheckListener {
+
     private final StartupReporter startupReporter;
 
     public StartupReadinessCheckListener(HealthCheckerProcessor healthCheckerProcessor,

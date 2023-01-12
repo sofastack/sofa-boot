@@ -14,9 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.boot.actuator.startup;
+package com.alipay.sofa.boot.startup;
 
-import com.alipay.sofa.boot.startup.BaseStat;
 import org.springframework.core.env.Environment;
 
 import java.lang.management.ManagementFactory;
@@ -30,6 +29,7 @@ import java.util.List;
  * @since 2020/7/8
  */
 public class StartupReporter {
+
     private final StartupStaticsModel startupStaticsModel = new StartupStaticsModel();
 
     public StartupReporter(Environment environment) {

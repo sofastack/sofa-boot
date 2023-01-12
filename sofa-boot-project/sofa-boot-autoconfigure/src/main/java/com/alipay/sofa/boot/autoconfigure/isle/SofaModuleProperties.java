@@ -40,6 +40,7 @@ public class SofaModuleProperties {
     private float       parallelRefreshCoreCountFactor              = 5.0f;
     private long        parallelRefreshTimeout                      = 60;
     private long        parallelRefreshCheckPeriod                  = 30;
+    private boolean     shareParentPostProcessor                   = true;
 
     public List<String> getActiveProfiles() {
         return activeProfiles;
@@ -135,5 +136,13 @@ public class SofaModuleProperties {
 
     public void setUnregisterComponentWhenModuleInstallFailure(boolean unregisterComponentWhenModuleInstallFailure) {
         this.unregisterComponentWhenModuleInstallFailure = unregisterComponentWhenModuleInstallFailure;
+    }
+
+    public boolean isShareParentPostProcessor() {
+        return shareParentPostProcessor;
+    }
+
+    public void setShareParentPostProcessor(boolean shareParentPostProcessor) {
+        this.shareParentPostProcessor = shareParentPostProcessor;
     }
 }

@@ -23,7 +23,7 @@ import com.alipay.sofa.boot.actuator.health.HealthIndicatorProcessor;
 import com.alipay.sofa.boot.actuator.health.ReadinessCheckCallbackProcessor;
 import com.alipay.sofa.boot.actuator.health.ReadinessCheckListener;
 import com.alipay.sofa.boot.actuator.health.ReadinessEndpoint;
-import com.alipay.sofa.boot.actuator.startup.StartupReporter;
+import com.alipay.sofa.boot.startup.StartupReporter;
 import com.alipay.sofa.boot.actuator.startup.health.StartupReadinessCheckListener;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.boot.autoconfigure.AutoConfiguration;

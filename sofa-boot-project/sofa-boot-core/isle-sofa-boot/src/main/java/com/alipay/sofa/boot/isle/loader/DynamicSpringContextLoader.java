@@ -16,23 +16,20 @@
  */
 package com.alipay.sofa.boot.isle.loader;
 
-import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.context.ContextRefreshPostProcessor;
 import com.alipay.sofa.boot.context.SofaDefaultListableBeanFactory;
 import com.alipay.sofa.boot.context.SofaGenericApplicationContext;
 import com.alipay.sofa.boot.context.SofaSpringContextSupport;
 import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptor;
-import com.alipay.sofa.boot.isle.loader.singleton.SingletonSofaPostProcessor;
+import com.alipay.sofa.boot.isle.loader.processor.SofaPostProcessorShareManager;
 import com.alipay.sofa.boot.log.SofaLogger;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionReader;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
-import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.io.Resource;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -56,6 +53,8 @@ public class DynamicSpringContextLoader implements SpringContextLoader, Initiali
     private List<ContextRefreshPostProcessor> contextRefreshPostProcessors = new ArrayList<>();
 
     private boolean publishEventToParent;
+
+    private SofaPostProcessorShareManager sofaPostProcessorShareManager;
 
     public DynamicSpringContextLoader(ApplicationContext rootApplicationContext) {
         this.rootApplicationContext = (ConfigurableApplicationContext) rootApplicationContext;
@@ -98,6 +97,7 @@ public class DynamicSpringContextLoader implements SpringContextLoader, Initiali
 
         loadBeanDefinitions(deployment, beanDefinitionReader);
         deployment.setApplicationContext(context);
+        addPostProcessors(beanFactory);
     }
 
     protected SofaDefaultListableBeanFactory newInstanceBeanFactory() {
@@ -139,22 +139,8 @@ public class DynamicSpringContextLoader implements SpringContextLoader, Initiali
     }
 
     protected void addPostProcessors(SofaDefaultListableBeanFactory beanFactory) {
-        Map<String, BeanDefinition> processors = (Map<String, BeanDefinition>) rootApplicationContext
-                .getBean(SofaBootConstants.PROCESSORS_OF_ROOT_APPLICATION_CONTEXT);
-        for (Map.Entry<String, BeanDefinition> entry : processors.entrySet()) {
-            if (!beanFactory.containsBeanDefinition(entry.getKey())) {
-                Class<?> type = rootApplicationContext.getType(entry.getKey());
-                if (type != null
-                        && AnnotationUtils.findAnnotation(type, SingletonSofaPostProcessor.class) != null) {
-                    // 复用单例
-                    beanFactory.registerSingleton(entry.getKey(),
-                            rootApplicationContext.getBean(entry.getKey()));
-                } else {
-                    // 注册 BeanDefinition
-                    beanFactory.registerBeanDefinition(entry.getKey(), entry.getValue());
-                }
-            }
-        }
+        sofaPostProcessorShareManager.getRegisterSingletonMap().forEach(beanFactory::registerSingleton);
+        sofaPostProcessorShareManager.getRegisterBeanDefinitionMap().forEach(beanFactory::registerBeanDefinition);
     }
 
     public boolean isAllowBeanOverriding() {
@@ -187,5 +173,13 @@ public class DynamicSpringContextLoader implements SpringContextLoader, Initiali
 
     public void setContextRefreshPostProcessors(List<ContextRefreshPostProcessor> contextRefreshPostProcessors) {
         this.contextRefreshPostProcessors = contextRefreshPostProcessors;
+    }
+
+    public SofaPostProcessorShareManager getSofaPostProcessorShareManager() {
+        return sofaPostProcessorShareManager;
+    }
+
+    public void setSofaPostProcessorShareManager(SofaPostProcessorShareManager sofaPostProcessorShareManager) {
+        this.sofaPostProcessorShareManager = sofaPostProcessorShareManager;
     }
 }

@@ -17,7 +17,7 @@
 package com.alipay.sofa.boot.actuator.autoconfigure.startup;
 
 import com.alipay.sofa.boot.actuator.startup.StartupEndPoint;
-import com.alipay.sofa.boot.actuator.startup.StartupReporter;
+import com.alipay.sofa.boot.startup.StartupReporter;
 import com.alipay.sofa.boot.actuator.startup.isle.StartupModelCreatingStage;
 import com.alipay.sofa.boot.actuator.startup.isle.StartupSpringContextInstallStage;
 import com.alipay.sofa.boot.autoconfigure.isle.SofaModuleAutoConfiguration;
@@ -27,7 +27,6 @@ import com.alipay.sofa.boot.isle.loader.SpringContextLoader;
 import com.alipay.sofa.boot.isle.profile.SofaModuleProfileChecker;
 import com.alipay.sofa.boot.isle.stage.ModelCreatingStage;
 import com.alipay.sofa.boot.isle.stage.SpringContextInstallStage;
-import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -44,7 +43,7 @@ import org.springframework.context.annotation.Bean;
  * @version StartupIsleAutoConfiguration.java, v 0.1 2023年01月04日 2:40 PM huzijie Exp $
  */
 @AutoConfiguration(before = SofaModuleAutoConfiguration.class)
-@ConditionalOnClass({ ApplicationRuntimeModel.class, SofaRuntimeContext.class })
+@ConditionalOnClass({ ApplicationRuntimeModel.class })
 @ConditionalOnProperty(value = "sofa.boot.isle.enabled", matchIfMissing = true)
 @ConditionalOnAvailableEndpoint(endpoint = StartupEndPoint.class)
 public class StartupIsleAutoConfiguration {

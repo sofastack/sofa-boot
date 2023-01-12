@@ -19,6 +19,7 @@ package com.alipay.sofa.boot.actuator.startup;
 import com.alipay.sofa.boot.log.SofaLogger;
 import com.alipay.sofa.boot.startup.ChildrenStat;
 import com.alipay.sofa.boot.startup.ModuleStat;
+import com.alipay.sofa.boot.startup.StartupReporter;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
