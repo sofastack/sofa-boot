@@ -18,6 +18,9 @@ package com.alipay.sofa.boot.actuator.health;
 
 import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
+import com.alipay.sofa.boot.startup.BaseStat;
+import com.alipay.sofa.boot.startup.StartupReporter;
+import com.alipay.sofa.boot.startup.StartupReporterAware;
 import org.slf4j.Logger;
 import org.springframework.beans.BeansException;
 import org.springframework.boot.actuate.health.Health;
@@ -46,11 +49,12 @@ import java.util.stream.Collectors;
  * @author qilong.zql
  */
 public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
-                                   GenericApplicationListener {
+                                   GenericApplicationListener, StartupReporterAware {
 
     private static final Logger                   logger                              = SofaBootLoggerFactory
                                                                                           .getLogger(ReadinessCheckListener.class);
 
+    public static final String                    READINESS_CHECK_STAGE                = "ReadinessCheckStage";
     /**
      * health check not ready result key
      */
@@ -122,7 +126,9 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
      */
     private ReadinessState                        readinessState;
 
-    protected ApplicationContext                  applicationContext;
+    private ApplicationContext                  applicationContext;
+
+    private StartupReporter                     startupReporter;
 
     private boolean                               skipAll                             = false;
 
@@ -145,6 +151,11 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
+    }
+
+    @Override
+    public void setStartupReporter(StartupReporter startupReporter) throws BeansException {
+        this.startupReporter = startupReporter;
     }
 
     @Override
@@ -177,7 +188,12 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
             healthCheckerProcessor.init();
             healthIndicatorProcessor.init();
             readinessCheckCallbackProcessor.init();
+            BaseStat stat = new BaseStat();
+            stat.setName(READINESS_CHECK_STAGE);
+            stat.setStartTime(System.currentTimeMillis());
             readinessHealthCheck();
+            stat.setEndTime(System.currentTimeMillis());
+            startupReporter.addCommonStartupStat(stat);
         }
     }
 

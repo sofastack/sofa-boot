@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.runtime.proxy;
 
-import com.alipay.sofa.runtime.spring.singleton.SingletonSofaPostProcessor;
+import com.alipay.sofa.boot.context.processor.SingletonSofaPostProcessor;
 import org.springframework.aop.framework.ProxyFactoryBean;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactoryUtils;

@@ -14,13 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.boot.actuator.startup;
+package com.alipay.sofa.boot.startup;
 
-import com.alipay.sofa.boot.log.SofaLogger;
-import com.alipay.sofa.boot.startup.ChildrenStat;
-import com.alipay.sofa.boot.startup.ModuleStat;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.SmartLifecycle;
@@ -33,9 +29,14 @@ import static com.alipay.sofa.boot.startup.BootStageConstants.APPLICATION_CONTEX
  * @author Zhijie
  * @since 2020/7/20
  */
-public class StartupContextRefreshedListener implements SmartLifecycle, ApplicationContextAware {
+public class StartupSmartLifecycle implements SmartLifecycle, ApplicationContextAware {
     public static final String ROOT_MODULE_NAME = "ROOT_APPLICATION_CONTEXT";
+    private final StartupReporter startupReporter;
     private ApplicationContext applicationContext;
+
+    public StartupSmartLifecycle(StartupReporter startupReporter) {
+        this.startupReporter = startupReporter;
+    }
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -44,14 +45,6 @@ public class StartupContextRefreshedListener implements SmartLifecycle, Applicat
 
     @Override
     public void start() {
-        StartupReporter startupReporter;
-        try {
-            startupReporter = applicationContext.getBean(StartupReporter.class);
-        } catch (NoSuchBeanDefinitionException e) {
-            // just happen in unit tests
-            SofaLogger.warn("Failed to found bean StartupReporter", e);
-            return;
-        }
         // init ContextRefreshStageStat
         ChildrenStat<ModuleStat> stat = new ChildrenStat<>();
         stat.setName(APPLICATION_CONTEXT_REFRESH_STAGE);

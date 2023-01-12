@@ -24,32 +24,19 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author Zhijie
  * @since 2020/7/13
  */
-@ConfigurationProperties(prefix = "sofa.boot.actuator.startup")
+@ConfigurationProperties(prefix = "sofa.boot.startup")
 public class StartupProperties {
 
     /**
-     * bean 耗时统计阈值，单位 ms
+     * 基本耗时统计阈值，单位 ms
      */
-    private long    beanInitCostThreshold = 100;
+    private long  costThreshold = 100;
 
-    /**
-     * 是否跳过 sofa 包名的 bean
-     */
-    private boolean skipSofaBean          = false;
-
-    public long getBeanInitCostThreshold() {
-        return beanInitCostThreshold;
+    public long getCostThreshold() {
+        return costThreshold;
     }
 
-    public void setBeanInitCostThreshold(long beanInitCostThreshold) {
-        this.beanInitCostThreshold = beanInitCostThreshold;
-    }
-
-    public boolean isSkipSofaBean() {
-        return skipSofaBean;
-    }
-
-    public void setSkipSofaBean(boolean skipSofaBean) {
-        this.skipSofaBean = skipSofaBean;
+    public void setCostThreshold(long costThreshold) {
+        this.costThreshold = costThreshold;
     }
 }

@@ -16,19 +16,18 @@
  */
 package com.alipay.sofa.runtime.spring.parser;
 
+import com.alipay.sofa.boot.constant.SofaBootConstants;
+import com.alipay.sofa.boot.context.SofaDefaultListableBeanFactory;
+import com.alipay.sofa.boot.spring.namespace.spi.SofaBootTagNameSupport;
+import com.alipay.sofa.runtime.spring.async.AsyncInitBeanHolder;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
-import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.xml.BeanDefinitionDecorator;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Node;
-
-import com.alipay.sofa.boot.constant.SofaBootConstants;
-import com.alipay.sofa.boot.spring.namespace.spi.SofaBootTagNameSupport;
-import com.alipay.sofa.runtime.spring.async.AsyncInitBeanHolder;
 
 /**
  * @author qilong.zql
@@ -47,7 +46,7 @@ public class AsyncInitBeanDefinitionDecorator implements BeanDefinitionDecorator
         String moduleName = getModuleName(parserContext);
         if (moduleName != null && moduleName.trim().length() > 0) {
             AsyncInitBeanHolder.registerAsyncInitBean(moduleName, definition.getBeanName(),
-                ((AbstractBeanDefinition) definition.getBeanDefinition()).getInitMethodName());
+                definition.getBeanDefinition().getInitMethodName());
         }
         return definition;
     }
@@ -61,21 +60,10 @@ public class AsyncInitBeanDefinitionDecorator implements BeanDefinitionDecorator
         BeanDefinitionRegistry registry = parserContext.getRegistry();
         if (registry instanceof AbstractApplicationContext) {
             BeanFactory beanFactory = ((AbstractApplicationContext) registry).getBeanFactory();
-            if (beanFactory instanceof BeanLoadCostBeanFactory) {
-                return ((BeanLoadCostBeanFactory) beanFactory).getId();
+            if (beanFactory instanceof SofaDefaultListableBeanFactory) {
+                return ((AbstractApplicationContext) registry).getId();
             }
         }
-
-        if (registry instanceof BeanLoadCostBeanFactory) {
-            return ((BeanLoadCostBeanFactory) registry).getId();
-        }
         return SofaBootConstants.ROOT_APPLICATION_CONTEXT;
-    }
-
-    public static boolean isBeanLoadCostBeanFactory(Class factoryClass) {
-        if (factoryClass == null) {
-            return false;
-        }
-        return BeanLoadCostBeanFactory.class.isAssignableFrom(factoryClass);
     }
 }

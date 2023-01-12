@@ -16,8 +16,8 @@
  */
 package com.alipay.sofa.smoke.tests.actuator.startup;
 
-import com.alipay.sofa.boot.actuator.startup.StartupContextRefreshedListener;
-import com.alipay.sofa.boot.actuator.startup.StartupReporter;
+import com.alipay.sofa.boot.startup.StartupSmartLifecycle;
+import com.alipay.sofa.boot.startup.StartupReporter;
 import com.alipay.sofa.boot.startup.BaseStat;
 import com.alipay.sofa.boot.startup.BeanStat;
 import com.alipay.sofa.boot.startup.BootStageConstants;
@@ -90,7 +90,7 @@ public class DefaultStageStartupReporterTests {
         assertThat(((ChildrenStat<?>) applicationContextRefreshStage).getChildren().size()).isEqualTo(1);
         ModuleStat moduleStat = (ModuleStat) ((ChildrenStat<?>) applicationContextRefreshStage).getChildren().get(0);
         assertThat(moduleStat).isNotNull();
-        assertThat(moduleStat.getName()).isEqualTo(StartupContextRefreshedListener.ROOT_MODULE_NAME);
+        assertThat(moduleStat.getName()).isEqualTo(StartupSmartLifecycle.ROOT_MODULE_NAME);
         assertThat(moduleStat.getEndTime() > moduleStat.getStartTime()).isTrue();
         assertThat(moduleStat.getEndTime() - moduleStat.getStartTime()).isEqualTo(moduleStat.getCost());
 
@@ -105,7 +105,7 @@ public class DefaultStageStartupReporterTests {
         assertThat(initBeanStat.getBeanClassName()).isEqualTo(InitCostBean.class.getName() + " (com.alipay.sofa.smoke.tests.actuator.startup.beans.InitCostBean)");
         assertThat(initBeanStat.getChildren().isEmpty()).isTrue();
         assertThat(initBeanStat.getAfterPropertiesSetTime()).isEqualTo(0);
-        assertThat(initBeanStat.getInitTime()).isEqualTo(0);
+        assertThat(initBeanStat.getInitMethodTime()).isEqualTo(0);
         assertThat(initBeanStat.getInterfaceType()).isNull();
         assertThat(initBeanStat.getExtensionProperty()).isNull();
     }

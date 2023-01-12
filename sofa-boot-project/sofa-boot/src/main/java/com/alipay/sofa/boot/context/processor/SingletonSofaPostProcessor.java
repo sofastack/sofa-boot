@@ -14,14 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.boot.startup;
+package com.alipay.sofa.boot.context.processor;
 
-import org.springframework.beans.factory.support.RootBeanDefinition;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
+ * Use this annotation to tag BeanFactoryPostProcessor/BeanPostProcessor, which will share singleton in modules.
+ *
  * @author huzijie
- * @version BeanStatExtension.java, v 0.1 2021年01月04日 5:27 下午 huzijie Exp $
+ * @version SingletonSofaPostProcessor.java, v 0.1 2022年10月24日 4:24 PM huzijie Exp $
  */
-public interface BeanStatExtension {
-    void customBeanStat(String beanName, RootBeanDefinition mbd, Object[] args, BeanStat bs);
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ ElementType.TYPE })
+@Inherited
+public @interface SingletonSofaPostProcessor {
 }

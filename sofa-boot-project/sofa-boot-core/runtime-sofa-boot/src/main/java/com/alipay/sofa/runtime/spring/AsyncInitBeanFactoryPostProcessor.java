@@ -19,6 +19,7 @@ package com.alipay.sofa.runtime.spring;
 import com.alipay.sofa.boot.annotation.PlaceHolderAnnotationInvocationHandler;
 import com.alipay.sofa.boot.annotation.PlaceHolderBinder;
 import com.alipay.sofa.boot.constant.SofaBootConstants;
+import com.alipay.sofa.boot.context.SofaGenericApplicationContext;
 import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.boot.util.BeanDefinitionUtil;
 import com.alipay.sofa.runtime.api.annotation.SofaAsyncInit;
@@ -195,10 +196,8 @@ public class AsyncInitBeanFactoryPostProcessor implements BeanFactoryPostProcess
     }
 
     private String getModuleName(ApplicationContext applicationContext) {
-        BeanFactory beanFactory = ((AbstractApplicationContext) applicationContext)
-            .getBeanFactory();
-        if (beanFactory instanceof BeanLoadCostBeanFactory) {
-            return ((BeanLoadCostBeanFactory) beanFactory).getId();
+        if (applicationContext instanceof SofaGenericApplicationContext) {
+            return applicationContext.getId();
         }
         return SofaBootConstants.ROOT_APPLICATION_CONTEXT;
     }

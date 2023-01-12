@@ -16,10 +16,10 @@
  */
 package com.alipay.sofa.runtime.spring;
 
+import com.alipay.sofa.boot.context.processor.SingletonSofaPostProcessor;
 import com.alipay.sofa.runtime.SofaRuntimeUtils;
-import com.alipay.sofa.runtime.filter.JvmFilterHolder;
 import com.alipay.sofa.runtime.filter.JvmFilter;
-import com.alipay.sofa.runtime.spring.singleton.SingletonSofaPostProcessor;
+import com.alipay.sofa.runtime.filter.JvmFilterHolder;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.core.PriorityOrdered;

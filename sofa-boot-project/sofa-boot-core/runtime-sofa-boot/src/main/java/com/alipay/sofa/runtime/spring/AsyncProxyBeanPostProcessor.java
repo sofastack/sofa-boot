@@ -16,25 +16,23 @@
  */
 package com.alipay.sofa.runtime.spring;
 
-import java.lang.reflect.Method;
-import java.util.concurrent.CountDownLatch;
-
+import com.alipay.sofa.boot.constant.SofaBootConstants;
+import com.alipay.sofa.boot.context.SofaGenericApplicationContext;
+import com.alipay.sofa.boot.log.SofaLogger;
+import com.alipay.sofa.runtime.spring.async.AsyncInitBeanHolder;
+import com.alipay.sofa.runtime.spring.async.AsyncTaskExecutor;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.support.AbstractApplicationContext;
-
-import com.alipay.sofa.boot.constant.SofaBootConstants;
-import com.alipay.sofa.boot.log.SofaLogger;
-import com.alipay.sofa.runtime.spring.async.AsyncInitBeanHolder;
-import com.alipay.sofa.runtime.spring.async.AsyncTaskExecutor;
 import org.springframework.core.PriorityOrdered;
+
+import java.lang.reflect.Method;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * @author qilong.zql
@@ -73,10 +71,8 @@ public class AsyncProxyBeanPostProcessor implements BeanPostProcessor, Applicati
 
     @Override
     public void afterPropertiesSet() {
-        ConfigurableBeanFactory beanFactory = ((AbstractApplicationContext) applicationContext)
-            .getBeanFactory();
-        if (beanFactory instanceof BeanLoadCostBeanFactory) {
-            moduleName = ((BeanLoadCostBeanFactory) beanFactory).getId();
+        if (applicationContext instanceof SofaGenericApplicationContext) {
+            moduleName = applicationContext.getId();
         } else {
             moduleName = SofaBootConstants.ROOT_APPLICATION_CONTEXT;
         }

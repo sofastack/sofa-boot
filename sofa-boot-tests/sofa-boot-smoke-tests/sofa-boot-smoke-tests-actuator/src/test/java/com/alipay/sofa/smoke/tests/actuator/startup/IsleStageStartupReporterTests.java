@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.smoke.tests.actuator.startup;
 
-import com.alipay.sofa.boot.actuator.startup.StartupReporter;
+import com.alipay.sofa.boot.startup.StartupReporter;
 import com.alipay.sofa.boot.startup.BaseStat;
 import com.alipay.sofa.boot.startup.BeanStat;
 import com.alipay.sofa.boot.startup.BootStageConstants;
@@ -95,7 +95,7 @@ public class IsleStageStartupReporterTests {
         BeanStat childBeanStat = parentBeanStat.getChildren().get(0);
         assertThat(childBeanStat).isNotNull();
         assertThat(ChildBean.CHILD_INIT_TIME - childBeanStat.getRealRefreshElapsedTime() < 15).isTrue();
-        assertThat(ChildBean.CHILD_INIT_TIME - childBeanStat.getInitTime() < 10).isTrue();
+        assertThat(ChildBean.CHILD_INIT_TIME - childBeanStat.getInitMethodTime() < 10).isTrue();
         assertThat(childBeanStat.getChildren().size()).isEqualTo(0);
         assertThat(childBeanStat.getBeanClassName()).isEqualTo(ChildBean.class.getName() + " (child)");
 

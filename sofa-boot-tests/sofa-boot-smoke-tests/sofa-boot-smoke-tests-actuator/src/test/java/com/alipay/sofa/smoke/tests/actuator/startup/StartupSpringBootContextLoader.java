@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.smoke.tests.actuator.startup;
 
-import com.alipay.sofa.boot.actuator.startup.StartupSpringApplication;
+import com.alipay.sofa.boot.startup.StartupSpringApplication;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.test.context.SpringBootContextLoader;
 

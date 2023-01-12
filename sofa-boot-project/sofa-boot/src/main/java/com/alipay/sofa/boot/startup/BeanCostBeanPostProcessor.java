@@ -14,10 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.boot.actuator.startup;
+package com.alipay.sofa.boot.startup;
 
-import com.alipay.sofa.boot.startup.BeanStat;
-import com.alipay.sofa.boot.isle.loader.processor.UnshareSofaPostProcessor;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 
@@ -32,46 +30,33 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author huzijie
  * @version BeanCostBeanPostProcessor.java, v 0.1 2020年12月31日 2:40 下午 huzijie Exp $
  */
-@UnshareSofaPostProcessor
 public class BeanCostBeanPostProcessor implements BeanPostProcessor {
-    private final static String         SOFA_CLASS_NAME_PREFIX = "com.alipay.sofa.runtime";
-    private final Map<String, BeanStat> beanInitCostMap        = new ConcurrentHashMap<>();
-    private final List<BeanStat>        beanStatList           = new ArrayList<>();
-    private final long                  beanLoadCost;
-    private final boolean               skipSofaBean;
 
-    public BeanCostBeanPostProcessor(long beanInitCostThreshold, boolean skipSofaBean) {
-        this.beanLoadCost = beanInitCostThreshold;
-        this.skipSofaBean = skipSofaBean;
-    }
+    private final Map<String, BeanStat> beanInitCostMap        = new ConcurrentHashMap<>();
+
+    private final List<BeanStat>        beanStatList           = new ArrayList<>();
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName)
                                                                                throws BeansException {
-        if (!skipSofaBean || isNotSofaBean(bean)) {
-            BeanStat beanStat = new BeanStat();
-            beanStat.setName(beanName);
-            String beanClassName = getBeanName(bean, beanName);
-            beanStat.setBeanClassName(beanClassName);
-            beanStat.startRefresh();
-            beanInitCostMap.put(beanClassName, beanStat);
-        }
+        BeanStat beanStat = new BeanStat();
+        beanStat.setName(beanName);
+        String beanClassName = getBeanName(bean, beanName);
+        beanStat.setBeanClassName(beanClassName);
+        beanStat.startRefresh();
+        beanInitCostMap.put(beanClassName, beanStat);
         return bean;
     }
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName)
                                                                               throws BeansException {
-        if (!skipSofaBean || isNotSofaBean(bean)) {
-            String beanClassName = getBeanName(bean, beanName);
-            BeanStat beanStat = beanInitCostMap.remove(beanClassName);
-            if (beanStat != null) {
+        String beanClassName = getBeanName(bean, beanName);
+        BeanStat beanStat = beanInitCostMap.remove(beanClassName);
+        if (beanStat != null) {
+            beanStat.finishRefresh();
                 beanStat.finishRefresh();
-                if (beanStat.getRefreshElapsedTime() > beanLoadCost) {
-                    beanStat.finishRefresh();
-                    beanStatList.add(beanStat);
-                }
-            }
+                beanStatList.add(beanStat);
         }
         return bean;
     }
@@ -80,19 +65,7 @@ public class BeanCostBeanPostProcessor implements BeanPostProcessor {
         return this.beanStatList;
     }
 
-    private boolean isNotSofaBean(Object bean) {
-        return !bean.getClass().getName().contains(SOFA_CLASS_NAME_PREFIX);
-    }
-
     private String getBeanName(Object bean, String beanName) {
         return bean.getClass().getName() + " (" + beanName + ")";
-    }
-
-    public long getBeanLoadCost() {
-        return beanLoadCost;
-    }
-
-    public boolean isSkipSofaBean() {
-        return skipSofaBean;
     }
 }

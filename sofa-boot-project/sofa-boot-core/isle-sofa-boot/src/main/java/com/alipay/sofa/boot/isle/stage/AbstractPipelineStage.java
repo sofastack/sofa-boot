@@ -16,8 +16,11 @@
  */
 package com.alipay.sofa.boot.isle.stage;
 
-import com.alipay.sofa.boot.log.SofaLogger;
 import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
+import com.alipay.sofa.boot.startup.BaseStat;
+import com.alipay.sofa.boot.startup.ChildrenStat;
+import com.alipay.sofa.boot.startup.StartupReporter;
+import com.alipay.sofa.boot.startup.StartupReporterAware;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
@@ -34,7 +37,8 @@ import org.springframework.util.Assert;
  * @author xuanbei 18/3/1
  * @author huzijie
  */
-public abstract class AbstractPipelineStage implements PipelineStage, ApplicationContextAware, BeanFactoryAware, InitializingBean {
+public abstract class AbstractPipelineStage implements PipelineStage, ApplicationContextAware,
+        BeanFactoryAware, StartupReporterAware, InitializingBean {
 
     protected final ClassLoader  appClassLoader = Thread.currentThread().getContextClassLoader();
 
@@ -42,19 +46,34 @@ public abstract class AbstractPipelineStage implements PipelineStage, Applicatio
 
     protected ConfigurableApplicationContext applicationContext;
 
+    protected StartupReporter startupReporter;
+
     protected ConfigurableListableBeanFactory beanFactory;
 
+    protected BaseStat baseStat;
 
     @Override
     public void process() throws Exception {
-        SofaLogger.info("------------------ {} Start ------------------", this.getClass().getSimpleName());
-        doProcess();
-        SofaLogger.info("------------------ {} End ------------------", this.getClass().getSimpleName());
+        BaseStat stat = createBaseStat();
+        stat.setName(getName());
+        stat.setStartTime(System.currentTimeMillis());
+        this.baseStat = stat;
+        try {
+            doProcess();
+        } finally {
+            stat.setEndTime(System.currentTimeMillis());
+            startupReporter.addCommonStartupStat(stat);
+        }
     }
 
     @Override
     public void afterPropertiesSet() throws Exception {
         Assert.notNull(application,"applicationRuntimeModel must not be null");
+    }
+
+    @Override
+    public void setStartupReporter(StartupReporter startupReporter) throws BeansException {
+        this.startupReporter = startupReporter;
     }
 
     @Override
@@ -77,6 +96,10 @@ public abstract class AbstractPipelineStage implements PipelineStage, Applicatio
 
     public void setApplicationRuntimeModel(ApplicationRuntimeModel application) {
         this.application = application;
+    }
+
+    protected BaseStat createBaseStat() {
+        return new BaseStat();
     }
 
     /**

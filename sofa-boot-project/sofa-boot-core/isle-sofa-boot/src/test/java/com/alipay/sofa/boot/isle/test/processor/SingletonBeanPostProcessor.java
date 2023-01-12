@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.boot.isle.test.processor;
 
-import com.alipay.sofa.runtime.spring.singleton.SingletonSofaPostProcessor;
+import com.alipay.sofa.boot.context.processor.SingletonSofaPostProcessor;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 
 /**

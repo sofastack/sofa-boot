@@ -22,8 +22,8 @@ import com.alipay.sofa.boot.context.SofaGenericApplicationContext;
 import com.alipay.sofa.boot.context.SofaSpringContextSupport;
 import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptor;
-import com.alipay.sofa.boot.isle.loader.processor.SofaPostProcessorShareManager;
 import com.alipay.sofa.boot.log.SofaLogger;
+import com.alipay.sofa.boot.startup.BeanStatCustomizer;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.support.BeanDefinitionReader;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
@@ -32,6 +32,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 import org.springframework.core.io.Resource;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -54,6 +55,8 @@ public class DynamicSpringContextLoader implements SpringContextLoader, Initiali
 
     private List<ContextRefreshPostProcessor> contextRefreshPostProcessors = new ArrayList<>();
 
+    private List<BeanStatCustomizer> beanStatCustomizers = new ArrayList<>();
+
     private boolean publishEventToParent;
 
     private SofaPostProcessorShareManager sofaPostProcessorShareManager;
@@ -74,6 +77,10 @@ public class DynamicSpringContextLoader implements SpringContextLoader, Initiali
         ClassLoader classLoader = deployment.getClassLoader();
 
         SofaDefaultListableBeanFactory beanFactory = SofaSpringContextSupport.createBeanFactory(classLoader, this::newInstanceBeanFactory);
+        if (!CollectionUtils.isEmpty(beanStatCustomizers)) {
+            AnnotationAwareOrderComparator.sort(beanStatCustomizers);
+            beanStatCustomizers.forEach(beanFactory::addBeanStatCustomizer);
+        }
 
         SofaGenericApplicationContext context = SofaSpringContextSupport.createApplicationContext(beanFactory, this::newInstanceApplicationContext);
 
@@ -183,5 +190,13 @@ public class DynamicSpringContextLoader implements SpringContextLoader, Initiali
 
     public void setSofaPostProcessorShareManager(SofaPostProcessorShareManager sofaPostProcessorShareManager) {
         this.sofaPostProcessorShareManager = sofaPostProcessorShareManager;
+    }
+
+    public List<BeanStatCustomizer> getBeanStatCustomizers() {
+        return beanStatCustomizers;
+    }
+
+    public void setBeanStatCustomizers(List<BeanStatCustomizer> beanStatCustomizers) {
+        this.beanStatCustomizers = beanStatCustomizers;
     }
 }

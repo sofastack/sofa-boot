@@ -18,13 +18,13 @@ package com.alipay.sofa.boot.autoconfigure.isle;
 
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.context.ContextRefreshPostProcessor;
+import com.alipay.sofa.boot.context.processor.SofaPostProcessorShareFilter;
 import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.boot.isle.deployment.DefaultModuleDeploymentValidator;
 import com.alipay.sofa.boot.isle.deployment.ModuleDeploymentValidator;
 import com.alipay.sofa.boot.isle.loader.DynamicSpringContextLoader;
+import com.alipay.sofa.boot.isle.loader.SofaPostProcessorShareManager;
 import com.alipay.sofa.boot.isle.loader.SpringContextLoader;
-import com.alipay.sofa.boot.isle.loader.processor.SofaPostProcessorShareFilter;
-import com.alipay.sofa.boot.isle.loader.processor.SofaPostProcessorShareManager;
 import com.alipay.sofa.boot.isle.profile.DefaultSofaModuleProfileChecker;
 import com.alipay.sofa.boot.isle.profile.SofaModuleProfileChecker;
 import com.alipay.sofa.boot.isle.spring.SofaModuleContextLifecycle;
@@ -35,6 +35,7 @@ import com.alipay.sofa.boot.isle.stage.PipelineContext;
 import com.alipay.sofa.boot.isle.stage.PipelineStage;
 import com.alipay.sofa.boot.isle.stage.SpringContextInstallStage;
 import com.alipay.sofa.boot.log.SofaLogger;
+import com.alipay.sofa.boot.startup.BeanStatCustomizer;
 import com.alipay.sofa.boot.util.NamedThreadFactory;
 import com.alipay.sofa.common.thread.SofaThreadPoolExecutor;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -122,13 +123,15 @@ public class SofaModuleAutoConfiguration {
     public SpringContextLoader sofaDynamicSpringContextLoader(SofaModuleProperties sofaModuleProperties,
                                                               ApplicationContext applicationContext,
                                                               List<ContextRefreshPostProcessor> contextRefreshPostProcessors,
-                                                              SofaPostProcessorShareManager sofaPostProcessorShareManager) {
+                                                              SofaPostProcessorShareManager sofaPostProcessorShareManager,
+                                                              List<BeanStatCustomizer> beanStatCustomizers) {
         DynamicSpringContextLoader dynamicSpringContextLoader = new DynamicSpringContextLoader(applicationContext);
         dynamicSpringContextLoader.setActiveProfiles(sofaModuleProperties.getActiveProfiles());
         dynamicSpringContextLoader.setAllowBeanOverriding(sofaModuleProperties.isAllowBeanDefinitionOverriding());
         dynamicSpringContextLoader.setPublishEventToParent(sofaModuleProperties.isPublishEventToParent());
         dynamicSpringContextLoader.setContextRefreshPostProcessors(contextRefreshPostProcessors);
         dynamicSpringContextLoader.setSofaPostProcessorShareManager(sofaPostProcessorShareManager);
+        dynamicSpringContextLoader.setBeanStatCustomizers(beanStatCustomizers);
         return dynamicSpringContextLoader;
     }
 

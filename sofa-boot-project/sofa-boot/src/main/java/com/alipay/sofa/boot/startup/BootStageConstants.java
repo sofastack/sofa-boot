@@ -57,19 +57,4 @@ public class BootStageConstants {
      * StartupContextRefreshedListener.onApplicationEvent(ContextRefreshedEvent)
      */
     public static final String APPLICATION_CONTEXT_REFRESH_STAGE = "ApplicationContextRefreshStage";
-
-    /**
-     * The running stage for ModuleCreatingStage
-     */
-    public static final String ISLE_MODEL_CREATING_STAGE         = "ModelCreatingStage";
-
-    /**
-     * The running stage for SpringContextInstallStage
-     */
-    public static final String ISLE_SPRING_CONTEXT_INSTALL_STAGE = "SpringContextInstallStage";
-
-    /**
-     * The running stage for ReadinessCheckListener
-     */
-    public static final String HEALTH_CHECK_STAGE                = "HealthCheckStage";
 }

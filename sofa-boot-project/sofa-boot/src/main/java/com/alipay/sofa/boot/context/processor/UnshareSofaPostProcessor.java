@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.boot.isle.loader.processor;
+package com.alipay.sofa.boot.context.processor;
 
 import java.lang.annotation.*;
 

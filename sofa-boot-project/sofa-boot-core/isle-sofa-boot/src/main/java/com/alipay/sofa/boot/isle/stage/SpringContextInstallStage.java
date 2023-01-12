@@ -16,14 +16,19 @@
  */
 package com.alipay.sofa.boot.isle.stage;
 
+import com.alipay.sofa.boot.context.SofaDefaultListableBeanFactory;
 import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.boot.isle.deployment.DependencyTree;
 import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptor;
 import com.alipay.sofa.boot.isle.deployment.DeploymentException;
 import com.alipay.sofa.boot.isle.loader.SpringContextLoader;
 import com.alipay.sofa.boot.log.SofaLogger;
+import com.alipay.sofa.boot.startup.BaseStat;
+import com.alipay.sofa.boot.startup.ChildrenStat;
+import com.alipay.sofa.boot.startup.ModuleStat;
 import com.alipay.sofa.boot.util.ClassLoaderContextUtils;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.util.Assert;
@@ -86,6 +91,11 @@ public class SpringContextInstallStage extends AbstractPipelineStage implements 
         throwModuleInstallFailure();
     }
 
+    @Override
+    protected BaseStat createBaseStat() {
+        return new ChildrenStat<ModuleStat>();
+    }
+
     /**
      * Create {@link ApplicationContext} for each {@link DeploymentDescriptor}
      */
@@ -120,7 +130,7 @@ public class SpringContextInstallStage extends AbstractPipelineStage implements 
     private void doRefreshSpringContextSerial() {
         for (DeploymentDescriptor deployment : application.getResolvedDeployments()) {
             if (deployment.isSpringPowered() && !application.getFailed().contains(deployment)) {
-                doRefreshSpringContext(deployment);
+                refreshAndCollectCost(deployment);
             }
             // 模块刷新异常时提前中止
             if (!ignoreModuleInstallFailure && !application.getFailed().isEmpty()) {
@@ -178,7 +188,7 @@ public class SpringContextInstallStage extends AbstractPipelineStage implements 
                 Thread.currentThread().setName(
                         "sofa-module-refresh-" + deployment.getModuleName());
                 if (deployment.isSpringPowered() && !application.getFailed().contains(deployment)) {
-                    doRefreshSpringContext(deployment);
+                    refreshAndCollectCost(deployment);
                 }
                 DependencyTree.Entry<String, DeploymentDescriptor> entry = application
                         .getDeployRegistry().getEntry(deployment.getModuleName());
@@ -200,6 +210,25 @@ public class SpringContextInstallStage extends AbstractPipelineStage implements 
                 Thread.currentThread().setName(oldName);
             }
         }));
+    }
+
+    protected void refreshAndCollectCost(DeploymentDescriptor deployment) {
+        ModuleStat moduleStat = new ModuleStat();
+        moduleStat.setName(deployment.getModuleName());
+        moduleStat.setStartTime(System.currentTimeMillis());
+
+        doRefreshSpringContext(deployment);
+
+        moduleStat.setEndTime(System.currentTimeMillis());
+        moduleStat.setCost(moduleStat.getEndTime() - moduleStat.getStartTime());
+        moduleStat.setThreadName(Thread.currentThread().getName());
+        ConfigurableApplicationContext ctx = (ConfigurableApplicationContext) deployment.getApplicationContext();
+        ConfigurableListableBeanFactory beanFactory = ctx.getBeanFactory();
+        if (beanFactory instanceof SofaDefaultListableBeanFactory) {
+            moduleStat.setChildren(((SofaDefaultListableBeanFactory) beanFactory).getBeanStats());
+        }
+
+        ((ChildrenStat<ModuleStat>) baseStat).addChild(moduleStat);
     }
 
     protected void doRefreshSpringContext(DeploymentDescriptor deployment) {

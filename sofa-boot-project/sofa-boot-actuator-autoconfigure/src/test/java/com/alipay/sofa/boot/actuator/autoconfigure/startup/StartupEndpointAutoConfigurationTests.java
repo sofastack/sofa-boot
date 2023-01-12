@@ -18,6 +18,7 @@ package com.alipay.sofa.boot.actuator.autoconfigure.startup;
 
 import com.alipay.sofa.boot.actuator.startup.StartupEndPoint;
 import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
+import com.alipay.sofa.boot.startup.StartupReporter;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.FilteredClassLoader;
@@ -36,26 +37,38 @@ public class StartupEndpointAutoConfigurationTests {
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
                                                              .withConfiguration(
                                                                  AutoConfigurations
-                                                                     .of(StartupEndPointAutoConfiguration.class,
-                                                                         StartupAutoConfiguration.class))
+                                                                     .of(StartupEndPointAutoConfiguration.class))
                                                              .withClassLoader(
                                                                  new FilteredClassLoader(
                                                                      ApplicationRuntimeModel.class));
 
     @Test
     void runShouldHaveEndpointBean() {
-        this.contextRunner.withPropertyValues("management.endpoints.web.exposure.include=startup")
+        this.contextRunner
+                .withBean(StartupReporter.class)
+                .withPropertyValues("management.endpoints.web.exposure.include=startup")
                 .run((context) -> assertThat(context).hasSingleBean(StartupEndPoint.class));
     }
 
     @Test
+    void runWhenNotStartupReporterBeanShouldNotHaveEndpointBean() {
+        this.contextRunner
+                .withPropertyValues("management.endpoints.web.exposure.include=startup")
+                .run((context) -> assertThat(context).doesNotHaveBean(StartupEndPoint.class));
+    }
+
+    @Test
     void runWhenNotExposedShouldNotHaveEndpointBean() {
-        this.contextRunner.run((context) -> assertThat(context).doesNotHaveBean(StartupEndPoint.class));
+        this.contextRunner
+                .withBean(StartupReporter.class)
+                .run((context) -> assertThat(context).doesNotHaveBean(StartupEndPoint.class));
     }
 
     @Test
     void runWhenEnabledPropertyIsFalseShouldNotHaveEndpointBean() {
-        this.contextRunner.withPropertyValues("management.endpoint.startup.enabled:false")
+        this.contextRunner
+                .withBean(StartupReporter.class)
+                .withPropertyValues("management.endpoint.startup.enabled:false")
                 .withPropertyValues("management.endpoints.web.exposure.include=*")
                 .run((context) -> assertThat(context).doesNotHaveBean(StartupEndPoint.class));
     }

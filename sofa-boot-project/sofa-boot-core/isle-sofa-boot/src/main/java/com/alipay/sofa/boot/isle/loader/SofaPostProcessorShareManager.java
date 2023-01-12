@@ -14,8 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.boot.isle.loader.processor;
+package com.alipay.sofa.boot.isle.loader;
 
+import com.alipay.sofa.boot.context.processor.SingletonSofaPostProcessor;
+import com.alipay.sofa.boot.context.processor.SofaPostProcessorShareFilter;
+import com.alipay.sofa.boot.context.processor.UnshareSofaPostProcessor;
 import com.alipay.sofa.boot.util.BeanDefinitionUtil;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;

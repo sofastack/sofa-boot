@@ -14,10 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.boot.actuator.startup;
+package com.alipay.sofa.boot.startup;
 
-import com.alipay.sofa.boot.startup.BaseStat;
-import org.springframework.core.env.Environment;
+import org.springframework.boot.context.properties.bind.Bindable;
+import org.springframework.boot.context.properties.bind.Binder;
+import org.springframework.core.env.ConfigurableEnvironment;
 
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
@@ -31,12 +32,32 @@ import java.util.List;
  */
 public class StartupReporter {
 
-    private final StartupStaticsModel startupStaticsModel = new StartupStaticsModel();
+    private final StartupStaticsModel startupStaticsModel;
 
-    public StartupReporter(Environment environment) {
-        startupStaticsModel.setAppName(environment.getProperty("spring.application.name"));
-        startupStaticsModel.setApplicationBootTime(ManagementFactory.getRuntimeMXBean()
-            .getStartTime());
+    private boolean storeStatics = false;
+
+    private int costThreshold = 100;
+
+    public StartupReporter() {
+        this.startupStaticsModel = new StartupStaticsModel();
+        this.startupStaticsModel.setApplicationBootTime(ManagementFactory.getRuntimeMXBean().getStartTime());
+    }
+
+    /**
+     * Bind the environment to the {@link StartupReporter}.
+     * @param environment the environment to bind
+     */
+    public void bindToStartupReporter(ConfigurableEnvironment environment) {
+        try {
+            Binder.get(environment).bind("sofa.boot.startup", Bindable.ofInstance(this));
+        }
+        catch (Exception ex) {
+            throw new IllegalStateException("Cannot bind to StartupReporter", ex);
+        }
+    }
+
+    public void setAppName(String appName) {
+        this.startupStaticsModel.setAppName(appName);
     }
 
     /**
@@ -79,6 +100,28 @@ public class StartupReporter {
         return startupStaticsModel;
     }
 
+    public void clear() {
+        startupStaticsModel.clear();
+    }
+
+
+    public boolean isStoreStatics() {
+        return storeStatics;
+    }
+
+    public void setStoreStatics(boolean storeStatics) {
+        this.storeStatics = storeStatics;
+    }
+
+
+    public int getCostThreshold() {
+        return costThreshold;
+    }
+
+    public void setCostThreshold(int costThreshold) {
+        this.costThreshold = costThreshold;
+    }
+
     public static class StartupStaticsModel {
         private String         appName;
         private long           applicationBootElapsedTime = 0;
@@ -115,6 +158,11 @@ public class StartupReporter {
 
         public void setStageStats(List<BaseStat> stageStats) {
             this.stageStats = stageStats;
+        }
+
+        // todo clear all date
+        public void clear() {
+
         }
     }
 }

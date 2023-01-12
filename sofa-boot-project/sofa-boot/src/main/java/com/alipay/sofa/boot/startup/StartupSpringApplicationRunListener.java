@@ -14,13 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.boot.actuator.startup;
+package com.alipay.sofa.boot.startup;
 
-import com.alipay.sofa.boot.log.SofaLogger;
-import com.alipay.sofa.boot.startup.BaseStat;
-import com.alipay.sofa.boot.startup.ChildrenStat;
-import com.alipay.sofa.boot.startup.ModuleStat;
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import com.alipay.sofa.boot.constant.SofaBootConstants;
 import org.springframework.boot.ConfigurableBootstrapContext;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.SpringApplicationRunListener;
@@ -40,16 +36,22 @@ import static com.alipay.sofa.boot.startup.BootStageConstants.*;
  * @since 2020/7/20
  */
 public class StartupSpringApplicationRunListener implements SpringApplicationRunListener, Ordered {
+
     private final SpringApplication application;
-    private final String[]          args;
+
+    private final StartupReporter startupReporter;
+
     private BaseStat                jvmStartingStage;
+
     private BaseStat                environmentPrepareStage;
+
     private BaseStat                applicationContextPrepareStage;
+
     private BaseStat                applicationContextLoadStage;
 
     public StartupSpringApplicationRunListener(SpringApplication sa, String[] args) {
-        this.application = sa;
-        this.args = args;
+        application = sa;
+        startupReporter = new StartupReporter();
     }
 
     @Override
@@ -58,7 +60,7 @@ public class StartupSpringApplicationRunListener implements SpringApplicationRun
         stat.setName(JVM_STARTING_STAGE);
         stat.setStartTime(ManagementFactory.getRuntimeMXBean().getStartTime());
         stat.setEndTime(System.currentTimeMillis());
-        this.jvmStartingStage = stat;
+        jvmStartingStage = stat;
     }
 
     @Override
@@ -68,7 +70,9 @@ public class StartupSpringApplicationRunListener implements SpringApplicationRun
         stat.setName(ENVIRONMENT_PREPARE_STAGE);
         stat.setStartTime(jvmStartingStage.getEndTime());
         stat.setEndTime(System.currentTimeMillis());
-        this.environmentPrepareStage = stat;
+        environmentPrepareStage = stat;
+        startupReporter.setAppName(environment.getProperty(SofaBootConstants.APP_NAME_KEY));
+        startupReporter.bindToStartupReporter(environment);
     }
 
     @Override
@@ -77,11 +81,11 @@ public class StartupSpringApplicationRunListener implements SpringApplicationRun
         stat.setName(APPLICATION_CONTEXT_PREPARE_STAGE);
         stat.setStartTime(environmentPrepareStage.getEndTime());
         stat.setEndTime(System.currentTimeMillis());
-        if (this.application instanceof StartupSpringApplication) {
-            stat.setChildren(((StartupSpringApplication) this.application)
+        if (application instanceof StartupSpringApplication) {
+            stat.setChildren(((StartupSpringApplication) application)
                 .getInitializerStartupStatList());
         }
-        this.applicationContextPrepareStage = stat;
+        applicationContextPrepareStage = stat;
     }
 
     @Override
@@ -90,19 +94,15 @@ public class StartupSpringApplicationRunListener implements SpringApplicationRun
         stat.setName(APPLICATION_CONTEXT_LOAD_STAGE);
         stat.setStartTime(applicationContextPrepareStage.getEndTime());
         stat.setEndTime(System.currentTimeMillis());
-        this.applicationContextLoadStage = stat;
+        context.getBeanFactory().addBeanPostProcessor(new BeanCostBeanPostProcessor());
+        context.getBeanFactory().addBeanPostProcessor(new StartupReporterBeanPostProcessor(startupReporter));
+        context.getBeanFactory().registerSingleton("STARTUP_REPORTER_BEAN", startupReporter);
+        context.getBeanFactory().registerSingleton("STARTUP_SMART_LIfE_CYCLE", new StartupSmartLifecycle(startupReporter));
+        applicationContextLoadStage = stat;
     }
 
     @Override
     public void started(ConfigurableApplicationContext context, Duration timeTaken) {
-        StartupReporter startupReporter;
-        try {
-            startupReporter = context.getBean(StartupReporter.class);
-        } catch (NoSuchBeanDefinitionException e) {
-            // just happen in unit tests
-            SofaLogger.warn("Failed to found bean StartupReporter");
-            return;
-        }
         // refresh applicationRefreshStage
         ChildrenStat<ModuleStat> applicationRefreshStage = (ChildrenStat<ModuleStat>) startupReporter
             .getStageNyName(APPLICATION_CONTEXT_REFRESH_STAGE);
@@ -121,6 +121,18 @@ public class StartupSpringApplicationRunListener implements SpringApplicationRun
         startupReporter.addCommonStartupStat(applicationContextPrepareStage);
         startupReporter.addCommonStartupStat(applicationContextLoadStage);
         startupReporter.applicationBootFinish();
+
+        // print log
+        printLog(startupReporter.report());
+
+        // clear statics when doesn't need store
+        if (!startupReporter.isStoreStatics()) {
+            startupReporter.clear();
+        }
+    }
+
+    private void printLog(StartupReporter.StartupStaticsModel report) {
+        //todo 打印耗时日志
     }
 
     @Override
