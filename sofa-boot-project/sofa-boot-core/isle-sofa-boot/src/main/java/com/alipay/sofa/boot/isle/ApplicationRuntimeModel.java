@@ -50,8 +50,6 @@ public class ApplicationRuntimeModel implements IsleDeploymentModel {
     private final DeployRegistry                    deployRegistry  = new DeployRegistry();
     /** module deployment validator */
     private ModuleDeploymentValidator               moduleDeploymentValidator;
-    /** application name */
-    private String                                  appName;
     /** resolved deployments */
     private List<DeploymentDescriptor>              resolvedDeployments;
 
@@ -81,14 +79,6 @@ public class ApplicationRuntimeModel implements IsleDeploymentModel {
     public List<DeploymentDescriptor> getAllInactiveDeployments() {
         Collections.sort(inactiveDeploys);
         return inactiveDeploys;
-    }
-
-    public void setAppName(String appName) {
-        this.appName = appName;
-    }
-
-    public String getAppName() {
-        return appName;
     }
 
     public List<DeploymentDescriptor> getResolvedDeployments() {

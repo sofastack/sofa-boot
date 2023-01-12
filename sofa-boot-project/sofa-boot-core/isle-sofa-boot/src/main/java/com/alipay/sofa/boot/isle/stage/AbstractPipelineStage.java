@@ -32,6 +32,7 @@ import org.springframework.util.Assert;
  * {@link AbstractPipelineStage} is a common base class for {@link PipelineStage} implementations.
  *
  * @author xuanbei 18/3/1
+ * @author huzijie
  */
 public abstract class AbstractPipelineStage implements PipelineStage, ApplicationContextAware, BeanFactoryAware, InitializingBean {
 

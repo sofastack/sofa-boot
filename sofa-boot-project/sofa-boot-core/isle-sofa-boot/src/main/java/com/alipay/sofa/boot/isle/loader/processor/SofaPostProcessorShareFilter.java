@@ -17,7 +17,9 @@
 package com.alipay.sofa.boot.isle.loader.processor;
 
 /**
- * Created by TomorJM on 2019-10-09.
+ * Filter used to determine whether PostProcessor should share or use singleton.
+ *
+ * @author huzijie
  */
 public interface SofaPostProcessorShareFilter {
 

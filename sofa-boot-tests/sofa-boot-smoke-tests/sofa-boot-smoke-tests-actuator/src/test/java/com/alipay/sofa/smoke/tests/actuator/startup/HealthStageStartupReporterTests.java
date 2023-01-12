@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.smoke.tests.actuator.startup;
 
-import com.alipay.sofa.boot.startup.StartupReporter;
+import com.alipay.sofa.boot.actuator.startup.StartupReporter;
 import com.alipay.sofa.boot.startup.BaseStat;
 import com.alipay.sofa.boot.startup.BootStageConstants;
 import com.alipay.sofa.smoke.tests.actuator.ActuatorSofaBootApplication;

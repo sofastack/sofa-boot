@@ -24,6 +24,7 @@ import java.lang.annotation.Target;
 
 /**
  * Use this annotation to tag BeanFactoryPostProcessor/BeanPostProcessor, which will share singleton in modules.
+ *
  * @author huzijie
  * @version SingletonSofaPostProcessor.java, v 0.1 2022年10月24日 4:24 PM huzijie Exp $
  */

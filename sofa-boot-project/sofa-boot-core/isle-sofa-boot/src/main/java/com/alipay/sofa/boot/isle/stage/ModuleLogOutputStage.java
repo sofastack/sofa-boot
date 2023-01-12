@@ -16,11 +16,8 @@
  */
 package com.alipay.sofa.boot.isle.stage;
 
-import com.alipay.sofa.boot.log.SofaLogger;
 import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptor;
-import com.alipay.sofa.runtime.factory.BeanLoadCostBeanFactory;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.context.ConfigurableApplicationContext;
+import com.alipay.sofa.boot.log.SofaLogger;
 
 import java.util.Iterator;
 import java.util.List;
@@ -46,14 +43,10 @@ public class ModuleLogOutputStage extends AbstractPipelineStage {
     private static final String SYMBOLIC5          = "      +---";
     private static final String SYMBOLIC6          = "      `---";
 
-    private static final String INDENT_PREFIX      = "  │   ";
-    private static final String EMPTY_INDEX_PREFIX = "      ";
-
     @Override
     protected void doProcess() throws Exception {
         logInstalledModules();
         logFailedModules();
-        logInfoBeanCost();
     }
 
     private void logInstalledModules() {
@@ -116,44 +109,6 @@ public class ModuleLogOutputStage extends AbstractPipelineStage {
             }
             stringBuilder.append(treeSymbol).append(dd.getName()).append("\n");
         }
-        SofaLogger.info(stringBuilder.toString());
-    }
-
-    private void logInfoBeanCost() {
-        List<DeploymentDescriptor> deploys = application.getInstalled();
-        StringBuilder stringBuilder = new StringBuilder();
-
-        long totalTime = 0;
-        long realStart = 0;
-        long realEnd = 0;
-        stringBuilder.append("\n").append("Spring bean load time cost list").append("(")
-            .append(deploys.size()).append(") >>>>>>>");
-        StringBuilder sb = new StringBuilder();
-
-        int size = deploys.size();
-        for (int i = 0; i < size; ++i) {
-            String prefix = (i == size - 1) ? SYMBOLIC2 : SYMBOLIC1;
-            String indexPrefix = (i == size - 1) ? EMPTY_INDEX_PREFIX : INDENT_PREFIX;
-
-            DeploymentDescriptor dd = deploys.get(i);
-            BeanFactory beanFactory = ((ConfigurableApplicationContext) dd.getApplicationContext())
-                .getBeanFactory();
-            if (realStart == 0 || dd.getStartTime() < realStart) {
-                realStart = dd.getStartTime();
-            }
-            if (realEnd == 0 || (dd.getStartTime() + dd.getElapsedTime()) > realEnd) {
-                realEnd = dd.getStartTime() + dd.getElapsedTime();
-            }
-            totalTime += dd.getElapsedTime();
-
-            if (beanFactory instanceof BeanLoadCostBeanFactory) {
-                sb.append(prefix).append("[Module] ").append(dd.getName()).append(" [")
-                    .append(dd.getElapsedTime()).append(" ms]\n");
-                sb.append(((BeanLoadCostBeanFactory) beanFactory).outputBeanStats(indexPrefix));
-            }
-        }
-        stringBuilder.append(" [totalTime = ").append(totalTime).append(" ms, realTime = ")
-            .append(realEnd - realStart).append(" ms]\n").append(sb);
         SofaLogger.info(stringBuilder.toString());
     }
 

@@ -38,6 +38,9 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * Manager to found share PostProcessors.
+ *
+ * @author huzijie
  * Created by TomorJM on 2019-10-09.
  */
 public class SofaPostProcessorShareManager implements BeanFactoryAware, InitializingBean {

@@ -14,8 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.boot.startup;
+package com.alipay.sofa.boot.actuator.startup;
 
+import com.alipay.sofa.boot.startup.BaseStat;
 import org.springframework.core.env.Environment;
 
 import java.lang.management.ManagementFactory;

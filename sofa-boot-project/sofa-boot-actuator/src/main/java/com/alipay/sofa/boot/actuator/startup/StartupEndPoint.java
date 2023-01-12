@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.boot.actuator.startup;
 
-import com.alipay.sofa.boot.startup.StartupReporter;
 import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
 import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
 import org.springframework.boot.actuate.endpoint.annotation.WriteOperation;

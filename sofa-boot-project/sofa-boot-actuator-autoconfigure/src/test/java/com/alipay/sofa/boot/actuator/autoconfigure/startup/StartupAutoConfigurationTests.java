@@ -19,7 +19,7 @@ package com.alipay.sofa.boot.actuator.autoconfigure.startup;
 import com.alipay.sofa.boot.actuator.autoconfigure.health.ReadinessAutoConfiguration;
 import com.alipay.sofa.boot.actuator.startup.BeanCostBeanPostProcessor;
 import com.alipay.sofa.boot.actuator.startup.StartupContextRefreshedListener;
-import com.alipay.sofa.boot.startup.StartupReporter;
+import com.alipay.sofa.boot.actuator.startup.StartupReporter;
 import com.alipay.sofa.boot.actuator.startup.health.StartupReadinessCheckListener;
 import com.alipay.sofa.boot.actuator.startup.isle.StartupModelCreatingStage;
 import com.alipay.sofa.boot.actuator.startup.isle.StartupSpringContextInstallStage;

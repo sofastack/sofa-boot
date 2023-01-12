@@ -20,16 +20,19 @@ import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptor;
 
 /**
+ * interface to create sofa application context use {@link DeploymentDescriptor}.
  *
  * @author linfengqi  2011-7-26
+ * @author huzijie
  */
 public interface SpringContextLoader {
+
     /**
+     * create spring context but not refresh it.
      *
      * @param deployment deployment descriptor
      * @param application application runtime model
      * @throws Exception throws when exception occur
      */
-    void loadSpringContext(DeploymentDescriptor deployment, ApplicationRuntimeModel application)
-                                                                                                throws Exception;
+    void loadSpringContext(DeploymentDescriptor deployment, ApplicationRuntimeModel application) throws Exception;
 }

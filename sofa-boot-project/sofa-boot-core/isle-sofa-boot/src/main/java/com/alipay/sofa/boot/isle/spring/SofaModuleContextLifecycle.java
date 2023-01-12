@@ -30,6 +30,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * 2. Any other bean has option to precede.
  *
  * @author xuanbei 18/3/12
+ * @author huzijie
  */
 public class SofaModuleContextLifecycle implements SmartLifecycle {
 

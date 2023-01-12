@@ -20,7 +20,6 @@ import com.alipay.sofa.boot.log.SofaLogger;
 import com.alipay.sofa.boot.startup.BaseStat;
 import com.alipay.sofa.boot.startup.ChildrenStat;
 import com.alipay.sofa.boot.startup.ModuleStat;
-import com.alipay.sofa.boot.startup.StartupReporter;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.boot.ConfigurableBootstrapContext;
 import org.springframework.boot.SpringApplication;

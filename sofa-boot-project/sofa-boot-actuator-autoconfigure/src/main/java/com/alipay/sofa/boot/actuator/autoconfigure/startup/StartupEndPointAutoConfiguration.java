@@ -17,7 +17,7 @@
 package com.alipay.sofa.boot.actuator.autoconfigure.startup;
 
 import com.alipay.sofa.boot.actuator.startup.StartupEndPoint;
-import com.alipay.sofa.boot.startup.StartupReporter;
+import com.alipay.sofa.boot.actuator.startup.StartupReporter;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.boot.actuate.autoconfigure.startup.StartupEndpointAutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfiguration;

@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.boot.actuator.startup;
 
-import com.alipay.sofa.boot.startup.StartupReporter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

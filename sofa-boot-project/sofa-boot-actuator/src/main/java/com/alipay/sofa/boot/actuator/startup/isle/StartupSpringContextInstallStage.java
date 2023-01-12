@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.boot.actuator.startup.isle;
 
-import com.alipay.sofa.boot.startup.StartupReporter;
+import com.alipay.sofa.boot.actuator.startup.StartupReporter;
 import com.alipay.sofa.boot.startup.ChildrenStat;
 import com.alipay.sofa.boot.startup.ModuleStat;
 import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptor;

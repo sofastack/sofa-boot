@@ -16,6 +16,8 @@
  */
 package com.alipay.sofa.boot.isle.deployment;
 
+import java.io.Serial;
+
 /**
  * Signals a checked exception to the caller of the deploy subsystem.
  *
@@ -24,6 +26,8 @@ package com.alipay.sofa.boot.isle.deployment;
  * @author linfengqi  2011-3-26
  */
 public class DeploymentException extends Exception {
+
+    @Serial
     private static final long serialVersionUID = -6809659761040724153L;
 
     /**
