@@ -18,8 +18,7 @@ package com.alipay.sofa.boot.actuator.startup.isle;
 
 import com.alipay.sofa.boot.actuator.startup.StartupReporter;
 import com.alipay.sofa.boot.startup.BaseStat;
-import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
-import com.alipay.sofa.isle.stage.ModelCreatingStage;
+import com.alipay.sofa.boot.isle.stage.ModelCreatingStage;
 
 import static com.alipay.sofa.boot.startup.BootStageConstants.ISLE_MODEL_CREATING_STAGE;
 
@@ -31,7 +30,11 @@ import static com.alipay.sofa.boot.startup.BootStageConstants.ISLE_MODEL_CREATIN
  */
 public class StartupModelCreatingStage extends ModelCreatingStage {
 
-    private StartupReporter startupReporter;
+    private final StartupReporter startupReporter;
+
+    public StartupModelCreatingStage(StartupReporter startupReporter) {
+        this.startupReporter = startupReporter;
+    }
 
     @Override
     protected void doProcess() throws Exception {
@@ -48,9 +51,5 @@ public class StartupModelCreatingStage extends ModelCreatingStage {
 
     public StartupReporter getStartupReporter() {
         return startupReporter;
-    }
-
-    public void setStartupReporter(StartupReporter startupReporter) {
-        this.startupReporter = startupReporter;
     }
 }

@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.runtime.spring.parser;
 
-import com.alipay.sofa.runtime.factory.BeanLoadCostBeanFactory;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;

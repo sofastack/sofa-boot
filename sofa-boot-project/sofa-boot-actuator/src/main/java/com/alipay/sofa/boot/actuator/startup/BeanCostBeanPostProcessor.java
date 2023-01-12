@@ -17,7 +17,7 @@
 package com.alipay.sofa.boot.actuator.startup;
 
 import com.alipay.sofa.boot.startup.BeanStat;
-import com.alipay.sofa.runtime.spring.share.UnshareSofaPostProcessor;
+import com.alipay.sofa.boot.isle.loader.share.UnshareSofaPostProcessor;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 

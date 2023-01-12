@@ -22,7 +22,6 @@ import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.boot.util.BeanDefinitionUtil;
 import com.alipay.sofa.runtime.api.annotation.SofaAsyncInit;
-import com.alipay.sofa.runtime.factory.BeanLoadCostBeanFactory;
 import com.alipay.sofa.boot.log.SofaLogger;
 import com.alipay.sofa.runtime.spring.async.AsyncInitBeanHolder;
 import org.springframework.beans.BeansException;

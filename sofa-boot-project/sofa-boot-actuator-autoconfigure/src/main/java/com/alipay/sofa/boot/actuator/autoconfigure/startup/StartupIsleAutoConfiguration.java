@@ -21,11 +21,12 @@ import com.alipay.sofa.boot.actuator.startup.StartupReporter;
 import com.alipay.sofa.boot.actuator.startup.isle.StartupModelCreatingStage;
 import com.alipay.sofa.boot.actuator.startup.isle.StartupSpringContextInstallStage;
 import com.alipay.sofa.boot.autoconfigure.isle.SofaModuleAutoConfiguration;
-import com.alipay.sofa.isle.ApplicationRuntimeModel;
-import com.alipay.sofa.isle.profile.SofaModuleProfileChecker;
 import com.alipay.sofa.boot.autoconfigure.isle.SofaModuleProperties;
-import com.alipay.sofa.isle.stage.ModelCreatingStage;
-import com.alipay.sofa.isle.stage.SpringContextInstallStage;
+import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
+import com.alipay.sofa.boot.isle.loader.SpringContextLoader;
+import com.alipay.sofa.boot.isle.profile.SofaModuleProfileChecker;
+import com.alipay.sofa.boot.isle.stage.ModelCreatingStage;
+import com.alipay.sofa.boot.isle.stage.SpringContextInstallStage;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -34,9 +35,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.SearchStrategy;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.support.AbstractApplicationContext;
 
 /**
  * {@link EnableAutoConfiguration Auto-configuration} for startup isle components.
@@ -50,26 +49,31 @@ import org.springframework.context.support.AbstractApplicationContext;
 @ConditionalOnAvailableEndpoint(endpoint = StartupEndPoint.class)
 public class StartupIsleAutoConfiguration {
 
-    @Bean
-    @ConditionalOnMissingBean(value = SpringContextInstallStage.class, search = SearchStrategy.CURRENT)
-    public StartupSpringContextInstallStage startupSpringContextInstallStage(ApplicationContext applicationContext,
-                                                                             SofaModuleProperties sofaModuleProperties,
-                                                                             StartupReporter startupReporter) {
-        return new StartupSpringContextInstallStage(
-            (AbstractApplicationContext) applicationContext, sofaModuleProperties, startupReporter);
-    }
 
     @Bean
     @ConditionalOnMissingBean(value = ModelCreatingStage.class, search = SearchStrategy.CURRENT)
     public StartupModelCreatingStage startupModelCreatingStage(SofaModuleProperties sofaModuleProperties,
-                                                               SofaRuntimeContext sofaRuntimeContext,
                                                                SofaModuleProfileChecker sofaModuleProfileChecker,
+                                                               ApplicationRuntimeModel applicationRuntimeModel,
                                                                StartupReporter startupReporter) {
-        StartupModelCreatingStage startupModelCreatingStage = new StartupModelCreatingStage();
-        startupModelCreatingStage.setStartupReporter(startupReporter);
-        startupModelCreatingStage.setSofaRuntimeContext(sofaRuntimeContext);
+        StartupModelCreatingStage startupModelCreatingStage = new StartupModelCreatingStage(startupReporter);
+        startupModelCreatingStage.setApplicationRuntimeModel(applicationRuntimeModel);
         startupModelCreatingStage.setSofaModuleProfileChecker(sofaModuleProfileChecker);
         startupModelCreatingStage.setAllowModuleOverriding(sofaModuleProperties.isAllowModuleOverriding());
         return startupModelCreatingStage;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(value = SpringContextInstallStage.class, search = SearchStrategy.CURRENT)
+    public StartupSpringContextInstallStage springContextInstallStage(SofaModuleProperties sofaModuleProperties,
+                                                                      SpringContextLoader springContextLoader,
+                                                                      ApplicationRuntimeModel applicationRuntimeModel,
+                                                                      StartupReporter startupReporter) {
+        StartupSpringContextInstallStage springContextInstallStage = new StartupSpringContextInstallStage(startupReporter);
+        springContextInstallStage.setApplicationRuntimeModel(applicationRuntimeModel);
+        springContextInstallStage.setSpringContextLoader(springContextLoader);
+        springContextInstallStage.setModuleStartUpParallel(sofaModuleProperties.isModuleStartUpParallel());
+        springContextInstallStage.setIgnoreModuleInstallFailure(sofaModuleProperties.isIgnoreModuleInstallFailure());
+        return springContextInstallStage;
     }
 }

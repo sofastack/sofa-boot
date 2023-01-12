@@ -19,7 +19,6 @@ package com.alipay.sofa.runtime.spring;
 import java.lang.reflect.Method;
 import java.util.concurrent.CountDownLatch;
 
-import com.alipay.sofa.runtime.factory.BeanLoadCostBeanFactory;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.aop.framework.ProxyFactory;

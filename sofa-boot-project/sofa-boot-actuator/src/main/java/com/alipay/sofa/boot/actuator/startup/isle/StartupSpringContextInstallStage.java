@@ -19,14 +19,10 @@ package com.alipay.sofa.boot.actuator.startup.isle;
 import com.alipay.sofa.boot.actuator.startup.StartupReporter;
 import com.alipay.sofa.boot.startup.ChildrenStat;
 import com.alipay.sofa.boot.startup.ModuleStat;
-import com.alipay.sofa.isle.ApplicationRuntimeModel;
-import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
-import com.alipay.sofa.isle.spring.config.SofaModuleProperties;
-import com.alipay.sofa.isle.stage.SpringContextInstallStage;
-import com.alipay.sofa.runtime.factory.BeanLoadCostBeanFactory;
+import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptor;
+import com.alipay.sofa.boot.isle.stage.SpringContextInstallStage;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.support.AbstractApplicationContext;
 
 import static com.alipay.sofa.boot.startup.BootStageConstants.ISLE_SPRING_CONTEXT_INSTALL_STAGE;
 
@@ -37,13 +33,12 @@ import static com.alipay.sofa.boot.startup.BootStageConstants.ISLE_SPRING_CONTEX
  * @since 2020/7/8
  */
 public class StartupSpringContextInstallStage extends SpringContextInstallStage {
+
     private final StartupReporter    startupReporter;
+
     private ChildrenStat<ModuleStat> contextRefreshStageStat;
 
-    public StartupSpringContextInstallStage(AbstractApplicationContext applicationContext,
-                                            SofaModuleProperties sofaModuleProperties,
-                                            StartupReporter startupReporter) {
-        super(applicationContext, sofaModuleProperties);
+    public StartupSpringContextInstallStage(StartupReporter startupReporter) {
         this.startupReporter = startupReporter;
     }
 
@@ -61,14 +56,13 @@ public class StartupSpringContextInstallStage extends SpringContextInstallStage 
     }
 
     @Override
-    protected void doRefreshSpringContext(DeploymentDescriptor deployment,
-                                          ApplicationRuntimeModel application) {
+    protected void doRefreshSpringContext(DeploymentDescriptor deployment) {
 
         ModuleStat moduleStat = new ModuleStat();
         moduleStat.setName(deployment.getModuleName());
         moduleStat.setStartTime(System.currentTimeMillis());
 
-        super.doRefreshSpringContext(deployment, application);
+        super.doRefreshSpringContext(deployment);
 
         moduleStat.setEndTime(System.currentTimeMillis());
         moduleStat.setCost(moduleStat.getEndTime() - moduleStat.getStartTime());
@@ -81,5 +75,9 @@ public class StartupSpringContextInstallStage extends SpringContextInstallStage 
         }
 
         contextRefreshStageStat.addChild(moduleStat);
+    }
+
+    public StartupReporter getStartupReporter() {
+        return startupReporter;
     }
 }

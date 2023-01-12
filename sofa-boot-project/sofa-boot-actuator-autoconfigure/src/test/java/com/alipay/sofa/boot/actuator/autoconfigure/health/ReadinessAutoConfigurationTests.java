@@ -25,7 +25,7 @@ import com.alipay.sofa.boot.actuator.health.ReadinessCheckListener;
 import com.alipay.sofa.boot.actuator.health.SofaBootHealthIndicator;
 import com.alipay.sofa.boot.autoconfigure.isle.SofaModuleAutoConfiguration;
 import com.alipay.sofa.boot.autoconfigure.runtime.SofaRuntimeAutoConfiguration;
-import com.alipay.sofa.isle.ApplicationRuntimeModel;
+import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;

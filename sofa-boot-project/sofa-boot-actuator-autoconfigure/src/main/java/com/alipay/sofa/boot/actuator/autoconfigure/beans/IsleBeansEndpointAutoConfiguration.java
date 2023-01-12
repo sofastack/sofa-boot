@@ -18,7 +18,7 @@ package com.alipay.sofa.boot.actuator.autoconfigure.beans;
 
 import com.alipay.sofa.boot.actuator.beans.IsleBeansEndpoint;
 import com.alipay.sofa.boot.autoconfigure.isle.SofaModuleAutoConfiguration;
-import com.alipay.sofa.isle.ApplicationRuntimeModel;
+import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
 import org.springframework.boot.actuate.autoconfigure.beans.BeansEndpointAutoConfiguration;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.boot.actuate.beans.BeansEndpoint;

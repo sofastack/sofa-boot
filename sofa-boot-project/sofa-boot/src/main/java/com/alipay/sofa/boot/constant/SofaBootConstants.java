@@ -87,7 +87,7 @@ public class SofaBootConstants {
     public static final boolean SOFABOOT_SHARE_PARENT_CONTEXT_POST_PROCESSOR_DEFAULT_ENABLED = true;
 
     /** framework constants **/
-    public static String        APPLICATION                                                  = "SOFABOOT-APPLICATION";
+    public final static String        APPLICATION                                                  = "SOFABOOT-APPLICATION";
     public static String        PROCESSORS_OF_ROOT_APPLICATION_CONTEXT                       = "PROCESSORS_OF_ROOT_APPLICATION_CONTEXT";
     public static String        SOFA_MODULE_FILE                                             = "sofa-module.properties";
     public static String        SPRING_CONTEXT_PATH                                          = "META-INF/spring";

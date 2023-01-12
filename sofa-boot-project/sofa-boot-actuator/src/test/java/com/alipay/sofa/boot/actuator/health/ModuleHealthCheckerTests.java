@@ -17,8 +17,8 @@
 package com.alipay.sofa.boot.actuator.health;
 
 import com.alipay.sofa.boot.constant.SofaBootConstants;
-import com.alipay.sofa.isle.ApplicationRuntimeModel;
-import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
+import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
+import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptor;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

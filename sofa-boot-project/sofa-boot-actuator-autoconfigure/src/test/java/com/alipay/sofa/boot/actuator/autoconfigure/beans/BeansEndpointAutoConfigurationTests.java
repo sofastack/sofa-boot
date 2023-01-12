@@ -19,7 +19,7 @@ package com.alipay.sofa.boot.actuator.autoconfigure.beans;
 import com.alipay.sofa.boot.actuator.beans.IsleBeansEndpoint;
 import com.alipay.sofa.boot.autoconfigure.isle.SofaModuleAutoConfiguration;
 import com.alipay.sofa.boot.autoconfigure.runtime.SofaRuntimeAutoConfiguration;
-import com.alipay.sofa.isle.ApplicationRuntimeModel;
+import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.FilteredClassLoader;
