@@ -32,16 +32,16 @@ import java.util.List;
  */
 public class ModuleLogOutputStage extends AbstractPipelineStage {
 
-    public static final String MODULE_LOG_OUTPUT_STAGE_NAME = "ModuleLogOutputStage";
+    public static final String  MODULE_LOG_OUTPUT_STAGE_NAME = "ModuleLogOutputStage";
 
-    private static final String SYMBOLIC1          = "  ├─";
-    private static final String SYMBOLIC2          = "  └─";
+    private static final String SYMBOLIC1                    = "  ├─";
+    private static final String SYMBOLIC2                    = "  └─";
 
-    private static final String SYMBOLIC3          = "  │   +---";
-    private static final String SYMBOLIC4          = "  │   `---";
+    private static final String SYMBOLIC3                    = "  │   +---";
+    private static final String SYMBOLIC4                    = "  │   `---";
 
-    private static final String SYMBOLIC5          = "      +---";
-    private static final String SYMBOLIC6          = "      `---";
+    private static final String SYMBOLIC5                    = "      +---";
+    private static final String SYMBOLIC6                    = "      `---";
 
     @Override
     protected void doProcess() throws Exception {

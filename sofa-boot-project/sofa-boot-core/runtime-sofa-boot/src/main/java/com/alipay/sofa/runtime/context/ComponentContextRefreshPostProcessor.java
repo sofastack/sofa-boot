@@ -1,3 +1,19 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.alipay.sofa.runtime.context;
 
 import com.alipay.sofa.boot.context.ContextRefreshPostProcessor;
@@ -22,13 +38,14 @@ import java.util.Collection;
  */
 public class ComponentContextRefreshPostProcessor implements ContextRefreshPostProcessor {
 
-    private boolean unregisterComponentWhenContextRefreshFailure;
+    private boolean                  unregisterComponentWhenContextRefreshFailure;
 
-    private final ComponentManager componentManager;
+    private final ComponentManager   componentManager;
 
-    private final SofaRuntimeContext sofaRuntimeContext;;
+    private final SofaRuntimeContext sofaRuntimeContext;                           ;
 
-    public ComponentContextRefreshPostProcessor(ComponentManager componentManager, SofaRuntimeContext sofaRuntimeContext) {
+    public ComponentContextRefreshPostProcessor(ComponentManager componentManager,
+                                                SofaRuntimeContext sofaRuntimeContext) {
         this.componentManager = componentManager;
         this.sofaRuntimeContext = sofaRuntimeContext;
     }
@@ -37,15 +54,16 @@ public class ComponentContextRefreshPostProcessor implements ContextRefreshPostP
     public void postProcessAfterRefresh(SofaGenericApplicationContext context, Throwable throwable) {
         if (throwable == null) {
             ComponentName componentName = ComponentNameFactory.createComponentName(
-                    SpringContextComponent.SPRING_COMPONENT_TYPE, context.getId());
+                SpringContextComponent.SPRING_COMPONENT_TYPE, context.getId());
             Implementation implementation = new SpringContextImplementation(context);
-            ComponentInfo componentInfo = new SpringContextComponent(componentName, implementation, sofaRuntimeContext);
+            ComponentInfo componentInfo = new SpringContextComponent(componentName, implementation,
+                sofaRuntimeContext);
             componentManager.register(componentInfo);
         }
 
         if (throwable != null && unregisterComponentWhenContextRefreshFailure) {
             Collection<ComponentInfo> componentInfos = componentManager
-                    .getComponentInfosByApplicationContext(context);
+                .getComponentInfosByApplicationContext(context);
             for (ComponentInfo componentInfo : componentInfos) {
                 try {
                     componentManager.unregister(componentInfo);

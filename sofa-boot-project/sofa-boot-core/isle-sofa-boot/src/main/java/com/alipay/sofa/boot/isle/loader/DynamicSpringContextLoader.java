@@ -49,17 +49,17 @@ public class DynamicSpringContextLoader implements SpringContextLoader, Initiali
 
     protected final ConfigurableApplicationContext rootApplicationContext;
 
-    private boolean allowBeanOverriding;
+    private boolean                                allowBeanOverriding;
 
-    private List<String> activeProfiles = new ArrayList<>();
+    private List<String>                           activeProfiles               = new ArrayList<>();
 
-    private List<ContextRefreshPostProcessor> contextRefreshPostProcessors = new ArrayList<>();
+    private List<ContextRefreshPostProcessor>      contextRefreshPostProcessors = new ArrayList<>();
 
-    private List<BeanStatCustomizer> beanStatCustomizers = new ArrayList<>();
+    private List<BeanStatCustomizer>               beanStatCustomizers          = new ArrayList<>();
 
-    private boolean publishEventToParent;
+    private boolean                                publishEventToParent;
 
-    private SofaPostProcessorShareManager sofaPostProcessorShareManager;
+    private SofaPostProcessorShareManager          sofaPostProcessorShareManager;
 
     public DynamicSpringContextLoader(ApplicationContext rootApplicationContext) {
         this.rootApplicationContext = (ConfigurableApplicationContext) rootApplicationContext;
@@ -68,7 +68,8 @@ public class DynamicSpringContextLoader implements SpringContextLoader, Initiali
     @Override
     public void afterPropertiesSet() throws Exception {
         Assert.notNull(rootApplicationContext, "rootApplicationContext must not be null");
-        Assert.isInstanceOf(ConfigurableApplicationContext.class, "rootApplicationContext must be ConfigurableApplicationContext");
+        Assert.isInstanceOf(ConfigurableApplicationContext.class,
+            "rootApplicationContext must be ConfigurableApplicationContext");
     }
 
     @Override
@@ -118,7 +119,7 @@ public class DynamicSpringContextLoader implements SpringContextLoader, Initiali
     }
 
     protected ConfigurableApplicationContext getSpringParentContext(DeploymentDescriptor deployment,
-                                                             ApplicationRuntimeModel application) {
+                                                                    ApplicationRuntimeModel application) {
         ConfigurableApplicationContext parentSpringContext = null;
         if (deployment.getSpringParent() != null) {
             String springParent = deployment.getSpringParent();

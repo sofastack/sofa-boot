@@ -34,13 +34,14 @@ public class StartupReporter {
 
     private final StartupStaticsModel startupStaticsModel;
 
-    private boolean storeStatics = false;
+    private boolean                   storeStatics  = false;
 
-    private int costThreshold = 100;
+    private int                       costThreshold = 100;
 
     public StartupReporter() {
         this.startupStaticsModel = new StartupStaticsModel();
-        this.startupStaticsModel.setApplicationBootTime(ManagementFactory.getRuntimeMXBean().getStartTime());
+        this.startupStaticsModel.setApplicationBootTime(ManagementFactory.getRuntimeMXBean()
+            .getStartTime());
     }
 
     /**
@@ -50,8 +51,7 @@ public class StartupReporter {
     public void bindToStartupReporter(ConfigurableEnvironment environment) {
         try {
             Binder.get(environment).bind("sofa.boot.startup", Bindable.ofInstance(this));
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             throw new IllegalStateException("Cannot bind to StartupReporter", ex);
         }
     }
@@ -104,7 +104,6 @@ public class StartupReporter {
         startupStaticsModel.clear();
     }
 
-
     public boolean isStoreStatics() {
         return storeStatics;
     }
@@ -112,7 +111,6 @@ public class StartupReporter {
     public void setStoreStatics(boolean storeStatics) {
         this.storeStatics = storeStatics;
     }
-
 
     public int getCostThreshold() {
         return costThreshold;

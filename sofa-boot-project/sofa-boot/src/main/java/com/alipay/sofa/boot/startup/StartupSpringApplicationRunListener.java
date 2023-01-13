@@ -27,8 +27,6 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import java.lang.management.ManagementFactory;
 import java.time.Duration;
 
-import static com.alipay.sofa.boot.startup.BootStageConstants.*;
-
 /**
  * Extend for {@link SpringApplicationRunListener} to compute startup stages cost time.
  *
@@ -39,7 +37,9 @@ public class StartupSpringApplicationRunListener implements SpringApplicationRun
 
     private final SpringApplication application;
 
-    private final StartupReporter startupReporter;
+    private final String[]          args;
+
+    private final StartupReporter   startupReporter;
 
     private BaseStat                jvmStartingStage;
 
@@ -49,15 +49,16 @@ public class StartupSpringApplicationRunListener implements SpringApplicationRun
 
     private BaseStat                applicationContextLoadStage;
 
-    public StartupSpringApplicationRunListener(SpringApplication sa, String[] args) {
-        application = sa;
-        startupReporter = new StartupReporter();
+    public StartupSpringApplicationRunListener(SpringApplication springApplication, String[] args) {
+        this.application = springApplication;
+        this.args = args;
+        this.startupReporter = new StartupReporter();
     }
 
     @Override
     public void starting(ConfigurableBootstrapContext bootstrapContext) {
         BaseStat stat = new BaseStat();
-        stat.setName(JVM_STARTING_STAGE);
+        stat.setName(BootStageConstants.JVM_STARTING_STAGE);
         stat.setStartTime(ManagementFactory.getRuntimeMXBean().getStartTime());
         stat.setEndTime(System.currentTimeMillis());
         jvmStartingStage = stat;
@@ -67,7 +68,7 @@ public class StartupSpringApplicationRunListener implements SpringApplicationRun
     public void environmentPrepared(ConfigurableBootstrapContext bootstrapContext,
                                     ConfigurableEnvironment environment) {
         BaseStat stat = new BaseStat();
-        stat.setName(ENVIRONMENT_PREPARE_STAGE);
+        stat.setName(BootStageConstants.ENVIRONMENT_PREPARE_STAGE);
         stat.setStartTime(jvmStartingStage.getEndTime());
         stat.setEndTime(System.currentTimeMillis());
         environmentPrepareStage = stat;
@@ -78,7 +79,7 @@ public class StartupSpringApplicationRunListener implements SpringApplicationRun
     @Override
     public void contextPrepared(ConfigurableApplicationContext context) {
         ChildrenStat<BaseStat> stat = new ChildrenStat<>();
-        stat.setName(APPLICATION_CONTEXT_PREPARE_STAGE);
+        stat.setName(BootStageConstants.APPLICATION_CONTEXT_PREPARE_STAGE);
         stat.setStartTime(environmentPrepareStage.getEndTime());
         stat.setEndTime(System.currentTimeMillis());
         if (application instanceof StartupSpringApplication) {
@@ -91,13 +92,15 @@ public class StartupSpringApplicationRunListener implements SpringApplicationRun
     @Override
     public void contextLoaded(ConfigurableApplicationContext context) {
         BaseStat stat = new BaseStat();
-        stat.setName(APPLICATION_CONTEXT_LOAD_STAGE);
+        stat.setName(BootStageConstants.APPLICATION_CONTEXT_LOAD_STAGE);
         stat.setStartTime(applicationContextPrepareStage.getEndTime());
         stat.setEndTime(System.currentTimeMillis());
         context.getBeanFactory().addBeanPostProcessor(new BeanCostBeanPostProcessor());
-        context.getBeanFactory().addBeanPostProcessor(new StartupReporterBeanPostProcessor(startupReporter));
+        context.getBeanFactory().addBeanPostProcessor(
+            new StartupReporterBeanPostProcessor(startupReporter));
         context.getBeanFactory().registerSingleton("STARTUP_REPORTER_BEAN", startupReporter);
-        context.getBeanFactory().registerSingleton("STARTUP_SMART_LIfE_CYCLE", new StartupSmartLifecycle(startupReporter));
+        context.getBeanFactory().registerSingleton("STARTUP_SMART_LIfE_CYCLE",
+            new StartupSmartLifecycle(startupReporter));
         applicationContextLoadStage = stat;
     }
 
@@ -105,7 +108,7 @@ public class StartupSpringApplicationRunListener implements SpringApplicationRun
     public void started(ConfigurableApplicationContext context, Duration timeTaken) {
         // refresh applicationRefreshStage
         ChildrenStat<ModuleStat> applicationRefreshStage = (ChildrenStat<ModuleStat>) startupReporter
-            .getStageNyName(APPLICATION_CONTEXT_REFRESH_STAGE);
+            .getStageNyName(BootStageConstants.APPLICATION_CONTEXT_REFRESH_STAGE);
         applicationRefreshStage.setStartTime(applicationContextLoadStage.getEndTime());
         applicationRefreshStage.setCost(applicationRefreshStage.getEndTime()
                                         - applicationRefreshStage.getStartTime());

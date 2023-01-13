@@ -30,7 +30,7 @@ public class StartupProperties {
     /**
      * 基本耗时统计阈值，单位 ms
      */
-    private long  costThreshold = 100;
+    private long costThreshold = 100;
 
     public long getCostThreshold() {
         return costThreshold;

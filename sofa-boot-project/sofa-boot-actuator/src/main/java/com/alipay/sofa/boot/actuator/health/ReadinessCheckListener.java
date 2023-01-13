@@ -54,7 +54,7 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
     private static final Logger                   logger                              = SofaBootLoggerFactory
                                                                                           .getLogger(ReadinessCheckListener.class);
 
-    public static final String                    READINESS_CHECK_STAGE                = "ReadinessCheckStage";
+    public static final String                    READINESS_CHECK_STAGE               = "ReadinessCheckStage";
     /**
      * health check not ready result key
      */
@@ -126,9 +126,9 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
      */
     private ReadinessState                        readinessState;
 
-    private ApplicationContext                  applicationContext;
+    private ApplicationContext                    applicationContext;
 
-    private StartupReporter                     startupReporter;
+    private StartupReporter                       startupReporter;
 
     private boolean                               skipAll                             = false;
 

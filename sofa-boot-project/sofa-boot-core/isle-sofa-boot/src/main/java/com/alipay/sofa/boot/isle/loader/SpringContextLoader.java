@@ -34,5 +34,6 @@ public interface SpringContextLoader {
      * @param application application runtime model
      * @throws Exception throws when exception occur
      */
-    void loadSpringContext(DeploymentDescriptor deployment, ApplicationRuntimeModel application) throws Exception;
+    void loadSpringContext(DeploymentDescriptor deployment, ApplicationRuntimeModel application)
+                                                                                                throws Exception;
 }

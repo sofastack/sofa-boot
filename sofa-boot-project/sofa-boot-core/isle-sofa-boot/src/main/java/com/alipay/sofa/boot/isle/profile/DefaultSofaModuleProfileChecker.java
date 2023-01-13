@@ -37,7 +37,7 @@ public class DefaultSofaModuleProfileChecker implements SofaModuleProfileChecker
 
     private final Set<String> activeProfiles = new HashSet<>();
 
-    private List<String> userCustomProfiles;
+    private List<String>      userCustomProfiles;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -52,7 +52,8 @@ public class DefaultSofaModuleProfileChecker implements SofaModuleProfileChecker
 
     @Override
     public boolean acceptProfiles(String[] sofaModuleProfiles) {
-        Assert.notEmpty(sofaModuleProfiles, ErrorCode.convert("01-13000", SofaBootConstants.DEFAULT_PROFILE_VALUE));
+        Assert.notEmpty(sofaModuleProfiles,
+            ErrorCode.convert("01-13000", SofaBootConstants.DEFAULT_PROFILE_VALUE));
         for (String sofaModuleProfile : sofaModuleProfiles) {
             if (StringUtils.hasText(sofaModuleProfile) && sofaModuleProfile.charAt(0) == '!') {
                 if (!isProfileActive(sofaModuleProfile.substring(1))) {

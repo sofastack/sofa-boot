@@ -48,7 +48,7 @@ public class ComponentsEndPoint {
     }
 
     @ReadOperation
-    public ApplicationComponents components() {
+    public ComponentsDescriptor components() {
         ComponentManager componentManager = sofaRuntimeContext.getComponentManager();
         Map<String, Collection<ComponentDisplayInfo>> componentsInfoMap = new HashMap<>();
         Collection<ComponentType> componentTypes = componentManager.getComponentTypes();
@@ -60,14 +60,14 @@ public class ComponentsEndPoint {
                     .collect(Collectors.toList());
             componentsInfoMap.put(componentType.getName(), componentDisplayInfos);
         });
-        return new ApplicationComponents(componentsInfoMap);
+        return new ComponentsDescriptor(componentsInfoMap);
     }
 
-    public static final class ApplicationComponents {
+    public static final class ComponentsDescriptor {
 
         private final Map<String, Collection<ComponentDisplayInfo>> componentsInfoMap;
 
-        private ApplicationComponents(Map<String, Collection<ComponentDisplayInfo>> componentsInfoMap) {
+        private ComponentsDescriptor(Map<String, Collection<ComponentDisplayInfo>> componentsInfoMap) {
             this.componentsInfoMap = componentsInfoMap;
         }
 

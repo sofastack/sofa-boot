@@ -39,13 +39,13 @@ import java.util.Set;
  */
 public class SofaGenericApplicationContext extends GenericApplicationContext {
 
-    private static final Method GET_APPLICATION_EVENT_MULTICASTER_METHOD;
+    private static final Method               GET_APPLICATION_EVENT_MULTICASTER_METHOD;
 
-    private static final Field EARLY_APPLICATION_EVENTS_FIELD;
+    private static final Field                EARLY_APPLICATION_EVENTS_FIELD;
 
     private List<ContextRefreshPostProcessor> postProcessors = new ArrayList<>();
 
-    private boolean publishEventToParent;
+    private boolean                           publishEventToParent;
 
     static {
         try {
@@ -99,8 +99,7 @@ public class SofaGenericApplicationContext extends GenericApplicationContext {
         ApplicationEvent applicationEvent;
         if (event instanceof ApplicationEvent) {
             applicationEvent = (ApplicationEvent) event;
-        }
-        else {
+        } else {
             applicationEvent = new PayloadApplicationEvent<>(this, event);
             if (eventType == null) {
                 eventType = ((PayloadApplicationEvent<?>) applicationEvent).getResolvableType();
@@ -108,12 +107,12 @@ public class SofaGenericApplicationContext extends GenericApplicationContext {
         }
 
         Set<ApplicationEvent> earlyApplicationEvents = getFieldValueByReflect(
-                EARLY_APPLICATION_EVENTS_FIELD, this);
+            EARLY_APPLICATION_EVENTS_FIELD, this);
         if (earlyApplicationEvents != null) {
             earlyApplicationEvents.add(applicationEvent);
         } else {
             ApplicationEventMulticaster applicationEventMulticaster = getMethodValueByReflect(
-                    GET_APPLICATION_EVENT_MULTICASTER_METHOD, this);
+                GET_APPLICATION_EVENT_MULTICASTER_METHOD, this);
             applicationEventMulticaster.multicastEvent(applicationEvent, eventType);
         }
     }

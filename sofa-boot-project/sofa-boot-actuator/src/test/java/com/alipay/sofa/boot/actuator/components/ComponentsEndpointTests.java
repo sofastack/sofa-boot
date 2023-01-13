@@ -92,7 +92,7 @@ public class ComponentsEndpointTests {
         Mockito.doReturn(extensionComponents).when(componentManager)
             .getComponentInfosByType(ExtensionComponent.EXTENSION_COMPONENT_TYPE);
 
-        ComponentsEndPoint.ApplicationComponents applicationComponents = sofaBootComponentsEndPoint
+        ComponentsEndPoint.ComponentsDescriptor applicationComponents = sofaBootComponentsEndPoint
             .components();
         assertThat(applicationComponents).isNotNull();
         Map<String, Collection<ComponentsEndPoint.ComponentDisplayInfo>> componentTypeCollectionMap = applicationComponents

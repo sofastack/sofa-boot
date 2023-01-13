@@ -126,7 +126,6 @@ public class ApplicationRuntimeModel implements IsleDeploymentModel {
         return moduleDeploymentValidator;
     }
 
-
     public void setModuleDeploymentValidator(ModuleDeploymentValidator moduleDeploymentValidator) {
         this.moduleDeploymentValidator = moduleDeploymentValidator;
     }

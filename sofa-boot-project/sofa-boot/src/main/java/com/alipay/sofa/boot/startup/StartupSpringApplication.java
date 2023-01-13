@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.boot.startup;
 
-import com.alipay.sofa.boot.startup.BaseStat;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;

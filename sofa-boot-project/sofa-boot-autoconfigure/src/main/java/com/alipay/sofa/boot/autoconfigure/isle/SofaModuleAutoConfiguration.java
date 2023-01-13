@@ -84,7 +84,7 @@ public class SofaModuleAutoConfiguration {
         ApplicationRuntimeModel applicationRuntimeModel = new ApplicationRuntimeModel();
         applicationRuntimeModel.setModuleDeploymentValidator(moduleDeploymentValidator);
         applicationRuntimeModel.setSofaModuleProfileChecker(sofaModuleProfileChecker);
-        return  applicationRuntimeModel;
+        return applicationRuntimeModel;
     }
 
     @Bean
@@ -105,8 +105,10 @@ public class SofaModuleAutoConfiguration {
         SpringContextInstallStage springContextInstallStage = new SpringContextInstallStage();
         springContextInstallStage.setApplicationRuntimeModel(applicationRuntimeModel);
         springContextInstallStage.setSpringContextLoader(springContextLoader);
-        springContextInstallStage.setModuleStartUpParallel(sofaModuleProperties.isModuleStartUpParallel());
-        springContextInstallStage.setIgnoreModuleInstallFailure(sofaModuleProperties.isIgnoreModuleInstallFailure());
+        springContextInstallStage.setModuleStartUpParallel(sofaModuleProperties
+            .isModuleStartUpParallel());
+        springContextInstallStage.setIgnoreModuleInstallFailure(sofaModuleProperties
+            .isIgnoreModuleInstallFailure());
         return springContextInstallStage;
     }
 
@@ -125,10 +127,13 @@ public class SofaModuleAutoConfiguration {
                                                               List<ContextRefreshPostProcessor> contextRefreshPostProcessors,
                                                               SofaPostProcessorShareManager sofaPostProcessorShareManager,
                                                               List<BeanStatCustomizer> beanStatCustomizers) {
-        DynamicSpringContextLoader dynamicSpringContextLoader = new DynamicSpringContextLoader(applicationContext);
+        DynamicSpringContextLoader dynamicSpringContextLoader = new DynamicSpringContextLoader(
+            applicationContext);
         dynamicSpringContextLoader.setActiveProfiles(sofaModuleProperties.getActiveProfiles());
-        dynamicSpringContextLoader.setAllowBeanOverriding(sofaModuleProperties.isAllowBeanDefinitionOverriding());
-        dynamicSpringContextLoader.setPublishEventToParent(sofaModuleProperties.isPublishEventToParent());
+        dynamicSpringContextLoader.setAllowBeanOverriding(sofaModuleProperties
+            .isAllowBeanDefinitionOverriding());
+        dynamicSpringContextLoader.setPublishEventToParent(sofaModuleProperties
+            .isPublishEventToParent());
         dynamicSpringContextLoader.setContextRefreshPostProcessors(contextRefreshPostProcessors);
         dynamicSpringContextLoader.setSofaPostProcessorShareManager(sofaPostProcessorShareManager);
         dynamicSpringContextLoader.setBeanStatCustomizers(beanStatCustomizers);
@@ -156,8 +161,9 @@ public class SofaModuleAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public SofaModuleProfileChecker sofaModuleProfileChecker(SofaModuleProperties sofaModuleProperties) {
-        DefaultSofaModuleProfileChecker defaultSofaModuleProfileChecker =  new DefaultSofaModuleProfileChecker();
-        defaultSofaModuleProfileChecker.setUserCustomProfiles(sofaModuleProperties.getActiveProfiles());
+        DefaultSofaModuleProfileChecker defaultSofaModuleProfileChecker = new DefaultSofaModuleProfileChecker();
+        defaultSofaModuleProfileChecker.setUserCustomProfiles(sofaModuleProperties
+            .getActiveProfiles());
         return defaultSofaModuleProfileChecker;
     }
 
@@ -172,8 +178,10 @@ public class SofaModuleAutoConfiguration {
     public SofaPostProcessorShareManager sofaModulePostProcessorShareManager(SofaModuleProperties sofaModuleProperties,
                                                                              List<SofaPostProcessorShareFilter> sofaPostProcessorShareFilters) {
         SofaPostProcessorShareManager sofaPostProcessorShareManager = new SofaPostProcessorShareManager();
-        sofaPostProcessorShareManager.setShareParentContextPostProcessors(sofaModuleProperties.isShareParentPostProcessor());
-        sofaPostProcessorShareManager.setSofaPostProcessorShareFilters(sofaPostProcessorShareFilters);
+        sofaPostProcessorShareManager.setShareParentContextPostProcessors(sofaModuleProperties
+            .isShareParentPostProcessor());
+        sofaPostProcessorShareManager
+            .setSofaPostProcessorShareFilters(sofaPostProcessorShareFilters);
         return sofaPostProcessorShareManager;
     }
 }

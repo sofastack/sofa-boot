@@ -32,9 +32,9 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class BeanCostBeanPostProcessor implements BeanPostProcessor {
 
-    private final Map<String, BeanStat> beanInitCostMap        = new ConcurrentHashMap<>();
+    private final Map<String, BeanStat> beanInitCostMap = new ConcurrentHashMap<>();
 
-    private final List<BeanStat>        beanStatList           = new ArrayList<>();
+    private final List<BeanStat>        beanStatList    = new ArrayList<>();
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName)
@@ -55,8 +55,8 @@ public class BeanCostBeanPostProcessor implements BeanPostProcessor {
         BeanStat beanStat = beanInitCostMap.remove(beanClassName);
         if (beanStat != null) {
             beanStat.finishRefresh();
-                beanStat.finishRefresh();
-                beanStatList.add(beanStat);
+            beanStat.finishRefresh();
+            beanStatList.add(beanStat);
         }
         return bean;
     }

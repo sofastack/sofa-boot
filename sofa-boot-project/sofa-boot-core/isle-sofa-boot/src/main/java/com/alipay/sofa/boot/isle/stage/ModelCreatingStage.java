@@ -24,7 +24,6 @@ import com.alipay.sofa.boot.isle.deployment.DeploymentBuilder;
 import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptor;
 import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptorConfiguration;
 import com.alipay.sofa.boot.isle.deployment.DeploymentException;
-import com.alipay.sofa.boot.isle.profile.SofaModuleProfileChecker;
 import com.alipay.sofa.boot.log.SofaLogger;
 import org.springframework.core.io.UrlResource;
 import org.springframework.util.StringUtils;
@@ -48,7 +47,7 @@ public class ModelCreatingStage extends AbstractPipelineStage {
 
     public static final String MODEL_CREATING_STAGE_NAME = "ModelCreatingStage";
 
-    protected boolean                   allowModuleOverriding;
+    protected boolean          allowModuleOverriding;
 
     @Override
     protected void doProcess() throws Exception {
@@ -101,12 +100,12 @@ public class ModelCreatingStage extends AbstractPipelineStage {
         StringBuilder stringBuilder = new StringBuilder();
         if (application.getAllInactiveDeployments().size() > 0) {
             writeMessageToStringBuilder(stringBuilder, application.getAllInactiveDeployments(),
-                    "All unactivated module list");
+                "All unactivated module list");
         }
         writeMessageToStringBuilder(stringBuilder, application.getAllDeployments(),
-                "All activated module list");
+            "All activated module list");
         writeMessageToStringBuilder(stringBuilder, application.getResolvedDeployments(),
-                "Modules that could install");
+            "Modules that could install");
         SofaLogger.info(stringBuilder.toString());
 
         String errorMessage = getErrorMessageByApplicationModule(application);
@@ -123,26 +122,26 @@ public class ModelCreatingStage extends AbstractPipelineStage {
         StringBuilder sbError = new StringBuilder(512);
         if (application.getDeployRegistry().getPendingEntries().size() > 0) {
             sbError.append("\n").append(ErrorCode.convert("01-12000")).append("(")
-                    .append(application.getDeployRegistry().getPendingEntries().size())
-                    .append(") >>>>>>>>\n");
+                .append(application.getDeployRegistry().getPendingEntries().size())
+                .append(") >>>>>>>>\n");
 
             for (DependencyTree.Entry<String, DeploymentDescriptor> entry : application
-                    .getDeployRegistry().getPendingEntries()) {
+                .getDeployRegistry().getPendingEntries()) {
                 if (application.getAllDeployments().contains(entry.get())) {
                     sbError.append("[").append(entry.getKey()).append("]").append(" depends on ")
-                            .append(entry.getWaitsFor())
-                            .append(", but the latter can not be resolved.").append("\n");
+                        .append(entry.getWaitsFor())
+                        .append(", but the latter can not be resolved.").append("\n");
                 }
             }
         }
 
         if (application.getDeployRegistry().getMissingRequirements().size() > 0) {
             sbError.append("Missing modules").append("(")
-                    .append(application.getDeployRegistry().getMissingRequirements().size())
-                    .append(") >>>>>>>>\n");
+                .append(application.getDeployRegistry().getMissingRequirements().size())
+                .append(") >>>>>>>>\n");
 
             for (DependencyTree.Entry<String, DeploymentDescriptor> entry : application
-                    .getDeployRegistry().getMissingRequirements()) {
+                .getDeployRegistry().getMissingRequirements()) {
                 sbError.append("[").append(entry.getKey()).append("]").append("\n");
             }
 

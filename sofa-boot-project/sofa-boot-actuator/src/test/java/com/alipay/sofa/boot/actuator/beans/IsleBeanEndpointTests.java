@@ -50,14 +50,14 @@ public class IsleBeanEndpointTests {
         model.addInstalled(new MockDeploymentDescriptor("B"));
         context.getBeanFactory().registerSingleton(SofaBootConstants.APPLICATION, model);
         IsleBeansEndpoint isleBeansEndpoint = new IsleBeansEndpoint(context);
-        BeansEndpoint.ApplicationBeans applicationBeans = isleBeansEndpoint.beans();
+        BeansEndpoint.BeansDescriptor applicationBeans = isleBeansEndpoint.beans();
         assertThat(applicationBeans).isNotNull();
-        Map<String, BeansEndpoint.ContextBeans> beansMap = applicationBeans.getContexts();
+        Map<String, BeansEndpoint.ContextBeansDescriptor> beansMap = applicationBeans.getContexts();
         assertThat(beansMap).isNotNull();
         assertThat(beansMap.size()).isEqualTo(3);
         assertThat(beansMap.get("bootstrap")).isNotNull();
 
-        BeansEndpoint.ContextBeans contextBeansA = beansMap.get("isle-module-A");
+        BeansEndpoint.ContextBeansDescriptor contextBeansA = beansMap.get("isle-module-A");
         assertThat(contextBeansA).isNotNull();
         assertThat(contextBeansA.getParentId()).isEqualTo("isle-module-parentA");
         assertThat(
@@ -65,7 +65,7 @@ public class IsleBeanEndpointTests {
                 .contains("com.alipay.sofa.boot.actuator.beans.IsleBeanEndpointTests$TestBean"))
             .isTrue();
 
-        BeansEndpoint.ContextBeans contextBeansB = beansMap.get("isle-module-B");
+        BeansEndpoint.ContextBeansDescriptor contextBeansB = beansMap.get("isle-module-B");
         assertThat(contextBeansB).isNotNull();
         assertThat(contextBeansB.getParentId()).isEqualTo("isle-module-parentB");
         assertThat(

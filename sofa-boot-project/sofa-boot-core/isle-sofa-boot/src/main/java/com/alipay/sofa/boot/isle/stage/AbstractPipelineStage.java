@@ -18,7 +18,6 @@ package com.alipay.sofa.boot.isle.stage;
 
 import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.boot.startup.BaseStat;
-import com.alipay.sofa.boot.startup.ChildrenStat;
 import com.alipay.sofa.boot.startup.StartupReporter;
 import com.alipay.sofa.boot.startup.StartupReporterAware;
 import org.springframework.beans.BeansException;
@@ -38,19 +37,20 @@ import org.springframework.util.Assert;
  * @author huzijie
  */
 public abstract class AbstractPipelineStage implements PipelineStage, ApplicationContextAware,
-        BeanFactoryAware, StartupReporterAware, InitializingBean {
+                                           BeanFactoryAware, StartupReporterAware, InitializingBean {
 
-    protected final ClassLoader  appClassLoader = Thread.currentThread().getContextClassLoader();
+    protected final ClassLoader               appClassLoader = Thread.currentThread()
+                                                                 .getContextClassLoader();
 
-    protected ApplicationRuntimeModel application;
+    protected ApplicationRuntimeModel         application;
 
-    protected ConfigurableApplicationContext applicationContext;
+    protected ConfigurableApplicationContext  applicationContext;
 
-    protected StartupReporter startupReporter;
+    protected StartupReporter                 startupReporter;
 
     protected ConfigurableListableBeanFactory beanFactory;
 
-    protected BaseStat baseStat;
+    protected BaseStat                        baseStat;
 
     @Override
     public void process() throws Exception {
@@ -68,7 +68,7 @@ public abstract class AbstractPipelineStage implements PipelineStage, Applicatio
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        Assert.notNull(application,"applicationRuntimeModel must not be null");
+        Assert.notNull(application, "applicationRuntimeModel must not be null");
     }
 
     @Override
@@ -79,14 +79,14 @@ public abstract class AbstractPipelineStage implements PipelineStage, Applicatio
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         Assert.isTrue(applicationContext instanceof ConfigurableApplicationContext,
-                "applicationContext must implement ConfigurableApplicationContext");
+            "applicationContext must implement ConfigurableApplicationContext");
         this.applicationContext = (ConfigurableApplicationContext) applicationContext;
     }
 
     @Override
     public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
         Assert.isTrue(beanFactory instanceof ConfigurableListableBeanFactory,
-                "beanFactory must implement ConfigurableListableBeanFactory");
+            "beanFactory must implement ConfigurableListableBeanFactory");
         this.beanFactory = (ConfigurableListableBeanFactory) beanFactory;
     }
 

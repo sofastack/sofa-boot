@@ -57,22 +57,22 @@ public class IsleBeansEndpoint extends BeansEndpoint {
 
     @ReadOperation
     @Override
-    public ApplicationBeans beans() {
-        ApplicationBeans applicationBeans = super.beans();
+    public BeansEndpoint.BeansDescriptor beans() {
+        BeansEndpoint.BeansDescriptor beansDescriptor = super.beans();
         ApplicationRuntimeModel applicationRuntimeModel = context.getBean(
             SofaBootConstants.APPLICATION, ApplicationRuntimeModel.class);
-        Map<String, ContextBeans> moduleApplicationContexts = getModuleApplicationContexts(applicationRuntimeModel);
-        applicationBeans.getContexts().putAll(moduleApplicationContexts);
-        return applicationBeans;
+        Map<String, BeansEndpoint.ContextBeansDescriptor> moduleApplicationContexts = getModuleApplicationContexts(applicationRuntimeModel);
+        beansDescriptor.getContexts().putAll(moduleApplicationContexts);
+        return beansDescriptor;
     }
 
-    private Map<String, ContextBeans> getModuleApplicationContexts(ApplicationRuntimeModel applicationRuntimeModel) {
-        Map<String, ContextBeans> contexts = new HashMap<>();
+    private Map<String, BeansEndpoint.ContextBeansDescriptor> getModuleApplicationContexts(ApplicationRuntimeModel applicationRuntimeModel) {
+        Map<String, BeansEndpoint.ContextBeansDescriptor> contexts = new HashMap<>();
         List<DeploymentDescriptor> installedModules = applicationRuntimeModel.getInstalled();
         installedModules.forEach(descriptor -> {
             ApplicationContext applicationContext = descriptor.getApplicationContext();
             if (applicationContext instanceof ConfigurableApplicationContext) {
-                ContextBeans contextBeans = describing((ConfigurableApplicationContext) applicationContext,
+                BeansEndpoint.ContextBeansDescriptor contextBeans = describing((ConfigurableApplicationContext) applicationContext,
                         descriptor.getSpringParent());
                 if (contextBeans != null) {
                     contexts.put(descriptor.getModuleName(), contextBeans);
@@ -82,7 +82,8 @@ public class IsleBeansEndpoint extends BeansEndpoint {
         return contexts;
     }
 
-    private ContextBeans describing(ConfigurableApplicationContext context, String parentModuleName) {
+    private BeansEndpoint.ContextBeansDescriptor describing(ConfigurableApplicationContext context,
+                                                            String parentModuleName) {
         Map<String, BeanDescriptor> beanDescriptorMap = callContextBeansDescribeBeans(context
             .getBeanFactory());
         return createContextBeans(beanDescriptorMap, parentModuleName);
@@ -91,7 +92,7 @@ public class IsleBeansEndpoint extends BeansEndpoint {
     // FIXME only can use reflect now
     private Map<String, BeanDescriptor> callContextBeansDescribeBeans(ConfigurableListableBeanFactory beanFactory) {
         try {
-            Class<?> clazz = ContextBeans.class;
+            Class<?> clazz = BeansEndpoint.ContextBeansDescriptor.class;
             Method method = clazz.getDeclaredMethod("describeBeans",
                 ConfigurableListableBeanFactory.class);
             method.setAccessible(true);
@@ -104,12 +105,13 @@ public class IsleBeansEndpoint extends BeansEndpoint {
     }
 
     // FIXME only can use reflect now
-    private ContextBeans createContextBeans(Map<String, BeanDescriptor> beans, String parentId) {
+    private BeansEndpoint.ContextBeansDescriptor createContextBeans(Map<String, BeanDescriptor> beans,
+                                                                    String parentId) {
         try {
-            Class<?> clazz = ContextBeans.class;
+            Class<?> clazz = BeansEndpoint.ContextBeansDescriptor.class;
             Constructor<?> constructor = clazz.getDeclaredConstructor(Map.class, String.class);
             constructor.setAccessible(true);
-            return (ContextBeans) constructor.newInstance(beans, parentId);
+            return (BeansEndpoint.ContextBeansDescriptor) constructor.newInstance(beans, parentId);
         } catch (Throwable e) {
             // ignore
             return null;

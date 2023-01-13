@@ -44,7 +44,7 @@ public class StartupEndPoint {
     }
 
     @WriteOperation
-    public StartupEndpoint.StartupResponse startupForSpringBoot() {
+    public StartupEndpoint.StartupDescriptor startupForSpringBoot() {
         throw new UnsupportedOperationException("Please use GET method instead");
     }
 }

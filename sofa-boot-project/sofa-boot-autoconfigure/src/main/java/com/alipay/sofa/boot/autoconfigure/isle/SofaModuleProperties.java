@@ -30,23 +30,23 @@ public class SofaModuleProperties {
 
     private List<String> activeProfiles;
 
-    private boolean     allowBeanDefinitionOverriding               = false;
+    private boolean      allowBeanDefinitionOverriding  = false;
 
-    private boolean     moduleStartUpParallel                       = true;
+    private boolean      moduleStartUpParallel          = true;
 
-    private boolean     publishEventToParent                        = false;
+    private boolean      publishEventToParent           = false;
 
-    private boolean     allowModuleOverriding                       = false;
+    private boolean      allowModuleOverriding          = false;
 
-    private boolean     ignoreModuleInstallFailure                  = false;
+    private boolean      ignoreModuleInstallFailure     = false;
 
-    private boolean     shareParentPostProcessor                    = true;
+    private boolean      shareParentPostProcessor       = true;
 
-    private float       parallelRefreshCoreCountFactor              = 5.0f;
+    private float        parallelRefreshCoreCountFactor = 5.0f;
 
-    private long        parallelRefreshTimeout                      = 60;
+    private long         parallelRefreshTimeout         = 60;
 
-    private long        parallelRefreshCheckPeriod                  = 30;
+    private long         parallelRefreshCheckPeriod     = 30;
 
     public List<String> getActiveProfiles() {
         return activeProfiles;

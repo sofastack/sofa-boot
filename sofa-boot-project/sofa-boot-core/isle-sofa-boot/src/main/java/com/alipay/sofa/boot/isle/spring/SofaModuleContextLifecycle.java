@@ -34,7 +34,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class SofaModuleContextLifecycle implements SmartLifecycle {
 
-    private final AtomicBoolean         isleRefreshed = new AtomicBoolean(false);
+    private final AtomicBoolean   isleRefreshed = new AtomicBoolean(false);
 
     private final PipelineContext pipelineContext;
 

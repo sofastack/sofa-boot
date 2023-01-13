@@ -41,12 +41,12 @@ import com.alipay.sofa.boot.constant.SofaBootConstants;
 public abstract class AbstractDeploymentDescriptor implements DeploymentDescriptor {
     protected final Properties                        properties;
     protected final DeploymentDescriptorConfiguration deploymentDescriptorConfiguration;
-    protected final ClassLoader               classLoader;
-    protected final URL                       url;
-    private final List<String>              installedSpringXml = new ArrayList<>();
-    private ApplicationContext              applicationContext;
-    private long                            startTime;
-    private long                            elapsedTime;
+    protected final ClassLoader                       classLoader;
+    protected final URL                               url;
+    private final List<String>                        installedSpringXml = new ArrayList<>();
+    private ApplicationContext                        applicationContext;
+    private long                                      startTime;
+    private long                                      elapsedTime;
     protected Map<String, Resource>                   springResources;
 
     public AbstractDeploymentDescriptor(URL url,

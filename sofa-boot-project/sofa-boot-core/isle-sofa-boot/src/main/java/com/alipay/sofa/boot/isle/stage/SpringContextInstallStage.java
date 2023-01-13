@@ -53,25 +53,27 @@ import java.util.stream.Collectors;
  */
 public class SpringContextInstallStage extends AbstractPipelineStage implements InitializingBean {
 
-    public static final String SOFA_MODULE_REFRESH_EXECUTOR_BEAN_NAME = "sofaModuleRefreshExecutor";
+    public static final String  SOFA_MODULE_REFRESH_EXECUTOR_BEAN_NAME = "sofaModuleRefreshExecutor";
 
-    public static final String SPRING_CONTEXT_INSTALL_STAGE_NAME = "SpringContextInstallStage";
+    public static final String  SPRING_CONTEXT_INSTALL_STAGE_NAME      = "SpringContextInstallStage";
 
     private SpringContextLoader springContextLoader;
 
-    private boolean moduleStartUpParallel;
+    private boolean             moduleStartUpParallel;
 
-    private boolean ignoreModuleInstallFailure;
+    private boolean             ignoreModuleInstallFailure;
 
-    private ExecutorService moduleRefreshExecutorService;
+    private ExecutorService     moduleRefreshExecutorService;
 
     @Override
     public void afterPropertiesSet() throws Exception {
         super.afterPropertiesSet();
         Assert.notNull(springContextLoader, "springContextLoader must not be null");
         if (moduleStartUpParallel) {
-            moduleRefreshExecutorService = (ExecutorService) applicationContext.getBean(SOFA_MODULE_REFRESH_EXECUTOR_BEAN_NAME, Supplier.class).get();
-            Assert.notNull(moduleRefreshExecutorService, "moduleRefreshExecutorService must not be null");
+            moduleRefreshExecutorService = (ExecutorService) applicationContext.getBean(
+                SOFA_MODULE_REFRESH_EXECUTOR_BEAN_NAME, Supplier.class).get();
+            Assert.notNull(moduleRefreshExecutorService,
+                "moduleRefreshExecutorService must not be null");
         }
     }
 
@@ -114,7 +116,6 @@ public class SpringContextInstallStage extends AbstractPipelineStage implements 
             }
         }
     }
-
 
     /**
      * Refresh {@link ApplicationContext} for each {@link DeploymentDescriptor}
@@ -222,7 +223,8 @@ public class SpringContextInstallStage extends AbstractPipelineStage implements 
         moduleStat.setEndTime(System.currentTimeMillis());
         moduleStat.setCost(moduleStat.getEndTime() - moduleStat.getStartTime());
         moduleStat.setThreadName(Thread.currentThread().getName());
-        ConfigurableApplicationContext ctx = (ConfigurableApplicationContext) deployment.getApplicationContext();
+        ConfigurableApplicationContext ctx = (ConfigurableApplicationContext) deployment
+            .getApplicationContext();
         ConfigurableListableBeanFactory beanFactory = ctx.getBeanFactory();
         if (beanFactory instanceof SofaDefaultListableBeanFactory) {
             moduleStat.setChildren(((SofaDefaultListableBeanFactory) beanFactory).getBeanStats());
