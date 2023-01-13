@@ -16,12 +16,13 @@
  */
 package com.alipay.sofa.smoke.tests.actuator.startup;
 
-import com.alipay.sofa.boot.startup.StartupReporter;
+import com.alipay.sofa.boot.isle.stage.ModelCreatingStage;
+import com.alipay.sofa.boot.isle.stage.SpringContextInstallStage;
 import com.alipay.sofa.boot.startup.BaseStat;
 import com.alipay.sofa.boot.startup.BeanStat;
-import com.alipay.sofa.boot.startup.BootStageConstants;
 import com.alipay.sofa.boot.startup.ChildrenStat;
 import com.alipay.sofa.boot.startup.ModuleStat;
+import com.alipay.sofa.boot.startup.StartupReporter;
 import com.alipay.sofa.runtime.ext.spring.ExtensionFactoryBean;
 import com.alipay.sofa.runtime.ext.spring.ExtensionPointFactoryBean;
 import com.alipay.sofa.runtime.spring.factory.ReferenceFactoryBean;
@@ -62,11 +63,11 @@ public class IsleStageStartupReporterTests {
         assertThat(startupStaticsModel).isNotNull();
         assertThat(startupStaticsModel.getStageStats().size()).isEqualTo(7);
 
-        BaseStat isleModelCreatingStage = startupReporter.getStageNyName(BootStageConstants.ISLE_MODEL_CREATING_STAGE);
+        BaseStat isleModelCreatingStage = startupReporter.getStageNyName(ModelCreatingStage.MODEL_CREATING_STAGE_NAME);
         assertThat(isleModelCreatingStage).isNotNull();
         assertThat(isleModelCreatingStage.getCost() > 0).isTrue();
 
-        BaseStat isleSpringContextInstallStage = startupReporter.getStageNyName(BootStageConstants.ISLE_SPRING_CONTEXT_INSTALL_STAGE);
+        BaseStat isleSpringContextInstallStage = startupReporter.getStageNyName(SpringContextInstallStage.SPRING_CONTEXT_INSTALL_STAGE_NAME);
         assertThat(isleSpringContextInstallStage).isNotNull();
         assertThat(isleSpringContextInstallStage.getCost() > 0).isTrue();
 
@@ -87,7 +88,7 @@ public class IsleStageStartupReporterTests {
         assertThat(parentBeanStat).isNotNull();
         assertThat(ChildBean.CHILD_INIT_TIME + ParentBean.PARENT_INIT_TIME - parentBeanStat.getRefreshElapsedTime() < 20).isTrue();
         assertThat(ParentBean.PARENT_INIT_TIME - parentBeanStat.getRealRefreshElapsedTime() < 20).isTrue();
-        assertThat(ParentBean.PARENT_INIT_TIME - parentBeanStat.getAfterPropertiesSetTime() < 20).isTrue();
+        assertThat(ParentBean.PARENT_INIT_TIME - parentBeanStat.getInitMethodTime() < 20).isTrue();
         assertThat(parentBeanStat.getChildren().size()).isEqualTo(1);
         assertThat(parentBeanStat.getBeanClassName()).isEqualTo(ParentBean.class.getName() + " (parent)");
 

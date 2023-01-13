@@ -16,9 +16,9 @@
  */
 package com.alipay.sofa.smoke.tests.actuator.startup;
 
+import com.alipay.sofa.boot.actuator.health.ReadinessCheckListener;
 import com.alipay.sofa.boot.startup.StartupReporter;
 import com.alipay.sofa.boot.startup.BaseStat;
-import com.alipay.sofa.boot.startup.BootStageConstants;
 import com.alipay.sofa.smoke.tests.actuator.ActuatorSofaBootApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +49,7 @@ public class HealthStageStartupReporterTests {
         assertThat(startupStaticsModel.getStageStats().size()).isEqualTo(6);
 
         BaseStat healthCheckStage = startupReporter
-            .getStageNyName(BootStageConstants.HEALTH_CHECK_STAGE);
+            .getStageNyName(ReadinessCheckListener.READINESS_CHECK_STAGE);
         assertThat(healthCheckStage).isNotNull();
         assertThat(healthCheckStage.getCost() > 0).isTrue();
     }

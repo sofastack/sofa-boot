@@ -104,7 +104,6 @@ public class DefaultStageStartupReporterTests {
         assertThat(initBeanStat.getBeanType()).isNull();
         assertThat(initBeanStat.getBeanClassName()).isEqualTo(InitCostBean.class.getName() + " (com.alipay.sofa.smoke.tests.actuator.startup.beans.InitCostBean)");
         assertThat(initBeanStat.getChildren().isEmpty()).isTrue();
-        assertThat(initBeanStat.getAfterPropertiesSetTime()).isEqualTo(0);
         assertThat(initBeanStat.getInitMethodTime()).isEqualTo(0);
         assertThat(initBeanStat.getInterfaceType()).isNull();
         assertThat(initBeanStat.getExtensionProperty()).isNull();
