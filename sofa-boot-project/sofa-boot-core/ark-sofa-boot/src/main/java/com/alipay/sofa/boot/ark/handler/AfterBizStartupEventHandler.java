@@ -14,34 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime.spring;
+package com.alipay.sofa.boot.ark.handler;
 
-import com.alipay.sofa.boot.context.processor.SingletonSofaPostProcessor;
-import com.alipay.sofa.runtime.filter.JvmFilter;
-import com.alipay.sofa.runtime.filter.JvmFilterHolder;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.core.PriorityOrdered;
+import com.alipay.sofa.ark.spi.event.biz.AfterBizStartupEvent;
+import com.alipay.sofa.ark.spi.model.Biz;
+import com.alipay.sofa.ark.spi.service.event.EventHandler;
+import com.alipay.sofa.boot.ark.invoke.DynamicJvmServiceProxyFinder;
 
 /**
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
- * Created on 2020/8/18
+ * Created on 03/09/2021
  */
-@SingletonSofaPostProcessor
-public class JvmFilterPostProcessor implements BeanPostProcessor, PriorityOrdered {
+public class AfterBizStartupEventHandler implements EventHandler<AfterBizStartupEvent> {
 
     @Override
-    public Object postProcessAfterInitialization(Object bean, String beanName)
-                                                                              throws BeansException {
-        if (bean instanceof JvmFilter) {
-            JvmFilterHolder.addJvmFilter((JvmFilter) bean);
-        }
-
-        return bean;
+    public void handleEvent(AfterBizStartupEvent event) {
+        Biz biz = event.getSource();
+        DynamicJvmServiceProxyFinder.getInstance().afterBizStartup(biz);
     }
 
     @Override
-    public int getOrder() {
-        return PriorityOrdered.HIGHEST_PRECEDENCE;
+    public int getPriority() {
+        return LOWEST_PRECEDENCE;
     }
 }

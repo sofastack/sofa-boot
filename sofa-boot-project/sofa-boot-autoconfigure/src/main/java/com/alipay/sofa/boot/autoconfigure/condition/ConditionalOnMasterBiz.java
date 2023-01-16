@@ -14,34 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime;
+package com.alipay.sofa.boot.autoconfigure.condition;
 
-import java.util.Collections;
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
+import org.springframework.context.annotation.Conditional;
 
-import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * SofaFramework Manager Interface
+ * 只在非 ark 环境或者 ark 环境的 master biz 生效，非 master biz 不生效
  *
- * @author qilong.zql
- * @since 2.5.0
+ * @author caojie.cj@antfin.com
+ * @since 2019/10/29
  */
-public class SofaFramework {
+@Target({ ElementType.TYPE, ElementType.METHOD })
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Conditional(OnMasterBiz.class)
+public @interface ConditionalOnMasterBiz {
 
-    private static CopyOnWriteArraySet<SofaRuntimeManager> runtimeSet = new CopyOnWriteArraySet<>();
-
-    public static void registerSofaRuntimeManager(SofaRuntimeManager sofaRuntimeManager) {
-        runtimeSet.add(sofaRuntimeManager);
-    }
-
-    public static void unRegisterSofaRuntimeManager(SofaRuntimeManager sofaRuntimeManager) {
-        runtimeSet.remove(sofaRuntimeManager);
-    }
-
-    public static Set<SofaRuntimeManager> getRuntimeSet() {
-        return Collections.unmodifiableSet(runtimeSet);
-    }
-
+    /**
+     * 额外的条件，用于处理某些配置在基座
+     * @return
+     */
+    String extensionCondition() default "";
 }

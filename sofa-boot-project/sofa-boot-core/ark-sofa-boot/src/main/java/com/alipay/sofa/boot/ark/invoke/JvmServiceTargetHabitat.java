@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime.invoke;
+package com.alipay.sofa.boot.ark.invoke;
 
 import com.alipay.sofa.ark.api.ArkClient;
 import com.alipay.sofa.runtime.service.component.ServiceComponent;
@@ -27,13 +27,14 @@ import java.util.concurrent.ConcurrentHashMap;
  * Created on 03/09/2021
  */
 public class JvmServiceTargetHabitat {
-    private String                        bizName;
+
+    private final String                        bizName;
 
     /**
      * Key as version
      * Value as target bean
      */
-    private Map<String, ServiceComponent> habitat = new ConcurrentHashMap<>();
+    private final Map<String, ServiceComponent> habitat = new ConcurrentHashMap<>();
 
     public JvmServiceTargetHabitat(String bizName) {
         this.bizName = bizName;

@@ -14,25 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime.spring;
+package com.alipay.sofa.runtime.spi.service;
 
-import com.alipay.sofa.ark.spi.event.AfterFinishStartupEvent;
-import com.alipay.sofa.ark.spi.service.PriorityOrdered;
-import com.alipay.sofa.ark.spi.service.event.EventHandler;
-import com.alipay.sofa.runtime.invoke.DynamicJvmServiceProxyFinder;
+import com.alipay.sofa.runtime.service.component.ServiceComponent;
+import com.alipay.sofa.runtime.spi.binding.Contract;
 
 /**
- * @author caojie.cj@antfin.com
- * @since 2019/11/28
+ * @author huzijie
+ * @version ServiceProxyManager.java, v 0.1 2023年01月16日 3:37 PM huzijie Exp $
  */
-public class FinishStartupEventHandler implements EventHandler<AfterFinishStartupEvent> {
-    @Override
-    public void handleEvent(AfterFinishStartupEvent event) {
-        DynamicJvmServiceProxyFinder.getDynamicJvmServiceProxyFinder().setHasFinishStartup(true);
-    }
+public interface DynamicServiceProxyManager {
 
-    @Override
-    public int getPriority() {
-        return PriorityOrdered.DEFAULT_PRECEDENCE;
-    }
+    ServiceProxy getDynamicServiceProxy(Contract contract, ClassLoader classLoader);
+
+    ServiceComponent getDynamicServiceComponent(Contract contract, ClassLoader classLoader);
 }

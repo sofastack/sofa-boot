@@ -16,19 +16,11 @@
  */
 package com.alipay.sofa.runtime.service.component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.CountDownLatch;
-
 import com.alipay.sofa.boot.error.ErrorCode;
+import com.alipay.sofa.boot.log.SofaLogger;
 import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
-import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.api.component.Property;
-import com.alipay.sofa.runtime.invoke.DynamicJvmServiceProxyFinder;
-import com.alipay.sofa.boot.log.SofaLogger;
 import com.alipay.sofa.runtime.model.ComponentType;
 import com.alipay.sofa.runtime.service.binding.JvmBinding;
 import com.alipay.sofa.runtime.service.helper.ReferenceRegisterHelper;
@@ -36,12 +28,18 @@ import com.alipay.sofa.runtime.spi.binding.Binding;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapter;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
 import com.alipay.sofa.runtime.spi.component.AbstractComponent;
-import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.DefaultImplementation;
 import com.alipay.sofa.runtime.spi.component.Implementation;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.health.HealthResult;
 import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
+import com.alipay.sofa.runtime.spi.util.JvmServiceUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * reference component
@@ -235,19 +233,17 @@ public class ReferenceComponent extends AbstractComponent {
      */
     private Object getServiceTarget() {
         Object serviceTarget = null;
-        ComponentName componentName = ComponentNameFactory.createComponentName(
-            ServiceComponent.SERVICE_COMPONENT_TYPE, reference.getInterfaceType(),
-            reference.getUniqueId());
-        ComponentInfo componentInfo = sofaRuntimeContext.getComponentManager().getComponentInfo(
-            componentName);
 
-        if (componentInfo != null) {
-            serviceTarget = componentInfo.getImplementation().getTarget();
+        ServiceComponent serviceComponent = JvmServiceUtils.foundServiceComponent(
+            sofaRuntimeContext.getComponentManager(), reference);
+
+        if (serviceComponent != null) {
+            serviceTarget = serviceComponent.getImplementation().getTarget();
         }
 
         if (serviceTarget == null) {
-            serviceTarget = DynamicJvmServiceProxyFinder.getDynamicJvmServiceProxyFinder()
-                .findServiceProxy(sofaRuntimeContext.getAppClassLoader(), reference);
+            serviceTarget = sofaRuntimeContext.getServiceProxyManager().getDynamicServiceProxy(
+                reference, sofaRuntimeContext.getAppClassLoader());
         }
         return serviceTarget;
     }

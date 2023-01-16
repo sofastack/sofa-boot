@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.boot.autoconfigure.runtime;
 
-import com.alipay.sofa.runtime.SofaFramework;
+import com.alipay.sofa.boot.autoconfigure.condition.ConditionalOnMasterBiz;
 import com.alipay.sofa.runtime.api.client.ReferenceClient;
 import com.alipay.sofa.runtime.api.client.ServiceClient;
 import com.alipay.sofa.runtime.client.impl.ClientFactoryImpl;
@@ -112,7 +112,6 @@ public class SofaRuntimeAutoConfiguration {
             ServiceClient.class,
             new ServiceClientImpl(sofaRuntimeManager.getSofaRuntimeContext(),
                 bindingConverterFactory, bindingAdapterFactory));
-        SofaFramework.registerSofaRuntimeManager(sofaRuntimeManager);
         return sofaRuntimeManager;
     }
 
@@ -130,6 +129,7 @@ public class SofaRuntimeAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
+    @ConditionalOnMasterBiz
     public static JvmFilterPostProcessor jvmFilterPostProcessor() {
         return new JvmFilterPostProcessor();
     }

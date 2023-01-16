@@ -16,12 +16,11 @@
  */
 package com.alipay.sofa.boot.util;
 
+import com.alipay.sofa.boot.constant.SofaBootConstants;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.Environment;
 import org.springframework.util.ClassUtils;
-
-import com.alipay.sofa.boot.constant.SofaBootConstants;
 
 /**
  * SofaBootEnvUtils
@@ -31,7 +30,52 @@ import com.alipay.sofa.boot.constant.SofaBootConstants;
  */
 public class SofaBootEnvUtils {
 
-    private final static String SPRING_CLOUD_MARK_NAME = "org.springframework.cloud.bootstrap.BootstrapConfiguration";
+    private static final String SPRING_CLOUD_MARK_NAME   = "org.springframework.cloud.bootstrap.BootstrapConfiguration";
+
+    private static final String ARK_BIZ_CLASSLOADER_NAME = "com.alipay.sofa.ark.container.service.classloader.BizClassLoader";
+
+    private static boolean      LOCAL_ENV                = false;
+
+    private static boolean      TEST_ENV                 = false;
+
+    private static boolean      ARK_ENV                  = false;
+
+    static {
+        initLocalEnv();
+        initSpringTestEnv();
+        initArkEnv();
+    }
+
+    private static void initSpringTestEnv() {
+        // Detection of test environment
+        StackTraceElement[] stackTrace = new RuntimeException().getStackTrace();
+        for (StackTraceElement stackTraceElement : stackTrace) {
+            if ("loadContext".equals(stackTraceElement.getMethodName())
+                && "org.springframework.boot.test.context.SpringBootContextLoader"
+                    .equals(stackTraceElement.getClassName())) {
+                TEST_ENV = true;
+                break;
+            }
+        }
+    }
+
+    private static void initLocalEnv() {
+        try {
+            //todo 更严谨的判断方式
+            Class.forName("com.intellij.rt.execution.application.AppMainV2");
+            LOCAL_ENV = true;
+        } catch (ClassNotFoundException e) {
+            LOCAL_ENV = false;
+        }
+    }
+
+    private static void initArkEnv() {
+        ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
+        if (contextClassLoader != null
+            && ARK_BIZ_CLASSLOADER_NAME.equals(contextClassLoader.getClass().getName())) {
+            ARK_ENV = true;
+        }
+    }
 
     /**
      * Determine whether the {@link org.springframework.core.env.Environment} is Spring Cloud bootstrap environment.
@@ -61,4 +105,17 @@ public class SofaBootEnvUtils {
     public static boolean isSpringCloud() {
         return ClassUtils.isPresent(SPRING_CLOUD_MARK_NAME, null);
     }
+
+    public static boolean isSpringTestEnv() {
+        return TEST_ENV;
+    }
+
+    public static boolean isLocalEnv() {
+        return LOCAL_ENV;
+    }
+
+    public static boolean isArkEnv() {
+        return ARK_ENV;
+    }
+
 }

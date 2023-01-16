@@ -35,6 +35,7 @@
         <fastjson.version>1.2.83</fastjson.version>
         <javassist.version>3.19.0-GA</javassist.version>
         <protobuf-java.version>3.11.0</protobuf-java.version>
+        <xerces.version>2.12.2</xerces.version>
         <guice.version>3.0</guice.version>
         <guava.version>28.2-jre</guava.version>
         <zipkin.version>2.11.3</zipkin.version>
@@ -160,6 +161,12 @@
                 <artifactId>tracer-sofa-boot</artifactId>
                 <version>${sofa.boot.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>ark-sofa-boot</artifactId>
+                <version>${sofa.boot.version}</version>
+            </dependency>
             <!-- starter management begin -->
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
@@ -189,6 +196,11 @@
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>tracer-sofa-boot-starter</artifactId>
+                <version>${sofa.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>ark-sofa-boot-starter</artifactId>
                 <version>${sofa.boot.version}</version>
             </dependency>
 
@@ -452,6 +464,11 @@
                 <groupId>com.google.protobuf</groupId>
                 <artifactId>protobuf-java</artifactId>
                 <version>${protobuf-java.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>xerces</groupId>
+                <artifactId>xercesImpl</artifactId>
+                <version>${xerces.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.javassist</groupId>

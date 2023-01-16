@@ -38,10 +38,10 @@
 //import com.alipay.sofa.ark.spi.model.BizState;
 //import com.alipay.sofa.runtime.SofaBizHealthCheckEventHandler;
 //import com.alipay.sofa.runtime.SofaBizUninstallEventHandler;
-//import com.alipay.sofa.runtime.SofaFramework;
+//import com.alipay.sofa.boot.ark.SofaFramework;
 //import com.alipay.sofa.runtime.SofaRuntimeProperties;
 //import com.alipay.sofa.runtime.api.annotation.SofaService;
-//import com.alipay.sofa.runtime.invoke.DynamicJvmServiceProxyFinder;
+//import com.alipay.sofa.boot.ark.invoke.DynamicJvmServiceProxyFinder;
 //import com.alipay.sofa.runtime.service.binding.JvmBinding;
 //import com.alipay.sofa.runtime.spi.binding.Contract;
 //import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;

@@ -17,6 +17,7 @@
 package com.alipay.sofa.runtime.spi.component;
 
 import com.alipay.sofa.runtime.api.client.ClientFactory;
+import com.alipay.sofa.runtime.spi.service.DynamicServiceProxyManager;
 
 /**
  * SOFA Runtime Context
@@ -25,10 +26,12 @@ import com.alipay.sofa.runtime.api.client.ClientFactory;
  */
 public class SofaRuntimeContext {
     /** component manager */
-    private ComponentManager   componentManager;
+    private ComponentManager           componentManager;
     /** client factory */
-    private ClientFactory      clientFactory;
-    private SofaRuntimeManager sofaRuntimeManager;
+    private ClientFactory              clientFactory;
+    private SofaRuntimeManager         sofaRuntimeManager;
+
+    private DynamicServiceProxyManager serviceProxyManager;
 
     public SofaRuntimeContext(SofaRuntimeManager sofaRuntimeManager,
                               ComponentManager componentManager, ClientFactory clientFactory) {
@@ -55,5 +58,9 @@ public class SofaRuntimeContext {
 
     public SofaRuntimeManager getSofaRuntimeManager() {
         return sofaRuntimeManager;
+    }
+
+    public DynamicServiceProxyManager getServiceProxyManager() {
+        return serviceProxyManager;
     }
 }

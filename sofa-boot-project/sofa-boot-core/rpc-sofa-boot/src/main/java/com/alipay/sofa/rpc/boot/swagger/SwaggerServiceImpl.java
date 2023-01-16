@@ -16,14 +16,9 @@
  */
 package com.alipay.sofa.rpc.boot.swagger;
 
-import java.util.Collection;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import com.alipay.sofa.rpc.boot.runtime.binding.RpcBindingType;
-import com.alipay.sofa.runtime.SofaFramework;
 import com.alipay.sofa.runtime.service.component.ServiceComponent;
-
+import com.alipay.sofa.runtime.spi.component.ComponentManager;
 import io.swagger.v3.core.util.Json;
 import io.swagger.v3.jaxrs2.integration.JaxrsOpenApiContextBuilder;
 import io.swagger.v3.oas.integration.GenericOpenApiContext;
@@ -33,12 +28,20 @@ import io.swagger.v3.oas.integration.SwaggerConfiguration;
 import io.swagger.v3.oas.integration.api.OpenApiContext;
 import io.swagger.v3.oas.models.OpenAPI;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 /**
  * @author khotyn
  */
 public class SwaggerServiceImpl implements SwaggerService {
-    private volatile OpenAPI openapi;
-    private Set<String>      restfulServices;
+    private final ComponentManager componentManager;
+    private volatile OpenAPI       openapi;
+    private Set<String>            restfulServices;
+
+    public SwaggerServiceImpl(ComponentManager componentManager) {
+        this.componentManager = componentManager;
+    }
 
     @Override
     public String openapi() {
@@ -97,11 +100,7 @@ public class SwaggerServiceImpl implements SwaggerService {
     }
 
     private Set<String> getAllRestfulService() {
-        return SofaFramework.getRuntimeSet().stream()
-                .map(srm -> srm.getComponentManager().getComponentInfosByType(ServiceComponent.SERVICE_COMPONENT_TYPE))
-                .flatMap(Collection::stream)
-                .collect(Collectors.toSet())
-                .stream()
+        return componentManager.getComponentInfosByType(ServiceComponent.SERVICE_COMPONENT_TYPE).stream()
                 .filter(ci -> {
                     ServiceComponent sc = (ServiceComponent) ci;
                     return sc.getService().getBinding(RpcBindingType.REST_BINDING_TYPE) != null;
