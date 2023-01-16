@@ -37,7 +37,10 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * Component to found service component in other Ark biz
+ *
  * @author qilong.zql
+ * @author huzijie
  * @since 2.5.0
  */
 public class DynamicJvmServiceProxyFinder {
