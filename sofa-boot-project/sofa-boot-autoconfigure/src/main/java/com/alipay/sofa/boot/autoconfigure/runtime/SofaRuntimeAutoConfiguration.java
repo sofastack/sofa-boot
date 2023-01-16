@@ -17,11 +17,11 @@
 package com.alipay.sofa.boot.autoconfigure.runtime;
 
 import com.alipay.sofa.boot.autoconfigure.condition.ConditionalOnMasterBiz;
+import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.runtime.api.client.ReferenceClient;
 import com.alipay.sofa.runtime.api.client.ServiceClient;
 import com.alipay.sofa.runtime.client.impl.ClientFactoryImpl;
 import com.alipay.sofa.runtime.component.impl.StandardSofaRuntimeManager;
-import com.alipay.sofa.runtime.configure.SofaRuntimeConfigurationProperties;
 import com.alipay.sofa.runtime.proxy.ProxyBeanFactoryPostProcessor;
 import com.alipay.sofa.runtime.service.client.ReferenceClientImpl;
 import com.alipay.sofa.runtime.service.client.ServiceClientImpl;
@@ -56,7 +56,7 @@ import java.util.Set;
  * @author xuanbei 18/3/17
  */
 @Configuration(proxyBeanMethods = false)
-@EnableConfigurationProperties(SofaRuntimeConfigurationProperties.class)
+@EnableConfigurationProperties(SofaRuntimeProperties.class)
 @ConditionalOnClass(SofaRuntimeContext.class)
 public class SofaRuntimeAutoConfiguration {
 
@@ -82,10 +82,10 @@ public class SofaRuntimeAutoConfiguration {
     @ConditionalOnMissingBean
     public static BindingConverterFactory bindingConverterFactory() {
         BindingConverterFactory bindingConverterFactory = new BindingConverterFactoryImpl();
-        bindingConverterFactory
-            .addBindingConverters(getClassesByServiceLoader(BindingConverter.class));
+        bindingConverterFactory.addBindingConverters(getClassesByServiceLoader(BindingConverter.class));
         return bindingConverterFactory;
     }
+
 
     @Bean
     @ConditionalOnMissingBean
@@ -102,14 +102,13 @@ public class SofaRuntimeAutoConfiguration {
                                                         BindingAdapterFactory bindingAdapterFactory) {
         ClientFactoryInternal clientFactoryInternal = new ClientFactoryImpl();
         SofaRuntimeManager sofaRuntimeManager = new StandardSofaRuntimeManager(
-            environment.getProperty("spring.application.name"), Thread.currentThread()
-                .getContextClassLoader(), clientFactoryInternal);
-        sofaRuntimeManager.getComponentManager().registerComponentClient(
-            ReferenceClient.class,
+                environment.getProperty(SofaBootConstants.APP_NAME_KEY),
+                Thread.currentThread().getContextClassLoader(),
+                clientFactoryInternal);
+        clientFactoryInternal.registerClient(ReferenceClient.class,
             new ReferenceClientImpl(sofaRuntimeManager.getSofaRuntimeContext(),
                 bindingConverterFactory, bindingAdapterFactory));
-        sofaRuntimeManager.getComponentManager().registerComponentClient(
-            ServiceClient.class,
+        clientFactoryInternal.registerClient(ServiceClient.class,
             new ServiceClientImpl(sofaRuntimeManager.getSofaRuntimeContext(),
                 bindingConverterFactory, bindingAdapterFactory));
         return sofaRuntimeManager;
@@ -117,8 +116,17 @@ public class SofaRuntimeAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public static SofaRuntimeContext sofaRuntimeContext(SofaRuntimeManager sofaRuntimeManager) {
-        return sofaRuntimeManager.getSofaRuntimeContext();
+    public static SofaRuntimeContext sofaRuntimeContext(SofaRuntimeManager sofaRuntimeManager, SofaRuntimeProperties sofaRuntimeProperties) {
+        SofaRuntimeContext sofaRuntimeContext = sofaRuntimeManager.getSofaRuntimeContext();
+        sofaRuntimeContext.getProperties().setSkipJvmReferenceHealthCheck(sofaRuntimeProperties.isSkipJvmReferenceHealthCheck());
+        sofaRuntimeContext.getProperties().setSkipExtensionHealthCheck(sofaRuntimeProperties.isSkipExtensionHealthCheck());
+        sofaRuntimeContext.getProperties().setDisableJvmFirst(sofaRuntimeProperties.isDisableJvmFirst());
+        sofaRuntimeContext.getProperties().setExtensionFailureInsulating(sofaRuntimeProperties.isExtensionFailureInsulating());
+        sofaRuntimeContext.getProperties().setJvmFilterEnable(sofaRuntimeProperties.isJvmFilterEnable());
+        sofaRuntimeContext.getProperties().setSkipAllComponentShutdown(sofaRuntimeProperties.isSkipAllComponentShutdown());
+        sofaRuntimeContext.getProperties().setSkipCommonComponentShutdown(sofaRuntimeProperties.isSkipCommonComponentShutdown());
+        sofaRuntimeContext.getProperties().setServiceInterfaceTypeCheck(sofaRuntimeProperties.isServiceInterfaceTypeCheck());
+        return sofaRuntimeContext;
     }
 
     @Bean

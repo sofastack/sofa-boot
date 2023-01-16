@@ -35,7 +35,7 @@ public abstract class AbstractContract implements Contract {
     /** associated binding */
     protected Set<Binding>        bindings      = new HashSet<>(2);
     /** unique id */
-    protected String              uniqueId      = "";
+    protected String              uniqueId;
     /** interface class type */
     protected Class<?>            interfaceType;
     /** interface mode */
@@ -63,14 +63,17 @@ public abstract class AbstractContract implements Contract {
         this.property = property;
     }
 
+    @Override
     public <T extends Binding> void addBinding(T binding) {
         this.bindings.add(binding);
     }
 
+    @Override
     public <T extends Binding> void addBinding(Set<T> bindings) {
         this.bindings.addAll(bindings);
     }
 
+    @Override
     public Binding getBinding(BindingType bindingType) {
         for (Binding binding : this.bindings) {
             if (binding != null && binding.getBindingType() == bindingType) {
@@ -81,22 +84,27 @@ public abstract class AbstractContract implements Contract {
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public Set<Binding> getBindings() {
         return this.bindings;
     }
 
+    @Override
     public boolean hasBinding() {
         return this.bindings.size() > 0;
     }
 
+    @Override
     public String getUniqueId() {
         return uniqueId;
     }
 
+    @Override
     public InterfaceMode getInterfaceMode() {
         return this.interfaceMode;
     }
 
+    @Override
     public Class<?> getInterfaceType() {
         return interfaceType;
     }

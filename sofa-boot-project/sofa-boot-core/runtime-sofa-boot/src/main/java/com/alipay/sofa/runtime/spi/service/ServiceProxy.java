@@ -25,6 +25,7 @@ import com.alipay.sofa.boot.util.StringUtils;
  * @author xuanbei 18/2/28
  */
 public abstract class ServiceProxy implements MethodInterceptor {
+
     protected ClassLoader serviceClassLoader;
 
     public ServiceProxy(ClassLoader serviceClassLoader) {

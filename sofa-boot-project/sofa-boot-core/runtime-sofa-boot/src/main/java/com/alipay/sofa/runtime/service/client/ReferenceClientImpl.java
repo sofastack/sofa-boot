@@ -46,9 +46,10 @@ import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
  * @author xuanbei 18/3/1
  */
 public class ReferenceClientImpl implements ReferenceClient {
-    private SofaRuntimeContext      sofaRuntimeContext;
-    private BindingConverterFactory bindingConverterFactory;
-    private BindingAdapterFactory   bindingAdapterFactory;
+
+    private final SofaRuntimeContext      sofaRuntimeContext;
+    private final BindingConverterFactory bindingConverterFactory;
+    private final BindingAdapterFactory   bindingAdapterFactory;
 
     public ReferenceClientImpl(SofaRuntimeContext sofaRuntimeContext,
                                BindingConverterFactory bindingConverterFactory,
@@ -88,6 +89,7 @@ public class ReferenceClientImpl implements ReferenceClient {
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public <T> T reference(ReferenceParam<T> referenceParam) {
 
         return (T) ReferenceRegisterHelper.registerReference(

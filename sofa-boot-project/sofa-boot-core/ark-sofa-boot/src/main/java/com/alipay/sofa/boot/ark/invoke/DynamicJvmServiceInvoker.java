@@ -18,7 +18,6 @@ package com.alipay.sofa.boot.ark.invoke;
 
 import com.alipay.sofa.ark.spi.replay.ReplayContext;
 import com.alipay.sofa.boot.log.SofaLogger;
-import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import com.alipay.sofa.runtime.spi.binding.Contract;
 import com.alipay.sofa.runtime.spi.service.ServiceProxy;
 import com.caucho.hessian.io.Hessian2Input;
@@ -92,7 +91,7 @@ public class DynamicJvmServiceInvoker extends ServiceProxy {
             Class[] oldArgumentTypes = targetMethod.getParameterTypes();
             Method transformMethod;
             // check whether skip serialize or not
-            if (!serialize || SofaRuntimeProperties.isSkipJvmSerialize(clientClassloader.get())) {
+            if (!serialize) {
                 ClassLoader tcl = Thread.currentThread().getContextClassLoader();
                 try {
                     pushThreadContextClassLoader(getServiceClassLoader());

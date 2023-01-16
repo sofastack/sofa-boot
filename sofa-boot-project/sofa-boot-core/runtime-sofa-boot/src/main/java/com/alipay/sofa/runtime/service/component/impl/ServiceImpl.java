@@ -29,7 +29,8 @@ import com.alipay.sofa.runtime.service.component.Service;
  * @author xuanbei 18/3/1
  */
 public class ServiceImpl extends AbstractContract implements Service {
-    private Object target;
+
+    private final Object target;
 
     public ServiceImpl(String uniqueId, Class<?> interfaceType, Object target) {
         super(uniqueId, interfaceType);

@@ -21,9 +21,8 @@ import com.alipay.sofa.ark.spi.model.BizState;
 import com.alipay.sofa.ark.spi.replay.ReplayContext;
 import com.alipay.sofa.ark.spi.service.ArkInject;
 import com.alipay.sofa.ark.spi.service.biz.BizManagerService;
-import com.alipay.sofa.boot.ark.SofaFramework;
+import com.alipay.sofa.boot.ark.SofaRuntimeContainer;
 import com.alipay.sofa.common.utils.StringUtil;
-import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import com.alipay.sofa.runtime.service.binding.JvmBinding;
 import com.alipay.sofa.runtime.service.component.ServiceComponent;
 import com.alipay.sofa.runtime.spi.binding.Contract;
@@ -83,6 +82,9 @@ public class DynamicJvmServiceProxyFinder {
             // Service provider don't intend to publish JVM service, serialize is considered to be true in this case
             serialize = true;
         }
+
+        serialize &= SofaRuntimeContainer.isJvmInvokeSerialize(clientClassloader);
+
         return new DynamicJvmServiceInvoker(clientClassloader,
             sofaRuntimeManager.getAppClassLoader(), serviceComponent.getService().getTarget(),
             contract, biz.getIdentity(), serialize);
@@ -90,7 +92,7 @@ public class DynamicJvmServiceProxyFinder {
 
     public ServiceComponent findServiceComponent(ClassLoader clientClassloader, Contract contract) {
         ServiceComponent serviceComponent;
-        if (hasFinishStartup && SofaRuntimeProperties.isDynamicJvmServiceCacheEnable()) {
+        if (hasFinishStartup && SofaRuntimeContainer.isJvmServiceCache(clientClassloader)) {
             serviceComponent = cacheSearching(contract);
             if (serviceComponent != null) {
                 return serviceComponent;
@@ -99,7 +101,7 @@ public class DynamicJvmServiceProxyFinder {
 
         String interfaceType = contract.getInterfaceType().getCanonicalName();
         String uniqueId = contract.getUniqueId();
-        for (SofaRuntimeManager sofaRuntimeManager : SofaFramework.sofaRuntimeManagerSet()) {
+        for (SofaRuntimeManager sofaRuntimeManager : SofaRuntimeContainer.sofaRuntimeManagerSet()) {
             if (sofaRuntimeManager.getAppClassLoader().equals(clientClassloader)) {
                 continue;
             }
@@ -145,14 +147,10 @@ public class DynamicJvmServiceProxyFinder {
     }
 
     public void afterBizStartup(Biz biz) {
-        if (!SofaRuntimeProperties.isDynamicJvmServiceCacheEnable()) {
-            return;
-        }
-
         // Currently, there is no way to get SOFA Runtime Manager from biz
         // The overhead is acceptable as this only happens after biz's successful installation
-        SofaRuntimeManager sofaRuntimeManager = SofaFramework.getSofaRuntimeManager(biz.getBizClassLoader());
-        if (sofaRuntimeManager != null) {
+        SofaRuntimeManager sofaRuntimeManager = SofaRuntimeContainer.getSofaRuntimeManager(biz.getBizClassLoader());
+        if (sofaRuntimeManager != null && SofaRuntimeContainer.isJvmServiceCache(biz.getBizClassLoader())) {
             for (ComponentInfo componentInfo: sofaRuntimeManager.getComponentManager().getComponents()) {
                 if (componentInfo instanceof ServiceComponent serviceComponent) {
                     String uniqueName = getUniqueName(serviceComponent.getService());
@@ -165,12 +163,8 @@ public class DynamicJvmServiceProxyFinder {
     }
 
     public void afterBizUninstall(Biz biz) {
-        if (!SofaRuntimeProperties.isDynamicJvmServiceCacheEnable()) {
-            return;
-        }
-
-        SofaRuntimeManager sofaRuntimeManager = SofaFramework.getSofaRuntimeManager(biz.getBizClassLoader());
-        if (sofaRuntimeManager != null) {
+        SofaRuntimeManager sofaRuntimeManager = SofaRuntimeContainer.getSofaRuntimeManager(biz.getBizClassLoader());
+        if (sofaRuntimeManager != null && SofaRuntimeContainer.isJvmServiceCache(biz.getBizClassLoader())) {
             for (ComponentInfo componentInfo : sofaRuntimeManager.getComponentManager()
                     .getComponents()) {
                 if (componentInfo instanceof ServiceComponent serviceComponent) {

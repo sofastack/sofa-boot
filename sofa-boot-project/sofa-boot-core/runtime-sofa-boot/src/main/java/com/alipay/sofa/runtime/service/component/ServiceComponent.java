@@ -23,7 +23,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 import com.alipay.sofa.boot.error.ErrorCode;
-import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.component.Property;
 import com.alipay.sofa.boot.log.SofaLogger;
@@ -46,10 +45,9 @@ import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
 public class ServiceComponent extends AbstractComponent {
     public static final String        UNREGISTER_DELAY_MILLISECONDS = "UNREGISTER_DELAY_MILLISECONDS";
     public static final ComponentType SERVICE_COMPONENT_TYPE        = new ComponentType("service");
-
-    private Service                   service;
-    private BindingAdapterFactory     bindingAdapterFactory;
-    private Map<String, Property>     properties                    = new ConcurrentHashMap<>();
+    private final Service                   service;
+    private final BindingAdapterFactory     bindingAdapterFactory;
+    private final Map<String, Property>     properties                    = new ConcurrentHashMap<>();
 
     public ServiceComponent(Implementation implementation, Service service,
                             BindingAdapterFactory bindingAdapterFactory,
@@ -81,7 +79,7 @@ public class ServiceComponent extends AbstractComponent {
     @Override
     public void register() {
         Object target = service.getTarget();
-        if (SofaRuntimeProperties.isServiceInterfaceTypeCheck()) {
+        if (sofaRuntimeContext.getProperties().isServiceInterfaceTypeCheck()) {
             Class<?> interfaceType = service.getInterfaceType();
             if (!interfaceType.isAssignableFrom(target.getClass())) {
                 throw new ServiceRuntimeException(ErrorCode.convert("01-00104", service,

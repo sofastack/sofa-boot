@@ -17,19 +17,24 @@
 package com.alipay.sofa.runtime.component.impl;
 
 import com.alipay.sofa.boot.error.ErrorCode;
-import com.alipay.sofa.runtime.SofaRuntimeProperties;
+import com.alipay.sofa.boot.log.SofaLogger;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.component.ComponentName;
-import com.alipay.sofa.boot.log.SofaLogger;
 import com.alipay.sofa.runtime.model.ComponentStatus;
 import com.alipay.sofa.runtime.model.ComponentType;
 import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.ComponentManager;
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spring.SpringContextComponent;
 import org.springframework.context.ApplicationContext;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
@@ -45,18 +50,19 @@ public class ComponentManagerImpl implements ComponentManager {
     protected ConcurrentMap<ComponentType, Map<ComponentName, ComponentInfo>> resolvedRegistry;
     /** client factory */
     private ClientFactoryInternal                                             clientFactoryInternal;
+    private SofaRuntimeContext sofaRuntimeContext;
     private final ClassLoader                                                 appClassLoader;
 
     public ComponentManagerImpl(ClientFactoryInternal clientFactoryInternal,
                                 ClassLoader appClassLoader) {
-        this.registry = new ConcurrentHashMap(16);
-        this.resolvedRegistry = new ConcurrentHashMap(16);
+        this.registry = new ConcurrentHashMap<>(16);
+        this.resolvedRegistry = new ConcurrentHashMap<>(16);
         this.clientFactoryInternal = clientFactoryInternal;
         this.appClassLoader = appClassLoader;
     }
 
     public Collection<ComponentInfo> getComponentInfos() {
-        return new ArrayList(registry.values());
+        return new ArrayList<>(registry.values());
     }
 
     public Collection<ComponentName> getPendingComponentInfos() {
@@ -69,10 +75,12 @@ public class ComponentManagerImpl implements ComponentManager {
         return names;
     }
 
+    @Override
     public ComponentInfo getComponentInfo(ComponentName name) {
         return registry.get(name);
     }
 
+    @Override
     public boolean isRegistered(ComponentName name) {
         return registry.containsKey(name);
     }
@@ -89,7 +97,7 @@ public class ComponentManagerImpl implements ComponentManager {
 
     @Override
     public void shutdown() {
-        if (SofaRuntimeProperties.isSkipAllComponentShutdown(appClassLoader)) {
+        if (sofaRuntimeContext.getProperties().isSkipAllComponentShutdown()) {
             return;
         }
         List<ComponentInfo> elems = new ArrayList<>(registry.values());
@@ -109,7 +117,7 @@ public class ComponentManagerImpl implements ComponentManager {
             elems.removeAll(springContextComponents);
         }
 
-        if (SofaRuntimeProperties.isSkipCommonComponentShutdown(appClassLoader)) {
+        if (sofaRuntimeContext.getProperties().isSkipCommonComponentShutdown()) {
             return;
         }
         // shutdown remaining components
@@ -144,6 +152,7 @@ public class ComponentManagerImpl implements ComponentManager {
         doRegister(componentInfo);
     }
 
+    @Override
     public ComponentInfo registerAndGet(ComponentInfo componentInfo) {
         return doRegister(componentInfo);
     }
@@ -151,6 +160,10 @@ public class ComponentManagerImpl implements ComponentManager {
     @Override
     public void registerComponentClient(Class<?> clientType, Object client) {
         clientFactoryInternal.registerClient(clientType, client);
+    }
+
+    public void setSofaRuntimeContext(SofaRuntimeContext sofaRuntimeContext) {
+        this.sofaRuntimeContext = sofaRuntimeContext;
     }
 
     private ComponentInfo doRegister(ComponentInfo ci) {
@@ -194,6 +207,7 @@ public class ComponentManagerImpl implements ComponentManager {
         return ci;
     }
 
+    @Override
     public void unregister(ComponentInfo componentInfo) throws ServiceRuntimeException {
         ComponentName componentName = componentInfo.getName();
         registry.remove(componentName);
@@ -208,6 +222,7 @@ public class ComponentManagerImpl implements ComponentManager {
         componentInfo.unregister();
     }
 
+    @Override
     public Collection<ComponentInfo> getComponentInfosByType(ComponentType type) {
         List<ComponentInfo> componentInfos = new ArrayList<>();
 

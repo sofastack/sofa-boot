@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.runtime.spring.bean;
 
-import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.util.StringUtils;
 
@@ -52,20 +51,12 @@ public class SofaBeanNameGenerator {
 
     public static String generateSofaServiceBeanName(String interfaceName, String uniqueId,
                                                      String beanId) {
-        if (SofaRuntimeProperties.isServiceNameWithBeanId() && StringUtils.hasText(beanId)) {
-            return generateSofaServiceBeanName(interfaceName, uniqueId) + ":" + beanId;
-        } else {
-            return generateSofaServiceBeanName(interfaceName, uniqueId);
-        }
+        return generateSofaServiceBeanName(interfaceName, uniqueId) + ":" + beanId;
     }
 
     public static String generateSofaServiceBeanName(Class<?> interfaceType, String uniqueId,
                                                      String beanId) {
-        if (SofaRuntimeProperties.isServiceNameWithBeanId() && StringUtils.hasText(beanId)) {
-            return generateSofaServiceBeanName(interfaceType, uniqueId) + ":" + beanId;
-        } else {
-            return generateSofaServiceBeanName(interfaceType, uniqueId);
-        }
+        return generateSofaServiceBeanName(interfaceType, uniqueId) + ":" + beanId;
     }
 
     public static String generateSofaServiceBeanName(String interfaceName, String uniqueId) {

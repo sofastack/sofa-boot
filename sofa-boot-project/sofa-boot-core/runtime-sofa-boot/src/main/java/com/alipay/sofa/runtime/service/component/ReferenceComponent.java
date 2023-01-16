@@ -18,7 +18,6 @@ package com.alipay.sofa.runtime.service.component;
 
 import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.boot.log.SofaLogger;
-import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.component.Property;
 import com.alipay.sofa.runtime.model.ComponentType;
@@ -49,10 +48,9 @@ import java.util.concurrent.CountDownLatch;
 @SuppressWarnings("unchecked")
 public class ReferenceComponent extends AbstractComponent {
     public static final ComponentType REFERENCE_COMPONENT_TYPE = new ComponentType("reference");
-
-    private BindingAdapterFactory     bindingAdapterFactory;
-    private Reference                 reference;
-    private CountDownLatch            latch                    = new CountDownLatch(1);
+    private final BindingAdapterFactory     bindingAdapterFactory;
+    private final Reference                 reference;
+    private final CountDownLatch            latch                    = new CountDownLatch(1);
 
     public ReferenceComponent(Reference reference, Implementation implementation,
                               BindingAdapterFactory bindingAdapterFactory,
@@ -96,7 +94,7 @@ public class ReferenceComponent extends AbstractComponent {
         }
 
         // check reference has a corresponding service
-        if (!SofaRuntimeProperties.isSkipJvmReferenceHealthCheck(sofaRuntimeContext)
+        if (!sofaRuntimeContext.getProperties().isSkipJvmReferenceHealthCheck()
             && jvmBinding != null) {
             Object serviceTarget = getServiceTarget();
             if (serviceTarget == null && !jvmBinding.hasBackupProxy()) {

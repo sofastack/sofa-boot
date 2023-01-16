@@ -25,6 +25,7 @@ import com.alipay.sofa.runtime.spi.service.DynamicServiceProxyManager;
  * @author xuanbei 18/2/28
  */
 public class SofaRuntimeContext {
+    private final Properties properties;
     /** component manager */
     private ComponentManager           componentManager;
     /** client factory */
@@ -38,6 +39,7 @@ public class SofaRuntimeContext {
         this.sofaRuntimeManager = sofaRuntimeManager;
         this.componentManager = componentManager;
         this.clientFactory = clientFactory;
+        this.properties = new Properties();
     }
 
     public String getAppName() {
@@ -62,5 +64,85 @@ public class SofaRuntimeContext {
 
     public DynamicServiceProxyManager getServiceProxyManager() {
         return serviceProxyManager;
+    }
+
+    public Properties getProperties() {
+        return properties;
+    }
+
+    public class Properties {
+
+        private boolean skipJvmReferenceHealthCheck   = false;
+        private boolean skipExtensionHealthCheck      = false;
+        private boolean disableJvmFirst               = false;
+        private boolean extensionFailureInsulating    = false;
+        private boolean skipAllComponentShutdown      = false;
+        private boolean skipCommonComponentShutdown   = false;
+        private boolean jvmFilterEnable               = false;
+        private boolean serviceInterfaceTypeCheck     = false;
+
+        public boolean isSkipJvmReferenceHealthCheck() {
+            return skipJvmReferenceHealthCheck;
+        }
+
+        public void setSkipJvmReferenceHealthCheck(boolean skipJvmReferenceHealthCheck) {
+            this.skipJvmReferenceHealthCheck = skipJvmReferenceHealthCheck;
+        }
+
+        public boolean isSkipExtensionHealthCheck() {
+            return skipExtensionHealthCheck;
+        }
+
+        public void setSkipExtensionHealthCheck(boolean skipExtensionHealthCheck) {
+            this.skipExtensionHealthCheck = skipExtensionHealthCheck;
+        }
+
+        public boolean isDisableJvmFirst() {
+            return disableJvmFirst;
+        }
+
+        public void setDisableJvmFirst(boolean disableJvmFirst) {
+            this.disableJvmFirst = disableJvmFirst;
+        }
+
+        public boolean isExtensionFailureInsulating() {
+            return extensionFailureInsulating;
+        }
+
+        public void setExtensionFailureInsulating(boolean extensionFailureInsulating) {
+            this.extensionFailureInsulating = extensionFailureInsulating;
+        }
+
+        public boolean isSkipAllComponentShutdown() {
+            return skipAllComponentShutdown;
+        }
+
+        public void setSkipAllComponentShutdown(boolean skipAllComponentShutdown) {
+            this.skipAllComponentShutdown = skipAllComponentShutdown;
+        }
+
+        public boolean isSkipCommonComponentShutdown() {
+            return skipCommonComponentShutdown;
+        }
+
+        public void setSkipCommonComponentShutdown(boolean skipCommonComponentShutdown) {
+            this.skipCommonComponentShutdown = skipCommonComponentShutdown;
+        }
+
+        public boolean isJvmFilterEnable() {
+            return jvmFilterEnable;
+        }
+
+        public void setJvmFilterEnable(boolean jvmFilterEnable) {
+            this.jvmFilterEnable = jvmFilterEnable;
+        }
+
+        public boolean isServiceInterfaceTypeCheck() {
+            return serviceInterfaceTypeCheck;
+        }
+
+        public void setServiceInterfaceTypeCheck(boolean serviceInterfaceTypeCheck) {
+            this.serviceInterfaceTypeCheck = serviceInterfaceTypeCheck;
+        }
     }
 }

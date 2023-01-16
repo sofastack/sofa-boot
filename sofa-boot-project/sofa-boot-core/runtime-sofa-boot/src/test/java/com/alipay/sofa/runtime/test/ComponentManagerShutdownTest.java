@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.runtime.test;
 
-import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import com.alipay.sofa.runtime.api.annotation.SofaService;
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;

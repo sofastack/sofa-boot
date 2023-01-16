@@ -21,7 +21,7 @@ import com.alipay.sofa.ark.spi.model.Biz;
 import com.alipay.sofa.ark.spi.service.PriorityOrdered;
 import com.alipay.sofa.ark.spi.service.event.EventHandler;
 import com.alipay.sofa.boot.actuator.health.ReadinessCheckListener;
-import com.alipay.sofa.boot.ark.SofaFramework;
+import com.alipay.sofa.boot.ark.SofaRuntimeContainer;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.actuate.health.Status;
 import org.springframework.context.ApplicationContext;
@@ -59,7 +59,7 @@ public class SofaBizHealthCheckEventHandler implements EventHandler<AfterBizStar
             return;
         }
 
-        ApplicationContext applicationContext = SofaFramework.getApplicationContext(biz
+        ApplicationContext applicationContext = SofaRuntimeContainer.getApplicationContext(biz
             .getBizClassLoader());
 
         if (applicationContext == null) {

@@ -17,11 +17,10 @@
 package com.alipay.sofa.runtime.ext.component;
 
 import com.alipay.sofa.boot.error.ErrorCode;
-import com.alipay.sofa.runtime.SofaRuntimeProperties;
+import com.alipay.sofa.boot.log.SofaLogger;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.api.component.Property;
-import com.alipay.sofa.boot.log.SofaLogger;
 import com.alipay.sofa.runtime.model.ComponentStatus;
 import com.alipay.sofa.runtime.model.ComponentType;
 import com.alipay.sofa.runtime.spi.component.AbstractComponent;
@@ -48,8 +47,7 @@ import java.util.Map;
 public class ExtensionComponent extends AbstractComponent {
     public static final String        LINK_SYMBOL              = "$";
     public static final ComponentType EXTENSION_COMPONENT_TYPE = new ComponentType("extension");
-
-    private Extension                 extension;
+    private final Extension                 extension;
 
     public ExtensionComponent(Extension extension, SofaRuntimeContext sofaRuntimeContext) {
         this.extension = extension;
@@ -131,7 +129,7 @@ public class ExtensionComponent extends AbstractComponent {
 
     @Override
     public HealthResult isHealthy() {
-        if (SofaRuntimeProperties.isSkipExtensionHealthCheck(sofaRuntimeContext)) {
+        if (sofaRuntimeContext.getProperties().isSkipExtensionHealthCheck()) {
             HealthResult healthResult = new HealthResult(componentName.getRawName());
             healthResult.setHealthy(true);
             return healthResult;
@@ -174,8 +172,7 @@ public class ExtensionComponent extends AbstractComponent {
                     .loadContributions((ExtensionInternal) extension);
                 ((ExtensionInternal) extension).setContributions(contribs);
             } catch (Exception e) {
-                if (SofaRuntimeProperties.isExtensionFailureInsulating(sofaRuntimeContext
-                    .getAppClassLoader())) {
+                if (sofaRuntimeContext.getProperties().isExtensionFailureInsulating()) {
                     this.e = e;
                 }
                 SofaLogger.error(

@@ -31,8 +31,8 @@ import java.util.Set;
  * @author xuanbei 18/2/28
  */
 public class BindingConverterFactoryImpl implements BindingConverterFactory {
-    private Map<BindingType, BindingConverter> bindingTypeBindingConverterMap = new HashMap<>();
-    private Map<String, BindingConverter>      tagBindingConverterMap         = new HashMap<>();
+    private final Map<BindingType, BindingConverter> bindingTypeBindingConverterMap = new HashMap<>();
+    private final Map<String, BindingConverter>      tagBindingConverterMap         = new HashMap<>();
 
     @Override
     public BindingConverter getBindingConverter(BindingType bindingType) {
@@ -50,10 +50,10 @@ public class BindingConverterFactoryImpl implements BindingConverterFactory {
             return;
         }
 
-        List<BindingConverter> sortedBindingConverter = new ArrayList<>(bindingConverters);
+        List<BindingConverter<?, ?>> sortedBindingConverter = new ArrayList<>(bindingConverters);
         sortedBindingConverter.sort(AnnotationAwareOrderComparator.INSTANCE);
 
-        for (BindingConverter bindingConverter : sortedBindingConverter) {
+        for (BindingConverter<?, ?> bindingConverter : sortedBindingConverter) {
             bindingTypeBindingConverterMap.putIfAbsent(bindingConverter.supportBindingType(),
                 bindingConverter);
             tagBindingConverterMap.putIfAbsent(bindingConverter.supportTagName(), bindingConverter);

@@ -46,9 +46,10 @@ import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
  * @author xuanbei 18/3/1
  */
 public class ServiceClientImpl implements ServiceClient {
-    private SofaRuntimeContext      sofaRuntimeContext;
-    private BindingConverterFactory bindingConverterFactory;
-    private BindingAdapterFactory   bindingAdapterFactory;
+
+    private final SofaRuntimeContext      sofaRuntimeContext;
+    private final BindingConverterFactory bindingConverterFactory;
+    private final BindingAdapterFactory   bindingAdapterFactory;
 
     public ServiceClientImpl(SofaRuntimeContext sofaRuntimeContext,
                              BindingConverterFactory bindingConverterFactory,
@@ -59,6 +60,7 @@ public class ServiceClientImpl implements ServiceClient {
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public void service(ServiceParam serviceParam) {
         Implementation implementation = new DefaultImplementation();
         implementation.setTarget(serviceParam.getInstance());

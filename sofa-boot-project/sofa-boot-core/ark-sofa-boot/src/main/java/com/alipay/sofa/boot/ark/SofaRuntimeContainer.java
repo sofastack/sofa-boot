@@ -33,25 +33,34 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author huzijie
  * @since 2.5.0
  */
-public class SofaFramework implements ApplicationContextAware, DisposableBean {
+public class SofaRuntimeContainer implements ApplicationContextAware, DisposableBean {
 
     private static final Map<ClassLoader, ApplicationContext> APPLICATION_CONTEXT_MAP  = new ConcurrentHashMap<>();
 
     private static final Map<ClassLoader, SofaRuntimeManager> SOFA_RUNTIME_MANAGER_MAP = new ConcurrentHashMap<>();
 
-    private final SofaRuntimeManager                          sofaRuntimeManager;
+    private static final Map<ClassLoader, Boolean> JVM_SERVICE_CACHE_MAP = new ConcurrentHashMap<>();
 
-    private ClassLoader                                       contextClassLoader;
+    private static final Map<ClassLoader, Boolean> JVM_INVOKE_SERIALIZE_MAP = new ConcurrentHashMap<>();
 
-    public SofaFramework(SofaRuntimeManager sofaRuntimeManager) {
-        this.sofaRuntimeManager = sofaRuntimeManager;
+    private final ClassLoader  contextClassLoader;
+
+    public SofaRuntimeContainer(SofaRuntimeManager sofaRuntimeManager) {
+        this.contextClassLoader = Thread.currentThread().getContextClassLoader();
+        SOFA_RUNTIME_MANAGER_MAP.put(contextClassLoader, sofaRuntimeManager);
+    }
+
+    public void setJvmServiceCache(boolean jvmServiceCache) {
+        JVM_SERVICE_CACHE_MAP.put(contextClassLoader, jvmServiceCache);
+    }
+
+    public void setJvmInvokeSerialize(boolean jvmInvokeSerialize) {
+        JVM_INVOKE_SERIALIZE_MAP.put(contextClassLoader, jvmInvokeSerialize);
     }
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        contextClassLoader = Thread.currentThread().getContextClassLoader();
         APPLICATION_CONTEXT_MAP.put(contextClassLoader, applicationContext);
-        SOFA_RUNTIME_MANAGER_MAP.put(contextClassLoader, sofaRuntimeManager);
     }
 
     public static ApplicationContext getApplicationContext(ClassLoader classLoader) {
@@ -60,6 +69,14 @@ public class SofaFramework implements ApplicationContextAware, DisposableBean {
 
     public static SofaRuntimeManager getSofaRuntimeManager(ClassLoader classLoader) {
         return SOFA_RUNTIME_MANAGER_MAP.get(classLoader);
+    }
+
+    public static boolean isJvmServiceCache(ClassLoader classLoader) {
+        return JVM_SERVICE_CACHE_MAP.getOrDefault(classLoader, false) ;
+    }
+
+    public static boolean isJvmInvokeSerialize(ClassLoader classLoader) {
+        return JVM_INVOKE_SERIALIZE_MAP.getOrDefault(classLoader, true);
     }
 
     public static Collection<SofaRuntimeManager> sofaRuntimeManagerSet() {

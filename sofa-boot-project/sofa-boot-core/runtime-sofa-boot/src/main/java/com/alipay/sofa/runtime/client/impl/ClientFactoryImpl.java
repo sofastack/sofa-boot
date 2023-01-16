@@ -27,7 +27,7 @@ import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
  */
 public class ClientFactoryImpl implements ClientFactoryInternal {
 
-    private Map<Class<?>, Object> clients = new ConcurrentHashMap<>(8);
+    private final Map<Class<?>, Object> clients = new ConcurrentHashMap<>(8);
 
     @Override
     public void registerClient(Class<?> clientType, Object clientInstance) {

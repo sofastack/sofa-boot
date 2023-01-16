@@ -38,22 +38,22 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class StandardSofaRuntimeManager implements SofaRuntimeManager, ApplicationContextAware {
 
-    private ComponentManager           componentManager;
+    private final String                     appName;
+    private final List<RuntimeShutdownAware> runtimeShutdownAwares = new CopyOnWriteArrayList<RuntimeShutdownAware>();
+    private ComponentManagerImpl       componentManager;
     private ClientFactoryInternal      clientFactoryInternal;
     private SofaRuntimeContext         sofaRuntimeContext;
-    private ApplicationContext         rootApplicationContext;
-    private String                     appName;
     private ClassLoader                appClassLoader;
-    private List<RuntimeShutdownAware> runtimeShutdownAwares = new CopyOnWriteArrayList<RuntimeShutdownAware>();
+    private ApplicationContext         rootApplicationContext;
 
     public StandardSofaRuntimeManager(String appName, ClassLoader appClassLoader,
                                       ClientFactoryInternal clientFactoryInternal) {
-        componentManager = new ComponentManagerImpl(clientFactoryInternal, appClassLoader);
         this.appName = appName;
         this.appClassLoader = appClassLoader;
-        this.sofaRuntimeContext = new SofaRuntimeContext(this, componentManager,
-            clientFactoryInternal);
         this.clientFactoryInternal = clientFactoryInternal;
+        this.componentManager = new ComponentManagerImpl(clientFactoryInternal, appClassLoader);
+        this.sofaRuntimeContext = new SofaRuntimeContext(this, componentManager, clientFactoryInternal);
+        this.componentManager.setSofaRuntimeContext(sofaRuntimeContext);
     }
 
     @Override
