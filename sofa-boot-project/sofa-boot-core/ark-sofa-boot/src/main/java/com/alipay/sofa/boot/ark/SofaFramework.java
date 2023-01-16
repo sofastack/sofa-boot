@@ -27,9 +27,10 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * SofaFramework Manager Interface
+ * SofaFramework manager interface for ark
  *
  * @author qilong.zql
+ * @author huzijie
  * @since 2.5.0
  */
 public class SofaFramework implements ApplicationContextAware, DisposableBean {

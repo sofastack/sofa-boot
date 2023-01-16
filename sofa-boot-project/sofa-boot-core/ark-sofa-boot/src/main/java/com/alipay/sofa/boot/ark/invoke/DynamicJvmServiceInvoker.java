@@ -33,6 +33,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
+ * Subclass for {@link ServiceProxy} to transmit between ark biz
+ *
  * @author huzijie
  * @version DynamicJvmServiceInvoker.java, v 0.1 2023年01月16日 5:10 PM huzijie Exp $
  */

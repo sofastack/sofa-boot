@@ -22,6 +22,8 @@ import com.alipay.sofa.runtime.spi.service.DynamicServiceProxyManager;
 import com.alipay.sofa.runtime.spi.service.ServiceProxy;
 
 /**
+ * Implement for {@link DynamicServiceProxyManager} to create dynamic service from Ark biz
+ *
  * @author huzijie
  * @version ArkDynamicServiceProxyManager.java, v 0.1 2023年01月16日 3:55 PM huzijie Exp $
  */
