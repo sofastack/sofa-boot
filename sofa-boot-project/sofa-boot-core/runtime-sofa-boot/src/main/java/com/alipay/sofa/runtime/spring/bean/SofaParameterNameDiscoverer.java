@@ -16,34 +16,34 @@
  */
 package com.alipay.sofa.runtime.spring.bean;
 
+import com.alipay.sofa.boot.annotation.AnnotationWrapper;
+import com.alipay.sofa.runtime.api.annotation.SofaReference;
+import org.springframework.core.ParameterNameDiscoverer;
+import org.springframework.core.StandardReflectionParameterNameDiscoverer;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
-import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
-import org.springframework.core.ParameterNameDiscoverer;
-import org.springframework.core.env.Environment;
-
-import com.alipay.sofa.boot.annotation.PlaceHolderAnnotationInvocationHandler.AnnotationWrapperBuilder;
-import com.alipay.sofa.boot.annotation.PlaceHolderBinder;
-import com.alipay.sofa.runtime.api.annotation.SofaReference;
-
 /**
+ * Implementation of {@link ParameterNameDiscoverer} to handle parameter with {@link SofaReference} annotation.
+ *
  * @author qilong.zql
  * @since 3.1.0
  */
 public class SofaParameterNameDiscoverer implements ParameterNameDiscoverer {
-    private final PlaceHolderBinder                   binder                                    = new DefaultPlaceHolderBinder();
-    private LocalVariableTableParameterNameDiscoverer localVariableTableParameterNameDiscoverer = new LocalVariableTableParameterNameDiscoverer();
-    private Environment                               environment;
 
-    public SofaParameterNameDiscoverer(Environment environment) {
-        this.environment = environment;
+    private final StandardReflectionParameterNameDiscoverer standardReflectionParameterNameDiscoverer = new StandardReflectionParameterNameDiscoverer();
+
+    private final AnnotationWrapper<SofaReference>          referenceAnnotationWrapper;
+
+    public SofaParameterNameDiscoverer(AnnotationWrapper<SofaReference> referenceAnnotationWrapper) {
+        this.referenceAnnotationWrapper = referenceAnnotationWrapper;
     }
 
     @Override
     public String[] getParameterNames(Method method) {
-        String[] parameterNames = localVariableTableParameterNameDiscoverer
+        String[] parameterNames = standardReflectionParameterNameDiscoverer
             .getParameterNames(method);
         Class<?>[] parameterTypes = method.getParameterTypes();
         Annotation[][] annotations = method.getParameterAnnotations();
@@ -52,7 +52,7 @@ public class SofaParameterNameDiscoverer implements ParameterNameDiscoverer {
 
     @Override
     public String[] getParameterNames(Constructor<?> ctor) {
-        String[] parameterNames = localVariableTableParameterNameDiscoverer.getParameterNames(ctor);
+        String[] parameterNames = standardReflectionParameterNameDiscoverer.getParameterNames(ctor);
         Class<?>[] parameterTypes = ctor.getParameterTypes();
         Annotation[][] annotations = ctor.getParameterAnnotations();
         return transformParameterNames(parameterNames, parameterTypes, annotations);
@@ -64,10 +64,9 @@ public class SofaParameterNameDiscoverer implements ParameterNameDiscoverer {
         for (int i = 0; i < annotations.length; ++i) {
             for (Annotation annotation : annotations[i]) {
                 if (annotation instanceof SofaReference) {
-                    AnnotationWrapperBuilder<SofaReference> wrapperBuilder = AnnotationWrapperBuilder
-                        .wrap(annotation).withBinder(binder);
-                    SofaReference delegate = wrapperBuilder.build();
-                    Class interfaceType = delegate.interfaceType();
+                    SofaReference delegate = referenceAnnotationWrapper
+                        .wrap((SofaReference) annotation);
+                    Class<?> interfaceType = delegate.interfaceType();
                     if (interfaceType.equals(void.class)) {
                         interfaceType = parameterType[i];
                     }
@@ -78,12 +77,5 @@ public class SofaParameterNameDiscoverer implements ParameterNameDiscoverer {
             }
         }
         return parameterNames;
-    }
-
-    class DefaultPlaceHolderBinder implements PlaceHolderBinder {
-        @Override
-        public String bind(String text) {
-            return environment.resolvePlaceholders(text);
-        }
     }
 }

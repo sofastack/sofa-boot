@@ -16,18 +16,20 @@
  */
 package com.alipay.sofa.boot.tracer.kafka;
 
+import com.alipay.sofa.boot.context.processor.SingletonSofaPostProcessor;
 import com.sofa.alipay.tracer.plugins.kafkamq.factories.SofaTracerKafkaConsumerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.kafka.core.ConsumerFactory;
 
 /**
- * {@link BeanPostProcessor} to wrapper ConsumerFactory in {@link SofaTracerKafkaConsumerFactory}
+ * Implementation of {@link BeanPostProcessor} to wrapper ConsumerFactory in {@link SofaTracerKafkaConsumerFactory}.
  *
  * @author chenchen6   2020/9/3 22:18
  * @author huzijie
  * @since 3.9.1
  */
+@SingletonSofaPostProcessor
 public class KafkaConsumerFactoryBeanPostProcessor implements BeanPostProcessor {
 
     @SuppressWarnings("rawtypes")

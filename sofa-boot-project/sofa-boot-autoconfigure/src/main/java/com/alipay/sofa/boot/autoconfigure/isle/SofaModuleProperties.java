@@ -21,31 +21,62 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import java.util.List;
 
 /**
- * Properties
+ * Configuration properties to configure sofa isle.
  *
  * @author xuanbei 18/5/6
+ * @author huzijie
  */
 @ConfigurationProperties("sofa.boot.isle")
 public class SofaModuleProperties {
 
+    /**
+     * Active profile list.
+     */
     private List<String> activeProfiles;
 
+    /**
+     * Allow bean definition override in sofa module application contexts.
+     */
     private boolean      allowBeanDefinitionOverriding  = false;
 
+    /**
+     * Enable parallel sofa module application context refresh.
+     */
     private boolean      moduleStartUpParallel          = true;
 
+    /**
+     * Allow sofa module application context publish event to parent application context.
+     */
     private boolean      publishEventToParent           = false;
 
+    /**
+     * Allow module name override.
+     */
     private boolean      allowModuleOverriding          = false;
 
+    /**
+     * Ignore module install failure.
+     */
     private boolean      ignoreModuleInstallFailure     = false;
 
+    /**
+     * Share parent post processors to sofa module application context.
+     */
     private boolean      shareParentPostProcessor       = true;
 
+    /**
+     * Thead pool size factor used in parallel sofa module application context refresh.
+     */
     private float        parallelRefreshCoreCountFactor = 5.0f;
 
+    /**
+     * Timeout used in parallel sofa module application context refresh, in milliseconds.
+     */
     private long         parallelRefreshTimeout         = 60;
 
+    /**
+     * Monitor period used in parallel sofa module application context refresh, in milliseconds.
+     */
     private long         parallelRefreshCheckPeriod     = 30;
 
     public List<String> getActiveProfiles() {

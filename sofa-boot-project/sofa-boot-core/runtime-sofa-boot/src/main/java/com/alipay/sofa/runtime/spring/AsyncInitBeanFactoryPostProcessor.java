@@ -16,15 +16,14 @@
  */
 package com.alipay.sofa.runtime.spring;
 
-import com.alipay.sofa.boot.annotation.PlaceHolderAnnotationInvocationHandler;
-import com.alipay.sofa.boot.annotation.PlaceHolderBinder;
-import com.alipay.sofa.boot.constant.SofaBootConstants;
-import com.alipay.sofa.boot.context.SofaGenericApplicationContext;
-import com.alipay.sofa.boot.error.ErrorCode;
-import com.alipay.sofa.boot.log.SofaLogger;
+import com.alipay.sofa.boot.annotation.AnnotationWrapper;
+import com.alipay.sofa.boot.annotation.DefaultPlaceHolderBinder;
+import com.alipay.sofa.boot.context.processor.SingletonSofaPostProcessor;
+import com.alipay.sofa.boot.log.ErrorCode;
+import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import com.alipay.sofa.boot.util.BeanDefinitionUtil;
 import com.alipay.sofa.runtime.api.annotation.SofaAsyncInit;
-import com.alipay.sofa.runtime.spring.async.AsyncInitBeanHolder;
+import org.slf4j.Logger;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
@@ -33,8 +32,6 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ScannedGenericBeanDefinition;
@@ -44,6 +41,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.type.MethodMetadata;
 import org.springframework.core.type.StandardMethodMetadata;
 import org.springframework.util.ClassUtils;
+import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -54,22 +52,28 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static com.alipay.sofa.runtime.async.AsyncInitMethodManager.ASYNC_INIT_METHOD_NAME;
+
 /**
+ * Implementation of {@link BeanFactoryPostProcessor} to register async init beans.
+ *
  * @author huzijie
  * @version AsyncInitBeanFactoryPostProcessor.java, v 0.1 2022年03月25日 2:08 PM huzijie Exp $
  */
+@SingletonSofaPostProcessor
 public class AsyncInitBeanFactoryPostProcessor implements BeanFactoryPostProcessor,
-                                              ApplicationContextAware, EnvironmentAware {
+                                              EnvironmentAware {
 
-    private final PlaceHolderBinder binder = new AsyncInitBeanFactoryPostProcessor.DefaultPlaceHolderBinder();
-    private Environment             environment;
-    private String                  moduleName;
+    private static final Logger              LOGGER = SofaBootLoggerFactory
+                                                        .getLogger(AsyncInitBeanFactoryPostProcessor.class);
+
+    private AnnotationWrapper<SofaAsyncInit> annotationWrapper;
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
         Arrays.stream(beanFactory.getBeanDefinitionNames())
                 .collect(Collectors.toMap(Function.identity(), beanFactory::getBeanDefinition))
-                .forEach((key, value) -> scanAsyncInitBeanDefinition(key, value, beanFactory));
+                .forEach(this::scanAsyncInitBeanDefinition);
     }
 
     /**
@@ -79,17 +83,15 @@ public class AsyncInitBeanFactoryPostProcessor implements BeanFactoryPostProcess
      * {@link org.springframework.beans.factory.support.ChildBeanDefinition}
      * {@link org.springframework.beans.factory.support.RootBeanDefinition}
      */
-    private void scanAsyncInitBeanDefinition(String beanId, BeanDefinition beanDefinition,
-                                             ConfigurableListableBeanFactory beanFactory) {
+    private void scanAsyncInitBeanDefinition(String beanId, BeanDefinition beanDefinition) {
         if (BeanDefinitionUtil.isFromConfigurationSource(beanDefinition)) {
             scanAsyncInitBeanDefinitionOnMethod(beanId, (AnnotatedBeanDefinition) beanDefinition);
         } else {
             Class<?> beanClassType = BeanDefinitionUtil.resolveBeanClassType(beanDefinition);
             if (beanClassType == null) {
-                SofaLogger.warn("Bean class type cant be resolved from bean of {}", beanId);
                 return;
             }
-            scanAsyncInitBeanDefinitionOnClass(beanId, beanClassType, beanDefinition, beanFactory);
+            scanAsyncInitBeanDefinitionOnClass(beanClassType, beanDefinition);
         }
     }
 
@@ -105,7 +107,7 @@ public class AsyncInitBeanFactoryPostProcessor implements BeanFactoryPostProcess
             declaringClass = ClassUtils.forName(methodMetadata.getDeclaringClassName(), null);
         } catch (Throwable throwable) {
             // it's impossible to catch throwable here
-            SofaLogger.error(ErrorCode.convert("01-02001", beanId), throwable);
+            LOGGER.error(ErrorCode.convert("01-02001", beanId), throwable);
             return;
         }
         if (methodMetadata instanceof StandardMethodMetadata) {
@@ -146,7 +148,7 @@ public class AsyncInitBeanFactoryPostProcessor implements BeanFactoryPostProcess
             if (sofaAsyncInitAnnotation == null) {
                 sofaAsyncInitAnnotation = returnType.getAnnotation(SofaAsyncInit.class);
             }
-            registerAsyncInitBean(beanId, sofaAsyncInitAnnotation, beanDefinition);
+            registerAsyncInitBean(sofaAsyncInitAnnotation, beanDefinition);
         } else if (candidateMethods.size() > 1) {
             for (Method m : candidateMethods) {
                 if (AnnotatedElementUtils.hasAnnotation(m, SofaAsyncInit.class)
@@ -158,53 +160,32 @@ public class AsyncInitBeanFactoryPostProcessor implements BeanFactoryPostProcess
         }
     }
 
-    private void scanAsyncInitBeanDefinitionOnClass(String beanId, Class<?> beanClass,
-                                                    BeanDefinition beanDefinition,
-                                                    ConfigurableListableBeanFactory beanFactory) {
+    private void scanAsyncInitBeanDefinitionOnClass(Class<?> beanClass,
+                                                    BeanDefinition beanDefinition) {
         // See issue: https://github.com/sofastack/sofa-boot/issues/835
         SofaAsyncInit sofaAsyncInitAnnotation = AnnotationUtils.findAnnotation(beanClass,
             SofaAsyncInit.class);
-        registerAsyncInitBean(beanId, sofaAsyncInitAnnotation, beanDefinition);
+        registerAsyncInitBean(sofaAsyncInitAnnotation, beanDefinition);
     }
 
     @SuppressWarnings("unchecked")
-    private void registerAsyncInitBean(String beanId, SofaAsyncInit sofaAsyncInitAnnotation,
+    private void registerAsyncInitBean(SofaAsyncInit sofaAsyncInitAnnotation,
                                        BeanDefinition beanDefinition) {
         if (sofaAsyncInitAnnotation == null) {
             return;
         }
-        PlaceHolderAnnotationInvocationHandler.AnnotationWrapperBuilder<SofaAsyncInit> wrapperBuilder = PlaceHolderAnnotationInvocationHandler.AnnotationWrapperBuilder
-            .wrap(sofaAsyncInitAnnotation).withBinder(binder);
-        sofaAsyncInitAnnotation = wrapperBuilder.build();
 
-        if (sofaAsyncInitAnnotation.value()) {
-            AsyncInitBeanHolder.registerAsyncInitBean(moduleName, beanId,
-                beanDefinition.getInitMethodName());
+        sofaAsyncInitAnnotation = annotationWrapper.wrap(sofaAsyncInitAnnotation);
+
+        String initMethodName = beanDefinition.getInitMethodName();
+        if (sofaAsyncInitAnnotation.value() && StringUtils.hasText(initMethodName)) {
+            beanDefinition.setAttribute(ASYNC_INIT_METHOD_NAME, initMethodName);
         }
-    }
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.moduleName = getModuleName(applicationContext);
     }
 
     @Override
     public void setEnvironment(Environment environment) {
-        this.environment = environment;
+        this.annotationWrapper = AnnotationWrapper.create(SofaAsyncInit.class)
+            .withEnvironment(environment).withBinder(DefaultPlaceHolderBinder.INSTANCE);
     }
-
-    private String getModuleName(ApplicationContext applicationContext) {
-        if (applicationContext instanceof SofaGenericApplicationContext) {
-            return applicationContext.getId();
-        }
-        return SofaBootConstants.ROOT_APPLICATION_CONTEXT;
-    }
-
-    class DefaultPlaceHolderBinder implements PlaceHolderBinder {
-        @Override
-        public String bind(String text) {
-            return environment.resolvePlaceholders(text);
-        }
-    }
-
 }

@@ -16,6 +16,11 @@
  */
 package com.alipay.sofa.boot.isle.deployment;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.core.io.Resource;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,17 +31,11 @@ import java.util.Objects;
 import java.util.Properties;
 import java.util.stream.Stream;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.core.io.Resource;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
-
-import com.alipay.sofa.boot.constant.SofaBootConstants;
-
 /**
+ * Base implementation of {@link DeploymentDescriptor} to create module for url.
+ *
  * @author yangyanzhao
- * @version $Id: AbstractDeploymentDescriptor.java, v 0.1 2012-2-1 15:13:00
- *          yangyanzhao Exp $
+ * @version $Id: AbstractDeploymentDescriptor.java, v 0.1 2012-2-1 15:13:00 yangyanzhao Exp $
  */
 public abstract class AbstractDeploymentDescriptor implements DeploymentDescriptor {
     protected final Properties                        properties;
@@ -122,7 +121,7 @@ public abstract class AbstractDeploymentDescriptor implements DeploymentDescript
 
     @Override
     public String getSpringParent() {
-        List<String> name = getFormattedModuleInfo(SofaBootConstants.SPRING_PARENT);
+        List<String> name = getFormattedModuleInfo(DeploymentDescriptorConfiguration.SPRING_PARENT);
         return name == null ? null : name.get(0);
     }
 
@@ -193,7 +192,7 @@ public abstract class AbstractDeploymentDescriptor implements DeploymentDescript
         if (ret == null || ret.length() == 0) {
             return null;
         }
-        String[] array = ret.split(",");
+        String[] array = StringUtils.commaDelimitedListToStringArray(ret);
         List<String> list = new ArrayList<>(array.length);
         for (String item : array) {
             int idx = item.indexOf(';');
@@ -205,6 +204,9 @@ public abstract class AbstractDeploymentDescriptor implements DeploymentDescript
         return list;
     }
 
+    /**
+     * Actually load spring xml resources.
+     */
     protected abstract void loadSpringXMLs();
 
     @Override
@@ -212,10 +214,9 @@ public abstract class AbstractDeploymentDescriptor implements DeploymentDescript
         if (this == o) {
             return true;
         }
-        if (!(o instanceof AbstractDeploymentDescriptor)) {
+        if (!(o instanceof AbstractDeploymentDescriptor that)) {
             return false;
         }
-        AbstractDeploymentDescriptor that = (AbstractDeploymentDescriptor) o;
         return Objects.equals(this.getModuleName(), that.getModuleName());
     }
 

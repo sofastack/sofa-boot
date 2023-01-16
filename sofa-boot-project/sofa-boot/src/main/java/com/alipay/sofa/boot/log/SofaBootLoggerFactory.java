@@ -16,18 +16,16 @@
  */
 package com.alipay.sofa.boot.log;
 
+import com.alipay.sofa.boot.constant.SofaBootConstants;
+import com.alipay.sofa.common.log.LoggerSpaceManager;
 import org.slf4j.Logger;
 
-import com.alipay.sofa.common.log.LoggerSpaceManager;
-
 /**
+ * Factory to create {@link Logger} form {@link  LoggerSpaceManager} use sofa boot space name.
+ *
  * @author xuanbei 18/2/28
  */
 public class SofaBootLoggerFactory {
-    /***
-     * sofa runtime log space
-     */
-    public static final String SOFA_BOOT_LOG_SPACE = "sofa-boot";
 
     /**
      * get Logger Object
@@ -39,7 +37,7 @@ public class SofaBootLoggerFactory {
         if (name == null || name.isEmpty()) {
             return null;
         }
-        return LoggerSpaceManager.getLoggerBySpace(name, SOFA_BOOT_LOG_SPACE);
+        return LoggerSpaceManager.getLoggerBySpace(name, SofaBootConstants.SOFA_BOOT_SPACE_NAME);
     }
 
     /**

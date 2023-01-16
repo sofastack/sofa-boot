@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.boot.actuator.health;
 
-import com.alipay.sofa.boot.error.ErrorCode;
+import com.alipay.sofa.boot.log.ErrorCode;
 import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import com.alipay.sofa.boot.startup.BaseStat;
 import com.alipay.sofa.boot.startup.StartupReporter;
@@ -43,10 +43,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 /**
- * An implement of {@link GenericApplicationListener} to trigger readiness check.
+ * Implementation of {@link GenericApplicationListener} to trigger readiness check.
  *
  * @author liangen
  * @author qilong.zql
+ * @author huzijie
  */
 public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
                                    GenericApplicationListener, StartupReporterAware {

@@ -22,7 +22,7 @@ import org.springframework.aop.Pointcut;
 import org.springframework.aop.support.AbstractPointcutAdvisor;
 
 /**
- * Implement for {@link AbstractPointcutAdvisor} to use {@link TracerAnnotationClassPointcut} as pointcut
+ * Implementation of {@link AbstractPointcutAdvisor} to use {@link TracerAnnotationClassPointcut} as pointcut.
  *
  * @author guolei.sgl (guolei.sgl@antfin.com) 2019/8/9 3:17 PM
  * @author huzijie

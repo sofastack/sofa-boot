@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.boot.actuator.health;
 
-import com.alipay.sofa.boot.util.StringUtils;
+import org.springframework.util.StringUtils;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.health.HealthResult;
@@ -24,9 +24,10 @@ import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.Status;
 
 /**
- * A {@link HealthChecker} used to check {@link ComponentInfo} health.
+ * Implementation of {@link HealthChecker} used to check {@link ComponentInfo} health.
  *
  * @author xuanbei 18/5/15
+ * @author huzijie
  */
 public class ComponentHealthChecker implements HealthChecker {
 

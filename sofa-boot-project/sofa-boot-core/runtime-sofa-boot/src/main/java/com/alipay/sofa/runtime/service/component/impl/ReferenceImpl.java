@@ -18,19 +18,19 @@ package com.alipay.sofa.runtime.service.component.impl;
 
 import java.util.Map;
 
-import com.alipay.sofa.boot.util.StringUtils;
+import org.springframework.util.StringUtils;
 import com.alipay.sofa.runtime.model.InterfaceMode;
 import com.alipay.sofa.runtime.service.component.AbstractContract;
 import com.alipay.sofa.runtime.service.component.Reference;
 
 /**
- * Reference Implementation
+ * Reference Implementation.
  *
  * @author xuanbei 18/3/1
  */
 public class ReferenceImpl extends AbstractContract implements Reference {
     /** jvm first or not */
-    private boolean jvmFirst = true;
+    private final boolean jvmFirst;
 
     public ReferenceImpl(String uniqueId, Class<?> interfaceType, InterfaceMode interfaceMode,
                          boolean jvmFirst) {

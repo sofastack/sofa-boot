@@ -19,8 +19,8 @@ package com.alipay.sofa.runtime.api.aware;
 import com.alipay.sofa.runtime.api.client.ExtensionClient;
 
 /**
- * Interface used to implemented by a Spring bean who want to get an instance of {@link ExtensionClient}. Sample usage:
- *
+ * Interface used to implemented by a Spring bean who want to get an instance of {@link ExtensionClient}.
+ * Sample usage:
  * <pre>
  *
  * public class ExtensionClientBean implements ExtensionClientAware {

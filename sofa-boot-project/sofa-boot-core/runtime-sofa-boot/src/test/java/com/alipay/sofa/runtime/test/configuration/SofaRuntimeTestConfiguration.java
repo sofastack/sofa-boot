@@ -21,7 +21,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.alipay.sofa.runtime.spring.AsyncProxyBeanPostProcessor;
-import com.alipay.sofa.runtime.spring.async.AsyncTaskExecutionListener;
 
 /**
  * Test runtime-sofa-boot-core, build some necessary beans.
@@ -33,7 +32,7 @@ import com.alipay.sofa.runtime.spring.async.AsyncTaskExecutionListener;
 public class SofaRuntimeTestConfiguration {
     @Bean
     public AsyncProxyBeanPostProcessor asyncProxyBeanPostProcessor() {
-        return new AsyncProxyBeanPostProcessor();
+        return new AsyncProxyBeanPostProcessor(asyncInitMethodManager);
     }
 
     @Bean

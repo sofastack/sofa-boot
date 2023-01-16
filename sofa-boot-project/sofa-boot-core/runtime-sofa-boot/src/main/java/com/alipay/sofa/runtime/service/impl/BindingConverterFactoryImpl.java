@@ -28,11 +28,16 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * Base implementation of {@link BindingConverterFactory}.
+ *
  * @author xuanbei 18/2/28
  */
+@SuppressWarnings("rawtypes")
 public class BindingConverterFactoryImpl implements BindingConverterFactory {
-    private Map<BindingType, BindingConverter> bindingTypeBindingConverterMap = new HashMap<>();
-    private Map<String, BindingConverter>      tagBindingConverterMap         = new HashMap<>();
+
+    private final Map<BindingType, BindingConverter> bindingTypeBindingConverterMap = new HashMap<>();
+
+    private final Map<String, BindingConverter>      tagBindingConverterMap         = new HashMap<>();
 
     @Override
     public BindingConverter getBindingConverter(BindingType bindingType) {
@@ -53,7 +58,7 @@ public class BindingConverterFactoryImpl implements BindingConverterFactory {
         List<BindingConverter> sortedBindingConverter = new ArrayList<>(bindingConverters);
         sortedBindingConverter.sort(AnnotationAwareOrderComparator.INSTANCE);
 
-        for (BindingConverter bindingConverter : sortedBindingConverter) {
+        for (BindingConverter<?, ?> bindingConverter : sortedBindingConverter) {
             bindingTypeBindingConverterMap.putIfAbsent(bindingConverter.supportBindingType(),
                 bindingConverter);
             tagBindingConverterMap.putIfAbsent(bindingConverter.supportTagName(), bindingConverter);

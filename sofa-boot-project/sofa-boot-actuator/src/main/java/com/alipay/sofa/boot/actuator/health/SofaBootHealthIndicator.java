@@ -26,10 +26,11 @@ import static com.alipay.sofa.boot.actuator.health.ReadinessCheckListener.HEALTH
 import static com.alipay.sofa.boot.actuator.health.ReadinessCheckListener.HEALTH_CHECK_NOT_READY_MSG;
 
 /**
- * An implement of {@link HealthIndicator} to check result for {@link HealthCheckerProcessor}.
+ * Implementation of {@link HealthIndicator} to check result for {@link HealthCheckerProcessor}.
  *
  * @author liangen
  * @author qilong.zql
+ * @author huzijie
  * @since 2.3.0
  */
 public class SofaBootHealthIndicator implements HealthIndicator, NonReadinessCheck {

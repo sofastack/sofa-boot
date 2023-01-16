@@ -19,10 +19,10 @@ package com.alipay.sofa.runtime.ext.component;
 import org.w3c.dom.Element;
 
 import com.alipay.sofa.runtime.api.component.ComponentName;
-import com.alipay.sofa.service.api.component.Extension;
+import com.alipay.sofa.runtime.ext.Extension;
 
 /**
- * SOFA Extension Internal Object
+ * SOFA Extension Internal Object.
  *
  * @author xi.hux@alipay.com
  * @author ruoshan
@@ -32,28 +32,28 @@ import com.alipay.sofa.service.api.component.Extension;
 public interface ExtensionInternal extends Extension {
 
     /**
-     * Set extension element
+     * Set extension element.
      *
      * @param element extension element
      */
     void setElement(Element element);
 
     /**
-     * Set contributions
+     * Set contributions.
      *
      * @param contribs contributions
      */
     void setContributions(Object[] contribs);
 
     /**
-     * Set target component(The extension point component) name
+     * Set target component(The extension point component) name.
      *
      * @param target target component name。
      */
     void setTargetComponentName(ComponentName target);
 
     /**
-     * Dispose the component
+     * Dispose the component.
      */
     void dispose();
 

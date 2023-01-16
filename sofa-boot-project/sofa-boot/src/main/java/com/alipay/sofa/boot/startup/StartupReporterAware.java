@@ -20,10 +20,20 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.Aware;
 
 /**
+ * Interface to be implemented by any object that wishes to be notified
+ * of the {@link StartupReporter} that it runs in.
+ *
  * @author huzijie
  * @version StartupReporterAware.java, v 0.1 2023年01月12日 6:12 PM huzijie Exp $
+ * @since 4.0.0
  */
 public interface StartupReporterAware extends Aware {
 
+    /**
+     * Set the StartupReporter that this object runs in.
+     *
+     * @param startupReporter the StartupReporter object to be used by this object
+     * @throws BeansException if thrown by startupReporter methods
+     */
     void setStartupReporter(StartupReporter startupReporter) throws BeansException;
 }

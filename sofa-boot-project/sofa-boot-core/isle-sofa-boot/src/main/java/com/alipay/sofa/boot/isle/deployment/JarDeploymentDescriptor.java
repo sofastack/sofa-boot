@@ -16,6 +16,10 @@
  */
 package com.alipay.sofa.boot.isle.deployment;
 
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.util.Assert;
+import org.springframework.util.ResourceUtils;
+
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.JarURLConnection;
@@ -27,13 +31,8 @@ import java.util.Properties;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.util.Assert;
-import org.springframework.util.ResourceUtils;
-
-import com.alipay.sofa.boot.constant.SofaBootConstants;
-
 /**
+ * Deployment descriptor created by jar.
  *
  * @author yangyanzhao
  * @version $Id: JarDescriptor.java, v 0.1 2012-1-11 17:43:17 yangyanzhao Exp $
@@ -62,10 +61,10 @@ public class JarDeploymentDescriptor extends AbstractDeploymentDescriptor {
             for (Enumeration<JarEntry> entries = jarFile.entries(); entries.hasMoreElements();) {
                 JarEntry entry = entries.nextElement();
                 String entryPath = entry.getName();
-                if (entryPath.startsWith(SofaBootConstants.SPRING_CONTEXT_PATH)
+                if (entryPath.startsWith(DeploymentDescriptorConfiguration.SPRING_CONTEXT_PATH)
                     && entryPath.endsWith("xml")) {
                     String fileName = entry.getName().substring(
-                        SofaBootConstants.SPRING_CONTEXT_PATH.length() + 1);
+                        DeploymentDescriptorConfiguration.SPRING_CONTEXT_PATH.length() + 1);
                     springResources.put(fileName,
                         convertToByteArrayResource(jarFile.getInputStream(entry)));
                 }

@@ -28,74 +28,73 @@ import java.util.Map;
  * Configuration properties to configure health.
  *
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
+ * @author huzijie
  * Created on 2020/5/18
  */
-@ConfigurationProperties(prefix = "sofa.boot.actuator.health")
+@ConfigurationProperties("sofa.boot.actuator.health")
 public class HealthProperties {
 
     /**
-     * 健康检查失败时抛出异常
+     * Thrown exception when the health check fails.
      */
     private boolean                          insulator                    = false;
 
     /**
-     * 并行健康检查
+     * Enable parallel health check.
      */
     private boolean                          parallelCheck                = true;
 
     /**
-     * 并行健康检查超时时间，单位 ms
+     * Timeout duration of parallel health check, in milliseconds.
      */
     private long                             parallelCheckTimeout         = 120 * 1000;
 
     /**
-     * 手动触发 readinessCallBack
+     * Manually trigger the readinessCallBack.
      */
     private boolean                          manualReadinessCallback      = false;
 
     /**
-     * 排除 {@link org.springframework.boot.actuate.health.HealthIndicator} 组件列表
+     * Exclude {@link org.springframework.boot.actuate.health.HealthIndicator} component list.
      */
     private List<String>                     excludedIndicators           = new ArrayList<>();
 
     /**
-     * Readiness 健康检查跳过所有组件
+     * Readiness health check skips all components.
      */
     private boolean                          skipAll                      = false;
 
     /**
-     * Readiness 健康检查跳过所有 {@link com.alipay.sofa.boot.actuator.health.HealthChecker} 组件
+     * Readiness health check skips all {@link com.alipay.sofa.boot.actuator.health.HealthChecker} components.
      */
     private boolean                          skipHealthChecker            = false;
 
     /**
-     * Readiness 健康检查跳过所有 {@link org.springframework.boot.actuate.health.HealthIndicator} 组件
+     * Readiness health check skips all {@link org.springframework.boot.actuate.health.HealthIndicator} components.
      */
     private boolean                          skipHealthIndicator          = false;
 
     /**
-     * 全局的 {@link com.alipay.sofa.boot.actuator.health.HealthChecker} 组件超时时间，单位ms
+     * Global {@link com.alipay.sofa.boot.actuator.health.HealthChecker} health check timeout，in milliseconds.
      */
     private int                              globalHealthCheckerTimeout   = 60 * 1000;
 
     /**
-     * 指定 {@link com.alipay.sofa.boot.actuator.health.HealthChecker} 组件配置,
-     * key 为 {@link com.alipay.sofa.boot.actuator.health.HealthChecker#getComponentName()} 的返回值
+     * Customize {@link com.alipay.sofa.boot.actuator.health.HealthChecker} component property,
+     * key is {@link com.alipay.sofa.boot.actuator.health.HealthChecker#getComponentName()} return value.
      */
     private Map<String, HealthCheckerConfig> healthCheckerConfig          = new HashMap<>();
 
     /**
-     * 全局的 {@link org.springframework.boot.actuate.health.HealthIndicator} 组件超时时间，单位ms
+     * Global {@link org.springframework.boot.actuate.health.HealthIndicator} health check timeout，in milliseconds.
      */
     private int                              globalHealthIndicatorTimeout = 60 * 1000;
 
     /**
-     * 指定 {@link org.springframework.boot.actuate.health.HealthIndicator} 组件超时时间, key 为 beanId, value 为超时时间，单位ms
+     * Customize {@link org.springframework.boot.actuate.health.HealthIndicator} component property,
+     * key is bean name.
      */
     private Map<String, HealthCheckerConfig> healthIndicatorConfig        = new HashMap<>();
-
-    public HealthProperties() {
-    }
 
     public boolean isInsulator() {
         return insulator;

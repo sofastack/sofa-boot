@@ -16,15 +16,28 @@
  */
 package com.alipay.sofa.boot.startup;
 
-import org.springframework.beans.factory.support.RootBeanDefinition;
-
 /**
+ * Interface to custom {@link BeanStat}.
+ *
  * @author huzijie
  * @version BeanStatExtension.java, v 0.1 2021年01月04日 5:27 下午 huzijie Exp $
  */
 public interface BeanStatCustomizer {
 
-    default boolean support(RootBeanDefinition beanDefinition) {return true;}
+    /**
+     * Given bean name and bean instance, return whether this {@code BeanStatCustomizer} can support it.
+     * @param beanName beanName
+     * @param bean bean
+     * @return true if support, otherwise false.
+     */
+    default boolean support(String beanName, Object bean) {return true;}
 
-    BeanStat customize(String beanName, Object bean, BeanStat bs);
+    /**
+     * Custom bean stat.
+     * @param beanName beanName
+     * @param bean bean instance
+     * @param beanStat beanStat
+     * @return customized bean stat. if {@code null}, no subsequent BeanStatCustomizer will be invoked
+     */
+    BeanStat customize(String beanName, Object bean, BeanStat beanStat);
 }

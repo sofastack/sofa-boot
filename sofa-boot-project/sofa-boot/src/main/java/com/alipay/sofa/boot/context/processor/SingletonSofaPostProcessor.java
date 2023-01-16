@@ -23,10 +23,14 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Use this annotation to tag BeanFactoryPostProcessor/BeanPostProcessor, which will share singleton in modules.
+ * Indicates that an annotated class with type match
+ * {@link org.springframework.beans.factory.config.BeanPostProcessor} or
+ * {@link org.springframework.beans.factory.config.BeanFactoryPostProcessor}
+ * will use same singleton when shared to other application contexts.
  *
  * @author huzijie
  * @version SingletonSofaPostProcessor.java, v 0.1 2022年10月24日 4:24 PM huzijie Exp $
+ * @since 4.0.0
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.TYPE })

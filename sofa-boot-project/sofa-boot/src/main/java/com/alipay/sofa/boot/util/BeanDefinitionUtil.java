@@ -29,6 +29,8 @@ import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
 /**
+ * Utility methods that are useful for bean definition resolve.
+ *
  * Created by TomorJM on 2019-10-09.
  */
 public class BeanDefinitionUtil {
@@ -41,7 +43,7 @@ public class BeanDefinitionUtil {
      * {@link org.springframework.beans.factory.support.RootBeanDefinition}
      *
      * @param beanDefinition resolve bean class type from bean definition
-     * @return
+     * @return class for bean definition, could be null.
      */
     public static Class<?> resolveBeanClassType(BeanDefinition beanDefinition) {
         Class<?> clazz = null;
@@ -59,8 +61,9 @@ public class BeanDefinitionUtil {
             }
 
             try {
-                clazz = org.springframework.util.StringUtils.isEmpty(className) ? null : ClassUtils
-                    .forName(className, null);
+                if (StringUtils.hasText(className)) {
+                    clazz = ClassUtils.forName(className, null);
+                }
             } catch (Throwable throwable) {
                 // ignore
             }
@@ -72,8 +75,9 @@ public class BeanDefinitionUtil {
             } catch (IllegalStateException ex) {
                 try {
                     String className = beanDefinition.getBeanClassName();
-                    clazz = StringUtils.isEmpty(className) ? null : ClassUtils.forName(className,
-                        null);
+                    if (StringUtils.hasText(className)) {
+                        clazz = ClassUtils.forName(className, null);
+                    }
                 } catch (Throwable throwable) {
                     // ignore
                 }

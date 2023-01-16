@@ -20,6 +20,7 @@
         <module>isle-sofa-boot-starter</module>
         <module>rpc-sofa-boot-starter</module>
         <module>tracer-sofa-boot-starter</module>
+        <module>ark-sofa-boot-starter</module>
     </modules>
 
     <build>

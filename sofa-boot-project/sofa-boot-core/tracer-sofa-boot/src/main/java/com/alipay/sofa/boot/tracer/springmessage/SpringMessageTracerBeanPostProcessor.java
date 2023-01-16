@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.boot.tracer.springmessage;
 
+import com.alipay.sofa.boot.context.processor.SingletonSofaPostProcessor;
 import com.alipay.sofa.tracer.plugins.message.interceptor.SofaTracerChannelInterceptor;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
@@ -27,12 +28,13 @@ import org.springframework.util.StringUtils;
 import static com.alipay.common.tracer.core.configuration.SofaTracerConfiguration.TRACER_APPNAME_KEY;
 
 /**
- * {@link BeanPostProcessor} to add interceptor {@link SofaTracerChannelInterceptor}
+ * Implementation of {@link BeanPostProcessor} to add interceptor {@link SofaTracerChannelInterceptor}.
  *
  * @author guolei.sgl (guolei.sgl@antfin.com) 2019/12/4 11:07 AM
  * @author huzijie
  * @since 3.9.1
  **/
+@SingletonSofaPostProcessor
 public class SpringMessageTracerBeanPostProcessor implements BeanPostProcessor, PriorityOrdered {
 
     private String appName;

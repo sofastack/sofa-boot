@@ -25,7 +25,7 @@ import org.springframework.util.StringUtils;
 import static com.alipay.common.tracer.core.configuration.SofaTracerConfiguration.TRACER_APPNAME_KEY;
 
 /**
- * {@link MongoClientSettingsBuilderCustomizer} to add {@link SofaTracerCommandListener}
+ * Implementation of {@link MongoClientSettingsBuilderCustomizer} to add {@link SofaTracerCommandListener}.
  *
  * @author linnan
  * @author huzijie

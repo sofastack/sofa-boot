@@ -16,15 +16,15 @@
  */
 package com.alipay.sofa.boot.isle.stage;
 
-import com.alipay.sofa.boot.constant.SofaBootConstants;
-import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.boot.isle.deployment.DependencyTree;
 import com.alipay.sofa.boot.isle.deployment.DeploymentBuilder;
 import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptor;
 import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptorConfiguration;
 import com.alipay.sofa.boot.isle.deployment.DeploymentException;
-import com.alipay.sofa.boot.log.SofaLogger;
+import com.alipay.sofa.boot.log.ErrorCode;
+import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
+import org.slf4j.Logger;
 import org.springframework.core.io.UrlResource;
 import org.springframework.util.StringUtils;
 
@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.Properties;
 
 /**
- * Stage to found sofa modules in classpath
+ * Stage to found sofa modules in classpath.
  *
  * @author fengqi.lin
  * @author yangyanzhao
@@ -45,9 +45,12 @@ import java.util.Properties;
  */
 public class ModelCreatingStage extends AbstractPipelineStage {
 
-    public static final String MODEL_CREATING_STAGE_NAME = "ModelCreatingStage";
+    private static final Logger LOGGER                    = SofaBootLoggerFactory
+                                                              .getLogger(ModelCreatingStage.class);
 
-    protected boolean          allowModuleOverriding;
+    public static final String  MODEL_CREATING_STAGE_NAME = "ModelCreatingStage";
+
+    protected boolean           allowModuleOverriding;
 
     @Override
     protected void doProcess() throws Exception {
@@ -56,7 +59,8 @@ public class ModelCreatingStage extends AbstractPipelineStage {
     }
 
     protected void getAllDeployments() throws IOException, DeploymentException {
-        Enumeration<URL> urls = appClassLoader.getResources(SofaBootConstants.SOFA_MODULE_FILE);
+        Enumeration<URL> urls = appClassLoader
+            .getResources(DeploymentDescriptorConfiguration.SOFA_MODULE_FILE);
         if (urls == null || !urls.hasMoreElements()) {
             return;
         }
@@ -67,8 +71,8 @@ public class ModelCreatingStage extends AbstractPipelineStage {
             Properties props = new Properties();
             props.load(urlResource.getInputStream());
             DeploymentDescriptorConfiguration deploymentDescriptorConfiguration = new DeploymentDescriptorConfiguration(
-                Collections.singletonList(SofaBootConstants.MODULE_NAME),
-                Collections.singletonList(SofaBootConstants.REQUIRE_MODULE));
+                Collections.singletonList(DeploymentDescriptorConfiguration.MODULE_NAME),
+                Collections.singletonList(DeploymentDescriptorConfiguration.REQUIRE_MODULE));
             DeploymentDescriptor dd = DeploymentBuilder.build(url, props,
                 deploymentDescriptorConfiguration, appClassLoader);
 
@@ -86,9 +90,9 @@ public class ModelCreatingStage extends AbstractPipelineStage {
                                                                                                throws DeploymentException {
         if (exist != null) {
             if (isAllowModuleOverriding()) {
-                SofaLogger.warn("Overriding module deployment for module name '"
-                                + dd.getModuleName() + "': replacing '" + exist.getName()
-                                + "' with '" + dd.getName() + "'");
+                LOGGER.warn(
+                    "Overriding module deployment for module name '{}': replacing '{}' with '{}'",
+                    dd.getModuleName(), exist.getName(), dd.getName());
             } else {
                 throw new DeploymentException(ErrorCode.convert("01-11006", dd.getModuleName(),
                     exist.getName(), dd.getName()));
@@ -106,11 +110,11 @@ public class ModelCreatingStage extends AbstractPipelineStage {
             "All activated module list");
         writeMessageToStringBuilder(stringBuilder, application.getResolvedDeployments(),
             "Modules that could install");
-        SofaLogger.info(stringBuilder.toString());
+        LOGGER.info(stringBuilder.toString());
 
         String errorMessage = getErrorMessageByApplicationModule(application);
         if (StringUtils.hasText(errorMessage)) {
-            SofaLogger.error(errorMessage);
+            LOGGER.error(errorMessage);
         }
 
         if (application.getDeployRegistry().getPendingEntries().size() > 0) {

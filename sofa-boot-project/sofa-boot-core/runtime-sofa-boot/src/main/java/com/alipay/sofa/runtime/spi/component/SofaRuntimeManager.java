@@ -22,62 +22,65 @@ import com.alipay.sofa.runtime.spi.spring.RuntimeShutdownAware;
 import org.springframework.context.ApplicationContext;
 
 /**
+ * Interface to get infomations form sofa runtime.
+ *
  * @author xuanbei 18/2/28
  */
 public interface SofaRuntimeManager {
+
     /**
-     * get sofa runtime context
+     * Get sofa runtime context.
      *
      * @return sofa runtime context
      */
     SofaRuntimeContext getSofaRuntimeContext();
 
     /**
-     * get app name
+     * Get app name.
      *
      * @return app name
      */
     String getAppName();
 
     /**
-     * get application ClassLoader
+     * Get application ClassLoader.
      *
      * @return application ClassLoader
      */
     ClassLoader getAppClassLoader();
 
     /**
-     * get component manager
+     * Get component manager.
      *
      * @return component manager
      */
     ComponentManager getComponentManager();
 
     /**
-     * get client factory
+     * Get client factory.
      *
-     * @return Client 工厂
+     * @return client factory
      */
     ClientFactoryInternal getClientFactoryInternal();
 
     /**
-     * shutdown manager
+     * Shutdown sofa runtime.
      *
      * @throws ServiceRuntimeException throws when exception occur
      */
     void shutdown() throws ServiceRuntimeException;
 
     /**
-     * shutdown root context, only used by external component such SOFA Ark
+     * Shutdown root context, only used by external component such sofa ark.
      *
      * @throws ServiceRuntimeException throws when exception occur
      */
     void shutDownExternally() throws ServiceRuntimeException;
 
     /**
-     * register shutdown aware which would be executed after receive uninstall event
+     * Register shutdown aware which would be executed after receive uninstall event.
      *
-     * @param shutdownAware
+     * @param shutdownAware shutdownAware
      */
     void registerShutdownAware(RuntimeShutdownAware shutdownAware);
 
@@ -87,5 +90,5 @@ public interface SofaRuntimeManager {
      *
      * @return Spring context
      */
-    public ApplicationContext getRootApplicationContext();
+    ApplicationContext getRootApplicationContext();
 }

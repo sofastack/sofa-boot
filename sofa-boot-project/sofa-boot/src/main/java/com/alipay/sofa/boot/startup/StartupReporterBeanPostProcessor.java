@@ -21,8 +21,11 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.lang.Nullable;
 
 /**
+ * Implementation of {@link BeanPostProcessor} to inject StartupReporter to {@link StartupReporterAware} beans.
+ *
  * @author huzijie
  * @version StartupReporterBeanPostProcessor.java, v 0.1 2023年01月12日 6:13 PM huzijie Exp $
+ * @since 4.0.0
  */
 public class StartupReporterBeanPostProcessor implements BeanPostProcessor {
 

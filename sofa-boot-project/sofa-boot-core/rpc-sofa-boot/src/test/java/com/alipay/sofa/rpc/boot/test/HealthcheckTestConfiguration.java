@@ -33,7 +33,7 @@
 //package com.alipay.sofa.rpc.boot.test;
 //
 //import com.alipay.sofa.boot.actuator.health.core.HealthCheckExecutor;
-//import com.alipay.sofa.runtime.configure.SofaRuntimeConfigurationProperties;
+//import com.alipay.sofa.boot.autoconfigure.runtime.SofaRuntimeConfigurationProperties;
 //import org.springframework.boot.context.properties.EnableConfigurationProperties;
 //import org.springframework.context.annotation.Bean;
 //import org.springframework.context.annotation.Configuration;

@@ -16,6 +16,7 @@
         <module>isle-sofa-boot</module>
         <module>rpc-sofa-boot</module>
         <module>tracer-sofa-boot</module>
+        <module>ark-sofa-boot</module>
     </modules>
 
     <artifactId>sofa-boot-core</artifactId>

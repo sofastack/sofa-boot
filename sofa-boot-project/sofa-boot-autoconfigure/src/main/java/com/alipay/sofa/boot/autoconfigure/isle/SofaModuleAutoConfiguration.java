@@ -17,7 +17,7 @@
 package com.alipay.sofa.boot.autoconfigure.isle;
 
 import com.alipay.sofa.boot.constant.SofaBootConstants;
-import com.alipay.sofa.boot.context.ContextRefreshPostProcessor;
+import com.alipay.sofa.boot.context.ContextRefreshInterceptor;
 import com.alipay.sofa.boot.context.processor.SofaPostProcessorShareFilter;
 import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.boot.isle.deployment.DefaultModuleDeploymentValidator;
@@ -34,10 +34,12 @@ import com.alipay.sofa.boot.isle.stage.ModuleLogOutputStage;
 import com.alipay.sofa.boot.isle.stage.PipelineContext;
 import com.alipay.sofa.boot.isle.stage.PipelineStage;
 import com.alipay.sofa.boot.isle.stage.SpringContextInstallStage;
-import com.alipay.sofa.boot.log.SofaLogger;
+import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import com.alipay.sofa.boot.startup.BeanStatCustomizer;
-import com.alipay.sofa.boot.util.NamedThreadFactory;
+import com.alipay.sofa.common.thread.NamedThreadFactory;
 import com.alipay.sofa.common.thread.SofaThreadPoolExecutor;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -54,7 +56,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
 /**
- * {@link EnableAutoConfiguration Auto-configuration} for SOFA Isle.
+ * {@link EnableAutoConfiguration Auto-configuration} for sofa Isle.
  *
  * @author xuanbei 18/3/12
  * @author huzijie
@@ -64,6 +66,9 @@ import java.util.function.Supplier;
 @ConditionalOnClass(ApplicationRuntimeModel.class)
 @ConditionalOnProperty(value = "sofa.boot.isle.enabled", havingValue = "true", matchIfMissing = true)
 public class SofaModuleAutoConfiguration {
+
+    private static final Logger LOGGER = SofaBootLoggerFactory
+                                           .getLogger(SofaModuleAutoConfiguration.class);
 
     @Bean
     @ConditionalOnMissingBean
@@ -77,7 +82,7 @@ public class SofaModuleAutoConfiguration {
         return new SofaModuleContextLifecycle(pipelineContext);
     }
 
-    @Bean(SofaBootConstants.APPLICATION)
+    @Bean(ApplicationRuntimeModel.APPLICATION_RUNTIME_MODEL_NAME)
     @ConditionalOnMissingBean
     public ApplicationRuntimeModel applicationRuntimeModel(ModuleDeploymentValidator moduleDeploymentValidator,
                                                            SofaModuleProfileChecker sofaModuleProfileChecker) {
@@ -124,9 +129,9 @@ public class SofaModuleAutoConfiguration {
     @ConditionalOnMissingBean
     public SpringContextLoader sofaDynamicSpringContextLoader(SofaModuleProperties sofaModuleProperties,
                                                               ApplicationContext applicationContext,
-                                                              List<ContextRefreshPostProcessor> contextRefreshPostProcessors,
+                                                              ObjectProvider<ContextRefreshInterceptor> contextRefreshInterceptors,
                                                               SofaPostProcessorShareManager sofaPostProcessorShareManager,
-                                                              List<BeanStatCustomizer> beanStatCustomizers) {
+                                                              ObjectProvider<BeanStatCustomizer> beanStatCustomizers) {
         DynamicSpringContextLoader dynamicSpringContextLoader = new DynamicSpringContextLoader(
             applicationContext);
         dynamicSpringContextLoader.setActiveProfiles(sofaModuleProperties.getActiveProfiles());
@@ -134,9 +139,11 @@ public class SofaModuleAutoConfiguration {
             .isAllowBeanDefinitionOverriding());
         dynamicSpringContextLoader.setPublishEventToParent(sofaModuleProperties
             .isPublishEventToParent());
-        dynamicSpringContextLoader.setContextRefreshPostProcessors(contextRefreshPostProcessors);
+        dynamicSpringContextLoader.setContextRefreshInterceptors(contextRefreshInterceptors
+            .orderedStream().toList());
         dynamicSpringContextLoader.setSofaPostProcessorShareManager(sofaPostProcessorShareManager);
-        dynamicSpringContextLoader.setBeanStatCustomizers(beanStatCustomizers);
+        dynamicSpringContextLoader.setBeanStatCustomizers(beanStatCustomizers.orderedStream()
+            .toList());
         return dynamicSpringContextLoader;
     }
 
@@ -148,13 +155,13 @@ public class SofaModuleAutoConfiguration {
         long taskTimeout = sofaModuleProperties.getParallelRefreshTimeout();
         long checkPeriod = sofaModuleProperties.getParallelRefreshCheckPeriod();
 
-        SofaLogger.info("Create SOFA module refresh thread pool, corePoolSize: {}, maxPoolSize: {}," +
+        LOGGER.info("Create SOFA module refresh thread pool, corePoolSize: {}, maxPoolSize: {}," +
                         " taskTimeout:{}, checkPeriod:{}",
                 coreSize, coreSize, taskTimeout, checkPeriod);
         return () -> new SofaThreadPoolExecutor(coreSize, coreSize, 60,
                 TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(1000),
                 new NamedThreadFactory("sofa-module-refresh"), new ThreadPoolExecutor.CallerRunsPolicy(),
-                "sofa-module-refresh", SofaBootConstants.SOFABOOT_SPACE_NAME, taskTimeout, checkPeriod,
+                "sofa-module-refresh", SofaBootConstants.SOFA_BOOT_SPACE_NAME, taskTimeout, checkPeriod,
                 TimeUnit.SECONDS);
     }
 
@@ -176,12 +183,13 @@ public class SofaModuleAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public SofaPostProcessorShareManager sofaModulePostProcessorShareManager(SofaModuleProperties sofaModuleProperties,
-                                                                             List<SofaPostProcessorShareFilter> sofaPostProcessorShareFilters) {
+                                                                             ObjectProvider<SofaPostProcessorShareFilter> sofaPostProcessorShareFilters) {
         SofaPostProcessorShareManager sofaPostProcessorShareManager = new SofaPostProcessorShareManager();
         sofaPostProcessorShareManager.setShareParentContextPostProcessors(sofaModuleProperties
             .isShareParentPostProcessor());
         sofaPostProcessorShareManager
-            .setSofaPostProcessorShareFilters(sofaPostProcessorShareFilters);
+            .setSofaPostProcessorShareFilters(sofaPostProcessorShareFilters.orderedStream()
+                .toList());
         return sofaPostProcessorShareManager;
     }
 }

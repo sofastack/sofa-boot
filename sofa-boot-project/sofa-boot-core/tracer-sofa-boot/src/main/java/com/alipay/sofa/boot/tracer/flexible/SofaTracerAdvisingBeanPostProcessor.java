@@ -16,14 +16,16 @@
  */
 package com.alipay.sofa.boot.tracer.flexible;
 
+import com.alipay.sofa.boot.context.processor.SingletonSofaPostProcessor;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.springframework.aop.framework.AbstractAdvisingBeanPostProcessor;
 
 /**
- * Implement for {@link AbstractAdvisingBeanPostProcessor} to use {@link TracerAnnotationClassAdvisor}
+ * Implementation of {@link AbstractAdvisingBeanPostProcessor} to use {@link TracerAnnotationClassAdvisor}.
  *
  * @author guolei.sgl (guolei.sgl@antfin.com) 2019/8/10 11:51 AM
  **/
+@SingletonSofaPostProcessor
 public class SofaTracerAdvisingBeanPostProcessor extends AbstractAdvisingBeanPostProcessor {
 
     public SofaTracerAdvisingBeanPostProcessor(MethodInterceptor interceptor) {

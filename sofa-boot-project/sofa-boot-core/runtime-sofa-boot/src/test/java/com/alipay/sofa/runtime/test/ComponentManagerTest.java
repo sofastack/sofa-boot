@@ -35,7 +35,7 @@ import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.ComponentManager;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
-import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
+import com.alipay.sofa.runtime.spi.component.ComponentNameFactory;
 import com.alipay.sofa.runtime.test.beans.facade.SampleService;
 import com.alipay.sofa.runtime.test.beans.service.DefaultSampleService;
 import com.alipay.sofa.runtime.test.configuration.RuntimeConfiguration;

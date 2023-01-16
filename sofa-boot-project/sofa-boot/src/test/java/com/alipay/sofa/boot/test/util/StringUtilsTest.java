@@ -19,7 +19,7 @@ package com.alipay.sofa.boot.test.util;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.alipay.sofa.boot.util.StringUtils;
+import org.springframework.util.StringUtils;
 
 /**
  * @author qilong.zql

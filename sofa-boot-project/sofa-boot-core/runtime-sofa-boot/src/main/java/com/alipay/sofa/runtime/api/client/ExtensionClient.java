@@ -20,7 +20,7 @@ import com.alipay.sofa.runtime.api.client.param.ExtensionParam;
 import com.alipay.sofa.runtime.api.client.param.ExtensionPointParam;
 
 /**
- * Programming API for Extension/Extension-Point
+ * Programming API for Extension/Extension-Point.
  *
  * @author khotyn
  * @author ruoshan

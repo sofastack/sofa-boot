@@ -19,62 +19,63 @@ package com.alipay.sofa.runtime.spi.component;
 import com.alipay.sofa.runtime.api.ServiceValidationException;
 
 /**
- * implementation interface
+ * Implementation interface.
  *
  * @author xuanbei 18/2/28
  */
 public interface Implementation {
+
     /**
-     * get name
+     * Get name.
      *
      * @return name
      */
     String getName();
 
     /**
-     * get target object
+     * Get target object.
      *
      * @return target object
      */
     Object getTarget();
 
     /**
-     * get target object class type
+     * Get target object class type.
      *
      * @return target class type
      */
     Class<?> getTargetClass();
 
     /**
-     * is singleton or not
+     * Is singleton or not.
      *
      * @return true or false。
      */
     boolean isSingleton();
 
     /**
-     * is lazy init or not
+     * Is lazy init or not.
      *
      * @return true or false。
      */
     boolean isLazyInit();
 
     /**
-     * set target object
+     * Set target object.
      */
     void setTarget(Object target);
 
     /**
-     * is Factory or not
+     * Is Factory or not.
      *
      * @return true or false。
      */
     boolean isFactory();
 
     /**
-     * validate
+     * Validate implement.
      *
-     * @throws ServiceValidationException
+     * @throws ServiceValidationException if validate error.
      */
     void validate() throws ServiceValidationException;
 }

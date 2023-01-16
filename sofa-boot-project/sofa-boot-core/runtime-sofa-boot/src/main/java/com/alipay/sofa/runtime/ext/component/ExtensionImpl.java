@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.runtime.ext.component;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.w3c.dom.Element;
@@ -23,7 +24,7 @@ import org.w3c.dom.Element;
 import com.alipay.sofa.runtime.api.component.ComponentName;
 
 /**
- * Extension Implement
+ * Extension Implement.
  *
  * @author xi.hux@alipay.com
  * @author ruoshan
@@ -32,13 +33,21 @@ import com.alipay.sofa.runtime.api.component.ComponentName;
 
 public class ExtensionImpl implements ExtensionInternal, Serializable {
 
+    @Serial
     private static final long    serialVersionUID = 14648778982899384L;
+
     protected ComponentName      name;
+
     protected ComponentName      target;
+
     protected String             extensionPoint;
+
     protected String             documentation;
+
     protected ClassLoader        appClassLoader;
+
     protected transient Element  element;
+
     protected transient Object[] contributions;
 
     public ExtensionImpl(ComponentName name, String extensionPoint) {
@@ -53,35 +62,43 @@ public class ExtensionImpl implements ExtensionInternal, Serializable {
         this.appClassLoader = appClassLoader;
     }
 
+    @Override
     public void dispose() {
         element = null;
         contributions = null;
     }
 
+    @Override
     public Element getElement() {
         return element;
     }
 
+    @Override
     public void setElement(Element element) {
         this.element = element;
     }
 
+    @Override
     public String getExtensionPoint() {
         return extensionPoint;
     }
 
+    @Override
     public ComponentName getComponentName() {
         return this.name;
     }
 
+    @Override
     public ComponentName getTargetComponentName() {
         return this.target;
     }
 
+    @Override
     public void setTargetComponentName(ComponentName target) {
         this.target = target;
     }
 
+    @Override
     public Object[] getContributions() {
         return contributions;
     }
@@ -91,6 +108,7 @@ public class ExtensionImpl implements ExtensionInternal, Serializable {
         return appClassLoader;
     }
 
+    @Override
     public void setContributions(Object[] contributions) {
         this.contributions = contributions;
     }
@@ -99,6 +117,7 @@ public class ExtensionImpl implements ExtensionInternal, Serializable {
         return documentation;
     }
 
+    @Override
     public String getId() {
         return null;
     }

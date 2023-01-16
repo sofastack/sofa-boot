@@ -30,7 +30,7 @@ import com.alipay.sofa.runtime.test.extension.descriptor.SimpleExtensionDescript
 import com.alipay.sofa.runtime.test.extension.descriptor.SpringListExtensionDescriptor;
 import com.alipay.sofa.runtime.test.extension.descriptor.SpringMapExtensionDescriptor;
 import com.alipay.sofa.runtime.test.extension.descriptor.SpringSimpleExtensionDescriptor;
-import com.alipay.sofa.service.api.component.Extension;
+import com.alipay.sofa.runtime.ext.Extension;
 
 /**
  * @author khotyn

@@ -16,16 +16,17 @@
  */
 package com.alipay.sofa.boot.actuator.autoconfigure.health;
 
-import com.alipay.sofa.boot.actuator.health.ReadinessCheckCallbackProcessor;
 import com.alipay.sofa.boot.actuator.health.HealthCheckerProcessor;
 import com.alipay.sofa.boot.actuator.health.HealthIndicatorProcessor;
+import com.alipay.sofa.boot.actuator.health.ReadinessCheckCallbackProcessor;
 import com.alipay.sofa.boot.actuator.health.ReadinessCheckListener;
 import com.alipay.sofa.boot.actuator.health.ReadinessEndpoint;
 import com.alipay.sofa.boot.actuator.health.SofaBootHealthIndicator;
 import com.alipay.sofa.boot.constant.SofaBootConstants;
-import com.alipay.sofa.boot.log.SofaLogger;
-import com.alipay.sofa.boot.util.NamedThreadFactory;
+import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
+import com.alipay.sofa.common.thread.NamedThreadFactory;
 import com.alipay.sofa.common.thread.SofaThreadPoolExecutor;
+import org.slf4j.Logger;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -42,12 +43,16 @@ import java.util.concurrent.TimeUnit;
  * {@link EnableAutoConfiguration Auto-configuration} for readiness components.
  *
  * @author qilong.zql
+ * @author huzijie
  * @since 2.5.0
  */
 @AutoConfiguration
 @EnableConfigurationProperties(HealthProperties.class)
 @ConditionalOnAvailableEndpoint(endpoint = ReadinessEndpoint.class)
 public class ReadinessAutoConfiguration {
+
+    private static final Logger LOGGER = SofaBootLoggerFactory
+                                           .getLogger(ReadinessAutoConfiguration.class);
 
     @Bean
     @ConditionalOnMissingBean(value = ReadinessCheckListener.class, search = SearchStrategy.CURRENT)
@@ -124,11 +129,11 @@ public class ReadinessAutoConfiguration {
         } else {
             threadPoolSize = 1;
         }
-        SofaLogger.info("Create health-check thread pool, corePoolSize: {}, maxPoolSize: {}.",
+        LOGGER.info("Create health-check thread pool, corePoolSize: {}, maxPoolSize: {}.",
             threadPoolSize, threadPoolSize);
         return new SofaThreadPoolExecutor(threadPoolSize, threadPoolSize, 30, TimeUnit.SECONDS,
             new SynchronousQueue<>(), new NamedThreadFactory("health-check"),
             new ThreadPoolExecutor.CallerRunsPolicy(), "health-check",
-            SofaBootConstants.SOFABOOT_SPACE_NAME);
+            SofaBootConstants.SOFA_BOOT_SPACE_NAME);
     }
 }

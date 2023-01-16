@@ -32,7 +32,6 @@ public class DeploymentException extends Exception {
 
     /**
      * Creates a new <code>DeploymentException</code> with the supplied error message.
-     * false)}.
      *
      * @param message The exception's message
      */

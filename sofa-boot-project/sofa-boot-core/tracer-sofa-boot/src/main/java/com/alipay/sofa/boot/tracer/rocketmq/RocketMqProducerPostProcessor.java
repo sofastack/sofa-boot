@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.boot.tracer.rocketmq;
 
+import com.alipay.sofa.boot.context.processor.SingletonSofaPostProcessor;
 import com.alipay.sofa.tracer.plugins.rocketmq.interceptor.SofaTracerSendMessageHook;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.springframework.beans.BeansException;
@@ -27,12 +28,13 @@ import org.springframework.util.StringUtils;
 import static com.alipay.common.tracer.core.configuration.SofaTracerConfiguration.TRACER_APPNAME_KEY;
 
 /**
- * {@link BeanPostProcessor} to register send message hook {@link SofaTracerSendMessageHook}
+ * Implementation of {@link BeanPostProcessor} to register send message hook {@link SofaTracerSendMessageHook}.
  *
  * @author linnan
  * @author huzijie
  * @since 3.9.1
  */
+@SingletonSofaPostProcessor
 public class RocketMqProducerPostProcessor implements BeanPostProcessor, PriorityOrdered {
 
     private String appName;

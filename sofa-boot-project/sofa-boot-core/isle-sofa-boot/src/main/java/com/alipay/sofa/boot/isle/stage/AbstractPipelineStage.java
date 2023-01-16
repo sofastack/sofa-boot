@@ -103,7 +103,7 @@ public abstract class AbstractPipelineStage implements PipelineStage, Applicatio
     }
 
     /**
-     * do process pipeline stage, subclasses should override this method.
+     * Do process pipeline stage, subclasses should override this method.
      *
      * @throws Exception if a failure occurred
      */

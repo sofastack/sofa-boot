@@ -16,17 +16,19 @@
  */
 package com.alipay.sofa.runtime.ext.spring;
 
+import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.ext.component.ExtensionComponent;
 import com.alipay.sofa.runtime.ext.component.ExtensionPointComponent;
-import com.alipay.sofa.boot.log.SofaLogger;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
-import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
+import com.alipay.sofa.runtime.spi.component.ComponentNameFactory;
+import org.slf4j.Logger;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.w3c.dom.Element;
 
 /**
+ * Implementation of {@link org.springframework.beans.factory.FactoryBean} to register extension.
  *
  * @author xi.hux@alipay.com
  * @author yangyanzhao@alipay.com
@@ -35,22 +37,24 @@ import org.w3c.dom.Element;
  */
 public class ExtensionFactoryBean extends AbstractExtFactoryBean {
 
+    private static final Logger LOGGER = SofaBootLoggerFactory
+                                           .getLogger(ExtensionFactoryBean.class);
+
     /* extension bean */
-    private String      bean;
+    private String              bean;
 
     /* extension point name */
-    private String      point;
+    private String              point;
 
     /* content need to be parsed with XMap */
-    private Element     content;
+    private Element             content;
 
-    private String[]    require;
+    private String[]            require;
 
-    private ClassLoader classLoader;
+    private ClassLoader         classLoader;
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        super.afterPropertiesSet();
         Assert.notNull(applicationContext,
             "required property 'applicationContext' has not been set");
         Assert.notNull(getPoint(), "required property 'point' has not been set for extension");
@@ -69,7 +73,7 @@ public class ExtensionFactoryBean extends AbstractExtFactoryBean {
         try {
             publishAsNuxeoExtension();
         } catch (Exception e) {
-            SofaLogger.error("failed to publish extension", e);
+            LOGGER.error("failed to publish extension", e);
             throw e;
         }
     }
@@ -89,11 +93,6 @@ public class ExtensionFactoryBean extends AbstractExtFactoryBean {
         return ComponentNameFactory.createComponentName(
             ExtensionPointComponent.EXTENSION_POINT_COMPONENT_TYPE, this.getBean() + LINK_SYMBOL
                                                                     + this.getPoint());
-    }
-
-    @Deprecated
-    public void setBeanClassLoader(ClassLoader classLoader) {
-        throw new UnsupportedOperationException("Not support setBeanClassLoader for security");
     }
 
     public void setContribution(String[] contribution) throws Exception {

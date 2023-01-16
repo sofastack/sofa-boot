@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.boot.tracer.datasource;
 
+import com.alipay.sofa.boot.context.processor.SingletonSofaPostProcessor;
 import com.alipay.sofa.tracer.plugins.datasource.SmartDataSource;
 import com.alipay.sofa.tracer.plugins.datasource.utils.DataSourceUtils;
 import org.springframework.beans.BeansException;
@@ -32,12 +33,13 @@ import java.lang.reflect.Method;
 import static com.alipay.common.tracer.core.configuration.SofaTracerConfiguration.TRACER_APPNAME_KEY;
 
 /**
- * {@link BeanPostProcessor} to wrapper datasource in {@link SmartDataSource}
+ * Implementation of {@link BeanPostProcessor} to wrapper datasource in {@link SmartDataSource}.
  *
  * @author qilong.zql
  * @author huzijie
  * @since 2.3.2
  */
+@SingletonSofaPostProcessor
 public class DataSourceBeanPostProcessor implements BeanPostProcessor, PriorityOrdered {
 
     private String appName;

@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The base component to collect and report the startup costs
+ * The base component to collect and report the startup costs.
  *
  * @author Zhijie
  * @since 2020/7/8
@@ -85,7 +85,7 @@ public class StartupReporter {
     /**
      * Find the stage reported in sofaStartupStaticsModel by Name
      * @param stageName stageName
-     * @return the reported stage, return null if can't find the stage
+     * @return the reported stage, return null when can't find the stage
      */
     public BaseStat getStageNyName(String stageName) {
         return startupStaticsModel.getStageStats().stream().filter(commonStartupStat -> commonStartupStat.getName().equals(stageName))

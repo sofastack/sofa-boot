@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.boot.actuator.health;
 
-import com.alipay.sofa.boot.error.ErrorCode;
+import com.alipay.sofa.boot.log.ErrorCode;
 import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -44,6 +44,7 @@ import java.util.stream.Collectors;
  *
  * @author liangen
  * @author qilong.zql
+ * @author huzijie
  * @since 2.3.0
  */
 public class HealthCheckerProcessor implements ApplicationContextAware {
@@ -75,8 +76,8 @@ public class HealthCheckerProcessor implements ApplicationContextAware {
             Assert.notNull(healthCheckExecutor, () -> "HealthCheckExecutor must not be null");
             Map<String, HealthChecker> beansOfType = applicationContext
                     .getBeansOfType(HealthChecker.class);
-            healthCheckers = HealthCheckUtils.sortMapAccordingToValue(beansOfType,
-                    HealthCheckUtils.getComparatorToUse(applicationContext.getAutowireCapableBeanFactory()));
+            healthCheckers = HealthCheckComparatorSupport.sortMapAccordingToValue(beansOfType,
+                    HealthCheckComparatorSupport.getComparatorToUse(applicationContext.getAutowireCapableBeanFactory()));
 
             String healthCheckInfo = "Found " + healthCheckers.size() + " HealthChecker implementation:" + String.join(",", healthCheckers.keySet());
             logger.info(healthCheckInfo);

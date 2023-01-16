@@ -17,68 +17,52 @@
 package com.alipay.sofa.boot.constant;
 
 /**
- * SofaBootConstants
+ * Core constants for SOFABoot framework.
  *
  * @author yangguanchao
+ * @author huzijie
  * @since 2017/09/07
  */
 public class SofaBootConstants {
 
-    public static final String APP_NAME_KEY                                     = "spring.application.name";
-    public static final String SOFA_DEFAULT_PROPERTY_SOURCE                     = "sofaConfigurationProperties";
-    public static final String SOFA_BOOTSTRAP                                   = "sofaBootstrap";
-    public static final String SPRING_CLOUD_BOOTSTRAP                           = "bootstrap";
-    public static final String SOFA_HIGH_PRIORITY_CONFIG                        = "sofaHighPriorityConfig";
-
-    /** sofa boot space name **/
-    public static String       SOFABOOT_SPACE_NAME                              = "sofa-boot";
+    /**
+     * app name key
+     */
+    public static final String APP_NAME_KEY                 = "spring.application.name";
 
     /**
-     * {@link org.springframework.boot.ResourceBanner#getVersionsMap}
+     * SOFABoot config property source key
      */
-    public static final String SOFA_BOOT_VERSION                                = "sofa-boot.version";
-    public static final String SOFA_BOOT_FORMATTED_VERSION                      = "sofa-boot.formatted-version";
+    public static final String SOFA_DEFAULT_PROPERTY_SOURCE = "sofaConfigurationProperties";
 
     /**
-     * Default {@literal management.endpoints.web.exposure.include} value
+     * SOFABoot bootstrap property source key
      */
-    public static final String ENDPOINTS_WEB_EXPOSURE_INCLUDE_CONFIG            = "management.endpoints.web.exposure.include";
-    public static final String SOFA_DEFAULT_ENDPOINTS_WEB_EXPOSURE_VALUE        = "info, health, versions, components, beans, readiness, startup, triggerReadinessCallback";
-
-    public static final String ENDPOINT_AVAILABILITY_GROUP_CONFIG_KEY           = "management.endpoint.health.group.liveness.include";
-    public static final String DEFAULT_ENDPOINT_AVAILABILITY_GROUP_CONFIG_VALUE = "livenessState,sofaBoot";
+    public static final String SOFA_BOOTSTRAP               = "sofaBootstrap";
 
     /**
-     * root application context name
+     * SpringCloud property source key
+     * see {@link org.springframework.cloud.bootstrap.BootstrapApplicationListener#BOOTSTRAP_PROPERTY_SOURCE_NAME}
      */
-    public static final String ROOT_APPLICATION_CONTEXT                         = "RootApplicationContext";
+    public static final String SPRING_CLOUD_BOOTSTRAP       = "bootstrap";
 
     /**
-     * sofa configuration prefix
+     * SOFA High priority config key
      */
-    public static final String PREFIX                                           = "sofa.boot";
+    public static final String SOFA_HIGH_PRIORITY_CONFIG    = "sofaHighPriorityConfig";
 
     /**
-     * Thread Pool Core Size to execute async bean initialization
+     * Space name for SOFABoot framework used in sofa-common-tools
      */
-    public static final String ASYNC_INIT_BEAN_CORE_SIZE                        = PREFIX
-                                                                                  + ".asyncInitBeanCoreSize";
+    public static final String SOFA_BOOT_SPACE_NAME         = "sofa-boot";
 
     /**
-     * Thread Pool Max Size to execute async bean initialization
+     * SOFABoot version property key
      */
-    public static final String ASYNC_INIT_BEAN_MAX_SIZE                         = PREFIX
-                                                                                  + ".asyncInitBeanMaxSize";
+    public static final String SOFA_BOOT_VERSION            = "sofa-boot.version";
 
-    /** framework constants **/
-    public final static String APPLICATION                                      = "SOFABOOT-APPLICATION";
-    public static String       SOFA_MODULE_FILE                                 = "sofa-module.properties";
-    public static String       SPRING_CONTEXT_PATH                              = "META-INF/spring";
-    public static String       DEFAULT_PROFILE_VALUE                            = "default";
-
-    /** sofa-module.properties keywords **/
-    public static String       SPRING_PARENT                                    = "Spring-Parent";
-    public static String       MODULE_NAME                                      = "Module-Name";
-    public static String       REQUIRE_MODULE                                   = "Require-Module";
-    public static String       MODULE_PROFILE                                   = "Module-Profile";
+    /**
+     * SOFABoot formatted version property key
+     */
+    public static final String SOFA_BOOT_FORMATTED_VERSION  = "sofa-boot.formatted-version";
 }

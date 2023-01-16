@@ -16,21 +16,24 @@
  */
 package com.alipay.sofa.runtime.ext.component;
 
+import java.io.Serial;
 import java.net.URL;
 
 import com.alipay.sofa.common.xmap.Context;
 
 /**
- * @author <a href="mailto:bs@nuxeo.com">Bogdan Stefanescu</a>
+ * XMap context.
  *
+ * @author <a href="mailto:bs@nuxeo.com">Bogdan Stefanescu</a>
  * @author xi.hux@alipay.com
  * @since 2.6.0
  */
 public class XMapContext extends Context {
 
+    @Serial
     private static final long serialVersionUID = -7194560385886298218L;
 
-    private ClassLoader       appClassLoader;
+    private final ClassLoader appClassLoader;
 
     /**
      *

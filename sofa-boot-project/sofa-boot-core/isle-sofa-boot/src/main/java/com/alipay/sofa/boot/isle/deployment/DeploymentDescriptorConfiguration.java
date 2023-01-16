@@ -19,11 +19,26 @@ package com.alipay.sofa.boot.isle.deployment;
 import java.util.List;
 
 /**
- * deployment configuration
+ * Deployment configuration.
  *
  * @author khotyn 9/11/14 4:51 PM
  */
 public class DeploymentDescriptorConfiguration {
+
+    public static String       SOFA_MODULE_FILE      = "sofa-module.properties";
+
+    public static String       SPRING_CONTEXT_PATH   = "META-INF/spring";
+
+    public static String       DEFAULT_PROFILE_VALUE = "default";
+
+    /** sofa-module.properties keywords **/
+    public static String       SPRING_PARENT         = "Spring-Parent";
+
+    public static String       MODULE_NAME           = "Module-Name";
+
+    public static String       REQUIRE_MODULE        = "Require-Module";
+
+    public static String       MODULE_PROFILE        = "Module-Profile";
 
     /** module name identities */
     private final List<String> moduleNameIdentities;

@@ -22,74 +22,76 @@ import com.alipay.sofa.runtime.api.binding.BindingType;
 import com.alipay.sofa.runtime.spi.health.HealthResult;
 
 /**
+ * Interface for binding.
+ *
  * @author xuanbei 18/2/28
  */
 public interface Binding {
     /**
-     * get binding URI
+     * Get binding URI.
      *
      * @return binding URI
      */
     String getURI();
 
     /**
-     * get binding name
+     * Get binding name.
      *
      * @return binding name
      */
     String getName();
 
     /**
-     * get binding type
+     * Get binding type.
      *
      * @return binding type
      */
     BindingType getBindingType();
 
     /**
-     * get binding property dom Element
+     * Get binding property dom Element.
      *
      * @return dom Element
      */
     Element getBindingPropertyContent();
 
     /**
-     * get binding hashcode, prevent duplicate registration
+     * Get binding hashcode, prevent duplicate registration.
      *
      * @return binding hashcode
      */
     int getBindingHashCode();
 
     /**
-     * dump binding information
+     * Dump binding information.
      *
      * @return binding information
      */
     String dump();
 
     /**
-     * check binding health
+     * Check binding health.
      *
      * @return check result
      */
     HealthResult healthCheck();
 
     /**
-     * set binding healthy
+     * Set binding healthy.
      *
      * @param healthy health or not
      */
     void setHealthy(boolean healthy);
 
     /**
-     * set binding destroyed state
+     * Set binding destroyed state.
      *
      * @param destroyed destroyed or not
      */
     void setDestroyed(boolean destroyed);
 
     /**
-     * determine whether binding is destroyed
+     * Determine whether binding is destroyed.
      *
      * @return true or false
      */

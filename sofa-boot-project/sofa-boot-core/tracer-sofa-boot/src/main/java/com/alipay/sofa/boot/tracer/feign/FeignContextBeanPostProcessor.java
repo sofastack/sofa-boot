@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.boot.tracer.feign;
 
+import com.alipay.sofa.boot.context.processor.SingletonSofaPostProcessor;
 import com.alipay.sofa.tracer.plugins.springcloud.instruments.feign.SofaTracerFeignContext;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
@@ -25,11 +26,12 @@ import org.springframework.cloud.openfeign.FeignContext;
 import org.springframework.util.Assert;
 
 /**
- * {@link BeanPostProcessor} to wrapper FeignContext in {@link SofaTracerFeignContext}
+ * Implementation of {@link BeanPostProcessor} to wrapper FeignContext in {@link SofaTracerFeignContext}.
  *
  * @author guolei.sgl (guolei.sgl@antfin.com) 2019/3/13 6:08 PM
  * @author huzijie
  **/
+@SingletonSofaPostProcessor
 public class FeignContextBeanPostProcessor implements BeanPostProcessor, BeanFactoryAware {
 
     private BeanFactory beanFactory;

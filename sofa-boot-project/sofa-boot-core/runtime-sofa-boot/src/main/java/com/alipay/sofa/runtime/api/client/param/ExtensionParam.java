@@ -19,7 +19,7 @@ package com.alipay.sofa.runtime.api.client.param;
 import org.w3c.dom.Element;
 
 /**
- * Extension param
+ * Extension param.
  *
  * @author khotyn
  * @author ruoshan

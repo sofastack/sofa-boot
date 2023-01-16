@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.boot.actuator.health;
 
-import com.alipay.sofa.boot.error.ErrorCode;
+import com.alipay.sofa.boot.log.ErrorCode;
 import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -53,6 +53,7 @@ import java.util.stream.Collectors;
  *
  * @author liangen
  * @author qilong.zql
+ * @author huzijie
  * @version 2.3.0
  */
 public class HealthIndicatorProcessor implements ApplicationContextAware {
@@ -108,8 +109,8 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
 
             healthIndicators = beansOfType.entrySet().stream().filter(entry -> !isExcluded(entry.getValue()))
                     .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (x, y) -> y, LinkedHashMap::new));
-            healthIndicators = HealthCheckUtils.sortMapAccordingToValue(healthIndicators,
-                    HealthCheckUtils.getComparatorToUse(applicationContext.getAutowireCapableBeanFactory()));
+            healthIndicators = HealthCheckComparatorSupport.sortMapAccordingToValue(healthIndicators,
+                    HealthCheckComparatorSupport.getComparatorToUse(applicationContext.getAutowireCapableBeanFactory()));
 
             String healthIndicatorInfo = "Found " + healthIndicators.size() + " HealthIndicator implementation:" + String.join(",", healthIndicators.keySet());
             logger.info(healthIndicatorInfo);

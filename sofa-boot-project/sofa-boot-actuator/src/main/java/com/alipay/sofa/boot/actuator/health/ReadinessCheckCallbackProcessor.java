@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.boot.actuator.health;
 
-import com.alipay.sofa.boot.error.ErrorCode;
+import com.alipay.sofa.boot.log.ErrorCode;
 import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -56,8 +56,8 @@ public class ReadinessCheckCallbackProcessor implements ApplicationContextAware 
             Assert.notNull(applicationContext, () -> "Application must not be null");
             Map<String, ReadinessCheckCallback> beansOfType = applicationContext
                     .getBeansOfType(ReadinessCheckCallback.class);
-            readinessCheckCallbacks = HealthCheckUtils.sortMapAccordingToValue(beansOfType,
-                    HealthCheckUtils.getComparatorToUse(applicationContext.getAutowireCapableBeanFactory()));
+            readinessCheckCallbacks = HealthCheckComparatorSupport.sortMapAccordingToValue(beansOfType,
+                    HealthCheckComparatorSupport.getComparatorToUse(applicationContext.getAutowireCapableBeanFactory()));
 
             String applicationCallbackInfo = "Found " + readinessCheckCallbacks.size() + " ReadinessCheckCallback implementation: " + String.join(",", beansOfType.keySet());
             logger.info(applicationCallbackInfo);

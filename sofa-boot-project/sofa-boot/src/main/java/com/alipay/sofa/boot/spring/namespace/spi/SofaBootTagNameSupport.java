@@ -17,7 +17,7 @@
 package com.alipay.sofa.boot.spring.namespace.spi;
 
 /**
- * SofaBootTagNameSupport
+ * Interface to register spi to register bean definition parser.
  *
  * @author yangguanchao
  * @since 2018/04/05
@@ -26,9 +26,8 @@ package com.alipay.sofa.boot.spring.namespace.spi;
 public interface SofaBootTagNameSupport {
 
     /**
-     * 获取支持的 TagName
-     *
-     * @return 支持的 TagName
+     * get supported tag name
+     * @return tag name
      */
     String supportTagName();
 }

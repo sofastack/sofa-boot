@@ -26,12 +26,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Extend for {@link SpringApplication} to compute {@link ApplicationContextInitializer} initialize cost time.
+ * Extend of {@link SpringApplication} to compute {@link ApplicationContextInitializer} initialize cost time.
  *
  * @author huzijie
  * @version StartupSpringApplication.java, v 0.1 2022年03月14日 2:27 PM huzijie Exp $
  */
 public class StartupSpringApplication extends SpringApplication {
+
     private final List<BaseStat> initializerStartupStatList = new ArrayList<>();
 
     public StartupSpringApplication(Class<?>... primarySources) {
@@ -44,13 +45,15 @@ public class StartupSpringApplication extends SpringApplication {
         for (ApplicationContextInitializer initializer : getInitializers()) {
             Class<?> requiredType = GenericTypeResolver.resolveTypeArgument(initializer.getClass(),
                 ApplicationContextInitializer.class);
-            Assert.isInstanceOf(requiredType, context, "Unable to call initializer.");
-            BaseStat stat = new BaseStat();
-            stat.setName(initializer.getClass().getName());
-            stat.setStartTime(System.currentTimeMillis());
-            initializer.initialize(context);
-            stat.setEndTime(System.currentTimeMillis());
-            initializerStartupStatList.add(stat);
+            if (requiredType != null) {
+                Assert.isInstanceOf(requiredType, context, "Unable to call initializer.");
+                BaseStat stat = new BaseStat();
+                stat.setName(initializer.getClass().getName());
+                stat.setStartTime(System.currentTimeMillis());
+                initializer.initialize(context);
+                stat.setEndTime(System.currentTimeMillis());
+                initializerStartupStatList.add(stat);
+            }
         }
     }
 

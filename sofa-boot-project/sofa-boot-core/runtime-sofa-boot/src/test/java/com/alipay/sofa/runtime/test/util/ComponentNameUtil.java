@@ -19,7 +19,7 @@ package com.alipay.sofa.runtime.test.util;
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.service.component.ReferenceComponent;
 import com.alipay.sofa.runtime.service.component.ServiceComponent;
-import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
+import com.alipay.sofa.runtime.spi.component.ComponentNameFactory;
 
 /**
  * @author qilong.zql

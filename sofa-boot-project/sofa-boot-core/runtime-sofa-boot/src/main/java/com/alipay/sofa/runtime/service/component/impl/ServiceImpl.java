@@ -18,18 +18,19 @@ package com.alipay.sofa.runtime.service.component.impl;
 
 import java.util.Map;
 
-import com.alipay.sofa.boot.util.StringUtils;
+import org.springframework.util.StringUtils;
 import com.alipay.sofa.runtime.model.InterfaceMode;
 import com.alipay.sofa.runtime.service.component.AbstractContract;
 import com.alipay.sofa.runtime.service.component.Service;
 
 /**
- * Service Implementation
+ * Service Implementation.
  *
  * @author xuanbei 18/3/1
  */
 public class ServiceImpl extends AbstractContract implements Service {
-    private Object target;
+
+    private final Object target;
 
     public ServiceImpl(String uniqueId, Class<?> interfaceType, Object target) {
         super(uniqueId, interfaceType);

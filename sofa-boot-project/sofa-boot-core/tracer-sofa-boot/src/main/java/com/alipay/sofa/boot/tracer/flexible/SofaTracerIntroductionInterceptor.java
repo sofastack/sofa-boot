@@ -27,9 +27,10 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 /**
- *  * Implement for {@link IntroductionInterceptor} to handle {@link Tracer} annotation
+ * Implementation of {@link IntroductionInterceptor} to handle {@link Tracer} annotation
  *
  * @author guolei.sgl (guolei.sgl@antfin.com) 2019/8/9 3:05 PM
+ * @author huzijie
  **/
 public class SofaTracerIntroductionInterceptor implements IntroductionInterceptor {
 

@@ -26,6 +26,7 @@ import org.springframework.lang.Nullable;
  *
  * @author liangen
  * @author qilong.zql
+ * @author huzijie
  * @version 2.3.0
  */
 @Endpoint(id = "readiness")

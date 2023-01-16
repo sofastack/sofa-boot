@@ -24,11 +24,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author Zhijie
  * @since 2020/7/13
  */
-@ConfigurationProperties(prefix = "sofa.boot.startup")
+@ConfigurationProperties("sofa.boot.startup")
 public class StartupProperties {
 
     /**
-     * 基本耗时统计阈值，单位 ms
+     * Startup record threshold in milliseconds.
      */
     private long costThreshold = 100;
 

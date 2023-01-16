@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.boot.logging;
 
+import com.alipay.sofa.boot.util.SofaBootEnvUtils;
 import com.alipay.sofa.common.log.CommonLoggingConfigurations;
 import com.alipay.sofa.common.log.Constants;
 import com.alipay.sofa.common.log.env.LogEnvUtils;
@@ -31,6 +32,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Implementation of {@link ApplicationListener<ApplicationEnvironmentPreparedEvent>}
+ * to register spring environment to {@link CommonLoggingConfigurations}.
+ * 
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 2020/11/7
  */
@@ -46,7 +50,6 @@ public class LogEnvironmentPreparingListener
 
     @Override
     public int getOrder() {
-        // Must be invoked after ConfigFileApplicationListener
         return Ordered.HIGHEST_PRECEDENCE + 20;
     }
 
@@ -80,7 +83,7 @@ public class LogEnvironmentPreparingListener
     }
 
     private void defaultConsoleLoggers() {
-        if (LocalEnvUtil.isLocalEnv() || LocalEnvUtil.isTestEnv()) {
+        if (SofaBootEnvUtils.isLocalEnv() || SofaBootEnvUtils.isSpringTestEnv()) {
             CommonLoggingConfigurations.loadExternalConfiguration(
                 Constants.SOFA_MIDDLEWARE_ALL_LOG_CONSOLE_SWITCH, "true");
         }

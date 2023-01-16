@@ -16,14 +16,15 @@
  */
 package com.alipay.sofa.boot.isle.loader;
 
-import com.alipay.sofa.boot.context.ContextRefreshPostProcessor;
+import com.alipay.sofa.boot.context.ContextRefreshInterceptor;
 import com.alipay.sofa.boot.context.SofaDefaultListableBeanFactory;
 import com.alipay.sofa.boot.context.SofaGenericApplicationContext;
 import com.alipay.sofa.boot.context.SofaSpringContextSupport;
 import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptor;
-import com.alipay.sofa.boot.log.SofaLogger;
+import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import com.alipay.sofa.boot.startup.BeanStatCustomizer;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.support.BeanDefinitionReader;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
@@ -40,22 +41,25 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Implement for {@link SpringContextLoader} to create sofa application context.
+ * Implementation of {@link SpringContextLoader} to create sofa application context.
  *
  * @author linfengqi  2011-7-26
  * @author huzijie
  */
 public class DynamicSpringContextLoader implements SpringContextLoader, InitializingBean {
 
+    private static final Logger                    LOGGER                     = SofaBootLoggerFactory
+                                                                                  .getLogger(DynamicSpringContextLoader.class);
+
     protected final ConfigurableApplicationContext rootApplicationContext;
 
     private boolean                                allowBeanOverriding;
 
-    private List<String>                           activeProfiles               = new ArrayList<>();
+    private List<String>                           activeProfiles             = new ArrayList<>();
 
-    private List<ContextRefreshPostProcessor>      contextRefreshPostProcessors = new ArrayList<>();
+    private List<ContextRefreshInterceptor>        contextRefreshInterceptors = new ArrayList<>();
 
-    private List<BeanStatCustomizer>               beanStatCustomizers          = new ArrayList<>();
+    private List<BeanStatCustomizer>               beanStatCustomizers        = new ArrayList<>();
 
     private boolean                                publishEventToParent;
 
@@ -92,8 +96,8 @@ public class DynamicSpringContextLoader implements SpringContextLoader, Initiali
         context.setAllowBeanDefinitionOverriding(allowBeanOverriding);
         context.setPublishEventToParent(publishEventToParent);
 
-        contextRefreshPostProcessors.sort(AnnotationAwareOrderComparator.INSTANCE);
-        context.setPostProcessors(contextRefreshPostProcessors);
+        contextRefreshInterceptors.sort(AnnotationAwareOrderComparator.INSTANCE);
+        context.setInterceptors(contextRefreshInterceptors);
 
         ConfigurableApplicationContext parentContext = getSpringParentContext(deployment, application);
         context.setParent(parentContext);
@@ -130,7 +134,7 @@ public class DynamicSpringContextLoader implements SpringContextLoader, Initiali
                     parentSpringContext = (ConfigurableApplicationContext) parent
                         .getApplicationContext();
                     if (parentSpringContext == null) {
-                        SofaLogger.warn("Module [{}]'s Spring-Parent [{}] is Null!",
+                        LOGGER.warn("Module [{}]'s Spring-Parent [{}] is Null!",
                             deployment.getModuleName(), springParent);
                     }
                 }
@@ -177,12 +181,12 @@ public class DynamicSpringContextLoader implements SpringContextLoader, Initiali
         this.publishEventToParent = publishEventToParent;
     }
 
-    public List<ContextRefreshPostProcessor> getContextRefreshPostProcessors() {
-        return contextRefreshPostProcessors;
+    public List<ContextRefreshInterceptor> getContextRefreshInterceptors() {
+        return contextRefreshInterceptors;
     }
 
-    public void setContextRefreshPostProcessors(List<ContextRefreshPostProcessor> contextRefreshPostProcessors) {
-        this.contextRefreshPostProcessors = contextRefreshPostProcessors;
+    public void setContextRefreshInterceptors(List<ContextRefreshInterceptor> contextRefreshInterceptors) {
+        this.contextRefreshInterceptors = contextRefreshInterceptors;
     }
 
     public SofaPostProcessorShareManager getSofaPostProcessorShareManager() {

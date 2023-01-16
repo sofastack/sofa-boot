@@ -24,6 +24,7 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
 /**
@@ -34,6 +35,7 @@ import org.springframework.context.annotation.Bean;
  */
 @AutoConfiguration(before = StartupEndpointAutoConfiguration.class)
 @ConditionalOnAvailableEndpoint(endpoint = StartupEndPoint.class)
+@EnableConfigurationProperties(StartupProperties.class)
 @ConditionalOnBean(StartupReporter.class)
 public class StartupEndPointAutoConfiguration {
 

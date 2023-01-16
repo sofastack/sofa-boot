@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.boot.isle.deployment;
 
-import com.alipay.sofa.boot.error.ErrorCode;
+import com.alipay.sofa.boot.log.ErrorCode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,6 +30,7 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
+ * Base model for dependency tree.
  *
  * @author yangyanzhao
  * @version $Id: DependencyTree.java, v 0.1 2012-1-12 12:28:24 yangyanzhao Exp $
