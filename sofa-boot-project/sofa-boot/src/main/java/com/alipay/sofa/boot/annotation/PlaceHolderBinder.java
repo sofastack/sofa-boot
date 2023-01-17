@@ -16,6 +16,8 @@
  */
 package com.alipay.sofa.boot.annotation;
 
+import org.springframework.core.env.Environment;
+
 /**
  * Responsible to resolve place holder.
  *
@@ -23,5 +25,6 @@ package com.alipay.sofa.boot.annotation;
  * @since 2.5.2
  */
 public interface PlaceHolderBinder {
-    String bind(String string);
+
+    String bind(Environment environment, String string);
 }

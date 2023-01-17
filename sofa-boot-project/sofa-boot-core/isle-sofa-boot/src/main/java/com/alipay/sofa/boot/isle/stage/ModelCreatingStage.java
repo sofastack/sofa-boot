@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.boot.isle.stage;
 
-import com.alipay.sofa.boot.error.ErrorCode;
+import com.alipay.sofa.boot.log.ErrorCode;
 import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.boot.isle.deployment.DependencyTree;
 import com.alipay.sofa.boot.isle.deployment.DeploymentBuilder;

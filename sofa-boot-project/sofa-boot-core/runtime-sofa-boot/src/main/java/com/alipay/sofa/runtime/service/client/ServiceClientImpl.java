@@ -19,7 +19,7 @@ package com.alipay.sofa.runtime.service.client;
 import java.util.Collection;
 import java.util.Map;
 
-import com.alipay.sofa.boot.error.ErrorCode;
+import com.alipay.sofa.boot.log.ErrorCode;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.client.ServiceClient;
 import com.alipay.sofa.runtime.api.client.param.BindingParam;

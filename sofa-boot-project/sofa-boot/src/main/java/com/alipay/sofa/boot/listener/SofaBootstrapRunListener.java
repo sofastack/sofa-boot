@@ -52,7 +52,8 @@ public class SofaBootstrapRunListener implements
                                      ApplicationListener<ApplicationEnvironmentPreparedEvent>,
                                      Ordered {
 
-    private static AtomicBoolean           executed             = new AtomicBoolean(false);
+    private static final AtomicBoolean EXECUTED = new AtomicBoolean(false);
+
     private final static MapPropertySource HIGH_PRIORITY_CONFIG = new MapPropertySource(
                                                                     SofaBootConstants.SOFA_HIGH_PRIORITY_CONFIG,
                                                                     new HashMap<>());
@@ -64,7 +65,7 @@ public class SofaBootstrapRunListener implements
         StreamSupport.stream(environment.getPropertySources().spliterator(), false)
             .filter(propertySource -> propertySource instanceof EnumerablePropertySource)
             .map(propertySource -> Arrays
-                .asList(((EnumerablePropertySource) propertySource).getPropertyNames()))
+                .asList(((EnumerablePropertySource<?>) propertySource).getPropertyNames()))
                 .flatMap(Collection::stream).filter(LogEnvUtils::isSofaCommonLoggingConfig)
                 .forEach((key) -> HIGH_PRIORITY_CONFIG.getSource().put(key, environment.getProperty(key)));
     }
@@ -102,19 +103,20 @@ public class SofaBootstrapRunListener implements
         return HIGHEST_PRECEDENCE;
     }
 
+    @Override
     public void onApplicationEvent(ApplicationEnvironmentPreparedEvent event) {
         ConfigurableEnvironment environment = event.getEnvironment();
         SpringApplication application = event.getSpringApplication();
-        if (SofaBootEnvUtils.isSpringCloud() && executed.compareAndSet(false, true)) {
+        if (SofaBootEnvUtils.isSpringCloud() && EXECUTED.compareAndSet(false, true)) {
             StandardEnvironment bootstrapEnvironment = new StandardEnvironment();
             StreamSupport.stream(environment.getPropertySources().spliterator(), false)
                     .filter(source->!(source instanceof PropertySource.StubPropertySource))
                     .forEach(source -> bootstrapEnvironment.getPropertySources().addLast(source));
 
-            List<Class> sources = new ArrayList<>();
+            List<Class<?>> sources = new ArrayList<>();
             for (Object s : application.getAllSources()) {
                 if (s instanceof Class) {
-                    sources.add((Class) s);
+                    sources.add((Class<?>) s);
                 } else if (s instanceof String) {
                     sources.add(ClassUtils.resolveClassName((String) s, null));
                 }

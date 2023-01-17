@@ -16,8 +16,8 @@
  */
 package com.alipay.sofa.runtime.spring.bean;
 
-import com.alipay.sofa.boot.annotation.PlaceHolderAnnotationInvocationHandler.AnnotationWrapperBuilder;
-import com.alipay.sofa.boot.annotation.PlaceHolderBinder;
+import com.alipay.sofa.boot.annotation.AnnotationWrapper;
+import com.alipay.sofa.boot.annotation.DefaultPlaceHolderBinder;
 import com.alipay.sofa.runtime.api.annotation.SofaReference;
 import org.springframework.core.ParameterNameDiscoverer;
 import org.springframework.core.StandardReflectionParameterNameDiscoverer;
@@ -33,12 +33,12 @@ import java.lang.reflect.Method;
  */
 public class SofaParameterNameDiscoverer implements ParameterNameDiscoverer {
 
-    private final PlaceHolderBinder                   binder                                    = new DefaultPlaceHolderBinder();
     private final StandardReflectionParameterNameDiscoverer standardReflectionParameterNameDiscoverer = new StandardReflectionParameterNameDiscoverer();
-    private final Environment                               environment;
 
-    public SofaParameterNameDiscoverer(Environment environment) {
-        this.environment = environment;
+    private final AnnotationWrapper<SofaReference> referenceAnnotationWrapper;
+
+    public SofaParameterNameDiscoverer(AnnotationWrapper<SofaReference> referenceAnnotationWrapper) {
+        this.referenceAnnotationWrapper = referenceAnnotationWrapper;
     }
 
     @Override
@@ -64,10 +64,8 @@ public class SofaParameterNameDiscoverer implements ParameterNameDiscoverer {
         for (int i = 0; i < annotations.length; ++i) {
             for (Annotation annotation : annotations[i]) {
                 if (annotation instanceof SofaReference) {
-                    AnnotationWrapperBuilder<SofaReference> wrapperBuilder = AnnotationWrapperBuilder
-                        .wrap(annotation).withBinder(binder);
-                    SofaReference delegate = wrapperBuilder.build();
-                    Class interfaceType = delegate.interfaceType();
+                    SofaReference delegate = referenceAnnotationWrapper.wrap((SofaReference) annotation);
+                    Class<?> interfaceType = delegate.interfaceType();
                     if (interfaceType.equals(void.class)) {
                         interfaceType = parameterType[i];
                     }
@@ -78,12 +76,5 @@ public class SofaParameterNameDiscoverer implements ParameterNameDiscoverer {
             }
         }
         return parameterNames;
-    }
-
-    class DefaultPlaceHolderBinder implements PlaceHolderBinder {
-        @Override
-        public String bind(String text) {
-            return environment.resolvePlaceholders(text);
-        }
     }
 }

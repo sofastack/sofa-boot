@@ -24,7 +24,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.alipay.sofa.boot.annotation.PlaceHolderAnnotationInvocationHandler;
 import com.alipay.sofa.boot.annotation.PlaceHolderBinder;
 import com.alipay.sofa.boot.annotation.WrapperAnnotation;
 import com.alipay.sofa.runtime.api.annotation.SofaReference;
@@ -58,7 +57,7 @@ public class AnnotationPlaceHolderTest {
         };
 
         SofaService sofaService = AnnotationSampleService.class.getAnnotation(SofaService.class);
-        PlaceHolderAnnotationInvocationHandler.AnnotationWrapperBuilder<SofaService> builder = PlaceHolderAnnotationInvocationHandler.AnnotationWrapperBuilder
+        AnnotationWrapper<SofaService> builder = AnnotationWrapper
             .wrap(sofaService).withBinder(binder);
         SofaService delegate = builder.build();
 
@@ -108,7 +107,7 @@ public class AnnotationPlaceHolderTest {
 
         SofaReference sofaReference = AnnotationSampleService.class.getField("sampleService")
             .getAnnotation(SofaReference.class);
-        PlaceHolderAnnotationInvocationHandler.AnnotationWrapperBuilder<SofaReference> builder = PlaceHolderAnnotationInvocationHandler.AnnotationWrapperBuilder
+        AnnotationWrapper<SofaReference> builder = AnnotationWrapper
             .wrap(sofaReference).withBinder(binder);
         SofaReference delegate = builder.build();
 

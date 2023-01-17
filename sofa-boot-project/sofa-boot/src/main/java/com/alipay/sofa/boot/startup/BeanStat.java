@@ -21,19 +21,31 @@ package com.alipay.sofa.boot.startup;
  * Created on 2020/11/23
  */
 public class BeanStat extends ChildrenStat<BeanStat> {
+
     private static final String LAST_PREFIX        = "└─";
+
     private static final String MIDDLE_PREFIX      = "├─";
+
     private static final String INDENT_PREFIX      = "│   ";
+
     private static final String EMPTY_INDEX_PREFIX = "    ";
 
     private String              beanClassName;
+
     private long                beanRefreshStartTime;
+
     private long                beanRefreshEndTime;
+
     private long                refreshElapsedTime;
+
     private long                realRefreshElapsedTime;
+
     private long                initMethodTime;
-    private String              interfaceType      = null;
+
+    private String              interfaceType;
+
     private String              beanType;
+
     private String              extensionProperty;
 
     public void startRefresh() {

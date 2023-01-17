@@ -14,9 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.boot.error;
+package com.alipay.sofa.boot.log;
 
-import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import com.alipay.sofa.common.code.LogCode2Description;
 
 /**

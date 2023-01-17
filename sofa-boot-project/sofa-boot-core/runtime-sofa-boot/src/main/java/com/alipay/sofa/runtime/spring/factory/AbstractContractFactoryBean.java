@@ -22,7 +22,7 @@ import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import com.alipay.sofa.boot.error.ErrorCode;
+import com.alipay.sofa.boot.log.ErrorCode;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;

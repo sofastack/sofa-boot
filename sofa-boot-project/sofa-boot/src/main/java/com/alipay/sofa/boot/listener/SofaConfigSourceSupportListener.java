@@ -33,7 +33,6 @@ public class SofaConfigSourceSupportListener
                                             implements
                                             ApplicationListener<ApplicationEnvironmentPreparedEvent>,
                                             Ordered {
-    private static final int SOFA_BOOT_CONFIG_SOURCE_ORDER = LOWEST_PRECEDENCE;
 
     @Override
     public void onApplicationEvent(ApplicationEnvironmentPreparedEvent event) {
@@ -41,7 +40,7 @@ public class SofaConfigSourceSupportListener
         SofaConfigs.addConfigSource(new AbstractConfigSource() {
             @Override
             public int getOrder() {
-                return SOFA_BOOT_CONFIG_SOURCE_ORDER;
+                return LOWEST_PRECEDENCE;
             }
 
             @Override
@@ -56,7 +55,7 @@ public class SofaConfigSourceSupportListener
 
             @Override
             public boolean hasKey(String key) {
-                return !StringUtils.isEmpty(environment.getProperty(key));
+                return StringUtils.hasText(environment.getProperty(key));
             }
         });
     }

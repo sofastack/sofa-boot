@@ -40,8 +40,11 @@ import org.springframework.core.PriorityOrdered;
 public class SofaRuntimeAwareProcessor implements BeanPostProcessor, PriorityOrdered {
 
     private final SofaRuntimeManager sofaRuntimeManager;
+
     private final SofaRuntimeContext sofaRuntimeContext;
+
     private final ClientFactoryInternal clientFactory;
+
     private final ExtensionClientImpl extensionClient;
 
     public SofaRuntimeAwareProcessor(SofaRuntimeManager sofaRuntimeManager) {

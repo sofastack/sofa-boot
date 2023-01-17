@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.boot.test.logging;
 
-import com.alipay.sofa.boot.logging.LocalEnvUtil;
 import org.junit.Assert;
 import org.junit.Test;
 

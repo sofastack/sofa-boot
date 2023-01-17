@@ -17,7 +17,7 @@
 package com.alipay.sofa.runtime.spring;
 
 import com.alipay.sofa.boot.context.processor.SingletonSofaPostProcessor;
-import com.alipay.sofa.boot.error.ErrorCode;
+import com.alipay.sofa.boot.log.ErrorCode;
 import com.alipay.sofa.runtime.api.annotation.SofaClientFactory;
 import com.alipay.sofa.runtime.api.client.ClientFactory;
 import com.alipay.sofa.runtime.impl.ClientFactoryImpl;

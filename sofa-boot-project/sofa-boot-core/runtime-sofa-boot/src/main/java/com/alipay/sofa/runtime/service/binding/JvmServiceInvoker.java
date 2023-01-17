@@ -1,6 +1,6 @@
 package com.alipay.sofa.runtime.service.binding;
 
-import com.alipay.sofa.boot.error.ErrorCode;
+import com.alipay.sofa.boot.log.ErrorCode;
 import com.alipay.sofa.boot.log.SofaLogger;
 import com.alipay.sofa.runtime.filter.JvmFilterContext;
 import com.alipay.sofa.runtime.filter.JvmFilterHolder;

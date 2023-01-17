@@ -24,7 +24,6 @@ import java.lang.annotation.Target;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.alipay.sofa.boot.annotation.PlaceHolderAnnotationInvocationHandler;
 import com.alipay.sofa.boot.annotation.PlaceHolderBinder;
 
 /**
@@ -49,7 +48,7 @@ public class PlaceHolderAnnotationTest {
         };
 
         SampleAnnotation origin = SampleClass.class.getAnnotation(SampleAnnotation.class);
-        SampleAnnotation delegate = (SampleAnnotation) PlaceHolderAnnotationInvocationHandler.AnnotationWrapperBuilder
+        SampleAnnotation delegate = (SampleAnnotation) AnnotationWrapper
             .wrap(origin).withBinder(placeHolderBinder).build();
 
         Assert.assertEquals("value", delegate.id());

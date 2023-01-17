@@ -16,10 +16,10 @@
  */
 package com.alipay.sofa.runtime.spring;
 
-import com.alipay.sofa.boot.annotation.PlaceHolderAnnotationInvocationHandler;
-import com.alipay.sofa.boot.annotation.PlaceHolderBinder;
+import com.alipay.sofa.boot.annotation.AnnotationWrapper;
+import com.alipay.sofa.boot.annotation.DefaultPlaceHolderBinder;
 import com.alipay.sofa.boot.context.processor.SingletonSofaPostProcessor;
-import com.alipay.sofa.boot.error.ErrorCode;
+import com.alipay.sofa.boot.log.ErrorCode;
 import com.alipay.sofa.boot.log.SofaLogger;
 import com.alipay.sofa.boot.util.BeanDefinitionUtil;
 import com.alipay.sofa.runtime.api.annotation.SofaAsyncInit;
@@ -60,9 +60,7 @@ import static com.alipay.sofa.runtime.async.AsyncInitMethodManager.ASYNC_INIT_ME
 @SingletonSofaPostProcessor
 public class AsyncInitBeanFactoryPostProcessor implements BeanFactoryPostProcessor, EnvironmentAware {
 
-    private final PlaceHolderBinder binder = new AsyncInitBeanFactoryPostProcessor.DefaultPlaceHolderBinder();
-
-    private Environment             environment;
+    private AnnotationWrapper<SofaAsyncInit> annotationWrapper;
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
@@ -170,9 +168,8 @@ public class AsyncInitBeanFactoryPostProcessor implements BeanFactoryPostProcess
         if (sofaAsyncInitAnnotation == null) {
             return;
         }
-        PlaceHolderAnnotationInvocationHandler.AnnotationWrapperBuilder<SofaAsyncInit> wrapperBuilder = PlaceHolderAnnotationInvocationHandler.AnnotationWrapperBuilder
-            .wrap(sofaAsyncInitAnnotation).withBinder(binder);
-        sofaAsyncInitAnnotation = wrapperBuilder.build();
+
+        sofaAsyncInitAnnotation = annotationWrapper.wrap(sofaAsyncInitAnnotation);
 
         String initMethodName = beanDefinition.getInitMethodName();
         if (sofaAsyncInitAnnotation.value() && StringUtils.hasText(initMethodName)) {
@@ -182,14 +179,8 @@ public class AsyncInitBeanFactoryPostProcessor implements BeanFactoryPostProcess
 
     @Override
     public void setEnvironment(Environment environment) {
-        this.environment = environment;
+         this.annotationWrapper = AnnotationWrapper.create(SofaAsyncInit.class)
+                        .withEnvironment(environment)
+                        .withBinder(DefaultPlaceHolderBinder.INSTANCE);
     }
-
-    class DefaultPlaceHolderBinder implements PlaceHolderBinder {
-        @Override
-        public String bind(String text) {
-            return environment.resolvePlaceholders(text);
-        }
-    }
-
 }

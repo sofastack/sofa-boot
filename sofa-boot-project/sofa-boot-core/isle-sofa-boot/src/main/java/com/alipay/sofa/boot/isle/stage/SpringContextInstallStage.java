@@ -17,7 +17,7 @@
 package com.alipay.sofa.boot.isle.stage;
 
 import com.alipay.sofa.boot.context.SofaDefaultListableBeanFactory;
-import com.alipay.sofa.boot.error.ErrorCode;
+import com.alipay.sofa.boot.log.ErrorCode;
 import com.alipay.sofa.boot.isle.deployment.DependencyTree;
 import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptor;
 import com.alipay.sofa.boot.isle.deployment.DeploymentException;
@@ -221,7 +221,6 @@ public class SpringContextInstallStage extends AbstractPipelineStage implements 
         doRefreshSpringContext(deployment);
 
         moduleStat.setEndTime(System.currentTimeMillis());
-        moduleStat.setCost(moduleStat.getEndTime() - moduleStat.getStartTime());
         moduleStat.setThreadName(Thread.currentThread().getName());
         ConfigurableApplicationContext ctx = (ConfigurableApplicationContext) deployment
             .getApplicationContext();

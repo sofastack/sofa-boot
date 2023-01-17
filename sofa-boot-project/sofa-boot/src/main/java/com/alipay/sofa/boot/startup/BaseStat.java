@@ -23,8 +23,11 @@ package com.alipay.sofa.boot.startup;
 public class BaseStat {
 
     private String name;
+
     private long   startTime;
+
     private long   endTime;
+
     private long   cost;
 
     public String getName() {

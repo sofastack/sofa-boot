@@ -16,8 +16,7 @@
  */
 package com.alipay.sofa.boot.isle.profile;
 
-import com.alipay.sofa.boot.constant.SofaBootConstants;
-import com.alipay.sofa.boot.error.ErrorCode;
+import com.alipay.sofa.boot.log.ErrorCode;
 import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptor;
 import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptorConfiguration;
 import org.springframework.beans.factory.InitializingBean;

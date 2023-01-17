@@ -21,6 +21,7 @@ package com.alipay.sofa.boot.startup;
  * Created on 2020/11/23
  */
 public class ModuleStat extends ChildrenStat<BeanStat> {
+
     private String threadName;
 
     public String getThreadName() {

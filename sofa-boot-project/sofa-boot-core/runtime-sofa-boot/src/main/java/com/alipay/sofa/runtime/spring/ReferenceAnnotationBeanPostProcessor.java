@@ -16,10 +16,10 @@
  */
 package com.alipay.sofa.runtime.spring;
 
-import com.alipay.sofa.boot.annotation.PlaceHolderAnnotationInvocationHandler.AnnotationWrapperBuilder;
-import com.alipay.sofa.boot.annotation.PlaceHolderBinder;
+import com.alipay.sofa.boot.annotation.AnnotationWrapper;
+import com.alipay.sofa.boot.annotation.DefaultPlaceHolderBinder;
 import com.alipay.sofa.boot.context.processor.SingletonSofaPostProcessor;
-import com.alipay.sofa.boot.error.ErrorCode;
+import com.alipay.sofa.boot.log.ErrorCode;
 import com.alipay.sofa.boot.log.SofaLogger;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.annotation.SofaReference;
@@ -53,8 +53,6 @@ import java.lang.reflect.Modifier;
 @SingletonSofaPostProcessor
 public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor, ApplicationContextAware, PriorityOrdered {
 
-    private final PlaceHolderBinder binder = new DefaultPlaceHolderBinder();
-
     private final SofaRuntimeContext      sofaRuntimeContext;
 
     private final BindingAdapterFactory   bindingAdapterFactory;
@@ -62,6 +60,9 @@ public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor, 
     private final BindingConverterFactory bindingConverterFactory;
 
     private ApplicationContext      applicationContext;
+
+    private AnnotationWrapper<SofaReference> annotationWrapper;
+
     /**
      * To construct a ReferenceAnnotationBeanPostProcessor via a Spring Bean
      * sofaRuntimeContext and sofaRuntimeProperties will be obtained from applicationContext
@@ -88,13 +89,12 @@ public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor, 
         final Class<?> beanClass = bean.getClass();
 
         ReflectionUtils.doWithFields(beanClass, field -> {
-            AnnotationWrapperBuilder<SofaReference> builder = AnnotationWrapperBuilder.wrap(
-                field.getAnnotation(SofaReference.class)).withBinder(binder);
-            SofaReference sofaReferenceAnnotation = builder.build();
-
+            SofaReference sofaReferenceAnnotation = field.getAnnotation(SofaReference.class);
             if (sofaReferenceAnnotation == null) {
                 return;
             }
+
+            sofaReferenceAnnotation = annotationWrapper.wrap(sofaReferenceAnnotation);
 
             Class<?> interfaceType = sofaReferenceAnnotation.interfaceType();
             if (interfaceType.equals(void.class)) {
@@ -125,9 +125,8 @@ public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor, 
             if (sofaReferenceAnnotation == null) {
                 return;
             }
-            AnnotationWrapperBuilder<SofaReference> builder = AnnotationWrapperBuilder.wrap(
-                sofaReferenceAnnotation).withBinder(binder);
-            sofaReferenceAnnotation = builder.build();
+
+            sofaReferenceAnnotation = annotationWrapper.wrap(sofaReferenceAnnotation);
 
             Class<?> interfaceType = sofaReferenceAnnotation.interfaceType();
             if (interfaceType.equals(void.class)) {
@@ -170,12 +169,8 @@ public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor, 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
-    }
-
-    class DefaultPlaceHolderBinder implements PlaceHolderBinder {
-        @Override
-        public String bind(String text) {
-            return environment.resolvePlaceholders(text);
-        }
+        this.annotationWrapper = AnnotationWrapper.create(SofaReference.class)
+                .withEnvironment(applicationContext.getEnvironment())
+                .withBinder(DefaultPlaceHolderBinder.INSTANCE);
     }
 }

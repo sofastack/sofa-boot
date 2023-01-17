@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.boot.logging;
 
+import com.alipay.sofa.boot.util.SofaBootEnvUtils;
 import com.alipay.sofa.common.log.CommonLoggingConfigurations;
 import com.alipay.sofa.common.log.Constants;
 import com.alipay.sofa.common.log.env.LogEnvUtils;
@@ -80,7 +81,7 @@ public class LogEnvironmentPreparingListener
     }
 
     private void defaultConsoleLoggers() {
-        if (LocalEnvUtil.isLocalEnv() || LocalEnvUtil.isTestEnv()) {
+        if (SofaBootEnvUtils.isLocalEnv() || SofaBootEnvUtils.isSpringTestEnv()) {
             CommonLoggingConfigurations.loadExternalConfiguration(
                 Constants.SOFA_MIDDLEWARE_ALL_LOG_CONSOLE_SWITCH, "true");
         }
