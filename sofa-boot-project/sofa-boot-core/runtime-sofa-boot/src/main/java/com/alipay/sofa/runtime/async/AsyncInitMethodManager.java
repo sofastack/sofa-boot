@@ -17,9 +17,10 @@
 package com.alipay.sofa.runtime.async;
 
 import com.alipay.sofa.boot.constant.SofaBootConstants;
-import com.alipay.sofa.boot.log.SofaLogger;
+import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import com.alipay.sofa.boot.util.NamedThreadFactory;
 import com.alipay.sofa.common.thread.SofaThreadPoolExecutor;
+import org.slf4j.Logger;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -45,6 +46,8 @@ import java.util.concurrent.atomic.AtomicReference;
 public class AsyncInitMethodManager implements PriorityOrdered,
         ApplicationListener<ContextRefreshedEvent>,
         ApplicationContextAware {
+
+    private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(AsyncInitMethodManager.class);
 
     public static final String ASYNC_INIT_METHOD_NAME = "async-init-method-name";
 
@@ -121,9 +124,8 @@ public class AsyncInitMethodManager implements PriorityOrdered,
     }
 
     private ThreadPoolExecutor createAsyncExecutor() {
-        SofaLogger.info(String.format(
-                "create async-init-bean thread pool, corePoolSize: %d, maxPoolSize: %d.",
-                executorCoreSize, executorMaxSize));
+        LOGGER.info("create async-init-bean thread pool, corePoolSize: {}, maxPoolSize: {}.",
+                executorCoreSize, executorMaxSize);
         return new SofaThreadPoolExecutor(executorCoreSize, executorMaxSize, 30,
                 TimeUnit.SECONDS, new SynchronousQueue<>(), new NamedThreadFactory(
                 "async-init-bean"), new ThreadPoolExecutor.CallerRunsPolicy(), "async-init-bean",

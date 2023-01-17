@@ -17,7 +17,7 @@
 package com.alipay.sofa.runtime.impl;
 
 import com.alipay.sofa.boot.log.ErrorCode;
-import com.alipay.sofa.boot.log.SofaLogger;
+import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.model.ComponentStatus;
@@ -27,6 +27,7 @@ import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.ComponentManager;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.context.SpringContextComponent;
+import org.slf4j.Logger;
 import org.springframework.context.ApplicationContext;
 
 import java.util.ArrayList;
@@ -43,6 +44,8 @@ import java.util.concurrent.ConcurrentMap;
  */
 @SuppressWarnings("unchecked")
 public class ComponentManagerImpl implements ComponentManager {
+
+    private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(ComponentManager.class);
     /** container for all components */
     protected ConcurrentMap<ComponentName, ComponentInfo>                     registry;
     /** container for resolved components */
@@ -108,7 +111,7 @@ public class ComponentManagerImpl implements ComponentManager {
             try {
                 unregister(ri);
             } catch (Throwable t) {
-                SofaLogger.error(ErrorCode.convert("01-03001", ri.getName()), t);
+                LOGGER.error(ErrorCode.convert("01-03001", ri.getName()), t);
             }
         }
 
@@ -124,7 +127,7 @@ public class ComponentManagerImpl implements ComponentManager {
             try {
                 unregister(ri);
             } catch (Throwable t) {
-                SofaLogger.error(ErrorCode.convert("01-03001", ri.getName()), t);
+                LOGGER.error(ErrorCode.convert("01-03001", ri.getName()), t);
             }
         }
 
@@ -137,7 +140,7 @@ public class ComponentManagerImpl implements ComponentManager {
             }
             clientFactoryInternal = null;
         } catch (Throwable t) {
-            SofaLogger.error(ErrorCode.convert("01-03000"), t);
+            LOGGER.error(ErrorCode.convert("01-03000"), t);
         }
     }
 
@@ -168,7 +171,7 @@ public class ComponentManagerImpl implements ComponentManager {
     private ComponentInfo doRegister(ComponentInfo ci) {
         ComponentName name = ci.getName();
         if (isRegistered(name)) {
-            SofaLogger.warn("Component was already registered: {}", name);
+            LOGGER.warn("Component was already registered: {}", name);
             if (ci.canBeDuplicate()) {
                 return getComponentInfo(name);
             }
@@ -178,16 +181,16 @@ public class ComponentManagerImpl implements ComponentManager {
         try {
             ci.register();
         } catch (Throwable t) {
-            SofaLogger.error(ErrorCode.convert("01-03003", ci.getName()), t);
+            LOGGER.error(ErrorCode.convert("01-03003", ci.getName()), t);
             return null;
         }
 
-        SofaLogger.info("Registering component: {}", ci.getName());
+        LOGGER.info("Registering component: {}", ci.getName());
 
         try {
             ComponentInfo old = registry.putIfAbsent(ci.getName(), ci);
             if (old != null) {
-                SofaLogger.warn("Component was already registered: {}", name);
+                LOGGER.warn("Component was already registered: {}", name);
                 if (ci.canBeDuplicate()) {
                     return old;
                 }
@@ -200,7 +203,7 @@ public class ComponentManagerImpl implements ComponentManager {
             }
         } catch (Throwable t) {
             ci.exception(new Exception(t));
-            SofaLogger.error(ErrorCode.convert("01-03004", ci.getName()), t);
+            LOGGER.error(ErrorCode.convert("01-03004", ci.getName()), t);
         }
 
         return ci;
@@ -248,7 +251,7 @@ public class ComponentManagerImpl implements ComponentManager {
                 componentInfo.activate();
             } catch (Throwable t) {
                 componentInfo.exception(new Exception(t));
-                SofaLogger.error(ErrorCode.convert("01-03005", componentInfo.getName()), t);
+                LOGGER.error(ErrorCode.convert("01-03005", componentInfo.getName()), t);
             }
         }
     }

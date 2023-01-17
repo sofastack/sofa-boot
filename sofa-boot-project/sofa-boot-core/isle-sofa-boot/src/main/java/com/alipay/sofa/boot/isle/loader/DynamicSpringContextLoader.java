@@ -22,8 +22,9 @@ import com.alipay.sofa.boot.context.SofaGenericApplicationContext;
 import com.alipay.sofa.boot.context.SofaSpringContextSupport;
 import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptor;
-import com.alipay.sofa.boot.log.SofaLogger;
+import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import com.alipay.sofa.boot.startup.BeanStatCustomizer;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.support.BeanDefinitionReader;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
@@ -46,6 +47,8 @@ import java.util.Map;
  * @author huzijie
  */
 public class DynamicSpringContextLoader implements SpringContextLoader, InitializingBean {
+
+    private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(DynamicSpringContextLoader.class);
 
     protected final ConfigurableApplicationContext rootApplicationContext;
 
@@ -130,7 +133,7 @@ public class DynamicSpringContextLoader implements SpringContextLoader, Initiali
                     parentSpringContext = (ConfigurableApplicationContext) parent
                         .getApplicationContext();
                     if (parentSpringContext == null) {
-                        SofaLogger.warn("Module [{}]'s Spring-Parent [{}] is Null!",
+                        LOGGER.warn("Module [{}]'s Spring-Parent [{}] is Null!",
                             deployment.getModuleName(), springParent);
                     }
                 }

@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
+import org.slf4j.Logger;
 import org.w3c.dom.Attr;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.Document;
@@ -27,7 +29,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import com.alipay.sofa.common.xmap.annotation.XNodeMap;
-import com.alipay.sofa.boot.log.SofaLogger;
 
 /**
  *
@@ -151,13 +152,15 @@ public class XAnnotatedMap extends XAnnotatedList {
  */
 class ElementMapVisitor extends DOMHelper.NodeMapVisitor {
 
+    private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(ElementMapVisitor.class);
+
     @Override
     public void visitNode(Context ctx, XAnnotatedMember xam, Node node, String key,
                           Map<String, Object> result) {
         try {
             result.put(key, xam.xao.newInstance(ctx, (Element) node));
         } catch (Exception e) {
-            SofaLogger.error("visitNode error", e);
+            LOGGER.error("visitNode error", e);
         }
     }
 }

@@ -16,9 +16,10 @@
  */
 package com.alipay.sofa.boot.isle.spring;
 
-import com.alipay.sofa.boot.log.ErrorCode;
 import com.alipay.sofa.boot.isle.stage.PipelineContext;
-import com.alipay.sofa.boot.log.SofaLogger;
+import com.alipay.sofa.boot.log.ErrorCode;
+import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
+import org.slf4j.Logger;
 import org.springframework.context.SmartLifecycle;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -34,6 +35,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class SofaModuleContextLifecycle implements SmartLifecycle {
 
+    private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(SofaModuleContextLifecycle.class);
+
     private final AtomicBoolean   isleRefreshed = new AtomicBoolean(false);
 
     private final PipelineContext pipelineContext;
@@ -48,7 +51,7 @@ public class SofaModuleContextLifecycle implements SmartLifecycle {
             try {
                 pipelineContext.process();
             } catch (Throwable t) {
-                SofaLogger.error(ErrorCode.convert("01-10000"), t);
+                LOGGER.error(ErrorCode.convert("01-10000"), t);
                 throw new RuntimeException(t);
             }
         }

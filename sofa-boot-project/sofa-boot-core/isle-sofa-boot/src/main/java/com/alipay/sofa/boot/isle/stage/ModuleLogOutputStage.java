@@ -17,7 +17,8 @@
 package com.alipay.sofa.boot.isle.stage;
 
 import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptor;
-import com.alipay.sofa.boot.log.SofaLogger;
+import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
+import org.slf4j.Logger;
 
 import java.util.Iterator;
 import java.util.List;
@@ -31,6 +32,8 @@ import java.util.List;
  * @version $Id: ModuleLogOutputStage.java, v 0.1 2012-3-16 18:17:48 fengqi.lin Exp $
  */
 public class ModuleLogOutputStage extends AbstractPipelineStage {
+
+    private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(ModuleLogOutputStage.class);
 
     public static final String  MODULE_LOG_OUTPUT_STAGE_NAME = "ModuleLogOutputStage";
 
@@ -93,7 +96,7 @@ public class ModuleLogOutputStage extends AbstractPipelineStage {
         stringBuilder.append(" [totalTime = ").append(totalTime).append(" ms, realTime = ")
             .append(realEnd - realStart).append(" ms]\n").append(sb);
 
-        SofaLogger.info(stringBuilder.toString());
+        LOGGER.info(stringBuilder.toString());
     }
 
     private void logFailedModules() {
@@ -109,7 +112,7 @@ public class ModuleLogOutputStage extends AbstractPipelineStage {
             }
             stringBuilder.append(treeSymbol).append(dd.getName()).append("\n");
         }
-        SofaLogger.info(stringBuilder.toString());
+        LOGGER.info(stringBuilder.toString());
     }
 
     @Override

@@ -1,8 +1,9 @@
 package com.alipay.sofa.runtime.async;
 
-import com.alipay.sofa.boot.log.SofaLogger;
+import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
+import org.slf4j.Logger;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.CountDownLatch;
@@ -12,6 +13,8 @@ import java.util.concurrent.CountDownLatch;
  * @version AsyncInitializeBeanMethodInvoker.java, v 0.1 2023年01月17日 11:53 AM huzijie Exp $
  */
 public class AsyncInitializeBeanMethodInvoker implements MethodInterceptor {
+
+    private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(AsyncInitializeBeanMethodInvoker.class);
 
     private final AsyncInitMethodManager asyncInitMethodManager;
 
@@ -50,10 +53,9 @@ public class AsyncInitializeBeanMethodInvoker implements MethodInterceptor {
                 try {
                     long startTime = System.currentTimeMillis();
                     invocation.getMethod().invoke(targetObject, invocation.getArguments());
-                    SofaLogger.info(String.format(
-                            "%s(%s) %s method execute %dms.", targetObject
+                    LOGGER.info("{}({}) {} method execute {}dms.", targetObject
                                     .getClass().getName(), beanName, methodName, (System
-                                    .currentTimeMillis() - startTime)));
+                                    .currentTimeMillis() - startTime));
                 } catch (Throwable e) {
                     throw new RuntimeException(e);
                 } finally {
@@ -67,9 +69,9 @@ public class AsyncInitializeBeanMethodInvoker implements MethodInterceptor {
         if (isAsyncCalling) {
             long startTime = System.currentTimeMillis();
             initCountDownLatch.await();
-            SofaLogger.info(String.format("%s(%s) %s method wait %dms.",
+            LOGGER.info("{}({}) {} method wait {}ms.",
                     targetObject.getClass().getName(), beanName, methodName,
-                    (System.currentTimeMillis() - startTime)));
+                    (System.currentTimeMillis() - startTime));
         }
         return invocation.getMethod().invoke(targetObject, invocation.getArguments());
     }

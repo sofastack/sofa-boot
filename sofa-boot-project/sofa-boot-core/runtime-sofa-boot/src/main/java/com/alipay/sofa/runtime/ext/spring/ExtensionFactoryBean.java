@@ -16,12 +16,13 @@
  */
 package com.alipay.sofa.runtime.ext.spring;
 
+import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.ext.component.ExtensionComponent;
 import com.alipay.sofa.runtime.ext.component.ExtensionPointComponent;
-import com.alipay.sofa.boot.log.SofaLogger;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.ComponentNameFactory;
+import org.slf4j.Logger;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.w3c.dom.Element;
@@ -34,6 +35,8 @@ import org.w3c.dom.Element;
  * @since 2.6.0
  */
 public class ExtensionFactoryBean extends AbstractExtFactoryBean {
+
+    private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(ExtensionFactoryBean.class);
 
     /* extension bean */
     private String      bean;
@@ -69,7 +72,7 @@ public class ExtensionFactoryBean extends AbstractExtFactoryBean {
         try {
             publishAsNuxeoExtension();
         } catch (Exception e) {
-            SofaLogger.error("failed to publish extension", e);
+            LOGGER.error("failed to publish extension", e);
             throw e;
         }
     }

@@ -17,16 +17,17 @@
 package com.alipay.sofa.boot.isle.stage;
 
 import com.alipay.sofa.boot.context.SofaDefaultListableBeanFactory;
-import com.alipay.sofa.boot.log.ErrorCode;
 import com.alipay.sofa.boot.isle.deployment.DependencyTree;
 import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptor;
 import com.alipay.sofa.boot.isle.deployment.DeploymentException;
 import com.alipay.sofa.boot.isle.loader.SpringContextLoader;
-import com.alipay.sofa.boot.log.SofaLogger;
+import com.alipay.sofa.boot.log.ErrorCode;
+import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import com.alipay.sofa.boot.startup.BaseStat;
 import com.alipay.sofa.boot.startup.ChildrenStat;
 import com.alipay.sofa.boot.startup.ModuleStat;
 import com.alipay.sofa.boot.util.ClassLoaderContextUtils;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.ApplicationContext;
@@ -52,6 +53,8 @@ import java.util.stream.Collectors;
  * @version $Id: SpringContextInstallStage.java, v 0.1 2012-3-16 21:17:48 fengqi.lin Exp $
  */
 public class SpringContextInstallStage extends AbstractPipelineStage implements InitializingBean {
+
+    private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(SpringContextInstallStage.class);
 
     public static final String  SOFA_MODULE_REFRESH_EXECUTOR_BEAN_NAME = "sofaModuleRefreshExecutor";
 
@@ -83,7 +86,7 @@ public class SpringContextInstallStage extends AbstractPipelineStage implements 
             installSpringContext();
             refreshSpringContext();
         } catch (Throwable t) {
-            SofaLogger.error(ErrorCode.convert("01-11000"), t);
+            LOGGER.error(ErrorCode.convert("01-11000"), t);
             throw new DeploymentException(ErrorCode.convert("01-11000"), t);
         }
 
@@ -104,12 +107,12 @@ public class SpringContextInstallStage extends AbstractPipelineStage implements 
     protected void installSpringContext() {
         for (DeploymentDescriptor deployment : application.getResolvedDeployments()) {
             if (deployment.isSpringPowered()) {
-                SofaLogger.info("Start install ApplicationContext for module {}.", deployment.getName());
+                LOGGER.info("Start install ApplicationContext for module {}.", deployment.getName());
                 ClassLoaderContextUtils.runAndRollbackTCCL(() -> {
                     try {
                         springContextLoader.loadSpringContext(deployment, application);
                     } catch (Throwable t) {
-                        SofaLogger.error(ErrorCode.convert("01-11001", deployment.getName()), t);
+                        LOGGER.error(ErrorCode.convert("01-11001", deployment.getName()), t);
                         application.addFailed(deployment);
                     }
                 }, deployment.getClassLoader());
@@ -203,7 +206,7 @@ public class SpringContextInstallStage extends AbstractPipelineStage implements 
                     }
                 }
             } catch (Throwable t) {
-                SofaLogger.error(ErrorCode.convert("01-11002", deployment.getName()), t);
+                LOGGER.error(ErrorCode.convert("01-11002", deployment.getName()), t);
                 throw new RuntimeException(ErrorCode.convert("01-11002", deployment.getName()),
                         t);
             } finally {
@@ -233,7 +236,7 @@ public class SpringContextInstallStage extends AbstractPipelineStage implements 
     }
 
     protected void doRefreshSpringContext(DeploymentDescriptor deployment) {
-        SofaLogger.info("Start refresh ApplicationContext for module {}.", deployment.getName());
+        LOGGER.info("Start refresh ApplicationContext for module {}.", deployment.getName());
         ConfigurableApplicationContext ctx = (ConfigurableApplicationContext) deployment.getApplicationContext();
         if (ctx != null) {
             try {
@@ -241,7 +244,7 @@ public class SpringContextInstallStage extends AbstractPipelineStage implements 
                 ClassLoaderContextUtils.runAndRollbackTCCL(ctx::refresh, deployment.getClassLoader());
                 application.addInstalled(deployment);
             } catch (Throwable t) {
-                SofaLogger.error(ErrorCode.convert("01-11002", deployment.getName()), t);
+                LOGGER.error(ErrorCode.convert("01-11002", deployment.getName()), t);
                 application.addFailed(deployment);
             } finally {
                 deployment.deployFinish();
@@ -249,7 +252,7 @@ public class SpringContextInstallStage extends AbstractPipelineStage implements 
         } else {
             String errorMsg = ErrorCode.convert("01-11003", deployment.getName());
             application.addFailed(deployment);
-            SofaLogger.error(errorMsg, new RuntimeException(errorMsg));
+            LOGGER.error(errorMsg, new RuntimeException(errorMsg));
         }
     }
 

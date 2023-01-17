@@ -19,7 +19,7 @@ package com.alipay.sofa.runtime.context;
 import com.alipay.sofa.boot.context.ContextRefreshPostProcessor;
 import com.alipay.sofa.boot.context.SofaGenericApplicationContext;
 import com.alipay.sofa.boot.log.ErrorCode;
-import com.alipay.sofa.boot.log.SofaLogger;
+import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
@@ -27,6 +27,7 @@ import com.alipay.sofa.runtime.spi.component.ComponentManager;
 import com.alipay.sofa.runtime.spi.component.Implementation;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.component.ComponentNameFactory;
+import org.slf4j.Logger;
 
 import java.util.Collection;
 
@@ -37,6 +38,8 @@ import java.util.Collection;
  * @version ComponentContextRefreshPostProcessor.java, v 0.1 2023年01月12日 3:37 PM huzijie Exp $
  */
 public class ComponentContextRefreshPostProcessor implements ContextRefreshPostProcessor {
+
+    private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(ComponentContextRefreshPostProcessor.class);
 
     private boolean                  unregisterComponentWhenContextRefreshFailure;
 
@@ -68,7 +71,7 @@ public class ComponentContextRefreshPostProcessor implements ContextRefreshPostP
                 try {
                     componentManager.unregister(componentInfo);
                 } catch (ServiceRuntimeException e) {
-                    SofaLogger.error(ErrorCode.convert("01-03001", componentInfo.getName()), e);
+                    LOGGER.error(ErrorCode.convert("01-03001", componentInfo.getName()), e);
                 }
             }
         }

@@ -16,6 +16,10 @@
  */
 package com.alipay.sofa.common.xmap;
 
+import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
+import org.slf4j.Logger;
+import org.w3c.dom.Node;
+
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -23,9 +27,6 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.util.Map;
 
-import org.w3c.dom.Node;
-
-import com.alipay.sofa.boot.log.SofaLogger;
 
 /**
  * Value factories are used to decode values from XML strings.
@@ -38,6 +39,8 @@ import com.alipay.sofa.boot.log.SofaLogger;
  * @since 2.6.0
  */
 public abstract class XValueFactory {
+
+    private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(XValueFactory.class);
 
     static final Map<Class, XValueFactory> defaultFactories = new Hashtable<Class, XValueFactory>();
 
@@ -157,7 +160,7 @@ public abstract class XValueFactory {
                                                        try {
                                                            return ctx.loadClass(value);
                                                        } catch (Throwable t) {
-                                                           SofaLogger.error("load class error", t);
+                                                           LOGGER.error("load class error", t);
                                                            return null;
                                                        }
                                                    }
@@ -171,7 +174,7 @@ public abstract class XValueFactory {
                                                            return new Resource(
                                                                ctx.getResource(value));
                                                        } catch (Throwable t) {
-                                                           SofaLogger
+                                                           LOGGER
                                                                .error("new resource error", t);
                                                            return null;
                                                        }

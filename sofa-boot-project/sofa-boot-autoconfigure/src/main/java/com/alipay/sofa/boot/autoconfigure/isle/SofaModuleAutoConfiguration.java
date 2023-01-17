@@ -34,10 +34,11 @@ import com.alipay.sofa.boot.isle.stage.ModuleLogOutputStage;
 import com.alipay.sofa.boot.isle.stage.PipelineContext;
 import com.alipay.sofa.boot.isle.stage.PipelineStage;
 import com.alipay.sofa.boot.isle.stage.SpringContextInstallStage;
-import com.alipay.sofa.boot.log.SofaLogger;
+import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import com.alipay.sofa.boot.startup.BeanStatCustomizer;
 import com.alipay.sofa.boot.util.NamedThreadFactory;
 import com.alipay.sofa.common.thread.SofaThreadPoolExecutor;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -65,6 +66,8 @@ import java.util.function.Supplier;
 @ConditionalOnClass(ApplicationRuntimeModel.class)
 @ConditionalOnProperty(value = "sofa.boot.isle.enabled", havingValue = "true", matchIfMissing = true)
 public class SofaModuleAutoConfiguration {
+
+    private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(SofaModuleAutoConfiguration.class);
 
     @Bean
     @ConditionalOnMissingBean
@@ -149,7 +152,7 @@ public class SofaModuleAutoConfiguration {
         long taskTimeout = sofaModuleProperties.getParallelRefreshTimeout();
         long checkPeriod = sofaModuleProperties.getParallelRefreshCheckPeriod();
 
-        SofaLogger.info("Create SOFA module refresh thread pool, corePoolSize: {}, maxPoolSize: {}," +
+        LOGGER.info("Create SOFA module refresh thread pool, corePoolSize: {}, maxPoolSize: {}," +
                         " taskTimeout:{}, checkPeriod:{}",
                 coreSize, coreSize, taskTimeout, checkPeriod);
         return () -> new SofaThreadPoolExecutor(coreSize, coreSize, 60,

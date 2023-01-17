@@ -16,19 +16,19 @@
  */
 package com.alipay.sofa.common.xmap;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
+import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
+import com.alipay.sofa.common.xmap.annotation.XNodeList;
+import org.slf4j.Logger;
 import org.w3c.dom.Attr;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import com.alipay.sofa.common.xmap.annotation.XNodeList;
-import com.alipay.sofa.boot.log.SofaLogger;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  *
@@ -175,12 +175,14 @@ public class XAnnotatedList extends XAnnotatedMember {
  */
 class ElementVisitor extends DOMHelper.NodeVisitor {
 
+    private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(ElementVisitor.class);
+
     @Override
     public void visitNode(Context ctx, XAnnotatedMember xam, Node node, Collection<Object> result) {
         try {
             result.add(xam.xao.newInstance(ctx, (Element) node));
         } catch (Throwable e) {
-            SofaLogger.error("visitNode error", e);
+            LOGGER.error("visitNode error", e);
         }
     }
 }

@@ -16,25 +16,26 @@
  */
 package com.alipay.sofa.runtime.service.component;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
-
 import com.alipay.sofa.boot.log.ErrorCode;
+import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.component.Property;
-import com.alipay.sofa.boot.log.SofaLogger;
 import com.alipay.sofa.runtime.model.ComponentType;
 import com.alipay.sofa.runtime.spi.binding.Binding;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapter;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
 import com.alipay.sofa.runtime.spi.component.AbstractComponent;
+import com.alipay.sofa.runtime.spi.component.ComponentNameFactory;
 import com.alipay.sofa.runtime.spi.component.Implementation;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.health.HealthResult;
-import com.alipay.sofa.runtime.spi.component.ComponentNameFactory;
+import org.slf4j.Logger;
+
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Service Component
@@ -43,6 +44,8 @@ import com.alipay.sofa.runtime.spi.component.ComponentNameFactory;
  */
 @SuppressWarnings("unchecked")
 public class ServiceComponent extends AbstractComponent {
+
+    private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(ServiceComponent.class);
 
     public static final String        UNREGISTER_DELAY_MILLISECONDS = "UNREGISTER_DELAY_MILLISECONDS";
 
@@ -115,17 +118,17 @@ public class ServiceComponent extends AbstractComponent {
                         binding.getBindingType(), service));
                 }
 
-                SofaLogger.info(" <<PreOut Binding [{}] Begins - {}.", binding.getBindingType(),
+                LOGGER.info(" <<PreOut Binding [{}] Begins - {}.", binding.getBindingType(),
                     service);
                 try {
                     bindingAdapter.preOutBinding(service, binding, target, getContext());
                 } catch (Throwable t) {
                     allPassed = false;
-                    SofaLogger.error(
+                    LOGGER.error(
                         ErrorCode.convert("01-00002", binding.getBindingType(), service), t);
                     continue;
                 }
-                SofaLogger.info(" <<PreOut Binding [{}] Ends - {}.", binding.getBindingType(),
+                LOGGER.info(" <<PreOut Binding [{}] Ends - {}.", binding.getBindingType(),
                     service);
             }
 
@@ -163,7 +166,7 @@ public class ServiceComponent extends AbstractComponent {
                 }
 
                 Object outBindingResult;
-                SofaLogger.info(" <<Out Binding [{}] Begins - {}.", binding.getBindingType(),
+                LOGGER.info(" <<Out Binding [{}] Begins - {}.", binding.getBindingType(),
                     service);
                 try {
                     outBindingResult = bindingAdapter.outBinding(service, binding, target,
@@ -171,16 +174,16 @@ public class ServiceComponent extends AbstractComponent {
                 } catch (Throwable t) {
                     allPassed = false;
                     binding.setHealthy(false);
-                    SofaLogger.error(
+                    LOGGER.error(
                         ErrorCode.convert("01-00004", binding.getBindingType(), service), t);
                     continue;
                 }
                 if (!Boolean.FALSE.equals(outBindingResult)) {
-                    SofaLogger.info(" <<Out Binding [{}] Ends - {}.", binding.getBindingType(),
+                    LOGGER.info(" <<Out Binding [{}] Ends - {}.", binding.getBindingType(),
                         service);
                 } else {
                     binding.setHealthy(false);
-                    SofaLogger.info(" <<Out Binding [{}] Fails, Don't publish service - {}.",
+                    LOGGER.info(" <<Out Binding [{}] Fails, Don't publish service - {}.",
                         binding.getBindingType(), service);
                 }
             }
@@ -190,7 +193,7 @@ public class ServiceComponent extends AbstractComponent {
             }
         }
 
-        SofaLogger.info("Register Service - {}", service);
+        LOGGER.info("Register Service - {}", service);
     }
 
     @Override
@@ -213,17 +216,17 @@ public class ServiceComponent extends AbstractComponent {
                         binding.getBindingType(), service));
                 }
 
-                SofaLogger.info(" <<Pre un-out Binding [{}] Begins - {}.",
+                LOGGER.info(" <<Pre un-out Binding [{}] Begins - {}.",
                     binding.getBindingType(), service);
                 try {
                     bindingAdapter.preUnoutBinding(service, binding, target, getContext());
                 } catch (Throwable t) {
                     allPassed = false;
-                    SofaLogger.error(
+                    LOGGER.error(
                         ErrorCode.convert("01-00006", binding.getBindingType(), service), t);
                     continue;
                 }
-                SofaLogger.info(" <<Pre un-out Binding [{}] Ends - {}.", binding.getBindingType(),
+                LOGGER.info(" <<Pre un-out Binding [{}] Ends - {}.", binding.getBindingType(),
                     service);
             }
 
@@ -270,17 +273,17 @@ public class ServiceComponent extends AbstractComponent {
                         binding.getBindingType(), service));
                 }
 
-                SofaLogger.info(" <<Post un-out Binding [{}] Begins - {}.",
+                LOGGER.info(" <<Post un-out Binding [{}] Begins - {}.",
                     binding.getBindingType(), service);
                 try {
                     bindingAdapter.postUnoutBinding(service, binding, target, getContext());
                 } catch (Throwable t) {
                     allPassed = false;
-                    SofaLogger.error(
+                    LOGGER.error(
                         ErrorCode.convert("01-00008", binding.getBindingType(), service), t);
                     continue;
                 }
-                SofaLogger.info(" <<Post un-out Binding [{}] Ends - {}.", binding.getBindingType(),
+                LOGGER.info(" <<Post un-out Binding [{}] Ends - {}.", binding.getBindingType(),
                     service);
             }
 

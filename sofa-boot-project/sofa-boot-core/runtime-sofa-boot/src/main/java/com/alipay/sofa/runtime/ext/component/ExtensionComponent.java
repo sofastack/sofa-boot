@@ -17,21 +17,22 @@
 package com.alipay.sofa.runtime.ext.component;
 
 import com.alipay.sofa.boot.log.ErrorCode;
-import com.alipay.sofa.boot.log.SofaLogger;
+import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.api.component.Property;
+import com.alipay.sofa.runtime.ext.Extensible;
+import com.alipay.sofa.runtime.ext.Extension;
+import com.alipay.sofa.runtime.ext.ExtensionPoint;
 import com.alipay.sofa.runtime.model.ComponentStatus;
 import com.alipay.sofa.runtime.model.ComponentType;
 import com.alipay.sofa.runtime.spi.component.AbstractComponent;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.ComponentManager;
+import com.alipay.sofa.runtime.spi.component.ComponentNameFactory;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.health.HealthResult;
-import com.alipay.sofa.runtime.spi.component.ComponentNameFactory;
-import com.alipay.sofa.runtime.ext.Extensible;
-import com.alipay.sofa.runtime.ext.Extension;
-import com.alipay.sofa.runtime.ext.ExtensionPoint;
+import org.slf4j.Logger;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.ReflectionUtils;
 
@@ -45,6 +46,8 @@ import java.util.Map;
  * @since 2.6.0
  */
 public class ExtensionComponent extends AbstractComponent {
+
+    private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(ExtensionComponent.class);
 
     public static final String        LINK_SYMBOL              = "$";
 
@@ -178,7 +181,7 @@ public class ExtensionComponent extends AbstractComponent {
                 if (sofaRuntimeContext.getProperties().isExtensionFailureInsulating()) {
                     this.e = e;
                 }
-                SofaLogger.error(
+                LOGGER.error(
                     ErrorCode.convert("01-01002", extensionPoint.getName(),
                         extension.getComponentName()), e);
             }

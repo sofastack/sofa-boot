@@ -20,7 +20,7 @@ import com.alipay.sofa.boot.annotation.AnnotationWrapper;
 import com.alipay.sofa.boot.annotation.DefaultPlaceHolderBinder;
 import com.alipay.sofa.boot.context.processor.SingletonSofaPostProcessor;
 import com.alipay.sofa.boot.log.ErrorCode;
-import com.alipay.sofa.boot.log.SofaLogger;
+import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.annotation.SofaReference;
 import com.alipay.sofa.runtime.api.binding.BindingType;
@@ -34,6 +34,7 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
+import org.slf4j.Logger;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.ApplicationContext;
@@ -52,6 +53,8 @@ import java.lang.reflect.Modifier;
  */
 @SingletonSofaPostProcessor
 public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor, ApplicationContextAware, PriorityOrdered {
+
+    private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(ReferenceAnnotationBeanPostProcessor.class);
 
     private final SofaRuntimeContext      sofaRuntimeContext;
 
@@ -109,7 +112,7 @@ public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor, 
                 return false;
             }
             if (Modifier.isStatic(field.getModifiers())) {
-                SofaLogger.warn(
+                LOGGER.warn(
                     "SofaReference annotation is not supported on static fields: {}", field);
                 return false;
             }

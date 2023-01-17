@@ -17,13 +17,14 @@
 package com.alipay.sofa.boot.ark.invoke;
 
 import com.alipay.sofa.ark.spi.replay.ReplayContext;
-import com.alipay.sofa.boot.log.SofaLogger;
+import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import com.alipay.sofa.runtime.spi.binding.Contract;
 import com.alipay.sofa.runtime.spi.service.ServiceProxy;
 import com.caucho.hessian.io.Hessian2Input;
 import com.caucho.hessian.io.Hessian2Output;
 import com.caucho.hessian.io.SerializerFactory;
 import org.aopalliance.intercept.MethodInvocation;
+import org.slf4j.Logger;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -38,6 +39,8 @@ import java.lang.reflect.Method;
  * @version DynamicJvmServiceInvoker.java, v 0.1 2023年01月16日 5:10 PM huzijie Exp $
  */
 public class DynamicJvmServiceInvoker extends ServiceProxy {
+
+    private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(DynamicJvmServiceInvoker.class);
 
     private final Contract                 contract;
     private final Object                   targetService;
@@ -64,11 +67,8 @@ public class DynamicJvmServiceInvoker extends ServiceProxy {
     protected Object doInvoke(MethodInvocation invocation) throws Throwable {
         try {
 
-            if (SofaLogger.isDebugEnabled()) {
-                SofaLogger
-                    .debug(">> Start in Cross App JVM service invoke, the service interface is  - "
-                           + getInterfaceType());
-            }
+            LOGGER.atDebug().log(() -> ">> Start in Cross App JVM service invoke, the service interface is  - "
+                    + getInterfaceType());
 
             if (DynamicJvmServiceProxyFinder.getInstance().getBizManagerService() != null) {
                 ReplayContext.setPlaceHolder();
@@ -119,19 +119,15 @@ public class DynamicJvmServiceInvoker extends ServiceProxy {
 
     @Override
     protected void doCatch(MethodInvocation invocation, Throwable e, long startTime) {
-        if (SofaLogger.isDebugEnabled()) {
-            SofaLogger.debug(getCommonInvocationLog("Exception", invocation, startTime));
-        }
+        LOGGER.atDebug().log(() -> getCommonInvocationLog("Exception", invocation, startTime));
     }
 
     @Override
     protected void doFinally(MethodInvocation invocation, long startTime) {
-        if (SofaLogger.isDebugEnabled()) {
-            SofaLogger.debug(getCommonInvocationLog("Finally", invocation, startTime));
-        }
+        LOGGER.atDebug().log(() -> getCommonInvocationLog("Finally", invocation, startTime));
     }
 
-    private Class getInterfaceType() {
+    private Class<?> getInterfaceType() {
         return contract.getInterfaceType();
     }
 
@@ -143,7 +139,7 @@ public class DynamicJvmServiceInvoker extends ServiceProxy {
         this.clientClassloader.set(clientClassloader);
     }
 
-    private Method getTargetMethod(Method method, Class[] argumentTypes) {
+    private Method getTargetMethod(Method method, Class<?>[] argumentTypes) {
         try {
             return targetService.getClass().getMethod(method.getName(), argumentTypes);
         } catch (NoSuchMethodException ex) {

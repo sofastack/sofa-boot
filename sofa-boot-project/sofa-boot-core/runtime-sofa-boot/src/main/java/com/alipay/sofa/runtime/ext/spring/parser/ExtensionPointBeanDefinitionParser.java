@@ -16,9 +16,10 @@
  */
 package com.alipay.sofa.runtime.ext.spring.parser;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
+import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
+import com.alipay.sofa.boot.util.ParserUtils;
+import com.alipay.sofa.runtime.ext.spring.ExtensionPointFactoryBean;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.config.RuntimeBeanReference;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.ParserContext;
@@ -27,9 +28,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.alipay.sofa.runtime.ext.spring.ExtensionPointFactoryBean;
-import com.alipay.sofa.boot.log.SofaLogger;
-import com.alipay.sofa.boot.util.ParserUtils;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * Extension point definition parser
@@ -40,6 +40,8 @@ import com.alipay.sofa.boot.util.ParserUtils;
  * @since 2.6.0
  */
 public class ExtensionPointBeanDefinitionParser extends AbstractExtBeanDefinitionParser {
+
+    private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(ExtensionPointBeanDefinitionParser.class);
 
     public static final String                              CLASS        = "class";
 
@@ -93,8 +95,7 @@ public class ExtensionPointBeanDefinitionParser extends AbstractExtBeanDefinitio
                             });
                 } else {
                     if (element.hasAttribute(REF)) {
-                        SofaLogger
-                            .error("nested bean definition/reference cannot be used when attribute 'ref' is specified");
+                        LOGGER.error("nested bean definition/reference cannot be used when attribute 'ref' is specified");
                     }
                     target = parserContext.getDelegate().parsePropertySubElement(subElement,
                         builder.getBeanDefinition());

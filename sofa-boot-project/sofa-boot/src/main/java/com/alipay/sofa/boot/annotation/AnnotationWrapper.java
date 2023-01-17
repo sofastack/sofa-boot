@@ -54,7 +54,7 @@ public class AnnotationWrapper<A extends Annotation> {
             ClassLoader cl = this.getClass().getClassLoader();
             Class<?>[] exposedInterface = {delegate.annotationType(), WrapperAnnotation.class};
             return (A) Proxy.newProxyInstance(cl, exposedInterface,
-                    new PlaceHolderAnnotationInvocationHandler(delegate, binder, environment)));
+                    new PlaceHolderAnnotationInvocationHandler(delegate, binder, environment));
         }
         return null;
     }

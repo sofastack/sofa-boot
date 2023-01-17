@@ -20,9 +20,10 @@ import com.alipay.sofa.boot.annotation.AnnotationWrapper;
 import com.alipay.sofa.boot.annotation.DefaultPlaceHolderBinder;
 import com.alipay.sofa.boot.context.processor.SingletonSofaPostProcessor;
 import com.alipay.sofa.boot.log.ErrorCode;
-import com.alipay.sofa.boot.log.SofaLogger;
+import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import com.alipay.sofa.boot.util.BeanDefinitionUtil;
 import com.alipay.sofa.runtime.api.annotation.SofaAsyncInit;
+import org.slf4j.Logger;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
@@ -60,6 +61,8 @@ import static com.alipay.sofa.runtime.async.AsyncInitMethodManager.ASYNC_INIT_ME
 @SingletonSofaPostProcessor
 public class AsyncInitBeanFactoryPostProcessor implements BeanFactoryPostProcessor, EnvironmentAware {
 
+    private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(AsyncInitBeanFactoryPostProcessor.class);
+
     private AnnotationWrapper<SofaAsyncInit> annotationWrapper;
 
     @Override
@@ -82,7 +85,7 @@ public class AsyncInitBeanFactoryPostProcessor implements BeanFactoryPostProcess
         } else {
             Class<?> beanClassType = BeanDefinitionUtil.resolveBeanClassType(beanDefinition);
             if (beanClassType == null) {
-                SofaLogger.warn("Bean class type cant be resolved from bean of {}", beanId);
+                LOGGER.warn("Bean class type cant be resolved from bean of {}", beanId);
                 return;
             }
             scanAsyncInitBeanDefinitionOnClass(beanClassType, beanDefinition);
@@ -101,7 +104,7 @@ public class AsyncInitBeanFactoryPostProcessor implements BeanFactoryPostProcess
             declaringClass = ClassUtils.forName(methodMetadata.getDeclaringClassName(), null);
         } catch (Throwable throwable) {
             // it's impossible to catch throwable here
-            SofaLogger.error(ErrorCode.convert("01-02001", beanId), throwable);
+            LOGGER.error(ErrorCode.convert("01-02001", beanId), throwable);
             return;
         }
         if (methodMetadata instanceof StandardMethodMetadata) {

@@ -1,7 +1,7 @@
 package com.alipay.sofa.runtime.service.binding;
 
 import com.alipay.sofa.boot.log.ErrorCode;
-import com.alipay.sofa.boot.log.SofaLogger;
+import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import com.alipay.sofa.runtime.filter.JvmFilterContext;
 import com.alipay.sofa.runtime.filter.JvmFilterHolder;
 import com.alipay.sofa.runtime.service.component.ServiceComponent;
@@ -9,6 +9,7 @@ import com.alipay.sofa.runtime.spi.binding.Contract;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.service.ServiceProxy;
 import org.aopalliance.intercept.MethodInvocation;
+import org.slf4j.Logger;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Proxy;
@@ -17,6 +18,8 @@ import java.lang.reflect.Proxy;
  * JVM Service Invoker
  */
 public class JvmServiceInvoker extends ServiceProxy {
+
+    private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(JvmServiceInvoker.class);
 
     private final Contract contract;
 
@@ -90,8 +93,7 @@ public class JvmServiceInvoker extends ServiceProxy {
                     + "] has already been destroyed.");
         }
 
-        SofaLogger.debug(">> Start in JVM service invoke, the service interface is  - {}",
-                getInterfaceName());
+        LOGGER.atDebug().log(">> Start in JVM service invoke, the service interface is  - {}.", getInterfaceName());
 
         Object retVal;
         Object targetObj = this.getTarget();
@@ -104,16 +106,15 @@ public class JvmServiceInvoker extends ServiceProxy {
                 try {
                     return serviceProxy.invoke(invocation);
                 } finally {
-                    SofaLogger.debug(
-                            "<< Finish Cross App JVM service invoke, the service is  - {}]",
-                            (getInterfaceName() + "#" + getUniqueId()));
+                    LOGGER.atDebug().log("<< Finish Cross App JVM service invoke, the service is  - {}.",
+                            getInterfaceName() + "#" + getUniqueId());
                 }
             }
         }
 
         if (targetObj == null || ((targetObj instanceof Proxy) && binding.hasBackupProxy())) {
             targetObj = binding.getBackupProxy();
-            SofaLogger.debug("<<{}.{} backup proxy invoke.", getInterfaceName().getName(),
+            LOGGER.atDebug().log("<<{}.{} backup proxy invoke.", getInterfaceName().getName(),
                     invocation.getMethod().getName());
         }
 
@@ -129,7 +130,7 @@ public class JvmServiceInvoker extends ServiceProxy {
         } catch (InvocationTargetException ex) {
             throw ex.getTargetException();
         } finally {
-            SofaLogger.debug(
+            LOGGER.atDebug().log(
                     "<< Finish JVM service invoke, the service implementation is  - {}]",
                     (this.target == null ? "null" : this.target.getClass().getName()));
 
@@ -141,16 +142,12 @@ public class JvmServiceInvoker extends ServiceProxy {
 
     @Override
     protected void doCatch(MethodInvocation invocation, Throwable e, long startTime) {
-        if (SofaLogger.isDebugEnabled()) {
-            SofaLogger.debug(getCommonInvocationLog("Exception", invocation, startTime));
-        }
+        LOGGER.atDebug().log(() -> getCommonInvocationLog("Exception", invocation, startTime));
     }
 
     @Override
     protected void doFinally(MethodInvocation invocation, long startTime) {
-        if (SofaLogger.isDebugEnabled()) {
-            SofaLogger.debug(getCommonInvocationLog("Finally", invocation, startTime));
-        }
+        LOGGER.atDebug().log(() -> getCommonInvocationLog("Finally", invocation, startTime));
     }
 
     protected Object getTarget() {
