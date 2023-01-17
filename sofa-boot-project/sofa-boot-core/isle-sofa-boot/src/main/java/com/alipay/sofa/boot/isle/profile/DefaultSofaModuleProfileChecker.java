@@ -19,6 +19,7 @@ package com.alipay.sofa.boot.isle.profile;
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptor;
+import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptorConfiguration;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -41,7 +42,7 @@ public class DefaultSofaModuleProfileChecker implements SofaModuleProfileChecker
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        activeProfiles.add(SofaBootConstants.DEFAULT_PROFILE_VALUE);
+        activeProfiles.add(DeploymentDescriptorConfiguration.DEFAULT_PROFILE_VALUE);
         if (userCustomProfiles != null) {
             activeProfiles.addAll(userCustomProfiles.stream().map(String::trim).collect(Collectors.toSet()));
         }
@@ -53,7 +54,7 @@ public class DefaultSofaModuleProfileChecker implements SofaModuleProfileChecker
     @Override
     public boolean acceptProfiles(String[] sofaModuleProfiles) {
         Assert.notEmpty(sofaModuleProfiles,
-            ErrorCode.convert("01-13000", SofaBootConstants.DEFAULT_PROFILE_VALUE));
+            ErrorCode.convert("01-13000", DeploymentDescriptorConfiguration.DEFAULT_PROFILE_VALUE));
         for (String sofaModuleProfile : sofaModuleProfiles) {
             if (StringUtils.hasText(sofaModuleProfile) && sofaModuleProfile.charAt(0) == '!') {
                 if (!isProfileActive(sofaModuleProfile.substring(1))) {
@@ -79,7 +80,7 @@ public class DefaultSofaModuleProfileChecker implements SofaModuleProfileChecker
     private void validateProfile(String profile) {
         if (!StringUtils.hasText(profile)) {
             throw new IllegalArgumentException(ErrorCode.convert("01-13001", profile,
-                SofaBootConstants.DEFAULT_PROFILE_VALUE));
+                    DeploymentDescriptorConfiguration.DEFAULT_PROFILE_VALUE));
         }
 
         if (profile.charAt(0) == '!') {
@@ -88,11 +89,11 @@ public class DefaultSofaModuleProfileChecker implements SofaModuleProfileChecker
     }
 
     private String[] getModuleProfiles(DeploymentDescriptor deploymentDescriptor) {
-        String profiles = deploymentDescriptor.getProperty(SofaBootConstants.MODULE_PROFILE);
+        String profiles = deploymentDescriptor.getProperty(DeploymentDescriptorConfiguration.MODULE_PROFILE);
         if (StringUtils.hasText(profiles)) {
             return StringUtils.commaDelimitedListToStringArray(profiles);
         } else {
-            return new String[] { SofaBootConstants.DEFAULT_PROFILE_VALUE };
+            return new String[] { DeploymentDescriptorConfiguration.DEFAULT_PROFILE_VALUE };
         }
 
     }

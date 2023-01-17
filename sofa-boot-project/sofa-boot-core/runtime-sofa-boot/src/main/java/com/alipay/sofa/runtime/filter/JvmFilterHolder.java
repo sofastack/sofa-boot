@@ -16,10 +16,10 @@
  */
 package com.alipay.sofa.runtime.filter;
 
-import org.springframework.core.Ordered;
+import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -28,34 +28,34 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Created on 2020/8/18
  */
 public class JvmFilterHolder {
-    private static final List<JvmFilter> JVM_FILTERS = new ArrayList<>();
-    private static final AtomicBoolean filtersSorted  = new AtomicBoolean(false);
 
-    private static final Comparator<Ordered> comparator = Comparator.comparingInt(Ordered::getOrder);
+    private final List<JvmFilter> JVM_FILTERS = new ArrayList<>();
 
-    public static void addJvmFilter(JvmFilter f) {
+    private final AtomicBoolean FILTERS_SORTED = new AtomicBoolean(false);
+
+    public void addJvmFilter(JvmFilter f) {
         JVM_FILTERS.add(f);
-        filtersSorted.compareAndSet(true, false);
+        FILTERS_SORTED.compareAndSet(true, false);
     }
 
-    public static void clearJvmFilters() {
+    public void clearJvmFilters() {
         JVM_FILTERS.clear();
     }
 
-    private static void sortJvmFilters() {
-        if (filtersSorted.compareAndSet(false, true)) {
-            JVM_FILTERS.sort(comparator);
+    private void sortJvmFilters() {
+        if (FILTERS_SORTED.compareAndSet(false, true)) {
+            JVM_FILTERS.sort(AnnotationAwareOrderComparator.INSTANCE);
         }
     }
 
-    public static List<JvmFilter> getJvmFilters() {
+    public List<JvmFilter> getJvmFilters() {
         sortJvmFilters();
         return JVM_FILTERS;
     }
 
     public static boolean beforeInvoking(JvmFilterContext context) {
-        sortJvmFilters();
-        for (JvmFilter filter : JVM_FILTERS) {
+        List<JvmFilter> filters = Collections.unmodifiableList(context.getSofaRuntimeContext().getJvmFilterHolder().getJvmFilters());
+        for (JvmFilter filter : filters) {
             if (!filter.before(context)) {
                 return false;
             }
@@ -64,9 +64,9 @@ public class JvmFilterHolder {
     }
 
     public static boolean afterInvoking(JvmFilterContext context) {
-        sortJvmFilters();
-        for (int i = JVM_FILTERS.size() - 1; i >= 0; --i) {
-            if (!JVM_FILTERS.get(i).after(context)) {
+        List<JvmFilter> filters = Collections.unmodifiableList(context.getSofaRuntimeContext().getJvmFilterHolder().getJvmFilters());
+        for (int i = filters.size() - 1; i >= 0; --i) {
+            if (!filters.get(i).after(context)) {
                 return false;
             }
         }

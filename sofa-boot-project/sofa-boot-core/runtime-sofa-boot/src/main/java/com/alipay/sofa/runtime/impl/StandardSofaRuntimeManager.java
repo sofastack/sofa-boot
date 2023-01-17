@@ -52,7 +52,7 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager, Applicati
         this.appClassLoader = appClassLoader;
         this.clientFactoryInternal = clientFactoryInternal;
         this.componentManager = new ComponentManagerImpl(clientFactoryInternal, appClassLoader);
-        this.sofaRuntimeContext = new SofaRuntimeContext(this, componentManager, clientFactoryInternal);
+        this.sofaRuntimeContext = new SofaRuntimeContext(this);
         this.componentManager.setSofaRuntimeContext(sofaRuntimeContext);
     }
 

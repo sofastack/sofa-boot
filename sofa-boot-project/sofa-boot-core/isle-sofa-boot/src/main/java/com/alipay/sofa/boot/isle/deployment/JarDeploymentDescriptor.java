@@ -62,10 +62,10 @@ public class JarDeploymentDescriptor extends AbstractDeploymentDescriptor {
             for (Enumeration<JarEntry> entries = jarFile.entries(); entries.hasMoreElements();) {
                 JarEntry entry = entries.nextElement();
                 String entryPath = entry.getName();
-                if (entryPath.startsWith(SofaBootConstants.SPRING_CONTEXT_PATH)
+                if (entryPath.startsWith(DeploymentDescriptorConfiguration.SPRING_CONTEXT_PATH)
                     && entryPath.endsWith("xml")) {
                     String fileName = entry.getName().substring(
-                        SofaBootConstants.SPRING_CONTEXT_PATH.length() + 1);
+                            DeploymentDescriptorConfiguration.SPRING_CONTEXT_PATH.length() + 1);
                     springResources.put(fileName,
                         convertToByteArrayResource(jarFile.getInputStream(entry)));
                 }

@@ -18,8 +18,6 @@ package com.alipay.sofa.runtime.spring;
 
 import com.alipay.sofa.boot.annotation.PlaceHolderAnnotationInvocationHandler;
 import com.alipay.sofa.boot.annotation.PlaceHolderBinder;
-import com.alipay.sofa.boot.constant.SofaBootConstants;
-import com.alipay.sofa.boot.context.SofaGenericApplicationContext;
 import com.alipay.sofa.boot.context.processor.SingletonSofaPostProcessor;
 import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.boot.log.SofaLogger;
@@ -33,7 +31,6 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ScannedGenericBeanDefinition;
@@ -186,13 +183,6 @@ public class AsyncInitBeanFactoryPostProcessor implements BeanFactoryPostProcess
     @Override
     public void setEnvironment(Environment environment) {
         this.environment = environment;
-    }
-
-    private String getModuleName(ApplicationContext applicationContext) {
-        if (applicationContext instanceof SofaGenericApplicationContext) {
-            return applicationContext.getId();
-        }
-        return SofaBootConstants.ROOT_APPLICATION_CONTEXT;
     }
 
     class DefaultPlaceHolderBinder implements PlaceHolderBinder {

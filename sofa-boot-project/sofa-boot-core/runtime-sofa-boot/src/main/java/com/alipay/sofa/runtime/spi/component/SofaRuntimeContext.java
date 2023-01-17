@@ -17,6 +17,9 @@
 package com.alipay.sofa.runtime.spi.component;
 
 import com.alipay.sofa.runtime.api.client.ClientFactory;
+import com.alipay.sofa.runtime.filter.JvmFilterHolder;
+import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
+import com.alipay.sofa.runtime.spi.service.DefaultDynamicServiceProxyManager;
 import com.alipay.sofa.runtime.spi.service.DynamicServiceProxyManager;
 
 /**
@@ -25,22 +28,27 @@ import com.alipay.sofa.runtime.spi.service.DynamicServiceProxyManager;
  * @author xuanbei 18/2/28
  */
 public class SofaRuntimeContext {
-    private final Properties properties;
+
     /** component manager */
     private final ComponentManager           componentManager;
-    /** client factory */
-    private final ClientFactory              clientFactory;
 
     private final SofaRuntimeManager         sofaRuntimeManager;
+    /** client factory */
+    private final ClientFactoryInternal     clientFactory;
+
+    private final Properties properties;
+
+    private final JvmFilterHolder jvmFilterHolder;
 
     private DynamicServiceProxyManager serviceProxyManager;
 
-    public SofaRuntimeContext(SofaRuntimeManager sofaRuntimeManager,
-                              ComponentManager componentManager, ClientFactory clientFactory) {
+    public SofaRuntimeContext(SofaRuntimeManager sofaRuntimeManager) {
         this.sofaRuntimeManager = sofaRuntimeManager;
-        this.componentManager = componentManager;
-        this.clientFactory = clientFactory;
+        this.componentManager = sofaRuntimeManager.getComponentManager();
+        this.clientFactory = sofaRuntimeManager.getClientFactoryInternal();
         this.properties = new Properties();
+        this.jvmFilterHolder = new JvmFilterHolder();
+        this.serviceProxyManager = new DefaultDynamicServiceProxyManager();
     }
 
     public String getAppName() {
@@ -67,8 +75,16 @@ public class SofaRuntimeContext {
         return serviceProxyManager;
     }
 
+    public void setServiceProxyManager(DynamicServiceProxyManager serviceProxyManager) {
+        this.serviceProxyManager = serviceProxyManager;
+    }
+
     public Properties getProperties() {
         return properties;
+    }
+
+    public JvmFilterHolder getJvmFilterHolder() {
+        return jvmFilterHolder;
     }
 
     public class Properties {

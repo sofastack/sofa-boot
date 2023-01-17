@@ -129,6 +129,6 @@ public class ReadinessAutoConfiguration {
         return new SofaThreadPoolExecutor(threadPoolSize, threadPoolSize, 30, TimeUnit.SECONDS,
             new SynchronousQueue<>(), new NamedThreadFactory("health-check"),
             new ThreadPoolExecutor.CallerRunsPolicy(), "health-check",
-            SofaBootConstants.SOFABOOT_SPACE_NAME);
+            SofaBootConstants.SOFA_BOOT_SPACE_NAME);
     }
 }

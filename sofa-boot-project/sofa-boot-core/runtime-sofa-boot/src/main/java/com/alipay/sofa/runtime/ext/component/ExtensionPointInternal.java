@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.runtime.ext.component;
 
-import com.alipay.sofa.service.api.component.ExtensionPoint;
+import com.alipay.sofa.runtime.ext.ExtensionPoint;
 
 /**
  * SOFA Extension Point Internal Object

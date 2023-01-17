@@ -122,7 +122,7 @@ public abstract class AbstractDeploymentDescriptor implements DeploymentDescript
 
     @Override
     public String getSpringParent() {
-        List<String> name = getFormattedModuleInfo(SofaBootConstants.SPRING_PARENT);
+        List<String> name = getFormattedModuleInfo(DeploymentDescriptorConfiguration.SPRING_PARENT);
         return name == null ? null : name.get(0);
     }
 

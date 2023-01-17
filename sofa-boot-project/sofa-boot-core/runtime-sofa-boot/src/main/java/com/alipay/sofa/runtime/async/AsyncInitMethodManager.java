@@ -127,7 +127,7 @@ public class AsyncInitMethodManager implements PriorityOrdered,
         return new SofaThreadPoolExecutor(executorCoreSize, executorMaxSize, 30,
                 TimeUnit.SECONDS, new SynchronousQueue<>(), new NamedThreadFactory(
                 "async-init-bean"), new ThreadPoolExecutor.CallerRunsPolicy(), "async-init-bean",
-                SofaBootConstants.SOFABOOT_SPACE_NAME);
+                SofaBootConstants.SOFA_BOOT_SPACE_NAME);
     }
 
     public int getExecutorCoreSize() {

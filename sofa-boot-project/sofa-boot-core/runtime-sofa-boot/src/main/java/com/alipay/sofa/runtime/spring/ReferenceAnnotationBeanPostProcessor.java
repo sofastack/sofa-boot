@@ -39,7 +39,6 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.PriorityOrdered;
-import org.springframework.core.env.Environment;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
 
@@ -61,8 +60,6 @@ public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor, 
     private final BindingAdapterFactory   bindingAdapterFactory;
 
     private final BindingConverterFactory bindingConverterFactory;
-
-    private Environment             environment;
 
     private ApplicationContext      applicationContext;
     /**

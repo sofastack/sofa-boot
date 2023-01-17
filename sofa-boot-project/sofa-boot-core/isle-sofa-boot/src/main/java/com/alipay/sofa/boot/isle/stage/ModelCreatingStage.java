@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.boot.isle.stage;
 
-import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.boot.isle.deployment.DependencyTree;
@@ -56,7 +55,7 @@ public class ModelCreatingStage extends AbstractPipelineStage {
     }
 
     protected void getAllDeployments() throws IOException, DeploymentException {
-        Enumeration<URL> urls = appClassLoader.getResources(SofaBootConstants.SOFA_MODULE_FILE);
+        Enumeration<URL> urls = appClassLoader.getResources(DeploymentDescriptorConfiguration.SOFA_MODULE_FILE);
         if (urls == null || !urls.hasMoreElements()) {
             return;
         }
@@ -67,8 +66,8 @@ public class ModelCreatingStage extends AbstractPipelineStage {
             Properties props = new Properties();
             props.load(urlResource.getInputStream());
             DeploymentDescriptorConfiguration deploymentDescriptorConfiguration = new DeploymentDescriptorConfiguration(
-                Collections.singletonList(SofaBootConstants.MODULE_NAME),
-                Collections.singletonList(SofaBootConstants.REQUIRE_MODULE));
+                Collections.singletonList(DeploymentDescriptorConfiguration.MODULE_NAME),
+                Collections.singletonList(DeploymentDescriptorConfiguration.REQUIRE_MODULE));
             DeploymentDescriptor dd = DeploymentBuilder.build(url, props,
                 deploymentDescriptorConfiguration, appClassLoader);
 

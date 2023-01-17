@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.boot.autoconfigure.runtime;
 
-import com.alipay.sofa.boot.autoconfigure.condition.ConditionalOnMasterBiz;
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.util.ServiceLoaderUtils;
 import com.alipay.sofa.runtime.api.client.ReferenceClient;
@@ -36,14 +35,15 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
+import com.alipay.sofa.runtime.spi.service.DynamicServiceProxyManager;
 import com.alipay.sofa.runtime.spring.AsyncInitBeanFactoryPostProcessor;
 import com.alipay.sofa.runtime.spring.AsyncProxyBeanPostProcessor;
 import com.alipay.sofa.runtime.spring.ClientFactoryAnnotationBeanPostProcessor;
-import com.alipay.sofa.runtime.spring.JvmFilterPostProcessor;
 import com.alipay.sofa.runtime.spring.ReferenceAnnotationBeanPostProcessor;
 import com.alipay.sofa.runtime.spring.ServiceBeanFactoryPostProcessor;
 import com.alipay.sofa.runtime.spring.SofaRuntimeAwareProcessor;
 import com.alipay.sofa.runtime.startup.ComponentBeanStatCustomizer;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -81,8 +81,11 @@ public class SofaRuntimeAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public static SofaRuntimeContext sofaRuntimeContext(SofaRuntimeManager sofaRuntimeManager, SofaRuntimeProperties sofaRuntimeProperties) {
+    public static SofaRuntimeContext sofaRuntimeContext(SofaRuntimeManager sofaRuntimeManager,
+                                                        ObjectProvider<DynamicServiceProxyManager> dynamicServiceProxyManager,
+                                                        SofaRuntimeProperties sofaRuntimeProperties) {
         SofaRuntimeContext sofaRuntimeContext = sofaRuntimeManager.getSofaRuntimeContext();
+        dynamicServiceProxyManager.ifUnique(sofaRuntimeContext::setServiceProxyManager);
         sofaRuntimeContext.getProperties().setSkipJvmReferenceHealthCheck(sofaRuntimeProperties.isSkipJvmReferenceHealthCheck());
         sofaRuntimeContext.getProperties().setSkipExtensionHealthCheck(sofaRuntimeProperties.isSkipExtensionHealthCheck());
         sofaRuntimeContext.getProperties().setDisableJvmFirst(sofaRuntimeProperties.isDisableJvmFirst());
@@ -142,14 +145,6 @@ public class SofaRuntimeAutoConfiguration {
                                                                                             BindingConverterFactory bindingConverterFactory,
                                                                                             BindingAdapterFactory bindingAdapterFactory) {
         return new ReferenceAnnotationBeanPostProcessor(sofaRuntimeManager.getSofaRuntimeContext(), bindingAdapterFactory, bindingConverterFactory);
-    }
-
-
-    @Bean
-    @ConditionalOnMissingBean
-    @ConditionalOnMasterBiz
-    public static JvmFilterPostProcessor jvmFilterPostProcessor() {
-        return new JvmFilterPostProcessor();
     }
 
     @Bean

@@ -59,8 +59,9 @@ public class BeanDefinitionUtil {
             }
 
             try {
-                clazz = org.springframework.util.StringUtils.isEmpty(className) ? null : ClassUtils
-                    .forName(className, null);
+                if (StringUtils.hasText(className)) {
+                    clazz = ClassUtils.forName(className, null);
+                }
             } catch (Throwable throwable) {
                 // ignore
             }
@@ -72,8 +73,9 @@ public class BeanDefinitionUtil {
             } catch (IllegalStateException ex) {
                 try {
                     String className = beanDefinition.getBeanClassName();
-                    clazz = StringUtils.isEmpty(className) ? null : ClassUtils.forName(className,
-                        null);
+                    if (StringUtils.hasText(className)) {
+                        clazz = ClassUtils.forName(className, null);
+                    }
                 } catch (Throwable throwable) {
                     // ignore
                 }

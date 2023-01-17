@@ -17,9 +17,13 @@ import java.lang.reflect.Proxy;
  * JVM Service Invoker
  */
 public class JvmServiceInvoker extends ServiceProxy {
+
     private final Contract contract;
+
     private final JvmBinding binding;
+
     private final SofaRuntimeContext sofaRuntimeContext;
+
     private Object target;
 
     public JvmServiceInvoker(Contract contract, JvmBinding binding,
@@ -158,7 +162,6 @@ public class JvmServiceInvoker extends ServiceProxy {
                 this.target = serviceComponent.getImplementation().getTarget();
             }
         }
-
         return target;
     }
 

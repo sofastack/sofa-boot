@@ -46,9 +46,6 @@ public class EnvironmentCustomizer implements EnvironmentPostProcessor {
         // Get SOFABoot version properties
         Properties defaultConfiguration = getSofaBootVersionProperties();
 
-        // Config default value of {@literal management.endpoints.web.exposure.include}
-        defaultConfiguration.put(SofaBootConstants.ENDPOINTS_WEB_EXPOSURE_INCLUDE_CONFIG,
-            SofaBootConstants.SOFA_DEFAULT_ENDPOINTS_WEB_EXPOSURE_VALUE);
         defaultConfiguration.put(SofaBootConstants.ENDPOINT_AVAILABILITY_GROUP_CONFIG_KEY,
             SofaBootConstants.DEFAULT_ENDPOINT_AVAILABILITY_GROUP_CONFIG_VALUE);
 
@@ -61,14 +58,13 @@ public class EnvironmentCustomizer implements EnvironmentPostProcessor {
     }
 
     /**
-     * {@link org.springframework.boot.ResourceBanner#getVersionsMap}
      * Get SOFABoot Version and print it on banner
      */
     protected Properties getSofaBootVersionProperties() {
         Properties properties = new Properties();
         String sofaBootVersion = getSofaBootVersion();
         // generally, it would not be null and just for test.
-        sofaBootVersion = StringUtils.isEmpty(sofaBootVersion) ? "" : sofaBootVersion;
+        sofaBootVersion = !StringUtils.hasText(sofaBootVersion) ? "" : sofaBootVersion;
         String sofaBootFormattedVersion = sofaBootVersion.isEmpty() ? "" : String.format(" (v%s)",
             sofaBootVersion);
         properties.setProperty(SofaBootConstants.SOFA_BOOT_VERSION, sofaBootVersion);

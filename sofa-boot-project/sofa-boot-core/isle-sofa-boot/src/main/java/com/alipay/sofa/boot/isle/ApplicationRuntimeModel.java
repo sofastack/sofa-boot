@@ -37,6 +37,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @author khotyn 7/25/14 8:15 PM
  */
 public class ApplicationRuntimeModel implements IsleDeploymentModel {
+
+    public static final String APPLICATION_RUNTIME_MODEL_NAME = "APPLICATION_RUNTIME_MODEL";
     /** deploys */
     private final List<DeploymentDescriptor>        deploys         = new ArrayList<>();
     /** inactive deploys */

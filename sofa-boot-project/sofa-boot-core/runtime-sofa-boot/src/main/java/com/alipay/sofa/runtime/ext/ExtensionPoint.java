@@ -14,67 +14,44 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.service.api.component;
+package com.alipay.sofa.runtime.ext;
 
-import org.w3c.dom.Element;
-
-import com.alipay.sofa.runtime.api.component.ComponentName;
+import java.util.List;
 
 /**
- * SOFA Extension Object
+ * SOFA Extension Point Object
  *
  * @author xi.hux@alipay.com
  * @author ruoshan
  * @since 2.6.0
  */
-public interface Extension {
+public interface ExtensionPoint {
 
     /**
-     * Get component name for the extension
+     * Get extension point name
      *
-     * @return Component name for the extension
+     * @return extension point name
      */
-    ComponentName getComponentName();
+    String getName();
 
     /**
-     * Get Target Component Name。
+     * Get all contributions class
      *
-     * @return Target Component Name
+     * @return all contributions class
      */
-    ComponentName getTargetComponentName();
+    List<Class<?>> getContributions();
 
     /**
-     * Get extension point Name
+     * Get the comment
      *
-     * @return Extension point Name
+     * @return the comment
      */
-    String getExtensionPoint();
+    String getDocumentation();
 
     /**
-     * Get extension element
+     * Whether has contribution or not
      *
-     * @return extension element
+     * @return true or false
      */
-    Element getElement();
-
-    /**
-     * Get contributions
-     *
-     * @return contributions
-     */
-    Object[] getContributions();
-
-    /**
-     * Get AppClassLoader
-     * @return appClassLoader
-     */
-    ClassLoader getAppClassLoader();
-
-    /**
-     * Identifies the extension inside the contributing component.
-     *
-     * @return id
-     */
-    String getId();
-
+    boolean hasContribution();
 }

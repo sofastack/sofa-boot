@@ -53,8 +53,8 @@ public class FileDeploymentDescriptor extends AbstractDeploymentDescriptor {
                                        + url.getFile().substring(
                                            0,
                                            url.getFile().length()
-                                                   - SofaBootConstants.SOFA_MODULE_FILE.length())
-                                       + SofaBootConstants.SPRING_CONTEXT_PATH);
+                                                   - DeploymentDescriptorConfiguration.SOFA_MODULE_FILE.length())
+                                       + DeploymentDescriptorConfiguration.SPRING_CONTEXT_PATH);
             File springXml = new File(springXmlUri);
             List<File> springFiles = new ArrayList<>();
             if (springXml.exists()) {

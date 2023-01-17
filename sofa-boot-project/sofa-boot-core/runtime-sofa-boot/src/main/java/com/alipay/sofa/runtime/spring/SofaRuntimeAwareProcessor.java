@@ -20,6 +20,8 @@ import com.alipay.sofa.boot.context.processor.SingletonSofaPostProcessor;
 import com.alipay.sofa.runtime.api.aware.ClientFactoryAware;
 import com.alipay.sofa.runtime.api.aware.ExtensionClientAware;
 import com.alipay.sofa.runtime.ext.client.ExtensionClientImpl;
+import com.alipay.sofa.runtime.filter.JvmFilter;
+import com.alipay.sofa.runtime.filter.JvmFilterHolder;
 import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
@@ -60,6 +62,9 @@ public class SofaRuntimeAwareProcessor implements BeanPostProcessor, PriorityOrd
         }
         if (bean instanceof ExtensionClientAware) {
             ((ExtensionClientAware) bean).setExtensionClient(extensionClient);
+        }
+        if (bean instanceof JvmFilter) {
+            sofaRuntimeContext.getJvmFilterHolder().addJvmFilter((JvmFilter) bean);
         }
         if (bean instanceof RuntimeShutdownAware) {
             sofaRuntimeManager.registerShutdownAware((RuntimeShutdownAware) bean);
