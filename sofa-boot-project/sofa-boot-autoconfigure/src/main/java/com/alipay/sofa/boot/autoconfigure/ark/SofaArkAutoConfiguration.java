@@ -42,7 +42,7 @@ public class SofaArkAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public SofaRuntimeContainer sofaFramework(SofaRuntimeManager sofaRuntimeManager,
+    public SofaRuntimeContainer sofaRuntimeContainer(SofaRuntimeManager sofaRuntimeManager,
                                               SofaArkProperties sofaArkProperties) {
         SofaRuntimeContainer sofaRuntimeContainer = new SofaRuntimeContainer(sofaRuntimeManager);
         sofaRuntimeContainer.setJvmServiceCache(sofaArkProperties.isJvmServiceCache());
