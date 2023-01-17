@@ -39,6 +39,7 @@ public class AbstractExtFactoryBean extends CommonContextBean implements BeanFac
 
     public final static String LINK_SYMBOL = "$";
 
+    @Override
     public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
         this.beanFactory = beanFactory;
 
@@ -49,6 +50,7 @@ public class AbstractExtFactoryBean extends CommonContextBean implements BeanFac
      * @return null
      * @throws Exception any exception
      */
+    @Override
     public Object getObject() throws Exception {
         return null;
     }
@@ -57,14 +59,17 @@ public class AbstractExtFactoryBean extends CommonContextBean implements BeanFac
      * no real bean exist
      * @return String.class
      */
+    @Override
     public Class<?> getObjectType() {
         return String.class;
     }
 
+    @Override
     public boolean isSingleton() {
         return true;
     }
 
+    @Override
     public int getOrder() {
         return Ordered.LOWEST_PRECEDENCE;
     }

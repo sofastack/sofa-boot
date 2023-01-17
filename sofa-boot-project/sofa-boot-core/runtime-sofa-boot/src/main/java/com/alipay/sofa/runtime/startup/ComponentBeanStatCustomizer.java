@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime;
+package com.alipay.sofa.runtime.startup;
 
 import com.alipay.sofa.boot.startup.BeanStat;
 import com.alipay.sofa.boot.startup.BeanStatCustomizer;

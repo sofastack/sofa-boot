@@ -21,11 +21,10 @@ import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.springframework.core.Conventions;
 import org.springframework.core.io.Resource;
-import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 
 import com.alipay.sofa.boot.spring.namespace.spi.SofaBootTagNameSupport;
-import com.alipay.sofa.runtime.spi.util.ParserUtils;
+import com.alipay.sofa.boot.util.ParserUtils;
 
 /**
  * Common parser for extension and extension point
@@ -39,9 +38,6 @@ public abstract class AbstractExtBeanDefinitionParser extends
                                                                                                implements
                                                                                                SofaBootTagNameSupport {
     public static final String  REF                       = "ref";
-
-    @Deprecated
-    private static final String BEAN_CLASS_LOADER         = "beanClassLoader";
 
     private static final String BEAN_CLASS_LOADER_WRAPPER = "beanClassLoaderWrapper";
 
@@ -79,25 +75,22 @@ public abstract class AbstractExtBeanDefinitionParser extends
     protected void parseAttribute(Element element, ParserContext parserContext,
                                   BeanDefinitionBuilder builder) {
         ParserUtils.parseCustomAttributes(element, parserContext, builder,
-            new ParserUtils.AttributeCallback() {
-
-                public void process(Element parent, Attr attribute, BeanDefinitionBuilder builder,
-                                    ParserContext parserContext) {
+                (parent, attribute, builder1, parserContext1) -> {
                     String name = attribute.getLocalName();
 
                     // fallback mechanism
                     if (!REF.equals(name)) {
-                        builder.addPropertyValue(Conventions.attributeNameToPropertyName(name),
+                        builder1.addPropertyValue(Conventions.attributeNameToPropertyName(name),
                             attribute.getValue());
                     }
 
-                }
-            });
+                });
     }
 
     protected abstract void parserSubElement(Element element, ParserContext parserContext,
                                              BeanDefinitionBuilder builder);
 
+    @Override
     protected boolean shouldGenerateIdAsFallback() {
         return true;
     }

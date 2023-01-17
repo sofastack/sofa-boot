@@ -35,6 +35,7 @@ import org.springframework.context.ApplicationContext;
  * @author xuanbei 18/3/1
  */
 public class ReferenceRegisterHelper {
+
     public static Object registerReference(Reference reference,
                                            BindingAdapterFactory bindingAdapterFactory,
                                            SofaRuntimeContext sofaRuntimeContext) {

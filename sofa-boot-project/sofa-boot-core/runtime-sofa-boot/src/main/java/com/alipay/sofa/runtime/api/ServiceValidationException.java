@@ -16,6 +16,8 @@
  */
 package com.alipay.sofa.runtime.api;
 
+import java.io.Serial;
+
 /**
  * service validation exception
  *
@@ -26,6 +28,7 @@ public class ServiceValidationException extends RuntimeException {
     /**
      * Comment for <code>serialVersionUID</code>
      */
+    @Serial
     private static final long serialVersionUID = 2142600090521376989L;
 
     /**

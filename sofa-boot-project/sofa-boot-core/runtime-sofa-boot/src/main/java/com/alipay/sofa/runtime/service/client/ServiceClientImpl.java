@@ -48,7 +48,9 @@ import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
 public class ServiceClientImpl implements ServiceClient {
 
     private final SofaRuntimeContext      sofaRuntimeContext;
+
     private final BindingConverterFactory bindingConverterFactory;
+
     private final BindingAdapterFactory   bindingAdapterFactory;
 
     public ServiceClientImpl(SofaRuntimeContext sofaRuntimeContext,
@@ -119,11 +121,9 @@ public class ServiceClientImpl implements ServiceClient {
             .getComponentInfosByType(ServiceComponent.SERVICE_COMPONENT_TYPE);
 
         for (ComponentInfo componentInfo : serviceComponents) {
-            if (!(componentInfo instanceof ServiceComponent)) {
+            if (!(componentInfo instanceof ServiceComponent serviceComponent)) {
                 continue;
             }
-
-            ServiceComponent serviceComponent = (ServiceComponent) componentInfo;
 
             if (serviceComponent.getService().getInterfaceType() == interfaceClass
                 && serviceComponent.getService().getUniqueId().equals(uniqueId)) {

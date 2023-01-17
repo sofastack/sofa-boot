@@ -34,7 +34,7 @@ import com.alipay.sofa.runtime.spi.component.AbstractComponent;
 import com.alipay.sofa.runtime.spi.component.Implementation;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.health.HealthResult;
-import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
+import com.alipay.sofa.runtime.spi.component.ComponentNameFactory;
 
 /**
  * Service Component
@@ -43,10 +43,15 @@ import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
  */
 @SuppressWarnings("unchecked")
 public class ServiceComponent extends AbstractComponent {
+
     public static final String        UNREGISTER_DELAY_MILLISECONDS = "UNREGISTER_DELAY_MILLISECONDS";
+
     public static final ComponentType SERVICE_COMPONENT_TYPE        = new ComponentType("service");
+
     private final Service                   service;
+
     private final BindingAdapterFactory     bindingAdapterFactory;
+
     private final Map<String, Property>     properties                    = new ConcurrentHashMap<>();
 
     public ServiceComponent(Implementation implementation, Service service,

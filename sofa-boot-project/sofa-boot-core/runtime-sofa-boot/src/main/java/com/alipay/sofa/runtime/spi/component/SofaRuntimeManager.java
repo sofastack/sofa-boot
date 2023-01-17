@@ -87,5 +87,5 @@ public interface SofaRuntimeManager {
      *
      * @return Spring context
      */
-    public ApplicationContext getRootApplicationContext();
+    ApplicationContext getRootApplicationContext();
 }

@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.runtime.service.binding;
 
+import com.alipay.sofa.boot.util.ClassLoaderContextUtils;
 import com.alipay.sofa.runtime.api.binding.BindingType;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapter;
 import com.alipay.sofa.runtime.spi.binding.Contract;
@@ -102,10 +103,9 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
             newClassLoader = javaClass.getClassLoader();
         }
 
-        ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
+        ClassLoader finalClassLoader = newClassLoader;
 
-        try {
-            Thread.currentThread().setContextClassLoader(newClassLoader);
+        return ClassLoaderContextUtils.callAndRollbackTCCL(() -> {
             ServiceProxy handler = new JvmServiceInvoker(contract, binding, sofaRuntimeContext);
             ProxyFactory factory = new ProxyFactory();
             if (javaClass.isInterface()) {
@@ -116,10 +116,9 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
                 factory.setProxyTargetClass(true);
             }
             factory.addAdvice(handler);
-            return factory.getProxy(newClassLoader);
-        } finally {
-            Thread.currentThread().setContextClassLoader(oldClassLoader);
-        }
+            return factory.getProxy(finalClassLoader);
+        }, finalClassLoader);
+
     }
 
 }

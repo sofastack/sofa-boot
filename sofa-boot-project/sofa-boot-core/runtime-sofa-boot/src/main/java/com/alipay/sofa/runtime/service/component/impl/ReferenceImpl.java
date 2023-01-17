@@ -30,7 +30,7 @@ import com.alipay.sofa.runtime.service.component.Reference;
  */
 public class ReferenceImpl extends AbstractContract implements Reference {
     /** jvm first or not */
-    private boolean jvmFirst;
+    private final boolean jvmFirst;
 
     public ReferenceImpl(String uniqueId, Class<?> interfaceType, InterfaceMode interfaceMode,
                          boolean jvmFirst) {

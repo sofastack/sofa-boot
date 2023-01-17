@@ -48,7 +48,7 @@ public abstract class AbstractSingleExtPointBeanDefinitionParser extends
         if (parentName != null) {
             builder.getRawBeanDefinition().setParentName(parentName);
         }
-        Class beanClass = getBeanClass(element);
+        Class<?> beanClass = getBeanClass(element);
         if (beanClass != null) {
             builder.getRawBeanDefinition().setBeanClass(beanClass);
         } else {

@@ -24,7 +24,7 @@ package com.alipay.sofa.runtime.api.binding;
  */
 public class BindingType {
 
-    private String type;
+    private final String type;
 
     /**
      * Set the binding type.

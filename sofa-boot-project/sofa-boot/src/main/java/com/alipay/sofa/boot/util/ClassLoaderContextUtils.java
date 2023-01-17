@@ -16,9 +16,11 @@
  */
 package com.alipay.sofa.boot.util;
 
+import java.util.concurrent.Callable;
+
 /**
  * @author huzijie
- * @version ClassLoaderSwitchUtils.java, v 0.1 2023年01月12日 10:35 AM huzijie Exp $
+ * @version ClassLoaderContextUtils.java, v 0.1 2023年01月12日 10:35 AM huzijie Exp $
  */
 public class ClassLoaderContextUtils {
 
@@ -32,11 +34,13 @@ public class ClassLoaderContextUtils {
         }
     }
 
-    public static void runAndRollbackClassLoader(Runnable runnable, ClassLoader oldClassLoader,
-                                                 ClassLoader newClassloader) {
+    public static <T> T callAndRollbackTCCL(Callable<T> callable, ClassLoader newClassloader) {
+        ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
         Thread.currentThread().setContextClassLoader(newClassloader);
         try {
-            runnable.run();
+            return callable.call();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to invoke callable", e);
         } finally {
             Thread.currentThread().setContextClassLoader(oldClassLoader);
         }

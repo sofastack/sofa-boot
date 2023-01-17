@@ -22,5 +22,19 @@ package com.alipay.sofa.runtime.model;
  * @author xuanbei 18/2/28
  */
 public enum InterfaceMode {
-    spring, api, annotation
+
+    /**
+     * SPRING XML
+     */
+    spring,
+
+    /**
+     * SPRING ANNOTATION
+     */
+    annotation,
+
+    /**
+     * API
+     */
+    api,
 }

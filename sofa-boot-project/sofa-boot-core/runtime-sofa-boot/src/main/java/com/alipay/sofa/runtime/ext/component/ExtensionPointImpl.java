@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.runtime.ext.component;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,10 +33,16 @@ import com.alipay.sofa.common.xmap.XMap;
  * @since 2.6.0
  */
 public class ExtensionPointImpl implements ExtensionPointInternal, Serializable {
+
+    @Serial
     private static final long          serialVersionUID = 3939941819263075106L;
+
     protected String                   name;
+
     protected String                   documentation;
+
     protected transient List<Class<?>> contributions    = new ArrayList<>(2);
+
     protected ClassLoader              beanClassLoader;
 
     public ExtensionPointImpl(String name, Class<?> contributionClass) {
@@ -45,34 +52,42 @@ public class ExtensionPointImpl implements ExtensionPointInternal, Serializable 
         }
     }
 
+    @Override
     public void setBeanClassLoader(ClassLoader beanClassLoader) {
         this.beanClassLoader = beanClassLoader;
     }
 
+    @Override
     public List<Class<?>> getContributions() {
         return contributions;
     }
 
+    @Override
     public boolean hasContribution() {
         return contributions.size() > 0;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public String getDocumentation() {
         return documentation;
     }
 
+    @Override
     public void addContribution(Class<?> javaClass) {
         this.contributions.add(javaClass);
     }
 
+    @Override
     public void addContribution(String className) {
         this.addContribution(ClassUtils.resolveClassName(className, beanClassLoader));
     }
 
+    @Override
     public Object[] loadContributions(ExtensionInternal extension) throws Exception {
         if (contributions != null) {
             XMap xmap = new XMap();

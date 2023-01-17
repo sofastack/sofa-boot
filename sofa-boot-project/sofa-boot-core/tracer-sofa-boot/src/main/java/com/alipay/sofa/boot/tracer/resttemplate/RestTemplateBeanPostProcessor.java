@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.boot.tracer.resttemplate;
 
+import com.alipay.sofa.boot.context.processor.SingletonSofaPostProcessor;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.web.client.RestTemplate;
@@ -26,6 +27,7 @@ import org.springframework.web.client.RestTemplate;
  * @author guolei.sgl (guolei.sgl@antfin.com) 2019/9/11 11:59 PM
  * @author huzijie
  **/
+@SingletonSofaPostProcessor
 public class RestTemplateBeanPostProcessor implements BeanPostProcessor {
 
     private final RestTemplateEnhance sofaTracerRestTemplateEnhance;

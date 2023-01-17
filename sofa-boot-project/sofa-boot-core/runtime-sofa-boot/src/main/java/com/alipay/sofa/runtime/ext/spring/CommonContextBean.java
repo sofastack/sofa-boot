@@ -32,9 +32,13 @@ import org.springframework.context.ApplicationContextAware;
 public class CommonContextBean implements ApplicationContextAware, BeanNameAware, InitializingBean {
 
     protected String                          beanName;
+
     protected ClassLoaderWrapper              beanClassLoaderWrapper;
+
     protected ConfigurableListableBeanFactory configurableListableBeanFactory;
+
     protected SofaRuntimeContext              sofaRuntimeContext;
+
     protected ApplicationContext              applicationContext;
 
     @Override
@@ -48,16 +52,6 @@ public class CommonContextBean implements ApplicationContextAware, BeanNameAware
         configurableListableBeanFactory = (ConfigurableListableBeanFactory) applicationContext
             .getAutowireCapableBeanFactory();
         this.sofaRuntimeContext = applicationContext.getBean(SofaRuntimeContext.class);
-    }
-
-    @Deprecated
-    public void setBeanClassLoader(ClassLoader beanClassLoader) {
-        throw new UnsupportedOperationException("Not support setBeanClassLoader for security");
-    }
-
-    @Deprecated
-    public ClassLoader getBeanClassLoader() {
-        throw new UnsupportedOperationException("Not support getBeanClassLoader for security");
     }
 
     public ClassLoaderWrapper getBeanClassLoaderWrapper() {

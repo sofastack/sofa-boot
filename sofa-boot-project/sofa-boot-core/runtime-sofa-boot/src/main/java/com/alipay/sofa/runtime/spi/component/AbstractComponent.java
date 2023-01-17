@@ -150,6 +150,7 @@ public abstract class AbstractComponent implements ComponentInfo {
         componentStatus = ComponentStatus.ACTIVATED;
     }
 
+    @Override
     public void exception(Exception e) throws ServiceRuntimeException {
         this.e = e;
     }

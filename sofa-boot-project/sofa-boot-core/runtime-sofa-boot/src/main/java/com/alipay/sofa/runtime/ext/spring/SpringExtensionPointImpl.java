@@ -24,6 +24,8 @@ import com.alipay.sofa.runtime.ext.component.ExtensionInternal;
 import com.alipay.sofa.runtime.ext.component.ExtensionPointImpl;
 import com.alipay.sofa.runtime.ext.component.XMapContext;
 
+import java.io.Serial;
+
 /**
  * Extension point implement in spring env
  *
@@ -33,6 +35,7 @@ import com.alipay.sofa.runtime.ext.component.XMapContext;
 
 public class SpringExtensionPointImpl extends ExtensionPointImpl {
 
+    @Serial
     private static final long serialVersionUID = -7891847787889605861L;
 
     public SpringExtensionPointImpl(String name, Class<?> contributionClass) {

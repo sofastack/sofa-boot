@@ -14,18 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime.spi.util;
+package com.alipay.sofa.runtime.service.binding;
 
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.service.component.ServiceComponent;
 import com.alipay.sofa.runtime.spi.binding.Contract;
 import com.alipay.sofa.runtime.spi.component.ComponentManager;
+import com.alipay.sofa.runtime.spi.component.ComponentNameFactory;
 
 /**
  * @author huzijie
- * @version JvmServiceUtils.java, v 0.1 2023年01月16日 4:02 PM huzijie Exp $
+ * @version JvmServiceFinder.java, v 0.1 2023年01月16日 4:02 PM huzijie Exp $
  */
-public class JvmServiceUtils {
+public class JvmServiceFinder {
 
     public static ServiceComponent foundServiceComponent(ComponentManager componentManager,
                                                          Contract contract) {

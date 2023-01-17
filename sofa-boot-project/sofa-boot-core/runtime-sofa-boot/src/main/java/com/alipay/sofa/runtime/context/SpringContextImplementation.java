@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime.spring;
+package com.alipay.sofa.runtime.context;
 
 import com.alipay.sofa.runtime.api.ServiceValidationException;
 import com.alipay.sofa.runtime.spi.component.Implementation;
@@ -25,6 +25,7 @@ import org.springframework.context.ApplicationContext;
  * Created on 2020/10/26
  */
 public class SpringContextImplementation implements Implementation {
+
     private ApplicationContext applicationContext;
 
     public SpringContextImplementation(ApplicationContext applicationContext) {

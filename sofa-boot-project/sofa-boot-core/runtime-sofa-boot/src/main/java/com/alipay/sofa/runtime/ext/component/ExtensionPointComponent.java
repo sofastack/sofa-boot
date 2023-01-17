@@ -29,7 +29,7 @@ import com.alipay.sofa.runtime.spi.component.ComponentManager;
 import com.alipay.sofa.runtime.spi.component.Implementation;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.spring.SpringImplementationImpl;
-import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
+import com.alipay.sofa.runtime.spi.component.ComponentNameFactory;
 import com.alipay.sofa.service.api.component.ExtensionPoint;
 
 /**
@@ -40,11 +40,13 @@ import com.alipay.sofa.service.api.component.ExtensionPoint;
  * @since 2.6.0
  */
 public class ExtensionPointComponent extends AbstractComponent {
+
     private static final String       LINK_SYMBOL                    = "$";
+
     public static final ComponentType EXTENSION_POINT_COMPONENT_TYPE = new ComponentType(
                                                                          "extension-point");
     // Extension
-    private ExtensionPoint            extensionPoint;
+    private final ExtensionPoint            extensionPoint;
 
     public ExtensionPointComponent(ExtensionPoint extensionPoint,
                                    SofaRuntimeContext sofaRuntimeContext,

@@ -25,6 +25,7 @@ import com.alipay.sofa.runtime.api.binding.BindingType;
  *
  * @author xuanbei 18/2/28
  */
+@SuppressWarnings("rawtypes")
 public interface BindingConverterFactory {
     /**
      * get binding converter by binding type

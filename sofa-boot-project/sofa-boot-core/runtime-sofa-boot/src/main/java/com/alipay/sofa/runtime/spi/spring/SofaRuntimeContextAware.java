@@ -27,5 +27,6 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
  * @since 2.5.0
  */
 public interface SofaRuntimeContextAware {
+
     void setSofaRuntimeContext(SofaRuntimeContext sofaRuntimeContext);
 }

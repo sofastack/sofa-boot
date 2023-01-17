@@ -21,7 +21,7 @@ import com.alipay.sofa.runtime.ext.component.ExtensionComponent;
 import com.alipay.sofa.runtime.ext.component.ExtensionPointComponent;
 import com.alipay.sofa.boot.log.SofaLogger;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
-import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
+import com.alipay.sofa.runtime.spi.component.ComponentNameFactory;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.w3c.dom.Element;
@@ -89,11 +89,6 @@ public class ExtensionFactoryBean extends AbstractExtFactoryBean {
         return ComponentNameFactory.createComponentName(
             ExtensionPointComponent.EXTENSION_POINT_COMPONENT_TYPE, this.getBean() + LINK_SYMBOL
                                                                     + this.getPoint());
-    }
-
-    @Deprecated
-    public void setBeanClassLoader(ClassLoader classLoader) {
-        throw new UnsupportedOperationException("Not support setBeanClassLoader for security");
     }
 
     public void setContribution(String[] contribution) throws Exception {

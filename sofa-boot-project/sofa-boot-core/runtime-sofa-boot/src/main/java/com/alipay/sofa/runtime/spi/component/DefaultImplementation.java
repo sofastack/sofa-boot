@@ -22,7 +22,9 @@ import com.alipay.sofa.runtime.api.ServiceValidationException;
  * @author xuanbei 18/3/1
  */
 public class DefaultImplementation implements Implementation {
+
     private String name;
+
     private Object target;
 
     public DefaultImplementation() {

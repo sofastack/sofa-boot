@@ -92,8 +92,8 @@ public class ExtensionPointFactoryBean extends AbstractExtFactoryBean {
             this.name, applicationContext.getClassLoader());
 
         if (this.contribution != null && this.contribution.length != 0) {
-            for (int i = 0; i < contribution.length; i++) {
-                extensionPointBuilder.addContribution(contribution[i]);
+            for (String s : contribution) {
+                extensionPointBuilder.addContribution(s);
             }
         }
         Assert.hasLength(beanName,

@@ -23,14 +23,13 @@ import org.springframework.beans.factory.config.RuntimeBeanReference;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.springframework.core.Conventions;
-import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.alipay.sofa.runtime.ext.spring.ExtensionPointFactoryBean;
 import com.alipay.sofa.boot.log.SofaLogger;
-import com.alipay.sofa.runtime.spi.util.ParserUtils;
+import com.alipay.sofa.boot.util.ParserUtils;
 
 /**
  * Extension point definition parser
@@ -48,13 +47,13 @@ public class ExtensionPointBeanDefinitionParser extends AbstractExtBeanDefinitio
 
     public static final String                              CONTRIBUTION = "contribution";
 
-    private static final ExtensionPointBeanDefinitionParser instance     = new ExtensionPointBeanDefinitionParser();
+    private static final ExtensionPointBeanDefinitionParser INSTANCE = new ExtensionPointBeanDefinitionParser();
 
     public ExtensionPointBeanDefinitionParser() {
     }
 
     public static ExtensionPointBeanDefinitionParser getInstance() {
-        return instance;
+        return INSTANCE;
     }
 
     @Override
@@ -77,27 +76,21 @@ public class ExtensionPointBeanDefinitionParser extends AbstractExtBeanDefinitio
         // parse all sub elements
         for (int i = 0; i < nl.getLength(); i++) {
             Node node = nl.item(i);
-            if (node instanceof Element) {
-                Element subElement = (Element) node;
+            if (node instanceof Element subElement) {
                 // sofa:object
                 if (OBJECT.equals(subElement.getLocalName())) {
                     ParserUtils.parseCustomAttributes(subElement, parserContext, builder,
-                        new ParserUtils.AttributeCallback() {
-
-                            public void process(Element parent, Attr attribute,
-                                                BeanDefinitionBuilder builder,
-                                                ParserContext parserContext) {
+                            (parent, attribute, builder1, parserContext1) -> {
 
                                 String name = attribute.getLocalName();
                                 if (CLASS.equals(name)) {
                                     contributions.add(attribute.getValue());
                                 } else {
-                                    builder.addPropertyValue(
+                                    builder1.addPropertyValue(
                                         Conventions.attributeNameToPropertyName(name),
                                         attribute.getValue());
                                 }
-                            }
-                        });
+                            });
                 } else {
                     if (element.hasAttribute(REF)) {
                         SofaLogger

@@ -30,8 +30,11 @@ import java.util.Set;
 /**
  * @author xuanbei 18/2/28
  */
+@SuppressWarnings("rawtypes")
 public class BindingConverterFactoryImpl implements BindingConverterFactory {
+
     private final Map<BindingType, BindingConverter> bindingTypeBindingConverterMap = new HashMap<>();
+
     private final Map<String, BindingConverter>      tagBindingConverterMap         = new HashMap<>();
 
     @Override

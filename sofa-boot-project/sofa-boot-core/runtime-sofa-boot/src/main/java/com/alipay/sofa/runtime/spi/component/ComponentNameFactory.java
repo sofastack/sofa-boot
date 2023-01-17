@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime.spi.util;
+package com.alipay.sofa.runtime.spi.component;
 
 import com.alipay.sofa.boot.util.StringUtils;
 import com.alipay.sofa.runtime.api.component.ComponentName;

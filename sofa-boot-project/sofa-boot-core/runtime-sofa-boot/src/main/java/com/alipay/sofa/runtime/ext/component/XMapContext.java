@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.runtime.ext.component;
 
+import java.io.Serial;
 import java.net.URL;
 
 import com.alipay.sofa.common.xmap.Context;
@@ -28,9 +29,10 @@ import com.alipay.sofa.common.xmap.Context;
  */
 public class XMapContext extends Context {
 
+    @Serial
     private static final long serialVersionUID = -7194560385886298218L;
 
-    private ClassLoader       appClassLoader;
+    private final ClassLoader       appClassLoader;
 
     /**
      *

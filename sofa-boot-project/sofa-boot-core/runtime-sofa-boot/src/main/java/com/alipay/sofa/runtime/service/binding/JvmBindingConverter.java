@@ -31,6 +31,7 @@ import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
  * @since 3.1.3
  */
 public class JvmBindingConverter implements BindingConverter<JvmBindingParam, JvmBinding> {
+
     @Override
     public JvmBinding convert(JvmBindingParam bindingParam,
                               BindingConverterContext bindingConverterContext) {

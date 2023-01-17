@@ -26,13 +26,13 @@ import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.ComponentManager;
 import com.alipay.sofa.runtime.spi.component.Implementation;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
-import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
-import com.alipay.sofa.runtime.spring.SpringContextComponent;
-import com.alipay.sofa.runtime.spring.SpringContextImplementation;
+import com.alipay.sofa.runtime.spi.component.ComponentNameFactory;
 
 import java.util.Collection;
 
 /**
+ * Implement for {@link ContextRefreshPostProcessor} to handler components
+ *
  * @author huzijie
  * @version ComponentContextRefreshPostProcessor.java, v 0.1 2023年01月12日 3:37 PM huzijie Exp $
  */

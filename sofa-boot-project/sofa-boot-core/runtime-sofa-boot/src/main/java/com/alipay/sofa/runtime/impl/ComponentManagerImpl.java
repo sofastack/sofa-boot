@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime.component.impl;
+package com.alipay.sofa.runtime.impl;
 
 import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.boot.log.SofaLogger;
@@ -26,7 +26,7 @@ import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.ComponentManager;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
-import com.alipay.sofa.runtime.spring.SpringContextComponent;
+import com.alipay.sofa.runtime.context.SpringContextComponent;
 import org.springframework.context.ApplicationContext;
 
 import java.util.ArrayList;
@@ -37,7 +37,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.stream.Collectors;
 
 /**
  * @author xuanbei 18/3/9
@@ -103,7 +102,7 @@ public class ComponentManagerImpl implements ComponentManager {
         List<ComponentInfo> elems = new ArrayList<>(registry.values());
         // shutdown spring contexts first
         List<ComponentInfo> springContextComponents = elems.stream()
-                .filter(componentInfo -> componentInfo instanceof SpringContextComponent).collect(Collectors.toList());
+                .filter(componentInfo -> componentInfo instanceof SpringContextComponent).toList();
 
         for (ComponentInfo ri : springContextComponents) {
             try {

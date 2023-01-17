@@ -19,6 +19,7 @@ package com.alipay.sofa.runtime.service.component;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import com.alipay.sofa.runtime.api.binding.BindingType;
@@ -44,11 +45,7 @@ public abstract class AbstractContract implements Contract {
     protected Map<String, String> property      = new HashMap<>();
 
     protected AbstractContract(String uniqueId, Class<?> interfaceType) {
-        if (uniqueId == null) {
-            this.uniqueId = "";
-        } else {
-            this.uniqueId = uniqueId;
-        }
+        this.uniqueId = Objects.requireNonNullElse(uniqueId, "");
         this.interfaceType = interfaceType;
     }
 

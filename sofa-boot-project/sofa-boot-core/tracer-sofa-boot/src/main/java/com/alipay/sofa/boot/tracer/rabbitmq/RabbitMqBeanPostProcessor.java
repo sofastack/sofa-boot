@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.boot.tracer.rabbitmq;
 
+import com.alipay.sofa.boot.context.processor.SingletonSofaPostProcessor;
 import com.sofa.alipay.tracer.plugins.rabbitmq.interceptor.SofaTracerConsumeInterceptor;
 import org.aopalliance.aop.Advice;
 import org.springframework.amqp.rabbit.config.AbstractRabbitListenerContainerFactory;
@@ -34,6 +35,7 @@ import java.lang.reflect.Field;
  * @author huzijie
  * @since  3.9.1
  */
+@SingletonSofaPostProcessor
 public class RabbitMqBeanPostProcessor implements BeanPostProcessor, PriorityOrdered {
 
     @Override

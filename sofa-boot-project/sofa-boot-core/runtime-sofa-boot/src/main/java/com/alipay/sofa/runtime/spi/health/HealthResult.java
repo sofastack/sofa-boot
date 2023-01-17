@@ -20,9 +20,6 @@ package com.alipay.sofa.runtime.spi.health;
  * @author xuanbei 18/2/28
  */
 public class HealthResult {
-    public HealthResult() {
-
-    }
 
     public HealthResult(String healthName) {
         this.healthName = healthName;

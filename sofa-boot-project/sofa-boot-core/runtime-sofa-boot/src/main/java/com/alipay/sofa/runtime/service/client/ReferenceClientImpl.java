@@ -38,7 +38,7 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
-import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
+import com.alipay.sofa.runtime.spi.component.ComponentNameFactory;
 
 /**
  * Reference Client Implementation，you can reference a service by this class
@@ -48,7 +48,9 @@ import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
 public class ReferenceClientImpl implements ReferenceClient {
 
     private final SofaRuntimeContext      sofaRuntimeContext;
+
     private final BindingConverterFactory bindingConverterFactory;
+
     private final BindingAdapterFactory   bindingAdapterFactory;
 
     public ReferenceClientImpl(SofaRuntimeContext sofaRuntimeContext,

@@ -31,8 +31,8 @@ import com.alipay.sofa.runtime.spi.component.DefaultImplementation;
 import com.alipay.sofa.runtime.spi.component.Implementation;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.health.HealthResult;
-import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
-import com.alipay.sofa.runtime.spi.util.JvmServiceUtils;
+import com.alipay.sofa.runtime.spi.component.ComponentNameFactory;
+import com.alipay.sofa.runtime.service.binding.JvmServiceFinder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,9 +47,13 @@ import java.util.concurrent.CountDownLatch;
  */
 @SuppressWarnings("unchecked")
 public class ReferenceComponent extends AbstractComponent {
+
     public static final ComponentType REFERENCE_COMPONENT_TYPE = new ComponentType("reference");
+
     private final BindingAdapterFactory     bindingAdapterFactory;
+
     private final Reference                 reference;
+
     private final CountDownLatch            latch                    = new CountDownLatch(1);
 
     public ReferenceComponent(Reference reference, Implementation implementation,
@@ -232,7 +236,7 @@ public class ReferenceComponent extends AbstractComponent {
     private Object getServiceTarget() {
         Object serviceTarget = null;
 
-        ServiceComponent serviceComponent = JvmServiceUtils.foundServiceComponent(
+        ServiceComponent serviceComponent = JvmServiceFinder.foundServiceComponent(
             sofaRuntimeContext.getComponentManager(), reference);
 
         if (serviceComponent != null) {

@@ -30,7 +30,9 @@ import java.util.Set;
 /**
  * @author xuanbei 18/2/28
  */
+@SuppressWarnings("rawtypes")
 public class BindingAdapterFactoryImpl implements BindingAdapterFactory {
+
     private final Map<BindingType, BindingAdapter> bindingTypeBindingAdapterMap = new HashMap<>();
 
     @Override

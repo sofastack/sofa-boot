@@ -18,7 +18,9 @@ package com.alipay.sofa.runtime.spring;
 
 import com.alipay.sofa.boot.annotation.PlaceHolderAnnotationInvocationHandler.AnnotationWrapperBuilder;
 import com.alipay.sofa.boot.annotation.PlaceHolderBinder;
+import com.alipay.sofa.boot.context.processor.SingletonSofaPostProcessor;
 import com.alipay.sofa.boot.error.ErrorCode;
+import com.alipay.sofa.boot.log.SofaLogger;
 import com.alipay.sofa.boot.util.BeanDefinitionUtil;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.annotation.SofaReference;
@@ -26,7 +28,6 @@ import com.alipay.sofa.runtime.api.annotation.SofaReferenceBinding;
 import com.alipay.sofa.runtime.api.annotation.SofaService;
 import com.alipay.sofa.runtime.api.annotation.SofaServiceBinding;
 import com.alipay.sofa.runtime.api.binding.BindingType;
-import com.alipay.sofa.boot.log.SofaLogger;
 import com.alipay.sofa.runtime.service.binding.JvmBinding;
 import com.alipay.sofa.runtime.spi.binding.Binding;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
@@ -34,6 +35,7 @@ import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
 import com.alipay.sofa.runtime.spring.bean.SofaBeanNameGenerator;
+import com.alipay.sofa.runtime.spring.bean.SofaParameterNameDiscoverer;
 import com.alipay.sofa.runtime.spring.factory.ReferenceFactoryBean;
 import com.alipay.sofa.runtime.spring.factory.ServiceFactoryBean;
 import com.alipay.sofa.runtime.spring.parser.AbstractContractDefinitionParser;
@@ -46,6 +48,7 @@ import org.springframework.beans.factory.annotation.AnnotatedGenericBeanDefiniti
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
@@ -79,6 +82,7 @@ import java.util.stream.Stream;
  * @author qilong.zql
  * @since 3.1.0
  */
+@SingletonSofaPostProcessor
 public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor,
                                             ApplicationContextAware, EnvironmentAware,
                                             InitializingBean, Ordered {
@@ -88,19 +92,14 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
     private BindingConverterFactory bindingConverterFactory;
     private Environment             environment;
 
-    public ServiceBeanFactoryPostProcessor() {
-    }
-
-    @Deprecated
-    public ServiceBeanFactoryPostProcessor(SofaRuntimeContext sofaRuntimeContext,
-                                           BindingConverterFactory bindingConverterFactory) {
-        this.sofaRuntimeContext = sofaRuntimeContext;
-        this.bindingConverterFactory = bindingConverterFactory;
-    }
-
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory)
                                                                                    throws BeansException {
+        if (beanFactory instanceof AbstractAutowireCapableBeanFactory) {
+            ((AbstractAutowireCapableBeanFactory) beanFactory)
+                    .setParameterNameDiscoverer(new SofaParameterNameDiscoverer(environment));
+        }
+
         Arrays.stream(beanFactory.getBeanDefinitionNames())
                 .collect(Collectors.toMap(Function.identity(), beanFactory::getBeanDefinition))
                 .forEach((key, value) -> transformSofaBeanDefinition(key, value, (BeanDefinitionRegistry) beanFactory));

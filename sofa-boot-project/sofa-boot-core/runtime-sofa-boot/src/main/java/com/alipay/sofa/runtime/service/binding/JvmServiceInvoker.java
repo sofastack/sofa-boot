@@ -8,7 +8,6 @@ import com.alipay.sofa.runtime.service.component.ServiceComponent;
 import com.alipay.sofa.runtime.spi.binding.Contract;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.service.ServiceProxy;
-import com.alipay.sofa.runtime.spi.util.JvmServiceUtils;
 import org.aopalliance.intercept.MethodInvocation;
 
 import java.lang.reflect.InvocationTargetException;
@@ -152,7 +151,7 @@ public class JvmServiceInvoker extends ServiceProxy {
 
     protected Object getTarget() {
         if (this.target == null) {
-            ServiceComponent serviceComponent = JvmServiceUtils.foundServiceComponent(
+            ServiceComponent serviceComponent = JvmServiceFinder.foundServiceComponent(
                     sofaRuntimeContext.getComponentManager(), contract);
 
             if (serviceComponent != null) {

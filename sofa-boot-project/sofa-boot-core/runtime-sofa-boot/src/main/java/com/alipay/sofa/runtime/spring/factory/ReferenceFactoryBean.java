@@ -30,6 +30,7 @@ import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
  * @author xuanbei 18/3/1
  */
 public class ReferenceFactoryBean extends AbstractContractFactoryBean {
+
     protected Object  proxy;
     /** jvm first or not */
     protected boolean jvmFirst = true;

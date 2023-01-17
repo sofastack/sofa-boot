@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.boot.tracer.datasource;
 
+import com.alipay.sofa.boot.context.processor.SingletonSofaPostProcessor;
 import com.alipay.sofa.tracer.plugins.datasource.SmartDataSource;
 import com.alipay.sofa.tracer.plugins.datasource.utils.DataSourceUtils;
 import org.springframework.beans.BeansException;
@@ -49,6 +50,7 @@ import static com.alipay.common.tracer.core.configuration.SofaTracerConfiguratio
  * @author huzijie
  * @since 2.2.0
  */
+@SingletonSofaPostProcessor
 public class DataSourceBeanFactoryPostProcessor implements BeanFactoryPostProcessor,
                                                PriorityOrdered {
 

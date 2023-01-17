@@ -31,9 +31,7 @@ public class JvmFilterHolder {
     private static final List<JvmFilter> JVM_FILTERS = new ArrayList<>();
     private static final AtomicBoolean filtersSorted  = new AtomicBoolean(false);
 
-    private static final Comparator<Ordered> comparator = (f1, f2) -> {
-        return Integer.compare(f1.getOrder(), f2.getOrder());
-    };
+    private static final Comparator<Ordered> comparator = Comparator.comparingInt(Ordered::getOrder);
 
     public static void addJvmFilter(JvmFilter f) {
         JVM_FILTERS.add(f);

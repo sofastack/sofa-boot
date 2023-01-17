@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime.spring;
+package com.alipay.sofa.runtime.context;
 
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.component.ComponentName;
@@ -35,6 +35,7 @@ import java.util.Map;
  * @author khotyn Created on 2020/10/26
  */
 public class SpringContextComponent extends AbstractComponent {
+
     public static ComponentType SPRING_COMPONENT_TYPE = new ComponentType("Spring");
 
     public SpringContextComponent(ComponentName componentName, Implementation implementation,

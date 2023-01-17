@@ -28,7 +28,7 @@ import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.ComponentManager;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.health.HealthResult;
-import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
+import com.alipay.sofa.runtime.spi.component.ComponentNameFactory;
 import com.alipay.sofa.service.api.component.Extensible;
 import com.alipay.sofa.service.api.component.Extension;
 import com.alipay.sofa.service.api.component.ExtensionPoint;
@@ -45,8 +45,11 @@ import java.util.Map;
  * @since 2.6.0
  */
 public class ExtensionComponent extends AbstractComponent {
+
     public static final String        LINK_SYMBOL              = "$";
+
     public static final ComponentType EXTENSION_COMPONENT_TYPE = new ComponentType("extension");
+
     private final Extension                 extension;
 
     public ExtensionComponent(Extension extension, SofaRuntimeContext sofaRuntimeContext) {

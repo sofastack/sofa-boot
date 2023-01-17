@@ -28,13 +28,15 @@ import static com.alipay.sofa.runtime.spring.parser.ServiceDefinitionParser.BEAN
  * @since 3.1.0
  */
 public class SofaBeanNameGenerator {
+
     private static final String SERVICE_BEAN_NAME_PREFIX   = "ServiceFactoryBean#";
+
     private static final String REFERENCE_BEAN_NAME_PREFIX = "ReferenceFactoryBean#";
 
     public static String generateSofaServiceBeanName(BeanDefinition definition) {
         String interfaceName = (String) definition.getPropertyValues().get(
             AbstractContractDefinitionParser.INTERFACE_PROPERTY);
-        Class clazz = (Class) definition.getPropertyValues().get(
+        Class<?> clazz = (Class<?>) definition.getPropertyValues().get(
             AbstractContractDefinitionParser.INTERFACE_CLASS_PROPERTY);
         if (clazz != null) {
             interfaceName = clazz.getCanonicalName();
@@ -60,14 +62,14 @@ public class SofaBeanNameGenerator {
     }
 
     public static String generateSofaServiceBeanName(String interfaceName, String uniqueId) {
-        if (StringUtils.isEmpty(uniqueId)) {
+        if (!StringUtils.hasText(uniqueId)) {
             return SERVICE_BEAN_NAME_PREFIX + interfaceName;
         }
         return SERVICE_BEAN_NAME_PREFIX + interfaceName + ":" + uniqueId;
     }
 
     public static String generateSofaReferenceBeanName(Class<?> interfaceType, String uniqueId) {
-        if (StringUtils.isEmpty(uniqueId)) {
+        if (!StringUtils.hasText(uniqueId)) {
             return REFERENCE_BEAN_NAME_PREFIX + interfaceType.getCanonicalName();
         }
         return REFERENCE_BEAN_NAME_PREFIX + interfaceType.getCanonicalName() + ":" + uniqueId;
