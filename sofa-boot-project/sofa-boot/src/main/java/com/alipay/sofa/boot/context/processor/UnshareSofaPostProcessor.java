@@ -19,9 +19,13 @@ package com.alipay.sofa.boot.context.processor;
 import java.lang.annotation.*;
 
 /**
- * use this annotation to avoid BeanFactoryPostProcessor/BeanPostProcessor added to submodules
+ * Indicates that an annotated class with type match
+ * {@link org.springframework.beans.factory.config.BeanPostProcessor} or
+ * {@link org.springframework.beans.factory.config.BeanFactoryPostProcessor}
+ * will not share to other application contexts.
  *
- * Created by TomorJM on 2019-10-09.
+ * @author TomorJM
+ * @since 4.0.0
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.TYPE })

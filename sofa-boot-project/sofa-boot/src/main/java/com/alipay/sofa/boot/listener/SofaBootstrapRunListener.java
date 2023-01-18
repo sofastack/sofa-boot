@@ -45,6 +45,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.StreamSupport;
 
 /**
+ * Implementation of {@link ApplicationListener<ApplicationEnvironmentPreparedEvent>} to suit spring cloud enviroment.
+ * 
  * @author qilong.zql
  * @since 3.0.0
  */
@@ -72,7 +74,6 @@ public class SofaBootstrapRunListener implements
 
     /**
      * config required properties
-     * @param environment
      */
     private void assemblyRequireProperties(ConfigurableEnvironment environment) {
         if (StringUtils.hasText(environment.getProperty(SofaBootConstants.APP_NAME_KEY))) {
@@ -83,7 +84,6 @@ public class SofaBootstrapRunListener implements
 
     /**
      * Mark this environment as SOFA bootstrap environment
-     * @param environment
      */
     private void assemblyEnvironmentMark(ConfigurableEnvironment environment) {
         environment.getPropertySources().addFirst(
@@ -92,7 +92,6 @@ public class SofaBootstrapRunListener implements
 
     /**
      * Un-Mark this environment as SOFA bootstrap environment
-     * @param environment
      */
     private void unAssemblyEnvironmentMark(ConfigurableEnvironment environment) {
         environment.getPropertySources().remove(SofaBootConstants.SOFA_BOOTSTRAP);

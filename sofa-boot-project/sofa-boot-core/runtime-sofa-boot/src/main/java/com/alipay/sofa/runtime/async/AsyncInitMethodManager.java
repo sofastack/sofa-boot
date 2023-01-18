@@ -18,7 +18,7 @@ package com.alipay.sofa.runtime.async;
 
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
-import com.alipay.sofa.boot.util.NamedThreadFactory;
+import com.alipay.sofa.common.thread.NamedThreadFactory;
 import com.alipay.sofa.common.thread.SofaThreadPoolExecutor;
 import org.slf4j.Logger;
 import org.springframework.beans.BeansException;

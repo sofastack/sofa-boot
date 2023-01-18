@@ -17,21 +17,45 @@
 package com.alipay.sofa.boot.context.processor;
 
 /**
- * Filter used to determine whether PostProcessor should share or use singleton.
+ * Interface to judge bean or class match
+ * {@link org.springframework.beans.factory.config.BeanPostProcessor} or
+ * {@link org.springframework.beans.factory.config.BeanFactoryPostProcessor}
+ * should be share or should use singleton when shared.
  *
  * @author huzijie
+ * @since 4.0.0
  */
 public interface SofaPostProcessorShareFilter {
 
-    default boolean skipShareByClass(Object clazz) {
+    /**
+     * judge the bean for clazz type should be shared
+     * @param clazz type for bean
+     * @return if the bean should be shared, return true, otherwise false
+     */
+    default boolean skipShareByClass(Class<?> clazz) {
         return true;
     }
 
+    /**
+     * judge the bean for beanName should be shared
+     * @param beanName beanName for bean
+     * @return if the bean should be shared, return true, otherwise false
+     */
     default boolean skipShareByBeanName(String beanName) {return true;}
 
-    default boolean useSingletonByClass(Object clazz) {
+    /**
+     * judge the bean for clazz type should share singleton
+     * @param clazz type for bean
+     * @return if the bean should share singleton, return true, otherwise false
+     */
+    default boolean useSingletonByClass(Class<?> clazz) {
         return true;
     }
 
+    /**
+     * judge the bean for clazz type should share singleton
+     * @param beanName beanName for bean
+     * @return if the bean should share singleton, return true, otherwise false
+     */
     default boolean useSingletonByBeanName(String beanName) {return true;}
 }

@@ -25,7 +25,10 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
 /**
+ * Implementation of {@link InvocationHandler} to bind value from environment when get annotation value.
+ *
  * @author qilong.zql
+ * @author huzijie
  * @since 2.5.2
  */
 public class PlaceHolderAnnotationInvocationHandler implements InvocationHandler {

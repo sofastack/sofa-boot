@@ -19,12 +19,20 @@ package com.alipay.sofa.boot.annotation;
 import org.springframework.core.env.Environment;
 
 /**
- * Responsible to resolve place holder.
+ * Interface to bind value form {@link Environment}.
  *
  * @author qilong.zql
+ * @author huzijie
  * @since 2.5.2
  */
 public interface PlaceHolderBinder {
 
+    /**
+     * Bind value form environment
+     * @param environment Environment
+     * @param string origin value
+     * @since 4.0.0
+     * @return bind value
+     */
     String bind(Environment environment, String string);
 }

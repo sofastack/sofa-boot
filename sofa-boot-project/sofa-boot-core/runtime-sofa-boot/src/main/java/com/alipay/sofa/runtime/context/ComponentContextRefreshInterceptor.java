@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.runtime.context;
 
-import com.alipay.sofa.boot.context.ContextRefreshPostProcessor;
+import com.alipay.sofa.boot.context.ContextRefreshInterceptor;
 import com.alipay.sofa.boot.context.SofaGenericApplicationContext;
 import com.alipay.sofa.boot.log.ErrorCode;
 import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
@@ -32,14 +32,14 @@ import org.slf4j.Logger;
 import java.util.Collection;
 
 /**
- * Implement for {@link ContextRefreshPostProcessor} to handler components
+ * Implement for {@link ContextRefreshInterceptor} to handler components
  *
  * @author huzijie
- * @version ComponentContextRefreshPostProcessor.java, v 0.1 2023年01月12日 3:37 PM huzijie Exp $
+ * @version ComponentContextRefreshInterceptor.java, v 0.1 2023年01月12日 3:37 PM huzijie Exp $
  */
-public class ComponentContextRefreshPostProcessor implements ContextRefreshPostProcessor {
+public class ComponentContextRefreshInterceptor implements ContextRefreshInterceptor {
 
-    private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(ComponentContextRefreshPostProcessor.class);
+    private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(ComponentContextRefreshInterceptor.class);
 
     private boolean                  unregisterComponentWhenContextRefreshFailure;
 
@@ -47,14 +47,14 @@ public class ComponentContextRefreshPostProcessor implements ContextRefreshPostP
 
     private final SofaRuntimeContext sofaRuntimeContext;                           ;
 
-    public ComponentContextRefreshPostProcessor(ComponentManager componentManager,
-                                                SofaRuntimeContext sofaRuntimeContext) {
+    public ComponentContextRefreshInterceptor(ComponentManager componentManager,
+                                              SofaRuntimeContext sofaRuntimeContext) {
         this.componentManager = componentManager;
         this.sofaRuntimeContext = sofaRuntimeContext;
     }
 
     @Override
-    public void postProcessAfterRefresh(SofaGenericApplicationContext context, Throwable throwable) {
+    public void afterRefresh(SofaGenericApplicationContext context, Throwable throwable) {
         if (throwable == null) {
             ComponentName componentName = ComponentNameFactory.createComponentName(
                 SpringContextComponent.SPRING_COMPONENT_TYPE, context.getId());

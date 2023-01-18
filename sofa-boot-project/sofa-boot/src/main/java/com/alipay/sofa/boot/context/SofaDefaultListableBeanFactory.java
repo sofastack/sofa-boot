@@ -30,8 +30,13 @@ import java.util.List;
 import java.util.Stack;
 
 /**
+ * Default Implementation of {@link DefaultListableBeanFactory} in SOFABoot framework.
+ *
+ * <p>Support record bean create cost and init methods cost.
+ *
  * @author huzijie
  * @version SofaBeanFactory.java, v 0.1 2023年01月12日 12:35 PM huzijie Exp $
+ * @since 4.0.0
  */
 public class SofaDefaultListableBeanFactory extends DefaultListableBeanFactory {
 
@@ -77,6 +82,14 @@ public class SofaDefaultListableBeanFactory extends DefaultListableBeanFactory {
             beanStats.add(bs);
         }
         return object;
+    }
+
+    @Override
+    public void destroySingletons() {
+        super.destroySingletons();
+        PARENT_STACK_THREAD_LOCAL.remove();
+        beanStats.clear();
+        beanStatCustomizers.clear();
     }
 
     private BeanStat customBeanStat(String beanName, Object bean, BeanStat beanStat) {

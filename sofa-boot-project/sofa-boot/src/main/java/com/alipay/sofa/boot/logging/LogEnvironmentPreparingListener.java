@@ -32,6 +32,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Implementation of {@link ApplicationListener<ApplicationEnvironmentPreparedEvent>}
+ * to register spring environment to {@link CommonLoggingConfigurations}.
+ * 
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 2020/11/7
  */
@@ -47,7 +50,6 @@ public class LogEnvironmentPreparingListener
 
     @Override
     public int getOrder() {
-        // Must be invoked after ConfigFileApplicationListener
         return Ordered.HIGHEST_PRECEDENCE + 20;
     }
 

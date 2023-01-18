@@ -17,7 +17,7 @@
 package com.alipay.sofa.runtime.ext.spring.parser;
 
 import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
-import com.alipay.sofa.boot.util.ParserUtils;
+import com.alipay.sofa.boot.util.XmlParserUtils;
 import com.alipay.sofa.runtime.ext.spring.ExtensionPointFactoryBean;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.config.RuntimeBeanReference;
@@ -81,7 +81,7 @@ public class ExtensionPointBeanDefinitionParser extends AbstractExtBeanDefinitio
             if (node instanceof Element subElement) {
                 // sofa:object
                 if (OBJECT.equals(subElement.getLocalName())) {
-                    ParserUtils.parseCustomAttributes(subElement, parserContext, builder,
+                    XmlParserUtils.parseCustomAttributes(subElement, parserContext, builder,
                             (parent, attribute, builder1, parserContext1) -> {
 
                                 String name = attribute.getLocalName();

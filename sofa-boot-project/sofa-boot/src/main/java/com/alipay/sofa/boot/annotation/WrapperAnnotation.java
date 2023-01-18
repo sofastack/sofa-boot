@@ -17,7 +17,7 @@
 package com.alipay.sofa.boot.annotation;
 
 /**
- * A marker interface
+ * Interface to make class already wrapped by {@link AnnotationWrapper}.
  *
  * @author qilong.zql
  * @since 2.5.2

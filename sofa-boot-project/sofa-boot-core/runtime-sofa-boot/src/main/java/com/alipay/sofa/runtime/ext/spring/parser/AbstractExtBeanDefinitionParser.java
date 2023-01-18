@@ -24,7 +24,7 @@ import org.springframework.core.io.Resource;
 import org.w3c.dom.Element;
 
 import com.alipay.sofa.boot.spring.namespace.spi.SofaBootTagNameSupport;
-import com.alipay.sofa.boot.util.ParserUtils;
+import com.alipay.sofa.boot.util.XmlParserUtils;
 
 /**
  * Common parser for extension and extension point
@@ -74,7 +74,7 @@ public abstract class AbstractExtBeanDefinitionParser extends
 
     protected void parseAttribute(Element element, ParserContext parserContext,
                                   BeanDefinitionBuilder builder) {
-        ParserUtils.parseCustomAttributes(element, parserContext, builder,
+        XmlParserUtils.parseCustomAttributes(element, parserContext, builder,
                 (parent, attribute, builder1, parserContext1) -> {
                     String name = attribute.getLocalName();
 

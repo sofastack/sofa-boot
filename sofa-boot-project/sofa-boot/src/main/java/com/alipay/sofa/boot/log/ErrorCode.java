@@ -16,17 +16,19 @@
  */
 package com.alipay.sofa.boot.log;
 
+import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.common.code.LogCode2Description;
 
 /**
- * Error code
+ * Use {@link LogCode2Description} to transform error code.
+ *
  * @author huzijie
  * @version ErrorCode.java, v 0.1 2021年08月30日 11:29 上午 huzijie Exp $
  */
 public class ErrorCode {
 
     private static final LogCode2Description LCD = LogCode2Description
-                                                     .create(SofaBootLoggerFactory.SOFA_BOOT_LOG_SPACE);
+                                                     .create(SofaBootConstants.SOFA_BOOT_SPACE_NAME);
 
     public static String convert(String code) {
         return LCD.convert(code);

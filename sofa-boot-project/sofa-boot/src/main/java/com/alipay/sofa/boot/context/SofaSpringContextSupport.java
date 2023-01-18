@@ -26,8 +26,11 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
+ * Used to create {@link SofaDefaultListableBeanFactory} and {@link SofaGenericApplicationContext}.
+ *
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
- * Created on 28/06/2022
+ * @author huzijie
+ * @since 4.0.0
  */
 public class SofaSpringContextSupport {
 

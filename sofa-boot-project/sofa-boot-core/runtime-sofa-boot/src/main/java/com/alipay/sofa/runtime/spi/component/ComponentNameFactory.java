@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.runtime.spi.component;
 
-import com.alipay.sofa.boot.util.StringUtils;
+import org.springframework.util.StringUtils;
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.model.ComponentType;
 

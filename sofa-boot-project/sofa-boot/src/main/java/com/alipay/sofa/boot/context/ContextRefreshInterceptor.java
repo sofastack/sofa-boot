@@ -17,16 +17,24 @@
 package com.alipay.sofa.boot.context;
 
 /**
+ * Hook that allows for custom interceptor invoke before or after context refresh.
+ *
  * @author huzijie
- * @version ContextRefreshPostProcessor.java, v 0.1 2023年01月12日 1:58 PM huzijie Exp $
+ * @version ContextRefreshInterceptor.java, v 0.1 2023年01月12日 1:58 PM huzijie Exp $
+ * @since 4.0.0
  */
-public interface ContextRefreshPostProcessor {
+public interface ContextRefreshInterceptor {
 
-    default void postProcessBeforeRefresh(SofaGenericApplicationContext context) {
+    /**
+     * Invoke before application context refresh
+     * @param context application context
+     */
+    default void beforeRefresh(SofaGenericApplicationContext context) {}
 
-    }
-
-    default void postProcessAfterRefresh(SofaGenericApplicationContext context, Throwable throwable) {
-
-    }
+    /**
+     * Invoke after application context refresh
+     * @param context application context
+     * @param throwable not null when refresh failed
+     */
+    default void afterRefresh(SofaGenericApplicationContext context, Throwable throwable) {}
 }

@@ -29,7 +29,7 @@ import org.w3c.dom.NamedNodeMap;
  * @author xi.hux@alipay.com
  * @since 2.6.0
  */
-public class ParserUtils {
+public class XmlParserUtils {
 
     /**
      * Parse custom attributes, as ID, LAZY-INIT, DEPENDS-ON。

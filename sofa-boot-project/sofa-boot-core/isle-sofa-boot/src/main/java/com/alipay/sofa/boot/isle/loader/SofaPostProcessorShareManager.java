@@ -108,7 +108,7 @@ public class SofaPostProcessorShareManager implements BeanFactoryAware, Initiali
             return false;
         }
         for (SofaPostProcessorShareFilter filter : sofaPostProcessorShareFilters) {
-            if (filter.skipShareByClass(beanName) || filter.skipShareByClass(clazz)) {
+            if (filter.skipShareByBeanName(beanName) || filter.skipShareByClass(clazz)) {
                 return false;
             }
         }

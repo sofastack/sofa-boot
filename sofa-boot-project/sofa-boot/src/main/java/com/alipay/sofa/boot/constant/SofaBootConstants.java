@@ -17,30 +17,52 @@
 package com.alipay.sofa.boot.constant;
 
 /**
- * SofaBootConstants
+ * Core constants for SOFABoot framework.
  *
  * @author yangguanchao
+ * @author huzijie
  * @since 2017/09/07
  */
 public class SofaBootConstants {
 
+    /**
+     * app name key
+     */
     public static final String APP_NAME_KEY                                     = "spring.application.name";
 
+    /**
+     * SOFABoot config property source key
+     */
     public static final String SOFA_DEFAULT_PROPERTY_SOURCE                     = "sofaConfigurationProperties";
 
+    /**
+     * SOFABoot bootstrap property source key
+     */
     public static final String SOFA_BOOTSTRAP                                   = "sofaBootstrap";
 
+    /**
+     * SpringCloud property source key
+     * see {@link org.springframework.cloud.bootstrap.BootstrapApplicationListener#BOOTSTRAP_PROPERTY_SOURCE_NAME}
+     */
     public static final String SPRING_CLOUD_BOOTSTRAP                           = "bootstrap";
 
+    /**
+     * SOFA High priority config key
+     */
     public static final String SOFA_HIGH_PRIORITY_CONFIG                        = "sofaHighPriorityConfig";
 
+    /**
+     * Space name for SOFABoot framework used in sofa-common-tools
+     */
     public static final String SOFA_BOOT_SPACE_NAME                             = "sofa-boot";
 
+    /**
+     * SOFABoot version property key
+     */
     public static final String SOFA_BOOT_VERSION                                = "sofa-boot.version";
 
+    /**
+     * SOFABoot formatted version property key
+     */
     public static final String SOFA_BOOT_FORMATTED_VERSION                      = "sofa-boot.formatted-version";
-
-    public static final String ENDPOINT_AVAILABILITY_GROUP_CONFIG_KEY           = "management.endpoint.health.group.liveness.include";
-
-    public static final String DEFAULT_ENDPOINT_AVAILABILITY_GROUP_CONFIG_VALUE = "livenessState,sofaBoot";
 }

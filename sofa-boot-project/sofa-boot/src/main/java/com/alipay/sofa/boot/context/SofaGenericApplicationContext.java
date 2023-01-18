@@ -33,9 +33,14 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * ApplicationContext which won't publish event to its parent context.
+ * Default Implementation of {@link GenericApplicationContext} in SOFABoot framework.
+ *
+ * <p>Support not publish event to parent context,
+ * also could use {@link ContextRefreshInterceptor} hook to aware context refresh call.
  *
  * @author xuanbei 18/3/5
+ * @author huzijie
+ * @since 4.0.0
  */
 public class SofaGenericApplicationContext extends GenericApplicationContext {
 
@@ -43,7 +48,7 @@ public class SofaGenericApplicationContext extends GenericApplicationContext {
 
     private static final Field                EARLY_APPLICATION_EVENTS_FIELD;
 
-    private List<ContextRefreshPostProcessor> postProcessors = new ArrayList<>();
+    private List<ContextRefreshInterceptor> interceptors = new ArrayList<>();
 
     private boolean                           publishEventToParent;
 
@@ -72,21 +77,24 @@ public class SofaGenericApplicationContext extends GenericApplicationContext {
 
     @Override
     public void refresh() throws BeansException, IllegalStateException {
-        if (CollectionUtils.isEmpty(postProcessors)) {
+        if (CollectionUtils.isEmpty(interceptors)) {
             super.refresh();
             return;
         }
         Throwable throwable = null;
         try {
-            applyPostProcessorsBeforeRefresh();
+            applyInterceptorBeforeRefresh();
             super.refresh();
         } catch (Throwable t) {
             throwable = t;
         } finally {
-            applyPostProcessorsAfterRefreshSuccess(throwable);
+            applyInterceptorAfterRefresh(throwable);
         }
     }
 
+    /**
+     * @see org.springframework.context.support.AbstractApplicationContext#publishEvent(java.lang.Object, org.springframework.core.ResolvableType)
+     */
     @Override
     protected void publishEvent(Object event, ResolvableType eventType) {
         if (publishEventToParent) {
@@ -117,20 +125,20 @@ public class SofaGenericApplicationContext extends GenericApplicationContext {
         }
     }
 
-    protected void applyPostProcessorsBeforeRefresh() {
-        postProcessors.forEach(postProcessor -> postProcessor.postProcessBeforeRefresh(this));
+    protected void applyInterceptorBeforeRefresh() {
+        interceptors.forEach(interceptor -> interceptor.beforeRefresh(this));
     }
-
-    protected void applyPostProcessorsAfterRefreshSuccess(Throwable throwable) {
-        postProcessors.forEach(postProcessor -> postProcessor.postProcessAfterRefresh(this, throwable));
+    
+    protected void applyInterceptorAfterRefresh(Throwable throwable) {
+        interceptors.forEach(interceptor -> interceptor.afterRefresh(this, throwable));
     }
 
     public void setPublishEventToParent(boolean publishEventToParent) {
         this.publishEventToParent = publishEventToParent;
     }
 
-    public void setPostProcessors(List<ContextRefreshPostProcessor> postProcessors) {
-        this.postProcessors = postProcessors;
+    public void setInterceptors(List<ContextRefreshInterceptor> interceptors) {
+        this.interceptors = interceptors;
     }
 
     @SuppressWarnings("unchecked")

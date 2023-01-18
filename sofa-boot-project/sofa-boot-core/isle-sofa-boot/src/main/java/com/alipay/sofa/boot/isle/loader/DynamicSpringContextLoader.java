@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.boot.isle.loader;
 
-import com.alipay.sofa.boot.context.ContextRefreshPostProcessor;
+import com.alipay.sofa.boot.context.ContextRefreshInterceptor;
 import com.alipay.sofa.boot.context.SofaDefaultListableBeanFactory;
 import com.alipay.sofa.boot.context.SofaGenericApplicationContext;
 import com.alipay.sofa.boot.context.SofaSpringContextSupport;
@@ -56,7 +56,7 @@ public class DynamicSpringContextLoader implements SpringContextLoader, Initiali
 
     private List<String>                           activeProfiles               = new ArrayList<>();
 
-    private List<ContextRefreshPostProcessor>      contextRefreshPostProcessors = new ArrayList<>();
+    private List<ContextRefreshInterceptor>        contextRefreshInterceptors = new ArrayList<>();
 
     private List<BeanStatCustomizer>               beanStatCustomizers          = new ArrayList<>();
 
@@ -95,8 +95,8 @@ public class DynamicSpringContextLoader implements SpringContextLoader, Initiali
         context.setAllowBeanDefinitionOverriding(allowBeanOverriding);
         context.setPublishEventToParent(publishEventToParent);
 
-        contextRefreshPostProcessors.sort(AnnotationAwareOrderComparator.INSTANCE);
-        context.setPostProcessors(contextRefreshPostProcessors);
+        contextRefreshInterceptors.sort(AnnotationAwareOrderComparator.INSTANCE);
+        context.setInterceptors(contextRefreshInterceptors);
 
         ConfigurableApplicationContext parentContext = getSpringParentContext(deployment, application);
         context.setParent(parentContext);
@@ -180,12 +180,12 @@ public class DynamicSpringContextLoader implements SpringContextLoader, Initiali
         this.publishEventToParent = publishEventToParent;
     }
 
-    public List<ContextRefreshPostProcessor> getContextRefreshPostProcessors() {
-        return contextRefreshPostProcessors;
+    public List<ContextRefreshInterceptor> getContextRefreshInterceptors() {
+        return contextRefreshInterceptors;
     }
 
-    public void setContextRefreshPostProcessors(List<ContextRefreshPostProcessor> contextRefreshPostProcessors) {
-        this.contextRefreshPostProcessors = contextRefreshPostProcessors;
+    public void setContextRefreshInterceptors(List<ContextRefreshInterceptor> contextRefreshInterceptors) {
+        this.contextRefreshInterceptors = contextRefreshInterceptors;
     }
 
     public SofaPostProcessorShareManager getSofaPostProcessorShareManager() {

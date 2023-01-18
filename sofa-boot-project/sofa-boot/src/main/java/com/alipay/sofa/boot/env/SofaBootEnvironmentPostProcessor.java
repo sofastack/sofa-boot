@@ -29,13 +29,15 @@ import java.util.Properties;
 
 /**
  * Used to reset some special key property, such as management.endpoints.web.exposure.include and
- * sofa-boot.version etc. They would be added as a property source named sofaConfigurationProperties
+ * sofa-boot.version etc. They would be added as a property source named sofaConfigurationProperties.
  *
  * @author qilong.zql
+ * @author huzijie
  * @since 2.5.0
  */
 @Order(Ordered.LOWEST_PRECEDENCE - 100)
-public class EnvironmentCustomizer implements EnvironmentPostProcessor {
+public class SofaBootEnvironmentPostProcessor implements EnvironmentPostProcessor {
+
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment,
                                        SpringApplication application) {
@@ -45,9 +47,6 @@ public class EnvironmentCustomizer implements EnvironmentPostProcessor {
 
         // Get SOFABoot version properties
         Properties defaultConfiguration = getSofaBootVersionProperties();
-
-        defaultConfiguration.put(SofaBootConstants.ENDPOINT_AVAILABILITY_GROUP_CONFIG_KEY,
-            SofaBootConstants.DEFAULT_ENDPOINT_AVAILABILITY_GROUP_CONFIG_VALUE);
 
         PropertiesPropertySource propertySource = new PropertiesPropertySource(
             SofaBootConstants.SOFA_DEFAULT_PROPERTY_SOURCE, defaultConfiguration);
@@ -77,6 +76,6 @@ public class EnvironmentCustomizer implements EnvironmentPostProcessor {
      * Get SOFABoot Version string.
      */
     protected String getSofaBootVersion() {
-        return EnvironmentCustomizer.class.getPackage().getImplementationVersion();
+        return SofaBootEnvironmentPostProcessor.class.getPackage().getImplementationVersion();
     }
 }

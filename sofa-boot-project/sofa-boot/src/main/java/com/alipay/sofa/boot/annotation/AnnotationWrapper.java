@@ -7,8 +7,11 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Proxy;
 
 /**
+ * Used to wrap annotation to aware spring environment.
+ *
  * @author huzijie
  * @version AnnotationWrapper.java, v 0.1 2023年01月17日 4:05 PM huzijie Exp $
+ * @since 4.0.0
  */
 public class AnnotationWrapper<A extends Annotation> {
 
