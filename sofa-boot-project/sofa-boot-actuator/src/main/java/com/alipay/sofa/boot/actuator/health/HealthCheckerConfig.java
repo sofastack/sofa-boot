@@ -17,27 +17,30 @@
 package com.alipay.sofa.boot.actuator.health;
 
 /**
- * 指定 {@link com.alipay.sofa.boot.actuator.health.HealthChecker} 组件配置
+ * Config model used to custom health check logic.
+ *
+ * @author huzijie
+ * @since 4.0.0
  */
 public class HealthCheckerConfig {
 
     /**
-     * 重试次数
+     * retry times.
      */
     private Integer retryCount;
 
     /**
-     * 重试间隔
+     * retry interval, unit milliseconds.
      */
     private Long    retryTimeInterval;
 
     /**
-     * 是否严格校验
+     * stric check.
      */
     private Boolean strictCheck;
 
     /**
-     * 超时时间
+     * health check timeout, milliseconds.
      */
     private Integer timeout;
 

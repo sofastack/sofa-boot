@@ -43,10 +43,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 /**
- * An implement of {@link GenericApplicationListener} to trigger readiness check.
+ * Implementation of {@link GenericApplicationListener} to trigger readiness check.
  *
  * @author liangen
  * @author qilong.zql
+ * @author huzijie
  */
 public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
                                    GenericApplicationListener, StartupReporterAware {

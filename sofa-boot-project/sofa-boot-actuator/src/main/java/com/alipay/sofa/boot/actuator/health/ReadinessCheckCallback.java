@@ -30,7 +30,7 @@ public interface ReadinessCheckCallback {
 
     /**
      * trigger check callback
-     * @param applicationContext the applicationc context
+     * @param applicationContext the application context
      * @return callback result
      */
     Health onHealthy(ApplicationContext applicationContext);

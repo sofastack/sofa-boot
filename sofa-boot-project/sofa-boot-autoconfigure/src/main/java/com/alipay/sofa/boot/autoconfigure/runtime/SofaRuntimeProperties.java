@@ -19,10 +19,10 @@ package com.alipay.sofa.boot.autoconfigure.runtime;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * SofaRuntimeConfigurationProperties is exported by SOFA Runtime plugin in Ark.
- * Upon installing an Ark module, Thread context classloader will be switched to Biz ClassLoader.
+ * Configuration properties to configure sofa runtime.
  *
  * @author xuanbei 18/5/9
+ * @author huzijie
  */
 @ConfigurationProperties("sofa.boot.runtime")
 public class SofaRuntimeProperties {

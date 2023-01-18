@@ -21,9 +21,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import java.util.List;
 
 /**
- * Properties
+ * Configuration properties to configure sofa isle.
  *
  * @author xuanbei 18/5/6
+ * @author huzijie
  */
 @ConfigurationProperties("sofa.boot.isle")
 public class SofaModuleProperties {

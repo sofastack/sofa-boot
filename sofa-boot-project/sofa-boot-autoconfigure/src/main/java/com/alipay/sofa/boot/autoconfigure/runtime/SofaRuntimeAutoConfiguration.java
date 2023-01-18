@@ -45,6 +45,7 @@ import com.alipay.sofa.runtime.spring.SofaRuntimeAwareProcessor;
 import com.alipay.sofa.runtime.startup.ComponentBeanStatCustomizer;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -53,6 +54,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 
 /**
+ * {@link EnableAutoConfiguration Auto-configuration} for sofa runtime.
+ *
  * @author xuanbei 18/3/17
  */
 @AutoConfiguration

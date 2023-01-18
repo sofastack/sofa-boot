@@ -27,11 +27,14 @@ import org.springframework.lang.Nullable;
  * {@link EndpointWebExtension @EndpointWebExtension} for the {@link ReadinessEndpoint}.
  *
  * @author qilong.zql
+ * @author huzijie
  * @since 3.0.0
  */
 @EndpointWebExtension(endpoint = ReadinessEndpoint.class)
 public class ReadinessEndpointWebExtension {
+
     private final ReadinessEndpoint    delegate;
+
     private final HttpCodeStatusMapper statusMapper;
 
     public ReadinessEndpointWebExtension(ReadinessEndpoint delegate,

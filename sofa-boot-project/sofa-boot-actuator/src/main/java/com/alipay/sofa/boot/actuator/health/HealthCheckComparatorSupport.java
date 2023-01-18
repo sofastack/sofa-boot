@@ -28,12 +28,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * HealthCheck Util.
+ * Support for health check component comparator.
  *
  * @author qilong.zql
+ * @author huzijie
  * @since 3.0.0
  */
-public class HealthCheckUtils {
+public class HealthCheckComparatorSupport {
 
     public static Comparator<Object> getComparatorToUse(BeanFactory beanFactory) {
         Comparator<Object> comparatorToUse = null;

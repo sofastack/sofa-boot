@@ -19,7 +19,7 @@ package com.alipay.sofa.boot.actuator.health;
 import java.util.Comparator;
 
 /**
- * Provider a user custom Comparator to sort health checker components.
+ * Interface to provider a custom {@link Comparator} to sort health checker components.
  *
  * @author huzijie
  * @version HealthCheckerComparatorProvider.java, v 0.1 2022年07月05日 11:50 AM huzijie Exp $

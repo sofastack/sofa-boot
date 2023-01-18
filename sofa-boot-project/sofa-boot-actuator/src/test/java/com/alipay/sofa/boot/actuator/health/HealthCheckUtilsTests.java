@@ -31,7 +31,7 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Tests for {@link HealthCheckUtils}
+ * Tests for {@link HealthCheckComparatorSupport}
  *
  * @author huzijie
  * @version HealthCheckUtilsTests.java, v 0.1 2022年07月05日 11:55 AM huzijie Exp $
@@ -45,7 +45,7 @@ class HealthCheckUtilsTests {
         originMap.put("high", new OrderedBean(-100));
         assertThat(originMap.keySet().toArray()[0]).isEqualTo("low");
         assertThat(originMap.keySet().toArray()[1]).isEqualTo("high");
-        originMap = HealthCheckUtils.sortMapAccordingToValue(originMap,
+        originMap = HealthCheckComparatorSupport.sortMapAccordingToValue(originMap,
             AnnotationAwareOrderComparator.INSTANCE);
         assertThat(originMap.keySet().toArray()[0]).isEqualTo("high");
         assertThat(originMap.keySet().toArray()[1]).isEqualTo("low");
@@ -53,7 +53,7 @@ class HealthCheckUtilsTests {
 
     @Test
     public void getDefaultComparatorToUse() {
-        assertThat(HealthCheckUtils.getComparatorToUse(null)).isEqualTo(
+        assertThat(HealthCheckComparatorSupport.getComparatorToUse(null)).isEqualTo(
             AnnotationAwareOrderComparator.INSTANCE);
     }
 
@@ -83,7 +83,7 @@ class HealthCheckUtilsTests {
                 return null;
             }
         }).when(beanFactory).getBeanProvider(HealthCheckerComparatorProvider.class);
-        assertThat(HealthCheckUtils.getComparatorToUse(beanFactory)).isEqualTo(comparator);
+        assertThat(HealthCheckComparatorSupport.getComparatorToUse(beanFactory)).isEqualTo(comparator);
     }
 
     @Test

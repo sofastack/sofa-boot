@@ -24,9 +24,10 @@ import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.Status;
 
 /**
- * A {@link HealthChecker} used to check {@link ComponentInfo} health.
+ * Implementation of {@link HealthChecker} used to check {@link ComponentInfo} health.
  *
  * @author xuanbei 18/5/15
+ * @author huzijie
  */
 public class ComponentHealthChecker implements HealthChecker {
 

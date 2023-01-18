@@ -56,8 +56,8 @@ public class ReadinessCheckCallbackProcessor implements ApplicationContextAware 
             Assert.notNull(applicationContext, () -> "Application must not be null");
             Map<String, ReadinessCheckCallback> beansOfType = applicationContext
                     .getBeansOfType(ReadinessCheckCallback.class);
-            readinessCheckCallbacks = HealthCheckUtils.sortMapAccordingToValue(beansOfType,
-                    HealthCheckUtils.getComparatorToUse(applicationContext.getAutowireCapableBeanFactory()));
+            readinessCheckCallbacks = HealthCheckComparatorSupport.sortMapAccordingToValue(beansOfType,
+                    HealthCheckComparatorSupport.getComparatorToUse(applicationContext.getAutowireCapableBeanFactory()));
 
             String applicationCallbackInfo = "Found " + readinessCheckCallbacks.size() + " ReadinessCheckCallback implementation: " + String.join(",", beansOfType.keySet());
             logger.info(applicationCallbackInfo);

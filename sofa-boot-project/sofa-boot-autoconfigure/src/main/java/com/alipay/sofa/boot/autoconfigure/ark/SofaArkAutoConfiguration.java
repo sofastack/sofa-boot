@@ -30,7 +30,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 
 /**
- * {@link EnableAutoConfiguration Auto-configuration} for SOFA Ark.
+ * {@link EnableAutoConfiguration Auto-configuration} for sofa Ark.
  *
  * @author huzijie
  * @version SofaArkAutoConfiguration.java, v 0.1 2023年01月16日 11:31 AM huzijie Exp $

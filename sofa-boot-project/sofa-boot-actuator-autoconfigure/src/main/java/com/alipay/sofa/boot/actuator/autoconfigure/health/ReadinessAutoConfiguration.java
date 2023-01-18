@@ -43,6 +43,7 @@ import java.util.concurrent.TimeUnit;
  * {@link EnableAutoConfiguration Auto-configuration} for readiness components.
  *
  * @author qilong.zql
+ * @author huzijie
  * @since 2.5.0
  */
 @AutoConfiguration

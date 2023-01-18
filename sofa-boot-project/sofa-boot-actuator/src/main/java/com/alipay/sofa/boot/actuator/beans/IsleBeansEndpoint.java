@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.boot.actuator.beans;
 
-import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;

@@ -56,7 +56,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
 /**
- * {@link EnableAutoConfiguration Auto-configuration} for SOFA Isle.
+ * {@link EnableAutoConfiguration Auto-configuration} for sofa Isle.
  *
  * @author xuanbei 18/3/12
  * @author huzijie
