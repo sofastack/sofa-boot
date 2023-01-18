@@ -89,7 +89,6 @@ public class AsyncInitBeanFactoryPostProcessor implements BeanFactoryPostProcess
         } else {
             Class<?> beanClassType = BeanDefinitionUtil.resolveBeanClassType(beanDefinition);
             if (beanClassType == null) {
-                LOGGER.warn("Bean class type cant be resolved from bean of {}", beanId);
                 return;
             }
             scanAsyncInitBeanDefinitionOnClass(beanClassType, beanDefinition);

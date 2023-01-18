@@ -62,7 +62,8 @@ public class AnnotationWrapper<A extends Annotation> {
     }
 
     public A wrap(A annotation) {
-        Assert.isInstanceOf(clazz, annotation, "Parameter must be annotation type.");
+        Assert.notNull(annotation, "annotation must not be null.");
+        Assert.isInstanceOf(clazz, annotation, "parameter must be annotation type.");
         this.delegate = annotation;
         return build();
     }

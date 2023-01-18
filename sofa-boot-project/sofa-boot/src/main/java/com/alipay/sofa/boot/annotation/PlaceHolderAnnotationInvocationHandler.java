@@ -49,8 +49,7 @@ public class PlaceHolderAnnotationInvocationHandler implements InvocationHandler
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         Object ret = method.invoke(delegate, args);
-        if (!ReflectionUtils.isEqualsMethod(method) && !ReflectionUtils.isHashCodeMethod(method)
-            && !ReflectionUtils.isToStringMethod(method) && isAttributeMethod(method)) {
+        if (ret != null && !ReflectionUtils.isObjectMethod(method) && isAttributeMethod(method)) {
             return resolvePlaceHolder(ret);
         }
         return ret;

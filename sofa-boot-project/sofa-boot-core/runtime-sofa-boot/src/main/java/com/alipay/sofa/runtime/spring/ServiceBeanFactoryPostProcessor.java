@@ -132,7 +132,6 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
         } else {
             Class<?> beanClassType = BeanDefinitionUtil.resolveBeanClassType(beanDefinition);
             if (beanClassType == null) {
-                LOGGER.warn("Bean class type cant be resolved from bean of {}", beanId);
                 return;
             }
             generateSofaServiceDefinitionOnClass(beanId, beanClassType, beanDefinition, registry);

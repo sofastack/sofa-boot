@@ -61,7 +61,10 @@ public class SofaDefaultListableBeanFactory extends DefaultListableBeanFactory {
         Stack<BeanStat> parentStack = PARENT_STACK_THREAD_LOCAL.get();
         BeanStat bs = new BeanStat();
         bs.setName(beanName);
-        bs.setBeanClassName(BeanDefinitionUtil.resolveBeanClassType(mbd).getName());
+        Class<?> beanClass = BeanDefinitionUtil.resolveBeanClassType(mbd);
+        if (beanClass != null) {
+            bs.setBeanClassName(beanClass.getName());
+        }
         if (parentStack == null) {
             parentStack = new Stack<>();
             PARENT_STACK_THREAD_LOCAL.set(parentStack);

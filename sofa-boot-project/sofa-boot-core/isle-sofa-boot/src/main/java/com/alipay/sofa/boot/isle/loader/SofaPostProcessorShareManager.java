@@ -92,6 +92,9 @@ public class SofaPostProcessorShareManager implements BeanFactoryAware, Initiali
             if (notInWhiteNameList(beanName) && allBeanDefinitionNames.contains(beanName)) {
                 BeanDefinition beanDefinition = beanFactory.getBeanDefinition(beanName);
                 Class<?> clazz = BeanDefinitionUtil.resolveBeanClassType(beanDefinition);
+                if (clazz == null) {
+                    continue;
+                }
                 if (shouldBeanShare(beanName, clazz)) {
                     if (shouldBeanSingleton(beanName, clazz)) {
                         registerSingletonMap.put(beanName, beanFactory.getBean(beanName));
