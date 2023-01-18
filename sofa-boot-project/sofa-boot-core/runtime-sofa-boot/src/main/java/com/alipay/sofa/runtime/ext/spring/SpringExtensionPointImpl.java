@@ -27,7 +27,7 @@ import com.alipay.sofa.runtime.ext.component.XMapContext;
 import java.io.Serial;
 
 /**
- * Extension point implement in spring env
+ * Extension point implement in spring env.
  *
  * @author xi.hux@alipay.com
  * @since 2.6.0

@@ -28,7 +28,7 @@ import org.springframework.util.StringUtils;
 import static com.alipay.common.tracer.core.configuration.SofaTracerConfiguration.TRACER_APPNAME_KEY;
 
 /**
- * {@link BeanPostProcessor} to register send message hook {@link SofaTracerSendMessageHook}
+ * Implementation of {@link BeanPostProcessor} to register send message hook {@link SofaTracerSendMessageHook}.
  *
  * @author linnan
  * @author huzijie

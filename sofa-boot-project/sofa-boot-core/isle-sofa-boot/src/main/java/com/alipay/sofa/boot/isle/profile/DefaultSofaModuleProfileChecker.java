@@ -29,8 +29,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
+ * Implementation of {@link SofaModuleProfileChecker} to use spring custom profiles.
+ *
  * @author yangguanchao
  * @author qilong.zql
+ * @author huzijie
  * @since 3.2.0
  */
 public class DefaultSofaModuleProfileChecker implements SofaModuleProfileChecker, InitializingBean {

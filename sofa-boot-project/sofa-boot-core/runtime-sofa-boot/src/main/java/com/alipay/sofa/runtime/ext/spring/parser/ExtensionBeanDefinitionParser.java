@@ -25,7 +25,7 @@ import org.w3c.dom.NodeList;
 import com.alipay.sofa.runtime.ext.spring.ExtensionFactoryBean;
 
 /**
- * Extension definition parser
+ * Extension definition parser.
  *
  * @author xi.hux@alipay.com
  * @author yangyanzhao@alipay.com

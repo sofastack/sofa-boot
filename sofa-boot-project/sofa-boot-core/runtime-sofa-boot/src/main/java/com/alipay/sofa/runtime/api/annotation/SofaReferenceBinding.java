@@ -17,59 +17,63 @@
 package com.alipay.sofa.runtime.api.annotation;
 
 /**
+ * Annotation to configure sofa reference binding.
+ *
  * @author xuanbei 18/5/11
  */
 public @interface SofaReferenceBinding {
+
     /**
-     * binding type, maybe jvm/bolt/rest
+     * Binding type, maybe jvm/bolt/rest.
      *
      * @return binding type
      */
     String bindingType() default "jvm";
 
     /**
-     * timeout
+     * Timeout in milliseconds.
      *
      * @return timeout
      */
     int timeout() default 0;
 
     /**
-     * retry times
+     * Retry times.
      *
      * @return retry times
      */
     int retries() default 0;
 
     /**
-     * address time out
+     * Address time out.
      *
      * @return address time out
      */
     int addressWaitTime() default 0;
 
     /**
-     * invoke type
+     * Invoke type.
      *
      * @return invoke type
      */
     String invokeType() default "sync";
 
     /**
-     * filter beans
+     * Filter beans.
      *
      * @return filter beans
      */
     String[] filters() default {};
 
     /**
-     * direct url
+     * Direct url.
      *
      * @return direct url
      */
     String directUrl() default "";
 
     /**
+     *
      * @return callback handler
      * @deprecated this attribute is not intended for use and will be removed the next major version.
      * callback handler
@@ -78,7 +82,7 @@ public @interface SofaReferenceBinding {
     String callbackHandler() default "";
 
     /**
-     * callback implementation class name
+     * Callback implementation class name.
      *
      * @return callback implementation class name
      * @since 2.5.0
@@ -86,7 +90,7 @@ public @interface SofaReferenceBinding {
     String callbackClass() default "";
 
     /**
-     * callback spring beanName ref
+     * Callback spring beanName ref.
      *
      * @return callback spring beanName ref
      * @since 2.5.0
@@ -94,42 +98,42 @@ public @interface SofaReferenceBinding {
     String callbackRef() default "";
 
     /**
-     * registry for this consumer
+     * Registry for this consumer.
      *
      * @return registry for this consumer
      */
     String registry() default "";
 
     /**
-     * the number of long connections per ref
+     * The number of long connections per ref.
      *
-     * @return
+     * @return connection num
      */
     int connectionNum() default 1;
 
     /**
-     * delay init connection
+     * Delay init connection.
      *
-     * @return
+     * @return is lazy
      */
     boolean lazy() default false;
 
     /**
-     * specify serialize type
+     * Specify serialize type.
      *
-     * @return
+     * @return serialize type
      */
     String serializeType() default "";
 
     /**
-     * specify load balance type
+     * Specify load balance type.
      *
-     * @return
+     * @return  load balance type
      */
     String loadBalancer() default "";
 
     /**
-     * parameters of consumer
+     * Parameters of consumer.
      *
      * @return parameters of consumer
      */
@@ -139,14 +143,14 @@ public @interface SofaReferenceBinding {
      * serialization between biz, default is false.
      * only serialize of reference and service is false
      * then invocation between biz would skip serialization
-     * Note that the serialize of {@link SofaServiceBinding} is true
+     * Note that the serialize of {@link SofaServiceBinding} is true.
      *
-     * @return
+     * @return whether serialize
      */
     boolean serialize() default false;
 
     /**
-     * for each method config
+     * For each method config.
      *
      * @return method configs
      * @since 2.6.4
@@ -154,13 +158,13 @@ public @interface SofaReferenceBinding {
     SofaMethod[] methodInfos() default {};
 
     /**
-     * mock mode of reference
+     * Mock mode of reference.
      * @return "local", "remote" or empty
      */
     String mockMode() default "";
 
     /**
-     * get mock from spring beans
+     * Get mock from spring beans.
      * @return bean name
      */
     String mockBean() default "";

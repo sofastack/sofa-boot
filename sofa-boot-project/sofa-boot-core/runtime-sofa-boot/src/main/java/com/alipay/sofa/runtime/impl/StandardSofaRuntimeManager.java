@@ -32,18 +32,24 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * Default Sofa Runtime Manager
+ * Default implementation of {@link SofaRuntimeManager}.
  *
  * @author xuanbei 18/3/1
  */
 public class StandardSofaRuntimeManager implements SofaRuntimeManager, ApplicationContextAware {
 
     private final String                     appName;
-    private final List<RuntimeShutdownAware> runtimeShutdownAwares = new CopyOnWriteArrayList<RuntimeShutdownAware>();
+
+    private final List<RuntimeShutdownAware> runtimeShutdownAwareList = new CopyOnWriteArrayList<>();
+
     private ComponentManagerImpl       componentManager;
+
     private ClientFactoryInternal      clientFactoryInternal;
+
     private SofaRuntimeContext         sofaRuntimeContext;
+
     private ClassLoader                appClassLoader;
+
     private ApplicationContext         rootApplicationContext;
 
     public StandardSofaRuntimeManager(String appName, ClassLoader appClassLoader,
@@ -90,7 +96,7 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager, Applicati
     public void shutdown() throws ServiceRuntimeException {
         //todo this bean should be the last destroy bean in root context
         try {
-            for (RuntimeShutdownAware shutdownAware : runtimeShutdownAwares) {
+            for (RuntimeShutdownAware shutdownAware : runtimeShutdownAwareList) {
                 shutdownAware.shutdown();
             }
 
@@ -120,7 +126,7 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager, Applicati
 
     @Override
     public void registerShutdownAware(RuntimeShutdownAware callback) {
-        runtimeShutdownAwares.add(callback);
+        runtimeShutdownAwareList.add(callback);
     }
 
     @Override
@@ -132,7 +138,7 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager, Applicati
         componentManager = null;
         sofaRuntimeContext = null;
         clientFactoryInternal = null;
-        runtimeShutdownAwares.clear();
+        runtimeShutdownAwareList.clear();
     }
 
     @Override

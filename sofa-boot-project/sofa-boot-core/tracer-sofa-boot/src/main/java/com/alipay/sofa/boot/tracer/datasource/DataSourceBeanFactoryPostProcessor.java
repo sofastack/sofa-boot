@@ -44,7 +44,7 @@ import java.util.Set;
 import static com.alipay.common.tracer.core.configuration.SofaTracerConfiguration.TRACER_APPNAME_KEY;
 
 /**
- * {@link BeanFactoryPostProcessor} to wrapper datasource in {@link SmartDataSource}
+ * Implementation of {@link BeanFactoryPostProcessor} to wrapper datasource in {@link SmartDataSource}.
  *
  * @author qilong.zql
  * @author huzijie

@@ -23,6 +23,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
 
 /**
+ * Default implementation of {@link ClientFactoryInternal}.
+ *
  * @author xuanbei 18/3/9
  */
 public class ClientFactoryImpl implements ClientFactoryInternal {

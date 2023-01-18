@@ -41,7 +41,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Implement for {@link SpringContextLoader} to create sofa application context.
+ * Implementation of {@link SpringContextLoader} to create sofa application context.
  *
  * @author linfengqi  2011-7-26
  * @author huzijie

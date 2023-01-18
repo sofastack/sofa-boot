@@ -32,7 +32,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * Extension point definition parser
+ * Extension point definition parser.
  *
  * @author xi.hux@alipay.com
  * @author yangyanzhao@alipay.com

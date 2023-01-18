@@ -28,6 +28,7 @@ import org.springframework.util.StringUtils;
 import org.w3c.dom.Element;
 
 /**
+ * Implementation of {@link org.springframework.beans.factory.FactoryBean} to register extension.
  *
  * @author xi.hux@alipay.com
  * @author yangyanzhao@alipay.com
@@ -53,7 +54,6 @@ public class ExtensionFactoryBean extends AbstractExtFactoryBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        super.afterPropertiesSet();
         Assert.notNull(applicationContext,
             "required property 'applicationContext' has not been set");
         Assert.notNull(getPoint(), "required property 'point' has not been set for extension");

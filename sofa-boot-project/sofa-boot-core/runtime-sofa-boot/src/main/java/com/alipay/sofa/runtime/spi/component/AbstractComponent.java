@@ -29,7 +29,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * abstract component implementation
+ * Abstract component implementation.
  *
  * @author xuanbei 18/3/1
  */

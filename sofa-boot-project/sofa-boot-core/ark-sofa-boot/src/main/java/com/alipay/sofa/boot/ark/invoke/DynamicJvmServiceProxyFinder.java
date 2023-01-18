@@ -36,7 +36,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Component to found service component in other Ark biz
+ * Component to found service component in other Ark biz.
  *
  * @author qilong.zql
  * @author huzijie

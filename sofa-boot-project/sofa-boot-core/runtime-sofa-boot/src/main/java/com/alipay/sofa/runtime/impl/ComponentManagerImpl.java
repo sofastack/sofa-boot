@@ -20,13 +20,13 @@ import com.alipay.sofa.boot.log.ErrorCode;
 import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.component.ComponentName;
+import com.alipay.sofa.runtime.context.SpringContextComponent;
 import com.alipay.sofa.runtime.model.ComponentStatus;
 import com.alipay.sofa.runtime.model.ComponentType;
 import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.ComponentManager;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
-import com.alipay.sofa.runtime.context.SpringContextComponent;
 import org.slf4j.Logger;
 import org.springframework.context.ApplicationContext;
 
@@ -40,6 +40,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
+ * Default implementation of {@link ComponentManager}.
+ *
  * @author xuanbei 18/3/9
  */
 @SuppressWarnings("unchecked")
@@ -52,7 +54,9 @@ public class ComponentManagerImpl implements ComponentManager {
     protected ConcurrentMap<ComponentType, Map<ComponentName, ComponentInfo>> resolvedRegistry;
     /** client factory */
     private ClientFactoryInternal                                             clientFactoryInternal;
+
     private SofaRuntimeContext sofaRuntimeContext;
+
     private final ClassLoader                                                 appClassLoader;
 
     public ComponentManagerImpl(ClientFactoryInternal clientFactoryInternal,

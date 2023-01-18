@@ -17,7 +17,7 @@
 package com.alipay.sofa.runtime.spi.binding;
 
 /**
- * abstract binding implementation
+ * Abstract binding implementation.
  *
  * @author xuanbei 18/2/28
  */

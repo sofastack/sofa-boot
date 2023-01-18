@@ -33,6 +33,8 @@ import org.springframework.util.StringUtils;
 import static com.alipay.sofa.runtime.async.AsyncInitMethodManager.ASYNC_INIT_METHOD_NAME;
 
 /**
+ * Implementation of {@link BeanPostProcessor} to async init methods for specific beans.
+ *
  * @author qilong.zql
  * @author xuanbei
  * @since 2.6.0

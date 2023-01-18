@@ -27,7 +27,7 @@ import org.springframework.boot.actuate.health.Status;
 import org.springframework.context.ApplicationContext;
 
 /**
- * Implement for {@link EventHandler<AfterBizStartupEvent>} to check readiness health check result
+ * Implementation of {@link EventHandler<AfterBizStartupEvent>} to check readiness health check result.
  *
  * @author qilong.zql
  * @author huzijie

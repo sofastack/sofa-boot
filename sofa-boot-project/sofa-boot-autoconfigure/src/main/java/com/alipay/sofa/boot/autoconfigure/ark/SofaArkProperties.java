@@ -11,8 +11,14 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("sofa.boot.ark")
 public class SofaArkProperties {
 
+    /**
+     * Whether enable jvm service cache.
+     */
     private boolean jvmServiceCache    = false;
 
+    /**
+     * Whether enable jvm service invoke serialize.
+     */
     private boolean jvmInvokeSerialize       = true;
 
     public boolean isJvmServiceCache() {

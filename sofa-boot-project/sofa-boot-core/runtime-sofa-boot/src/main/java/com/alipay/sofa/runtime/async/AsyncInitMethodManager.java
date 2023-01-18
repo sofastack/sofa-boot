@@ -40,6 +40,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
+ * Manager to store and invoke async init method beans.
+ *
  * @author huzijie
  * @version AsyncInitMethodManager.java, v 0.1 2023年01月17日 11:55 AM huzijie Exp $
  */

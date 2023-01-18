@@ -24,7 +24,7 @@ import com.alipay.sofa.tracer.plugin.flexible.annotations.Tracer;
 import org.aopalliance.intercept.MethodInvocation;
 
 /**
- * Implement for {@link MethodInvocationProcessor} to generate tracer spanner around method invoke.
+ * Implementation of {@link MethodInvocationProcessor} to generate tracer spanner around method invoke.
  *
  * @author guolei.sgl (guolei.sgl@antfin.com) 2019/8/9 2:51 PM
  * @author huzijie

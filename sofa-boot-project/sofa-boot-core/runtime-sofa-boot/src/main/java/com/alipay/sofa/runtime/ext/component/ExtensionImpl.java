@@ -24,7 +24,7 @@ import org.w3c.dom.Element;
 import com.alipay.sofa.runtime.api.component.ComponentName;
 
 /**
- * Extension Implement
+ * Extension Implement.
  *
  * @author xi.hux@alipay.com
  * @author ruoshan

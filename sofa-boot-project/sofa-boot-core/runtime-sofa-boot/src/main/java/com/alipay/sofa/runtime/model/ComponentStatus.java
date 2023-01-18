@@ -17,7 +17,7 @@
 package com.alipay.sofa.runtime.model;
 
 /**
- * component status
+ * Component status.
  *
  * @author xuanbei 18/2/28
  */
@@ -44,6 +44,7 @@ public enum ComponentStatus {
     ACTIVATED(3, "activated");
 
     private final int    code;
+
     private final String desc;
 
     ComponentStatus(int code, String desc) {

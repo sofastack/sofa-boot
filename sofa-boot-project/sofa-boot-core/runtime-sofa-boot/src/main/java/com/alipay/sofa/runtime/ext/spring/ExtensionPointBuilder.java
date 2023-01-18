@@ -20,7 +20,7 @@ import com.alipay.sofa.runtime.ext.component.ExtensionPointInternal;
 import com.alipay.sofa.runtime.ext.ExtensionPoint;
 
 /**
- * Extension point builder
+ * Extension point builder.
  *
  * @author xi.hux@alipay.com
  * @since 2.6.0

@@ -24,7 +24,7 @@ import com.alipay.sofa.runtime.ext.component.ExtensionInternal;
 import com.alipay.sofa.runtime.ext.Extension;
 
 /**
- * Extension Builder
+ * Extension Builder.
  *
  * @author xi.hux@alipay.com
  * @since 2.6.0

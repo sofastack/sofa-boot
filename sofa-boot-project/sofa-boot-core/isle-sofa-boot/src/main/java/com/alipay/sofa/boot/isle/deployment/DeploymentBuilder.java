@@ -22,14 +22,14 @@ import java.util.Properties;
 import org.springframework.util.ResourceUtils;
 
 /**
- * SOFABoot Module deployment creator
+ * SOFABoot Module deployment creator.
  *
  * @author yangyanzhao
  * @version $Id: DeploymentBuilder.java, v 0.1 2012-1-11 07:40:11 yangyanzhao Exp $
  */
 public class DeploymentBuilder {
     /**
-     * build a SOFABoot Module deployment descriptor
+     * Build a SOFABoot Module deployment descriptor.
      *
      * @param url SOFABoot module file url
      * @param props properties

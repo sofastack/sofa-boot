@@ -21,7 +21,7 @@ import com.alipay.sofa.ark.spi.service.event.EventHandler;
 import com.alipay.sofa.boot.ark.invoke.DynamicJvmServiceProxyFinder;
 
 /**
- * Implement for {@link EventHandler<AfterFinishStartupEvent>} mark application startup finish
+ * Implementation of {@link EventHandler<AfterFinishStartupEvent>} mark application startup finish.
  *
  * @author caojie.cj@antfin.com
  * @author huzijie

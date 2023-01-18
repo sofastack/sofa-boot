@@ -22,8 +22,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation used to mark a spring bean async init. Sample usage:
- *
+ * Annotation used to mark a spring bean async init.
+ * <p>Sample usage:
  * <pre>
  *
  * &#064;SofaAsyncInit

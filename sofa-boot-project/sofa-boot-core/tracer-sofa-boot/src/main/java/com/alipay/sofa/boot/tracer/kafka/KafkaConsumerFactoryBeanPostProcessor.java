@@ -23,7 +23,7 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.kafka.core.ConsumerFactory;
 
 /**
- * {@link BeanPostProcessor} to wrapper ConsumerFactory in {@link SofaTracerKafkaConsumerFactory}
+ * Implementation of {@link BeanPostProcessor} to wrapper ConsumerFactory in {@link SofaTracerKafkaConsumerFactory}.
  *
  * @author chenchen6   2020/9/3 22:18
  * @author huzijie

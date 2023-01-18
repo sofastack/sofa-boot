@@ -23,7 +23,7 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.kafka.core.ProducerFactory;
 
 /**
- * {@link BeanPostProcessor} to wrapper ProducerFactory in {@link SofaTracerKafkaProducerFactory}
+ * Implementation of {@link BeanPostProcessor} to wrapper ProducerFactory in {@link SofaTracerKafkaProducerFactory}.
  *
  * @author chenchen6   2020/9/3 22:15
  * @author huzijie

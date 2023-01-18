@@ -19,6 +19,8 @@ package com.alipay.sofa.boot.isle.profile;
 import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptor;
 
 /**
+ * Interface used to check sofa module according to profiles.
+ *
  * @author qilong.zql
  * @author yangguanchao
  * @since 3.2.0
@@ -26,18 +28,18 @@ import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptor;
 public interface SofaModuleProfileChecker {
 
     /***
-     * determine whether the module should be activated
+     * determine whether the module should be activated.
      *
      * @param sofaModuleProfiles sofa module profiles
-     * @return true or false
+     * @return true to accept, otherwise false
      */
     boolean acceptProfiles(String[] sofaModuleProfiles);
 
     /**
-     * determine whether the module should be activated
+     * determine whether the module should be activated.
      *
-     * @param deploymentDescriptor
-     * @return
+     * @param deploymentDescriptor deploymentDescriptor
+     * @return true to accept, otherwise false
      */
     boolean acceptModule(DeploymentDescriptor deploymentDescriptor);
 }

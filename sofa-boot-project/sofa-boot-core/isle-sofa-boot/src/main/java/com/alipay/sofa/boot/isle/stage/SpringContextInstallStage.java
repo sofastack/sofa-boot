@@ -44,7 +44,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
- * Stage to create and refresh {@link ApplicationContext} for sofa modules
+ * Stage to create and refresh {@link ApplicationContext} for sofa modules.
  *
  * @author linfengqi
  * @author yangyanzhao

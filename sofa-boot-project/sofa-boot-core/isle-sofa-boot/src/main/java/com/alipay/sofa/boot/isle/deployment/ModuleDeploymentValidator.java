@@ -17,16 +17,17 @@
 package com.alipay.sofa.boot.isle.deployment;
 
 /**
- * Module Deployment Validator, determine whether a module is sofa module
+ * Interface to validate module deployment, determine whether a module is sofa module.
  *
  * @author khotyn 9/12/14 4:24 PM
  */
 public interface ModuleDeploymentValidator {
+
     /**
-     * determine whether a module is sofa module
+     * Determine whether a module is sofa module.
      *
      * @param deploymentDescriptor deployment descriptor
-     * @return true or false
+     * @return true means is sofa module, otherwise false.
      */
     boolean isModuleDeployment(DeploymentDescriptor deploymentDescriptor);
 }

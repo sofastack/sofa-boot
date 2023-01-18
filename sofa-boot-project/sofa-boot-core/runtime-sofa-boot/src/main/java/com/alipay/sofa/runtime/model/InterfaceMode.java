@@ -17,7 +17,7 @@
 package com.alipay.sofa.runtime.model;
 
 /**
- * interface mode, include spring xml, Client Api, Annotation
+ * Interface mode, include spring xml, Client Api, Annotation.
  *
  * @author xuanbei 18/2/28
  */

@@ -14,15 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime.spi.spring;
+package com.alipay.sofa.runtime.ext.spring;
 
+import com.alipay.sofa.runtime.spi.component.DefaultImplementation;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.Assert;
 
-import com.alipay.sofa.runtime.spi.component.DefaultImplementation;
-
 /**
- * Spring Component Implement
+ * Spring component implement.
  *
  * @author xi.hux@alipay.com
  * @since 2.6.0
@@ -31,13 +30,14 @@ import com.alipay.sofa.runtime.spi.component.DefaultImplementation;
 public class SpringImplementationImpl extends DefaultImplementation {
 
     protected ApplicationContext applicationContext;
+
     protected String             beanName;
+
     protected Object             target;
 
     public SpringImplementationImpl(String beanName, ApplicationContext applicationContext) {
         Assert.hasText(beanName, "beanName must not be empty");
         Assert.notNull(applicationContext, "applicationContext must not be null");
-
         this.beanName = beanName;
         this.applicationContext = applicationContext;
     }

@@ -32,7 +32,7 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * contains all deployments of the application
+ * Core model contains all deployments of the application.
  *
  * @author khotyn 7/25/14 8:15 PM
  */

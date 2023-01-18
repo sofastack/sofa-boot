@@ -60,7 +60,7 @@ public @interface SofaService {
     String uniqueId() default "";
 
     /**
-     * bindings of service
+     * Bindings of service.
      *
      * @return bindings of service
      */

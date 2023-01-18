@@ -38,7 +38,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Service Component
+ * Service Component.
  *
  * @author xuanbei 18/3/9
  */

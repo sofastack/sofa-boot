@@ -22,7 +22,7 @@ import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.component.Property;
 import com.alipay.sofa.runtime.model.ComponentType;
 import com.alipay.sofa.runtime.service.binding.JvmBinding;
-import com.alipay.sofa.runtime.service.binding.JvmServiceFinder;
+import com.alipay.sofa.runtime.service.binding.JvmServiceSupport;
 import com.alipay.sofa.runtime.service.helper.ReferenceRegisterHelper;
 import com.alipay.sofa.runtime.spi.binding.Binding;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapter;
@@ -42,7 +42,7 @@ import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 
 /**
- * reference component
+ * Reference component.
  *
  * @author xuanbei 18/3/1
  */
@@ -239,7 +239,7 @@ public class ReferenceComponent extends AbstractComponent {
     private Object getServiceTarget() {
         Object serviceTarget = null;
 
-        ServiceComponent serviceComponent = JvmServiceFinder.foundServiceComponent(
+        ServiceComponent serviceComponent = JvmServiceSupport.foundServiceComponent(
             sofaRuntimeContext.getComponentManager(), reference);
 
         if (serviceComponent != null) {

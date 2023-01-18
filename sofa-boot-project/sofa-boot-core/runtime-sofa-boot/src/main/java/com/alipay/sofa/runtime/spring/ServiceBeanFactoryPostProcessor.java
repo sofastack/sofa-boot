@@ -80,6 +80,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
+ * Implementation of {@link BeanFactoryPostProcessor} to resolve {@link SofaService}
+ * and {@link SofaReference} annotation and register factory beans.
+ *
  * @author qilong.zql
  * @since 3.1.0
  */

@@ -26,7 +26,7 @@ import org.springframework.util.ClassUtils;
 import com.alipay.sofa.common.xmap.XMap;
 
 /**
- * ExtensionPoint Implementation。
+ * ExtensionPoint Implementation.
  *
  * @author xi.hux@alipay.com
  * @author ruoshan

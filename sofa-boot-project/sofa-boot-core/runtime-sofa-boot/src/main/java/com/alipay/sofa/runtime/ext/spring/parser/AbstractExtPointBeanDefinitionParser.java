@@ -29,6 +29,8 @@ import org.springframework.util.StringUtils;
 import org.w3c.dom.Element;
 
 /**
+ * Abstract parser for extension and extension point.
+ *
  * @author fengqi.lin
  * @since 2.6.0
  */
@@ -39,12 +41,7 @@ public abstract class AbstractExtPointBeanDefinitionParser implements BeanDefini
      */
     public static final String ID_ATTRIBUTE = "id";
 
-    /**
-     *
-     * @param element
-     * @param parserContext
-     * @return
-     */
+    @Override
     public final BeanDefinition parse(Element element, ParserContext parserContext) {
         AbstractBeanDefinition definition = parseInternal(element, parserContext);
         if (definition != null && !parserContext.isNested()) {

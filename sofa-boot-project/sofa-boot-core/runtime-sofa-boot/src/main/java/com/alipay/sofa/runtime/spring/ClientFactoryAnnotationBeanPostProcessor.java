@@ -29,7 +29,7 @@ import org.springframework.util.ReflectionUtils;
 import java.lang.reflect.Modifier;
 
 /**
- * {@link SofaClientFactory} handler
+ * Implementation of {@link BeanPostProcessor} to inject value to field with {@link SofaClientFactory}.
  *
  * @author xuanbei 18/3/2
  */

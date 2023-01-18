@@ -19,7 +19,7 @@ package com.alipay.sofa.boot.isle.stage;
 import java.util.List;
 
 /**
- * Default implement for {@link PipelineContext}
+ * Default implement for {@link PipelineContext}.
  *
  * @author xuanbei 18/3/12
  * @author huzijie

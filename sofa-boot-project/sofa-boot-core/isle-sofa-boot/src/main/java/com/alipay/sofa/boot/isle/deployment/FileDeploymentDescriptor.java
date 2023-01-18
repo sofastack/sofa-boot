@@ -29,6 +29,7 @@ import org.springframework.core.io.FileSystemResource;
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 
 /**
+ * Deployment descriptor created by file.
  *
  * @author yangyanzhao
  * @version $Id: FileDescriptor.java, v 0.1 2012-1-11 17:41:52 yangyanzhao Exp $

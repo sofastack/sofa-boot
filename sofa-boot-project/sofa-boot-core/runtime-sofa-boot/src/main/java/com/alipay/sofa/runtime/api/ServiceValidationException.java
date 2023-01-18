@@ -19,7 +19,7 @@ package com.alipay.sofa.runtime.api;
 import java.io.Serial;
 
 /**
- * service validation exception
+ * Service validation exception.
  *
  * @author xuanbei 18/2/28
  */

@@ -21,38 +21,38 @@ import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.model.ComponentType;
 
 /**
- * ComponentName Factory
+ * ComponentName Factory.
  *
  * @author xuanbei 18/2/28
  */
 public class ComponentNameFactory {
     /**
-     * create ComponentName by component type and class type
+     * Create ComponentName by component type and class type.
      *
-     * @param clazz
-     * @param type
+     * @param type component type
+     * @param clazz clazz
      */
     public static ComponentName createComponentName(ComponentType type, Class<?> clazz) {
         return new ComponentName(type, mergeComponentName(clazz, null));
     }
 
     /**
-     * create ComponentName by component type and component name
+     * Create ComponentName by component type and component name.
      *
-     * @param type
-     * @param name
-     * @return
+     * @param type component type
+     * @param name name
+     * @return component name
      */
     public static ComponentName createComponentName(ComponentType type, String name) {
         return new ComponentName(type, name);
     }
 
     /**
-     * create ComponentName by component type,class type and unique id
+     * Create ComponentName by component type,class type and unique id.
      *
-     * @param type
-     * @param clazz
-     * @param uniqueId
+     * @param type component type
+     * @param clazz clazz
+     * @param uniqueId unique id
      */
     public static ComponentName createComponentName(ComponentType type, Class<?> clazz,
                                                     String uniqueId) {
@@ -60,10 +60,10 @@ public class ComponentNameFactory {
     }
 
     /**
-     * create ComponentName by class type and unique id
+     * Create ComponentName by class type and unique id.
      *
-     * @param clazz
-     * @param uniqueId
+     * @param clazz clazz
+     * @param uniqueId unique id
      */
     private static String mergeComponentName(Class<?> clazz, String uniqueId) {
         String ret = clazz.getName();

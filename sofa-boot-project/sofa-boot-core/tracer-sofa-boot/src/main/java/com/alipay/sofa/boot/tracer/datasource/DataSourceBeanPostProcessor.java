@@ -33,7 +33,7 @@ import java.lang.reflect.Method;
 import static com.alipay.common.tracer.core.configuration.SofaTracerConfiguration.TRACER_APPNAME_KEY;
 
 /**
- * {@link BeanPostProcessor} to wrapper datasource in {@link SmartDataSource}
+ * Implementation of {@link BeanPostProcessor} to wrapper datasource in {@link SmartDataSource}.
  *
  * @author qilong.zql
  * @author huzijie

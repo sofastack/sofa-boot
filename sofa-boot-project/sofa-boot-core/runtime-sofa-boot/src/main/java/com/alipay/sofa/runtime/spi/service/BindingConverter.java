@@ -28,7 +28,7 @@ import com.alipay.sofa.runtime.api.client.param.BindingParam;
 import com.alipay.sofa.runtime.spi.binding.Binding;
 
 /**
- * Binding Converter, convert {@link BindingParam} or xml Element to concrete {@link Binding}
+ * Binding Converter, convert {@link BindingParam} or xml Element to concrete {@link Binding}.
  *
  * @author xuanbei 18/2/28
  */

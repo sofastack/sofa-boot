@@ -25,7 +25,7 @@ import com.alipay.sofa.runtime.spi.service.ServiceProxy;
 import org.springframework.aop.framework.ProxyFactory;
 
 /**
- * JVM Binding Adapter, used to handle JvmBinding
+ * JVM Binding Adapter, used to handle JvmBinding.
  *
  * @author xi.hux@alipay.com
  * @version $Id: DefaultBindingAdapter.java,v 0.1 2009-10-12 17:14:41 xi.hux Exp $

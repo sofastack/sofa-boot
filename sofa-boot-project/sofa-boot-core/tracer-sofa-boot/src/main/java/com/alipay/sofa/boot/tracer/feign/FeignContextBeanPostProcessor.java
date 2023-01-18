@@ -26,7 +26,7 @@ import org.springframework.cloud.openfeign.FeignContext;
 import org.springframework.util.Assert;
 
 /**
- * {@link BeanPostProcessor} to wrapper FeignContext in {@link SofaTracerFeignContext}
+ * Implementation of {@link BeanPostProcessor} to wrapper FeignContext in {@link SofaTracerFeignContext}.
  *
  * @author guolei.sgl (guolei.sgl@antfin.com) 2019/3/13 6:08 PM
  * @author huzijie

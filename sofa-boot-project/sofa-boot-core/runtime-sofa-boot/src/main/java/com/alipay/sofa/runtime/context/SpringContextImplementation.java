@@ -21,6 +21,8 @@ import com.alipay.sofa.runtime.spi.component.Implementation;
 import org.springframework.context.ApplicationContext;
 
 /**
+ * Implementation of {@link  Implementation} for {@link SpringContextComponent}
+ *
  * @author khotyn
  * Created on 2020/10/26
  */

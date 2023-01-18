@@ -27,20 +27,44 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("sofa.boot.runtime")
 public class SofaRuntimeProperties {
 
+    /**
+     * Skip jvm reference check in health checker.
+     */
     private boolean skipJvmReferenceHealthCheck   = false;
 
+    /**
+     * Skip extension check in health checker.
+     */
     private boolean skipExtensionHealthCheck      = false;
 
+    /**
+     * Global disable jvm first.
+     */
     private boolean disableJvmFirst               = false;
 
+    /**
+     * Throw exception when extension failed to load contributions.
+     */
     private boolean extensionFailureInsulating    = false;
 
+    /**
+     * Skip to destroy all components when shutdown.
+     */
     private boolean skipAllComponentShutdown      = false;
 
+    /**
+     * Skip to destroy all common components when shutdown.
+     */
     private boolean skipCommonComponentShutdown   = false;
 
+    /**
+     * Enable jvm filter feature.
+     */
     private boolean jvmFilterEnable               = false;
 
+    /**
+     * Enable service interface type check.
+     */
     private boolean serviceInterfaceTypeCheck     = false;
 
     public boolean isSkipJvmReferenceHealthCheck() {

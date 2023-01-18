@@ -34,6 +34,7 @@ import org.springframework.util.ResourceUtils;
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 
 /**
+ * Deployment descriptor created by jar.
  *
  * @author yangyanzhao
  * @version $Id: JarDescriptor.java, v 0.1 2012-1-11 17:43:17 yangyanzhao Exp $

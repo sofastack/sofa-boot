@@ -46,8 +46,8 @@ import org.springframework.util.ReflectionUtils;
 import java.lang.reflect.Modifier;
 
 /**
- * Responsible to inject field annotated by @SofaReference and
- * invoke setXX method annotated by @SofaReference
+ * Implementation of {@link BeanPostProcessor} to inject field annotated by {@link SofaReference} and
+ * invoke set method annotated by {@link SofaReference}.
  *
  * @author xuanbei 18/5/9
  */
@@ -68,10 +68,7 @@ public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor, 
 
     /**
      * To construct a ReferenceAnnotationBeanPostProcessor via a Spring Bean
-     * sofaRuntimeContext and sofaRuntimeProperties will be obtained from applicationContext
-     * @param sofaRuntimeContext
-     * @param bindingAdapterFactory
-     * @param bindingConverterFactory
+     * sofaRuntimeContext and sofaRuntimeProperties will be obtained from applicationContext.
      */
     public ReferenceAnnotationBeanPostProcessor(SofaRuntimeContext sofaRuntimeContext,
                                                 BindingAdapterFactory bindingAdapterFactory,

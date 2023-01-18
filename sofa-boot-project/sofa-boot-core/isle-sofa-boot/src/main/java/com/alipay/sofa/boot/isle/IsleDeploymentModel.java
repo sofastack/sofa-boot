@@ -23,19 +23,20 @@ import java.util.Map;
 
 /**
  * An interface to obtain isle deployments
- * <p> Note it can only be aware when Isle deployments have start installing
+ * <p> Note it can only be aware when Isle deployments have start installing.
  * <pre>{@code
  *     IsleDeploymentModel model = applicationContext.getBean(SofaBootConstants.APPLICATION, IsleDeploymentModel.class);
  * }</pre>
+ *
  * @author huzijie
  * @version IsleDeploymentModel.java, v 0.1 2022年07月11日 11:28 AM huzijie Exp $
  */
 public interface IsleDeploymentModel {
 
     /**
-     * Get All module application context map, the key is module name, the value is applicationContext
+     * Get All module application context map, the key is module name, the value is applicationContext.
      * <p> Note the result will change when isle deployments is installing
-     * @return the result
+     * @return the application context map, key is module name, value is context instances.
      */
     @NonNull
     Map<String, ApplicationContext> getModuleApplicationContextMap();

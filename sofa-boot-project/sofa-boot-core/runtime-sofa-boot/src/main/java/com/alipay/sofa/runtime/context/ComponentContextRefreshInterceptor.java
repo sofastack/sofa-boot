@@ -24,15 +24,16 @@ import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.ComponentManager;
+import com.alipay.sofa.runtime.spi.component.ComponentNameFactory;
 import com.alipay.sofa.runtime.spi.component.Implementation;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
-import com.alipay.sofa.runtime.spi.component.ComponentNameFactory;
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import org.slf4j.Logger;
 
 import java.util.Collection;
 
 /**
- * Implement for {@link ContextRefreshInterceptor} to handler components
+ * Implementation of {@link ContextRefreshInterceptor} to handler components.
  *
  * @author huzijie
  * @version ComponentContextRefreshInterceptor.java, v 0.1 2023年01月12日 3:37 PM huzijie Exp $
@@ -41,16 +42,13 @@ public class ComponentContextRefreshInterceptor implements ContextRefreshInterce
 
     private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(ComponentContextRefreshInterceptor.class);
 
-    private boolean                  unregisterComponentWhenContextRefreshFailure;
-
     private final ComponentManager   componentManager;
 
     private final SofaRuntimeContext sofaRuntimeContext;                           ;
 
-    public ComponentContextRefreshInterceptor(ComponentManager componentManager,
-                                              SofaRuntimeContext sofaRuntimeContext) {
-        this.componentManager = componentManager;
-        this.sofaRuntimeContext = sofaRuntimeContext;
+    public ComponentContextRefreshInterceptor(SofaRuntimeManager sofaRuntimeManager) {
+        this.componentManager = sofaRuntimeManager.getComponentManager();
+        this.sofaRuntimeContext = sofaRuntimeManager.getSofaRuntimeContext();
     }
 
     @Override
@@ -64,7 +62,7 @@ public class ComponentContextRefreshInterceptor implements ContextRefreshInterce
             componentManager.register(componentInfo);
         }
 
-        if (throwable != null && unregisterComponentWhenContextRefreshFailure) {
+        if (throwable != null) {
             Collection<ComponentInfo> componentInfos = componentManager
                 .getComponentInfosByApplicationContext(context);
             for (ComponentInfo componentInfo : componentInfos) {

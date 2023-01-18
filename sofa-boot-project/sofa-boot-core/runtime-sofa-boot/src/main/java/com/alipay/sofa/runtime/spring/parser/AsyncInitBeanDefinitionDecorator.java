@@ -27,6 +27,8 @@ import org.w3c.dom.Node;
 import static com.alipay.sofa.runtime.async.AsyncInitMethodManager.ASYNC_INIT_METHOD_NAME;
 
 /**
+ * Async init definition decorator.
+ *
  * @author qilong.zql
  * @author xuanbei
  * @since 2.6.0

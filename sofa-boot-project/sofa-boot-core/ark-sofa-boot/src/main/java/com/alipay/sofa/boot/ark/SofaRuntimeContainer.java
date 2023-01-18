@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * SofaFramework manager interface for ark
+ * SofaFramework manager interface for ark.
  *
  * @author qilong.zql
  * @author huzijie

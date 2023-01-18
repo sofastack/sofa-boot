@@ -20,7 +20,7 @@ import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptor;
 
 /**
- * interface to create sofa application context use {@link DeploymentDescriptor}.
+ * Interface to create sofa application context use {@link DeploymentDescriptor}.
  *
  * @author linfengqi  2011-7-26
  * @author huzijie

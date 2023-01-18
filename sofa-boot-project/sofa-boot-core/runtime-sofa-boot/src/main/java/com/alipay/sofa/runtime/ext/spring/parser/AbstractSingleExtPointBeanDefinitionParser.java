@@ -22,6 +22,8 @@ import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;
 
 /**
+ * Abstract single parser for extension and extension point.
+ *
  * @author fengqi.lin
  * @since 2.6.0
  */
@@ -97,7 +99,7 @@ public abstract class AbstractSingleExtPointBeanDefinitionParser extends
      * the supplied <code>Element</code>, or <code>null</code> if none
      * @see #getBeanClassName
      */
-    protected Class getBeanClass(Element element) {
+    protected Class<?> getBeanClass(Element element) {
         return null;
     }
 

@@ -40,7 +40,8 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 /**
- * SOFA Extension Component
+ * SOFA Extension Component.
+ *
  * @author khotyn
  * @author ruoshan
  * @since 2.6.0

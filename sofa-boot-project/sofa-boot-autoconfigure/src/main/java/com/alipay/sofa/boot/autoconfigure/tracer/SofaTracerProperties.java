@@ -36,28 +36,61 @@ import static com.alipay.common.tracer.core.configuration.SofaTracerConfiguratio
 @ConfigurationProperties("sofa.boot.tracer")
 public class SofaTracerProperties {
 
+    /**
+     * Disable digest log.
+     */
     private String              disableDigestLog          = "false";
 
+    /**
+     * Disable configuration.
+     */
     private Map<String, String> disableConfiguration      = new HashMap<String, String>();
 
+    /**
+     * Tracer's global rolling configuration.
+     */
     private String              tracerGlobalRollingPolicy = TimedRollingFileAppender.DAILY_ROLLING_PATTERN;
 
+    /**
+     * Tracer's global log retention days configuration.
+     */
     private String              tracerGlobalLogReserveDay = String.valueOf(DEFAULT_LOG_RESERVE_DAY);
 
+    /**
+     * The interval for printing the stat log.
+     */
     private String              statLogInterval           = String
                                                               .valueOf(SofaTracerStatisticReporterManager.DEFAULT_CYCLE_SECONDS);
 
+    /**
+     * Threshold, the length of the service transparent field
+     */
     private String              baggageMaxLength          = String
                                                               .valueOf(SofaTracerConfiguration.PEN_ATTRS_LENGTH_TRESHOLD);
 
+    /**
+     * Sampling policy name.
+     */
     private String              samplerName;
 
+    /**
+     * Sampling policy percentage.
+     */
     private float               samplerPercentage         = 100;
 
+    /**
+     * Custom sampling rule class name.
+     */
     private String              samplerCustomRuleClassName;
 
+    /**
+     * Custom reporter class name.
+     */
     private String              reporterName;
 
+    /**
+     * Use json to print log.
+     */
     private boolean             jsonOutput                = true;
 
     public String getDisableDigestLog() {

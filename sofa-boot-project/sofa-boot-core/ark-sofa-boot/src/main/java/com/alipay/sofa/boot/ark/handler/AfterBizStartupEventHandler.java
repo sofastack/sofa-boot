@@ -22,7 +22,7 @@ import com.alipay.sofa.ark.spi.service.event.EventHandler;
 import com.alipay.sofa.boot.ark.invoke.DynamicJvmServiceProxyFinder;
 
 /**
- * Implement for {@link EventHandler<AfterBizStartupEvent>} mark biz startup
+ * Implementation of {@link EventHandler<AfterBizStartupEvent>} mark biz startup.
  *
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * @author huzijie

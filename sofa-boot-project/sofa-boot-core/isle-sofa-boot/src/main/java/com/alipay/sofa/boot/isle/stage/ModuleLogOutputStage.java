@@ -24,7 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Stage to found log sofa module information
+ * Stage to found log sofa module information.
  *
  * @author fengqi.lin
  * @author yangyanzhao

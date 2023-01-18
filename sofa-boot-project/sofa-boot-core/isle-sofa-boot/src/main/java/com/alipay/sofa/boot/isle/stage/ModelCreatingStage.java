@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.Properties;
 
 /**
- * Stage to found sofa modules in classpath
+ * Stage to found sofa modules in classpath.
  *
  * @author fengqi.lin
  * @author yangyanzhao

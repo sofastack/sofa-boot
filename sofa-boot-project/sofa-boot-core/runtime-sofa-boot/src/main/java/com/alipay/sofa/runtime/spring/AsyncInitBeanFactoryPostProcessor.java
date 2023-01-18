@@ -55,6 +55,8 @@ import java.util.stream.Collectors;
 import static com.alipay.sofa.runtime.async.AsyncInitMethodManager.ASYNC_INIT_METHOD_NAME;
 
 /**
+ * Implementation of {@link BeanFactoryPostProcessor} to register async init beans.
+ *
  * @author huzijie
  * @version AsyncInitBeanFactoryPostProcessor.java, v 0.1 2022年03月25日 2:08 PM huzijie Exp $
  */

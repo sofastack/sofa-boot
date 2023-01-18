@@ -19,6 +19,8 @@ package com.alipay.sofa.runtime.api.component;
 import java.util.List;
 
 /**
+ * Property model for components.
+ *
  * @author xuanbei 18/2/28
  */
 public class Property {

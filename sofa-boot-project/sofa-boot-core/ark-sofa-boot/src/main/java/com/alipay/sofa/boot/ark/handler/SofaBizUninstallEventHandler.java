@@ -25,7 +25,7 @@ import com.alipay.sofa.boot.ark.invoke.DynamicJvmServiceProxyFinder;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 
 /**
- * Implement for {@link EventHandler<BeforeBizStopEvent>} to shut down {@link SofaRuntimeManager}
+ * Implementation of {@link EventHandler<BeforeBizStopEvent>} to shut down {@link SofaRuntimeManager}.
  *
  * @author qilong.zql
  * @author huzijie

@@ -24,6 +24,8 @@ import com.alipay.sofa.runtime.spring.parser.AbstractContractDefinitionParser;
 import static com.alipay.sofa.runtime.spring.parser.ServiceDefinitionParser.BEAN_ID;
 
 /**
+ * Service and reference factory bean name generator.
+ *
  * @author qilong.zql
  * @since 3.1.0
  */

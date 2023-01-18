@@ -21,22 +21,23 @@ import java.util.Set;
 import com.alipay.sofa.runtime.api.binding.BindingType;
 
 /**
- * Binding Adapter Factory
+ * Interface to create {@link BindingAdapter}.
  *
  * @author xuanbei 18/2/28
  */
 @SuppressWarnings("rawtypes")
 public interface BindingAdapterFactory {
+
     /**
-     * get binding adapter by binding type
+     * Get binding adapter by binding type.
      *
      * @param bindingType binding type
      * @return binding adapter
      */
     BindingAdapter getBindingAdapter(BindingType bindingType);
 
-    /***
-     * add binding adapters
+    /**
+     * Add binding adapters.
      *
      * @param bindingAdapters binding adapters
      */

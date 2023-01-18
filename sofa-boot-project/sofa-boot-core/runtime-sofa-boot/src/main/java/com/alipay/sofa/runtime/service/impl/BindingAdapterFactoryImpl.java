@@ -28,6 +28,8 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * Base implementation of {@link BindingAdapterFactory}.
+ *
  * @author xuanbei 18/2/28
  */
 @SuppressWarnings("rawtypes")

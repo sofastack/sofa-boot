@@ -20,12 +20,29 @@ import com.alipay.sofa.runtime.service.component.ServiceComponent;
 import com.alipay.sofa.runtime.spi.binding.Contract;
 
 /**
+ * Interface to found service proxy or component dynamically.
+ *
  * @author huzijie
  * @version ServiceProxyManager.java, v 0.1 2023年01月16日 3:37 PM huzijie Exp $
+ * @since 4.0.0
  */
 public interface DynamicServiceProxyManager {
 
+    /**
+     * Get a ServiceProxy instance.
+     *
+     * @param contract contract
+     * @param classLoader classLoader
+     * @return ServiceProxy instance.
+     */
     ServiceProxy getDynamicServiceProxy(Contract contract, ClassLoader classLoader);
 
+    /**
+     * Get a ServiceComponent instance.
+     *
+     * @param contract contract
+     * @param classLoader classLoader
+     * @return ServiceComponent instance.
+     */
     ServiceComponent getDynamicServiceComponent(Contract contract, ClassLoader classLoader);
 }

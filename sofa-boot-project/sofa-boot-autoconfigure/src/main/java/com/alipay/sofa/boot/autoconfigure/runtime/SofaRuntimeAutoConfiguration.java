@@ -21,6 +21,7 @@ import com.alipay.sofa.boot.util.ServiceLoaderUtils;
 import com.alipay.sofa.runtime.api.client.ReferenceClient;
 import com.alipay.sofa.runtime.api.client.ServiceClient;
 import com.alipay.sofa.runtime.async.AsyncInitMethodManager;
+import com.alipay.sofa.runtime.context.ComponentContextRefreshInterceptor;
 import com.alipay.sofa.runtime.impl.ClientFactoryImpl;
 import com.alipay.sofa.runtime.impl.StandardSofaRuntimeManager;
 import com.alipay.sofa.runtime.proxy.ProxyBeanFactoryPostProcessor;
@@ -173,5 +174,11 @@ public class SofaRuntimeAutoConfiguration {
     @ConditionalOnMissingBean
     public ComponentBeanStatCustomizer componentBeanStatCustomizer() {
         return new ComponentBeanStatCustomizer();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public ComponentContextRefreshInterceptor componentContextRefreshInterceptor(SofaRuntimeManager sofaRuntimeManager) {
+        return new ComponentContextRefreshInterceptor(sofaRuntimeManager);
     }
 }

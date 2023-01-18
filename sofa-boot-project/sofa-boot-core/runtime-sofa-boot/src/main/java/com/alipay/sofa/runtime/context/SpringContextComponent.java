@@ -30,7 +30,7 @@ import org.springframework.context.support.AbstractApplicationContext;
 import java.util.Map;
 
 /**
- * Spring itself is registered as SOFA component (SpringComponent)
+ * Register application context as a component.
  *
  * @author khotyn Created on 2020/10/26
  */

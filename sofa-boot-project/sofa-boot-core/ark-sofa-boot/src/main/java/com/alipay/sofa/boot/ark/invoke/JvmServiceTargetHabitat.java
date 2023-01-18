@@ -23,6 +23,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * Cache for jvm service components.
+ *
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 03/09/2021
  */

@@ -41,7 +41,7 @@ import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
 
 /**
- * Service Client Implementation，you can publish a service by this class
+ * Service Client Implementation，you can publish a service by this class.
  *
  * @author xuanbei 18/3/1
  */

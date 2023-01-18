@@ -41,7 +41,7 @@ import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
 import com.alipay.sofa.runtime.spi.component.ComponentNameFactory;
 
 /**
- * Reference Client Implementation，you can reference a service by this class
+ * Reference Client Implementation，you can reference a service by this class.
  *
  * @author xuanbei 18/3/1
  */

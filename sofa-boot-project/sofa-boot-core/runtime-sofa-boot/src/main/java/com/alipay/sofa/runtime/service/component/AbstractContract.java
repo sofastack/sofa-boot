@@ -28,7 +28,7 @@ import com.alipay.sofa.runtime.spi.binding.Binding;
 import com.alipay.sofa.runtime.spi.binding.Contract;
 
 /**
- * abstract contract implementation
+ * Abstract contract implementation.
  *
  * @author xuanbei 18/3/1
  */

@@ -28,7 +28,7 @@ import java.lang.reflect.Method;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * Implement for {@link DynamicMethodMatcherPointcut} to find class that with {@link Tracer} annotation on method.
+ * Implementation of {@link DynamicMethodMatcherPointcut} to find class that with {@link Tracer} annotation on method.
  *
  * @author guolei.sgl (guolei.sgl@antfin.com) 2019/8/9 3:12 PM
  * @author huzijie

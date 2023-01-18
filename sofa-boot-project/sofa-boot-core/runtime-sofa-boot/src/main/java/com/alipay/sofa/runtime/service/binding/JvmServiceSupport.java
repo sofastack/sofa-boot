@@ -23,10 +23,12 @@ import com.alipay.sofa.runtime.spi.component.ComponentManager;
 import com.alipay.sofa.runtime.spi.component.ComponentNameFactory;
 
 /**
+ * Support to find jvm service.
+ *
  * @author huzijie
- * @version JvmServiceFinder.java, v 0.1 2023年01月16日 4:02 PM huzijie Exp $
+ * @version JvmServiceSupport.java, v 0.1 2023年01月16日 4:02 PM huzijie Exp $
  */
-public class JvmServiceFinder {
+public class JvmServiceSupport {
 
     public static ServiceComponent foundServiceComponent(ComponentManager componentManager,
                                                          Contract contract) {

@@ -23,7 +23,7 @@ import com.alipay.sofa.runtime.spi.service.DefaultDynamicServiceProxyManager;
 import com.alipay.sofa.runtime.spi.service.DynamicServiceProxyManager;
 
 /**
- * SOFA Runtime Context
+ * SOFA Runtime Context.
  *
  * @author xuanbei 18/2/28
  */
@@ -33,6 +33,7 @@ public class SofaRuntimeContext {
     private final ComponentManager           componentManager;
 
     private final SofaRuntimeManager         sofaRuntimeManager;
+
     /** client factory */
     private final ClientFactoryInternal     clientFactory;
 

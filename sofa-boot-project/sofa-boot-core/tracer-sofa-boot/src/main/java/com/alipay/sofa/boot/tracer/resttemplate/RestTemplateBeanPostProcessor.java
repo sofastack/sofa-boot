@@ -22,7 +22,7 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * {@link BeanPostProcessor} to enhance message hook {@link RestTemplate}
+ * Implementation of {@link BeanPostProcessor} to enhance message hook {@link RestTemplate}.
  *
  * @author guolei.sgl (guolei.sgl@antfin.com) 2019/9/11 11:59 PM
  * @author huzijie

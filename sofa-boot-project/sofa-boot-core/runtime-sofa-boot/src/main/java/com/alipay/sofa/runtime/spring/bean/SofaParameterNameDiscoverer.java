@@ -28,6 +28,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
 /**
+ * Implementation of {@link ParameterNameDiscoverer} to handle parameter with {@link SofaReference} annotation.
+ *
  * @author qilong.zql
  * @since 3.1.0
  */

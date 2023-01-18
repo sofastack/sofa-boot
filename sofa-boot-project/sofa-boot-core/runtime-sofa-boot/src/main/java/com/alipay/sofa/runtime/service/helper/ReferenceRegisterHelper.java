@@ -30,7 +30,7 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import org.springframework.context.ApplicationContext;
 
 /**
- * reference register helper
+ * Reference register helper.
  *
  * @author xuanbei 18/3/1
  */

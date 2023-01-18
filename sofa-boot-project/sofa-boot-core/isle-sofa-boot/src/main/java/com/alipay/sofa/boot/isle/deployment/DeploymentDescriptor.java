@@ -23,7 +23,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
 
 /**
- * SOFABoot Module Deployment Descriptor.
+ * Interface for descriptor a sofa module deployment.
  *
  * @author yangyanzhao
  * @version $Id: DeploymentDescriptor.java, v 0.1 2012-1-10 12:28:28 yangyanzhao Exp $

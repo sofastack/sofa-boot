@@ -33,9 +33,12 @@ public class ZipkinProperties {
      */
     private String  baseUrl = "http://localhost:9411/";
 
+    /**
+     * Whether enable zipkin tracer.
+     */
     private boolean enabled = true;
     /**
-     * When enabled, spans are gzipped before sent to the zipkin server
+     * When enabled, spans are gzipped before sent to the zipkin server.
      */
     private boolean gzipped = false;
 

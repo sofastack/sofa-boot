@@ -27,7 +27,7 @@ import com.alipay.sofa.boot.spring.namespace.spi.SofaBootTagNameSupport;
 import com.alipay.sofa.boot.util.XmlParserUtils;
 
 /**
- * Common parser for extension and extension point
+ * Common parser for extension and extension point.
  *
  * @author yangyanzhao@alipay.com
  * @author yangyanzhao
@@ -87,6 +87,13 @@ public abstract class AbstractExtBeanDefinitionParser extends
                 });
     }
 
+    /**
+     * Actually parse sub element.
+     *
+     * @param element element
+     * @param parserContext parserContext
+     * @param builder builder
+     */
     protected abstract void parserSubElement(Element element, ParserContext parserContext,
                                              BeanDefinitionBuilder builder);
 

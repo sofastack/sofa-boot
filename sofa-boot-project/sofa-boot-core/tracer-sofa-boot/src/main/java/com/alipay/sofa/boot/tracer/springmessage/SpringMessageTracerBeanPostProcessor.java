@@ -28,7 +28,7 @@ import org.springframework.util.StringUtils;
 import static com.alipay.common.tracer.core.configuration.SofaTracerConfiguration.TRACER_APPNAME_KEY;
 
 /**
- * {@link BeanPostProcessor} to add interceptor {@link SofaTracerChannelInterceptor}
+ * Implementation of {@link BeanPostProcessor} to add interceptor {@link SofaTracerChannelInterceptor}.
  *
  * @author guolei.sgl (guolei.sgl@antfin.com) 2019/12/4 11:07 AM
  * @author huzijie

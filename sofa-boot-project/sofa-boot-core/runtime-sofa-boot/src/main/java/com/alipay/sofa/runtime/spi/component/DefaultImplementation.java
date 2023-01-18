@@ -19,6 +19,8 @@ package com.alipay.sofa.runtime.spi.component;
 import com.alipay.sofa.runtime.api.ServiceValidationException;
 
 /**
+ * Default implementation of {@link Implementation}.
+ *
  * @author xuanbei 18/3/1
  */
 public class DefaultImplementation implements Implementation {

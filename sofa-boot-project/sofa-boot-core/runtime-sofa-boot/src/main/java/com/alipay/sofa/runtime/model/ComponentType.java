@@ -17,7 +17,7 @@
 package com.alipay.sofa.runtime.model;
 
 /**
- * component type
+ * Component type.
  *
  * @author xuanbei 18/2/28
  */
@@ -40,10 +40,12 @@ public class ComponentType {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
+        if (this == o) {
             return true;
-        if (!(o instanceof ComponentType that))
+        }
+        if (!(o instanceof ComponentType that)) {
             return false;
+        }
 
         return typeName.equals(that.typeName);
     }

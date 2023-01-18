@@ -24,8 +24,10 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
+ * Container to hold jvm filter.
+ *
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
- * Created on 2020/8/18
+ * @author huzijie
  */
 public class JvmFilterHolder {
 

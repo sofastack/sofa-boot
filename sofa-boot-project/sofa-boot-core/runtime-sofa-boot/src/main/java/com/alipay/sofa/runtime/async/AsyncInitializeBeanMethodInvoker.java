@@ -9,6 +9,8 @@ import java.lang.reflect.Method;
 import java.util.concurrent.CountDownLatch;
 
 /**
+ * Implementation of {@link MethodInterceptor} to async invoke init method.
+ *
  * @author huzijie
  * @version AsyncInitializeBeanMethodInvoker.java, v 0.1 2023年01月17日 11:53 AM huzijie Exp $
  */
@@ -25,9 +27,15 @@ public class AsyncInitializeBeanMethodInvoker implements MethodInterceptor {
     private final String beanName;
 
     private final CountDownLatch initCountDownLatch = new CountDownLatch(1);
-    // mark async-init method is during first invocation.
+
+    /**
+     * mark async-init method is during first invocation.
+     */
     private volatile boolean isAsyncCalling = false;
-    // mark init-method is called.
+
+    /**
+     * mark init-method is called.
+     */
     private volatile boolean isAsyncCalled = false;
 
     public AsyncInitializeBeanMethodInvoker(AsyncInitMethodManager asyncInitMethodManager, Object targetObject, String beanName, String methodName) {

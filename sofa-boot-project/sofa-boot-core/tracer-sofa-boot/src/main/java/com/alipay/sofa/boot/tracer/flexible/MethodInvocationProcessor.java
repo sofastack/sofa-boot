@@ -28,11 +28,11 @@ import org.aopalliance.intercept.MethodInvocation;
 public interface MethodInvocationProcessor {
 
     /**
-     * proxy method
-     * @param invocation
-     * @param tracerSpan
-     * @return
-     * @throws Throwable
+     * Proxy method.
+     * @param invocation invocation
+     * @param tracerSpan tracer span
+     * @return result
+     * @throws Throwable exception
      */
     Object process(MethodInvocation invocation, Tracer tracerSpan) throws Throwable;
 }

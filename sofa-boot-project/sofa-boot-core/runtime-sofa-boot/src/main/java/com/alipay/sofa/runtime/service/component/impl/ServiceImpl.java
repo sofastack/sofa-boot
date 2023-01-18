@@ -24,7 +24,7 @@ import com.alipay.sofa.runtime.service.component.AbstractContract;
 import com.alipay.sofa.runtime.service.component.Service;
 
 /**
- * Service Implementation
+ * Service Implementation.
  *
  * @author xuanbei 18/3/1
  */

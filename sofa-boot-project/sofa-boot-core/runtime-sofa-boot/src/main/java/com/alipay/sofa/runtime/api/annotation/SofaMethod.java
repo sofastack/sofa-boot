@@ -22,6 +22,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * Annotation to configure specified method.
+ *
  * @author bystander
  * @since 2.6.4
  */

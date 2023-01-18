@@ -15,7 +15,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Proxy;
 
 /**
- * JVM Service Invoker
+ * Extensions for {@link ServiceProxy} to invoke jvm service.
+ *
+ * @author huzijie
+ * @since 3.1.2
  */
 public class JvmServiceInvoker extends ServiceProxy {
 
@@ -152,7 +155,7 @@ public class JvmServiceInvoker extends ServiceProxy {
 
     protected Object getTarget() {
         if (this.target == null) {
-            ServiceComponent serviceComponent = JvmServiceFinder.foundServiceComponent(
+            ServiceComponent serviceComponent = JvmServiceSupport.foundServiceComponent(
                     sofaRuntimeContext.getComponentManager(), contract);
 
             if (serviceComponent != null) {

@@ -26,7 +26,7 @@ import com.alipay.sofa.boot.ark.handler.SofaBizUninstallEventHandler;
 import com.alipay.sofa.boot.ark.invoke.DynamicJvmServiceProxyFinder;
 
 /**
- * Implement for {@link PluginActivator} to register SOFABoot bridge components
+ * Implementation of {@link PluginActivator} to register SOFABoot bridge components.
  *
  * @author qilong.zql
  * @author huzijie

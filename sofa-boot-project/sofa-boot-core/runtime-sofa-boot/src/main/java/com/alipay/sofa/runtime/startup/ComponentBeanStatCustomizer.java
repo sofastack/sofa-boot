@@ -24,8 +24,11 @@ import com.alipay.sofa.runtime.spring.factory.ReferenceFactoryBean;
 import com.alipay.sofa.runtime.spring.factory.ServiceFactoryBean;
 
 /**
+ * Implementation of {@link BeanStatCustomizer} to update component information.
+ *
  * @author huzijie
  * @version ComponentBeanStatCustomizer.java, v 0.1 2023年01月12日 7:47 PM huzijie Exp $
+ * @since 4.0.0
  */
 public class ComponentBeanStatCustomizer implements BeanStatCustomizer {
 

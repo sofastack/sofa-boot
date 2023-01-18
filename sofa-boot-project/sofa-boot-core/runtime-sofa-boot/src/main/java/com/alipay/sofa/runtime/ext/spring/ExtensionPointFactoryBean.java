@@ -20,7 +20,6 @@ import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import com.alipay.sofa.runtime.ext.component.ExtensionPointComponent;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.Implementation;
-import com.alipay.sofa.runtime.spi.spring.SpringImplementationImpl;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -28,7 +27,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 /**
- * Extension point factory bean
+ * Implementation of {@link org.springframework.beans.factory.FactoryBean} to register extension point.
  *
  * @author xi.hux@alipay.com
  * @author yangyanzhao@alipay.com
