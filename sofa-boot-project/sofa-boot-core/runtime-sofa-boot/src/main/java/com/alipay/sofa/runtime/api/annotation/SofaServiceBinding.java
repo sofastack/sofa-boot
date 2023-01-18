@@ -17,92 +17,94 @@
 package com.alipay.sofa.runtime.api.annotation;
 
 /**
+ * Annotation to configure sofa service binding.
+ *
  * @author xuanbei 18/5/11
  */
 public @interface SofaServiceBinding {
     /**
-     * binding type, maybe jvm/bolt/rest
+     * Binding type, maybe jvm/bolt/rest.
      *
      * @return binding type
      */
     String bindingType() default "jvm";
 
     /**
-     * normal weight, default is 100
+     * Normal weight, default is 100.
      *
      * @return normal weight
      */
     int weight() default 0;
 
     /**
-     * when warmup, the weight.
+     * When warmup, the weight.
      *
      * @return warmup weight
      */
     int warmUpWeight() default 0;
 
     /**
-     * warmup time, default is 0
+     * Warmup time, default is 0.
      *
      * @return warmup time
      */
     int warmUpTime() default 0;
 
     /**
-     * filter beans
+     * Filter beans.
      *
      * @return filter beans
      */
     String[] filters() default {};
 
     /**
-     * custom thread pool for current service
+     * Custom thread pool for current service.
      *
      * @return custom thread pool
      */
     String userThreadPool() default "";
 
     /**
-     * registry for this service
+     * Registry for this service.
      *
      * @return registry for this service
      */
     String registry() default "";
 
     /**
-     * timeout
+     * Timeout in milliseconds.
      *
      * @return timeout
      */
     int timeout() default 0;
 
     /**
-     * specify serialize type
+     * Specify serialize type.
      *
-     * @return
+     * @return serialize type
      */
     String serializeType() default "";
 
     /**
-     * parameters of service
+     * Parameters of service.
      *
      * @return parameters of service
      */
     SofaParameter[] parameters() default {};
 
     /**
-     * serialization between biz, default is true.
+     * Serialization between biz, default is true.
      * only serialize of reference and service is false
-     * then invocation between biz would skip serialization
+     * then invocation between biz would skip serialization.
      *
      * Note that the serialize of {@link SofaReferenceBinding} is false
      *
-     * @return
+     * @return whether serialize
      */
     boolean serialize() default true;
 
     /**
-     * for each method config
+     * For each method config.
      *
      * @return method configs
      * @since 2.6.4

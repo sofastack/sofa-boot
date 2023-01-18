@@ -17,13 +17,16 @@
 package com.alipay.sofa.runtime.spi.spring;
 
 /**
+ * Interface to be implemented by any object that wishes to be trigger when sofa runtime shutdown.
+ *
  * @author qilong.zql
  * @author xuanbei
  * @since 2.5.0
  */
 public interface RuntimeShutdownAware {
+
     /**
-     * Invoked when the sofa runtime shutdown
+     * Invoked when the sofa runtime shutdown.
      */
     void shutdown();
 }

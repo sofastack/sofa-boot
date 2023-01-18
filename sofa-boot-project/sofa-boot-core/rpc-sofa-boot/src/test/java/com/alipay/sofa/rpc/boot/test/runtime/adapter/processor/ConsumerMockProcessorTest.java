@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.rpc.boot.test.runtime.adapter.processor;
 
-import com.alipay.sofa.boot.util.StringUtils;
+import org.springframework.util.StringUtils;
 import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ConsumerMockProcessor;
 import com.alipay.sofa.rpc.common.MockMode;
 import com.alipay.sofa.rpc.config.ConsumerConfig;

@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
+ * Stat model witch hold children list.
+ *
  * @author huzijie
  * @version ChildrenStat.java, v 0.1 2022年03月14日 12:18 PM huzijie Exp $
  */

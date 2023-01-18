@@ -19,6 +19,7 @@ package com.alipay.sofa.rpc.boot.swagger;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.alipay.sofa.runtime.spi.component.ComponentManager;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.ApplicationListener;
 
@@ -36,12 +37,14 @@ public class SwaggerServiceApplicationListener implements
 
     @Override
     public void onApplicationEvent(ApplicationStartedEvent event) {
+        ComponentManager componentManager = event.getApplicationContext().getBean(
+            ComponentManager.class);
         List<BindingParam> bindingParams = new ArrayList<>();
         bindingParams.add(new RestBindingParam());
 
         ServiceParam serviceParam = new ServiceParam();
         serviceParam.setInterfaceType(SwaggerService.class);
-        serviceParam.setInstance(new SwaggerServiceImpl());
+        serviceParam.setInstance(new SwaggerServiceImpl(componentManager));
         serviceParam.setBindingParams(bindingParams);
 
         ServiceClient serviceClient = clientFactory.getClient(ServiceClient.class);

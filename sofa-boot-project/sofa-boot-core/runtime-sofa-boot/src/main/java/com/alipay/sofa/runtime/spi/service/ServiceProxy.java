@@ -18,13 +18,15 @@ package com.alipay.sofa.runtime.spi.service;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
-
-import com.alipay.sofa.boot.util.StringUtils;
+import org.springframework.util.StringUtils;
 
 /**
+ * Implementation of {@link MethodInterceptor} to invoke method use service.
+ *
  * @author xuanbei 18/2/28
  */
 public abstract class ServiceProxy implements MethodInterceptor {
+
     protected ClassLoader serviceClassLoader;
 
     public ServiceProxy(ClassLoader serviceClassLoader) {
@@ -83,9 +85,29 @@ public abstract class ServiceProxy implements MethodInterceptor {
         return serviceClassLoader;
     }
 
+    /**
+     * Actually do invoke.
+     *
+     * @param invocation invocation
+     * @return invoke result
+     * @throws Throwable invoke exception
+     */
     protected abstract Object doInvoke(MethodInvocation invocation) throws Throwable;
 
+    /**
+     * Hook to handle exception.
+     *
+     * @param invocation invocation
+     * @param e exception
+     * @param startTime start time
+     */
     protected abstract void doCatch(MethodInvocation invocation, Throwable e, long startTime);
 
+    /**
+     * Hook to handle after invocatino.
+     *
+     * @param invocation invocation
+     * @param startTime start time
+     */
     protected abstract void doFinally(MethodInvocation invocation, long startTime);
 }

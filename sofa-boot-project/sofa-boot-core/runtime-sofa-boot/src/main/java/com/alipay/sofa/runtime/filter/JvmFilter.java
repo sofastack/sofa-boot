@@ -26,6 +26,7 @@ import org.springframework.core.Ordered;
  * Created on 2020/8/18
  */
 public interface JvmFilter extends Ordered {
+
     /**
      * This method is called before the actual JVM service invoking.
      * If filter chain is not interrupted, setting of <code>invokeResult</code> of context

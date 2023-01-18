@@ -5,16 +5,16 @@ name: CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master,4.0.0 ]
   pull_request:
-    branches: [ master ]
+    branches: [ master,4.0.0 ]
 
 jobs:
   build:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        jdk: [8, 11]
+        jdk: [17]
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK

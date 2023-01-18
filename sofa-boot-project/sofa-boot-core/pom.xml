@@ -12,14 +12,11 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <modules>
-        <module>healthcheck-sofa-boot</module>
         <module>runtime-sofa-boot</module>
         <module>isle-sofa-boot</module>
-        <module>test-sofa-boot</module>
         <module>rpc-sofa-boot</module>
         <module>tracer-sofa-boot</module>
-        <module>log-sofa-boot</module>
-        <module>startup-sofa-boot</module>
+        <module>ark-sofa-boot</module>
     </modules>
 
     <artifactId>sofa-boot-core</artifactId>

@@ -23,7 +23,7 @@ import com.alipay.sofa.runtime.spi.binding.AbstractBinding;
 import com.alipay.sofa.runtime.spi.health.HealthResult;
 
 /**
- * JVM Service and Reference Binding
+ * JVM Service and Reference Binding.
  *
  * @author xi.hux@alipay.com
  * @version $Id: JVMBinding.java,v 0.1 2009-9-8 22:03:49 xi.hux Exp $
@@ -32,11 +32,11 @@ public class JvmBinding extends AbstractBinding {
     /**
      * binding type: JVM
      */
-    public static BindingType JVM_BINDING_TYPE = new BindingType(XmlConstants.BINDING_TYPE);
+    public static BindingType  JVM_BINDING_TYPE = new BindingType(XmlConstants.BINDING_TYPE);
 
-    private JvmBindingParam   jvmBindingParam  = new JvmBindingParam();
+    private final HealthResult healthResult     = new HealthResult(getName());
 
-    private HealthResult      healthResult     = new HealthResult(getName());
+    private JvmBindingParam    jvmBindingParam  = new JvmBindingParam();
 
     public JvmBinding() {
     }

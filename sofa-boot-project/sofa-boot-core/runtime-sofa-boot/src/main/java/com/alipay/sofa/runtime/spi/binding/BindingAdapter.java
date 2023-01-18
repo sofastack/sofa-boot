@@ -20,16 +20,14 @@ import com.alipay.sofa.runtime.api.binding.BindingType;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 
 /**
- * <p>
- * Binding Adapter for SOFA service and reference
- * refer {@link BindingType} to get supported binding types.
- * </p>
+ * Binding adapter for service and reference, refer {@link BindingType} to get supported binding types.
  *
  * @author xuanbei 18/2/28
  */
 public interface BindingAdapter<T extends Binding> {
+
     /**
-     * pre out binding
+     * Pre out binding.
      *
      * @param contract           binding contract
      * @param binding            binding object
@@ -40,7 +38,7 @@ public interface BindingAdapter<T extends Binding> {
                        SofaRuntimeContext sofaRuntimeContext);
 
     /**
-     * out binding, out binding means provide service
+     * Out binding, out binding means provide service.
      *
      * @param contract           binding contract
      * @param binding            binding object
@@ -52,7 +50,7 @@ public interface BindingAdapter<T extends Binding> {
                       SofaRuntimeContext sofaRuntimeContext);
 
     /**
-     * pre un-out binding
+     * Pre un-out binding.
      *
      * @param contract           binding contract
      * @param binding            binding object
@@ -63,7 +61,7 @@ public interface BindingAdapter<T extends Binding> {
                          SofaRuntimeContext sofaRuntimeContext);
 
     /**
-     * post unout binding
+     * Post unout binding.
      *
      * @param contract           binding contract
      * @param binding            binding object
@@ -74,7 +72,7 @@ public interface BindingAdapter<T extends Binding> {
                           SofaRuntimeContext sofaRuntimeContext);
 
     /**
-     * in binding, in binding means reference service
+     * In binding, in binding means reference service.
      *
      * @param contract           binding contract
      * @param binding            binding object
@@ -84,7 +82,7 @@ public interface BindingAdapter<T extends Binding> {
     Object inBinding(Object contract, T binding, SofaRuntimeContext sofaRuntimeContext);
 
     /**
-     * undo in binding
+     * Undo in binding.
      *
      * @param contract contract
      * @param binding binding
@@ -93,14 +91,14 @@ public interface BindingAdapter<T extends Binding> {
     void unInBinding(Object contract, T binding, SofaRuntimeContext sofaRuntimeContext);
 
     /**
-     * get binding type
+     * Get binding type.
      *
      * @return binding type
      */
     BindingType getBindingType();
 
     /**
-     * get binding class
+     * Get binding class.
      *
      * @return binding class
      */

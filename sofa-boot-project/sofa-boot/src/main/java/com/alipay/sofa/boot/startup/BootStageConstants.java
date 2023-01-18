@@ -24,6 +24,8 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import java.time.Duration;
 
 /**
+ * Core constants for startup stage statics.
+ *
  * @author huzijie
  * @version BootStageConstants.java, v 0.1 2020年12月31日 11:40 上午 huzijie Exp $
  */
@@ -57,19 +59,4 @@ public class BootStageConstants {
      * StartupContextRefreshedListener.onApplicationEvent(ContextRefreshedEvent)
      */
     public static final String APPLICATION_CONTEXT_REFRESH_STAGE = "ApplicationContextRefreshStage";
-
-    /**
-     * The running stage for ModuleCreatingStage
-     */
-    public static final String ISLE_MODEL_CREATING_STAGE         = "ModelCreatingStage";
-
-    /**
-     * The running stage for SpringContextInstallStage
-     */
-    public static final String ISLE_SPRING_CONTEXT_INSTALL_STAGE = "SpringContextInstallStage";
-
-    /**
-     * The running stage for ReadinessCheckListener
-     */
-    public static final String HEALTH_CHECK_STAGE                = "HealthCheckStage";
 }

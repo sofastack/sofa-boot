@@ -18,7 +18,7 @@ package com.alipay.sofa.runtime.service.client;
 
 import java.util.Collection;
 
-import com.alipay.sofa.boot.error.ErrorCode;
+import com.alipay.sofa.boot.log.ErrorCode;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.client.ReferenceClient;
 import com.alipay.sofa.runtime.api.client.param.BindingParam;
@@ -38,17 +38,20 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
-import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
+import com.alipay.sofa.runtime.spi.component.ComponentNameFactory;
 
 /**
- * Reference Client Implementation，you can reference a service by this class
+ * Reference Client Implementation，you can reference a service by this class.
  *
  * @author xuanbei 18/3/1
  */
 public class ReferenceClientImpl implements ReferenceClient {
-    private SofaRuntimeContext      sofaRuntimeContext;
-    private BindingConverterFactory bindingConverterFactory;
-    private BindingAdapterFactory   bindingAdapterFactory;
+
+    private final SofaRuntimeContext      sofaRuntimeContext;
+
+    private final BindingConverterFactory bindingConverterFactory;
+
+    private final BindingAdapterFactory   bindingAdapterFactory;
 
     public ReferenceClientImpl(SofaRuntimeContext sofaRuntimeContext,
                                BindingConverterFactory bindingConverterFactory,
@@ -88,6 +91,7 @@ public class ReferenceClientImpl implements ReferenceClient {
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public <T> T reference(ReferenceParam<T> referenceParam) {
 
         return (T) ReferenceRegisterHelper.registerReference(

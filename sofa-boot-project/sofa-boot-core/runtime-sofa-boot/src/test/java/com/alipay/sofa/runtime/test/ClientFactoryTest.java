@@ -16,8 +16,7 @@
  */
 package com.alipay.sofa.runtime.test;
 
-import com.alipay.sofa.boot.util.StringUtils;
-import com.alipay.sofa.runtime.SofaRuntimeProperties;
+import org.springframework.util.StringUtils;
 import com.alipay.sofa.runtime.api.client.param.ServiceParam;
 import com.alipay.sofa.runtime.service.binding.JvmBindingParam;
 import com.alipay.sofa.runtime.test.beans.service.DefaultSampleService;

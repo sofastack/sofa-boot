@@ -19,13 +19,14 @@ package com.alipay.sofa.runtime.service.component;
 import com.alipay.sofa.runtime.spi.binding.Contract;
 
 /**
- * Reference Definition
+ * Reference Definition.
  *
  * @author xuanbei 18/3/1
  */
 public interface Reference extends Contract {
+
     /**
-     * jvm first or not
+     * Jvm first or not.
      *
      * @return true or false
      */

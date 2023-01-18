@@ -23,21 +23,8 @@
         </dependency>
 
         <dependency>
-            <groupId>com.alipay.sofa</groupId>
-            <artifactId>sofa-ark-spi</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.alipay.sofa</groupId>
-            <artifactId>sofa-ark-api</artifactId>
-            <optional>true</optional>
-        </dependency>
-
-        <!--Optional-->
-        <dependency>
-            <groupId>com.alipay.sofa</groupId>
-            <artifactId>hessian</artifactId>
-            <optional>true</optional>
+            <groupId>xerces</groupId>
+            <artifactId>xercesImpl</artifactId>
         </dependency>
 
         <dependency>
@@ -45,10 +32,10 @@
             <artifactId>spring-boot-autoconfigure-processor</artifactId>
             <optional>true</optional>
         </dependency>
-        <!-- Test -->
+
         <dependency>
-            <groupId>org.jmockit</groupId>
-            <artifactId>jmockit</artifactId>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
             <scope>test</scope>
         </dependency>
 

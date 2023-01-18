@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.runtime.api.component;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import com.alipay.sofa.runtime.model.ComponentType;
@@ -26,6 +27,8 @@ import com.alipay.sofa.runtime.model.ComponentType;
  * @author xuanbei 18/2/28
  */
 public class ComponentName implements Serializable {
+
+    @Serial
     private static final long   serialVersionUID = -6856142686482394411L;
 
     /**

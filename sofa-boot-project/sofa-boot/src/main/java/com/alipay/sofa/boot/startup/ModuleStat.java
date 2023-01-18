@@ -17,10 +17,13 @@
 package com.alipay.sofa.boot.startup;
 
 /**
+ * Stat model to record sofa module refresh.
+ *
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 2020/11/23
  */
 public class ModuleStat extends ChildrenStat<BeanStat> {
+
     private String threadName;
 
     public String getThreadName() {

@@ -17,12 +17,13 @@
 package com.alipay.sofa.runtime.model;
 
 /**
- * component type
+ * Component type.
  *
  * @author xuanbei 18/2/28
  */
 public class ComponentType {
-    private String typeName;
+
+    private final String typeName;
 
     public ComponentType(String typeName) {
         this.typeName = typeName;
@@ -39,12 +40,12 @@ public class ComponentType {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
+        if (this == o) {
             return true;
-        if (!(o instanceof ComponentType))
+        }
+        if (!(o instanceof ComponentType that)) {
             return false;
-
-        ComponentType that = (ComponentType) o;
+        }
 
         return typeName.equals(that.typeName);
     }

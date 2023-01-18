@@ -18,12 +18,11 @@
     <dependencies>
         <dependency>
             <groupId>com.alipay.sofa</groupId>
-            <artifactId>rpc-sofa-boot</artifactId>
+            <artifactId>sofa-boot-starter</artifactId>
         </dependency>
-
         <dependency>
             <groupId>com.alipay.sofa</groupId>
-            <artifactId>sofa-boot-autoconfigure</artifactId>
+            <artifactId>rpc-sofa-boot</artifactId>
         </dependency>
     </dependencies>
 

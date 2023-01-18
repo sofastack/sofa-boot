@@ -25,7 +25,7 @@ import org.w3c.dom.NodeList;
 import com.alipay.sofa.runtime.ext.spring.ExtensionFactoryBean;
 
 /**
- * Extension definition parser
+ * Extension definition parser.
  *
  * @author xi.hux@alipay.com
  * @author yangyanzhao@alipay.com
@@ -36,13 +36,13 @@ public class ExtensionBeanDefinitionParser extends AbstractExtBeanDefinitionPars
 
     public static final String                         CONTENT  = "content";
 
-    private static final ExtensionBeanDefinitionParser instance = new ExtensionBeanDefinitionParser();
+    private static final ExtensionBeanDefinitionParser INSTANCE = new ExtensionBeanDefinitionParser();
 
     public ExtensionBeanDefinitionParser() {
     }
 
     public static ExtensionBeanDefinitionParser getInstance() {
-        return instance;
+        return INSTANCE;
     }
 
     @Override
@@ -58,8 +58,7 @@ public class ExtensionBeanDefinitionParser extends AbstractExtBeanDefinitionPars
         // parse all sub elements
         for (int i = 0; i < nl.getLength(); i++) {
             Node node = nl.item(i);
-            if (node instanceof Element) {
-                Element subElement = (Element) node;
+            if (node instanceof Element subElement) {
                 // osgi:content
                 if (CONTENT.equals(subElement.getLocalName())) {
                     builder.addPropertyValue(CONTENT, subElement);

@@ -16,22 +16,11 @@
  */
 package com.alipay.sofa.runtime.spring;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-
-import com.alipay.sofa.boot.error.ErrorCode;
-import com.alipay.sofa.runtime.log.SofaLogger;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.context.ApplicationContext;
-import org.springframework.core.PriorityOrdered;
-import org.springframework.core.env.Environment;
-import org.springframework.util.Assert;
-import org.springframework.util.ReflectionUtils;
-
-import com.alipay.sofa.boot.annotation.PlaceHolderAnnotationInvocationHandler.AnnotationWrapperBuilder;
-import com.alipay.sofa.boot.annotation.PlaceHolderBinder;
+import com.alipay.sofa.boot.annotation.AnnotationWrapper;
+import com.alipay.sofa.boot.annotation.DefaultPlaceHolderBinder;
+import com.alipay.sofa.boot.context.processor.SingletonSofaPostProcessor;
+import com.alipay.sofa.boot.log.ErrorCode;
+import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.annotation.SofaReference;
 import com.alipay.sofa.runtime.api.binding.BindingType;
@@ -45,38 +34,50 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
+import org.slf4j.Logger;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.core.PriorityOrdered;
+import org.springframework.util.Assert;
+import org.springframework.util.ReflectionUtils;
+
+import java.lang.reflect.Modifier;
 
 /**
- * Responsible to inject field annotated by @SofaReference and
- * invoke setXX method annotated by @SofaReference
+ * Implementation of {@link BeanPostProcessor} to inject field annotated by {@link SofaReference} and
+ * invoke set method annotated by {@link SofaReference}.
  *
  * @author xuanbei 18/5/9
  */
-public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor, PriorityOrdered {
-    private final PlaceHolderBinder binder = new DefaultPlaceHolderBinder();
-    private ApplicationContext      applicationContext;
-    private SofaRuntimeContext      sofaRuntimeContext;
-    private BindingAdapterFactory   bindingAdapterFactory;
-    private BindingConverterFactory bindingConverterFactory;
-    private Environment             environment;
+@SingletonSofaPostProcessor
+public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor,
+                                                 ApplicationContextAware, PriorityOrdered {
+
+    private static final Logger              LOGGER = SofaBootLoggerFactory
+                                                        .getLogger(ReferenceAnnotationBeanPostProcessor.class);
+
+    private final SofaRuntimeContext         sofaRuntimeContext;
+
+    private final BindingAdapterFactory      bindingAdapterFactory;
+
+    private final BindingConverterFactory    bindingConverterFactory;
+
+    private ApplicationContext               applicationContext;
+
+    private AnnotationWrapper<SofaReference> annotationWrapper;
 
     /**
      * To construct a ReferenceAnnotationBeanPostProcessor via a Spring Bean
-     * sofaRuntimeContext and sofaRuntimeProperties will be obtained from applicationContext
-     * @param applicationContext
-     * @param sofaRuntimeContext
-     * @param bindingAdapterFactory
-     * @param bindingConverterFactory
+     * sofaRuntimeContext and sofaRuntimeProperties will be obtained from applicationContext.
      */
-    public ReferenceAnnotationBeanPostProcessor(ApplicationContext applicationContext,
-                                                SofaRuntimeContext sofaRuntimeContext,
+    public ReferenceAnnotationBeanPostProcessor(SofaRuntimeContext sofaRuntimeContext,
                                                 BindingAdapterFactory bindingAdapterFactory,
                                                 BindingConverterFactory bindingConverterFactory) {
-        this.applicationContext = applicationContext;
         this.sofaRuntimeContext = sofaRuntimeContext;
         this.bindingAdapterFactory = bindingAdapterFactory;
         this.bindingConverterFactory = bindingConverterFactory;
-        this.environment = applicationContext.getEnvironment();
     }
 
     @Override
@@ -89,75 +90,54 @@ public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor, 
     private void processSofaReference(final Object bean) {
         final Class<?> beanClass = bean.getClass();
 
-        ReflectionUtils.doWithFields(beanClass, new ReflectionUtils.FieldCallback() {
-
-            @Override
-            @SuppressWarnings("unchecked")
-            public void doWith(Field field) throws IllegalArgumentException, IllegalAccessException {
-                AnnotationWrapperBuilder<SofaReference> builder = AnnotationWrapperBuilder.wrap(
-                    field.getAnnotation(SofaReference.class)).withBinder(binder);
-                SofaReference sofaReferenceAnnotation = builder.build();
-
-                if (sofaReferenceAnnotation == null) {
-                    return;
-                }
-
-                Class<?> interfaceType = sofaReferenceAnnotation.interfaceType();
-                if (interfaceType.equals(void.class)) {
-                    interfaceType = field.getType();
-                }
-
-                Object proxy = createReferenceProxy(sofaReferenceAnnotation, interfaceType);
-                ReflectionUtils.makeAccessible(field);
-                ReflectionUtils.setField(field, bean, proxy);
+        ReflectionUtils.doWithFields(beanClass, field -> {
+            SofaReference sofaReferenceAnnotation = field.getAnnotation(SofaReference.class);
+            if (sofaReferenceAnnotation == null) {
+                return;
             }
-        }, new ReflectionUtils.FieldFilter() {
 
-            @Override
-            public boolean matches(Field field) {
-                if (!field.isAnnotationPresent(SofaReference.class)) {
-                    return false;
-                }
-                if (Modifier.isStatic(field.getModifiers())) {
-                    SofaLogger.warn(
-                        "SofaReference annotation is not supported on static fields: {}", field);
-                    return false;
-                }
-                return true;
+            sofaReferenceAnnotation = annotationWrapper.wrap(sofaReferenceAnnotation);
+
+            Class<?> interfaceType = sofaReferenceAnnotation.interfaceType();
+            if (interfaceType.equals(void.class)) {
+                interfaceType = field.getType();
             }
+
+            Object proxy = createReferenceProxy(sofaReferenceAnnotation, interfaceType);
+            ReflectionUtils.makeAccessible(field);
+            ReflectionUtils.setField(field, bean, proxy);
+        }, field -> {
+            if (!field.isAnnotationPresent(SofaReference.class)) {
+                return false;
+            }
+            if (Modifier.isStatic(field.getModifiers())) {
+                LOGGER.warn(
+                    "SofaReference annotation is not supported on static fields: {}", field);
+                return false;
+            }
+            return true;
         });
 
-        ReflectionUtils.doWithMethods(beanClass, new ReflectionUtils.MethodCallback() {
-            @Override
-            @SuppressWarnings("unchecked")
-            public void doWith(Method method) throws IllegalArgumentException,
-                                             IllegalAccessException {
-                Class[] parameterTypes = method.getParameterTypes();
-                Assert.isTrue(parameterTypes.length == 1,
-                    "method should have one and only one parameter.");
+        ReflectionUtils.doWithMethods(beanClass, method -> {
+            Class<?>[] parameterTypes = method.getParameterTypes();
+            Assert.isTrue(parameterTypes.length == 1,
+                "method should have one and only one parameter.");
 
-                SofaReference sofaReferenceAnnotation = method.getAnnotation(SofaReference.class);
-                if (sofaReferenceAnnotation == null) {
-                    return;
-                }
-                AnnotationWrapperBuilder<SofaReference> builder = AnnotationWrapperBuilder.wrap(
-                    sofaReferenceAnnotation).withBinder(binder);
-                sofaReferenceAnnotation = builder.build();
-
-                Class<?> interfaceType = sofaReferenceAnnotation.interfaceType();
-                if (interfaceType.equals(void.class)) {
-                    interfaceType = parameterTypes[0];
-                }
-
-                Object proxy = createReferenceProxy(sofaReferenceAnnotation, interfaceType);
-                ReflectionUtils.invokeMethod(method, bean, proxy);
+            SofaReference sofaReferenceAnnotation = method.getAnnotation(SofaReference.class);
+            if (sofaReferenceAnnotation == null) {
+                return;
             }
-        }, new ReflectionUtils.MethodFilter() {
-            @Override
-            public boolean matches(Method method) {
-                return method.isAnnotationPresent(SofaReference.class);
+
+            sofaReferenceAnnotation = annotationWrapper.wrap(sofaReferenceAnnotation);
+
+            Class<?> interfaceType = sofaReferenceAnnotation.interfaceType();
+            if (interfaceType.equals(void.class)) {
+                interfaceType = parameterTypes[0];
             }
-        });
+
+            Object proxy = createReferenceProxy(sofaReferenceAnnotation, interfaceType);
+            ReflectionUtils.invokeMethod(method, bean, proxy);
+        }, method -> method.isAnnotationPresent(SofaReference.class));
     }
 
     private Object createReferenceProxy(SofaReference sofaReferenceAnnotation,
@@ -188,10 +168,11 @@ public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor, 
         return PriorityOrdered.HIGHEST_PRECEDENCE;
     }
 
-    class DefaultPlaceHolderBinder implements PlaceHolderBinder {
-        @Override
-        public String bind(String text) {
-            return environment.resolvePlaceholders(text);
-        }
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+        this.annotationWrapper = AnnotationWrapper.create(SofaReference.class)
+            .withEnvironment(applicationContext.getEnvironment())
+            .withBinder(DefaultPlaceHolderBinder.INSTANCE);
     }
 }

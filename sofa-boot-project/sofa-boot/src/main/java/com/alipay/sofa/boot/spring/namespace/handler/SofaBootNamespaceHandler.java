@@ -16,18 +16,17 @@
  */
 package com.alipay.sofa.boot.spring.namespace.handler;
 
-import java.util.ServiceLoader;
-
+import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
+import com.alipay.sofa.boot.spring.namespace.spi.SofaBootTagNameSupport;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.xml.BeanDefinitionDecorator;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 
-import com.alipay.sofa.boot.log.InfraLoggerFactory;
-import com.alipay.sofa.boot.spring.namespace.spi.SofaBootTagNameSupport;
+import java.util.ServiceLoader;
 
 /**
- * SofaBootNamespaceHandler
+ * Implementation of {@link NamespaceHandlerSupport} to register {@link SofaBootTagNameSupport}.
  *
  * @author yangguanchao
  * @author qilong.zql
@@ -35,7 +34,7 @@ import com.alipay.sofa.boot.spring.namespace.spi.SofaBootTagNameSupport;
  */
 public class SofaBootNamespaceHandler extends NamespaceHandlerSupport {
 
-    private static final Logger logger = InfraLoggerFactory
+    private static final Logger logger = SofaBootLoggerFactory
                                            .getLogger(SofaBootNamespaceHandler.class);
 
     @Override
@@ -52,9 +51,10 @@ public class SofaBootNamespaceHandler extends NamespaceHandlerSupport {
             registerBeanDefinitionDecoratorForAttribute(tagNameSupport.supportTagName(),
                 (BeanDefinitionDecorator) tagNameSupport);
         } else {
-            logger.error(tagNameSupport.getClass() + " tag name supported ["
-                         + tagNameSupport.supportTagName() + "] parser are not instance of "
-                         + BeanDefinitionParser.class + "or " + BeanDefinitionDecorator.class);
+            logger
+                .error(
+                    "{} class supported [{}] parser are not instance of BeanDefinitionParser or BeanDefinitionDecorator",
+                    tagNameSupport.getClass().getName(), tagNameSupport.supportTagName());
         }
     }
 }

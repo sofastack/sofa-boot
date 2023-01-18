@@ -19,6 +19,7 @@ package com.alipay.sofa.runtime.service.component;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import com.alipay.sofa.runtime.api.binding.BindingType;
@@ -27,7 +28,7 @@ import com.alipay.sofa.runtime.spi.binding.Binding;
 import com.alipay.sofa.runtime.spi.binding.Contract;
 
 /**
- * abstract contract implementation
+ * Abstract contract implementation.
  *
  * @author xuanbei 18/3/1
  */
@@ -35,7 +36,7 @@ public abstract class AbstractContract implements Contract {
     /** associated binding */
     protected Set<Binding>        bindings      = new HashSet<>(2);
     /** unique id */
-    protected String              uniqueId      = "";
+    protected String              uniqueId;
     /** interface class type */
     protected Class<?>            interfaceType;
     /** interface mode */
@@ -44,11 +45,7 @@ public abstract class AbstractContract implements Contract {
     protected Map<String, String> property      = new HashMap<>();
 
     protected AbstractContract(String uniqueId, Class<?> interfaceType) {
-        if (uniqueId == null) {
-            this.uniqueId = "";
-        } else {
-            this.uniqueId = uniqueId;
-        }
+        this.uniqueId = Objects.requireNonNullElse(uniqueId, "");
         this.interfaceType = interfaceType;
     }
 
@@ -63,14 +60,17 @@ public abstract class AbstractContract implements Contract {
         this.property = property;
     }
 
+    @Override
     public <T extends Binding> void addBinding(T binding) {
         this.bindings.add(binding);
     }
 
+    @Override
     public <T extends Binding> void addBinding(Set<T> bindings) {
         this.bindings.addAll(bindings);
     }
 
+    @Override
     public Binding getBinding(BindingType bindingType) {
         for (Binding binding : this.bindings) {
             if (binding != null && binding.getBindingType() == bindingType) {
@@ -81,22 +81,27 @@ public abstract class AbstractContract implements Contract {
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public Set<Binding> getBindings() {
         return this.bindings;
     }
 
+    @Override
     public boolean hasBinding() {
         return this.bindings.size() > 0;
     }
 
+    @Override
     public String getUniqueId() {
         return uniqueId;
     }
 
+    @Override
     public InterfaceMode getInterfaceMode() {
         return this.interfaceMode;
     }
 
+    @Override
     public Class<?> getInterfaceType() {
         return interfaceType;
     }

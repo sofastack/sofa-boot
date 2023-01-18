@@ -16,17 +16,19 @@
  */
 package com.alipay.sofa.boot.annotation;
 
+import org.springframework.core.env.Environment;
+import org.springframework.util.ReflectionUtils;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-
-import org.springframework.util.Assert;
-import org.springframework.util.ReflectionUtils;
 
 /**
+ * Implementation of {@link InvocationHandler} to bind value from environment when get annotation value.
+ *
  * @author qilong.zql
+ * @author huzijie
  * @since 2.5.2
  */
 public class PlaceHolderAnnotationInvocationHandler implements InvocationHandler {
@@ -35,16 +37,19 @@ public class PlaceHolderAnnotationInvocationHandler implements InvocationHandler
 
     private final PlaceHolderBinder binder;
 
-    private PlaceHolderAnnotationInvocationHandler(Annotation delegate, PlaceHolderBinder binder) {
+    private final Environment       environment;
+
+    public PlaceHolderAnnotationInvocationHandler(Annotation delegate, PlaceHolderBinder binder,
+                                                  Environment environment) {
         this.delegate = delegate;
         this.binder = binder;
+        this.environment = environment;
     }
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         Object ret = method.invoke(delegate, args);
-        if (!ReflectionUtils.isEqualsMethod(method) && !ReflectionUtils.isHashCodeMethod(method)
-            && !ReflectionUtils.isToStringMethod(method) && isAttributeMethod(method)) {
+        if (ret != null && !ReflectionUtils.isObjectMethod(method) && isAttributeMethod(method)) {
             return resolvePlaceHolder(ret);
         }
         return ret;
@@ -70,43 +75,13 @@ public class PlaceHolderAnnotationInvocationHandler implements InvocationHandler
 
     private Object doResolvePlaceHolder(Object origin) {
         if (origin instanceof String) {
-            return binder.bind((String) origin);
+            return binder.bind(environment, (String) origin);
         } else if (origin instanceof Annotation && !(origin instanceof WrapperAnnotation)) {
-            return AnnotationWrapperBuilder.wrap(origin).withBinder(binder).build();
+            return AnnotationWrapper.create((Annotation) origin).withBinder(binder)
+                .withEnvironment(environment).wrap((Annotation) origin);
         } else {
             return origin;
         }
     }
 
-    public static class AnnotationWrapperBuilder<A> {
-        private Annotation        delegate;
-        private PlaceHolderBinder binder;
-
-        private AnnotationWrapperBuilder() {
-        }
-
-        public static <A> AnnotationWrapperBuilder wrap(A annotation) {
-            Assert.isTrue(annotation == null || annotation instanceof Annotation,
-                "Parameter must be annotation type.");
-            AnnotationWrapperBuilder<A> builder = new AnnotationWrapperBuilder<A>();
-            builder.delegate = (Annotation) annotation;
-            return builder;
-        }
-
-        public AnnotationWrapperBuilder withBinder(PlaceHolderBinder binder) {
-            this.binder = binder;
-            return this;
-        }
-
-        @SuppressWarnings("unchecked")
-        public A build() {
-            if (delegate != null) {
-                ClassLoader cl = this.getClass().getClassLoader();
-                Class<?>[] exposedInterface = { delegate.annotationType(), WrapperAnnotation.class };
-                return (A) Proxy.newProxyInstance(cl, exposedInterface,
-                    new PlaceHolderAnnotationInvocationHandler(delegate, binder));
-            }
-            return null;
-        }
-    }
 }

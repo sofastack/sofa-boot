@@ -16,8 +16,6 @@
  */
 package com.alipay.sofa.runtime.spring.factory;
 
-import org.springframework.util.Assert;
-
 import com.alipay.sofa.runtime.model.InterfaceMode;
 import com.alipay.sofa.runtime.service.binding.JvmBinding;
 import com.alipay.sofa.runtime.service.binding.JvmBindingParam;
@@ -25,11 +23,15 @@ import com.alipay.sofa.runtime.service.component.Reference;
 import com.alipay.sofa.runtime.service.component.impl.ReferenceImpl;
 import com.alipay.sofa.runtime.service.helper.ReferenceRegisterHelper;
 import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
+import org.springframework.util.Assert;
 
 /**
+ * Implementation of {@link org.springframework.beans.factory.FactoryBean} to register reference.
+ *
  * @author xuanbei 18/3/1
  */
 public class ReferenceFactoryBean extends AbstractContractFactoryBean {
+
     protected Object  proxy;
     /** jvm first or not */
     protected boolean jvmFirst = true;
@@ -44,7 +46,8 @@ public class ReferenceFactoryBean extends AbstractContractFactoryBean {
     }
 
     @Override
-    protected void doAfterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() throws Exception {
+        super.afterPropertiesSet();
         Reference reference = buildReference();
         Assert
             .isTrue(bindings.size() <= 1,

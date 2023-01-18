@@ -21,10 +21,10 @@ import org.w3c.dom.Element;
 
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.ext.component.ExtensionInternal;
-import com.alipay.sofa.service.api.component.Extension;
+import com.alipay.sofa.runtime.ext.Extension;
 
 /**
- * Extension Builder
+ * Extension Builder.
  *
  * @author xi.hux@alipay.com
  * @since 2.6.0

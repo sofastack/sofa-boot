@@ -17,21 +17,21 @@
 package com.alipay.sofa.runtime.api.annotation;
 
 /**
- * Configure parameters by annotation
+ * Annotation to configure parameters.
  *
  * @author <a href="mailto:scienjus@gmail.com">ScienJus</a>
  */
 public @interface SofaParameter {
 
     /**
-     * Parameter key
-     * @return
+     * Parameter key.
+     * @return key
      */
     String key();
 
     /**
-     * Parameter value
-     * @return
+     * Parameter value.
+     * @return value
      */
     String value();
 }

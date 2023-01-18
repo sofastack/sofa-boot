@@ -15,30 +15,27 @@
 
     <properties>
         <!--project-->
-        <java.version>1.8</java.version>
+        <java.version>17</java.version>
         <project.encoding>UTF-8</project.encoding>
         <project.build.encoding>UTF-8</project.build.encoding>
+        <spring-cloud.version>4.0.0</spring-cloud.version>
 
-        <!--starter-->
-        <sofa.ark.version>1.1.5</sofa.ark.version>
-        <sofa.lookout.version>1.5.2</sofa.lookout.version>
 
-        <!--core-->
-        <sofa.registry.version>5.4.2</sofa.registry.version>
-        <tracer.core.version>3.1.0</tracer.core.version>
-        <rpc.core.version>5.8.3</rpc.core.version>
-
-        <!--2rd lib dependency-->
-        <sofa.common.tools.version>1.3.6</sofa.common.tools.version>
-        <sofa.bolt.version>1.5.10</sofa.bolt.version>
+        <!-- sofa stack lib-->
+        <sofa.registry.version>6.1.8</sofa.registry.version>
+        <tracer.core.version>3.1.1</tracer.core.version>
+        <rpc.core.version>5.9.1</rpc.core.version>
+        <sofa.common.tools.version>1.3.10</sofa.common.tools.version>
+        <sofa.bolt.version>1.6.6</sofa.bolt.version>
         <sofa.hessian.version>3.3.12</sofa.hessian.version>
+        <sofa.ark.version>2.0.6</sofa.ark.version>
+        <sofa.lookout.version>1.6.1</sofa.lookout.version>
 
         <!--3rd lib dependency-->
-        <!--FIXME 1.7.36 will cause compatibility problem, see #https://www.slf4j.org/manual.html-->
-        <slf4j.version>1.7.32</slf4j.version>
-        <fastjson.version>1.2.69</fastjson.version>
+        <fastjson.version>1.2.83</fastjson.version>
         <javassist.version>3.19.0-GA</javassist.version>
         <protobuf-java.version>3.11.0</protobuf-java.version>
+        <xerces.version>2.12.2</xerces.version>
         <guice.version>3.0</guice.version>
         <guava.version>28.2-jre</guava.version>
         <zipkin.version>2.11.3</zipkin.version>
@@ -112,6 +109,12 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-context</artifactId>
+                <version>${spring-cloud.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>sofa-boot</artifactId>
                 <version>${sofa.boot.version}</version>
@@ -137,12 +140,6 @@
 
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
-                <artifactId>healthcheck-sofa-boot</artifactId>
-                <version>${sofa.boot.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.alipay.sofa</groupId>
                 <artifactId>runtime-sofa-boot</artifactId>
                 <version>${sofa.boot.version}</version>
             </dependency>
@@ -150,12 +147,6 @@
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>isle-sofa-boot</artifactId>
-                <version>${sofa.boot.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>test-sofa-boot</artifactId>
                 <version>${sofa.boot.version}</version>
             </dependency>
 
@@ -173,35 +164,23 @@
 
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
-                <artifactId>log-sofa-boot</artifactId>
+                <artifactId>ark-sofa-boot</artifactId>
                 <version>${sofa.boot.version}</version>
             </dependency>
-
-            <dependency>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>startup-sofa-boot</artifactId>
-                <version>${sofa.boot.version}</version>
-            </dependency>
-
             <!-- starter management begin -->
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
-                <artifactId>healthcheck-sofa-boot-starter</artifactId>
+                <artifactId>sofa-boot-starter</artifactId>
                 <version>${sofa.boot.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
-                <artifactId>startup-sofa-boot-starter</artifactId>
+                <artifactId>actuator-sofa-boot-starter</artifactId>
                 <version>${sofa.boot.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>runtime-sofa-boot-starter</artifactId>
-                <version>${sofa.boot.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>test-sofa-boot-starter</artifactId>
                 <version>${sofa.boot.version}</version>
             </dependency>
             <dependency>
@@ -219,10 +198,9 @@
                 <artifactId>tracer-sofa-boot-starter</artifactId>
                 <version>${sofa.boot.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
-                <artifactId>log-sofa-boot-starter</artifactId>
+                <artifactId>ark-sofa-boot-starter</artifactId>
                 <version>${sofa.boot.version}</version>
             </dependency>
 
@@ -237,25 +215,6 @@
                 <version>${sofa.ark.version}</version>
             </dependency>
             <!-- starter management end -->
-
-            <!-- Ark Plugin Management begin -->
-            <dependency>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>runtime-sofa-boot-plugin</artifactId>
-                <version>${sofa.boot.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>rpc-sofa-boot-plugin</artifactId>
-                <version>${sofa.boot.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>tracer-sofa-boot-plugin</artifactId>
-                <version>${sofa.boot.version}</version>
-            </dependency>
 
             <!--tracer and its extension plugin-->
             <dependency>
@@ -386,26 +345,31 @@
                 <artifactId>bolt</artifactId>
                 <version>${sofa.bolt.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>hessian</artifactId>
                 <version>${sofa.hessian.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>sofa-ark-spi</artifactId>
                 <version>${sofa.ark.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>sofa-ark-archive</artifactId>
                 <version>${sofa.ark.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>sofa-ark-common</artifactId>
                 <version>${sofa.ark.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>sofa-ark-tools</artifactId>
@@ -416,51 +380,61 @@
                 <artifactId>sofa-ark-api</artifactId>
                 <version>${sofa.ark.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>sofa-ark-container</artifactId>
                 <version>${sofa.ark.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>com.alipay.sofa.lookout</groupId>
                 <artifactId>lookout-api</artifactId>
                 <version>${sofa.lookout.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>com.alipay.sofa.lookout</groupId>
                 <artifactId>lookout-client</artifactId>
                 <version>${sofa.lookout.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>com.alipay.sofa.lookout</groupId>
                 <artifactId>lookout-common</artifactId>
                 <version>${sofa.lookout.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>com.alipay.sofa.lookout</groupId>
                 <artifactId>lookout-core</artifactId>
                 <version>${sofa.lookout.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>com.alipay.sofa.lookout</groupId>
                 <artifactId>lookout-ext-jvm</artifactId>
                 <version>${sofa.lookout.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>com.alipay.sofa.lookout</groupId>
                 <artifactId>lookout-ext-os</artifactId>
                 <version>${sofa.lookout.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>com.alipay.sofa.lookout</groupId>
                 <artifactId>lookout-reg-dropwizard</artifactId>
                 <version>${sofa.lookout.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>com.alipay.sofa.lookout</groupId>
                 <artifactId>lookout-reg-prometheus</artifactId>
                 <version>${sofa.lookout.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>com.alipay.sofa.lookout</groupId>
                 <artifactId>lookout-reg-server</artifactId>
@@ -474,11 +448,13 @@
                 <artifactId>fastjson</artifactId>
                 <version>${fastjson.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>com.google.inject</groupId>
                 <artifactId>guice</artifactId>
                 <version>${guice.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>com.google.inject.extensions</groupId>
                 <artifactId>guice-multibindings</artifactId>
@@ -488,6 +464,11 @@
                 <groupId>com.google.protobuf</groupId>
                 <artifactId>protobuf-java</artifactId>
                 <version>${protobuf-java.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>xerces</groupId>
+                <artifactId>xercesImpl</artifactId>
+                <version>${xerces.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.javassist</groupId>

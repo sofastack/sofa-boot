@@ -27,10 +27,13 @@ import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
 
 /**
+ * Implementation of {@link BindingConverter} to convert jvm binding.
+ *
  * @author qilong.zql
  * @since 3.1.3
  */
 public class JvmBindingConverter implements BindingConverter<JvmBindingParam, JvmBinding> {
+
     @Override
     public JvmBinding convert(JvmBindingParam bindingParam,
                               BindingConverterContext bindingConverterContext) {

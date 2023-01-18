@@ -16,11 +16,11 @@
  */
 package com.alipay.sofa.boot.actuator.beans;
 
-import com.alipay.sofa.boot.constant.SofaBootConstants;
-import com.alipay.sofa.isle.ApplicationRuntimeModel;
-import com.alipay.sofa.isle.deployment.DeploymentDescriptor;
+import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
+import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.boot.actuate.beans.BeansEndpoint;
+import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
 import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -32,6 +32,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * {@link Endpoint @Endpoint} to expose details of an application's beans, grouped by
+ * application context, support expose beans in sofa modules.
+ *
  * @author huzijie
  * @version IsleBeansEndpoint.java, v 0.1 2022年03月17日 11:10 AM huzijie Exp $
  */
@@ -53,22 +56,22 @@ public class IsleBeansEndpoint extends BeansEndpoint {
 
     @ReadOperation
     @Override
-    public ApplicationBeans beans() {
-        ApplicationBeans applicationBeans = super.beans();
+    public BeansEndpoint.BeansDescriptor beans() {
+        BeansEndpoint.BeansDescriptor beansDescriptor = super.beans();
         ApplicationRuntimeModel applicationRuntimeModel = context.getBean(
-            SofaBootConstants.APPLICATION, ApplicationRuntimeModel.class);
-        Map<String, ContextBeans> moduleApplicationContexts = getModuleApplicationContexts(applicationRuntimeModel);
-        applicationBeans.getContexts().putAll(moduleApplicationContexts);
-        return applicationBeans;
+            ApplicationRuntimeModel.APPLICATION_RUNTIME_MODEL_NAME, ApplicationRuntimeModel.class);
+        Map<String, BeansEndpoint.ContextBeansDescriptor> moduleApplicationContexts = getModuleApplicationContexts(applicationRuntimeModel);
+        beansDescriptor.getContexts().putAll(moduleApplicationContexts);
+        return beansDescriptor;
     }
 
-    private Map<String, ContextBeans> getModuleApplicationContexts(ApplicationRuntimeModel applicationRuntimeModel) {
-        Map<String, ContextBeans> contexts = new HashMap<>();
+    private Map<String, BeansEndpoint.ContextBeansDescriptor> getModuleApplicationContexts(ApplicationRuntimeModel applicationRuntimeModel) {
+        Map<String, BeansEndpoint.ContextBeansDescriptor> contexts = new HashMap<>();
         List<DeploymentDescriptor> installedModules = applicationRuntimeModel.getInstalled();
         installedModules.forEach(descriptor -> {
             ApplicationContext applicationContext = descriptor.getApplicationContext();
             if (applicationContext instanceof ConfigurableApplicationContext) {
-                ContextBeans contextBeans = describing((ConfigurableApplicationContext) applicationContext,
+                BeansEndpoint.ContextBeansDescriptor contextBeans = describing((ConfigurableApplicationContext) applicationContext,
                         descriptor.getSpringParent());
                 if (contextBeans != null) {
                     contexts.put(descriptor.getModuleName(), contextBeans);
@@ -78,7 +81,8 @@ public class IsleBeansEndpoint extends BeansEndpoint {
         return contexts;
     }
 
-    private ContextBeans describing(ConfigurableApplicationContext context, String parentModuleName) {
+    private BeansEndpoint.ContextBeansDescriptor describing(ConfigurableApplicationContext context,
+                                                            String parentModuleName) {
         Map<String, BeanDescriptor> beanDescriptorMap = callContextBeansDescribeBeans(context
             .getBeanFactory());
         return createContextBeans(beanDescriptorMap, parentModuleName);
@@ -87,7 +91,7 @@ public class IsleBeansEndpoint extends BeansEndpoint {
     // FIXME only can use reflect now
     private Map<String, BeanDescriptor> callContextBeansDescribeBeans(ConfigurableListableBeanFactory beanFactory) {
         try {
-            Class<?> clazz = ContextBeans.class;
+            Class<?> clazz = BeansEndpoint.ContextBeansDescriptor.class;
             Method method = clazz.getDeclaredMethod("describeBeans",
                 ConfigurableListableBeanFactory.class);
             method.setAccessible(true);
@@ -100,12 +104,13 @@ public class IsleBeansEndpoint extends BeansEndpoint {
     }
 
     // FIXME only can use reflect now
-    private ContextBeans createContextBeans(Map<String, BeanDescriptor> beans, String parentId) {
+    private BeansEndpoint.ContextBeansDescriptor createContextBeans(Map<String, BeanDescriptor> beans,
+                                                                    String parentId) {
         try {
-            Class<?> clazz = ContextBeans.class;
+            Class<?> clazz = BeansEndpoint.ContextBeansDescriptor.class;
             Constructor<?> constructor = clazz.getDeclaredConstructor(Map.class, String.class);
             constructor.setAccessible(true);
-            return (ContextBeans) constructor.newInstance(beans, parentId);
+            return (BeansEndpoint.ContextBeansDescriptor) constructor.newInstance(beans, parentId);
         } catch (Throwable e) {
             // ignore
             return null;

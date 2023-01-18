@@ -19,20 +19,21 @@ package com.alipay.sofa.runtime.service.component;
 import com.alipay.sofa.runtime.spi.binding.Contract;
 
 /**
- * Service Definition
+ * Service Definition.
  *
  * @author xuanbei 18/3/1
  */
 public interface Service extends Contract {
+
     /**
-     * get target object
+     * Get target object.
      *
      * @return target object
      */
     Object getTarget();
 
     /**
-     * set unique id
+     * Set unique id.
      */
     void setUniqueId(String uniqueId);
 }

@@ -33,7 +33,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import com.alipay.sofa.boot.util.StringUtils;
+import org.springframework.util.StringUtils;
 import com.alipay.sofa.runtime.api.annotation.SofaReference;
 import com.alipay.sofa.runtime.api.annotation.SofaReferenceBinding;
 import com.alipay.sofa.runtime.api.annotation.SofaService;

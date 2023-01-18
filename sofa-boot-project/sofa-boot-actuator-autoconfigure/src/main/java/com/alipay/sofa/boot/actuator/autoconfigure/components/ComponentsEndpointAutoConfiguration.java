@@ -16,33 +16,33 @@
  */
 package com.alipay.sofa.boot.actuator.autoconfigure.components;
 
-import com.alipay.sofa.boot.actuator.components.SofaBootComponentsEndPoint;
+import com.alipay.sofa.boot.actuator.components.ComponentsEndPoint;
 import com.alipay.sofa.boot.autoconfigure.runtime.SofaRuntimeAutoConfiguration;
-import com.alipay.sofa.runtime.SofaFramework;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 /**
+ * {@link EnableAutoConfiguration Auto-configuration} for {@link ComponentsEndPoint}.
+ *
  * @author huzijie
  * @version ComponentsEndpointAutoConfiguration.java, v 0.1 2022年03月17日 3:56 PM huzijie Exp $
  */
-@Configuration(proxyBeanMethods = false)
-@ConditionalOnAvailableEndpoint(endpoint = SofaBootComponentsEndPoint.class)
-@ConditionalOnClass(SofaFramework.class)
-@AutoConfigureAfter(SofaRuntimeAutoConfiguration.class)
+@AutoConfiguration(after = SofaRuntimeAutoConfiguration.class)
+@ConditionalOnClass(SofaRuntimeContext.class)
+@ConditionalOnAvailableEndpoint(endpoint = ComponentsEndPoint.class)
 public class ComponentsEndpointAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
     @ConditionalOnBean(SofaRuntimeContext.class)
-    public SofaBootComponentsEndPoint sofaBootComponentsEndPoint(SofaRuntimeContext sofaRuntimeContext) {
-        return new SofaBootComponentsEndPoint(sofaRuntimeContext);
+    public ComponentsEndPoint sofaBootComponentsEndPoint(SofaRuntimeContext sofaRuntimeContext) {
+        return new ComponentsEndPoint(sofaRuntimeContext);
     }
 
 }

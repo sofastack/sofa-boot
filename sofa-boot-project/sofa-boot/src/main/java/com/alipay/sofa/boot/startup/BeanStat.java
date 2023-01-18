@@ -17,24 +17,37 @@
 package com.alipay.sofa.boot.startup;
 
 /**
+ * Stat model to record bean init.
+ *
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 2020/11/23
  */
 public class BeanStat extends ChildrenStat<BeanStat> {
+
     private static final String LAST_PREFIX        = "└─";
+
     private static final String MIDDLE_PREFIX      = "├─";
+
     private static final String INDENT_PREFIX      = "│   ";
+
     private static final String EMPTY_INDEX_PREFIX = "    ";
 
     private String              beanClassName;
+
     private long                beanRefreshStartTime;
+
     private long                beanRefreshEndTime;
+
     private long                refreshElapsedTime;
+
     private long                realRefreshElapsedTime;
-    private long                initTime;
-    private long                afterPropertiesSetTime;
-    private String              interfaceType      = null;
+
+    private long                initMethodTime;
+
+    private String              interfaceType;
+
     private String              beanType;
+
     private String              extensionProperty;
 
     public void startRefresh() {
@@ -94,20 +107,12 @@ public class BeanStat extends ChildrenStat<BeanStat> {
         this.realRefreshElapsedTime = realRefreshElapsedTime;
     }
 
-    public long getInitTime() {
-        return initTime;
+    public long getInitMethodTime() {
+        return initMethodTime;
     }
 
-    public void setInitTime(long initTime) {
-        this.initTime = initTime;
-    }
-
-    public long getAfterPropertiesSetTime() {
-        return afterPropertiesSetTime;
-    }
-
-    public void setAfterPropertiesSetTime(long afterPropertiesSetTime) {
-        this.afterPropertiesSetTime = afterPropertiesSetTime;
+    public void setInitMethodTime(long initMethodTime) {
+        this.initMethodTime = initMethodTime;
     }
 
     public String getInterfaceType() {

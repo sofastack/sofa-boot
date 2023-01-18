@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.runtime.spring.factory;
 
-import com.alipay.sofa.boot.error.ErrorCode;
+import com.alipay.sofa.boot.log.ErrorCode;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.annotation.SofaService;
 import com.alipay.sofa.runtime.model.InterfaceMode;
@@ -32,10 +32,14 @@ import com.alipay.sofa.runtime.spi.component.Implementation;
 import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
 
 /**
+ * Implementation of {@link org.springframework.beans.factory.FactoryBean} to register service.
+ *
  * @author xuanbei 18/3/1
  */
 public class ServiceFactoryBean extends AbstractContractFactoryBean {
+
     protected Object  ref;
+
     protected Service service;
 
     public ServiceFactoryBean() {
@@ -46,7 +50,8 @@ public class ServiceFactoryBean extends AbstractContractFactoryBean {
     }
 
     @Override
-    protected void doAfterPropertiesSet() {
+    public void afterPropertiesSet() throws Exception {
+        super.afterPropertiesSet();
         if (!apiType && hasSofaServiceAnnotation()) {
             throw new ServiceRuntimeException(ErrorCode.convert("01-00103", beanId, ref.getClass()));
         }

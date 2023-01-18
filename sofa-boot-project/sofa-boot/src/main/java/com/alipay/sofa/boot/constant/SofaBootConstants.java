@@ -17,217 +17,52 @@
 package com.alipay.sofa.boot.constant;
 
 /**
- * SofaBootConstants
+ * Core constants for SOFABoot framework.
  *
  * @author yangguanchao
+ * @author huzijie
  * @since 2017/09/07
  */
 public class SofaBootConstants {
 
-    /***
-     * 获取应用名: 备注 @Value("${spring.application.name:@null}")
+    /**
+     * app name key
      */
-    public static final String  APP_NAME_KEY                                                 = "spring.application.name";
-
-    public static final String  SOFA_DEFAULT_PROPERTY_SOURCE                                 = "sofaConfigurationProperties";
-    public static final String  SOFA_BOOTSTRAP                                               = "sofaBootstrap";
-    public static final String  SPRING_CLOUD_BOOTSTRAP                                       = "bootstrap";
-    public static final String  SOFA_HIGH_PRIORITY_CONFIG                                    = "sofaHighPriorityConfig";
+    public static final String APP_NAME_KEY                 = "spring.application.name";
 
     /**
-     * {@link org.springframework.boot.ResourceBanner#getVersionsMap}
+     * SOFABoot config property source key
      */
-    public static final String  SOFA_BOOT_VERSION                                            = "sofa-boot.version";
-    public static final String  SOFA_BOOT_FORMATTED_VERSION                                  = "sofa-boot.formatted-version";
+    public static final String SOFA_DEFAULT_PROPERTY_SOURCE = "sofaConfigurationProperties";
 
     /**
-     * resource pattern of properties file which is used to save some information of starters.
+     * SOFABoot bootstrap property source key
      */
-    public static final String  SOFA_BOOT_VERSION_PROPERTIES                                 = "classpath*:META-INF/sofa.versions.properties";
+    public static final String SOFA_BOOTSTRAP               = "sofaBootstrap";
 
     /**
-     * Default {@literal management.endpoints.web.exposure.include} value
+     * SpringCloud property source key
+     * see {@link org.springframework.cloud.bootstrap.BootstrapApplicationListener#BOOTSTRAP_PROPERTY_SOURCE_NAME}
      */
-    public static final String  ENDPOINTS_WEB_EXPOSURE_INCLUDE_CONFIG                        = "management.endpoints.web.exposure.include";
-    public static final String  SOFA_DEFAULT_ENDPOINTS_WEB_EXPOSURE_VALUE                    = "info, health, versions, components, beans, readiness, startup, triggerReadinessCallback";
-
-    public static final String  ENDPOINT_AVAILABILITY_GROUP_CONFIG_KEY                       = "management.endpoint.health.group.liveness.include";
-    public static final String  DEFAULT_ENDPOINT_AVAILABILITY_GROUP_CONFIG_VALUE             = "livenessState,sofaBoot";
+    public static final String SPRING_CLOUD_BOOTSTRAP       = "bootstrap";
 
     /**
-     * root application context name
+     * SOFA High priority config key
      */
-    public static final String  ROOT_APPLICATION_CONTEXT                                     = "RootApplicationContext";
+    public static final String SOFA_HIGH_PRIORITY_CONFIG    = "sofaHighPriorityConfig";
 
     /**
-     * sofa configuration prefix
+     * Space name for SOFABoot framework used in sofa-common-tools
      */
-    public static final String  PREFIX                                                       = "com.alipay.sofa.boot";
+    public static final String SOFA_BOOT_SPACE_NAME         = "sofa-boot";
 
     /**
-     * Thread Pool Core Size to execute async bean initialization
+     * SOFABoot version property key
      */
-    public static final String  ASYNC_INIT_BEAN_CORE_SIZE                                    = PREFIX
-                                                                                               + ".asyncInitBeanCoreSize";
+    public static final String SOFA_BOOT_VERSION            = "sofa-boot.version";
 
     /**
-     * Thread Pool Max Size to execute async bean initialization
+     * SOFABoot formatted version property key
      */
-    public static final String  ASYNC_INIT_BEAN_MAX_SIZE                                     = PREFIX
-                                                                                               + ".asyncInitBeanMaxSize";
-    /**
-     * skip all readiness check
-     */
-    public static final String  SOFABOOT_SKIP_ALL_HEALTH_CHECK                               = "com.alipay.sofa.healthcheck.skip.all";
-
-    /**
-     * skip all {@literal com.alipay.sofa.healthcheck.core.HealthChecker} readiness check
-     */
-    public static final String  SOFABOOT_SKIP_COMPONENT_HEALTH_CHECK                         = "com.alipay.sofa.healthcheck.skip.component";
-
-    /**
-     * skip all {@literal org.springframework.boot.actuate.health.HealthIndicator} readiness check
-     */
-    public static final String  SOFABOOT_SKIP_HEALTH_INDICATOR_CHECK                         = "com.alipay.sofa.healthcheck.skip.indicator";
-
-    /**
-     * {@literal com.alipay.sofa.runtime.spring.health.SofaComponentHealthChecker} retry count config.
-     */
-    public static final String  SOFABOOT_COMPONENT_CHECK_RETRY_COUNT                         = "com.alipay.sofa.healthcheck.component.check.retry.count";
-
-    /**
-     * default {@literal com.alipay.sofa.runtime.spring.health.SofaComponentHealthChecker} retry count value.
-     */
-    public static final int     SOFABOOT_COMPONENT_CHECK_RETRY_DEFAULT_COUNT                 = 20;
-
-    /**
-     * {@literal com.alipay.sofa.runtime.spring.health.SofaComponentHealthChecker} retry time interval config.
-     */
-    public static final String  SOFABOOT_COMPONENT_CHECK_RETRY_INTERVAL                      = "com.alipay.sofa.healthcheck.component.check.retry.interval";
-
-    /**
-     * default {@literal com.alipay.sofa.runtime.spring.health.SofaComponentHealthChecker} retry time interval value.
-     */
-    public static final long    SOFABOOT_COMPONENT_CHECK_RETRY_DEFAULT_INTERVAL              = 1000;
-
-    /**
-     * component-health-check strict config.
-     */
-    public static final String  SOFABOOT_COMPONENT_CHECK_STRICT_ENABLED                      = "com.alipay.sofa.healthcheck.component.check.strict.enabled";
-
-    /**
-     * default component-health-check strict value.
-     */
-    public static final boolean SOFABOOT_COMPONENT_CHECK_STRICT_DEFAULT_ENABLED              = true;
-
-    /**
-     * {@literal com.alipay.sofa.isle.spring.health.SofaModuleHealthChecker} retry count config.
-     */
-    public static final String  SOFABOOT_MODULE_CHECK_RETRY_COUNT                            = "com.alipay.sofa.healthcheck.module.check.retry.count";
-
-    /**
-     * default {@literal com.alipay.sofa.isle.spring.health.SofaModuleHealthChecker} retry count value.
-     */
-    public static final int     SOFABOOT_MODULE_CHECK_RETRY_DEFAULT_COUNT                    = 0;
-
-    /**
-     * {@literal com.alipay.sofa.isle.spring.health.SofaModuleHealthChecker} retry time interval config.
-     */
-    public static final String  SOFABOOT_MODULE_CHECK_RETRY_INTERVAL                         = "com.alipay.sofa.healthcheck.module.check.retry.interval";
-
-    /**
-     * default {@literal com.alipay.sofa.isle.spring.health.SofaModuleHealthChecker} retry time interval value.
-     */
-    public static final long    SOFABOOT_MODULE_CHECK_RETRY_DEFAULT_INTERVAL                 = 1000;
-
-    /**
-     * module-health-check strict config.
-     */
-    public static final String  SOFABOOT_MODULE_CHECK_STRICT_ENABLED                         = "com.alipay.sofa.healthcheck.module.check.strict.enabled";
-
-    /**
-     * default module-health-check strict value.
-     */
-    public static final boolean SOFABOOT_MODULE_CHECK_STRICT_DEFAULT_ENABLED                 = true;
-
-    /**
-     * health check default timeout config.
-     */
-    public static final String  SOFABOOT_HEALTH_CHECK_DEFAULT_TIMEOUT                        = "com.alipay.sofa.healthcheck.default.timeout";
-
-    /**
-     * health check default timeout config value.
-     */
-    public static final int     SOFABOOT_HEALTH_CHECK_DEFAULT_TIMEOUT_VALUE                  = 60 * 1000;
-
-    /**
-     * {@literal com.alipay.sofa.healthcheck.impl.ComponentHealthChecker} readiness check timeout config.
-     */
-    public static final String  SOFABOOT_COMPONENT_HEALTH_CHECK_TIMEOUT                      = "com.alipay.sofa.healthcheck.component.timeout";
-
-    /**
-     * {@literal com.alipay.sofa.healthcheck.impl.ComponentHealthChecker} readiness check timeout config value.
-     */
-    public static final int     SOFABOOT_COMPONENT_HEALTH_CHECK_DEFAULT_TIMEOUT              = 10 * 1000;
-
-    /**
-     * {@literal com.alipay.sofa.healthcheck.impl.ModuleHealthChecker} readiness check timeout config.
-     */
-    public static final String  SOFABOOT_MODULE_HEALTH_CHECK_TIMEOUT                         = "com.alipay.sofa.healthcheck.module.timeout";
-
-    /**
-     * {@literal com.alipay.sofa.healthcheck.impl.ModuleHealthChecker} readiness check timeout config value.
-     */
-    public static final int     SOFABOOT_MODULE_HEALTH_CHECK_DEFAULT_TIMEOUT                 = 10 * 1000;
-
-    /**
-     * {@literal com.alipay.sofa.healthcheck.HealthIndicatorProcessor} readiness check timeout config prefix.
-     */
-    public static final String  SOFABOOT_INDICATOR_HEALTH_CHECK_TIMEOUT_PREFIX               = "com.alipay.sofa.healthcheck.indicator.timeout.";
-
-    /**
-     * share parent context post processor config.
-     */
-    public static final String  SOFABOOT_SHARE_PARENT_CONTEXT_POST_PROCESSOR_ENABLED         = "com.alipay.sofa.boot.share.parent.context.post.processor.enabled";
-
-    /**
-     * share parent context post processor config value.
-     */
-    public static final boolean SOFABOOT_SHARE_PARENT_CONTEXT_POST_PROCESSOR_DEFAULT_ENABLED = true;
-
-    /**
-     * health check not ready result key
-     */
-    public static final String  SOFABOOT_HEALTH_CHECK_NOT_READY_KEY                          = "HEALTH-CHECK-NOT-READY";
-
-    /**
-     * health check timeout key
-     */
-    public static final String  SOFABOOT_HEALTH_CHECK_TIMEOUT_KEY                            = "HEALTH-CHECK-TIMEOUT";
-
-    /**
-     * health check not ready result
-     */
-    public static final String  SOFABOOT_HEALTH_CHECK_NOT_READY_MSG                          = "App is still in startup process, please try later!";
-
-    /**
-     * health check timeout result
-     */
-    public static final String  SOFABOOT_HEALTH_CHECK_TIMEOUT_MSG                            = "Timeout when wait for readiness check result!";
-
-    /** framework constants **/
-    public static String        APPLICATION                                                  = "SOFABOOT-APPLICATION";
-    public static String        PROCESSORS_OF_ROOT_APPLICATION_CONTEXT                       = "PROCESSORS_OF_ROOT_APPLICATION_CONTEXT";
-    public static String        SOFA_MODULE_FILE                                             = "sofa-module.properties";
-    public static String        SPRING_CONTEXT_PATH                                          = "META-INF/spring";
-    public static String        PROFILE_SEPARATOR                                            = ",";
-    public static String        DEFAULT_PROFILE_VALUE                                        = "default";
-
-    /** sofa-module.properties keywords **/
-    public static String        SPRING_PARENT                                                = "Spring-Parent";
-    public static String        MODULE_NAME                                                  = "Module-Name";
-    public static String        REQUIRE_MODULE                                               = "Require-Module";
-    public static String        MODULE_PROFILE                                               = "Module-Profile";
-
-    public static String        SOFABOOT_SPACE_NAME                                          = "sofa-boot";
+    public static final String SOFA_BOOT_FORMATTED_VERSION  = "sofa-boot.formatted-version";
 }

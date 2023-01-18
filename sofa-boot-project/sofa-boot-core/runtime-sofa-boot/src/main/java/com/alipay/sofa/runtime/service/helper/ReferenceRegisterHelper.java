@@ -18,7 +18,6 @@ package com.alipay.sofa.runtime.service.helper;
 
 import java.util.Collection;
 
-import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import com.alipay.sofa.runtime.service.binding.JvmBinding;
 import com.alipay.sofa.runtime.service.component.Reference;
 import com.alipay.sofa.runtime.service.component.ReferenceComponent;
@@ -31,11 +30,12 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import org.springframework.context.ApplicationContext;
 
 /**
- * reference register helper
+ * Reference register helper.
  *
  * @author xuanbei 18/3/1
  */
 public class ReferenceRegisterHelper {
+
     public static Object registerReference(Reference reference,
                                            BindingAdapterFactory bindingAdapterFactory,
                                            SofaRuntimeContext sofaRuntimeContext) {
@@ -50,8 +50,7 @@ public class ReferenceRegisterHelper {
         Binding binding = (Binding) reference.getBindings().toArray()[0];
 
         if (!binding.getBindingType().equals(JvmBinding.JVM_BINDING_TYPE)
-            && !SofaRuntimeProperties.isDisableJvmFirst(sofaRuntimeContext)
-            && reference.isJvmFirst()) {
+            && !sofaRuntimeContext.getProperties().isDisableJvmFirst() && reference.isJvmFirst()) {
             // as rpc invocation would be serialized, so here would Not ignore serialized
             reference.addBinding(new JvmBinding());
         }

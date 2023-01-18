@@ -19,7 +19,7 @@ package com.alipay.sofa.runtime.service.client;
 import java.util.Collection;
 import java.util.Map;
 
-import com.alipay.sofa.boot.error.ErrorCode;
+import com.alipay.sofa.boot.log.ErrorCode;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.client.ServiceClient;
 import com.alipay.sofa.runtime.api.client.param.BindingParam;
@@ -41,14 +41,17 @@ import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
 
 /**
- * Service Client Implementation，you can publish a service by this class
+ * Service Client Implementation，you can publish a service by this class.
  *
  * @author xuanbei 18/3/1
  */
 public class ServiceClientImpl implements ServiceClient {
-    private SofaRuntimeContext      sofaRuntimeContext;
-    private BindingConverterFactory bindingConverterFactory;
-    private BindingAdapterFactory   bindingAdapterFactory;
+
+    private final SofaRuntimeContext      sofaRuntimeContext;
+
+    private final BindingConverterFactory bindingConverterFactory;
+
+    private final BindingAdapterFactory   bindingAdapterFactory;
 
     public ServiceClientImpl(SofaRuntimeContext sofaRuntimeContext,
                              BindingConverterFactory bindingConverterFactory,
@@ -59,6 +62,7 @@ public class ServiceClientImpl implements ServiceClient {
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public void service(ServiceParam serviceParam) {
         Implementation implementation = new DefaultImplementation();
         implementation.setTarget(serviceParam.getInstance());
@@ -117,11 +121,9 @@ public class ServiceClientImpl implements ServiceClient {
             .getComponentInfosByType(ServiceComponent.SERVICE_COMPONENT_TYPE);
 
         for (ComponentInfo componentInfo : serviceComponents) {
-            if (!(componentInfo instanceof ServiceComponent)) {
+            if (!(componentInfo instanceof ServiceComponent serviceComponent)) {
                 continue;
             }
-
-            ServiceComponent serviceComponent = (ServiceComponent) componentInfo;
 
             if (serviceComponent.getService().getInterfaceType() == interfaceClass
                 && serviceComponent.getService().getUniqueId().equals(uniqueId)) {
