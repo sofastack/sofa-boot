@@ -28,7 +28,7 @@ import java.lang.management.ManagementFactory;
 import java.time.Duration;
 
 /**
- * Extend for {@link SpringApplicationRunListener} to compute startup stages cost time.
+ * Implementation of {@link SpringApplicationRunListener} to compute startup stages cost time.
  *
  * @author Zhijie
  * @since 2020/7/20

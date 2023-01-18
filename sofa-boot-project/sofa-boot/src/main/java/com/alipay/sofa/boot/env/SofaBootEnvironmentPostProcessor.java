@@ -28,8 +28,10 @@ import org.springframework.util.StringUtils;
 import java.util.Properties;
 
 /**
- * Used to reset some special key property, such as management.endpoints.web.exposure.include and
- * sofa-boot.version etc. They would be added as a property source named sofaConfigurationProperties.
+ * Implementation of {@link EnvironmentPostProcessor} to set some properties such as
+ * sofa-boot.version,
+ *
+ * <p> They would be added as a property source named sofaConfigurationProperties.
  *
  * @author qilong.zql
  * @author huzijie

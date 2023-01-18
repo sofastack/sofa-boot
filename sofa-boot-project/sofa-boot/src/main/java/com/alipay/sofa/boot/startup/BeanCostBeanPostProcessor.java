@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Extend for {@link BeanPostProcessor} to compute bean init cost time.
+ * Implementation of {@link BeanPostProcessor} to record bean init cost time.
  *
  * @author huzijie
  * @version BeanCostBeanPostProcessor.java, v 0.1 2020年12月31日 2:40 下午 huzijie Exp $

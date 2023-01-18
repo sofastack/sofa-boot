@@ -24,6 +24,8 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import java.time.Duration;
 
 /**
+ * Core constants for startup stage statics.
+ *
  * @author huzijie
  * @version BootStageConstants.java, v 0.1 2020年12月31日 11:40 上午 huzijie Exp $
  */

@@ -25,6 +25,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 
 /**
+ * Utility methods that are useful to handle spring xml.
  *
  * @author xi.hux@alipay.com
  * @since 2.6.0

@@ -17,6 +17,8 @@
 package com.alipay.sofa.boot.startup;
 
 /**
+ * Stat model to record bean init.
+ *
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 2020/11/23
  */

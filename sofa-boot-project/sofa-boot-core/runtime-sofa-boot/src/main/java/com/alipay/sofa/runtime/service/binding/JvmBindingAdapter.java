@@ -105,7 +105,7 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
 
         ClassLoader finalClassLoader = newClassLoader;
 
-        return ClassLoaderContextUtils.callAndRollbackTCCL(() -> {
+        return ClassLoaderContextUtils.callWithTemporaryContextClassloader(() -> {
             ServiceProxy handler = new JvmServiceInvoker(contract, binding, sofaRuntimeContext);
             ProxyFactory factory = new ProxyFactory();
             if (javaClass.isInterface()) {

@@ -24,7 +24,7 @@ import org.springframework.context.SmartLifecycle;
 import static com.alipay.sofa.boot.startup.BootStageConstants.APPLICATION_CONTEXT_REFRESH_STAGE;
 
 /**
- * An implement of {@link SmartLifecycle} to compute application context refresh time.
+ * Implementation of {@link SmartLifecycle} to compute application context refresh time.
  *
  * @author Zhijie
  * @since 2020/7/20

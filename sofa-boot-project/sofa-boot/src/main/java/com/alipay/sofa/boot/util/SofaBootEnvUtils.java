@@ -23,9 +23,10 @@ import org.springframework.core.env.Environment;
 import org.springframework.util.ClassUtils;
 
 /**
- * SofaBootEnvUtils
+ * Utility methods that are useful to obtain SOFABoot framework running environment.
  *
  * @author yangguanchao
+ * @author huzijie
  * @since 2.5.0
  */
 public class SofaBootEnvUtils {
@@ -100,20 +101,32 @@ public class SofaBootEnvUtils {
 
     /**
      * Check whether import spring cloud BootstrapConfiguration
-     * @return
+     * @return true indicates spring cloud BootstrapConfiguration is imported
      */
     public static boolean isSpringCloud() {
         return ClassUtils.isPresent(SPRING_CLOUD_MARK_NAME, null);
     }
 
+    /**
+     * Check whether running in spring test environment
+     * @return true indicates in spring test environment
+     */
     public static boolean isSpringTestEnv() {
         return TEST_ENV;
     }
 
+    /**
+     * Check whether running in local development environment
+     * @return true indicates in local development environment
+     */
+
     public static boolean isLocalEnv() {
         return LOCAL_ENV;
     }
-
+    /**
+     * Check whether running in sofa ark environment
+     * @return true indicates in sofa ark environment
+     */
     public static boolean isArkEnv() {
         return ARK_ENV;
     }

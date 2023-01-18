@@ -108,7 +108,7 @@ public class SpringContextInstallStage extends AbstractPipelineStage implements 
         for (DeploymentDescriptor deployment : application.getResolvedDeployments()) {
             if (deployment.isSpringPowered()) {
                 LOGGER.info("Start install ApplicationContext for module {}.", deployment.getName());
-                ClassLoaderContextUtils.runAndRollbackTCCL(() -> {
+                ClassLoaderContextUtils.runWithTemporaryContextClassloader(() -> {
                     try {
                         springContextLoader.loadSpringContext(deployment, application);
                     } catch (Throwable t) {
@@ -241,7 +241,7 @@ public class SpringContextInstallStage extends AbstractPipelineStage implements 
         if (ctx != null) {
             try {
                 deployment.startDeploy();
-                ClassLoaderContextUtils.runAndRollbackTCCL(ctx::refresh, deployment.getClassLoader());
+                ClassLoaderContextUtils.runWithTemporaryContextClassloader(ctx::refresh, deployment.getClassLoader());
                 application.addInstalled(deployment);
             } catch (Throwable t) {
                 LOGGER.error(ErrorCode.convert("01-11002", deployment.getName()), t);

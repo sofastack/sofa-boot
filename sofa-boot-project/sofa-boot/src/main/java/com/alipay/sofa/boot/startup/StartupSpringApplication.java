@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Extend for {@link SpringApplication} to compute {@link ApplicationContextInitializer} initialize cost time.
+ * Extend of {@link SpringApplication} to compute {@link ApplicationContextInitializer} initialize cost time.
  *
  * @author huzijie
  * @version StartupSpringApplication.java, v 0.1 2022年03月14日 2:27 PM huzijie Exp $
