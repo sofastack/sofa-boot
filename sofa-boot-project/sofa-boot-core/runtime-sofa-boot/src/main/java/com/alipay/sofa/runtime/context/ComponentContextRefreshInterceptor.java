@@ -40,11 +40,12 @@ import java.util.Collection;
  */
 public class ComponentContextRefreshInterceptor implements ContextRefreshInterceptor {
 
-    private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(ComponentContextRefreshInterceptor.class);
+    private static final Logger      LOGGER = SofaBootLoggerFactory
+                                                .getLogger(ComponentContextRefreshInterceptor.class);
 
     private final ComponentManager   componentManager;
 
-    private final SofaRuntimeContext sofaRuntimeContext;                           ;
+    private final SofaRuntimeContext sofaRuntimeContext;                                              ;
 
     public ComponentContextRefreshInterceptor(SofaRuntimeManager sofaRuntimeManager) {
         this.componentManager = sofaRuntimeManager.getComponentManager();

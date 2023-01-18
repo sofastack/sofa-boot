@@ -37,20 +37,21 @@ import org.w3c.dom.Element;
  */
 public class ExtensionFactoryBean extends AbstractExtFactoryBean {
 
-    private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(ExtensionFactoryBean.class);
+    private static final Logger LOGGER = SofaBootLoggerFactory
+                                           .getLogger(ExtensionFactoryBean.class);
 
     /* extension bean */
-    private String      bean;
+    private String              bean;
 
     /* extension point name */
-    private String      point;
+    private String              point;
 
     /* content need to be parsed with XMap */
-    private Element     content;
+    private Element             content;
 
-    private String[]    require;
+    private String[]            require;
 
-    private ClassLoader classLoader;
+    private ClassLoader         classLoader;
 
     @Override
     public void afterPropertiesSet() throws Exception {

@@ -46,26 +46,31 @@ import java.util.concurrent.atomic.AtomicReference;
  * @version AsyncInitMethodManager.java, v 0.1 2023年01月17日 11:55 AM huzijie Exp $
  */
 public class AsyncInitMethodManager implements PriorityOrdered,
-        ApplicationListener<ContextRefreshedEvent>,
-        ApplicationContextAware {
+                                   ApplicationListener<ContextRefreshedEvent>,
+                                   ApplicationContextAware {
 
-    private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(AsyncInitMethodManager.class);
+    private static final Logger                       LOGGER                 = SofaBootLoggerFactory
+                                                                                 .getLogger(AsyncInitMethodManager.class);
 
-    public static final String ASYNC_INIT_METHOD_NAME = "async-init-method-name";
+    public static final String                        ASYNC_INIT_METHOD_NAME = "async-init-method-name";
 
-    private final AtomicReference<ThreadPoolExecutor> threadPoolExecutorRef = new AtomicReference<>();
+    private final AtomicReference<ThreadPoolExecutor> threadPoolExecutorRef  = new AtomicReference<>();
 
-    private final Map<String, String> asyncInitBeanNameMap = new HashMap<>();
+    private final Map<String, String>                 asyncInitBeanNameMap   = new HashMap<>();
 
-    private final List<Future<?>> futures         = new ArrayList<>();
+    private final List<Future<?>>                     futures                = new ArrayList<>();
 
-    private ApplicationContext applicationContext;
+    private ApplicationContext                        applicationContext;
 
-    private boolean startUpFinish         = false;
+    private boolean                                   startUpFinish          = false;
 
-    private int executorCoreSize = Runtime.getRuntime().availableProcessors() + 1;
+    private int                                       executorCoreSize       = Runtime
+                                                                                 .getRuntime()
+                                                                                 .availableProcessors() + 1;
 
-    private int executorMaxSize = Runtime.getRuntime().availableProcessors() + 1;
+    private int                                       executorMaxSize        = Runtime
+                                                                                 .getRuntime()
+                                                                                 .availableProcessors() + 1;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -127,11 +132,11 @@ public class AsyncInitMethodManager implements PriorityOrdered,
 
     private ThreadPoolExecutor createAsyncExecutor() {
         LOGGER.info("create async-init-bean thread pool, corePoolSize: {}, maxPoolSize: {}.",
-                executorCoreSize, executorMaxSize);
-        return new SofaThreadPoolExecutor(executorCoreSize, executorMaxSize, 30,
-                TimeUnit.SECONDS, new SynchronousQueue<>(), new NamedThreadFactory(
-                "async-init-bean"), new ThreadPoolExecutor.CallerRunsPolicy(), "async-init-bean",
-                SofaBootConstants.SOFA_BOOT_SPACE_NAME);
+            executorCoreSize, executorMaxSize);
+        return new SofaThreadPoolExecutor(executorCoreSize, executorMaxSize, 30, TimeUnit.SECONDS,
+            new SynchronousQueue<>(), new NamedThreadFactory("async-init-bean"),
+            new ThreadPoolExecutor.CallerRunsPolicy(), "async-init-bean",
+            SofaBootConstants.SOFA_BOOT_SPACE_NAME);
     }
 
     public int getExecutorCoreSize() {

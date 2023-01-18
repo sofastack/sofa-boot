@@ -52,17 +52,19 @@ import java.lang.reflect.Modifier;
  * @author xuanbei 18/5/9
  */
 @SingletonSofaPostProcessor
-public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor, ApplicationContextAware, PriorityOrdered {
+public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor,
+                                                 ApplicationContextAware, PriorityOrdered {
 
-    private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(ReferenceAnnotationBeanPostProcessor.class);
+    private static final Logger              LOGGER = SofaBootLoggerFactory
+                                                        .getLogger(ReferenceAnnotationBeanPostProcessor.class);
 
-    private final SofaRuntimeContext      sofaRuntimeContext;
+    private final SofaRuntimeContext         sofaRuntimeContext;
 
-    private final BindingAdapterFactory   bindingAdapterFactory;
+    private final BindingAdapterFactory      bindingAdapterFactory;
 
-    private final BindingConverterFactory bindingConverterFactory;
+    private final BindingConverterFactory    bindingConverterFactory;
 
-    private ApplicationContext      applicationContext;
+    private ApplicationContext               applicationContext;
 
     private AnnotationWrapper<SofaReference> annotationWrapper;
 
@@ -170,7 +172,7 @@ public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor, 
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
         this.annotationWrapper = AnnotationWrapper.create(SofaReference.class)
-                .withEnvironment(applicationContext.getEnvironment())
-                .withBinder(DefaultPlaceHolderBinder.INSTANCE);
+            .withEnvironment(applicationContext.getEnvironment())
+            .withBinder(DefaultPlaceHolderBinder.INSTANCE);
     }
 }

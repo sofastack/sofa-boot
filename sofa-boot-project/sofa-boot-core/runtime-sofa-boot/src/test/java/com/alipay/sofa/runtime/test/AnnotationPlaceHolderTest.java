@@ -57,8 +57,8 @@ public class AnnotationPlaceHolderTest {
         };
 
         SofaService sofaService = AnnotationSampleService.class.getAnnotation(SofaService.class);
-        AnnotationWrapper<SofaService> builder = AnnotationWrapper
-            .wrap(sofaService).withBinder(binder);
+        AnnotationWrapper<SofaService> builder = AnnotationWrapper.wrap(sofaService).withBinder(
+            binder);
         SofaService delegate = builder.build();
 
         Assert.assertEquals(sofaService.hashCode(), delegate.hashCode());
@@ -107,8 +107,8 @@ public class AnnotationPlaceHolderTest {
 
         SofaReference sofaReference = AnnotationSampleService.class.getField("sampleService")
             .getAnnotation(SofaReference.class);
-        AnnotationWrapper<SofaReference> builder = AnnotationWrapper
-            .wrap(sofaReference).withBinder(binder);
+        AnnotationWrapper<SofaReference> builder = AnnotationWrapper.wrap(sofaReference)
+            .withBinder(binder);
         SofaReference delegate = builder.build();
 
         Assert.assertEquals("${annotation.sample.ref.uniqueId}", sofaReference.uniqueId());

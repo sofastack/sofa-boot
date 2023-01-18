@@ -17,11 +17,9 @@
 package com.alipay.sofa.runtime.spring.bean;
 
 import com.alipay.sofa.boot.annotation.AnnotationWrapper;
-import com.alipay.sofa.boot.annotation.DefaultPlaceHolderBinder;
 import com.alipay.sofa.runtime.api.annotation.SofaReference;
 import org.springframework.core.ParameterNameDiscoverer;
 import org.springframework.core.StandardReflectionParameterNameDiscoverer;
-import org.springframework.core.env.Environment;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -37,7 +35,7 @@ public class SofaParameterNameDiscoverer implements ParameterNameDiscoverer {
 
     private final StandardReflectionParameterNameDiscoverer standardReflectionParameterNameDiscoverer = new StandardReflectionParameterNameDiscoverer();
 
-    private final AnnotationWrapper<SofaReference> referenceAnnotationWrapper;
+    private final AnnotationWrapper<SofaReference>          referenceAnnotationWrapper;
 
     public SofaParameterNameDiscoverer(AnnotationWrapper<SofaReference> referenceAnnotationWrapper) {
         this.referenceAnnotationWrapper = referenceAnnotationWrapper;
@@ -66,7 +64,8 @@ public class SofaParameterNameDiscoverer implements ParameterNameDiscoverer {
         for (int i = 0; i < annotations.length; ++i) {
             for (Annotation annotation : annotations[i]) {
                 if (annotation instanceof SofaReference) {
-                    SofaReference delegate = referenceAnnotationWrapper.wrap((SofaReference) annotation);
+                    SofaReference delegate = referenceAnnotationWrapper
+                        .wrap((SofaReference) annotation);
                     Class<?> interfaceType = delegate.interfaceType();
                     if (interfaceType.equals(void.class)) {
                         interfaceType = parameterType[i];

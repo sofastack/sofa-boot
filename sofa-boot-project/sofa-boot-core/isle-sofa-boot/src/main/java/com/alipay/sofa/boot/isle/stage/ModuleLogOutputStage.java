@@ -33,7 +33,8 @@ import java.util.List;
  */
 public class ModuleLogOutputStage extends AbstractPipelineStage {
 
-    private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(ModuleLogOutputStage.class);
+    private static final Logger LOGGER                       = SofaBootLoggerFactory
+                                                                 .getLogger(ModuleLogOutputStage.class);
 
     public static final String  MODULE_LOG_OUTPUT_STAGE_NAME = "ModuleLogOutputStage";
 

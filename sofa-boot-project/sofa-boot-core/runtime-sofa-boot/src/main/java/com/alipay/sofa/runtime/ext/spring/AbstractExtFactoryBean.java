@@ -33,10 +33,10 @@ import org.springframework.core.Ordered;
  * @author yangyanzhao@alipay.com
  * @since 2.6.0
  */
-public class AbstractExtFactoryBean implements BeanFactoryAware, ApplicationContextAware, BeanNameAware,
-        FactoryBean, Ordered, InitializingBean {
+public class AbstractExtFactoryBean implements BeanFactoryAware, ApplicationContextAware,
+                                   BeanNameAware, FactoryBean, Ordered, InitializingBean {
 
-    protected String                          beanName;
+    protected String             beanName;
 
     protected SofaRuntimeContext sofaRuntimeContext;
 
@@ -45,16 +45,15 @@ public class AbstractExtFactoryBean implements BeanFactoryAware, ApplicationCont
     /**
      * Spring bean context for looking up spring's bean
      */
-    protected BeanFactory      beanFactory;
+    protected BeanFactory        beanFactory;
 
-    protected String           targetBeanName;
+    protected String             targetBeanName;
 
-    protected Object           target;
+    protected Object             target;
 
-    protected ClassLoaderWrapper              beanClassLoaderWrapper;
+    protected ClassLoaderWrapper beanClassLoaderWrapper;
 
-    public final static String LINK_SYMBOL = "$";
-
+    public final static String   LINK_SYMBOL = "$";
 
     @Override
     public void afterPropertiesSet() throws Exception {

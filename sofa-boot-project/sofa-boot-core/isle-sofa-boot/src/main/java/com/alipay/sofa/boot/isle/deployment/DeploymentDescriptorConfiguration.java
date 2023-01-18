@@ -25,20 +25,20 @@ import java.util.List;
  */
 public class DeploymentDescriptorConfiguration {
 
-    public static String       SOFA_MODULE_FILE                                 = "sofa-module.properties";
+    public static String       SOFA_MODULE_FILE      = "sofa-module.properties";
 
-    public static String       SPRING_CONTEXT_PATH                              = "META-INF/spring";
+    public static String       SPRING_CONTEXT_PATH   = "META-INF/spring";
 
-    public static String       DEFAULT_PROFILE_VALUE                            = "default";
+    public static String       DEFAULT_PROFILE_VALUE = "default";
 
     /** sofa-module.properties keywords **/
-    public static String       SPRING_PARENT                                    = "Spring-Parent";
+    public static String       SPRING_PARENT         = "Spring-Parent";
 
-    public static String       MODULE_NAME                                      = "Module-Name";
+    public static String       MODULE_NAME           = "Module-Name";
 
-    public static String       REQUIRE_MODULE                                   = "Require-Module";
+    public static String       REQUIRE_MODULE        = "Require-Module";
 
-    public static String       MODULE_PROFILE                                   = "Module-Profile";
+    public static String       MODULE_PROFILE        = "Module-Profile";
 
     /** module name identities */
     private final List<String> moduleNameIdentities;

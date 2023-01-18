@@ -48,13 +48,14 @@ import java.util.Map;
  */
 public class ExtensionComponent extends AbstractComponent {
 
-    private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(ExtensionComponent.class);
+    private static final Logger       LOGGER                   = SofaBootLoggerFactory
+                                                                   .getLogger(ExtensionComponent.class);
 
     public static final String        LINK_SYMBOL              = "$";
 
     public static final ComponentType EXTENSION_COMPONENT_TYPE = new ComponentType("extension");
 
-    private final Extension                 extension;
+    private final Extension           extension;
 
     public ExtensionComponent(Extension extension, SofaRuntimeContext sofaRuntimeContext) {
         this.extension = extension;

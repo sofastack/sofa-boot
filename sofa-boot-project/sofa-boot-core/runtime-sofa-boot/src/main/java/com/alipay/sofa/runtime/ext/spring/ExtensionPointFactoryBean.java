@@ -35,13 +35,14 @@ import org.springframework.util.StringUtils;
  */
 public class ExtensionPointFactoryBean extends AbstractExtFactoryBean {
 
-    private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(ExtensionPointFactoryBean.class);
+    private static final Logger LOGGER = SofaBootLoggerFactory
+                                           .getLogger(ExtensionPointFactoryBean.class);
 
     /* extension point name */
-    private String   name;
+    private String              name;
 
     /* contributions for the extension point */
-    private String[] contribution;
+    private String[]            contribution;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -68,7 +69,10 @@ public class ExtensionPointFactoryBean extends AbstractExtFactoryBean {
                     .getBeanDefinition(targetBeanName);
 
                 if (beanDef.isSingleton() && !beanDef.isLazyInit()) {
-                    LOGGER.atDebug().log("target bean [{}] is a non-lazy singleton; forcing initialization before publishing",
+                    LOGGER
+                        .atDebug()
+                        .log(
+                            "target bean [{}] is a non-lazy singleton; forcing initialization before publishing",
                             targetBeanName);
                     beanFactory.getBean(targetBeanName);
                 }

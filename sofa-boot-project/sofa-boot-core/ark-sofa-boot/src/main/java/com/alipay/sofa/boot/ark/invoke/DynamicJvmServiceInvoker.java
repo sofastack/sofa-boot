@@ -40,7 +40,8 @@ import java.lang.reflect.Method;
  */
 public class DynamicJvmServiceInvoker extends ServiceProxy {
 
-    private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(DynamicJvmServiceInvoker.class);
+    private static final Logger            LOGGER            = SofaBootLoggerFactory
+                                                                 .getLogger(DynamicJvmServiceInvoker.class);
 
     private final Contract                 contract;
     private final Object                   targetService;

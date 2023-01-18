@@ -31,9 +31,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class JvmFilterHolder {
 
-    private final List<JvmFilter> JVM_FILTERS = new ArrayList<>();
+    private final List<JvmFilter> JVM_FILTERS    = new ArrayList<>();
 
-    private final AtomicBoolean FILTERS_SORTED = new AtomicBoolean(false);
+    private final AtomicBoolean   FILTERS_SORTED = new AtomicBoolean(false);
 
     public void addJvmFilter(JvmFilter f) {
         JVM_FILTERS.add(f);
@@ -56,7 +56,8 @@ public class JvmFilterHolder {
     }
 
     public static boolean beforeInvoking(JvmFilterContext context) {
-        List<JvmFilter> filters = Collections.unmodifiableList(context.getSofaRuntimeContext().getJvmFilterHolder().getJvmFilters());
+        List<JvmFilter> filters = Collections.unmodifiableList(context.getSofaRuntimeContext()
+            .getJvmFilterHolder().getJvmFilters());
         for (JvmFilter filter : filters) {
             if (!filter.before(context)) {
                 return false;
@@ -66,7 +67,8 @@ public class JvmFilterHolder {
     }
 
     public static boolean afterInvoking(JvmFilterContext context) {
-        List<JvmFilter> filters = Collections.unmodifiableList(context.getSofaRuntimeContext().getJvmFilterHolder().getJvmFilters());
+        List<JvmFilter> filters = Collections.unmodifiableList(context.getSofaRuntimeContext()
+            .getJvmFilterHolder().getJvmFilters());
         for (int i = filters.size() - 1; i >= 0; --i) {
             if (!filters.get(i).after(context)) {
                 return false;

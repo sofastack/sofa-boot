@@ -46,7 +46,7 @@ public class ExtensionPointComponent extends AbstractComponent {
     public static final ComponentType EXTENSION_POINT_COMPONENT_TYPE = new ComponentType(
                                                                          "extension-point");
     // Extension
-    private final ExtensionPoint            extensionPoint;
+    private final ExtensionPoint      extensionPoint;
 
     public ExtensionPointComponent(ExtensionPoint extensionPoint,
                                    SofaRuntimeContext sofaRuntimeContext,

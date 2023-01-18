@@ -61,9 +61,11 @@ import static com.alipay.sofa.runtime.async.AsyncInitMethodManager.ASYNC_INIT_ME
  * @version AsyncInitBeanFactoryPostProcessor.java, v 0.1 2022年03月25日 2:08 PM huzijie Exp $
  */
 @SingletonSofaPostProcessor
-public class AsyncInitBeanFactoryPostProcessor implements BeanFactoryPostProcessor, EnvironmentAware {
+public class AsyncInitBeanFactoryPostProcessor implements BeanFactoryPostProcessor,
+                                              EnvironmentAware {
 
-    private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(AsyncInitBeanFactoryPostProcessor.class);
+    private static final Logger              LOGGER = SofaBootLoggerFactory
+                                                        .getLogger(AsyncInitBeanFactoryPostProcessor.class);
 
     private AnnotationWrapper<SofaAsyncInit> annotationWrapper;
 
@@ -184,8 +186,7 @@ public class AsyncInitBeanFactoryPostProcessor implements BeanFactoryPostProcess
 
     @Override
     public void setEnvironment(Environment environment) {
-         this.annotationWrapper = AnnotationWrapper.create(SofaAsyncInit.class)
-                        .withEnvironment(environment)
-                        .withBinder(DefaultPlaceHolderBinder.INSTANCE);
+        this.annotationWrapper = AnnotationWrapper.create(SofaAsyncInit.class)
+            .withEnvironment(environment).withBinder(DefaultPlaceHolderBinder.INSTANCE);
     }
 }

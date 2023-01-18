@@ -45,7 +45,7 @@ public class ModuleHealthChecker implements ApplicationContextAware, HealthCheck
     public Health isHealthy() {
         Health.Builder builder = new Health.Builder();
         ApplicationRuntimeModel application = applicationContext.getBean(
-                ApplicationRuntimeModel.APPLICATION_RUNTIME_MODEL_NAME, ApplicationRuntimeModel.class);
+            ApplicationRuntimeModel.APPLICATION_RUNTIME_MODEL_NAME, ApplicationRuntimeModel.class);
 
         for (DeploymentDescriptor deploymentDescriptor : application.getFailed()) {
             builder.withDetail(deploymentDescriptor.getName(), "failed");

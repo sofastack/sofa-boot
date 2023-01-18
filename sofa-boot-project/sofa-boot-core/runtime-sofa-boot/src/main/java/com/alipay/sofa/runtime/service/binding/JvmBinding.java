@@ -32,11 +32,11 @@ public class JvmBinding extends AbstractBinding {
     /**
      * binding type: JVM
      */
-    public static BindingType JVM_BINDING_TYPE = new BindingType(XmlConstants.BINDING_TYPE);
+    public static BindingType  JVM_BINDING_TYPE = new BindingType(XmlConstants.BINDING_TYPE);
 
-    private final HealthResult      healthResult     = new HealthResult(getName());
+    private final HealthResult healthResult     = new HealthResult(getName());
 
-    private JvmBindingParam   jvmBindingParam  = new JvmBindingParam();
+    private JvmBindingParam    jvmBindingParam  = new JvmBindingParam();
 
     public JvmBinding() {
     }

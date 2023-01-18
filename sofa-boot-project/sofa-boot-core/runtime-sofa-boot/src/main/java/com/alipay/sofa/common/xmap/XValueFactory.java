@@ -27,7 +27,6 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.util.Map;
 
-
 /**
  * Value factories are used to decode values from XML strings.
  * To register a new factory for a given XMap instance use the method
@@ -40,7 +39,8 @@ import java.util.Map;
  */
 public abstract class XValueFactory {
 
-    private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(XValueFactory.class);
+    private static final Logger            LOGGER           = SofaBootLoggerFactory
+                                                                .getLogger(XValueFactory.class);
 
     static final Map<Class, XValueFactory> defaultFactories = new Hashtable<Class, XValueFactory>();
 
@@ -174,8 +174,7 @@ public abstract class XValueFactory {
                                                            return new Resource(
                                                                ctx.getResource(value));
                                                        } catch (Throwable t) {
-                                                           LOGGER
-                                                               .error("new resource error", t);
+                                                           LOGGER.error("new resource error", t);
                                                            return null;
                                                        }
                                                    }

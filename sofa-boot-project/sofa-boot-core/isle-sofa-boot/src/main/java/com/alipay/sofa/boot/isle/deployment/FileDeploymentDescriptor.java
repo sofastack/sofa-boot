@@ -16,6 +16,8 @@
  */
 package com.alipay.sofa.boot.isle.deployment;
 
+import org.springframework.core.io.FileSystemResource;
+
 import java.io.File;
 import java.net.URI;
 import java.net.URL;
@@ -23,10 +25,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
-
-import org.springframework.core.io.FileSystemResource;
-
-import com.alipay.sofa.boot.constant.SofaBootConstants;
 
 /**
  * Deployment descriptor created by file.
@@ -50,12 +48,13 @@ public class FileDeploymentDescriptor extends AbstractDeploymentDescriptor {
         try {
             // When path contains special characters (e.g., white space, Chinese), URL converts them to UTF8 code point.
             // In order to process correctly, create File from URI
-            URI springXmlUri = new URI("file://"
-                                       + url.getFile().substring(
-                                           0,
-                                           url.getFile().length()
-                                                   - DeploymentDescriptorConfiguration.SOFA_MODULE_FILE.length())
-                                       + DeploymentDescriptorConfiguration.SPRING_CONTEXT_PATH);
+            URI springXmlUri = new URI(
+                "file://"
+                        + url.getFile().substring(
+                            0,
+                            url.getFile().length()
+                                    - DeploymentDescriptorConfiguration.SOFA_MODULE_FILE.length())
+                        + DeploymentDescriptorConfiguration.SPRING_CONTEXT_PATH);
             File springXml = new File(springXmlUri);
             List<File> springFiles = new ArrayList<>();
             if (springXml.exists()) {

@@ -39,11 +39,11 @@ public class SofaRuntimeContainer implements ApplicationContextAware, Disposable
 
     private static final Map<ClassLoader, SofaRuntimeManager> SOFA_RUNTIME_MANAGER_MAP = new ConcurrentHashMap<>();
 
-    private static final Map<ClassLoader, Boolean> JVM_SERVICE_CACHE_MAP = new ConcurrentHashMap<>();
+    private static final Map<ClassLoader, Boolean>            JVM_SERVICE_CACHE_MAP    = new ConcurrentHashMap<>();
 
-    private static final Map<ClassLoader, Boolean> JVM_INVOKE_SERIALIZE_MAP = new ConcurrentHashMap<>();
+    private static final Map<ClassLoader, Boolean>            JVM_INVOKE_SERIALIZE_MAP = new ConcurrentHashMap<>();
 
-    private final ClassLoader  contextClassLoader;
+    private final ClassLoader                                 contextClassLoader;
 
     public SofaRuntimeContainer(SofaRuntimeManager sofaRuntimeManager) {
         this.contextClassLoader = Thread.currentThread().getContextClassLoader();
@@ -72,7 +72,7 @@ public class SofaRuntimeContainer implements ApplicationContextAware, Disposable
     }
 
     public static boolean isJvmServiceCache(ClassLoader classLoader) {
-        return JVM_SERVICE_CACHE_MAP.getOrDefault(classLoader, false) ;
+        return JVM_SERVICE_CACHE_MAP.getOrDefault(classLoader, false);
     }
 
     public static boolean isJvmInvokeSerialize(ClassLoader classLoader) {

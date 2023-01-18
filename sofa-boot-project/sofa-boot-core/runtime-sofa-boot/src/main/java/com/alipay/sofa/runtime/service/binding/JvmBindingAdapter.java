@@ -120,5 +120,4 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
         }, finalClassLoader);
 
     }
-
 }

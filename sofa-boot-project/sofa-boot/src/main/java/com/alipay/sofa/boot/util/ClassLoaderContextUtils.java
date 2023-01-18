@@ -32,7 +32,8 @@ public class ClassLoaderContextUtils {
      * @param runnable runnable to invoke
      * @param newClassloader classloader used to invoke runnable
      */
-    public static void runWithTemporaryContextClassloader(Runnable runnable, ClassLoader newClassloader) {
+    public static void runWithTemporaryContextClassloader(Runnable runnable,
+                                                          ClassLoader newClassloader) {
         ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
         Thread.currentThread().setContextClassLoader(newClassloader);
         try {
@@ -48,7 +49,8 @@ public class ClassLoaderContextUtils {
      * @param callable callable to invoke
      * @param newClassloader classloader used to invoke callable
      */
-    public static <T> T callWithTemporaryContextClassloader(Callable<T> callable, ClassLoader newClassloader) {
+    public static <T> T callWithTemporaryContextClassloader(Callable<T> callable,
+                                                            ClassLoader newClassloader) {
         ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
         Thread.currentThread().setContextClassLoader(newClassloader);
         try {

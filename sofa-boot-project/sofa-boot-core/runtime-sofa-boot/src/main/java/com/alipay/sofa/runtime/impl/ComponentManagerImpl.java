@@ -47,7 +47,8 @@ import java.util.concurrent.ConcurrentMap;
 @SuppressWarnings("unchecked")
 public class ComponentManagerImpl implements ComponentManager {
 
-    private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(ComponentManager.class);
+    private static final Logger                                               LOGGER = SofaBootLoggerFactory
+                                                                                         .getLogger(ComponentManager.class);
     /** container for all components */
     protected ConcurrentMap<ComponentName, ComponentInfo>                     registry;
     /** container for resolved components */
@@ -55,7 +56,7 @@ public class ComponentManagerImpl implements ComponentManager {
     /** client factory */
     private ClientFactoryInternal                                             clientFactoryInternal;
 
-    private SofaRuntimeContext sofaRuntimeContext;
+    private SofaRuntimeContext                                                sofaRuntimeContext;
 
     private final ClassLoader                                                 appClassLoader;
 

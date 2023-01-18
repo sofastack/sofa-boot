@@ -51,7 +51,8 @@ import java.util.concurrent.TimeUnit;
 @ConditionalOnAvailableEndpoint(endpoint = ReadinessEndpoint.class)
 public class ReadinessAutoConfiguration {
 
-    private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(ReadinessAutoConfiguration.class);
+    private static final Logger LOGGER = SofaBootLoggerFactory
+                                           .getLogger(ReadinessAutoConfiguration.class);
 
     @Bean
     @ConditionalOnMissingBean(value = ReadinessCheckListener.class, search = SearchStrategy.CURRENT)

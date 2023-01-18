@@ -48,8 +48,8 @@ public class PlaceHolderAnnotationTest {
         };
 
         SampleAnnotation origin = SampleClass.class.getAnnotation(SampleAnnotation.class);
-        SampleAnnotation delegate = (SampleAnnotation) AnnotationWrapper
-            .wrap(origin).withBinder(placeHolderBinder).build();
+        SampleAnnotation delegate = (SampleAnnotation) AnnotationWrapper.wrap(origin)
+            .withBinder(placeHolderBinder).build();
 
         Assert.assertEquals("value", delegate.id());
         Assert.assertEquals("subValue", delegate.bindings()[0].id());

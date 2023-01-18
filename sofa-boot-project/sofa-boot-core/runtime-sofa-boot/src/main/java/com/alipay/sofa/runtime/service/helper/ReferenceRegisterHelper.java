@@ -50,8 +50,7 @@ public class ReferenceRegisterHelper {
         Binding binding = (Binding) reference.getBindings().toArray()[0];
 
         if (!binding.getBindingType().equals(JvmBinding.JVM_BINDING_TYPE)
-            && !sofaRuntimeContext.getProperties().isDisableJvmFirst()
-            && reference.isJvmFirst()) {
+            && !sofaRuntimeContext.getProperties().isDisableJvmFirst() && reference.isJvmFirst()) {
             // as rpc invocation would be serialized, so here would Not ignore serialized
             reference.addBinding(new JvmBinding());
         }

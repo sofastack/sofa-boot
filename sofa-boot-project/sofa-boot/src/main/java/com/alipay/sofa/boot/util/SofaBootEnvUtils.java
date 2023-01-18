@@ -123,6 +123,7 @@ public class SofaBootEnvUtils {
     public static boolean isLocalEnv() {
         return LOCAL_ENV;
     }
+
     /**
      * Check whether running in sofa ark environment
      * @return true indicates in sofa ark environment

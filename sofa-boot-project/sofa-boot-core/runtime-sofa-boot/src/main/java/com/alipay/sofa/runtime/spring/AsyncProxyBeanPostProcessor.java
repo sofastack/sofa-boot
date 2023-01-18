@@ -40,9 +40,10 @@ import static com.alipay.sofa.runtime.async.AsyncInitMethodManager.ASYNC_INIT_ME
  * @since 2.6.0
  */
 @SingletonSofaPostProcessor
-public class AsyncProxyBeanPostProcessor implements BeanPostProcessor, InitializingBean, BeanFactoryAware, PriorityOrdered {
+public class AsyncProxyBeanPostProcessor implements BeanPostProcessor, InitializingBean,
+                                        BeanFactoryAware, PriorityOrdered {
 
-    private final AsyncInitMethodManager asyncInitMethodManager;
+    private final AsyncInitMethodManager    asyncInitMethodManager;
 
     private ConfigurableListableBeanFactory beanFactory;
 
@@ -62,7 +63,7 @@ public class AsyncProxyBeanPostProcessor implements BeanPostProcessor, Initializ
         proxyFactory.setTargetClass(bean.getClass());
         proxyFactory.setProxyTargetClass(true);
         AsyncInitializeBeanMethodInvoker asyncInitializeBeanMethodInvoker = new AsyncInitializeBeanMethodInvoker(
-                asyncInitMethodManager, bean, beanName, methodName);
+            asyncInitMethodManager, bean, beanName, methodName);
         proxyFactory.addAdvice(asyncInitializeBeanMethodInvoker);
         return proxyFactory.getProxy();
     }
@@ -81,7 +82,8 @@ public class AsyncProxyBeanPostProcessor implements BeanPostProcessor, Initializ
     public void afterPropertiesSet() throws Exception {
         for (String beanName : beanFactory.getBeanDefinitionNames()) {
             BeanDefinition beanDefinition = beanFactory.getBeanDefinition(beanName);
-            String asyncInitMethodName = (String) beanDefinition.getAttribute(ASYNC_INIT_METHOD_NAME);
+            String asyncInitMethodName = (String) beanDefinition
+                .getAttribute(ASYNC_INIT_METHOD_NAME);
             if (StringUtils.hasText(asyncInitMethodName)) {
                 asyncInitMethodManager.registerAsyncInitBean(beanName, asyncInitMethodName);
             }

@@ -82,7 +82,7 @@ public class DefaultSofaModuleProfileChecker implements SofaModuleProfileChecker
     private void validateProfile(String profile) {
         if (!StringUtils.hasText(profile)) {
             throw new IllegalArgumentException(ErrorCode.convert("01-13001", profile,
-                    DeploymentDescriptorConfiguration.DEFAULT_PROFILE_VALUE));
+                DeploymentDescriptorConfiguration.DEFAULT_PROFILE_VALUE));
         }
 
         if (profile.charAt(0) == '!') {
@@ -91,7 +91,8 @@ public class DefaultSofaModuleProfileChecker implements SofaModuleProfileChecker
     }
 
     private String[] getModuleProfiles(DeploymentDescriptor deploymentDescriptor) {
-        String profiles = deploymentDescriptor.getProperty(DeploymentDescriptorConfiguration.MODULE_PROFILE);
+        String profiles = deploymentDescriptor
+            .getProperty(DeploymentDescriptorConfiguration.MODULE_PROFILE);
         if (StringUtils.hasText(profiles)) {
             return StringUtils.commaDelimitedListToStringArray(profiles);
         } else {

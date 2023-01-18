@@ -33,7 +33,7 @@ public class XMapContext extends Context {
     @Serial
     private static final long serialVersionUID = -7194560385886298218L;
 
-    private final ClassLoader       appClassLoader;
+    private final ClassLoader appClassLoader;
 
     /**
      *

@@ -41,7 +41,8 @@ import java.util.Set;
  */
 public class ExtensionPointBeanDefinitionParser extends AbstractExtBeanDefinitionParser {
 
-    private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(ExtensionPointBeanDefinitionParser.class);
+    private static final Logger                             LOGGER       = SofaBootLoggerFactory
+                                                                             .getLogger(ExtensionPointBeanDefinitionParser.class);
 
     public static final String                              CLASS        = "class";
 
@@ -49,7 +50,7 @@ public class ExtensionPointBeanDefinitionParser extends AbstractExtBeanDefinitio
 
     public static final String                              CONTRIBUTION = "contribution";
 
-    private static final ExtensionPointBeanDefinitionParser INSTANCE = new ExtensionPointBeanDefinitionParser();
+    private static final ExtensionPointBeanDefinitionParser INSTANCE     = new ExtensionPointBeanDefinitionParser();
 
     public ExtensionPointBeanDefinitionParser() {
     }

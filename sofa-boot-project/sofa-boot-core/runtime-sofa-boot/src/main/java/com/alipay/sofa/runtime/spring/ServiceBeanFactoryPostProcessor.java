@@ -91,15 +91,16 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
                                             ApplicationContextAware, EnvironmentAware,
                                             InitializingBean, Ordered {
 
-    private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(ServiceBeanFactoryPostProcessor.class);
+    private static final Logger              LOGGER = SofaBootLoggerFactory
+                                                        .getLogger(ServiceBeanFactoryPostProcessor.class);
 
-    private ApplicationContext      applicationContext;
+    private ApplicationContext               applicationContext;
 
-    private SofaRuntimeContext      sofaRuntimeContext;
+    private SofaRuntimeContext               sofaRuntimeContext;
 
-    private BindingConverterFactory bindingConverterFactory;
+    private BindingConverterFactory          bindingConverterFactory;
 
-    private AnnotationWrapper<SofaService> serviceAnnotationWrapper;
+    private AnnotationWrapper<SofaService>   serviceAnnotationWrapper;
 
     private AnnotationWrapper<SofaReference> referenceAnnotationWrapper;
 
@@ -394,11 +395,11 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
     @Override
     public void setEnvironment(Environment environment) {
         this.serviceAnnotationWrapper = AnnotationWrapper.create(SofaService.class)
-                .withEnvironment(applicationContext.getEnvironment())
-                .withBinder(DefaultPlaceHolderBinder.INSTANCE);
+            .withEnvironment(applicationContext.getEnvironment())
+            .withBinder(DefaultPlaceHolderBinder.INSTANCE);
         this.referenceAnnotationWrapper = AnnotationWrapper.create(SofaReference.class)
-                .withEnvironment(applicationContext.getEnvironment())
-                .withBinder(DefaultPlaceHolderBinder.INSTANCE);
+            .withEnvironment(applicationContext.getEnvironment())
+            .withBinder(DefaultPlaceHolderBinder.INSTANCE);
     }
 
     @Override

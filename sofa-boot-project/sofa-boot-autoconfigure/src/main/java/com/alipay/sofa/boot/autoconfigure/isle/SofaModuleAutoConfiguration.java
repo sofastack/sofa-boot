@@ -67,7 +67,8 @@ import java.util.function.Supplier;
 @ConditionalOnProperty(value = "sofa.boot.isle.enabled", havingValue = "true", matchIfMissing = true)
 public class SofaModuleAutoConfiguration {
 
-    private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(SofaModuleAutoConfiguration.class);
+    private static final Logger LOGGER = SofaBootLoggerFactory
+                                           .getLogger(SofaModuleAutoConfiguration.class);
 
     @Bean
     @ConditionalOnMissingBean
@@ -138,9 +139,11 @@ public class SofaModuleAutoConfiguration {
             .isAllowBeanDefinitionOverriding());
         dynamicSpringContextLoader.setPublishEventToParent(sofaModuleProperties
             .isPublishEventToParent());
-        dynamicSpringContextLoader.setContextRefreshInterceptors(contextRefreshInterceptors.orderedStream().toList());
+        dynamicSpringContextLoader.setContextRefreshInterceptors(contextRefreshInterceptors
+            .orderedStream().toList());
         dynamicSpringContextLoader.setSofaPostProcessorShareManager(sofaPostProcessorShareManager);
-        dynamicSpringContextLoader.setBeanStatCustomizers(beanStatCustomizers.orderedStream().toList());
+        dynamicSpringContextLoader.setBeanStatCustomizers(beanStatCustomizers.orderedStream()
+            .toList());
         return dynamicSpringContextLoader;
     }
 
@@ -185,7 +188,8 @@ public class SofaModuleAutoConfiguration {
         sofaPostProcessorShareManager.setShareParentContextPostProcessors(sofaModuleProperties
             .isShareParentPostProcessor());
         sofaPostProcessorShareManager
-            .setSofaPostProcessorShareFilters(sofaPostProcessorShareFilters.orderedStream().toList());
+            .setSofaPostProcessorShareFilters(sofaPostProcessorShareFilters.orderedStream()
+                .toList());
         return sofaPostProcessorShareManager;
     }
 }

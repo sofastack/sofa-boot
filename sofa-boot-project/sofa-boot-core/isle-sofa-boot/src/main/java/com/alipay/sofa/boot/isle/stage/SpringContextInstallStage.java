@@ -54,7 +54,8 @@ import java.util.stream.Collectors;
  */
 public class SpringContextInstallStage extends AbstractPipelineStage implements InitializingBean {
 
-    private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(SpringContextInstallStage.class);
+    private static final Logger LOGGER                                 = SofaBootLoggerFactory
+                                                                           .getLogger(SpringContextInstallStage.class);
 
     public static final String  SOFA_MODULE_REFRESH_EXECUTOR_BEAN_NAME = "sofaModuleRefreshExecutor";
 

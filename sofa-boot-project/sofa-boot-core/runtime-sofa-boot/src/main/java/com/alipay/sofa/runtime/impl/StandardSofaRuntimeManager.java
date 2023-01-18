@@ -42,15 +42,15 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager, Applicati
 
     private final List<RuntimeShutdownAware> runtimeShutdownAwareList = new CopyOnWriteArrayList<>();
 
-    private ComponentManagerImpl       componentManager;
+    private ComponentManagerImpl             componentManager;
 
-    private ClientFactoryInternal      clientFactoryInternal;
+    private ClientFactoryInternal            clientFactoryInternal;
 
-    private SofaRuntimeContext         sofaRuntimeContext;
+    private SofaRuntimeContext               sofaRuntimeContext;
 
-    private ClassLoader                appClassLoader;
+    private ClassLoader                      appClassLoader;
 
-    private ApplicationContext         rootApplicationContext;
+    private ApplicationContext               rootApplicationContext;
 
     public StandardSofaRuntimeManager(String appName, ClassLoader appClassLoader,
                                       ClientFactoryInternal clientFactoryInternal) {

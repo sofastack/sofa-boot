@@ -55,7 +55,7 @@ public class BindingConverterFactoryImpl implements BindingConverterFactory {
             return;
         }
 
-        List<BindingConverter<?, ?>> sortedBindingConverter = new ArrayList<>(bindingConverters);
+        List<BindingConverter> sortedBindingConverter = new ArrayList<>(bindingConverters);
         sortedBindingConverter.sort(AnnotationAwareOrderComparator.INSTANCE);
 
         for (BindingConverter<?, ?> bindingConverter : sortedBindingConverter) {

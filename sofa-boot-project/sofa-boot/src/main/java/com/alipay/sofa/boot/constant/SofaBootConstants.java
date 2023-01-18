@@ -28,41 +28,41 @@ public class SofaBootConstants {
     /**
      * app name key
      */
-    public static final String APP_NAME_KEY                                     = "spring.application.name";
+    public static final String APP_NAME_KEY                 = "spring.application.name";
 
     /**
      * SOFABoot config property source key
      */
-    public static final String SOFA_DEFAULT_PROPERTY_SOURCE                     = "sofaConfigurationProperties";
+    public static final String SOFA_DEFAULT_PROPERTY_SOURCE = "sofaConfigurationProperties";
 
     /**
      * SOFABoot bootstrap property source key
      */
-    public static final String SOFA_BOOTSTRAP                                   = "sofaBootstrap";
+    public static final String SOFA_BOOTSTRAP               = "sofaBootstrap";
 
     /**
      * SpringCloud property source key
      * see {@link org.springframework.cloud.bootstrap.BootstrapApplicationListener#BOOTSTRAP_PROPERTY_SOURCE_NAME}
      */
-    public static final String SPRING_CLOUD_BOOTSTRAP                           = "bootstrap";
+    public static final String SPRING_CLOUD_BOOTSTRAP       = "bootstrap";
 
     /**
      * SOFA High priority config key
      */
-    public static final String SOFA_HIGH_PRIORITY_CONFIG                        = "sofaHighPriorityConfig";
+    public static final String SOFA_HIGH_PRIORITY_CONFIG    = "sofaHighPriorityConfig";
 
     /**
      * Space name for SOFABoot framework used in sofa-common-tools
      */
-    public static final String SOFA_BOOT_SPACE_NAME                             = "sofa-boot";
+    public static final String SOFA_BOOT_SPACE_NAME         = "sofa-boot";
 
     /**
      * SOFABoot version property key
      */
-    public static final String SOFA_BOOT_VERSION                                = "sofa-boot.version";
+    public static final String SOFA_BOOT_VERSION            = "sofa-boot.version";
 
     /**
      * SOFABoot formatted version property key
      */
-    public static final String SOFA_BOOT_FORMATTED_VERSION                      = "sofa-boot.formatted-version";
+    public static final String SOFA_BOOT_FORMATTED_VERSION  = "sofa-boot.formatted-version";
 }

@@ -48,17 +48,18 @@ import java.util.Map;
  */
 public class DynamicSpringContextLoader implements SpringContextLoader, InitializingBean {
 
-    private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(DynamicSpringContextLoader.class);
+    private static final Logger                    LOGGER                     = SofaBootLoggerFactory
+                                                                                  .getLogger(DynamicSpringContextLoader.class);
 
     protected final ConfigurableApplicationContext rootApplicationContext;
 
     private boolean                                allowBeanOverriding;
 
-    private List<String>                           activeProfiles               = new ArrayList<>();
+    private List<String>                           activeProfiles             = new ArrayList<>();
 
     private List<ContextRefreshInterceptor>        contextRefreshInterceptors = new ArrayList<>();
 
-    private List<BeanStatCustomizer>               beanStatCustomizers          = new ArrayList<>();
+    private List<BeanStatCustomizer>               beanStatCustomizers        = new ArrayList<>();
 
     private boolean                                publishEventToParent;
 

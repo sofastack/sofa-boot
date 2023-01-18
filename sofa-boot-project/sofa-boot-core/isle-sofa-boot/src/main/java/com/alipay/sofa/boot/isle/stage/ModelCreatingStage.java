@@ -45,11 +45,12 @@ import java.util.Properties;
  */
 public class ModelCreatingStage extends AbstractPipelineStage {
 
-    private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(ModelCreatingStage.class);
+    private static final Logger LOGGER                    = SofaBootLoggerFactory
+                                                              .getLogger(ModelCreatingStage.class);
 
-    public static final String MODEL_CREATING_STAGE_NAME = "ModelCreatingStage";
+    public static final String  MODEL_CREATING_STAGE_NAME = "ModelCreatingStage";
 
-    protected boolean          allowModuleOverriding;
+    protected boolean           allowModuleOverriding;
 
     @Override
     protected void doProcess() throws Exception {
@@ -58,7 +59,8 @@ public class ModelCreatingStage extends AbstractPipelineStage {
     }
 
     protected void getAllDeployments() throws IOException, DeploymentException {
-        Enumeration<URL> urls = appClassLoader.getResources(DeploymentDescriptorConfiguration.SOFA_MODULE_FILE);
+        Enumeration<URL> urls = appClassLoader
+            .getResources(DeploymentDescriptorConfiguration.SOFA_MODULE_FILE);
         if (urls == null || !urls.hasMoreElements()) {
             return;
         }
@@ -88,8 +90,9 @@ public class ModelCreatingStage extends AbstractPipelineStage {
                                                                                                throws DeploymentException {
         if (exist != null) {
             if (isAllowModuleOverriding()) {
-                LOGGER.warn("Overriding module deployment for module name '{}': replacing '{}' with '{}'",
-                        dd.getModuleName(), exist.getName(), dd.getName());
+                LOGGER.warn(
+                    "Overriding module deployment for module name '{}': replacing '{}' with '{}'",
+                    dd.getModuleName(), exist.getName(), dd.getName());
             } else {
                 throw new DeploymentException(ErrorCode.convert("01-11006", dd.getModuleName(),
                     exist.getName(), dd.getName()));

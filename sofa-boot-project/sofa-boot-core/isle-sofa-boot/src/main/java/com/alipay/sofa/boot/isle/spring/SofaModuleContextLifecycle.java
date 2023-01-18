@@ -37,7 +37,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class SofaModuleContextLifecycle implements SmartLifecycle {
 
-    private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(SofaModuleContextLifecycle.class);
+    private static final Logger   LOGGER        = SofaBootLoggerFactory
+                                                    .getLogger(SofaModuleContextLifecycle.class);
 
     private final AtomicBoolean   isleRefreshed = new AtomicBoolean(false);
 

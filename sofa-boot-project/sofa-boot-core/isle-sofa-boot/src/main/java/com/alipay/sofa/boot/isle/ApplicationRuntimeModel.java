@@ -38,19 +38,19 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class ApplicationRuntimeModel implements IsleDeploymentModel {
 
-    public static final String APPLICATION_RUNTIME_MODEL_NAME = "APPLICATION_RUNTIME_MODEL";
+    public static final String                      APPLICATION_RUNTIME_MODEL_NAME = "APPLICATION_RUNTIME_MODEL";
     /** deploys */
-    private final List<DeploymentDescriptor>        deploys         = new ArrayList<>();
+    private final List<DeploymentDescriptor>        deploys                        = new ArrayList<>();
     /** inactive deploys */
-    private final List<DeploymentDescriptor>        inactiveDeploys = new ArrayList<>();
+    private final List<DeploymentDescriptor>        inactiveDeploys                = new ArrayList<>();
     /** failed deployments */
-    private final List<DeploymentDescriptor>        failed          = new CopyOnWriteArrayList<>();
+    private final List<DeploymentDescriptor>        failed                         = new CopyOnWriteArrayList<>();
     /** installed deployments */
-    private final List<DeploymentDescriptor>        installed       = new CopyOnWriteArrayList<>();
+    private final List<DeploymentDescriptor>        installed                      = new CopyOnWriteArrayList<>();
     /** module name to deployment */
-    private final Map<String, DeploymentDescriptor> deploymentMap   = new LinkedHashMap<>();
+    private final Map<String, DeploymentDescriptor> deploymentMap                  = new LinkedHashMap<>();
     /** deploy registry */
-    private final DeployRegistry                    deployRegistry  = new DeployRegistry();
+    private final DeployRegistry                    deployRegistry                 = new DeployRegistry();
     /** module deployment validator */
     private ModuleDeploymentValidator               moduleDeploymentValidator;
     /** module profiles checker */

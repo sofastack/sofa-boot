@@ -71,15 +71,14 @@ public class SofaRuntimeAutoConfiguration {
                                                         BindingAdapterFactory bindingAdapterFactory) {
         ClientFactoryInternal clientFactoryInternal = new ClientFactoryImpl();
         SofaRuntimeManager sofaRuntimeManager = new StandardSofaRuntimeManager(
-                environment.getProperty(SofaBootConstants.APP_NAME_KEY),
-                Thread.currentThread().getContextClassLoader(),
-                clientFactoryInternal);
-        clientFactoryInternal.registerClient(ReferenceClient.class,
-            new ReferenceClientImpl(sofaRuntimeManager.getSofaRuntimeContext(),
-                bindingConverterFactory, bindingAdapterFactory));
-        clientFactoryInternal.registerClient(ServiceClient.class,
-            new ServiceClientImpl(sofaRuntimeManager.getSofaRuntimeContext(),
-                bindingConverterFactory, bindingAdapterFactory));
+            environment.getProperty(SofaBootConstants.APP_NAME_KEY), Thread.currentThread()
+                .getContextClassLoader(), clientFactoryInternal);
+        clientFactoryInternal.registerClient(ReferenceClient.class, new ReferenceClientImpl(
+            sofaRuntimeManager.getSofaRuntimeContext(), bindingConverterFactory,
+            bindingAdapterFactory));
+        clientFactoryInternal.registerClient(ServiceClient.class, new ServiceClientImpl(
+            sofaRuntimeManager.getSofaRuntimeContext(), bindingConverterFactory,
+            bindingAdapterFactory));
         return sofaRuntimeManager;
     }
 
@@ -105,16 +104,17 @@ public class SofaRuntimeAutoConfiguration {
     @ConditionalOnMissingBean
     public static BindingConverterFactory bindingConverterFactory() {
         BindingConverterFactory bindingConverterFactory = new BindingConverterFactoryImpl();
-        bindingConverterFactory.addBindingConverters(ServiceLoaderUtils.getClassesByServiceLoader(BindingConverter.class));
+        bindingConverterFactory.addBindingConverters(ServiceLoaderUtils
+            .getClassesByServiceLoader(BindingConverter.class));
         return bindingConverterFactory;
     }
-
 
     @Bean
     @ConditionalOnMissingBean
     public static BindingAdapterFactory bindingAdapterFactory() {
         BindingAdapterFactory bindingAdapterFactory = new BindingAdapterFactoryImpl();
-        bindingAdapterFactory.addBindingAdapters(ServiceLoaderUtils.getClassesByServiceLoader(BindingAdapter.class));
+        bindingAdapterFactory.addBindingAdapters(ServiceLoaderUtils
+            .getClassesByServiceLoader(BindingAdapter.class));
         return bindingAdapterFactory;
     }
 
@@ -136,7 +136,6 @@ public class SofaRuntimeAutoConfiguration {
         return new AsyncInitBeanFactoryPostProcessor();
     }
 
-
     @Bean
     @ConditionalOnMissingBean
     public static ServiceBeanFactoryPostProcessor serviceBeanFactoryPostProcessor() {
@@ -148,7 +147,8 @@ public class SofaRuntimeAutoConfiguration {
     public static ReferenceAnnotationBeanPostProcessor referenceAnnotationBeanPostProcessor(SofaRuntimeManager sofaRuntimeManager,
                                                                                             BindingConverterFactory bindingConverterFactory,
                                                                                             BindingAdapterFactory bindingAdapterFactory) {
-        return new ReferenceAnnotationBeanPostProcessor(sofaRuntimeManager.getSofaRuntimeContext(), bindingAdapterFactory, bindingConverterFactory);
+        return new ReferenceAnnotationBeanPostProcessor(sofaRuntimeManager.getSofaRuntimeContext(),
+            bindingAdapterFactory, bindingConverterFactory);
     }
 
     @Bean
@@ -167,7 +167,8 @@ public class SofaRuntimeAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public static ClientFactoryAnnotationBeanPostProcessor clientFactoryAnnotationBeanPostProcessor(SofaRuntimeManager sofaRuntimeManager) {
-        return new ClientFactoryAnnotationBeanPostProcessor(sofaRuntimeManager.getClientFactoryInternal());
+        return new ClientFactoryAnnotationBeanPostProcessor(
+            sofaRuntimeManager.getClientFactoryInternal());
     }
 
     @Bean

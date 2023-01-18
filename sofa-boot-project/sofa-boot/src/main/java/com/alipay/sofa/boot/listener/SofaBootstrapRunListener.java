@@ -54,7 +54,7 @@ public class SofaBootstrapRunListener implements
                                      ApplicationListener<ApplicationEnvironmentPreparedEvent>,
                                      Ordered {
 
-    private static final AtomicBoolean EXECUTED = new AtomicBoolean(false);
+    private static final AtomicBoolean     EXECUTED             = new AtomicBoolean(false);
 
     private final static MapPropertySource HIGH_PRIORITY_CONFIG = new MapPropertySource(
                                                                     SofaBootConstants.SOFA_HIGH_PRIORITY_CONFIG,

@@ -44,13 +44,13 @@ import java.util.Set;
  */
 public class SofaGenericApplicationContext extends GenericApplicationContext {
 
-    private static final Method               GET_APPLICATION_EVENT_MULTICASTER_METHOD;
+    private static final Method             GET_APPLICATION_EVENT_MULTICASTER_METHOD;
 
-    private static final Field                EARLY_APPLICATION_EVENTS_FIELD;
+    private static final Field              EARLY_APPLICATION_EVENTS_FIELD;
 
     private List<ContextRefreshInterceptor> interceptors = new ArrayList<>();
 
-    private boolean                           publishEventToParent;
+    private boolean                         publishEventToParent;
 
     static {
         try {
@@ -128,7 +128,7 @@ public class SofaGenericApplicationContext extends GenericApplicationContext {
     protected void applyInterceptorBeforeRefresh() {
         interceptors.forEach(interceptor -> interceptor.beforeRefresh(this));
     }
-    
+
     protected void applyInterceptorAfterRefresh(Throwable throwable) {
         interceptors.forEach(interceptor -> interceptor.afterRefresh(this, throwable));
     }
