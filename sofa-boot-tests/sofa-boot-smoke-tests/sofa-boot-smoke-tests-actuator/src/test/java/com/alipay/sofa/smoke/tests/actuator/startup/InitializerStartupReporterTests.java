@@ -41,7 +41,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ContextConfiguration(loader = StartupSpringBootContextLoader.class)
 public class InitializerStartupReporterTests {
 
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
     private StartupReporter startupReporter;
 

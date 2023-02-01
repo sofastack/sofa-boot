@@ -194,7 +194,9 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
             stat.setStartTime(System.currentTimeMillis());
             readinessHealthCheck();
             stat.setEndTime(System.currentTimeMillis());
-            startupReporter.addCommonStartupStat(stat);
+            if (startupReporter != null) {
+                startupReporter.addCommonStartupStat(stat);
+            }
         }
     }
 
