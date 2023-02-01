@@ -166,7 +166,7 @@ public class ModelCreatingStage extends AbstractPipelineStage {
         }
     }
 
-    protected boolean isAllowModuleOverriding() {
+    public boolean isAllowModuleOverriding() {
         return this.allowModuleOverriding;
     }
 

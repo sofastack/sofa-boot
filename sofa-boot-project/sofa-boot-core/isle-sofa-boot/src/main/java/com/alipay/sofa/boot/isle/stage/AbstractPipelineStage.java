@@ -62,7 +62,9 @@ public abstract class AbstractPipelineStage implements PipelineStage, Applicatio
             doProcess();
         } finally {
             stat.setEndTime(System.currentTimeMillis());
-            startupReporter.addCommonStartupStat(stat);
+            if (startupReporter != null) {
+                startupReporter.addCommonStartupStat(stat);
+            }
         }
     }
 
