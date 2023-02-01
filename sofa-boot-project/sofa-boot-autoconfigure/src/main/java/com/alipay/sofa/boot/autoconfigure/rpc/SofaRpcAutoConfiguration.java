@@ -17,17 +17,11 @@
 package com.alipay.sofa.boot.autoconfigure.rpc;
 
 import com.alipay.sofa.boot.actuator.health.ReadinessCheckCallback;
-import com.alipay.sofa.rpc.boot.config.ConsulConfigurator;
+import com.alipay.sofa.boot.autoconfigure.rpc.SofaRpcAutoConfiguration.RegistryConfigurationImportSelector;
 import com.alipay.sofa.rpc.boot.config.FaultToleranceConfigurator;
-import com.alipay.sofa.rpc.boot.config.LocalFileConfigurator;
-import com.alipay.sofa.rpc.boot.config.MeshConfigurator;
-import com.alipay.sofa.rpc.boot.config.MulticastConfigurator;
-import com.alipay.sofa.rpc.boot.config.NacosConfigurator;
 import com.alipay.sofa.rpc.boot.config.RegistryConfigureProcessor;
 import com.alipay.sofa.rpc.boot.config.SofaBootRpcConfigConstants;
 import com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties;
-import com.alipay.sofa.rpc.boot.config.SofaRegistryConfigurator;
-import com.alipay.sofa.rpc.boot.config.ZookeeperConfigurator;
 import com.alipay.sofa.rpc.boot.container.ConsumerConfigContainer;
 import com.alipay.sofa.rpc.boot.container.ProviderConfigContainer;
 import com.alipay.sofa.rpc.boot.container.RegistryConfigContainer;
@@ -44,36 +38,38 @@ import com.alipay.sofa.rpc.boot.runtime.adapter.processor.DynamicConfigProcessor
 import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ProcessorContainer;
 import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ProviderConfigProcessor;
 import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ProviderRegisterProcessor;
-import com.alipay.sofa.rpc.boot.swagger.BoltSwaggerServiceApplicationListener;
-import com.alipay.sofa.rpc.boot.swagger.SwaggerServiceApplicationListener;
-import com.alipay.sofa.rpc.config.JAXRSProviderManager;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.health.Health;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.ImportSelector;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.env.Environment;
+import org.springframework.core.type.AnnotationMetadata;
 
-import javax.ws.rs.client.ClientRequestFilter;
-import javax.ws.rs.client.ClientResponseFilter;
-import javax.ws.rs.container.ContainerRequestFilter;
-import javax.ws.rs.container.ContainerResponseFilter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
+ * {@link EnableAutoConfiguration Auto-configuration} for Sofa Rpc.
+ *
  * @author <a href="mailto:lw111072@antfin.com">LiWei</a>
+ * @author yuanxuan
  */
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration
 @EnableConfigurationProperties(SofaBootRpcProperties.class)
 @ConditionalOnClass(SofaBootRpcProperties.class)
+@Import({ RegistryConfigurationImportSelector.class, SwaggerConfiguration.class,
+         RestFilterConfiguration.class })
 public class SofaRpcAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
@@ -120,55 +116,13 @@ public class SofaRpcAutoConfiguration {
         return new ProviderConfigHelper(serverConfigContainer, registryConfigContainer, appName);
     }
 
-    @Bean
-    @ConditionalOnMissingBean
-    public ZookeeperConfigurator zookeeperConfigurator() {
-        return new ZookeeperConfigurator();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public MulticastConfigurator multicastConfigurator() {
-        return new MulticastConfigurator();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public LocalFileConfigurator localFileConfigurator() {
-        return new LocalFileConfigurator();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public MeshConfigurator meshConfigurator() {
-        return new MeshConfigurator();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public NacosConfigurator nacosConfigurator() {
-        return new NacosConfigurator();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public SofaRegistryConfigurator sofaRegistryConfigurator() {
-        return new SofaRegistryConfigurator();
-    }
-
     @Bean(name = "registryConfigMap")
     public Map<String, RegistryConfigureProcessor> configureProcessorMap(List<RegistryConfigureProcessor> processorList) {
-        Map<String, RegistryConfigureProcessor> map = new HashMap<String, RegistryConfigureProcessor>();
+        Map<String, RegistryConfigureProcessor> map = new HashMap<>();
         for (RegistryConfigureProcessor processor : processorList) {
             map.put(processor.registryType(), processor);
         }
         return map;
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public ConsulConfigurator consulConfigurator() {
-        return new ConsulConfigurator();
     }
 
     @Bean
@@ -202,18 +156,6 @@ public class SofaRpcAutoConfiguration {
             faultToleranceConfigurator, serverConfigContainer, registryConfigContainer);
     }
 
-    @Bean
-    @ConditionalOnProperty(name = "com.alipay.sofa.rpc.rest-swagger", havingValue = "true")
-    public ApplicationListener swaggerServiceApplicationListener() {
-        return new SwaggerServiceApplicationListener();
-    }
-
-    @Bean
-    @ConditionalOnProperty(name = "com.alipay.sofa.rpc.enable-swagger", havingValue = "true")
-    public ApplicationListener boltSwaggerServiceApplicationListener() {
-        return new BoltSwaggerServiceApplicationListener();
-    }
-
     @Configuration(proxyBeanMethods = false)
     @ConditionalOnClass({ SofaBootRpcProperties.class, ReadinessCheckCallback.class, Health.class })
     public static class RpcAfterHealthCheckCallbackConfiguration {
@@ -221,46 +163,6 @@ public class SofaRpcAutoConfiguration {
         public RpcAfterHealthCheckCallback rpcAfterHealthCheckCallback() {
             return new RpcAfterHealthCheckCallback();
         }
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public List<ContainerRequestFilter> containerRequestFilters(List<ContainerRequestFilter> containerRequestFilters) {
-
-        for (ContainerRequestFilter filter : containerRequestFilters) {
-            JAXRSProviderManager.registerCustomProviderInstance(filter);
-        }
-        return containerRequestFilters;
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public List<ContainerResponseFilter> containerResponseFilters(List<ContainerResponseFilter> containerResponseFilters) {
-
-        for (ContainerResponseFilter filter : containerResponseFilters) {
-            JAXRSProviderManager.registerCustomProviderInstance(filter);
-        }
-        return containerResponseFilters;
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public List<ClientRequestFilter> clientRequestFilters(List<ClientRequestFilter> clientRequestFilters) {
-
-        for (ClientRequestFilter filter : clientRequestFilters) {
-            JAXRSProviderManager.registerCustomProviderInstance(filter);
-        }
-        return clientRequestFilters;
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public List<ClientResponseFilter> clientResponseFilters(List<ClientResponseFilter> clientResponseFilters) {
-
-        for (ClientResponseFilter filter : clientResponseFilters) {
-            JAXRSProviderManager.registerCustomProviderInstance(filter);
-        }
-        return clientResponseFilters;
     }
 
     @Bean
@@ -287,5 +189,13 @@ public class SofaRpcAutoConfiguration {
     @ConditionalOnMissingBean
     public ProviderRegisterProcessor providerRegisterProcessor() {
         return new ProviderRegisterProcessor();
+    }
+
+    static class RegistryConfigurationImportSelector implements ImportSelector {
+
+        @Override
+        public String[] selectImports(AnnotationMetadata importingClassMetadata) {
+            return RegistryConfigurations.registryConfigurationClass();
+        }
     }
 }

@@ -63,6 +63,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-framework</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
             <groupId>com.alipay.sofa</groupId>
             <artifactId>ark-sofa-boot</artifactId>
             <optional>true</optional>
@@ -223,6 +229,7 @@
             <artifactId>hessian</artifactId>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
 
 </project>
