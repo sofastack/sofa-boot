@@ -38,7 +38,10 @@ public class SofaConfigSourceSupportListener
 
     @Override
     public void onApplicationEvent(ApplicationEnvironmentPreparedEvent event) {
-        ConfigurableEnvironment environment = event.getEnvironment();
+        registerSofaConfigs(event.getEnvironment());
+    }
+
+    private void registerSofaConfigs(ConfigurableEnvironment environment) {
         SofaConfigs.addConfigSource(new AbstractConfigSource() {
 
             @Override

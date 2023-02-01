@@ -45,7 +45,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.StreamSupport;
 
 /**
- * Implementation of {@link ApplicationListener<ApplicationEnvironmentPreparedEvent>} to suit spring cloud enviroment.
+ * Implementation of {@link ApplicationListener<ApplicationEnvironmentPreparedEvent>} to suit spring cloud environment.
  * 
  * @author qilong.zql
  * @since 3.0.0
