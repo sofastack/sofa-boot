@@ -216,7 +216,7 @@ public class HealthCheckerProcessor implements ApplicationContextAware {
         Health health;
         boolean result;
         String checkType = isReadiness ? "readiness" : "liveness";
-        logger.info("HealthChecker[{}] {} check start.", beanId, checkType);
+        logger.info("HealthChecker [{}] {} check start.", beanId, checkType);
 
         // 定制配置
         healthChecker = wrapperHealthCheckerForCustomProperty(healthChecker);

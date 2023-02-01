@@ -207,7 +207,7 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
 
         boolean result;
         Health health;
-        logger.info("HealthIndicator[{}] readiness check start.", beanId);
+        logger.info("HealthIndicator [{}] readiness check start.", beanId);
         int timeout = Optional.ofNullable(getHealthIndicatorConfig())
                 .map(k -> getHealthIndicatorConfig().get(beanId))
                 .map(HealthCheckerConfig::getTimeout)

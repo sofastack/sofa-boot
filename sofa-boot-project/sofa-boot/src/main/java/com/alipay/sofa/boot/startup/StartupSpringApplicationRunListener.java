@@ -99,8 +99,10 @@ public class StartupSpringApplicationRunListener implements SpringApplicationRun
         context.getBeanFactory().addBeanPostProcessor(
             new StartupReporterBeanPostProcessor(startupReporter));
         context.getBeanFactory().registerSingleton("STARTUP_REPORTER_BEAN", startupReporter);
+        StartupSmartLifecycle startupSmartLifecycle = new StartupSmartLifecycle(startupReporter);
+        startupSmartLifecycle.setApplicationContext(context);
         context.getBeanFactory().registerSingleton("STARTUP_SMART_LIfE_CYCLE",
-            new StartupSmartLifecycle(startupReporter));
+            startupSmartLifecycle);
         applicationContextLoadStage = stat;
     }
 

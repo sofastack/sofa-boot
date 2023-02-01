@@ -17,9 +17,14 @@
 package com.alipay.sofa.boot.startup;
 
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.beans.factory.support.AbstractBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.SmartLifecycle;
+
+import java.util.Optional;
 
 import static com.alipay.sofa.boot.startup.BootStageConstants.APPLICATION_CONTEXT_REFRESH_STAGE;
 
@@ -60,9 +65,13 @@ public class StartupSmartLifecycle implements SmartLifecycle, ApplicationContext
         rootModuleStat.setThreadName(Thread.currentThread().getName());
 
         // getBeanStatList from BeanCostBeanPostProcessor
-        BeanCostBeanPostProcessor beanCostBeanPostProcessor = applicationContext
-            .getBean(BeanCostBeanPostProcessor.class);
-        rootModuleStat.setChildren((beanCostBeanPostProcessor.getBeanStatList()));
+        AutowireCapableBeanFactory beanFactory = applicationContext.getAutowireCapableBeanFactory();
+        if (beanFactory instanceof AbstractBeanFactory) {
+            Optional<BeanPostProcessor> postProcessor =
+                    ((AbstractBeanFactory) beanFactory).getBeanPostProcessors().stream().filter(p -> p instanceof BeanCostBeanPostProcessor)
+                    .findFirst();
+            postProcessor.ifPresent(beanPostProcessor -> rootModuleStat.setChildren(((BeanCostBeanPostProcessor) beanPostProcessor).getBeanStatList()));
+        }
 
         // report ContextRefreshStageStat
         stat.addChild(rootModuleStat);
