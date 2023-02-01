@@ -21,7 +21,7 @@ import com.google.common.base.CaseFormat;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.Environment;
-import org.springframework.util.StringUtils;
+import org.springframework.util.ObjectUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -342,7 +342,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     private String              dynamicConfig;
 
     public String getAftRegulationEffective() {
-        return StringUtils.isEmpty(aftRegulationEffective) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(aftRegulationEffective) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : aftRegulationEffective;
     }
 
@@ -351,7 +351,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getAftDegradeEffective() {
-        return StringUtils.isEmpty(aftDegradeEffective) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(aftDegradeEffective) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : aftDegradeEffective;
     }
 
@@ -360,7 +360,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getAftTimeWindow() {
-        return StringUtils.isEmpty(aftTimeWindow) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(aftTimeWindow) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : aftTimeWindow;
     }
 
@@ -369,7 +369,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getAftLeastWindowCount() {
-        return StringUtils.isEmpty(aftLeastWindowCount) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(aftLeastWindowCount) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : aftLeastWindowCount;
     }
 
@@ -378,7 +378,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getAftLeastWindowExceptionRateMultiple() {
-        return StringUtils.isEmpty(aftLeastWindowExceptionRateMultiple) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(aftLeastWindowExceptionRateMultiple) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName())
             : aftLeastWindowExceptionRateMultiple;
     }
@@ -388,7 +388,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getAftWeightDegradeRate() {
-        return StringUtils.isEmpty(aftWeightDegradeRate) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(aftWeightDegradeRate) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : aftWeightDegradeRate;
     }
 
@@ -397,7 +397,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getAftWeightRecoverRate() {
-        return StringUtils.isEmpty(aftWeightRecoverRate) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(aftWeightRecoverRate) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : aftWeightRecoverRate;
     }
 
@@ -406,7 +406,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getAftDegradeLeastWeight() {
-        return StringUtils.isEmpty(aftDegradeLeastWeight) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(aftDegradeLeastWeight) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : aftDegradeLeastWeight;
     }
 
@@ -415,7 +415,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getAftDegradeMaxIpCount() {
-        return StringUtils.isEmpty(aftDegradeMaxIpCount) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(aftDegradeMaxIpCount) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : aftDegradeMaxIpCount;
     }
 
@@ -429,7 +429,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
             return environment.getProperty(SofaOptions.CONFIG_TR_PORT);
         }
 
-        return StringUtils.isEmpty(boltPort) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(boltPort) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : boltPort;
     }
 
@@ -438,7 +438,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getDubboIoThreadSize() {
-        return StringUtils.isEmpty(dubboIoThreadSize) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(dubboIoThreadSize) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : dubboIoThreadSize;
     }
 
@@ -452,7 +452,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
             return environment.getProperty(SofaOptions.TR_MIN_POOLSIZE);
         }
 
-        return StringUtils.isEmpty(boltThreadPoolCoreSize) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(boltThreadPoolCoreSize) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : boltThreadPoolCoreSize;
     }
 
@@ -466,7 +466,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
             return environment.getProperty(SofaOptions.TR_MAX_POOLSIZE);
         }
 
-        return StringUtils.isEmpty(boltThreadPoolMaxSize) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(boltThreadPoolMaxSize) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : boltThreadPoolMaxSize;
     }
 
@@ -475,7 +475,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getBoltAcceptsSize() {
-        return StringUtils.isEmpty(boltAcceptsSize) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(boltAcceptsSize) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : boltAcceptsSize;
     }
 
@@ -484,7 +484,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getRestHostname() {
-        return StringUtils.isEmpty(restHostname) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(restHostname) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : restHostname;
     }
 
@@ -493,7 +493,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getRestPort() {
-        return StringUtils.isEmpty(restPort) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(restPort) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : restPort;
     }
 
@@ -502,7 +502,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getRestIoThreadSize() {
-        return StringUtils.isEmpty(restIoThreadSize) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(restIoThreadSize) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : restIoThreadSize;
     }
 
@@ -511,7 +511,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getRestContextPath() {
-        return StringUtils.isEmpty(restContextPath) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(restContextPath) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : restContextPath;
     }
 
@@ -520,7 +520,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getRestThreadPoolMaxSize() {
-        return StringUtils.isEmpty(restThreadPoolMaxSize) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(restThreadPoolMaxSize) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : restThreadPoolMaxSize;
     }
 
@@ -529,7 +529,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getRestMaxRequestSize() {
-        return StringUtils.isEmpty(restMaxRequestSize) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(restMaxRequestSize) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : restMaxRequestSize;
     }
 
@@ -538,7 +538,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getRestTelnet() {
-        return StringUtils.isEmpty(restTelnet) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(restTelnet) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : restTelnet;
     }
 
@@ -547,7 +547,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getRestDaemon() {
-        return StringUtils.isEmpty(restDaemon) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(restDaemon) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : restDaemon;
     }
 
@@ -556,7 +556,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getDubboPort() {
-        return StringUtils.isEmpty(dubboPort) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(dubboPort) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : dubboPort;
     }
 
@@ -565,7 +565,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getDubboThreadPoolMaxSize() {
-        return StringUtils.isEmpty(dubboThreadPoolMaxSize) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(dubboThreadPoolMaxSize) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : dubboThreadPoolMaxSize;
     }
 
@@ -574,7 +574,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getDubboAcceptsSize() {
-        return StringUtils.isEmpty(dubboAcceptsSize) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(dubboAcceptsSize) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : dubboAcceptsSize;
     }
 
@@ -583,7 +583,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getRegistryAddress() {
-        return StringUtils.isEmpty(registryAddress) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(registryAddress) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : registryAddress;
     }
 
@@ -596,7 +596,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
         if (environment.containsProperty(SofaOptions.TR_QUEUE_SIZE)) {
             return environment.getProperty(SofaOptions.TR_QUEUE_SIZE);
         }
-        return StringUtils.isEmpty(boltThreadPoolQueueSize) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(boltThreadPoolQueueSize) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : boltThreadPoolQueueSize;
     }
 
@@ -605,7 +605,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getDubboThreadPoolCoreSize() {
-        return StringUtils.isEmpty(dubboThreadPoolCoreSize) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(dubboThreadPoolCoreSize) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : dubboThreadPoolCoreSize;
     }
 
@@ -614,7 +614,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getDubboThreadPoolQueueSize() {
-        return StringUtils.isEmpty(dubboThreadPoolQueueSize) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(dubboThreadPoolQueueSize) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : dubboThreadPoolQueueSize;
     }
 
@@ -623,7 +623,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getRestThreadPoolCoreSize() {
-        return StringUtils.isEmpty(restThreadPoolCoreSize) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(restThreadPoolCoreSize) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : restThreadPoolCoreSize;
     }
 
@@ -632,7 +632,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getVirtualHost() {
-        return StringUtils.isEmpty(virtualHost) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(virtualHost) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : virtualHost;
     }
 
@@ -641,7 +641,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getBoundHost() {
-        return StringUtils.isEmpty(boundHost) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(boundHost) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : boundHost;
     }
 
@@ -650,7 +650,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getVirtualPort() {
-        return StringUtils.isEmpty(virtualPort) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(virtualPort) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : virtualPort;
     }
 
@@ -664,7 +664,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
             return environment.getProperty(SofaOptions.CONFIG_IP_RANGE);
         }
 
-        return StringUtils.isEmpty(enabledIpRange) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(enabledIpRange) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : enabledIpRange;
     }
 
@@ -678,7 +678,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
             return environment.getProperty(SofaOptions.CONFIG_NI_BIND);
         }
 
-        return StringUtils.isEmpty(bindNetworkInterface) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(bindNetworkInterface) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : bindNetworkInterface;
     }
 
@@ -687,7 +687,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getH2cPort() {
-        return StringUtils.isEmpty(h2cPort) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(h2cPort) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : h2cPort;
     }
 
@@ -696,7 +696,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getH2cThreadPoolCoreSize() {
-        return StringUtils.isEmpty(h2cThreadPoolCoreSize) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(h2cThreadPoolCoreSize) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : h2cThreadPoolCoreSize;
     }
 
@@ -705,7 +705,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getH2cThreadPoolMaxSize() {
-        return StringUtils.isEmpty(h2cThreadPoolMaxSize) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(h2cThreadPoolMaxSize) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : h2cThreadPoolMaxSize;
     }
 
@@ -714,7 +714,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getH2cThreadPoolQueueSize() {
-        return StringUtils.isEmpty(h2cThreadPoolQueueSize) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(h2cThreadPoolQueueSize) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : h2cThreadPoolQueueSize;
     }
 
@@ -723,7 +723,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getH2cAcceptsSize() {
-        return StringUtils.isEmpty(h2cAcceptsSize) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(h2cAcceptsSize) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : h2cAcceptsSize;
     }
 
@@ -732,7 +732,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getHttpPort() {
-        return StringUtils.isEmpty(httpPort) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(httpPort) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : httpPort;
     }
 
@@ -741,7 +741,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getHttpThreadPoolCoreSize() {
-        return StringUtils.isEmpty(httpThreadPoolCoreSize) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(httpThreadPoolCoreSize) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : httpThreadPoolCoreSize;
     }
 
@@ -750,7 +750,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getHttpThreadPoolMaxSize() {
-        return StringUtils.isEmpty(httpThreadPoolMaxSize) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(httpThreadPoolMaxSize) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : httpThreadPoolMaxSize;
     }
 
@@ -759,7 +759,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getHttpThreadPoolQueueSize() {
-        return StringUtils.isEmpty(httpThreadPoolQueueSize) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(httpThreadPoolQueueSize) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : httpThreadPoolQueueSize;
     }
 
@@ -768,7 +768,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getHttpAcceptsSize() {
-        return StringUtils.isEmpty(httpAcceptsSize) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(httpAcceptsSize) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : httpAcceptsSize;
     }
 
@@ -777,7 +777,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getLookoutCollectDisable() {
-        return StringUtils.isEmpty(lookoutCollectDisable) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(lookoutCollectDisable) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : lookoutCollectDisable;
     }
 
@@ -794,7 +794,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getEnableMesh() {
-        return StringUtils.isEmpty(enableMesh) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(enableMesh) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : enableMesh;
     }
 
@@ -803,7 +803,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getConsumerRepeatedReferenceLimit() {
-        return StringUtils.isEmpty(consumerRepeatedReferenceLimit) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(consumerRepeatedReferenceLimit) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : consumerRepeatedReferenceLimit;
     }
 
@@ -820,7 +820,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getHystrixEnable() {
-        return StringUtils.isEmpty(hystrixEnable) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(hystrixEnable) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : hystrixEnable;
     }
 
@@ -829,12 +829,12 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getRestAllowedOrigins() {
-        return StringUtils.isEmpty(restAllowedOrigins) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(restAllowedOrigins) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : restAllowedOrigins;
     }
 
     public String getTriplePort() {
-        return StringUtils.isEmpty(triplePort) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(triplePort) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : triplePort;
     }
 
@@ -843,7 +843,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getTripleThreadPoolCoreSize() {
-        return StringUtils.isEmpty(tripleThreadPoolCoreSize) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(tripleThreadPoolCoreSize) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : tripleThreadPoolCoreSize;
     }
 
@@ -852,7 +852,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getTripleThreadPoolMaxSize() {
-        return StringUtils.isEmpty(tripleThreadPoolMaxSize) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(tripleThreadPoolMaxSize) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : tripleThreadPoolMaxSize;
     }
 
@@ -861,7 +861,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getTripleThreadPoolQueueSize() {
-        return StringUtils.isEmpty(tripleThreadPoolQueueSize) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(tripleThreadPoolQueueSize) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : tripleThreadPoolQueueSize;
     }
 
@@ -870,7 +870,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getTripleAcceptsSize() {
-        return StringUtils.isEmpty(tripleAcceptsSize) ? getDotString(new Object() {
+        return ObjectUtils.isEmpty(tripleAcceptsSize) ? getDotString(new Object() {
         }.getClass().getEnclosingMethod().getName()) : tripleAcceptsSize;
     }
 
