@@ -55,13 +55,11 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ScannedGenericBeanDefinition;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.core.env.Environment;
 import org.springframework.core.type.MethodMetadata;
 import org.springframework.core.type.StandardMethodMetadata;
 import org.springframework.util.Assert;
@@ -88,8 +86,7 @@ import java.util.stream.Stream;
  */
 @SingletonSofaPostProcessor
 public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor,
-                                            ApplicationContextAware, EnvironmentAware,
-                                            InitializingBean, Ordered {
+                                            ApplicationContextAware, InitializingBean, Ordered {
 
     private static final Logger              LOGGER = SofaBootLoggerFactory
                                                         .getLogger(ServiceBeanFactoryPostProcessor.class);
@@ -389,10 +386,6 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
-    }
-
-    @Override
-    public void setEnvironment(Environment environment) {
         this.serviceAnnotationWrapper = AnnotationWrapper.create(SofaService.class)
             .withEnvironment(applicationContext.getEnvironment())
             .withBinder(DefaultPlaceHolderBinder.INSTANCE);

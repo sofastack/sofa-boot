@@ -106,7 +106,7 @@ public class ReadinessCheckCallbackProcessor implements ApplicationContextAware 
             health = readinessCheckCallback.onHealthy(applicationContext);
             result = health.getStatus().equals(Status.UP);
             if (result) {
-                logger.info("SOFABoot ReadinessCheckCallback[{}] check success.", beanId);
+                logger.info("SOFABoot ReadinessCheckCallback [{}] check success.", beanId);
             } else {
                 logger.error(
                         ErrorCode.convert("01-24001", beanId,

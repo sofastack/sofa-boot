@@ -72,7 +72,7 @@ public class DynamicSpringContextLoader implements SpringContextLoader, Initiali
     @Override
     public void afterPropertiesSet() throws Exception {
         Assert.notNull(rootApplicationContext, "rootApplicationContext must not be null");
-        Assert.isInstanceOf(ConfigurableApplicationContext.class,
+        Assert.isInstanceOf(ConfigurableApplicationContext.class, rootApplicationContext,
             "rootApplicationContext must be ConfigurableApplicationContext");
     }
 
