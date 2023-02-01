@@ -33,7 +33,7 @@ public interface SofaPostProcessorShareFilter {
      * @return if the bean should be shared, return true, otherwise false
      */
     default boolean skipShareByClass(Class<?> clazz) {
-        return true;
+        return false;
     }
 
     /**
@@ -41,7 +41,7 @@ public interface SofaPostProcessorShareFilter {
      * @param beanName beanName for bean
      * @return if the bean should be shared, return true, otherwise false
      */
-    default boolean skipShareByBeanName(String beanName) {return true;}
+    default boolean skipShareByBeanName(String beanName) {return false;}
 
     /**
      * judge the bean for clazz type should share singleton
@@ -49,7 +49,7 @@ public interface SofaPostProcessorShareFilter {
      * @return if the bean should share singleton, return true, otherwise false
      */
     default boolean useSingletonByClass(Class<?> clazz) {
-        return true;
+        return false;
     }
 
     /**
@@ -57,5 +57,5 @@ public interface SofaPostProcessorShareFilter {
      * @param beanName beanName for bean
      * @return if the bean should share singleton, return true, otherwise false
      */
-    default boolean useSingletonByBeanName(String beanName) {return true;}
+    default boolean useSingletonByBeanName(String beanName) {return false;}
 }

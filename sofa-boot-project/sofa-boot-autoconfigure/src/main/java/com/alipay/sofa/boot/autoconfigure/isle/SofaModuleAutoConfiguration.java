@@ -23,7 +23,7 @@ import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.boot.isle.deployment.DefaultModuleDeploymentValidator;
 import com.alipay.sofa.boot.isle.deployment.ModuleDeploymentValidator;
 import com.alipay.sofa.boot.isle.loader.DynamicSpringContextLoader;
-import com.alipay.sofa.boot.isle.loader.SofaPostProcessorShareManager;
+import com.alipay.sofa.boot.context.processor.SofaPostProcessorShareManager;
 import com.alipay.sofa.boot.isle.loader.SpringContextLoader;
 import com.alipay.sofa.boot.isle.profile.DefaultSofaModuleProfileChecker;
 import com.alipay.sofa.boot.isle.profile.SofaModuleProfileChecker;

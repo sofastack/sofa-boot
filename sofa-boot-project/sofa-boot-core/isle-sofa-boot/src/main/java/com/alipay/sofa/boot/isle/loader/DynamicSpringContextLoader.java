@@ -20,6 +20,7 @@ import com.alipay.sofa.boot.context.ContextRefreshInterceptor;
 import com.alipay.sofa.boot.context.SofaDefaultListableBeanFactory;
 import com.alipay.sofa.boot.context.SofaGenericApplicationContext;
 import com.alipay.sofa.boot.context.SofaSpringContextSupport;
+import com.alipay.sofa.boot.context.processor.SofaPostProcessorShareManager;
 import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptor;
 import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
