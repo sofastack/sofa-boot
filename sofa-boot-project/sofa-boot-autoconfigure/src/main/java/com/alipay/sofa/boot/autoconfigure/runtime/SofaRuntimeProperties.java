@@ -67,6 +67,16 @@ public class SofaRuntimeProperties {
      */
     private boolean serviceInterfaceTypeCheck   = false;
 
+    /**
+     * Custom async init executor core size.
+     */
+    private Integer asyncInitExecutorCoreSize;
+
+    /**
+     * Custom async init executor max size.
+     */
+    private Integer asyncInitExecutorMaxSize;
+
     public boolean isSkipJvmReferenceHealthCheck() {
         return skipJvmReferenceHealthCheck;
     }
@@ -129,5 +139,21 @@ public class SofaRuntimeProperties {
 
     public void setServiceInterfaceTypeCheck(boolean serviceInterfaceTypeCheck) {
         this.serviceInterfaceTypeCheck = serviceInterfaceTypeCheck;
+    }
+
+    public Integer getAsyncInitExecutorCoreSize() {
+        return asyncInitExecutorCoreSize;
+    }
+
+    public void setAsyncInitExecutorCoreSize(Integer asyncInitExecutorCoreSize) {
+        this.asyncInitExecutorCoreSize = asyncInitExecutorCoreSize;
+    }
+
+    public Integer getAsyncInitExecutorMaxSize() {
+        return asyncInitExecutorMaxSize;
+    }
+
+    public void setAsyncInitExecutorMaxSize(Integer asyncInitExecutorMaxSize) {
+        this.asyncInitExecutorMaxSize = asyncInitExecutorMaxSize;
     }
 }

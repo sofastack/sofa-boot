@@ -91,7 +91,7 @@ public class SofaRuntimeAutoConfigurationTests {
     }
 
     @Test
-    void customSofaRuntimeContextProperties() {
+    public void customSofaRuntimeContextProperties() {
         this.contextRunner
                 .withPropertyValues("sofa.boot.runtime.skipJvmReferenceHealthCheck=true")
                 .withPropertyValues("sofa.boot.runtime.skipExtensionHealthCheck=true")
@@ -111,6 +111,18 @@ public class SofaRuntimeAutoConfigurationTests {
                     assertThat(properties.isSkipCommonComponentShutdown()).isTrue();
                     assertThat(properties.isJvmFilterEnable()).isTrue();
                     assertThat(properties.isServiceInterfaceTypeCheck()).isTrue();
+                });
+    }
+
+    @Test
+    public void customAsyncInitMethodManager() {
+        this.contextRunner
+                .withPropertyValues("sofa.boot.runtime.asyncInitExecutorCoreSize=10")
+                .withPropertyValues("sofa.boot.runtime.asyncInitExecutorMaxSize=10")
+                .run((context) -> {
+                    AsyncInitMethodManager asyncInitMethodManager = context.getBean(AsyncInitMethodManager.class);
+                    assertThat(asyncInitMethodManager.getExecutorCoreSize()).isEqualTo(10);
+                    assertThat(asyncInitMethodManager.getExecutorMaxSize()).isEqualTo(10);
                 });
     }
 }

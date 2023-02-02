@@ -30,7 +30,7 @@ import com.alipay.sofa.runtime.api.annotation.SofaServiceBinding;
 import com.alipay.sofa.runtime.api.binding.BindingType;
 import com.alipay.sofa.runtime.service.binding.JvmBinding;
 import com.alipay.sofa.runtime.spi.binding.Binding;
-import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
@@ -93,7 +93,7 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
 
     private ApplicationContext               applicationContext;
 
-    private SofaRuntimeContext               sofaRuntimeContext;
+    private SofaRuntimeManager               sofaRuntimeManager;
 
     private BindingConverterFactory          bindingConverterFactory;
 
@@ -345,8 +345,8 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
             BindingConverterContext bindingConverterContext = new BindingConverterContext();
             bindingConverterContext.setInBinding(false);
             bindingConverterContext.setApplicationContext(applicationContext);
-            bindingConverterContext.setAppName(sofaRuntimeContext.getAppName());
-            bindingConverterContext.setAppClassLoader(sofaRuntimeContext.getAppClassLoader());
+            bindingConverterContext.setAppName(sofaRuntimeManager.getAppName());
+            bindingConverterContext.setAppClassLoader(sofaRuntimeManager.getAppClassLoader());
             Binding binding = bindingConverter.convert(sofaServiceAnnotation, sofaServiceBinding,
                 bindingConverterContext);
             bindings.add(binding);
@@ -375,8 +375,8 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
         BindingConverterContext bindingConverterContext = new BindingConverterContext();
         bindingConverterContext.setInBinding(true);
         bindingConverterContext.setApplicationContext(applicationContext);
-        bindingConverterContext.setAppName(sofaRuntimeContext.getAppName());
-        bindingConverterContext.setAppClassLoader(sofaRuntimeContext.getAppClassLoader());
+        bindingConverterContext.setAppName(sofaRuntimeManager.getAppName());
+        bindingConverterContext.setAppClassLoader(sofaRuntimeManager.getAppClassLoader());
         Binding binding = bindingConverter.convert(sofaReferenceAnnotation, sofaReferenceBinding,
             bindingConverterContext);
         bindings.add(binding);
@@ -401,8 +401,9 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        this.sofaRuntimeContext = applicationContext.getBean("sofaRuntimeContext",
-            SofaRuntimeContext.class);
+        // avoid getByType trigger factory bean early init
+        this.sofaRuntimeManager = applicationContext.getBean("sofaRuntimeManager",
+            SofaRuntimeManager.class);
         this.bindingConverterFactory = applicationContext.getBean("bindingConverterFactory",
             BindingConverterFactory.class);
     }

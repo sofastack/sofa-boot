@@ -28,6 +28,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.Ordered;
 import org.springframework.core.PriorityOrdered;
+import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -131,6 +132,8 @@ public class AsyncInitMethodManager implements PriorityOrdered,
     }
 
     private ThreadPoolExecutor createAsyncExecutor() {
+        Assert.isTrue(executorCoreSize >= 0, "executorCoreSize must no less than zero");
+        Assert.isTrue(executorMaxSize >= 0, "executorMaxSize must no less than zero");
         LOGGER.info("create async-init-bean thread pool, corePoolSize: {}, maxPoolSize: {}.",
             executorCoreSize, executorMaxSize);
         return new SofaThreadPoolExecutor(executorCoreSize, executorMaxSize, 30, TimeUnit.SECONDS,
