@@ -68,8 +68,8 @@ import java.util.Map;
 @AutoConfiguration
 @EnableConfigurationProperties(SofaBootRpcProperties.class)
 @ConditionalOnClass(SofaBootRpcProperties.class)
-@Import({ RegistryConfigurationImportSelector.class, SwaggerConfiguration.class,
-         RestFilterConfiguration.class })
+@Import({RegistryConfigurationImportSelector.class, SwaggerConfiguration.class,
+        RestFilterConfiguration.class})
 public class SofaRpcAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
@@ -82,7 +82,7 @@ public class SofaRpcAutoConfiguration {
     public FaultToleranceConfigurator faultToleranceConfigurator(SofaBootRpcProperties properties,
                                                                  Environment environment) {
         return new FaultToleranceConfigurator(properties,
-            environment.getProperty(SofaBootRpcConfigConstants.APP_NAME));
+                environment.getProperty(SofaBootRpcConfigConstants.APP_NAME));
     }
 
     @Bean
@@ -94,7 +94,8 @@ public class SofaRpcAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public RegistryConfigContainer registryConfigContainer(SofaBootRpcProperties sofaBootRpcProperties,
-                                                           @Qualifier("registryConfigMap") Map<String, RegistryConfigureProcessor> registryConfigMap) {
+                                                           @Qualifier("registryConfigMap")
+                                                           Map<String, RegistryConfigureProcessor> registryConfigMap) {
         return new RegistryConfigContainer(sofaBootRpcProperties, registryConfigMap);
     }
 
@@ -139,7 +140,7 @@ public class SofaRpcAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingClass({ "com.alipay.sofa.boot.actuator.health.ReadinessCheckCallback" })
+    @ConditionalOnMissingClass({"com.alipay.sofa.boot.actuator.health.ReadinessCheckCallback"})
     @ConditionalOnClass(SofaBootRpcProperties.class)
     public ApplicationContextRefreshedListener applicationContextRefreshedListener() {
         return new ApplicationContextRefreshedListener();
@@ -147,17 +148,18 @@ public class SofaRpcAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
+    @ConditionalOnClass(SofaBootRpcStartListener.class)
     public SofaBootRpcStartListener sofaBootRpcStartListener(SofaBootRpcProperties sofaBootRpcProperties,
                                                              ProviderConfigContainer providerConfigContainer,
                                                              FaultToleranceConfigurator faultToleranceConfigurator,
                                                              ServerConfigContainer serverConfigContainer,
                                                              RegistryConfigContainer registryConfigContainer) {
         return new SofaBootRpcStartListener(sofaBootRpcProperties, providerConfigContainer,
-            faultToleranceConfigurator, serverConfigContainer, registryConfigContainer);
+                faultToleranceConfigurator, serverConfigContainer, registryConfigContainer);
     }
 
     @Configuration(proxyBeanMethods = false)
-    @ConditionalOnClass({ SofaBootRpcProperties.class, ReadinessCheckCallback.class, Health.class })
+    @ConditionalOnClass({SofaBootRpcProperties.class, ReadinessCheckCallback.class, Health.class})
     public static class RpcAfterHealthCheckCallbackConfiguration {
         @Bean
         public RpcAfterHealthCheckCallback rpcAfterHealthCheckCallback() {
@@ -182,7 +184,7 @@ public class SofaRpcAutoConfiguration {
     @ConditionalOnProperty(name = "com.alipay.sofa.rpc.dynamic-config")
     public DynamicConfigProcessor dynamicConfigProcessor(Environment environment) {
         return new DynamicConfigProcessor(
-            environment.getProperty("com.alipay.sofa.rpc.dynamic-config"));
+                environment.getProperty("com.alipay.sofa.rpc.dynamic-config"));
     }
 
     @Bean
@@ -198,4 +200,5 @@ public class SofaRpcAutoConfiguration {
             return RegistryConfigurations.registryConfigurationClass();
         }
     }
+
 }
