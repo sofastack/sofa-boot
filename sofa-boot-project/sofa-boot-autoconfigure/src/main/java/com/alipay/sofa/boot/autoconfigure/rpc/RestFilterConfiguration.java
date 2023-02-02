@@ -19,6 +19,7 @@ package com.alipay.sofa.boot.autoconfigure.rpc;
 import com.alipay.sofa.rpc.config.JAXRSProviderManager;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import javax.ws.rs.client.ClientRequestFilter;
 import javax.ws.rs.client.ClientResponseFilter;
@@ -32,45 +33,78 @@ import java.util.List;
  * @author yuanxuan
  * @version : RestFilterConfiguration.java, v 0.1 2023年02月01日 14:02 yuanxuan Exp $
  */
+@Configuration(proxyBeanMethods = false)
 public class RestFilterConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public List<ContainerRequestFilter> containerRequestFilters(List<ContainerRequestFilter> containerRequestFilters) {
+    public ContainerRequestFilterContainer containerRequestFilters(List<ContainerRequestFilter> containerRequestFilters) {
 
         for (ContainerRequestFilter filter : containerRequestFilters) {
             JAXRSProviderManager.registerCustomProviderInstance(filter);
         }
-        return containerRequestFilters;
+        return new ContainerRequestFilterContainer(containerRequestFilters);
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public List<ContainerResponseFilter> containerResponseFilters(List<ContainerResponseFilter> containerResponseFilters) {
-
+    public ContainerResponseFilterContainer containerResponseFilters(List<ContainerResponseFilter> containerResponseFilters) {
         for (ContainerResponseFilter filter : containerResponseFilters) {
             JAXRSProviderManager.registerCustomProviderInstance(filter);
         }
-        return containerResponseFilters;
+        return new ContainerResponseFilterContainer(containerResponseFilters);
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public List<ClientRequestFilter> clientRequestFilters(List<ClientRequestFilter> clientRequestFilters) {
-
+    public ClientRequestFilterContainer clientRequestFilters(List<ClientRequestFilter> clientRequestFilters) {
         for (ClientRequestFilter filter : clientRequestFilters) {
             JAXRSProviderManager.registerCustomProviderInstance(filter);
         }
-        return clientRequestFilters;
+        return new ClientRequestFilterContainer(clientRequestFilters);
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public List<ClientResponseFilter> clientResponseFilters(List<ClientResponseFilter> clientResponseFilters) {
+    public ClientResponseFilterContainer clientResponseFilters(List<ClientResponseFilter> clientResponseFilters) {
 
         for (ClientResponseFilter filter : clientResponseFilters) {
             JAXRSProviderManager.registerCustomProviderInstance(filter);
         }
-        return clientResponseFilters;
+        return new ClientResponseFilterContainer(clientResponseFilters);
     }
+
+    static class ContainerResponseFilterContainer {
+        private List<ContainerResponseFilter> containerResponseFilters;
+
+        public ContainerResponseFilterContainer(List<ContainerResponseFilter> containerResponseFilters) {
+            this.containerResponseFilters = containerResponseFilters;
+        }
+    }
+
+    static class ContainerRequestFilterContainer {
+        private List<ContainerRequestFilter> containerRequestFilters;
+
+        public ContainerRequestFilterContainer(List<ContainerRequestFilter> containerRequestFilters) {
+            this.containerRequestFilters = containerRequestFilters;
+        }
+    }
+
+    static class ClientRequestFilterContainer {
+        private List<ClientRequestFilter> clientRequestFilters;
+
+        public ClientRequestFilterContainer(List<ClientRequestFilter> clientRequestFilters) {
+            this.clientRequestFilters = clientRequestFilters;
+        }
+    }
+
+    static class ClientResponseFilterContainer {
+        private List<ClientResponseFilter> clientResponseFilters;
+
+        public ClientResponseFilterContainer(List<ClientResponseFilter> clientResponseFilters) {
+            this.clientResponseFilters = clientResponseFilters;
+        }
+    }
+
 }
+
