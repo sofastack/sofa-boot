@@ -20,6 +20,7 @@
         <module>sofa-boot-smoke-tests-actuator</module>
         <module>sofa-boot-smoke-tests-tracer</module>
         <module>sofa-boot-smoke-tests-boot</module>
+        <module>sofa-boot-smoke-tests-runtime</module>
     </modules>
 
     <dependencies>

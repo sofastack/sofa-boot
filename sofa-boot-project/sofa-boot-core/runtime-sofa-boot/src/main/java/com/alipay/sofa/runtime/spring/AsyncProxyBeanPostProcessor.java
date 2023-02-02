@@ -27,6 +27,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.core.Ordered;
 import org.springframework.core.PriorityOrdered;
 import org.springframework.util.StringUtils;
 
@@ -41,7 +42,7 @@ import static com.alipay.sofa.runtime.async.AsyncInitMethodManager.ASYNC_INIT_ME
  */
 @SingletonSofaPostProcessor
 public class AsyncProxyBeanPostProcessor implements BeanPostProcessor, InitializingBean,
-                                        BeanFactoryAware, PriorityOrdered {
+                                        BeanFactoryAware, Ordered {
 
     private final AsyncInitMethodManager    asyncInitMethodManager;
 

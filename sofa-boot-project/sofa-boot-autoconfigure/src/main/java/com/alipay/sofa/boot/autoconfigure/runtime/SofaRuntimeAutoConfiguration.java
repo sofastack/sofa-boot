@@ -50,8 +50,6 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.context.properties.bind.BindResult;
-import org.springframework.boot.context.properties.bind.Binder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 
@@ -87,25 +85,17 @@ public class SofaRuntimeAutoConfiguration {
     @ConditionalOnMissingBean
     public static SofaRuntimeContext sofaRuntimeContext(SofaRuntimeManager sofaRuntimeManager,
                                                         ObjectProvider<DynamicServiceProxyManager> dynamicServiceProxyManager,
-                                                        Environment environment) {
+                                                        SofaRuntimeProperties sofaRuntimeProperties) {
         SofaRuntimeContext sofaRuntimeContext = sofaRuntimeManager.getSofaRuntimeContext();
         dynamicServiceProxyManager.ifUnique(sofaRuntimeContext::setServiceProxyManager);
-
-        // SofaRuntimeContext 被 ServiceBeanFactoryPostProcessor 引用，因此无法通过 ConfigurationPropertiesBindingPostProcessor 处理配置
-        BindResult<SofaRuntimeProperties> bindResult
-                = Binder.get(environment).bind("sofa.boot.runtime", SofaRuntimeProperties.class);
-
-        if (bindResult.isBound()) {
-            SofaRuntimeProperties sofaRuntimeProperties = bindResult.get();
-            sofaRuntimeContext.getProperties().setSkipJvmReferenceHealthCheck(sofaRuntimeProperties.isSkipJvmReferenceHealthCheck());
-            sofaRuntimeContext.getProperties().setSkipExtensionHealthCheck(sofaRuntimeProperties.isSkipExtensionHealthCheck());
-            sofaRuntimeContext.getProperties().setDisableJvmFirst(sofaRuntimeProperties.isDisableJvmFirst());
-            sofaRuntimeContext.getProperties().setExtensionFailureInsulating(sofaRuntimeProperties.isExtensionFailureInsulating());
-            sofaRuntimeContext.getProperties().setJvmFilterEnable(sofaRuntimeProperties.isJvmFilterEnable());
-            sofaRuntimeContext.getProperties().setSkipAllComponentShutdown(sofaRuntimeProperties.isSkipAllComponentShutdown());
-            sofaRuntimeContext.getProperties().setSkipCommonComponentShutdown(sofaRuntimeProperties.isSkipCommonComponentShutdown());
-            sofaRuntimeContext.getProperties().setServiceInterfaceTypeCheck(sofaRuntimeProperties.isServiceInterfaceTypeCheck());
-        }
+        sofaRuntimeContext.getProperties().setSkipJvmReferenceHealthCheck(sofaRuntimeProperties.isSkipJvmReferenceHealthCheck());
+        sofaRuntimeContext.getProperties().setSkipExtensionHealthCheck(sofaRuntimeProperties.isSkipExtensionHealthCheck());
+        sofaRuntimeContext.getProperties().setDisableJvmFirst(sofaRuntimeProperties.isDisableJvmFirst());
+        sofaRuntimeContext.getProperties().setExtensionFailureInsulating(sofaRuntimeProperties.isExtensionFailureInsulating());
+        sofaRuntimeContext.getProperties().setJvmFilterEnable(sofaRuntimeProperties.isJvmFilterEnable());
+        sofaRuntimeContext.getProperties().setSkipAllComponentShutdown(sofaRuntimeProperties.isSkipAllComponentShutdown());
+        sofaRuntimeContext.getProperties().setSkipCommonComponentShutdown(sofaRuntimeProperties.isSkipCommonComponentShutdown());
+        sofaRuntimeContext.getProperties().setServiceInterfaceTypeCheck(sofaRuntimeProperties.isServiceInterfaceTypeCheck());
         return sofaRuntimeContext;
     }
 
@@ -129,8 +119,17 @@ public class SofaRuntimeAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public AsyncInitMethodManager asyncInitMethodManager() {
-        return new AsyncInitMethodManager();
+    public AsyncInitMethodManager asyncInitMethodManager(SofaRuntimeProperties sofaRuntimeProperties) {
+        AsyncInitMethodManager asyncInitMethodManager = new AsyncInitMethodManager();
+        if (sofaRuntimeProperties.getAsyncInitExecutorCoreSize() != null) {
+            asyncInitMethodManager.setExecutorCoreSize(sofaRuntimeProperties
+                .getAsyncInitExecutorCoreSize());
+        }
+        if (sofaRuntimeProperties.getAsyncInitExecutorMaxSize() != null) {
+            asyncInitMethodManager.setExecutorMaxSize(sofaRuntimeProperties
+                .getAsyncInitExecutorMaxSize());
+        }
+        return asyncInitMethodManager;
     }
 
     @Bean

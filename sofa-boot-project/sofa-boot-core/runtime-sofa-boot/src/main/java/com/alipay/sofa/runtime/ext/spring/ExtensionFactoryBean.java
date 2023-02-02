@@ -55,6 +55,7 @@ public class ExtensionFactoryBean extends AbstractExtFactoryBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
+        super.afterPropertiesSet();
         Assert.notNull(applicationContext,
             "required property 'applicationContext' has not been set");
         Assert.notNull(getPoint(), "required property 'point' has not been set for extension");

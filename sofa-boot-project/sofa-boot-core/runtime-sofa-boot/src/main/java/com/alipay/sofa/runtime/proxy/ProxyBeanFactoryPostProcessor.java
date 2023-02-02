@@ -29,7 +29,7 @@ import org.springframework.core.PriorityOrdered;
 /**
  * Implementation of {@link BeanDefinitionRegistryPostProcessor} to update {@link ProxyFactoryBean} to avoid early init.
  *
- * <p> This bean must implement BeanDefinitionRegistryPostProcessor and use highest precedence, otherwise other
+ * <p> This bean must implement BeanDefinitionRegistryPostProcessor and use the highest precedence, otherwise other
  * BeanDefinitionRegistryPostProcessor may trigger construct inject then cause ProxyFactoryBean early init.
  *
  * @author ruoshan
