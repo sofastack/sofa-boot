@@ -33,6 +33,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.alipay.common.tracer.core.configuration.SofaTracerConfiguration.DEFAULT_LOG_RESERVE_DAY;
 
@@ -48,18 +49,20 @@ public class SofaTracerConfigurationListener
                                             ApplicationListener<ApplicationEnvironmentPreparedEvent>,
                                             Ordered {
 
-    private static final boolean IS_SPRING_CLOUD = ClassUtils
-                                                     .isPresent(
-                                                         "org.springframework.cloud.bootstrap.BootstrapConfiguration",
-                                                         null);
+    private static final boolean       IS_SPRING_CLOUD = ClassUtils
+                                                           .isPresent(
+                                                               "org.springframework.cloud.bootstrap.BootstrapConfiguration",
+                                                               null);
+
+    private static final AtomicBoolean EXECUTED        = new AtomicBoolean(false);
 
     @Override
     public void onApplicationEvent(ApplicationEnvironmentPreparedEvent event) {
-        ConfigurableEnvironment environment = event.getEnvironment();
-
-        if (IS_SPRING_CLOUD && isSpringCloudBootstrapEnvironment(environment)) {
+        if (!EXECUTED.compareAndSet(false, true)) {
             return;
         }
+
+        ConfigurableEnvironment environment = event.getEnvironment();
 
         // check spring.application.name
         String applicationName = environment

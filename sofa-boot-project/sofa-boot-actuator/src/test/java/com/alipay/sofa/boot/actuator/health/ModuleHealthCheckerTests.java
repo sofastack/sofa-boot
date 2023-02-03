@@ -35,7 +35,7 @@ import static com.alipay.sofa.boot.actuator.health.ModuleHealthChecker.COMPONENT
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Tests for {@link ModuleHealthChecker}
+ * Tests for {@link ModuleHealthChecker}.
  *
  * @author huzijie
  * @version ModuleHealthCheckerTests.java, v 0.1 2023年01月05日 6:10 PM huzijie Exp $

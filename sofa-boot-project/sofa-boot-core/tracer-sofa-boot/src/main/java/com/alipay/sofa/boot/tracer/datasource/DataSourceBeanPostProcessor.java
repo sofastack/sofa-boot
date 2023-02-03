@@ -48,12 +48,11 @@ public class DataSourceBeanPostProcessor implements BeanPostProcessor, PriorityO
     public Object postProcessAfterInitialization(Object bean, String beanName)
                                                                               throws BeansException {
         /*
-         * filter transformed datasource {@link DataSourceBeanFactoryPostProcessor}
+
          * filter bean which is type of {@link SmartDataSource}
          * filter bean which is not type of {@link DataSource}
          */
-        if (beanName.startsWith(DataSourceBeanFactoryPostProcessor.SOFA_TRACER_DATASOURCE)
-            || bean instanceof SmartDataSource || !(bean instanceof DataSource)) {
+        if (!(bean instanceof DataSource) || bean instanceof SmartDataSource) {
             return bean;
         }
 

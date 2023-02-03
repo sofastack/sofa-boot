@@ -36,7 +36,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
- * Tests for {@link HealthCheckerProcessor}
+ * Tests for {@link HealthCheckerProcessor}.
  * 
  * @author huzijie
  * @version HealthCheckerProcessorTests.java, v 0.1 2023年01月06日 11:07 AM huzijie Exp $

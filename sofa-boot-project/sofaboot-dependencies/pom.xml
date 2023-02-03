@@ -18,8 +18,6 @@
         <java.version>17</java.version>
         <project.encoding>UTF-8</project.encoding>
         <project.build.encoding>UTF-8</project.build.encoding>
-        <spring-cloud.version>4.0.0</spring-cloud.version>
-
 
         <!-- sofa stack lib-->
         <sofa.registry.version>6.1.8</sofa.registry.version>
@@ -32,6 +30,7 @@
         <sofa.lookout.version>1.6.1</sofa.lookout.version>
 
         <!--3rd lib dependency-->
+        <spring.cloud.starter.version>4.0.0</spring.cloud.starter.version>
         <fastjson.version>1.2.83</fastjson.version>
         <javassist.version>3.19.0-GA</javassist.version>
         <protobuf-java.version>3.11.0</protobuf-java.version>
@@ -42,7 +41,13 @@
         <zipkin.reporter.version>2.7.7</zipkin.reporter.version>
         <jackson.version>2.9.10</jackson.version>
         <jboss.jaxrs.api.version>1.0.2.Final</jboss.jaxrs.api.version>
-
+        <spring.cloud.stream.version>3.2.6</spring.cloud.stream.version>
+        <rocketmq.spring.boot.starter.version>2.0.2</rocketmq.spring.boot.starter.version>
+        <commons.io.version>2.4</commons.io.version>
+        <HikariCP.version>5.0.1</HikariCP.version>
+        <druid.version>1.0.12</druid.version>
+        <c3p0.version>0.9.1.1</c3p0.version>
+        <common.dbcp.version>1.4</common.dbcp.version>
         <resteasy.version>3.6.3.Final</resteasy.version>
         <curator.version>4.0.1</curator.version>
         <dubbo.version>2.6.9</dubbo.version>
@@ -109,12 +114,6 @@
     <dependencyManagement>
 
         <dependencies>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-starter-bootstrap</artifactId>
-                <version>${spring-cloud.version}</version>
-            </dependency>
-
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>sofa-boot</artifactId>
@@ -444,6 +443,60 @@
             <!-- 2nd dependency end -->
 
             <!-- 3rd lib dependency begin -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-bootstrap</artifactId>
+                <version>${spring.cloud.starter.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-openfeign</artifactId>
+                <version>${spring.cloud.starter.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-stream</artifactId>
+                <version>${spring.cloud.stream.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.rocketmq</groupId>
+                <artifactId>rocketmq-spring-boot-starter</artifactId>
+                <version>${rocketmq.spring.boot.starter.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons.io.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.zaxxer</groupId>
+                <artifactId>HikariCP</artifactId>
+                <version>${HikariCP.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>c3p0</groupId>
+                <artifactId>c3p0</artifactId>
+                <version>${c3p0.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-dbcp</groupId>
+                <artifactId>commons-dbcp</artifactId>
+                <version>${common.dbcp.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>

@@ -41,7 +41,7 @@ public class BeanCostBeanPostProcessorTests {
         assertThat(beanStats).hasSize(1);
         BeanStat beanStat = beanStats.get(0);
         assertThat(beanStat.getName()).isEqualTo("testBean");
-        assertThat(beanStat.getBeanClassName()).isEqualTo("java.lang.Object (testBean)");
+        assertThat(beanStat.getBeanClassName()).isEqualTo("java.lang.Object");
         assertThat(beanStat.getCost() >= 10).isTrue();
     }
 }

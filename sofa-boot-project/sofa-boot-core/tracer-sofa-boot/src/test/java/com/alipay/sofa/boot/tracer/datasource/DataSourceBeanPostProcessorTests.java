@@ -42,24 +42,6 @@ public class DataSourceBeanPostProcessorTests {
     }
 
     @Test
-    public void skipNotSupportedDataSource() {
-        EmptyDataSource emptyDataSource = new EmptyDataSource();
-        Object bean = dataSourceBeanPostProcessor.postProcessAfterInitialization(emptyDataSource,
-            DataSourceBeanFactoryPostProcessor.SOFA_TRACER_DATASOURCE + "_emptyDataSource");
-        assertThat(bean).isEqualTo(emptyDataSource);
-        assertThat(bean).isNotInstanceOf(SmartDataSource.class);
-    }
-
-    @Test
-    public void skipTransformedDataSource() {
-        EmptyDataSource emptyDataSource = new EmptyDataSource();
-        Object bean = dataSourceBeanPostProcessor.postProcessAfterInitialization(emptyDataSource,
-            DataSourceBeanFactoryPostProcessor.SOFA_TRACER_DATASOURCE + "_emptyDataSource");
-        assertThat(bean).isEqualTo(emptyDataSource);
-        assertThat(bean).isNotInstanceOf(SmartDataSource.class);
-    }
-
-    @Test
     public void skipSmartDataSource() {
         SmartDataSource smartDataSource = new SmartDataSource(new EmptyDataSource());
         Object bean = dataSourceBeanPostProcessor.postProcessAfterInitialization(smartDataSource,

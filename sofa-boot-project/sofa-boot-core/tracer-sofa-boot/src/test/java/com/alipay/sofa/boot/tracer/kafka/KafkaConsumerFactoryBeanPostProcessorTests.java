@@ -37,7 +37,7 @@ public class KafkaConsumerFactoryBeanPostProcessorTests {
     @Test
     public void wrapKafkaConsumerFactoryBean() {
         ConsumerFactory consumerFactory = new EmptyConsumerFactory();
-        Object bean = kafkaConsumerFactoryBeanPostProcessor.postProcessBeforeInitialization(
+        Object bean = kafkaConsumerFactoryBeanPostProcessor.postProcessAfterInitialization(
             consumerFactory, "consumerFactory");
         assertThat(bean).isNotEqualTo(consumerFactory);
         assertThat(bean).isInstanceOf(SofaTracerKafkaConsumerFactory.class);
@@ -46,7 +46,7 @@ public class KafkaConsumerFactoryBeanPostProcessorTests {
     @Test
     public void skipNotKafkaConsumerFactory() {
         Object object = new Object();
-        Object bean = kafkaConsumerFactoryBeanPostProcessor.postProcessBeforeInitialization(object,
+        Object bean = kafkaConsumerFactoryBeanPostProcessor.postProcessAfterInitialization(object,
             "consumerFactory");
         assertThat(bean).isEqualTo(object);
         assertThat(bean).isNotInstanceOf(SofaTracerKafkaConsumerFactory.class);
@@ -57,7 +57,7 @@ public class KafkaConsumerFactoryBeanPostProcessorTests {
         ConsumerFactory consumerFactory = new EmptyConsumerFactory();
         SofaTracerKafkaConsumerFactory sofaTracerKafkaConsumerFactory = new SofaTracerKafkaConsumerFactory(
             consumerFactory);
-        Object bean = kafkaConsumerFactoryBeanPostProcessor.postProcessBeforeInitialization(
+        Object bean = kafkaConsumerFactoryBeanPostProcessor.postProcessAfterInitialization(
             sofaTracerKafkaConsumerFactory, "consumerFactory");
         assertThat(bean).isEqualTo(sofaTracerKafkaConsumerFactory);
     }

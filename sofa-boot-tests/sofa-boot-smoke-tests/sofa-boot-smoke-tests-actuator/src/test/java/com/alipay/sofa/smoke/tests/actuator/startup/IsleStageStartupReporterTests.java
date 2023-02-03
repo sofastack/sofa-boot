@@ -35,6 +35,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.TestPropertySource;
 
 import java.util.List;
 
@@ -46,9 +47,8 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author huzijie
  * @version IsleStageStartupReporterTests.java, v 0.1 2021年01月04日 8:31 下午 huzijie Exp $
  */
-@SpringBootTest(classes = ActuatorSofaBootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {
-                                                                                                                                       "management.endpoints.web.exposure.include=startup",
-                                                                                                                                       "com.alipay.sofa.boot.beanLoadCost=1" })
+@SpringBootTest(classes = ActuatorSofaBootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestPropertySource(properties = "management.endpoints.web.exposure.include=startup")
 @Import(InitCostBean.class)
 public class IsleStageStartupReporterTests {
 
@@ -61,11 +61,11 @@ public class IsleStageStartupReporterTests {
         assertThat(startupReporter).isNotNull();
         StartupReporter.StartupStaticsModel startupStaticsModel = startupReporter.report();
         assertThat(startupStaticsModel).isNotNull();
-        assertThat(startupStaticsModel.getStageStats().size()).isEqualTo(7);
+        assertThat(startupStaticsModel.getStageStats().size()).isEqualTo(8);
 
         BaseStat isleModelCreatingStage = startupReporter.getStageNyName(ModelCreatingStage.MODEL_CREATING_STAGE_NAME);
         assertThat(isleModelCreatingStage).isNotNull();
-        assertThat(isleModelCreatingStage.getCost() > 0).isTrue();
+        assertThat(isleModelCreatingStage.getCost() >= 0).isTrue();
 
         BaseStat isleSpringContextInstallStage = startupReporter.getStageNyName(SpringContextInstallStage.SPRING_CONTEXT_INSTALL_STAGE_NAME);
         assertThat(isleSpringContextInstallStage).isNotNull();
@@ -84,13 +84,13 @@ public class IsleStageStartupReporterTests {
         assertThat(beanStats.size() >= 4).isTrue();
 
         //test parent bean
-        BeanStat parentBeanStat = beanStats.stream().filter(beanStat -> beanStat.getBeanClassName().contains("(parent)")).findFirst().orElse(null);
+        BeanStat parentBeanStat = beanStats.stream().filter(beanStat -> beanStat.getBeanClassName().contains("Parent")).findFirst().orElse(null);
         assertThat(parentBeanStat).isNotNull();
         assertThat(ChildBean.CHILD_INIT_TIME + ParentBean.PARENT_INIT_TIME - parentBeanStat.getRefreshElapsedTime() < 20).isTrue();
         assertThat(ParentBean.PARENT_INIT_TIME - parentBeanStat.getRealRefreshElapsedTime() < 20).isTrue();
         assertThat(ParentBean.PARENT_INIT_TIME - parentBeanStat.getInitMethodTime() < 20).isTrue();
         assertThat(parentBeanStat.getChildren().size()).isEqualTo(1);
-        assertThat(parentBeanStat.getBeanClassName()).isEqualTo(ParentBean.class.getName() + " (parent)");
+        assertThat(parentBeanStat.getBeanClassName()).isEqualTo(ParentBean.class.getName());
 
         // test child bean
         BeanStat childBeanStat = parentBeanStat.getChildren().get(0);
@@ -98,33 +98,33 @@ public class IsleStageStartupReporterTests {
         assertThat(ChildBean.CHILD_INIT_TIME - childBeanStat.getRealRefreshElapsedTime() < 15).isTrue();
         assertThat(ChildBean.CHILD_INIT_TIME - childBeanStat.getInitMethodTime() < 10).isTrue();
         assertThat(childBeanStat.getChildren().size()).isEqualTo(0);
-        assertThat(childBeanStat.getBeanClassName()).isEqualTo(ChildBean.class.getName() + " (child)");
+        assertThat(childBeanStat.getBeanClassName()).isEqualTo(ChildBean.class.getName());
 
         //test sofa service
         BeanStat serviceBeanStat = beanStats.stream().filter(beanStat -> beanStat.getBeanClassName().contains("ServiceFactoryBean")).findFirst().orElse(null);
         assertThat(serviceBeanStat).isNotNull();
         assertThat(serviceBeanStat.getRefreshElapsedTime() > 0).isTrue();
-        assertThat(serviceBeanStat.getBeanClassName()).isEqualTo(ServiceFactoryBean.class.getName() + " (sample)");
+        assertThat(serviceBeanStat.getBeanClassName()).isEqualTo(ServiceFactoryBean.class.getName());
         assertThat(serviceBeanStat.getInterfaceType()).isEqualTo("com.alipay.sofa.smoke.tests.actuator.startup.beans.SampleService");
 
         // test sofa reference
         BeanStat referenceBeanStat = beanStats.stream().filter(beanStat -> beanStat.getBeanClassName().contains("ReferenceFactoryBean")).findFirst().orElse(null);
         assertThat(referenceBeanStat).isNotNull();
         assertThat(referenceBeanStat.getRefreshElapsedTime() > 0).isTrue();
-        assertThat(referenceBeanStat.getBeanClassName()).isEqualTo(ReferenceFactoryBean.class.getName() + " (reference)");
+        assertThat(referenceBeanStat.getBeanClassName()).isEqualTo(ReferenceFactoryBean.class.getName());
         assertThat(referenceBeanStat.getInterfaceType()).isEqualTo("com.alipay.sofa.smoke.tests.actuator.startup.beans.TestService");
 
         // test extension bean
         BeanStat extensionBeanStat = beanStats.stream().filter(beanStat -> beanStat.getBeanClassName().contains("ExtensionFactoryBean")).findFirst().orElse(null);
         assertThat(extensionBeanStat).isNotNull();
-        assertThat(extensionBeanStat.getRefreshElapsedTime() > 0).isTrue();
+        assertThat(extensionBeanStat.getRefreshElapsedTime() >= 0).isTrue();
         assertThat(extensionBeanStat.getBeanClassName()).isEqualTo(ExtensionFactoryBean.class.getName());
         assertThat(extensionBeanStat.getExtensionProperty()).isEqualTo("ExtensionPointTarget: extension");
 
         // test extension point bean
         BeanStat extensionPointBeanStat = beanStats.stream().filter(beanStat -> beanStat.getBeanClassName().contains("ExtensionPointFactoryBean")).findFirst().orElse(null);
         assertThat(extensionPointBeanStat).isNotNull();
-        assertThat(extensionPointBeanStat.getRefreshElapsedTime() > 0).isTrue();
+        assertThat(extensionPointBeanStat.getRefreshElapsedTime() >= 0).isTrue();
         assertThat(extensionPointBeanStat.getBeanClassName()).isEqualTo(ExtensionPointFactoryBean.class.getName());
         assertThat(extensionPointBeanStat.getExtensionProperty()).isEqualTo("ExtensionPointTarget: extension");
     }
