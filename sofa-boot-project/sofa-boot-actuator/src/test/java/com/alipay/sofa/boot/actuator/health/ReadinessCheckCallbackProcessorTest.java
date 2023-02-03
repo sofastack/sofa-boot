@@ -33,7 +33,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
- * Tests for {@link ReadinessCheckCallbackProcessor}
+ * Tests for {@link ReadinessCheckCallbackProcessor}.
  *
  * @author huzijie
  * @version ReadinessCheckCallbackProcessorTest.java, v 0.1 2023年01月05日 6:12 PM huzijie Exp $

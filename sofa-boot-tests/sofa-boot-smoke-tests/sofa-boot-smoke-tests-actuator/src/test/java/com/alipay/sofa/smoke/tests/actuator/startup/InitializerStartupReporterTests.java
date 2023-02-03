@@ -16,16 +16,17 @@
  */
 package com.alipay.sofa.smoke.tests.actuator.startup;
 
-import com.alipay.sofa.boot.startup.StartupReporter;
 import com.alipay.sofa.boot.startup.BaseStat;
 import com.alipay.sofa.boot.startup.BootStageConstants;
 import com.alipay.sofa.boot.startup.ChildrenStat;
+import com.alipay.sofa.boot.startup.StartupReporter;
 import com.alipay.sofa.smoke.tests.actuator.ActuatorSofaBootApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 
 import java.util.List;
 
@@ -37,8 +38,9 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author huzijie
  * @version InitializerStartupReporterTests.java, v 0.1 2022年03月14日 2:37 PM huzijie Exp $
  */
-@SpringBootTest(classes = ActuatorSofaBootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = { "management.endpoints.web.exposure.include=startup" })
+@SpringBootTest(classes = ActuatorSofaBootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(loader = StartupSpringBootContextLoader.class)
+@TestPropertySource(properties = "management.endpoints.web.exposure.include=startup")
 public class InitializerStartupReporterTests {
 
     @Autowired
@@ -52,7 +54,6 @@ public class InitializerStartupReporterTests {
         assertThat(applicationContextPrepareStage).isNotNull();
         List<BaseStat> baseStatList = applicationContextPrepareStage.getChildren();
         assertThat(baseStatList.isEmpty()).isFalse();
-        assertThat(baseStatList.stream().anyMatch(stat -> stat.getName().equals("com.alipay.sofa.runtime.SofaRuntimeSpringContextInitializer"))).isTrue();
         assertThat(baseStatList.stream().filter(stat -> stat.getName().equals("com.alipay.sofa.smoke.tests.actuator.startup.spring.StartupInitializer")).findFirst().get()
                 .getCost() >= 10).isTrue();
     }

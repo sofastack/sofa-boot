@@ -23,6 +23,7 @@ import com.alipay.sofa.smoke.tests.actuator.ActuatorSofaBootApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -32,9 +33,9 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author huzijie
  * @version HealthStageStartupReporterTests.java, v 0.1 2021年01月04日 8:31 下午 huzijie Exp $
  */
-@SpringBootTest(classes = ActuatorSofaBootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {
-                                                                                                                                       "management.endpoints.web.exposure.include=startup,readiness",
-                                                                                                                                       "spring.autoconfigure.exclude=com.alipay.sofa.boot.actuator.autoconfigure.startup.StartupIsleAutoConfiguration" })
+@SpringBootTest(classes = ActuatorSofaBootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestPropertySource(properties = { "management.endpoints.web.exposure.include=startup,readiness",
+                                  "spring.autoconfigure.exclude=com.alipay.sofa.boot.autoconfigure.isle.SofaModuleAutoConfiguration" })
 public class HealthStageStartupReporterTests {
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")

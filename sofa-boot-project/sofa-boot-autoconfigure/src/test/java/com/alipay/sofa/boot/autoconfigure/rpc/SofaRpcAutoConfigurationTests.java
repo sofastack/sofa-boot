@@ -43,15 +43,16 @@ import static com.alipay.sofa.rpc.boot.config.SofaBootRpcConfigConstants.REGISTR
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Tests for SofaRpcAutoConfiguration
+ * Tests for {@link SofaRpcAutoConfiguration}.
  *
  * @author yuanxuan
- * @version : SofaRpcAutoConfigurationTests.java, v 0.1 2023Äê02ÔÂ02ÈÕ 15:42 yuanxuan Exp $
+ * @version : SofaRpcAutoConfigurationTests.java, v 0.1 2023ï¿½ï¿½02ï¿½ï¿½02ï¿½ï¿½ 15:42 yuanxuan Exp $
  */
 public class SofaRpcAutoConfigurationTests {
 
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
-            .withConfiguration(AutoConfigurations.of(SofaRpcAutoConfiguration.class));
+                                                             .withConfiguration(AutoConfigurations
+                                                                 .of(SofaRpcAutoConfiguration.class));
 
     @Test
     void defaultProviderConfigContainer() {
@@ -171,4 +172,3 @@ public class SofaRpcAutoConfigurationTests {
     }
 
 }
-

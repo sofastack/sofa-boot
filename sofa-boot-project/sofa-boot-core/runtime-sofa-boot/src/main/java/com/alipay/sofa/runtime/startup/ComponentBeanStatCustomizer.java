@@ -42,11 +42,11 @@ public class ComponentBeanStatCustomizer implements BeanStatCustomizer {
             return null;
         }
         if (bean instanceof ExtensionFactoryBean) {
-            bs.setInterfaceType(((ExtensionFactoryBean) bean).getPoint());
+            bs.setExtensionProperty(bean.toString());
             return null;
         }
         if (bean instanceof ExtensionPointFactoryBean) {
-            bs.setInterfaceType(((ExtensionPointFactoryBean) bean).getName());
+            bs.setExtensionProperty(bean.toString());
             return null;
         }
         return bs;

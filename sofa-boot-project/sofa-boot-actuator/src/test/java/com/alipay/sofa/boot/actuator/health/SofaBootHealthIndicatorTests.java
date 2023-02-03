@@ -28,7 +28,7 @@ import org.springframework.boot.actuate.health.Status;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Tests for {@link SofaBootHealthIndicator}
+ * Tests for {@link SofaBootHealthIndicator}.
  *
  * @author huzijie
  * @version SofaBootHealthIndicatorTests.java, v 0.1 2023年01月04日 12:11 PM huzijie Exp $

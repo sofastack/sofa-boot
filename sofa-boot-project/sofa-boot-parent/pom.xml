@@ -18,7 +18,6 @@
         <project.encoding>UTF-8</project.encoding>
         <java.version>17</java.version>
 
-        <sofa.version.maven.plugin>1.0.1</sofa.version.maven.plugin>
         <license.maven.plugin>3.0</license.maven.plugin>
         <maven.java.formatter.plugin>0.4</maven.java.formatter.plugin>
         <maven.pmd.plugin.version>3.19.0</maven.pmd.plugin.version>
@@ -28,83 +27,7 @@
         <maven.javadoc.plugin>2.9.1</maven.javadoc.plugin>
         <jacoco.maven.plugin>0.8.7</jacoco.maven.plugin>
         <maven.surefire.plugin>2.22.2</maven.surefire.plugin>
-
-        <!-- for dependencyManagement -->
-        <spring.cloud.stream.version>2.1.0.RELEASE</spring.cloud.stream.version>
-        <rocketmq.spring.boot.starter.version>2.0.2</rocketmq.spring.boot.starter.version>
-        <spring.cloud.starter.openfeign.version>3.0.5</spring.cloud.starter.openfeign.version>
-        <jakarta.servlet.version>3.1.0</jakarta.servlet.version>
-        <tomcat.version>9.0.54</tomcat.version>
-        <jetty.version>9.4.26.v20200117</jetty.version>
-        <undertow-core>2.1.3.Final</undertow-core>
-        <commons.io.version>2.4</commons.io.version>
-        <HikariCP.java6.version>2.3.8</HikariCP.java6.version>
-        <druid.version>1.0.12</druid.version>
-        <c3p0.version>0.9.1.1</c3p0.version>
-        <common.dbcp.version>1.4</common.dbcp.version>
     </properties>
-
-    <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-    <dependencyManagement>
-        <dependencies>
-            <!--provided-->
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-starter-openfeign</artifactId>
-                <version>${spring.cloud.starter.openfeign.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-stream</artifactId>
-                <version>${spring.cloud.stream.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.rocketmq</groupId>
-                <artifactId>rocketmq-spring-boot-starter</artifactId>
-                <version>${rocketmq.spring.boot.starter.version}</version>
-            </dependency>
-
-            <!--Test-->
-            <dependency>
-                <groupId>commons-io</groupId>
-                <artifactId>commons-io</artifactId>
-                <version>${commons.io.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.zaxxer</groupId>
-                <artifactId>HikariCP-java6</artifactId>
-                <version>${HikariCP.java6.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>druid</artifactId>
-                <version>${druid.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>c3p0</groupId>
-                <artifactId>c3p0</artifactId>
-                <version>${c3p0.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>commons-dbcp</groupId>
-                <artifactId>commons-dbcp</artifactId>
-                <version>${common.dbcp.version}</version>
-                <scope>test</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <build>
         <plugins>
@@ -227,26 +150,6 @@
                 <configuration>
                     <configLocation>${main.user.dir}/tools/check-style.xml</configLocation>
                 </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>sofa-version-maven-plugin</artifactId>
-                <version>${sofa.version.maven.plugin}</version>
-                <configuration>
-                    <dotGitDirectory>${main.user.dir}/.git</dotGitDirectory>
-                    <defaultPropertiesFileEntries>
-                        <Doc-Url>http://www.sofastack.tech/sofa-boot/docs/Home</Doc-Url>
-                    </defaultPropertiesFileEntries>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>gen</goal>
-                            <goal>write</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
 
             <plugin>

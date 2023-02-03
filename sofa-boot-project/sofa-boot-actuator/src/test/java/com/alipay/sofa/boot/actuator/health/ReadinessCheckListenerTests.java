@@ -37,7 +37,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.only;
 
 /**
- * Tests for {@link ReadinessCheckListener}
+ * Tests for {@link ReadinessCheckListener}.
  *
  * @author huzijie
  * @version ReadinessCheckListenerTests.java, v 0.1 2023年01月06日 1:20 PM huzijie Exp $

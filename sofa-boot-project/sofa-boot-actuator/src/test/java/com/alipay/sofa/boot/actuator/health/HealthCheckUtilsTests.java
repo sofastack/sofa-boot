@@ -31,7 +31,7 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Tests for {@link HealthCheckComparatorSupport}
+ * Tests for {@link HealthCheckComparatorSupport}.
  *
  * @author huzijie
  * @version HealthCheckUtilsTests.java, v 0.1 2022年07月05日 11:55 AM huzijie Exp $

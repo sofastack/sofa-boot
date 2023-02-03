@@ -16,8 +16,9 @@
  */
 package com.alipay.sofa.boot.util;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Tests for {@link SofaBootEnvUtils}.
@@ -28,14 +29,14 @@ import org.junit.Test;
 public class SofaBootEnvUtilTests {
 
     @Test
-    public void test() {
+    public void localEnv() {
         StackTraceElement[] elements = Thread.currentThread().getStackTrace();
         StackTraceElement first = elements[elements.length - 1];
         if (first.toString().contains("com.intellij.rt.junit.JUnitStarter")) {
             // If run from IDEA, LOCAL_ENV is true
-            Assert.assertTrue(SofaBootEnvUtils.isLocalEnv());
+            assertThat(SofaBootEnvUtils.isLocalEnv()).isTrue();
         } else {
-            Assert.assertFalse(SofaBootEnvUtils.isLocalEnv());
+            assertThat(SofaBootEnvUtils.isLocalEnv()).isFalse();
         }
     }
 }

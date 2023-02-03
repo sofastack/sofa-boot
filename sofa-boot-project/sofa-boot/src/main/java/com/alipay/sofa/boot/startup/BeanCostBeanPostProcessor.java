@@ -41,7 +41,7 @@ public class BeanCostBeanPostProcessor implements BeanPostProcessor {
                                                                                throws BeansException {
         BeanStat beanStat = new BeanStat();
         beanStat.setName(beanName);
-        String beanClassName = getBeanName(bean, beanName);
+        String beanClassName = bean.getClass().getName();
         beanStat.setBeanClassName(beanClassName);
         beanStat.startRefresh();
         beanInitCostMap.put(beanClassName, beanStat);
@@ -51,7 +51,7 @@ public class BeanCostBeanPostProcessor implements BeanPostProcessor {
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName)
                                                                               throws BeansException {
-        String beanClassName = getBeanName(bean, beanName);
+        String beanClassName = bean.getClass().getName();
         BeanStat beanStat = beanInitCostMap.remove(beanClassName);
         if (beanStat != null) {
             beanStat.finishRefresh();
@@ -63,9 +63,5 @@ public class BeanCostBeanPostProcessor implements BeanPostProcessor {
 
     public List<BeanStat> getBeanStatList() {
         return this.beanStatList;
-    }
-
-    private String getBeanName(Object bean, String beanName) {
-        return bean.getClass().getName() + " (" + beanName + ")";
     }
 }
