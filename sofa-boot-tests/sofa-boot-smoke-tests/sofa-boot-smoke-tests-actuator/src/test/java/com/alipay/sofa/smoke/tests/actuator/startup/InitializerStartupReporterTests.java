@@ -45,7 +45,7 @@ public class InitializerStartupReporterTests {
     private StartupReporter startupReporter;
 
     @Test
-    public void testStartupReporter() {
+    public void startupReporter() {
         BaseStat baseStat = startupReporter.getStageNyName(BootStageConstants.APPLICATION_CONTEXT_PREPARE_STAGE);
         assertThat(baseStat).isInstanceOf(ChildrenStat.class);
         ChildrenStat<BaseStat> applicationContextPrepareStage = (ChildrenStat<BaseStat>) baseStat;

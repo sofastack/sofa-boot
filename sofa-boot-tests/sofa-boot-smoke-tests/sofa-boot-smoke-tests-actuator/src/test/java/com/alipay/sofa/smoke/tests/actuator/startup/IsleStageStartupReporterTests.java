@@ -57,7 +57,7 @@ public class IsleStageStartupReporterTests {
     private StartupReporter startupReporter;
 
     @Test
-    public void testStartupReporter() {
+    public void startupReporter() {
         assertThat(startupReporter).isNotNull();
         StartupReporter.StartupStaticsModel startupStaticsModel = startupReporter.report();
         assertThat(startupStaticsModel).isNotNull();

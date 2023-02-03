@@ -42,7 +42,6 @@ public class SofaBootConstants {
 
     /**
      * SpringCloud property source key
-     * see {@link org.springframework.cloud.bootstrap.BootstrapApplicationListener#BOOTSTRAP_PROPERTY_SOURCE_NAME}
      */
     public static final String SPRING_CLOUD_BOOTSTRAP       = "bootstrap";
 

@@ -91,14 +91,16 @@ public class DynamicSpringContextLoader implements SpringContextLoader, Initiali
         SofaGenericApplicationContext context = SofaSpringContextSupport.createApplicationContext(beanFactory, this::newInstanceApplicationContext);
 
         context.setId(deployment.getModuleName());
-        if (!activeProfiles.isEmpty()) {
+        if (!CollectionUtils.isEmpty(activeProfiles)) {
             context.getEnvironment().setActiveProfiles(StringUtils.toStringArray(activeProfiles));
         }
         context.setAllowBeanDefinitionOverriding(allowBeanOverriding);
         context.setPublishEventToParent(publishEventToParent);
 
-        contextRefreshInterceptors.sort(AnnotationAwareOrderComparator.INSTANCE);
-        context.setInterceptors(contextRefreshInterceptors);
+        if (!CollectionUtils.isEmpty(contextRefreshInterceptors)) {
+            contextRefreshInterceptors.sort(AnnotationAwareOrderComparator.INSTANCE);
+            context.setInterceptors(contextRefreshInterceptors);
+        }
 
         ConfigurableApplicationContext parentContext = getSpringParentContext(deployment, application);
         context.setParent(parentContext);

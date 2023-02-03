@@ -16,6 +16,9 @@
  */
 package com.alipay.sofa.boot.isle.stage;
 
+import org.springframework.core.annotation.AnnotationAwareOrderComparator;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,14 +29,11 @@ import java.util.List;
  */
 public class DefaultPipelineContext implements PipelineContext {
 
-    private final List<PipelineStage> stageList;
-
-    public DefaultPipelineContext(List<PipelineStage> stageList) {
-        this.stageList = stageList;
-    }
+    private final List<PipelineStage> stageList = new ArrayList<>();
 
     @Override
     public void process() throws Exception {
+        stageList.sort(AnnotationAwareOrderComparator.INSTANCE);
         for (PipelineStage pipelineStage : stageList) {
             pipelineStage.process();
         }

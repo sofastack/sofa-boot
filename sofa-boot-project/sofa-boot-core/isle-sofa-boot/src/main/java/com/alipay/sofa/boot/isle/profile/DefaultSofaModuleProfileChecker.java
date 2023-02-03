@@ -16,9 +16,9 @@
  */
 package com.alipay.sofa.boot.isle.profile;
 
-import com.alipay.sofa.boot.log.ErrorCode;
 import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptor;
 import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptorConfiguration;
+import com.alipay.sofa.boot.log.ErrorCode;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -43,7 +43,11 @@ public class DefaultSofaModuleProfileChecker implements SofaModuleProfileChecker
     private List<String>      userCustomProfiles;
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
+        init();
+    }
+
+    public void init() {
         activeProfiles.add(DeploymentDescriptorConfiguration.DEFAULT_PROFILE_VALUE);
         if (userCustomProfiles != null) {
             activeProfiles.addAll(userCustomProfiles.stream().map(String::trim).collect(Collectors.toSet()));

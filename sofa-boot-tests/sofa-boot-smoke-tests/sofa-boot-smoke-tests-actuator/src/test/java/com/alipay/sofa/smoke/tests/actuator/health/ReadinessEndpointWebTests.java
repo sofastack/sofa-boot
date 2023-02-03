@@ -42,7 +42,7 @@ public class ReadinessEndpointWebTests {
     private TestRestTemplate restTemplate;
 
     @Test
-    public void testHealth() {
+    public void health() {
         ResponseEntity<HealthResponse> response = restTemplate.getForEntity("/actuator/readiness",
             HealthResponse.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);

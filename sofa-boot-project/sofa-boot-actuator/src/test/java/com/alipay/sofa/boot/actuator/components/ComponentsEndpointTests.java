@@ -62,7 +62,7 @@ public class ComponentsEndpointTests {
     private ComponentsEndPoint sofaBootComponentsEndPoint;
 
     @Test
-    public void testComponents() {
+    public void components() {
         Mockito.doReturn(componentManager).when(sofaRuntimeContext).getComponentManager();
 
         List<ComponentType> componentTypeList = new ArrayList<>();

@@ -40,7 +40,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class IsleBeanEndpointTests {
 
     @Test
-    public void testBeans() {
+    public void beans() {
         ConfigurableApplicationContext context = new ClassPathXmlApplicationContext();
         context.setId("bootstrap");
         context.refresh();
