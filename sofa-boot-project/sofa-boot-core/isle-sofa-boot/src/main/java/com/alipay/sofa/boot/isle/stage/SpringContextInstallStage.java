@@ -128,8 +128,9 @@ public class SpringContextInstallStage extends AbstractPipelineStage implements 
         // 并行刷新
         if (moduleStartUpParallel && moduleRefreshExecutorService != null) {
             doRefreshSpringContextParallel();
+        } else {
+            doRefreshSpringContextSerial();
         }
-        doRefreshSpringContextSerial();
     }
 
     private void doRefreshSpringContextSerial() {

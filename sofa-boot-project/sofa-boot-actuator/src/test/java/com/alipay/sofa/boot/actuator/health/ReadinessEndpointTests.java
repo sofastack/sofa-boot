@@ -43,7 +43,7 @@ public class ReadinessEndpointTests {
     private ReadinessCheckListener readinessCheckListener;
 
     @Test
-    public void testHealthWithOutDetails() {
+    public void healthWithOutDetails() {
         Health health = Health.down().withDetail("db", "error").build();
         Mockito.doReturn(health).when(readinessCheckListener).aggregateReadinessHealth();
         Health result = readinessEndpoint.health("false");
@@ -52,7 +52,7 @@ public class ReadinessEndpointTests {
     }
 
     @Test
-    public void testHealthWithDetails() {
+    public void healthWithDetails() {
         Health health = Health.up().withDetail("db", "success").build();
         Mockito.doReturn(health).when(readinessCheckListener).aggregateReadinessHealth();
         Health result = readinessEndpoint.health("true");

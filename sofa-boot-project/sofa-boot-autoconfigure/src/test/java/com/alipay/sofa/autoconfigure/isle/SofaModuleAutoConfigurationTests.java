@@ -112,16 +112,6 @@ public class SofaModuleAutoConfigurationTests {
     }
 
     @Test
-    void customModelCreatingStage() {
-        this.contextRunner
-                .withPropertyValues("sofa.boot.isle.allowModuleOverriding=true")
-                .run((context) -> {
-                    ModelCreatingStage modelCreatingStage = context.getBean(ModelCreatingStage.class);
-                    assertThat(modelCreatingStage.isAllowModuleOverriding()).isTrue();
-                });
-    }
-
-    @Test
     void customSpringContextInstallStage() {
         this.contextRunner
                 .withPropertyValues("sofa.boot.isle.moduleStartUpParallel=false")

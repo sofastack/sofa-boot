@@ -41,7 +41,7 @@ public class ManualReadinessCallbackEndPointTests {
     private ReadinessCheckListener          readinessCheckListener;
 
     @Test
-    public void testTrigger() {
+    public void trigger() {
         ReadinessCheckListener.ManualReadinessCallbackResult mockResult = new ReadinessCheckListener.ManualReadinessCallbackResult(
             true, "trigger Success");
         Mockito.doReturn(mockResult).when(readinessCheckListener).triggerReadinessCallback();

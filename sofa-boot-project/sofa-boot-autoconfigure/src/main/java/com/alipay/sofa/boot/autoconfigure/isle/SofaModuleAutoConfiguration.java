@@ -49,6 +49,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -73,7 +74,9 @@ public class SofaModuleAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public PipelineContext pipelineContext(List<PipelineStage> stageList) {
-        return new DefaultPipelineContext(stageList);
+        PipelineContext pipelineContext = new DefaultPipelineContext();
+        stageList.forEach(pipelineContext::appendStage);
+        return pipelineContext;
     }
 
     @Bean
@@ -94,11 +97,9 @@ public class SofaModuleAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public ModelCreatingStage modelCreatingStage(SofaModuleProperties sofaModuleProperties,
-                                                 ApplicationRuntimeModel applicationRuntimeModel) {
+    public ModelCreatingStage modelCreatingStage(ApplicationRuntimeModel applicationRuntimeModel) {
         ModelCreatingStage modelCreatingStage = new ModelCreatingStage();
         modelCreatingStage.setApplicationRuntimeModel(applicationRuntimeModel);
-        modelCreatingStage.setAllowModuleOverriding(sofaModuleProperties.isAllowModuleOverriding());
         return modelCreatingStage;
     }
 
@@ -134,13 +135,15 @@ public class SofaModuleAutoConfiguration {
                                                               ObjectProvider<BeanStatCustomizer> beanStatCustomizers) {
         DynamicSpringContextLoader dynamicSpringContextLoader = new DynamicSpringContextLoader(
             applicationContext);
-        dynamicSpringContextLoader.setActiveProfiles(sofaModuleProperties.getActiveProfiles());
+        if (sofaModuleProperties.getActiveProfiles() != null) {
+            dynamicSpringContextLoader.setActiveProfiles(sofaModuleProperties.getActiveProfiles());
+        }
         dynamicSpringContextLoader.setAllowBeanOverriding(sofaModuleProperties
             .isAllowBeanDefinitionOverriding());
         dynamicSpringContextLoader.setPublishEventToParent(sofaModuleProperties
             .isPublishEventToParent());
-        dynamicSpringContextLoader.setContextRefreshInterceptors(contextRefreshInterceptors
-            .orderedStream().toList());
+        dynamicSpringContextLoader.setContextRefreshInterceptors(new ArrayList<>(
+            contextRefreshInterceptors.orderedStream().toList()));
         dynamicSpringContextLoader.setSofaPostProcessorShareManager(sofaPostProcessorShareManager);
         dynamicSpringContextLoader.setBeanStatCustomizers(beanStatCustomizers.orderedStream()
             .toList());
