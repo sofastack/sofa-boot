@@ -3,7 +3,6 @@ com.alipay.sofa.boot.autoconfigure.isle.SofaModuleAutoConfiguration
 com.alipay.sofa.boot.autoconfigure.rpc.SofaRpcAutoConfiguration
 com.alipay.sofa.boot.autoconfigure.tracer.SofaTracerAutoConfiguration
 com.alipay.sofa.boot.autoconfigure.tracer.datasource.DataSourceAutoConfiguration
-com.alipay.sofa.boot.autoconfigure.tracer.feign.FeignClientAutoConfiguration
 com.alipay.sofa.boot.autoconfigure.tracer.zipkin.ZipkinAutoConfiguration
 com.alipay.sofa.boot.autoconfigure.tracer.resttemplate.RestTemplateAutoConfiguration
 com.alipay.sofa.boot.autoconfigure.tracer.kafka.KafkaAutoConfiguration
