@@ -61,6 +61,9 @@ public class SofaParameterNameDiscoverer implements ParameterNameDiscoverer {
     @SuppressWarnings("unchecked")
     protected String[] transformParameterNames(String[] parameterNames, Class<?>[] parameterType,
                                                Annotation[][] annotations) {
+        if (parameterNames == null) {
+            return null;
+        }
         for (int i = 0; i < annotations.length; ++i) {
             for (Annotation annotation : annotations[i]) {
                 if (annotation instanceof SofaReference) {
