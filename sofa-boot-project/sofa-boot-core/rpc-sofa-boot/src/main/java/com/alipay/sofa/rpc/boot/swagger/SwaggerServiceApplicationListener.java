@@ -32,7 +32,7 @@ import java.util.List;
 public class SwaggerServiceApplicationListener implements
                                               ApplicationListener<ApplicationStartedEvent> {
     private final ComponentManager componentManager;
-    private final ClientFactory clientFactory;
+    private final ClientFactory    clientFactory;
 
     public SwaggerServiceApplicationListener(SofaRuntimeManager sofaRuntimeManager) {
         this.componentManager = sofaRuntimeManager.getComponentManager();

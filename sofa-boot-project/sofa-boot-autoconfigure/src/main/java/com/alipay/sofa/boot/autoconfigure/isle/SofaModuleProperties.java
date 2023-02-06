@@ -18,6 +18,7 @@ package com.alipay.sofa.boot.autoconfigure.isle;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,7 +33,17 @@ public class SofaModuleProperties {
     /**
      * Active profile list.
      */
-    private List<String> activeProfiles;
+    private List<String> activeProfiles                 = new ArrayList<>();
+
+    /**
+     * Disable sofa module name list.
+     */
+    private List<String> ignoredModules                 = new ArrayList<>();
+
+    /**
+     * Disable require module calculate sofa module name list.
+     */
+    private List<String> ignoredCalculateRequireModules = new ArrayList<>();
 
     /**
      * Allow bean definition override in sofa module application contexts.
@@ -80,6 +91,22 @@ public class SofaModuleProperties {
 
     public void setActiveProfiles(List<String> activeProfiles) {
         this.activeProfiles = activeProfiles;
+    }
+
+    public List<String> getIgnoredModules() {
+        return ignoredModules;
+    }
+
+    public void setIgnoredModules(List<String> ignoredModules) {
+        this.ignoredModules = ignoredModules;
+    }
+
+    public List<String> getIgnoredCalculateRequireModules() {
+        return ignoredCalculateRequireModules;
+    }
+
+    public void setIgnoredCalculateRequireModules(List<String> ignoredCalculateRequireModules) {
+        this.ignoredCalculateRequireModules = ignoredCalculateRequireModules;
     }
 
     public boolean isAllowBeanDefinitionOverriding() {

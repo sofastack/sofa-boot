@@ -40,12 +40,20 @@ public class DeploymentBuilder {
                                              Properties props,
                                              DeploymentDescriptorConfiguration deploymentDescriptorConfiguration,
                                              ClassLoader classLoader) {
+        return build(url, props, deploymentDescriptorConfiguration, classLoader,
+            DeploymentDescriptorConfiguration.SOFA_MODULE_FILE);
+    }
+
+    public static DeploymentDescriptor build(URL url,
+                                             Properties props,
+                                             DeploymentDescriptorConfiguration deploymentDescriptorConfiguration,
+                                             ClassLoader classLoader, String modulePropertyName) {
         if (ResourceUtils.isJarURL(url)) {
             return new JarDeploymentDescriptor(url, props, deploymentDescriptorConfiguration,
                 classLoader);
         } else {
             return new FileDeploymentDescriptor(url, props, deploymentDescriptorConfiguration,
-                classLoader);
+                classLoader, modulePropertyName);
         }
     }
 }
