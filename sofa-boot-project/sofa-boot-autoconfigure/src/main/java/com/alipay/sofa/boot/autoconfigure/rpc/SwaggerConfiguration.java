@@ -18,9 +18,12 @@ package com.alipay.sofa.boot.autoconfigure.rpc;
 
 import com.alipay.sofa.rpc.boot.swagger.BoltSwaggerServiceApplicationListener;
 import com.alipay.sofa.rpc.boot.swagger.SwaggerServiceApplicationListener;
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import io.swagger.models.Swagger;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,13 +40,15 @@ public class SwaggerConfiguration {
 
     @Bean
     @ConditionalOnProperty(name = "com.alipay.sofa.rpc.rest-swagger", havingValue = "true")
-    public ApplicationListener swaggerServiceApplicationListener() {
-        return new SwaggerServiceApplicationListener();
+    @ConditionalOnBean(SofaRuntimeManager.class)
+    public ApplicationListener<ApplicationStartedEvent> swaggerServiceApplicationListener(SofaRuntimeManager sofaRuntimeManager) {
+        return new SwaggerServiceApplicationListener(sofaRuntimeManager);
     }
 
     @Bean
     @ConditionalOnProperty(name = "com.alipay.sofa.rpc.enable-swagger", havingValue = "true")
-    public ApplicationListener boltSwaggerServiceApplicationListener() {
-        return new BoltSwaggerServiceApplicationListener();
+    @ConditionalOnBean(SofaRuntimeManager.class)
+    public ApplicationListener<ApplicationStartedEvent> boltSwaggerServiceApplicationListener(SofaRuntimeManager sofaRuntimeManager) {
+        return new BoltSwaggerServiceApplicationListener(sofaRuntimeManager);
     }
 }
