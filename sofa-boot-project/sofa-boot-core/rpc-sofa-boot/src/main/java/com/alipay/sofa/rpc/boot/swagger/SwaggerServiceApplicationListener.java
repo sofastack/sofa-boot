@@ -16,29 +16,31 @@
  */
 package com.alipay.sofa.rpc.boot.swagger;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.alipay.sofa.runtime.spi.component.ComponentManager;
-import org.springframework.boot.context.event.ApplicationStartedEvent;
-import org.springframework.context.ApplicationListener;
-
 import com.alipay.sofa.rpc.boot.runtime.param.RestBindingParam;
-import com.alipay.sofa.runtime.api.aware.ClientFactoryAware;
 import com.alipay.sofa.runtime.api.client.ClientFactory;
 import com.alipay.sofa.runtime.api.client.ServiceClient;
 import com.alipay.sofa.runtime.api.client.param.BindingParam;
 import com.alipay.sofa.runtime.api.client.param.ServiceParam;
+import com.alipay.sofa.runtime.spi.component.ComponentManager;
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
+import org.springframework.context.ApplicationListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SwaggerServiceApplicationListener implements
-                                              ApplicationListener<ApplicationStartedEvent>,
-                                              ClientFactoryAware {
-    private ClientFactory clientFactory;
+                                              ApplicationListener<ApplicationStartedEvent> {
+    private final ComponentManager componentManager;
+    private final ClientFactory clientFactory;
+
+    public SwaggerServiceApplicationListener(SofaRuntimeManager sofaRuntimeManager) {
+        this.componentManager = sofaRuntimeManager.getComponentManager();
+        this.clientFactory = sofaRuntimeManager.getClientFactoryInternal();
+    }
 
     @Override
     public void onApplicationEvent(ApplicationStartedEvent event) {
-        ComponentManager componentManager = event.getApplicationContext().getBean(
-            ComponentManager.class);
         List<BindingParam> bindingParams = new ArrayList<>();
         bindingParams.add(new RestBindingParam());
 
@@ -49,10 +51,5 @@ public class SwaggerServiceApplicationListener implements
 
         ServiceClient serviceClient = clientFactory.getClient(ServiceClient.class);
         serviceClient.service(serviceParam);
-    }
-
-    @Override
-    public void setClientFactory(ClientFactory clientFactory) {
-        this.clientFactory = clientFactory;
     }
 }
