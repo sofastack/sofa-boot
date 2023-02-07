@@ -21,11 +21,8 @@
         <module>sofa-boot-smoke-tests-tracer</module>
         <module>sofa-boot-smoke-tests-boot</module>
         <module>sofa-boot-smoke-tests-runtime</module>
-<<<<<<< HEAD
         <module>sofa-boot-smoke-tests-rpc</module>
-=======
         <module>sofa-boot-smoke-tests-isle</module>
->>>>>>> upstream/4.0.0
     </modules>
 
     <dependencies>
