@@ -168,77 +168,7 @@
             </testResource>
         </testResources>
 
-        <!-- grpc  -->
-        <extensions>
-            <extension>
-                <groupId>kr.motd.maven</groupId>
-                <artifactId>os-maven-plugin</artifactId>
-                <version>1.6.1</version>
-            </extension>
-        </extensions>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-pmd-plugin</artifactId>
-                <configuration>
-                    <!-- There are unused imports in pb generated java file -->
-                    <!-- TODO: remove this -->
-                    <excludeRoots>
-                        <excludeRoot>build/generated/source/proto/test/java/</excludeRoot>
-                    </excludeRoots>
-                </configuration>
-            </plugin>
-            <!-- grpc -->
-            <plugin>
-                <groupId>org.xolstice.maven.plugins</groupId>
-                <artifactId>protobuf-maven-plugin</artifactId>
-                <version>0.5.1</version>
-                <configuration>
-                    <protocArtifact>com.google.protobuf:protoc:3.7.1:exe:${os.detected.classifier}</protocArtifact>
-                    <pluginId>grpc-java</pluginId>
-                    <pluginArtifact>io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}</pluginArtifact>
-                    <outputDirectory>build/generated/source/proto/test/java</outputDirectory>
-                    <clearOutputDirectory>false</clearOutputDirectory>
-                    <protocPlugins>
-                        <protocPlugin>
-                            <id>sofa-grpc</id>
-                            <groupId>com.alipay.sofa</groupId>
-                            <artifactId>sofa-rpc-compiler</artifactId>
-                            <version>${sofa.rpc.compiler.version}</version>
-                            <mainClass>com.alipay.sofa.gen.triple.SofaTripleGenerator</mainClass>
-                        </protocPlugin>
-                    </protocPlugins>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
-                            <goal>compile-custom</goal>
-                            <goal>test-compile</goal>
-                            <goal>test-compile-custom</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>3.0.0</version>
-                <executions>
-                    <execution>
-                        <phase>generate-test-sources</phase>
-                        <goals>
-                            <goal>add-test-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>build/generated/source/proto/test/java</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
