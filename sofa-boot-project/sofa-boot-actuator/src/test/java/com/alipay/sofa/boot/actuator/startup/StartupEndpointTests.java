@@ -43,7 +43,7 @@ public class StartupEndpointTests {
     private StartupReporter startupReporter;
 
     @Test
-    public void testStartup() {
+    public void startup() {
         StartupReporter.StartupStaticsModel staticsModel = new StartupReporter.StartupStaticsModel();
         staticsModel.setAppName("StartupEndpointTests");
         Mockito.doReturn(staticsModel).when(startupReporter).report();

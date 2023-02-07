@@ -19,11 +19,11 @@ package com.alipay.sofa.rpc.boot.swagger;
 import com.alipay.sofa.rpc.boot.runtime.param.RestBindingParam;
 import com.alipay.sofa.rpc.doc.swagger.rest.SwaggerRestService;
 import com.alipay.sofa.rpc.doc.swagger.rest.SwaggerRestServiceImpl;
-import com.alipay.sofa.runtime.api.aware.ClientFactoryAware;
 import com.alipay.sofa.runtime.api.client.ClientFactory;
 import com.alipay.sofa.runtime.api.client.ServiceClient;
 import com.alipay.sofa.runtime.api.client.param.BindingParam;
 import com.alipay.sofa.runtime.api.client.param.ServiceParam;
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.ApplicationListener;
 
@@ -34,14 +34,12 @@ import java.util.List;
  * @author <a href=mailto:orezsilence@163.com>zhangchengxi</a>
  */
 public class BoltSwaggerServiceApplicationListener implements
-                                                  ApplicationListener<ApplicationStartedEvent>,
-                                                  ClientFactoryAware {
+                                                  ApplicationListener<ApplicationStartedEvent> {
 
-    private ClientFactory clientFactory;
+    private final ClientFactory clientFactory;
 
-    @Override
-    public void setClientFactory(ClientFactory clientFactory) {
-        this.clientFactory = clientFactory;
+    public BoltSwaggerServiceApplicationListener(SofaRuntimeManager sofaRuntimeManager) {
+        this.clientFactory = sofaRuntimeManager.getClientFactoryInternal();
     }
 
     @Override

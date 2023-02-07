@@ -17,6 +17,7 @@
 package com.alipay.sofa.boot.tracer;
 
 import com.alipay.common.tracer.core.configuration.SofaTracerConfiguration;
+import com.alipay.sofa.boot.listener.SpringCloudConfigListener;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,12 +31,13 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
- * Tests for {@link SofaTracerConfigurationListenerTests}.
+ * Tests for {@link SofaTracerConfigurationListener}.
  *
  * @author huzijie
  * @version SofaTracerConfigurationListenerTests.java, v 0.1 2023年01月11日 3:28 PM huzijie Exp $
@@ -45,14 +47,18 @@ public class SofaTracerConfigurationListenerTests {
     private ConfigurableApplicationContext context;
 
     @BeforeEach
-    public void resetSofaTracerConfiguration() {
-        Field field = ReflectionUtils.findField(SofaTracerConfiguration.class, "properties");
+    public void resetSofaTracerConfiguration() throws IllegalAccessException {
+        Field field = ReflectionUtils.findField(SofaTracerConfigurationListener.class, "EXECUTED");
+        ReflectionUtils.makeAccessible(field);
+        ((AtomicBoolean) field.get(null)).set(false);
+
+        field = ReflectionUtils.findField(SofaTracerConfiguration.class, "properties");
         ReflectionUtils.makeAccessible(field);
         ReflectionUtils.setField(field, null, new ConcurrentHashMap<String, Object>());
     }
 
     @AfterEach
-    public void cleanUp() {
+    public void cleanUp() throws IllegalAccessException {
         resetSofaTracerConfiguration();
         if (this.context != null) {
             this.context.close();
@@ -86,6 +92,8 @@ public class SofaTracerConfigurationListenerTests {
         props.put("sofa.boot.tracer.samplerCustomRuleClassName", "TestRuleClass");
         props.put("sofa.boot.tracer.jsonOutput", "false");
         application.setDefaultProperties(props);
+        application.addListeners(new SpringCloudConfigListener());
+        application.addListeners(new SofaTracerConfigurationListener());
         this.context = application.run();
         assertThat(
             SofaTracerConfiguration

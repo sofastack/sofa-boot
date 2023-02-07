@@ -30,6 +30,7 @@ import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
@@ -50,8 +51,6 @@ public class ModelCreatingStage extends AbstractPipelineStage {
 
     public static final String  MODEL_CREATING_STAGE_NAME = "ModelCreatingStage";
 
-    protected boolean           allowModuleOverriding;
-
     @Override
     protected void doProcess() throws Exception {
         getAllDeployments();
@@ -59,23 +58,40 @@ public class ModelCreatingStage extends AbstractPipelineStage {
     }
 
     protected void getAllDeployments() throws IOException, DeploymentException {
-        Enumeration<URL> urls = appClassLoader
-            .getResources(DeploymentDescriptorConfiguration.SOFA_MODULE_FILE);
-        if (urls == null || !urls.hasMoreElements()) {
-            return;
+        List<URL> urls = getUrls();
+
+        List<DeploymentDescriptor> deploymentDescriptors = new ArrayList<>();
+        for (URL url : urls) {
+            deploymentDescriptors.add(getDeploymentDescriptor(url));
         }
 
-        while (urls.hasMoreElements()) {
-            URL url = urls.nextElement();
-            UrlResource urlResource = new UrlResource(url);
-            Properties props = new Properties();
-            props.load(urlResource.getInputStream());
-            DeploymentDescriptorConfiguration deploymentDescriptorConfiguration = new DeploymentDescriptorConfiguration(
-                Collections.singletonList(DeploymentDescriptorConfiguration.MODULE_NAME),
-                Collections.singletonList(DeploymentDescriptorConfiguration.REQUIRE_MODULE));
-            DeploymentDescriptor dd = DeploymentBuilder.build(url, props,
-                deploymentDescriptorConfiguration, appClassLoader);
+        addDeploymentDescriptors(deploymentDescriptors);
+    }
 
+    protected List<URL> getUrls() throws IOException {
+        Enumeration<URL> enumeration = appClassLoader
+            .getResources(DeploymentDescriptorConfiguration.SOFA_MODULE_FILE);
+        if (enumeration != null) {
+            return Collections.list(enumeration);
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
+    protected DeploymentDescriptor getDeploymentDescriptor(URL url) throws IOException {
+        UrlResource urlResource = new UrlResource(url);
+        Properties props = new Properties();
+        props.load(urlResource.getInputStream());
+        DeploymentDescriptorConfiguration deploymentDescriptorConfiguration = new DeploymentDescriptorConfiguration(
+            Collections.singletonList(DeploymentDescriptorConfiguration.MODULE_NAME),
+            Collections.singletonList(DeploymentDescriptorConfiguration.REQUIRE_MODULE));
+        return DeploymentBuilder.build(url, props, deploymentDescriptorConfiguration,
+            appClassLoader);
+    }
+
+    protected void addDeploymentDescriptors(List<DeploymentDescriptor> deploymentDescriptors)
+                                                                                             throws DeploymentException {
+        for (DeploymentDescriptor dd : deploymentDescriptors) {
             if (application.isModuleDeployment(dd)) {
                 if (application.acceptModule(dd)) {
                     validateDuplicateModule(application.addDeployment(dd), dd);
@@ -89,14 +105,8 @@ public class ModelCreatingStage extends AbstractPipelineStage {
     protected void validateDuplicateModule(DeploymentDescriptor exist, DeploymentDescriptor dd)
                                                                                                throws DeploymentException {
         if (exist != null) {
-            if (isAllowModuleOverriding()) {
-                LOGGER.warn(
-                    "Overriding module deployment for module name '{}': replacing '{}' with '{}'",
-                    dd.getModuleName(), exist.getName(), dd.getName());
-            } else {
-                throw new DeploymentException(ErrorCode.convert("01-11006", dd.getModuleName(),
-                    exist.getName(), dd.getName()));
-            }
+            throw new DeploymentException(ErrorCode.convert("01-11006", dd.getModuleName(),
+                exist.getName(), dd.getName()));
         }
     }
 
@@ -164,14 +174,6 @@ public class ModelCreatingStage extends AbstractPipelineStage {
             String symbol = i == size - 1 ? "  └─ " : "  ├─ ";
             sb.append(symbol).append(deploys.get(i).getName()).append("\n");
         }
-    }
-
-    public boolean isAllowModuleOverriding() {
-        return this.allowModuleOverriding;
-    }
-
-    public void setAllowModuleOverriding(boolean allowModuleOverriding) {
-        this.allowModuleOverriding = allowModuleOverriding;
     }
 
     @Override

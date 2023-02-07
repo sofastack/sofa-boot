@@ -40,7 +40,7 @@ public class ComponentsEndpointWebTests {
     private TestRestTemplate restTemplate;
 
     @Test
-    public void testComponentsActuator() {
+    public void componentsActuator() {
         ResponseEntity<String> response = restTemplate.getForEntity("/actuator/components",
             String.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);

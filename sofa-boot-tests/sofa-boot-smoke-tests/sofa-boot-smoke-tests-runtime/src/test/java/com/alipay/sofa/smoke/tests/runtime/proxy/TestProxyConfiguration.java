@@ -17,6 +17,7 @@
 package com.alipay.sofa.smoke.tests.runtime.proxy;
 
 import org.springframework.aop.framework.ProxyFactoryBean;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ImportResource;
@@ -36,7 +37,7 @@ public class TestProxyConfiguration {
     }
 
     @Bean
-    public ProxyFactoryBean proxyFactoryBean5(ProxyTestBeanFacade proxyTestBean) {
+    public ProxyFactoryBean proxyFactoryBean5(@Qualifier("proxyTestBean") ProxyTestBeanFacade proxyTestBean) {
         ProxyFactoryBean proxyFactoryBean = new ProxyFactoryBean();
         proxyFactoryBean.setInterfaces(ProxyTestBeanFacade.class);
         proxyFactoryBean.setTarget(proxyTestBean);

@@ -50,11 +50,6 @@ public class SofaModuleProperties {
     private boolean      publishEventToParent           = false;
 
     /**
-     * Allow module name override.
-     */
-    private boolean      allowModuleOverriding          = false;
-
-    /**
      * Ignore module install failure.
      */
     private boolean      ignoreModuleInstallFailure     = false;
@@ -109,14 +104,6 @@ public class SofaModuleProperties {
 
     public void setPublishEventToParent(boolean publishEventToParent) {
         this.publishEventToParent = publishEventToParent;
-    }
-
-    public boolean isAllowModuleOverriding() {
-        return allowModuleOverriding;
-    }
-
-    public void setAllowModuleOverriding(boolean allowModuleOverriding) {
-        this.allowModuleOverriding = allowModuleOverriding;
     }
 
     public boolean isIgnoreModuleInstallFailure() {

@@ -29,6 +29,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.TestPropertySource;
 
 import java.util.List;
 
@@ -40,9 +41,9 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author huzijie
  * @version DefaultStageStartupReporterTests.java, v 0.1 2021年01月04日 8:31 下午 huzijie Exp $
  */
-@SpringBootTest(classes = ActuatorSofaBootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {
-                                                                                                                                       "management.endpoints.web.exposure.include=startup",
-                                                                                                                                       "spring.autoconfigure.exclude=com.alipay.sofa.boot.actuator.autoconfigure.startup.StartupHealthAutoConfiguration,com.alipay.sofa.boot.actuator.autoconfigure.startup.StartupIsleAutoConfiguration" })
+@SpringBootTest(classes = ActuatorSofaBootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestPropertySource(properties = { "management.endpoints.web.exposure.include=startup",
+                                  "spring.autoconfigure.exclude=com.alipay.sofa.boot.autoconfigure.isle.SofaModuleAutoConfiguration" })
 @Import(InitCostBean.class)
 public class DefaultStageStartupReporterTests {
 
@@ -51,7 +52,7 @@ public class DefaultStageStartupReporterTests {
     private StartupReporter startupReporter;
 
     @Test
-    public void testStartupReporter() {
+    public void startupReporter() {
         assertThat(startupReporter).isNotNull();
         StartupReporter.StartupStaticsModel startupStaticsModel = startupReporter.report();
         assertThat(startupStaticsModel).isNotNull();
@@ -102,7 +103,7 @@ public class DefaultStageStartupReporterTests {
         assertThat(initBeanStat.getBeanRefreshEndTime() - initBeanStat.getBeanRefreshStartTime()).isEqualTo(initBeanStat.getRefreshElapsedTime());
         assertThat(initBeanStat.getRealRefreshElapsedTime() - InitCostBean.INIT_COST_TIME < 20).isTrue();
         assertThat(initBeanStat.getBeanType()).isNull();
-        assertThat(initBeanStat.getBeanClassName()).isEqualTo(InitCostBean.class.getName() + " (com.alipay.sofa.smoke.tests.actuator.startup.beans.InitCostBean)");
+        assertThat(initBeanStat.getBeanClassName()).isEqualTo(InitCostBean.class.getName());
         assertThat(initBeanStat.getChildren().isEmpty()).isTrue();
         assertThat(initBeanStat.getInitMethodTime()).isEqualTo(0);
         assertThat(initBeanStat.getInterfaceType()).isNull();

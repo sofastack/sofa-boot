@@ -37,13 +37,13 @@ import static org.assertj.core.api.Assertions.catchException;
 public class XsdValidationTest {
 
     @Test
-    public void testSofaParameter() {
+    public void sofaParameter() {
         Exception exception = catchException(() -> loadXml("config/spring/test_sofa_parameter.xml"));
         assertThat(exception).isNull();
     }
 
     @Test
-    public void testSofaParameterMissingKey() {
+    public void sofaParameterMissingKey() {
         Exception exception = catchException(() -> loadXml("config/spring/test_sofa_parameter_missing_key.xml"));
         assertThat(exception).isNotNull();
         assertThat(exception).isInstanceOf(SAXParseException.class);
@@ -53,7 +53,7 @@ public class XsdValidationTest {
     }
 
     @Test
-    public void testSofaParameterOutsideBinding() {
+    public void sofaParameterOutsideBinding() {
         Exception exception = catchException(() -> loadXml("config/spring/test_sofa_parameter_outside_binding.xml"));
         assertThat(exception).isNotNull();
         assertThat(exception).isInstanceOf(SAXParseException.class);

@@ -28,7 +28,7 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Tests for {@link SofaBootNamespaceHandler}
+ * Tests for {@link SofaBootNamespaceHandler}.
  *
  * @author huzijie
  * @version SofaBootNamespaceHandlerTests.java, v 0.1 2023年02月01日 11:50 AM huzijie Exp $

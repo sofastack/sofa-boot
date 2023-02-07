@@ -43,7 +43,7 @@ public class IsleBeanEndpointWebTests {
     private TestRestTemplate restTemplate;
 
     @Test
-    public void testIsleBeanActuator() throws JsonProcessingException {
+    public void isleBeanActuator() throws JsonProcessingException {
         ResponseEntity<String> response = restTemplate
             .getForEntity("/actuator/beans", String.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);

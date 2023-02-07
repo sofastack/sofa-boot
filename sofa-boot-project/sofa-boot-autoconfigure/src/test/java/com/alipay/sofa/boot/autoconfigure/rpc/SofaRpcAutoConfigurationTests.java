@@ -42,7 +42,7 @@ import static com.alipay.sofa.rpc.boot.config.SofaBootRpcConfigConstants.REGISTR
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Tests for SofaRpcAutoConfiguration
+ * Tests for {@link SofaRpcAutoConfiguration}.
  *
  * @author yuanxuan
  * @version : SofaRpcAutoConfigurationTests.java, v 0.1 202 15:42 yuanxuan Exp $

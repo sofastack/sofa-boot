@@ -50,7 +50,7 @@ public class ManualEndPointWebTests {
     private ReadinessCheckListener readinessCheckListener;
 
     @Test
-    public void testTrigger() {
+    public void trigger() {
         // 健康检查通过
         ResponseEntity<ReadinessCheckListener.ManualReadinessCallbackResult> response = restTemplate
             .getForEntity("/actuator/triggerReadinessCallback",
