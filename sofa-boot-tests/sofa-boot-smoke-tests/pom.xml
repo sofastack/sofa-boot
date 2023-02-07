@@ -21,6 +21,7 @@
         <module>sofa-boot-smoke-tests-tracer</module>
         <module>sofa-boot-smoke-tests-boot</module>
         <module>sofa-boot-smoke-tests-runtime</module>
+        <module>sofa-boot-smoke-tests-rpc</module>
         <module>sofa-boot-smoke-tests-isle</module>
     </modules>
 

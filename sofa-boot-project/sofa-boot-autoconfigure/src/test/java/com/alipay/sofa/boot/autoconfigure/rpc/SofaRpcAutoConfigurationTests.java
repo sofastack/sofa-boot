@@ -19,8 +19,7 @@ package com.alipay.sofa.boot.autoconfigure.rpc;
 import com.alipay.sofa.boot.actuator.health.ReadinessCheckCallback;
 import com.alipay.sofa.rpc.boot.config.RegistryConfigureProcessor;
 import com.alipay.sofa.rpc.boot.container.ProviderConfigContainer;
-import com.alipay.sofa.rpc.boot.context.ApplicationContextClosedListener;
-import com.alipay.sofa.rpc.boot.context.SofaBootRpcStartListener;
+import com.alipay.sofa.rpc.boot.context.ApplicationContextRefreshedListener;
 import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ConsumerMockProcessor;
 import com.alipay.sofa.rpc.boot.runtime.adapter.processor.DynamicConfigProcessor;
 import com.alipay.sofa.rpc.boot.swagger.BoltSwaggerServiceApplicationListener;
@@ -46,7 +45,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Tests for {@link SofaRpcAutoConfiguration}.
  *
  * @author yuanxuan
- * @version : SofaRpcAutoConfigurationTests.java, v 0.1 2023��02��02�� 15:42 yuanxuan Exp $
+ * @version : SofaRpcAutoConfigurationTests.java, v 0.1 202 15:42 yuanxuan Exp $
  */
 public class SofaRpcAutoConfigurationTests {
 
@@ -84,9 +83,9 @@ public class SofaRpcAutoConfigurationTests {
 
     @Test
     void applicationContextRefreshedListenerBeanCreatedWhenNoRpcReadinessCheck() {
-        this.contextRunner.withClassLoader(new FilteredClassLoader(ReadinessCheckCallback.class, SofaBootRpcStartListener.class)).run(
+        this.contextRunner.withClassLoader(new FilteredClassLoader(ReadinessCheckCallback.class)).run(
                 context -> {
-                    assertThat(context).hasSingleBean(ApplicationContextClosedListener.class);
+                    assertThat(context).hasSingleBean(ApplicationContextRefreshedListener.class);
 
                 });
 
