@@ -37,6 +37,7 @@
             <groupId>com.alipay.sofa</groupId>
             <artifactId>sofa-boot-starter</artifactId>
         </dependency>
+
         <dependency>
             <groupId>com.alipay.sofa</groupId>
             <artifactId>runtime-sofa-boot</artifactId>

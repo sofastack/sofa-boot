@@ -39,6 +39,7 @@ import org.springframework.util.Assert;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
@@ -141,6 +142,8 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
 
     private boolean                               throwExceptionWhenHealthCheckFailed = false;
 
+    private ThreadPoolExecutor healthCheckExecutor;
+
     public ReadinessCheckListener(HealthCheckerProcessor healthCheckerProcessor,
                                   HealthIndicatorProcessor healthIndicatorProcessor,
                                   ReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor) {
@@ -197,6 +200,7 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
             if (startupReporter != null) {
                 startupReporter.addCommonStartupStat(stat);
             }
+            healthCheckExecutor.shutdown();
         }
     }
 
@@ -416,6 +420,10 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
 
     public ReadinessState getReadinessState() {
         return readinessState;
+    }
+
+    public void setHealthCheckExecutor(ThreadPoolExecutor healthCheckExecutor) {
+        this.healthCheckExecutor = healthCheckExecutor;
     }
 
     public static class ManualReadinessCallbackResult {

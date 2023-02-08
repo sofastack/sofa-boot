@@ -38,12 +38,12 @@ public class SofaModuleProperties {
     /**
      * Disable sofa module name list.
      */
-    private List<String> ignoredModules                 = new ArrayList<>();
+    private List<String> ignoreModules = new ArrayList<>();
 
     /**
      * Disable require module calculate sofa module name list.
      */
-    private List<String> ignoredCalculateRequireModules = new ArrayList<>();
+    private List<String> ignoreCalculateRequireModules = new ArrayList<>();
 
     /**
      * Allow bean definition override in sofa module application contexts.
@@ -73,7 +73,7 @@ public class SofaModuleProperties {
     /**
      * Thead pool size factor used in parallel sofa module application context refresh.
      */
-    private float        parallelRefreshCoreCountFactor = 5.0f;
+    private float       parallelRefreshPoolSizeFactor = 5.0f;
 
     /**
      * Timeout used in parallel sofa module application context refresh, in milliseconds.
@@ -93,20 +93,20 @@ public class SofaModuleProperties {
         this.activeProfiles = activeProfiles;
     }
 
-    public List<String> getIgnoredModules() {
-        return ignoredModules;
+    public List<String> getIgnoreModules() {
+        return ignoreModules;
     }
 
-    public void setIgnoredModules(List<String> ignoredModules) {
-        this.ignoredModules = ignoredModules;
+    public void setIgnoreModules(List<String> ignoreModules) {
+        this.ignoreModules = ignoreModules;
     }
 
     public List<String> getIgnoredCalculateRequireModules() {
-        return ignoredCalculateRequireModules;
+        return ignoreCalculateRequireModules;
     }
 
     public void setIgnoredCalculateRequireModules(List<String> ignoredCalculateRequireModules) {
-        this.ignoredCalculateRequireModules = ignoredCalculateRequireModules;
+        this.ignoreCalculateRequireModules = ignoredCalculateRequireModules;
     }
 
     public boolean isAllowBeanDefinitionOverriding() {
@@ -141,12 +141,12 @@ public class SofaModuleProperties {
         this.ignoreModuleInstallFailure = ignoreModuleInstallFailure;
     }
 
-    public float getParallelRefreshCoreCountFactor() {
-        return parallelRefreshCoreCountFactor;
+    public float getParallelRefreshPoolSizeFactor() {
+        return parallelRefreshPoolSizeFactor;
     }
 
-    public void setParallelRefreshCoreCountFactor(float parallelRefreshCoreCountFactor) {
-        this.parallelRefreshCoreCountFactor = parallelRefreshCoreCountFactor;
+    public void setParallelRefreshPoolSizeFactor(float parallelRefreshPoolSizeFactor) {
+        this.parallelRefreshPoolSizeFactor = parallelRefreshPoolSizeFactor;
     }
 
     public long getParallelRefreshTimeout() {

@@ -101,7 +101,7 @@ public class SofaModuleAutoConfiguration {
             SofaModuleProperties sofaModuleProperties,
             ApplicationRuntimeModel applicationRuntimeModel) {
         ModelCreatingStage modelCreatingStage = new ModelCreatingStage();
-        sofaModuleProperties.getIgnoredModules().forEach(modelCreatingStage::addIgnoreModule);
+        sofaModuleProperties.getIgnoreModules().forEach(modelCreatingStage::addIgnoreModule);
         sofaModuleProperties.getIgnoredCalculateRequireModules().forEach(modelCreatingStage::addIgnoredCalculateRequireModule);
         modelCreatingStage.setApplicationRuntimeModel(applicationRuntimeModel);
         return modelCreatingStage;
@@ -156,7 +156,7 @@ public class SofaModuleAutoConfiguration {
     @ConditionalOnMissingBean
     @ConditionalOnProperty(value = "sofa.boot.isle.moduleStartUpParallel", havingValue = "true", matchIfMissing = true)
     public Supplier<ThreadPoolExecutor> sofaModuleRefreshExecutor(SofaModuleProperties sofaModuleProperties) {
-        int coreSize = (int) (Runtime.getRuntime().availableProcessors() * sofaModuleProperties.getParallelRefreshCoreCountFactor());
+        int coreSize = (int) (Runtime.getRuntime().availableProcessors() * sofaModuleProperties.getParallelRefreshPoolSizeFactor());
         long taskTimeout = sofaModuleProperties.getParallelRefreshTimeout();
         long checkPeriod = sofaModuleProperties.getParallelRefreshCheckPeriod();
 
