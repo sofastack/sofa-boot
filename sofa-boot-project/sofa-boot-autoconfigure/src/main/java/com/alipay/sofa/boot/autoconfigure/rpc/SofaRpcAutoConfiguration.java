@@ -148,7 +148,6 @@ public class SofaRpcAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    @ConditionalOnClass(SofaBootRpcStartListener.class)
     public SofaBootRpcStartListener sofaBootRpcStartListener(SofaBootRpcProperties sofaBootRpcProperties,
                                                              ProviderConfigContainer providerConfigContainer,
                                                              FaultToleranceConfigurator faultToleranceConfigurator,
