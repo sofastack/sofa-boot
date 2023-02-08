@@ -44,7 +44,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootApplication
 @SpringBootTest(classes = ParameterAnnotationTest.class)
 @TestPropertySource(properties = {
-                                  "com.alipay.sofa.rpc.registry.address=", // override default zk path
+                                  "sofa.boot.rpc.registry.address=", // override default zk path
                                   "dynamic_key=dynamic_test_key",
                                   "dynamic_value=dynamic_test_value" })
 public class ParameterAnnotationTest {

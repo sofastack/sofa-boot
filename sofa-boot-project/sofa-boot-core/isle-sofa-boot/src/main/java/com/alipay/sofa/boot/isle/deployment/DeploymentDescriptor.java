@@ -16,11 +16,11 @@
  */
 package com.alipay.sofa.boot.isle.deployment;
 
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Interface for descriptor a sofa module deployment.
@@ -138,4 +138,11 @@ public interface DeploymentDescriptor extends Comparable<DeploymentDescriptor> {
      * @return start time
      */
     long getStartTime();
+
+    /**
+     * set ignore require module.
+     *
+     * @param ignoreRequireModule ignore require module
+     */
+    void setIgnoreRequireModule(boolean ignoreRequireModule);
 }

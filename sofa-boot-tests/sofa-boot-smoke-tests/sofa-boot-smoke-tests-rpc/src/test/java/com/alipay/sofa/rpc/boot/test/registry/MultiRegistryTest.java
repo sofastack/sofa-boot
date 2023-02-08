@@ -32,7 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @version $Id: MeshTest.java, v 0.1 2018-06-25 19:26 zhiyuan.lzy Exp $$
  */
 @SpringBootApplication
-@SpringBootTest(properties = { "com.alipay.sofa.rpc.registries.gateway=zookeeper://127.0.0.1:2181" }, classes = MultiRegistryTest.class)
+@SpringBootTest(properties = { "sofa.boot.rpc.registries.gateway=zookeeper://127.0.0.1:2181" }, classes = MultiRegistryTest.class)
 @ImportResource("/spring/test_only_registry.xml")
 public class MultiRegistryTest extends ActivelyDestroyTest {
 

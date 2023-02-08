@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.tests.rpc.mock;
 
-import com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties;
 import com.alipay.sofa.rpc.boot.runtime.adapter.helper.ConsumerConfigHelper;
 import com.alipay.sofa.rpc.boot.runtime.binding.BoltBinding;
 import com.alipay.sofa.rpc.boot.runtime.binding.RpcBinding;
@@ -45,8 +44,7 @@ import static org.assertj.core.api.Assertions.fail;
 @SpringBootApplication
 @SpringBootTest
 @ImportResource("/spring/test_only_mock_bean.xml")
-@TestPropertySource(properties = { SofaBootRpcProperties.PREFIX
-                                   + ".consumer.repeated.reference.limit=10", })
+@TestPropertySource(properties = { "sofa.boot.rpc" + ".consumer.repeated.reference.limit=10", })
 public class MockBeanConfigTest {
 
     @SofaReference(binding = @SofaReferenceBinding(bindingType = "bolt", mockMode = MockMode.LOCAL, mockBean = "mockHello"))

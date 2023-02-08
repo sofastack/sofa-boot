@@ -33,14 +33,16 @@ import com.alipay.sofa.rpc.boot.container.ServerConfigContainer;
  *
  * @author <a href="mailto:lw111072@antfin.com">LiWei</a>
  */
-public class ApplicationContextClosedListener implements ApplicationListener,
-                                             ApplicationContextAware {
+public class RpcStopApplicationListener implements ApplicationListener, ApplicationContextAware {
+
     private final ProviderConfigContainer providerConfigContainer;
+
     private final ServerConfigContainer   serverConfigContainer;
+
     private ApplicationContext            applicationContext;
 
-    public ApplicationContextClosedListener(ProviderConfigContainer providerConfigContainer,
-                                            ServerConfigContainer serverConfigContainer) {
+    public RpcStopApplicationListener(ProviderConfigContainer providerConfigContainer,
+                                      ServerConfigContainer serverConfigContainer) {
         this.providerConfigContainer = providerConfigContainer;
         this.serverConfigContainer = serverConfigContainer;
     }

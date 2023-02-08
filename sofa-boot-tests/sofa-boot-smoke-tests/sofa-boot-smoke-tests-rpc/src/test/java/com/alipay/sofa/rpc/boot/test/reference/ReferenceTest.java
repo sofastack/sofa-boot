@@ -16,11 +16,10 @@
  */
 package com.alipay.sofa.rpc.boot.test.reference;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
-import java.util.List;
-
+import com.alipay.sofa.rpc.boot.config.SofaBootRpcConfigConstants;
+import com.alipay.sofa.rpc.boot.container.ServerConfigContainer;
+import com.alipay.sofa.rpc.config.ServerConfig;
+import com.alipay.sofa.rpc.core.exception.SofaRouteException;
 import com.alipay.sofa.tests.rpc.ActivelyDestroyTest;
 import com.alipay.sofa.tests.rpc.bean.invoke.HelloSyncService;
 import org.junit.jupiter.api.Test;
@@ -29,12 +28,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ImportResource;
 
-import com.alipay.sofa.rpc.boot.config.SofaBootRpcConfigConstants;
-import com.alipay.sofa.rpc.boot.container.ServerConfigContainer;
+import java.util.List;
 
-import com.alipay.sofa.rpc.config.ServerConfig;
-import com.alipay.sofa.rpc.core.exception.SofaRouteException;
-import com.google.common.collect.Lists;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  *
@@ -54,7 +51,7 @@ public class ReferenceTest extends ActivelyDestroyTest {
 
     @Test
     public void testNoServerStarted() {
-        List<String> protocols = Lists.newArrayList(SofaBootRpcConfigConstants.RPC_PROTOCOL_BOLT,
+        List<String> protocols = List.of(SofaBootRpcConfigConstants.RPC_PROTOCOL_BOLT,
             SofaBootRpcConfigConstants.RPC_PROTOCOL_REST,
             SofaBootRpcConfigConstants.RPC_PROTOCOL_H2C,
             SofaBootRpcConfigConstants.RPC_PROTOCOL_DUBBO);

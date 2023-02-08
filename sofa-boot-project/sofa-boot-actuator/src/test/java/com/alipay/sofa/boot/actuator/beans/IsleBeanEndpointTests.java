@@ -169,6 +169,11 @@ public class IsleBeanEndpointTests {
         }
 
         @Override
+        public void setIgnoreRequireModule(boolean ignoreRequireModule) {
+
+        }
+
+        @Override
         public int compareTo(DeploymentDescriptor o) {
             return 0;
         }

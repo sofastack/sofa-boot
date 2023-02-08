@@ -27,6 +27,7 @@ import com.alipay.sofa.rpc.config.ConsumerConfig;
 public class ConsumerMockProcessor implements ConsumerConfigProcessor {
 
     public static final String MOCK_URL = "mockUrl";
+
     private String             mockUrl;
 
     public ConsumerMockProcessor(String mockUrl) {

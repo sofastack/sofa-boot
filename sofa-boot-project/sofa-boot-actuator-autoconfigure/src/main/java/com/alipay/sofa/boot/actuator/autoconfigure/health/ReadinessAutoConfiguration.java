@@ -59,6 +59,7 @@ public class ReadinessAutoConfiguration {
     public ReadinessCheckListener readinessCheckListener(HealthCheckerProcessor healthCheckerProcessor,
                                                          HealthIndicatorProcessor healthIndicatorProcessor,
                                                          ReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor,
+                                                         ThreadPoolExecutor healthCheckExecutor,
                                                          HealthProperties healthCheckProperties) {
         ReadinessCheckListener readinessCheckListener = new ReadinessCheckListener(
             healthCheckerProcessor, healthIndicatorProcessor, afterReadinessCheckCallbackProcessor);
@@ -70,6 +71,7 @@ public class ReadinessAutoConfiguration {
         readinessCheckListener.setSkipHealthChecker(healthCheckProperties.isSkipHealthChecker());
         readinessCheckListener
             .setSkipHealthIndicator(healthCheckProperties.isSkipHealthIndicator());
+        readinessCheckListener.setHealthCheckExecutor(healthCheckExecutor);
         return readinessCheckListener;
     }
 
@@ -131,7 +133,7 @@ public class ReadinessAutoConfiguration {
         }
         LOGGER.info("Create health-check thread pool, corePoolSize: {}, maxPoolSize: {}.", 0,
             threadPoolSize);
-        return new SofaThreadPoolExecutor(0, threadPoolSize, 30, TimeUnit.SECONDS,
+        return new SofaThreadPoolExecutor(threadPoolSize, threadPoolSize, 30, TimeUnit.SECONDS,
             new SynchronousQueue<>(), new NamedThreadFactory("health-check"),
             new ThreadPoolExecutor.CallerRunsPolicy(), "health-check",
             SofaBootConstants.SOFA_BOOT_SPACE_NAME);

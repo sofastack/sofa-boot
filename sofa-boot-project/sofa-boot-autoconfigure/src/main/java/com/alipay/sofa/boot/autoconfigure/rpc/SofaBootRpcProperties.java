@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.rpc.boot.config;
+package com.alipay.sofa.boot.autoconfigure.rpc;
 
 import com.alipay.sofa.rpc.common.SofaOptions;
 import com.google.common.base.CaseFormat;
@@ -27,11 +27,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Configuration properties to configure sofa rpc.
+ *
  * @author khotyn
  */
-@ConfigurationProperties(SofaBootRpcProperties.PREFIX)
+@ConfigurationProperties("sofa.boot.rpc")
 public class SofaBootRpcProperties implements EnvironmentAware {
-    public static final String  PREFIX     = "com.alipay.sofa.rpc";
 
     private Environment         environment;
 
@@ -447,7 +448,6 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     }
 
     public String getBoltThreadPoolCoreSize() {
-
         if (environment.containsProperty(SofaOptions.TR_MIN_POOLSIZE)) {
             return environment.getProperty(SofaOptions.TR_MIN_POOLSIZE);
         }
@@ -886,7 +886,8 @@ public class SofaBootRpcProperties implements EnvironmentAware {
         if (environment == null) {
             return null;
         }
-        return environment.getProperty(PREFIX + "." + camelToDot(enclosingMethodName.substring(3)));
+        return environment.getProperty("sofa.boot.rpc."
+                                       + camelToDot(enclosingMethodName.substring(3)));
     }
 
     public String camelToDot(String camelCaseString) {

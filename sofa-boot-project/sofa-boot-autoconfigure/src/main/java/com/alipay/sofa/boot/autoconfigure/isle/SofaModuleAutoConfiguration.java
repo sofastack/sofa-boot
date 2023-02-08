@@ -19,11 +19,11 @@ package com.alipay.sofa.boot.autoconfigure.isle;
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.context.ContextRefreshInterceptor;
 import com.alipay.sofa.boot.context.processor.SofaPostProcessorShareFilter;
+import com.alipay.sofa.boot.context.processor.SofaPostProcessorShareManager;
 import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.boot.isle.deployment.DefaultModuleDeploymentValidator;
 import com.alipay.sofa.boot.isle.deployment.ModuleDeploymentValidator;
 import com.alipay.sofa.boot.isle.loader.DynamicSpringContextLoader;
-import com.alipay.sofa.boot.context.processor.SofaPostProcessorShareManager;
 import com.alipay.sofa.boot.isle.loader.SpringContextLoader;
 import com.alipay.sofa.boot.isle.profile.DefaultSofaModuleProfileChecker;
 import com.alipay.sofa.boot.isle.profile.SofaModuleProfileChecker;
@@ -97,8 +97,12 @@ public class SofaModuleAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public ModelCreatingStage modelCreatingStage(ApplicationRuntimeModel applicationRuntimeModel) {
+    public ModelCreatingStage modelCreatingStage(
+            SofaModuleProperties sofaModuleProperties,
+            ApplicationRuntimeModel applicationRuntimeModel) {
         ModelCreatingStage modelCreatingStage = new ModelCreatingStage();
+        sofaModuleProperties.getIgnoreModules().forEach(modelCreatingStage::addIgnoreModule);
+        sofaModuleProperties.getIgnoredCalculateRequireModules().forEach(modelCreatingStage::addIgnoredCalculateRequireModule);
         modelCreatingStage.setApplicationRuntimeModel(applicationRuntimeModel);
         return modelCreatingStage;
     }
@@ -135,9 +139,7 @@ public class SofaModuleAutoConfiguration {
                                                               ObjectProvider<BeanStatCustomizer> beanStatCustomizers) {
         DynamicSpringContextLoader dynamicSpringContextLoader = new DynamicSpringContextLoader(
             applicationContext);
-        if (sofaModuleProperties.getActiveProfiles() != null) {
-            dynamicSpringContextLoader.setActiveProfiles(sofaModuleProperties.getActiveProfiles());
-        }
+        dynamicSpringContextLoader.setActiveProfiles(sofaModuleProperties.getActiveProfiles());
         dynamicSpringContextLoader.setAllowBeanOverriding(sofaModuleProperties
             .isAllowBeanDefinitionOverriding());
         dynamicSpringContextLoader.setPublishEventToParent(sofaModuleProperties
@@ -151,10 +153,10 @@ public class SofaModuleAutoConfiguration {
     }
 
     @Bean(SpringContextInstallStage.SOFA_MODULE_REFRESH_EXECUTOR_BEAN_NAME)
-    @ConditionalOnMissingBean
+    @ConditionalOnMissingBean(name = SpringContextInstallStage.SOFA_MODULE_REFRESH_EXECUTOR_BEAN_NAME)
     @ConditionalOnProperty(value = "sofa.boot.isle.moduleStartUpParallel", havingValue = "true", matchIfMissing = true)
     public Supplier<ThreadPoolExecutor> sofaModuleRefreshExecutor(SofaModuleProperties sofaModuleProperties) {
-        int coreSize = (int) (Runtime.getRuntime().availableProcessors() * sofaModuleProperties.getParallelRefreshCoreCountFactor());
+        int coreSize = (int) (Runtime.getRuntime().availableProcessors() * sofaModuleProperties.getParallelRefreshPoolSizeFactor());
         long taskTimeout = sofaModuleProperties.getParallelRefreshTimeout();
         long checkPeriod = sofaModuleProperties.getParallelRefreshCheckPeriod();
 

@@ -26,29 +26,31 @@ import com.alipay.sofa.rpc.client.aft.FaultToleranceConfigManager;
  * @author <a href="mailto:lw111072@antfin.com">LiWei</a>
  */
 public class FaultToleranceConfigurator {
-    private SofaBootRpcProperties sofaBootRpcProperties;
-    private String                appName;
 
-    public FaultToleranceConfigurator(SofaBootRpcProperties sofaBootRpcProperties, String appName) {
-        this.sofaBootRpcProperties = sofaBootRpcProperties;
-        this.appName = appName;
-    }
+    private String appName;
+
+    private String regulationEffectiveStr;
+
+    private String degradeEffectiveStr;
+
+    private String timeWindowStr;
+
+    private String leastWindowCountStr;
+
+    private String leastWindowExceptionRateMultipleStr;
+
+    private String weightDegradeRateStr;
+
+    private String weightRecoverRateStr;
+
+    private String degradeLeastWeightStr;
+
+    private String degradeMaxIpCountStr;
 
     /**
      * 解析并生效自动故障剔除配置参数
      */
     public void startFaultTolerance() {
-        String regulationEffectiveStr = sofaBootRpcProperties.getAftRegulationEffective();
-        String degradeEffectiveStr = sofaBootRpcProperties.getAftDegradeEffective();
-        String timeWindowStr = sofaBootRpcProperties.getAftTimeWindow();
-        String leastWindowCountStr = sofaBootRpcProperties.getAftLeastWindowCount();
-        String leastWindowExceptionRateMultipleStr = sofaBootRpcProperties
-            .getAftLeastWindowExceptionRateMultiple();
-        String weightDegradeRateStr = sofaBootRpcProperties.getAftWeightDegradeRate();
-        String weightRecoverRateStr = sofaBootRpcProperties.getAftWeightRecoverRate();
-        String degradeLeastWeightStr = sofaBootRpcProperties.getAftDegradeLeastWeight();
-        String degradeMaxIpCountStr = sofaBootRpcProperties.getAftDegradeMaxIpCount();
-
         Boolean regulationEffective = SofaBootRpcParserUtil.parseBoolean(regulationEffectiveStr);
         Boolean degradeEffective = SofaBootRpcParserUtil.parseBoolean(degradeEffectiveStr);
         Long timeWindow = SofaBootRpcParserUtil.parseLong(timeWindowStr);
@@ -91,6 +93,46 @@ public class FaultToleranceConfigurator {
         }
 
         FaultToleranceConfigManager.putAppConfig(appName, faultToleranceConfig);
+    }
+
+    public void setAppName(String appName) {
+        this.appName = appName;
+    }
+
+    public void setRegulationEffectiveStr(String regulationEffectiveStr) {
+        this.regulationEffectiveStr = regulationEffectiveStr;
+    }
+
+    public void setDegradeEffectiveStr(String degradeEffectiveStr) {
+        this.degradeEffectiveStr = degradeEffectiveStr;
+    }
+
+    public void setTimeWindowStr(String timeWindowStr) {
+        this.timeWindowStr = timeWindowStr;
+    }
+
+    public void setLeastWindowCountStr(String leastWindowCountStr) {
+        this.leastWindowCountStr = leastWindowCountStr;
+    }
+
+    public void setLeastWindowExceptionRateMultipleStr(String leastWindowExceptionRateMultipleStr) {
+        this.leastWindowExceptionRateMultipleStr = leastWindowExceptionRateMultipleStr;
+    }
+
+    public void setWeightDegradeRateStr(String weightDegradeRateStr) {
+        this.weightDegradeRateStr = weightDegradeRateStr;
+    }
+
+    public void setWeightRecoverRateStr(String weightRecoverRateStr) {
+        this.weightRecoverRateStr = weightRecoverRateStr;
+    }
+
+    public void setDegradeLeastWeightStr(String degradeLeastWeightStr) {
+        this.degradeLeastWeightStr = degradeLeastWeightStr;
+    }
+
+    public void setDegradeMaxIpCountStr(String degradeMaxIpCountStr) {
+        this.degradeMaxIpCountStr = degradeMaxIpCountStr;
     }
 
 }

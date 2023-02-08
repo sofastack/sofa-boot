@@ -46,10 +46,14 @@ import java.util.Properties;
  */
 public class ModelCreatingStage extends AbstractPipelineStage {
 
-    private static final Logger LOGGER                    = SofaBootLoggerFactory
-                                                              .getLogger(ModelCreatingStage.class);
+    private static final Logger  LOGGER                         = SofaBootLoggerFactory
+                                                                    .getLogger(ModelCreatingStage.class);
 
-    public static final String  MODEL_CREATING_STAGE_NAME = "ModelCreatingStage";
+    public static final String   MODEL_CREATING_STAGE_NAME      = "ModelCreatingStage";
+
+    protected final List<String> ignoreModules                  = new ArrayList<>();
+
+    protected final List<String> ignoredCalculateRequireModules = new ArrayList<>();
 
     @Override
     protected void doProcess() throws Exception {
@@ -58,41 +62,55 @@ public class ModelCreatingStage extends AbstractPipelineStage {
     }
 
     protected void getAllDeployments() throws IOException, DeploymentException {
-        List<URL> urls = getUrls();
+        String modulePropertyFileName = DeploymentDescriptorConfiguration.SOFA_MODULE_FILE;
+        DeploymentDescriptorConfiguration deploymentDescriptorConfiguration = new DeploymentDescriptorConfiguration(
+            Collections.singletonList(DeploymentDescriptorConfiguration.MODULE_NAME),
+            Collections.singletonList(DeploymentDescriptorConfiguration.REQUIRE_MODULE));
 
-        List<DeploymentDescriptor> deploymentDescriptors = new ArrayList<>();
-        for (URL url : urls) {
-            deploymentDescriptors.add(getDeploymentDescriptor(url));
-        }
+        List<DeploymentDescriptor> deploymentDescriptors = getDeploymentDescriptors(
+            modulePropertyFileName, deploymentDescriptorConfiguration);
 
         addDeploymentDescriptors(deploymentDescriptors);
     }
 
-    protected List<URL> getUrls() throws IOException {
-        Enumeration<URL> enumeration = appClassLoader
-            .getResources(DeploymentDescriptorConfiguration.SOFA_MODULE_FILE);
-        if (enumeration != null) {
-            return Collections.list(enumeration);
-        } else {
-            return Collections.emptyList();
+    protected List<DeploymentDescriptor> getDeploymentDescriptors(String modulePropertyFileName,
+                                                                  DeploymentDescriptorConfiguration deploymentDescriptorConfiguration)
+                                                                                                                                      throws IOException {
+        List<DeploymentDescriptor> deploymentDescriptors = new ArrayList<>();
+
+        Enumeration<URL> urls = appClassLoader.getResources(modulePropertyFileName);
+        if (urls == null || !urls.hasMoreElements()) {
+            return deploymentDescriptors;
         }
+
+        while (urls.hasMoreElements()) {
+            URL url = urls.nextElement();
+            UrlResource urlResource = new UrlResource(url);
+            Properties props = new Properties();
+            props.load(urlResource.getInputStream());
+            DeploymentDescriptor deploymentDescriptor = createDeploymentDescriptor(url, props,
+                deploymentDescriptorConfiguration, appClassLoader, modulePropertyFileName);
+            if (ignoredCalculateRequireModules.contains(deploymentDescriptor.getModuleName())) {
+                deploymentDescriptor.setIgnoreRequireModule(true);
+            }
+            deploymentDescriptors.add(deploymentDescriptor);
+        }
+        return deploymentDescriptors;
     }
 
-    protected DeploymentDescriptor getDeploymentDescriptor(URL url) throws IOException {
-        UrlResource urlResource = new UrlResource(url);
-        Properties props = new Properties();
-        props.load(urlResource.getInputStream());
-        DeploymentDescriptorConfiguration deploymentDescriptorConfiguration = new DeploymentDescriptorConfiguration(
-            Collections.singletonList(DeploymentDescriptorConfiguration.MODULE_NAME),
-            Collections.singletonList(DeploymentDescriptorConfiguration.REQUIRE_MODULE));
-        return DeploymentBuilder.build(url, props, deploymentDescriptorConfiguration,
-            appClassLoader);
+    protected DeploymentDescriptor createDeploymentDescriptor(URL url,
+                                                              Properties props,
+                                                              DeploymentDescriptorConfiguration deploymentDescriptorConfiguration,
+                                                              ClassLoader classLoader,
+                                                              String modulePropertyName) {
+        return DeploymentBuilder.build(url, props, deploymentDescriptorConfiguration, classLoader,
+            modulePropertyName);
     }
 
     protected void addDeploymentDescriptors(List<DeploymentDescriptor> deploymentDescriptors)
                                                                                              throws DeploymentException {
         for (DeploymentDescriptor dd : deploymentDescriptors) {
-            if (application.isModuleDeployment(dd)) {
+            if (application.isModuleDeployment(dd) && !ignoreModules.contains(dd.getModuleName())) {
                 if (application.acceptModule(dd)) {
                     validateDuplicateModule(application.addDeployment(dd), dd);
                 } else {
@@ -104,7 +122,7 @@ public class ModelCreatingStage extends AbstractPipelineStage {
 
     protected void validateDuplicateModule(DeploymentDescriptor exist, DeploymentDescriptor dd)
                                                                                                throws DeploymentException {
-        if (exist != null) {
+        if (exist != null && dd.isSpringPowered() && exist.isSpringPowered()) {
             throw new DeploymentException(ErrorCode.convert("01-11006", dd.getModuleName(),
                 exist.getName(), dd.getName()));
         }
@@ -174,6 +192,14 @@ public class ModelCreatingStage extends AbstractPipelineStage {
             String symbol = i == size - 1 ? "  └─ " : "  ├─ ";
             sb.append(symbol).append(deploys.get(i).getName()).append("\n");
         }
+    }
+
+    public void addIgnoreModule(String moduleName) {
+        this.ignoreModules.add(moduleName);
+    }
+
+    public void addIgnoredCalculateRequireModule(String moduleName) {
+        this.ignoredCalculateRequireModules.add(moduleName);
     }
 
     @Override

@@ -41,7 +41,7 @@ import com.alipay.sofa.rpc.boot.config.SofaBootRpcConfigConstants;
 import com.alipay.sofa.rpc.core.exception.SofaRouteException;
 
 @SpringBootApplication
-@SpringBootTest(properties = { "com.alipay.sofa.rpc.registry.address=zookeeper://localhost:2181" }, classes = ReadinessTest.class)
+@SpringBootTest(properties = { "sofa.boot.rpc.registry.address=zookeeper://localhost:2181" }, classes = ReadinessTest.class)
 @ImportResource("/spring/readiness.xml")
 @Import({ ReadinessTest.Config.class, SofaRpcAutoConfiguration.class })
 public class ReadinessTest extends ActivelyDestroyTest {

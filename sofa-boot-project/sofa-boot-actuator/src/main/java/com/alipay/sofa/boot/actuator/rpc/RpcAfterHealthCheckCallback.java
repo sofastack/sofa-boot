@@ -14,40 +14,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.rpc.boot.health;
+package com.alipay.sofa.boot.actuator.rpc;
 
 import com.alipay.sofa.boot.actuator.health.ReadinessCheckCallback;
-import com.alipay.sofa.rpc.boot.context.event.SofaBootRpcStartAfterEvent;
-import com.alipay.sofa.rpc.boot.context.event.SofaBootRpcStartEvent;
+import com.alipay.sofa.rpc.boot.context.RpcStartApplicationListener;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.Status;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.PriorityOrdered;
 
 /**
- * SOFABoot RPC 健康检查回调.会启动服务器并发布服务
+ * SOFABoot RPC 健康检查回调.会启动服务器并发布服务.
  *
  * @author <a href="mailto:lw111072@antfin.com">LiWei</a>
  */
 public class RpcAfterHealthCheckCallback implements ReadinessCheckCallback, PriorityOrdered {
 
-    /**
-     * 健康检查
-     *
-     * @param applicationContext Spring 上下文
-     * @return 健康检查结果
-     */
+    private final RpcStartApplicationListener rpcStartApplicationListener;
+
+    public RpcAfterHealthCheckCallback(RpcStartApplicationListener rpcStartApplicationListener) {
+        this.rpcStartApplicationListener = rpcStartApplicationListener;
+    }
+
     @Override
     public Health onHealthy(ApplicationContext applicationContext) {
         Health.Builder builder = new Health.Builder();
 
-        //rpc 开始启动事件监听器
-        applicationContext.publishEvent(new SofaBootRpcStartEvent(applicationContext));
+        rpcStartApplicationListener.publishRpcStartEvent();
 
-        //rpc 启动完毕事件监听器
-        applicationContext.publishEvent(new SofaBootRpcStartAfterEvent(applicationContext));
-
-        return builder.status(Status.UP).build();
+        if (rpcStartApplicationListener.isSuccess()) {
+            return builder.status(Status.UP).build();
+        } else {
+            return builder.status(Status.DOWN).withDetail("Reason", "Rpc service start fail")
+                .build();
+        }
     }
 
     @Override

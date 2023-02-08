@@ -34,11 +34,14 @@ import java.util.Properties;
  */
 public class FileDeploymentDescriptor extends AbstractDeploymentDescriptor {
 
+    private final String modulePropertyName;
+
     public FileDeploymentDescriptor(URL url,
                                     Properties props,
                                     DeploymentDescriptorConfiguration deploymentDescriptorConfiguration,
-                                    ClassLoader classLoader) {
+                                    ClassLoader classLoader, String modulePropertyName) {
         super(url, props, deploymentDescriptorConfiguration, classLoader);
+        this.modulePropertyName = modulePropertyName;
     }
 
     @Override
@@ -48,13 +51,10 @@ public class FileDeploymentDescriptor extends AbstractDeploymentDescriptor {
         try {
             // When path contains special characters (e.g., white space, Chinese), URL converts them to UTF8 code point.
             // In order to process correctly, create File from URI
-            URI springXmlUri = new URI(
-                "file://"
-                        + url.getFile().substring(
-                            0,
-                            url.getFile().length()
-                                    - DeploymentDescriptorConfiguration.SOFA_MODULE_FILE.length())
-                        + DeploymentDescriptorConfiguration.SPRING_CONTEXT_PATH);
+            URI springXmlUri = new URI("file://"
+                                       + url.getFile().substring(0,
+                                           url.getFile().length() - modulePropertyName.length())
+                                       + DeploymentDescriptorConfiguration.SPRING_CONTEXT_PATH);
             File springXml = new File(springXmlUri);
             List<File> springFiles = new ArrayList<>();
             if (springXml.exists()) {

@@ -16,14 +16,19 @@
  */
 package com.alipay.sofa.smoke.tests.isle.model;
 
+import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptor;
 import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptorConfiguration;
 import com.alipay.sofa.boot.isle.stage.ModelCreatingStage;
+import org.springframework.core.io.UrlResource;
 import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * @author huzijie
@@ -43,9 +48,27 @@ public class CustomModelCreatingStage extends ModelCreatingStage {
     }
 
     @Override
-    public List<URL> getUrls() throws IOException {
-        List<URL> urls = super.getUrls();
-        urls.addAll(additionUrls);
-        return urls;
+    protected List<DeploymentDescriptor> getDeploymentDescriptors(String modulePropertyFileName,
+                                                                  DeploymentDescriptorConfiguration deploymentDescriptorConfiguration)
+                                                                                                                                      throws IOException {
+        List<DeploymentDescriptor> deploymentDescriptors = new ArrayList<>();
+
+        Enumeration<URL> urls = appClassLoader.getResources(modulePropertyFileName);
+        if (urls != null) {
+            additionUrls.addAll(Collections.list(urls));
+        }
+
+        for (URL url : additionUrls) {
+            UrlResource urlResource = new UrlResource(url);
+            Properties props = new Properties();
+            props.load(urlResource.getInputStream());
+            DeploymentDescriptor deploymentDescriptor = createDeploymentDescriptor(url, props,
+                deploymentDescriptorConfiguration, appClassLoader, modulePropertyFileName);
+            if (ignoredCalculateRequireModules.contains(deploymentDescriptor.getModuleName())) {
+                deploymentDescriptor.setIgnoreRequireModule(true);
+            }
+            deploymentDescriptors.add(deploymentDescriptor);
+        }
+        return deploymentDescriptors;
     }
 }

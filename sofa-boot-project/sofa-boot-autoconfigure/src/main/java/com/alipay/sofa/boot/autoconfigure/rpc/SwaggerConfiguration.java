@@ -39,14 +39,14 @@ import org.springframework.context.annotation.Configuration;
 public class SwaggerConfiguration {
 
     @Bean
-    @ConditionalOnProperty(name = "com.alipay.sofa.rpc.rest-swagger", havingValue = "true")
+    @ConditionalOnProperty(name = "sofa.boot.rpc.rest-swagger", havingValue = "true")
     @ConditionalOnBean(SofaRuntimeManager.class)
     public ApplicationListener<ApplicationStartedEvent> swaggerServiceApplicationListener(SofaRuntimeManager sofaRuntimeManager) {
         return new SwaggerServiceApplicationListener(sofaRuntimeManager);
     }
 
     @Bean
-    @ConditionalOnProperty(name = "com.alipay.sofa.rpc.enable-swagger", havingValue = "true")
+    @ConditionalOnProperty(name = "sofa.boot.rpc.enable-swagger", havingValue = "true")
     @ConditionalOnBean(SofaRuntimeManager.class)
     public ApplicationListener<ApplicationStartedEvent> boltSwaggerServiceApplicationListener(SofaRuntimeManager sofaRuntimeManager) {
         return new BoltSwaggerServiceApplicationListener(sofaRuntimeManager);

@@ -137,7 +137,7 @@ public class SofaModuleAutoConfigurationTests {
     @Test
     void customSofaModuleRefreshExecutor() {
         this.contextRunner
-                .withPropertyValues("sofa.boot.isle.parallelRefreshCoreCountFactor=2")
+                .withPropertyValues("sofa.boot.isle.parallelRefreshPoolSizeFactor=2")
                 .withPropertyValues("sofa.boot.isle.parallelRefreshTimeout=10")
                 .withPropertyValues("sofa.boot.isle.parallelRefreshCheckPeriod=20")
                 .run((context) -> {

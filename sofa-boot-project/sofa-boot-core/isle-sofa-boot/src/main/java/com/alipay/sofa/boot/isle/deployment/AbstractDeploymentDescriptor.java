@@ -47,6 +47,7 @@ public abstract class AbstractDeploymentDescriptor implements DeploymentDescript
     private long                                      startTime;
     private long                                      elapsedTime;
     protected Map<String, Resource>                   springResources;
+    protected boolean                                 ignoreRequireModule;
 
     public AbstractDeploymentDescriptor(URL url,
                                         Properties properties,
@@ -90,6 +91,10 @@ public abstract class AbstractDeploymentDescriptor implements DeploymentDescript
     @Override
     public List<String> getRequiredModules() {
         List<String> requires = new ArrayList<>();
+        if (ignoreRequireModule || !isSpringPowered()) {
+            return requires;
+        }
+
         List<String> requireModuleIdentities = deploymentDescriptorConfiguration
             .getRequireModuleIdentities();
 
@@ -112,6 +117,11 @@ public abstract class AbstractDeploymentDescriptor implements DeploymentDescript
             requires.add(springParent);
         }
         return requires;
+    }
+
+    @Override
+    public void setIgnoreRequireModule(boolean ignoreRequireModule) {
+        this.ignoreRequireModule = ignoreRequireModule;
     }
 
     @Override
@@ -192,6 +202,7 @@ public abstract class AbstractDeploymentDescriptor implements DeploymentDescript
         if (ret == null || ret.length() == 0) {
             return null;
         }
+
         String[] array = StringUtils.commaDelimitedListToStringArray(ret);
         List<String> list = new ArrayList<>(array.length);
         for (String item : array) {
