@@ -20,6 +20,7 @@
             <groupId>com.alipay.sofa</groupId>
             <artifactId>sofa-boot</artifactId>
         </dependency>
+
         <dependency>
             <groupId>com.alipay.sofa</groupId>
             <artifactId>sofa-boot-autoconfigure</artifactId>

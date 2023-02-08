@@ -17,21 +17,17 @@
 package com.alipay.sofa.rpc.boot.test.container;
 
 import com.alipay.sofa.rpc.boot.common.RpcThreadPoolMonitor;
+import com.alipay.sofa.rpc.boot.common.SofaBootRpcRuntimeException;
+import com.alipay.sofa.rpc.boot.config.SofaBootRpcConfigConstants;
+import com.alipay.sofa.rpc.boot.container.ServerConfigContainer;
+import com.alipay.sofa.rpc.boot.test.ActivelyDestroyTest;
+import com.alipay.sofa.rpc.common.RpcConstants;
+import com.alipay.sofa.rpc.config.ServerConfig;
 import com.alipay.sofa.rpc.config.UserThreadPoolManager;
 import com.alipay.sofa.rpc.server.UserThreadPool;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.springframework.core.env.Environment;
-import org.springframework.mock.env.MockEnvironment;
-
-import com.alipay.sofa.rpc.boot.common.SofaBootRpcRuntimeException;
-import com.alipay.sofa.rpc.boot.config.SofaBootRpcConfigConstants;
-import com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties;
-import com.alipay.sofa.rpc.boot.container.ServerConfigContainer;
-import com.alipay.sofa.rpc.boot.test.ActivelyDestroyTest;
-import com.alipay.sofa.rpc.common.RpcConstants;
-import com.alipay.sofa.rpc.config.ServerConfig;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -42,25 +38,21 @@ import java.util.List;
  * @author <a href="mailto:lw111072@antfin.com">LiWei</a>
  */
 public class ServerConfigContainerTest extends ActivelyDestroyTest {
-    private SofaBootRpcProperties sofaBootRpcProperties;
     private ServerConfigContainer serverConfigContainer;
 
     public ServerConfigContainerTest() {
-        Environment environment = new MockEnvironment();
-        sofaBootRpcProperties = new SofaBootRpcProperties();
-        sofaBootRpcProperties.setEnvironment(environment);
-        serverConfigContainer = new ServerConfigContainer(sofaBootRpcProperties);
+        serverConfigContainer = new ServerConfigContainer();
     }
 
     @Test
     public void testBoltConfiguration() {
-        sofaBootRpcProperties.setBoltPort("9090");
-        sofaBootRpcProperties.setBoltThreadPoolCoreSize("8080");
-        sofaBootRpcProperties.setBoltThreadPoolMaxSize("7070");
-        sofaBootRpcProperties.setBoltAcceptsSize(("6060"));
-        sofaBootRpcProperties.setVirtualHost("127.0.0.2");
-        sofaBootRpcProperties.setBoundHost("127.0.0.3");
-        sofaBootRpcProperties.setVirtualPort("8888");
+        serverConfigContainer.setBoltPortStr("9090");
+        serverConfigContainer.setBoltThreadPoolCoreSizeStr("8080");
+        serverConfigContainer.setBoltThreadPoolMaxSizeStr("7070");
+        serverConfigContainer.setBoltAcceptsSizeStr(("6060"));
+        serverConfigContainer.setVirtualHostStr("127.0.0.2");
+        serverConfigContainer.setBoundHostStr("127.0.0.3");
+        serverConfigContainer.setVirtualPortStr("8888");
         ServerConfig serverConfig = serverConfigContainer.createBoltServerConfig();
         Assert.assertEquals(9090, serverConfig.getPort());
         Assert.assertEquals(8080, serverConfig.getCoreThreads());
@@ -74,25 +66,24 @@ public class ServerConfigContainerTest extends ActivelyDestroyTest {
     @Test
     @Ignore("only can run in multi ip env")
     public void testBoltIpCustomConfiguration() {
-        sofaBootRpcProperties.setEnabledIpRange("192.168");
-        serverConfigContainer = new ServerConfigContainer(sofaBootRpcProperties);
+        serverConfigContainer.setEnabledIpRange("192.168");
         ServerConfig serverConfig = serverConfigContainer.createBoltServerConfig();
         Assert.assertEquals("192.168", serverConfig.getVirtualHost());
     }
 
     @Test
     public void testBoltServerDefaultPort() {
-        sofaBootRpcProperties.setBoltPort("");
+        serverConfigContainer.setBoltPortStr("");
         ServerConfig serverConfig = serverConfigContainer.createBoltServerConfig();
         Assert.assertEquals(SofaBootRpcConfigConstants.BOLT_PORT_DEFAULT, serverConfig.getPort());
     }
 
     @Test
     public void testDubboServerConfiguration() {
-        sofaBootRpcProperties.setDubboPort("9696");
-        sofaBootRpcProperties.setDubboIoThreadSize("8686");
-        sofaBootRpcProperties.setDubboThreadPoolMaxSize("7676");
-        sofaBootRpcProperties.setDubboAcceptsSize("6666");
+        serverConfigContainer.setDubboPortStr("9696");
+        serverConfigContainer.setDubboIoThreadSizeStr("8686");
+        serverConfigContainer.setDubboThreadPoolMaxSizeStr("7676");
+        serverConfigContainer.setDubboAcceptsSizeStr("6666");
 
         ServerConfig serverConfig = serverConfigContainer.createDubboServerConfig();
 
@@ -104,15 +95,15 @@ public class ServerConfigContainerTest extends ActivelyDestroyTest {
 
     @Test
     public void testRestServerConfiguration() {
-        sofaBootRpcProperties.setRestHostname("host_name");
-        sofaBootRpcProperties.setRestPort("123");
-        sofaBootRpcProperties.setRestIoThreadSize("456");
-        sofaBootRpcProperties.setRestContextPath("/api");
-        sofaBootRpcProperties.setRestThreadPoolMaxSize("789");
-        sofaBootRpcProperties.setRestMaxRequestSize("1000");
-        sofaBootRpcProperties.setRestTelnet("true");
-        sofaBootRpcProperties.setRestDaemon("true");
-        sofaBootRpcProperties.setRestAllowedOrigins("a.com");
+        serverConfigContainer.setRestHostName("host_name");
+        serverConfigContainer.setRestPortStr("123");
+        serverConfigContainer.setRestIoThreadSizeStr("456");
+        serverConfigContainer.setRestContextPath("/api");
+        serverConfigContainer.setRestThreadPoolMaxSizeStr("789");
+        serverConfigContainer.setRestMaxRequestSizeStr("1000");
+        serverConfigContainer.setRestTelnetStr("true");
+        serverConfigContainer.setRestDaemonStr("true");
+        serverConfigContainer.setRestAllowedOrigins("a.com");
         ServerConfig serverConfig = serverConfigContainer.createRestServerConfig();
 
         Assert.assertEquals("host_name", serverConfig.getBoundHost());
@@ -177,11 +168,11 @@ public class ServerConfigContainerTest extends ActivelyDestroyTest {
 
     @Test
     public void testCreateHttpServerConfig() {
-        sofaBootRpcProperties.setHttpPort("8080");
-        sofaBootRpcProperties.setHttpThreadPoolCoreSize("5");
-        sofaBootRpcProperties.setHttpThreadPoolMaxSize("10");
-        sofaBootRpcProperties.setHttpAcceptsSize("1");
-        sofaBootRpcProperties.setHttpThreadPoolQueueSize("8");
+        serverConfigContainer.setHttpPortStr("8080");
+        serverConfigContainer.setHttpThreadPoolCoreSizeStr("5");
+        serverConfigContainer.setHttpThreadPoolMaxSizeStr("10");
+        serverConfigContainer.setHttpAcceptsSizeStr("1");
+        serverConfigContainer.setHttpThreadPoolQueueSizeStr("8");
 
         ServerConfig serverConfig = serverConfigContainer
             .getServerConfig(SofaBootRpcConfigConstants.RPC_PROTOCOL_HTTP);

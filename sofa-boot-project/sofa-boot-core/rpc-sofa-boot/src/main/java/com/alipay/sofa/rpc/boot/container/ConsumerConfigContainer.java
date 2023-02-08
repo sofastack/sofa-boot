@@ -32,7 +32,7 @@ public class ConsumerConfigContainer {
     /**
      * ConsumerConfig 缓存
      */
-    private final ConcurrentMap<Binding, ConsumerConfig> consumerConfigMap = new ConcurrentHashMap<Binding, ConsumerConfig>();
+    private final ConcurrentMap<Binding, ConsumerConfig> consumerConfigMap = new ConcurrentHashMap<>();
 
     /**
      * 增加 ConsumerConfig

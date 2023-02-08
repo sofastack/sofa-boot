@@ -38,8 +38,8 @@ import static org.assertj.core.api.Assertions.assertThat;
  * you should change mesh address to test
  */
 @SpringBootApplication
-@SpringBootTest(properties = { "com.alipay.sofa.rpc.registries.mesh=mesh://127.0.0.1:13330",
-                              "com.alipay.sofa.rpc.enable.mesh=bolt" }, classes = MeshTest.class)
+@SpringBootTest(properties = { "sofa.boot.rpc.registries.mesh=mesh://127.0.0.1:13330",
+                              "sofa.boot.rpc.enable.mesh=bolt" }, classes = MeshTest.class)
 @RunWith(SpringRunner.class)
 @ImportResource("/spring/test_only_mesh.xml")
 @Ignore

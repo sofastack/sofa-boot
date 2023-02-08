@@ -20,7 +20,6 @@ import com.alipay.sofa.rpc.boot.common.NetworkAddressUtil;
 import com.alipay.sofa.rpc.boot.common.RpcThreadPoolMonitor;
 import com.alipay.sofa.rpc.boot.common.SofaBootRpcRuntimeException;
 import com.alipay.sofa.rpc.boot.config.SofaBootRpcConfigConstants;
-import com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties;
 import com.alipay.sofa.rpc.boot.log.LoggerConstant;
 import com.alipay.sofa.rpc.boot.log.SofaBootRpcLoggerFactory;
 import com.alipay.sofa.rpc.common.RpcConstants;
@@ -50,68 +49,162 @@ import java.util.concurrent.ThreadPoolExecutor;
  */
 public class ServerConfigContainer {
 
-    private static final Logger        LOGGER                      = SofaBootRpcLoggerFactory
-                                                                       .getLogger(ServerConfigContainer.class);
-
-    private SofaBootRpcProperties      sofaBootRpcProperties;
+    private static final Logger              LOGGER                      = SofaBootRpcLoggerFactory
+                                                                             .getLogger(ServerConfigContainer.class);
     /**
      * bolt ServerConfig
      */
-    private volatile ServerConfig      boltServerConfig;
-    private final Object               BOLT_LOCK                   = new Object();
+    private volatile ServerConfig            boltServerConfig;
+
+    private final Object                     BOLT_LOCK                   = new Object();
 
     /**
      * rest ServerConfig
      */
-    private volatile ServerConfig      restServerConfig;
-    private final Object               REST_LOCK                   = new Object();
+    private volatile ServerConfig            restServerConfig;
+
+    private final Object                     REST_LOCK                   = new Object();
 
     /**
      * dubbo ServerConfig
      */
-    private volatile ServerConfig      dubboServerConfig;
-    private final Object               DUBBO_LOCK                  = new Object();
+    private volatile ServerConfig            dubboServerConfig;
+
+    private final Object                     DUBBO_LOCK                  = new Object();
 
     /**
      * h2c ServerConfig
      */
-    private volatile ServerConfig      h2cServerConfig;
-    private final Object               H2C_LOCK                    = new Object();
+    private volatile ServerConfig            h2cServerConfig;
+
+    private final Object                     H2C_LOCK                    = new Object();
 
     /**
      * http ServerConfig
      */
-    private volatile ServerConfig      httpServerConfig;
-    private final Object               HTTP_LOCK                   = new Object();
+    private volatile ServerConfig            httpServerConfig;
+
+    private final Object                     HTTP_LOCK                   = new Object();
 
     /**
      * http ServerConfig
      */
-    private volatile ServerConfig      tripleServerConfig;
-    private final Object               TRIPLE_LOCK                 = new Object();
+    private volatile ServerConfig            tripleServerConfig;
+
+    private final Object                     TRIPLE_LOCK                 = new Object();
 
     //custom server configs
-    private Map<String, ServerConfig>  customServerConfigs         = new ConcurrentHashMap<String, ServerConfig>();
+    private final Map<String, ServerConfig>  customServerConfigs         = new ConcurrentHashMap<String, ServerConfig>();
 
-    private RpcThreadPoolMonitor       boltThreadPoolMonitor       = new RpcThreadPoolMonitor(
-                                                                       LoggerConstant.BOLT_THREAD_LOGGER_NAME);
+    private final RpcThreadPoolMonitor       boltThreadPoolMonitor       = new RpcThreadPoolMonitor(
+                                                                             LoggerConstant.BOLT_THREAD_LOGGER_NAME);
 
-    private RpcThreadPoolMonitor       tripleThreadPoolMonitor     = new RpcThreadPoolMonitor(
-                                                                       LoggerConstant.TRIPLE_THREAD_LOGGER_NAME);
+    private final RpcThreadPoolMonitor       tripleThreadPoolMonitor     = new RpcThreadPoolMonitor(
+                                                                             LoggerConstant.TRIPLE_THREAD_LOGGER_NAME);
 
-    private List<RpcThreadPoolMonitor> customThreadPoolMonitorList = new ArrayList<>();
+    private final List<RpcThreadPoolMonitor> customThreadPoolMonitorList = new ArrayList<>();
 
-    public ServerConfigContainer(SofaBootRpcProperties sofaBootRpcProperties) {
-        this.sofaBootRpcProperties = sofaBootRpcProperties;
+    private String                           enabledIpRange;
 
-        NetworkAddressUtil.caculate(sofaBootRpcProperties.getEnabledIpRange(),
-            sofaBootRpcProperties.getBindNetworkInterface());
-    }
+    private String                           bindNetworkInterface;
+
+    private String                           boundHostStr;
+
+    private String                           virtualHostStr;
+
+    private String                           virtualPortStr;
+
+    /**
+     * h2c configs
+     */
+    private String                           h2cPortStr;
+
+    private String                           h2cThreadPoolCoreSizeStr;
+
+    private String                           h2cThreadPoolMaxSizeStr;
+
+    private String                           h2cAcceptsSizeStr;
+
+    private String                           h2cThreadPoolQueueSizeStr;
+
+    /**
+     * bolt configs
+     */
+    private String                           boltPortStr;
+
+    private String                           boltThreadPoolCoreSizeStr;
+
+    private String                           boltThreadPoolMaxSizeStr;
+
+    private String                           boltAcceptsSizeStr;
+
+    private String                           boltThreadPoolQueueSizeStr;
+
+    private Boolean                          boltProcessInIoThread;
+
+    /**
+     * rest configs
+     */
+    private String                           restHostName;
+
+    private String                           restPortStr;
+
+    private String                           restIoThreadSizeStr;
+
+    private String                           restContextPath;
+
+    private String                           restThreadPoolMaxSizeStr;
+
+    private String                           restMaxRequestSizeStr;
+
+    private String                           restTelnetStr;
+
+    private String                           restDaemonStr;
+
+    private String                           restAllowedOrigins;
+
+    /**
+     * dubbo configs
+     */
+    private String                           dubboPortStr;
+
+    private String                           dubboIoThreadSizeStr;
+
+    private String                           dubboThreadPoolMaxSizeStr;
+
+    private String                           dubboAcceptsSizeStr;
+
+    /**
+     * http configs
+     */
+    private String                           httpPortStr;
+
+    private String                           httpThreadPoolCoreSizeStr;
+
+    private String                           httpThreadPoolMaxSizeStr;
+
+    private String                           httpAcceptsSizeStr;
+
+    private String                           httpThreadPoolQueueSizeStr;
+
+    /**
+     * triple configs
+     */
+    private String                           triplePortStr;
+
+    private String                           tripleThreadPoolCoreSizeStr;
+
+    private String                           tripleThreadPoolMaxSizeStr;
+
+    private String                           tripleAcceptsSizeStr;
+
+    private String                           tripleThreadPoolQueueSizeStr;
 
     /**
      * 开启所有 ServerConfig 对应的 Server
      */
     public void startServers() {
+        NetworkAddressUtil.caculate(enabledIpRange, bindNetworkInterface);
         if (boltServerConfig != null) {
             boltServerConfig.buildIfAbsent().start();
 
@@ -274,11 +367,6 @@ public class ServerConfigContainer {
      * @param serverConfig
      */
     private void addCommonServerConfig(ServerConfig serverConfig) {
-
-        String boundHostStr = sofaBootRpcProperties.getBoundHost();
-        String virtualHostStr = sofaBootRpcProperties.getVirtualHost();
-        String virtualPortStr = sofaBootRpcProperties.getVirtualPort();
-
         //this will filter by networkface and iprange
         serverConfig.setVirtualHost(NetworkAddressUtil.getLocalIP());
         serverConfig.setBoundHost(NetworkAddressUtil.getLocalBindIP());
@@ -303,16 +391,10 @@ public class ServerConfigContainer {
      * @return H2c 的服务端配置信息
      */
     ServerConfig createH2cServerConfig() {
-        String portStr = sofaBootRpcProperties.getH2cPort();
-        String h2cThreadPoolCoreSizeStr = sofaBootRpcProperties.getH2cThreadPoolCoreSize();
-        String h2cThreadPoolMaxSizeStr = sofaBootRpcProperties.getH2cThreadPoolMaxSize();
-        String acceptsSizeStr = sofaBootRpcProperties.getH2cAcceptsSize();
-        String h2cThreadPoolQueueSizeStr = sofaBootRpcProperties.getH2cThreadPoolQueueSize();
-
         ServerConfig serverConfig = new ServerConfig();
 
-        if (StringUtils.hasText(portStr)) {
-            serverConfig.setPort(Integer.parseInt(portStr));
+        if (StringUtils.hasText(h2cPortStr)) {
+            serverConfig.setPort(Integer.parseInt(h2cPortStr));
         } else {
             serverConfig.setPort(SofaBootRpcConfigConstants.H2C_PORT_DEFAULT);
         }
@@ -325,8 +407,8 @@ public class ServerConfigContainer {
             serverConfig.setCoreThreads(Integer.parseInt(h2cThreadPoolCoreSizeStr));
         }
 
-        if (StringUtils.hasText(acceptsSizeStr)) {
-            serverConfig.setAccepts(Integer.parseInt(acceptsSizeStr));
+        if (StringUtils.hasText(h2cAcceptsSizeStr)) {
+            serverConfig.setAccepts(Integer.parseInt(h2cAcceptsSizeStr));
         }
 
         if (StringUtils.hasText(h2cThreadPoolQueueSizeStr)) {
@@ -346,16 +428,10 @@ public class ServerConfigContainer {
      * @return Bolt 的服务端配置信息
      */
     public ServerConfig createBoltServerConfig() {
-        String portStr = sofaBootRpcProperties.getBoltPort();
-        String boltThreadPoolCoreSizeStr = sofaBootRpcProperties.getBoltThreadPoolCoreSize();
-        String boltThreadPoolMaxSizeStr = sofaBootRpcProperties.getBoltThreadPoolMaxSize();
-        String acceptsSizeStr = sofaBootRpcProperties.getBoltAcceptsSize();
-        String boltThreadPoolQueueSizeStr = sofaBootRpcProperties.getBoltThreadPoolQueueSize();
-        Boolean boltProcessInIoThread = sofaBootRpcProperties.getBoltProcessInIoThread();
         ServerConfig serverConfig = new ServerConfig();
 
-        if (StringUtils.hasText(portStr)) {
-            serverConfig.setPort(Integer.parseInt(portStr));
+        if (StringUtils.hasText(boltPortStr)) {
+            serverConfig.setPort(Integer.parseInt(boltPortStr));
         } else {
             serverConfig.setPort(SofaBootRpcConfigConstants.BOLT_PORT_DEFAULT);
         }
@@ -368,8 +444,8 @@ public class ServerConfigContainer {
             serverConfig.setCoreThreads(Integer.parseInt(boltThreadPoolCoreSizeStr));
         }
 
-        if (StringUtils.hasText(acceptsSizeStr)) {
-            serverConfig.setAccepts(Integer.parseInt(acceptsSizeStr));
+        if (StringUtils.hasText(boltAcceptsSizeStr)) {
+            serverConfig.setAccepts(Integer.parseInt(boltAcceptsSizeStr));
         }
 
         if (StringUtils.hasText(boltThreadPoolQueueSizeStr)) {
@@ -395,16 +471,6 @@ public class ServerConfigContainer {
      * @return rest ServerConfig
      */
     public ServerConfig createRestServerConfig() {
-        String hostName = sofaBootRpcProperties.getRestHostname();
-        String portStr = sofaBootRpcProperties.getRestPort();
-        String ioThreadSizeStr = sofaBootRpcProperties.getRestIoThreadSize();
-        String contextPath = sofaBootRpcProperties.getRestContextPath();
-        String restThreadPoolMaxSizeStr = sofaBootRpcProperties.getRestThreadPoolMaxSize();
-        String maxRequestSizeStr = sofaBootRpcProperties.getRestMaxRequestSize();
-        String telnetStr = sofaBootRpcProperties.getRestTelnet();
-        String daemonStr = sofaBootRpcProperties.getRestDaemon();
-
-        String allowedOrigins = sofaBootRpcProperties.getRestAllowedOrigins();
         int port;
         int ioThreadCount;
         int restThreadPoolMaxSize;
@@ -412,20 +478,20 @@ public class ServerConfigContainer {
         boolean telnet;
         boolean daemon;
 
-        if (!StringUtils.hasText(hostName)) {
-            hostName = null;
+        if (!StringUtils.hasText(restHostName)) {
+            restHostName = null;
         }
 
-        if (!StringUtils.hasText(portStr)) {
+        if (!StringUtils.hasText(restPortStr)) {
             port = SofaBootRpcConfigConstants.REST_PORT_DEFAULT;
         } else {
-            port = Integer.parseInt(portStr);
+            port = Integer.parseInt(restPortStr);
         }
 
-        if (!StringUtils.hasText(ioThreadSizeStr)) {
+        if (!StringUtils.hasText(restIoThreadSizeStr)) {
             ioThreadCount = SofaBootRpcConfigConstants.REST_IO_THREAD_COUNT_DEFAULT;
         } else {
-            ioThreadCount = Integer.parseInt(ioThreadSizeStr);
+            ioThreadCount = Integer.parseInt(restIoThreadSizeStr);
         }
 
         if (!StringUtils.hasText(restThreadPoolMaxSizeStr)) {
@@ -434,43 +500,43 @@ public class ServerConfigContainer {
             restThreadPoolMaxSize = Integer.parseInt(restThreadPoolMaxSizeStr);
         }
 
-        if (!StringUtils.hasText(maxRequestSizeStr)) {
+        if (!StringUtils.hasText(restMaxRequestSizeStr)) {
             maxRequestSize = SofaBootRpcConfigConstants.REST_MAX_REQUEST_SIZE_DEFAULT;
         } else {
-            maxRequestSize = Integer.parseInt(maxRequestSizeStr);
+            maxRequestSize = Integer.parseInt(restMaxRequestSizeStr);
         }
 
-        if (!StringUtils.hasText(telnetStr)) {
+        if (!StringUtils.hasText(restTelnetStr)) {
             telnet = SofaBootRpcConfigConstants.REST_TELNET_DEFAULT;
         } else {
-            telnet = Boolean.parseBoolean(telnetStr);
+            telnet = Boolean.parseBoolean(restTelnetStr);
         }
 
-        if (!StringUtils.hasText(daemonStr)) {
+        if (!StringUtils.hasText(restDaemonStr)) {
             daemon = SofaBootRpcConfigConstants.REST_DAEMON_DEFAULT;
         } else {
-            daemon = Boolean.parseBoolean(daemonStr);
+            daemon = Boolean.parseBoolean(restDaemonStr);
         }
 
         Map<String, String> parameters = new HashMap<String, String>();
 
-        if (StringUtils.hasText(allowedOrigins)) {
-            parameters.put(RpcConstants.ALLOWED_ORIGINS, allowedOrigins);
+        if (StringUtils.hasText(restAllowedOrigins)) {
+            parameters.put(RpcConstants.ALLOWED_ORIGINS, restAllowedOrigins);
         }
 
         ServerConfig serverConfig = new ServerConfig().setPort(port).setIoThreads(ioThreadCount)
             .setMaxThreads(restThreadPoolMaxSize).setPayload(maxRequestSize).setTelnet(telnet)
             .setDaemon(daemon).setParameters(parameters);
 
-        if (!StringUtils.isEmpty(contextPath)) {
-            serverConfig.setContextPath(contextPath);
+        if (!StringUtils.isEmpty(restContextPath)) {
+            serverConfig.setContextPath(restContextPath);
         }
 
         serverConfig.setAutoStart(false);
         serverConfig.setProtocol(SofaBootRpcConfigConstants.RPC_PROTOCOL_REST);
         addCommonServerConfig(serverConfig);
 
-        serverConfig.setBoundHost(hostName);
+        serverConfig.setBoundHost(restHostName);
 
         return serverConfig;
     }
@@ -481,21 +547,16 @@ public class ServerConfigContainer {
      * @return dubbo ServerConfig
      */
     public ServerConfig createDubboServerConfig() {
-        String portStr = sofaBootRpcProperties.getDubboPort();
-        String ioThreadSizeStr = sofaBootRpcProperties.getDubboIoThreadSize();
-        String dubboThreadPoolMaxSizeStr = sofaBootRpcProperties.getDubboThreadPoolMaxSize();
-        String dubboAcceptsSizeStr = sofaBootRpcProperties.getDubboAcceptsSize();
-
         ServerConfig serverConfig = new ServerConfig();
 
-        if (StringUtils.hasText(portStr)) {
-            serverConfig.setPort(Integer.parseInt(portStr));
+        if (StringUtils.hasText(dubboPortStr)) {
+            serverConfig.setPort(Integer.parseInt(dubboPortStr));
         } else {
             serverConfig.setPort(SofaBootRpcConfigConstants.DUBBO_PORT_DEFAULT);
         }
 
-        if (StringUtils.hasText(ioThreadSizeStr)) {
-            serverConfig.setIoThreads(Integer.parseInt(ioThreadSizeStr));
+        if (StringUtils.hasText(dubboIoThreadSizeStr)) {
+            serverConfig.setIoThreads(Integer.parseInt(dubboIoThreadSizeStr));
         }
 
         if (StringUtils.hasText(dubboThreadPoolMaxSizeStr)) {
@@ -521,16 +582,10 @@ public class ServerConfigContainer {
      * @return H2c 的服务端配置信息
      */
     ServerConfig createHttpServerConfig() {
-        String portStr = sofaBootRpcProperties.getHttpPort();
-        String httpThreadPoolCoreSizeStr = sofaBootRpcProperties.getHttpThreadPoolCoreSize();
-        String httpThreadPoolMaxSizeStr = sofaBootRpcProperties.getHttpThreadPoolMaxSize();
-        String acceptsSizeStr = sofaBootRpcProperties.getHttpAcceptsSize();
-        String httpThreadPoolQueueSizeStr = sofaBootRpcProperties.getHttpThreadPoolQueueSize();
-
         ServerConfig serverConfig = new ServerConfig();
 
-        if (StringUtils.hasText(portStr)) {
-            serverConfig.setPort(Integer.parseInt(portStr));
+        if (StringUtils.hasText(httpPortStr)) {
+            serverConfig.setPort(Integer.parseInt(httpPortStr));
         } else {
             serverConfig.setPort(SofaBootRpcConfigConstants.HTTP_PORT_DEFAULT);
         }
@@ -543,8 +598,8 @@ public class ServerConfigContainer {
             serverConfig.setMaxThreads(Integer.parseInt(httpThreadPoolMaxSizeStr));
         }
 
-        if (StringUtils.hasText(acceptsSizeStr)) {
-            serverConfig.setAccepts(Integer.parseInt(acceptsSizeStr));
+        if (StringUtils.hasText(httpAcceptsSizeStr)) {
+            serverConfig.setAccepts(Integer.parseInt(httpAcceptsSizeStr));
         }
 
         if (StringUtils.hasText(httpThreadPoolQueueSizeStr)) {
@@ -566,34 +621,28 @@ public class ServerConfigContainer {
      * @return server
      */
     private ServerConfig createTripleServerConfig() {
-        String portStr = sofaBootRpcProperties.getTriplePort();
-        String threadPoolCoreSizeStr = sofaBootRpcProperties.getTripleThreadPoolCoreSize();
-        String threadPoolMaxSizeStr = sofaBootRpcProperties.getTripleThreadPoolMaxSize();
-        String acceptsSizeStr = sofaBootRpcProperties.getTripleAcceptsSize();
-        String threadPoolQueueSizeStr = sofaBootRpcProperties.getTripleThreadPoolQueueSize();
-
         ServerConfig serverConfig = new ServerConfig();
 
-        if (StringUtils.hasText(portStr)) {
-            serverConfig.setPort(Integer.parseInt(portStr));
+        if (StringUtils.hasText(triplePortStr)) {
+            serverConfig.setPort(Integer.parseInt(triplePortStr));
         } else {
             serverConfig.setPort(SofaBootRpcConfigConstants.GRPC_PORT_DEFAULT);
         }
 
-        if (StringUtils.hasText(threadPoolMaxSizeStr)) {
-            serverConfig.setMaxThreads(Integer.parseInt(threadPoolMaxSizeStr));
+        if (StringUtils.hasText(tripleThreadPoolMaxSizeStr)) {
+            serverConfig.setMaxThreads(Integer.parseInt(tripleThreadPoolMaxSizeStr));
         }
 
-        if (StringUtils.hasText(threadPoolCoreSizeStr)) {
-            serverConfig.setCoreThreads(Integer.parseInt(threadPoolCoreSizeStr));
+        if (StringUtils.hasText(tripleThreadPoolCoreSizeStr)) {
+            serverConfig.setCoreThreads(Integer.parseInt(tripleThreadPoolCoreSizeStr));
         }
 
-        if (StringUtils.hasText(acceptsSizeStr)) {
-            serverConfig.setAccepts(Integer.parseInt(acceptsSizeStr));
+        if (StringUtils.hasText(tripleAcceptsSizeStr)) {
+            serverConfig.setAccepts(Integer.parseInt(tripleAcceptsSizeStr));
         }
 
-        if (StringUtils.hasText(threadPoolQueueSizeStr)) {
-            serverConfig.setQueues(Integer.parseInt(threadPoolQueueSizeStr));
+        if (StringUtils.hasText(tripleThreadPoolQueueSizeStr)) {
+            serverConfig.setQueues(Integer.parseInt(tripleThreadPoolQueueSizeStr));
         }
 
         serverConfig.setAutoStart(false);
@@ -680,4 +729,161 @@ public class ServerConfigContainer {
         customServerConfigs.remove(protocol);
         return true;
     }
+
+    public void setBoundHostStr(String boundHostStr) {
+        this.boundHostStr = boundHostStr;
+    }
+
+    public void setVirtualHostStr(String virtualHostStr) {
+        this.virtualHostStr = virtualHostStr;
+    }
+
+    public void setVirtualPortStr(String virtualPortStr) {
+        this.virtualPortStr = virtualPortStr;
+    }
+
+    public void setH2cPortStr(String h2cPortStr) {
+        this.h2cPortStr = h2cPortStr;
+    }
+
+    public void setH2cThreadPoolCoreSizeStr(String h2cThreadPoolCoreSizeStr) {
+        this.h2cThreadPoolCoreSizeStr = h2cThreadPoolCoreSizeStr;
+    }
+
+    public void setH2cThreadPoolMaxSizeStr(String h2cThreadPoolMaxSizeStr) {
+        this.h2cThreadPoolMaxSizeStr = h2cThreadPoolMaxSizeStr;
+    }
+
+    public void setH2cAcceptsSizeStr(String h2cAcceptsSizeStr) {
+        this.h2cAcceptsSizeStr = h2cAcceptsSizeStr;
+    }
+
+    public void setH2cThreadPoolQueueSizeStr(String h2cThreadPoolQueueSizeStr) {
+        this.h2cThreadPoolQueueSizeStr = h2cThreadPoolQueueSizeStr;
+    }
+
+    public void setBoltPortStr(String boltPortStr) {
+        this.boltPortStr = boltPortStr;
+    }
+
+    public void setBoltThreadPoolCoreSizeStr(String boltThreadPoolCoreSizeStr) {
+        this.boltThreadPoolCoreSizeStr = boltThreadPoolCoreSizeStr;
+    }
+
+    public void setBoltThreadPoolMaxSizeStr(String boltThreadPoolMaxSizeStr) {
+        this.boltThreadPoolMaxSizeStr = boltThreadPoolMaxSizeStr;
+    }
+
+    public void setBoltAcceptsSizeStr(String boltAcceptsSizeStr) {
+        this.boltAcceptsSizeStr = boltAcceptsSizeStr;
+    }
+
+    public void setBoltThreadPoolQueueSizeStr(String boltThreadPoolQueueSizeStr) {
+        this.boltThreadPoolQueueSizeStr = boltThreadPoolQueueSizeStr;
+    }
+
+    public void setBoltProcessInIoThread(Boolean boltProcessInIoThread) {
+        this.boltProcessInIoThread = boltProcessInIoThread;
+    }
+
+    public void setRestHostName(String restHostName) {
+        this.restHostName = restHostName;
+    }
+
+    public void setRestPortStr(String restPortStr) {
+        this.restPortStr = restPortStr;
+    }
+
+    public void setRestIoThreadSizeStr(String restIoThreadSizeStr) {
+        this.restIoThreadSizeStr = restIoThreadSizeStr;
+    }
+
+    public void setRestContextPath(String restContextPath) {
+        this.restContextPath = restContextPath;
+    }
+
+    public void setRestThreadPoolMaxSizeStr(String restThreadPoolMaxSizeStr) {
+        this.restThreadPoolMaxSizeStr = restThreadPoolMaxSizeStr;
+    }
+
+    public void setRestMaxRequestSizeStr(String restMaxRequestSizeStr) {
+        this.restMaxRequestSizeStr = restMaxRequestSizeStr;
+    }
+
+    public void setRestTelnetStr(String restTelnetStr) {
+        this.restTelnetStr = restTelnetStr;
+    }
+
+    public void setRestDaemonStr(String restDaemonStr) {
+        this.restDaemonStr = restDaemonStr;
+    }
+
+    public void setRestAllowedOrigins(String restAllowedOrigins) {
+        this.restAllowedOrigins = restAllowedOrigins;
+    }
+
+    public void setDubboPortStr(String dubboPortStr) {
+        this.dubboPortStr = dubboPortStr;
+    }
+
+    public void setDubboIoThreadSizeStr(String dubboIoThreadSizeStr) {
+        this.dubboIoThreadSizeStr = dubboIoThreadSizeStr;
+    }
+
+    public void setDubboThreadPoolMaxSizeStr(String dubboThreadPoolMaxSizeStr) {
+        this.dubboThreadPoolMaxSizeStr = dubboThreadPoolMaxSizeStr;
+    }
+
+    public void setDubboAcceptsSizeStr(String dubboAcceptsSizeStr) {
+        this.dubboAcceptsSizeStr = dubboAcceptsSizeStr;
+    }
+
+    public void setHttpPortStr(String httpPortStr) {
+        this.httpPortStr = httpPortStr;
+    }
+
+    public void setHttpThreadPoolCoreSizeStr(String httpThreadPoolCoreSizeStr) {
+        this.httpThreadPoolCoreSizeStr = httpThreadPoolCoreSizeStr;
+    }
+
+    public void setHttpThreadPoolMaxSizeStr(String httpThreadPoolMaxSizeStr) {
+        this.httpThreadPoolMaxSizeStr = httpThreadPoolMaxSizeStr;
+    }
+
+    public void setHttpAcceptsSizeStr(String httpAcceptsSizeStr) {
+        this.httpAcceptsSizeStr = httpAcceptsSizeStr;
+    }
+
+    public void setHttpThreadPoolQueueSizeStr(String httpThreadPoolQueueSizeStr) {
+        this.httpThreadPoolQueueSizeStr = httpThreadPoolQueueSizeStr;
+    }
+
+    public void setTriplePortStr(String triplePortStr) {
+        this.triplePortStr = triplePortStr;
+    }
+
+    public void setTripleThreadPoolCoreSizeStr(String tripleThreadPoolCoreSizeStr) {
+        this.tripleThreadPoolCoreSizeStr = tripleThreadPoolCoreSizeStr;
+    }
+
+    public void setTripleThreadPoolMaxSizeStr(String tripleThreadPoolMaxSizeStr) {
+        this.tripleThreadPoolMaxSizeStr = tripleThreadPoolMaxSizeStr;
+    }
+
+    public void setTripleAcceptsSizeStr(String tripleAcceptsSizeStr) {
+        this.tripleAcceptsSizeStr = tripleAcceptsSizeStr;
+    }
+
+    public void setTripleThreadPoolQueueSizeStr(String tripleThreadPoolQueueSizeStr) {
+        this.tripleThreadPoolQueueSizeStr = tripleThreadPoolQueueSizeStr;
+    }
+
+    public void setEnabledIpRange(String enabledIpRange) {
+        this.enabledIpRange = enabledIpRange;
+    }
+
+    public void setBindNetworkInterface(String bindNetworkInterface) {
+        this.bindNetworkInterface = bindNetworkInterface;
+    }
+
 }

@@ -16,13 +16,13 @@
  */
 package com.alipay.sofa.rpc.boot.test.runtime.adapter.processor;
 
-import org.springframework.util.StringUtils;
 import com.alipay.sofa.rpc.boot.runtime.adapter.processor.DynamicConfigProcessor;
 import com.alipay.sofa.rpc.config.ConsumerConfig;
 import com.alipay.sofa.rpc.config.ProviderConfig;
 import com.alipay.sofa.rpc.dynamic.DynamicConfigKeys;
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.util.StringUtils;
 
 /**
  * @author zhaowang

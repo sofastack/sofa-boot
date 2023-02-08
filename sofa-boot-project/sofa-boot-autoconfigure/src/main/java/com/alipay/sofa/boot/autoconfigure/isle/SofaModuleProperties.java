@@ -33,12 +33,12 @@ public class SofaModuleProperties {
     /**
      * Active profile list.
      */
-    private List<String> activeProfiles                 = new ArrayList<>();
+    private List<String> activeProfiles                = new ArrayList<>();
 
     /**
      * Disable sofa module name list.
      */
-    private List<String> ignoreModules = new ArrayList<>();
+    private List<String> ignoreModules                 = new ArrayList<>();
 
     /**
      * Disable require module calculate sofa module name list.
@@ -48,42 +48,42 @@ public class SofaModuleProperties {
     /**
      * Allow bean definition override in sofa module application contexts.
      */
-    private boolean      allowBeanDefinitionOverriding  = false;
+    private boolean      allowBeanDefinitionOverriding = false;
 
     /**
      * Enable parallel sofa module application context refresh.
      */
-    private boolean      moduleStartUpParallel          = true;
+    private boolean      moduleStartUpParallel         = true;
 
     /**
      * Allow sofa module application context publish event to parent application context.
      */
-    private boolean      publishEventToParent           = false;
+    private boolean      publishEventToParent          = false;
 
     /**
      * Ignore module install failure.
      */
-    private boolean      ignoreModuleInstallFailure     = false;
+    private boolean      ignoreModuleInstallFailure    = false;
 
     /**
      * Share parent post processors to sofa module application context.
      */
-    private boolean      shareParentPostProcessor       = true;
+    private boolean      shareParentPostProcessor      = true;
 
     /**
      * Thead pool size factor used in parallel sofa module application context refresh.
      */
-    private float       parallelRefreshPoolSizeFactor = 5.0f;
+    private float        parallelRefreshPoolSizeFactor = 5.0f;
 
     /**
      * Timeout used in parallel sofa module application context refresh, in milliseconds.
      */
-    private long         parallelRefreshTimeout         = 60;
+    private long         parallelRefreshTimeout        = 60;
 
     /**
      * Monitor period used in parallel sofa module application context refresh, in milliseconds.
      */
-    private long         parallelRefreshCheckPeriod     = 30;
+    private long         parallelRefreshCheckPeriod    = 30;
 
     public List<String> getActiveProfiles() {
         return activeProfiles;

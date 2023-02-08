@@ -48,7 +48,9 @@ import java.util.List;
 public class ProviderConfigHelper {
 
     private final ServerConfigContainer   serverConfigContainer;
+
     private final RegistryConfigContainer registryConfigContainer;
+
     private final String                  appName;
 
     public ProviderConfigHelper(ServerConfigContainer serverConfigContainer,

@@ -142,7 +142,7 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
 
     private boolean                               throwExceptionWhenHealthCheckFailed = false;
 
-    private ThreadPoolExecutor healthCheckExecutor;
+    private ThreadPoolExecutor                    healthCheckExecutor;
 
     public ReadinessCheckListener(HealthCheckerProcessor healthCheckerProcessor,
                                   HealthIndicatorProcessor healthIndicatorProcessor,
@@ -175,7 +175,7 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
 
     @Override
     public int getOrder() {
-        return LOWEST_PRECEDENCE;
+        return LOWEST_PRECEDENCE - 1;
     }
 
     @Override

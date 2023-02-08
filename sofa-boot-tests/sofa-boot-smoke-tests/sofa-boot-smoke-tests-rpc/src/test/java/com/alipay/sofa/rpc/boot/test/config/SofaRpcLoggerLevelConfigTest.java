@@ -35,21 +35,21 @@ public class SofaRpcLoggerLevelConfigTest {
 
     @Test
     public void testRpcLoggerLevel() {
-        Logger rpcLogger = LoggerFactory.getLogger("com.alipay.sofa.rpc.transport");
+        Logger rpcLogger = LoggerFactory.getLogger("sofa.boot.rpc.transport");
         Assert.assertTrue(rpcLogger.isDebugEnabled());
     }
 
     @Test
     public void testStarterLoggerLevel() {
         org.slf4j.Logger starterLogger = SofaBootRpcLoggerFactory
-            .getLogger("com.alipay.sofa.rpc.boot.xxx");
+            .getLogger("sofa.boot.rpc.boot.xxx");
         Assert.assertTrue(starterLogger.isErrorEnabled());
     }
 
     @Test
     public void testOtherLoggerLevel() {
         contextRunner.run(context -> {
-            Logger rpcLogger = LoggerFactory.getLogger("com.alipay.sofa.rpc.xxx");
+            Logger rpcLogger = LoggerFactory.getLogger("sofa.boot.rpc.xxx");
             Assert.assertTrue(rpcLogger.isDebugEnabled());
         });
     }

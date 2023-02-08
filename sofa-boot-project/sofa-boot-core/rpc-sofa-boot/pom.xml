@@ -24,8 +24,7 @@
 
         <dependency>
             <groupId>com.alipay.sofa</groupId>
-            <artifactId>sofa-boot-actuator</artifactId>
-            <optional>true</optional>
+            <artifactId>runtime-sofa-boot</artifactId>
         </dependency>
 
         <dependency>
@@ -36,11 +35,6 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.alipay.sofa</groupId>
-            <artifactId>runtime-sofa-boot</artifactId>
         </dependency>
 
         <!--optional-->
@@ -113,6 +107,7 @@
             <artifactId>nacos-api</artifactId>
             <optional>true</optional>
         </dependency>
+
         <dependency>
             <groupId>com.alibaba.nacos</groupId>
             <artifactId>nacos-client</artifactId>
@@ -131,6 +126,7 @@
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

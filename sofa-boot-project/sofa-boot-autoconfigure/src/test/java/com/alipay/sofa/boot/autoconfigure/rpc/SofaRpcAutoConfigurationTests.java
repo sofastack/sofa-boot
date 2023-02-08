@@ -16,10 +16,8 @@
  */
 package com.alipay.sofa.boot.autoconfigure.rpc;
 
-import com.alipay.sofa.boot.actuator.health.ReadinessCheckCallback;
 import com.alipay.sofa.rpc.boot.config.RegistryConfigureProcessor;
 import com.alipay.sofa.rpc.boot.container.ProviderConfigContainer;
-import com.alipay.sofa.rpc.boot.context.ApplicationContextRefreshedListener;
 import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ConsumerMockProcessor;
 import com.alipay.sofa.rpc.boot.runtime.adapter.processor.DynamicConfigProcessor;
 import com.alipay.sofa.rpc.boot.swagger.BoltSwaggerServiceApplicationListener;
@@ -27,7 +25,6 @@ import com.alipay.sofa.rpc.boot.swagger.SwaggerServiceApplicationListener;
 import com.alipay.sofa.rpc.config.JAXRSProviderManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
-import org.springframework.boot.test.context.FilteredClassLoader;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -82,18 +79,8 @@ public class SofaRpcAutoConfigurationTests {
     }
 
     @Test
-    void applicationContextRefreshedListenerBeanCreatedWhenNoRpcReadinessCheck() {
-        this.contextRunner.withClassLoader(new FilteredClassLoader(ReadinessCheckCallback.class)).run(
-                context -> {
-                    assertThat(context).hasSingleBean(ApplicationContextRefreshedListener.class);
-
-                });
-
-    }
-
-    @Test
     void consumerMockProcessorBeanCreatedWhenConfigured() {
-        this.contextRunner.withPropertyValues("com.alipay.sofa.rpc.mock-url=rpc-mocked-url").run(context -> {
+        this.contextRunner.withPropertyValues("sofa.boot.rpc.mock-url=rpc-mocked-url").run(context -> {
             assertThat(context).hasSingleBean(ConsumerMockProcessor.class);
             assertThat(context.getBean(ConsumerMockProcessor.class).getMockUrl()).isEqualTo("rpc-mocked-url");
         });
@@ -101,7 +88,7 @@ public class SofaRpcAutoConfigurationTests {
 
     @Test
     void dynamicConfigProcessorBeanCreatedWhenConfigured() {
-        this.contextRunner.withPropertyValues("com.alipay.sofa.rpc.dynamic-config=apollo").run(context -> {
+        this.contextRunner.withPropertyValues("sofa.boot.rpc.dynamic-config=apollo").run(context -> {
             assertThat(context).hasSingleBean(DynamicConfigProcessor.class);
             assertThat(context.getBean(DynamicConfigProcessor.class).getDynamicConfig()).isEqualTo("apollo");
         });
@@ -109,14 +96,14 @@ public class SofaRpcAutoConfigurationTests {
 
     @Test
     void swaggerServiceApplicationListenerBeanCreatedWhenEnable() {
-        this.contextRunner.withPropertyValues("com.alipay.sofa.rpc.rest-swagger=true").run(context -> {
+        this.contextRunner.withPropertyValues("sofa.boot.rpc.rest-swagger=true").run(context -> {
             assertThat(context).hasSingleBean(SwaggerServiceApplicationListener.class);
         });
     }
 
     @Test
     void boltSwaggerServiceApplicationListenerBeanCreatedWhenEnable() {
-        this.contextRunner.withPropertyValues("com.alipay.sofa.rpc.enable-swagger=true").run(context -> {
+        this.contextRunner.withPropertyValues("sofa.boot.rpc.enable-swagger=true").run(context -> {
             assertThat(context).hasSingleBean(BoltSwaggerServiceApplicationListener.class);
         });
     }

@@ -19,7 +19,6 @@ package com.alipay.sofa.tests.rpc.boot;
 import com.alipay.hessian.generic.model.GenericObject;
 import com.alipay.sofa.rpc.api.GenericService;
 import com.alipay.sofa.rpc.api.future.SofaResponseFuture;
-import com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties;
 import com.alipay.sofa.rpc.boot.container.ConsumerConfigContainer;
 import com.alipay.sofa.rpc.boot.runtime.param.RestBindingParam;
 import com.alipay.sofa.rpc.config.ConsumerConfig;
@@ -76,9 +75,9 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author yuanxuan
  * @version : SofaBootRpcApplicationTests.java, v 0.1 15:19 yuanxuan Exp $
  */
-@SpringBootTest(properties = { "com.alipay.sofa.rpc.rest-swagger=false",
-                              "com.alipay.sofa.rpc.enable-swagger=true",
-                              SofaBootRpcProperties.PREFIX + ".defaultTracer=" })
+@SpringBootTest(properties = { "sofa.boot.rpc.rest-swagger=false",
+                              "sofa.boot.rpc.enable-swagger=true",
+                              "sofa.boot.rpc" + ".defaultTracer=" })
 public class SofaBootRpcApplicationTests {
 
     @Autowired
