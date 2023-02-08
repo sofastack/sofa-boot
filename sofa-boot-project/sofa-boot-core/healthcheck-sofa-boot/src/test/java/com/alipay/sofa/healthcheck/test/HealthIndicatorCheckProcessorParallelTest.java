@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.healthcheck.test;
 
+import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.healthcheck.AfterReadinessCheckCallbackProcessor;
 import com.alipay.sofa.healthcheck.HealthCheckProperties;
 import com.alipay.sofa.healthcheck.HealthCheckerProcessor;
@@ -30,6 +31,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.actuate.health.Health;
+import org.springframework.boot.actuate.health.Status;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -121,10 +123,39 @@ public class HealthIndicatorCheckProcessorParallelTest {
         Assert.assertEquals(2, hashMap.size());
     }
 
+    @Test
+    public void testCheckIndicatorParallelTimeout() {
+        initApplicationContextTimeout();
+        ReadinessCheckListener readinessCheckListener = applicationContext
+            .getBean(ReadinessCheckListener.class);
+        Health health = readinessCheckListener.aggregateReadinessHealth();
+        Health healthIndicatorInfo = (Health) health.getDetails().get("HealthIndicatorInfo");
+        Health timeoutHealth = (Health) healthIndicatorInfo.getDetails().get(
+            SofaBootConstants.SOFABOOT_HEALTH_CHECK_TIMEOUT_KEY);
+        Assert.assertEquals(Status.DOWN, health.getStatus());
+        Assert.assertEquals(Status.UNKNOWN, timeoutHealth.getStatus());
+        Assert.assertEquals(SofaBootConstants.SOFABOOT_HEALTH_CHECK_TIMEOUT_MSG, timeoutHealth
+            .getDetails().get(SofaBootConstants.SOFABOOT_HEALTH_CHECK_TIMEOUT_KEY));
+    }
+
     private void initApplicationContext(boolean health) {
         Map<String, Object> properties = new LinkedHashMap<>();
         properties.put("disk-health-indicator.health", health);
         properties.put("spring.application.name", "HealthIndicatorCheckProcessorTest");
+        properties.put(SofaBootConstants.SOFABOOT_SKIP_HEALTH_INDICATOR_CHECK, "true");
+        SpringApplication springApplication = new SpringApplication(
+            HealthIndicatorConfiguration.class);
+        springApplication.setDefaultProperties(properties);
+        springApplication.setWebApplicationType(WebApplicationType.NONE);
+        applicationContext = springApplication.run();
+    }
+
+    private void initApplicationContextTimeout() {
+        Map<String, Object> properties = new LinkedHashMap<>();
+        properties.put("disk-health-indicator.health", true);
+        properties.put("spring.application.name", "HealthIndicatorCheckProcessorTest");
+        //        properties.put(SofaBootConstants.SOFABOOT_SKIP_HEALTH_INDICATOR_CHECK, "true");
+        properties.put("com.alipay.sofa.boot.health-check-parallel-timeout", "1");
         SpringApplication springApplication = new SpringApplication(
             HealthIndicatorConfiguration.class);
         springApplication.setDefaultProperties(properties);
