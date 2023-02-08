@@ -238,29 +238,30 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
                         SofaBootConstants.SOFABOOT_HEALTH_CHECK_NOT_READY_MSG).build());
         } else {
             boolean healthCheckerStatus = getHealthCheckerStatus();
+            boolean healthIndicatorStatus = getHealthIndicatorStatus();
+            boolean afterReadinessCheckCallbackStatus = getHealthCallbackStatus();
             Map<String, Health> healthCheckerDetails = getHealthCheckerDetails();
             Map<String, Health> healthIndicatorDetails = getHealthIndicatorDetails();
-
-            boolean afterReadinessCheckCallbackStatus = getHealthCallbackStatus();
             Map<String, Health> afterReadinessCheckCallbackDetails = getHealthCallbackDetails();
 
             Health.Builder builder;
-            if (healthCheckerStatus && afterReadinessCheckCallbackStatus) {
-                builder = Health.up();
-            } else {
-                builder = Health.down();
-            }
+            builder = healthCheckerStatus ? Health.up():Health.down();
             if (!CollectionUtils.isEmpty(healthCheckerDetails)) {
-                builder = builder.withDetail("HealthChecker", healthCheckerDetails);
+                builder = builder.withDetails(healthCheckerDetails);
             }
-            if (!CollectionUtils.isEmpty(afterReadinessCheckCallbackDetails)) {
-                builder = builder.withDetail("ReadinessCheckCallback",
-                    afterReadinessCheckCallbackDetails);
-            }
-            healths.put("SOFABootReadinessHealthCheckInfo", builder.build());
+            healths.put("HealthCheckerInfo", builder.build());
 
-            // HealthIndicator
-            healths.putAll(healthIndicatorDetails);
+            builder = healthIndicatorStatus ? Health.up():Health.down();
+            if (!CollectionUtils.isEmpty(healthIndicatorDetails)) {
+                builder = builder.withDetails(healthIndicatorDetails);
+            }
+            healths.put("HealthIndicatorInfo", builder.build());
+
+            builder = afterReadinessCheckCallbackStatus ? Health.up():Health.down();
+            if (!CollectionUtils.isEmpty(afterReadinessCheckCallbackDetails)) {
+                builder = builder.withDetails(afterReadinessCheckCallbackDetails);
+            }
+            healths.put("ReadinessCheckCallbackInfo", builder.build());
         }
         Status overallStatus = this.statusAggregator.getAggregateStatus(
                 healths.values().stream().map(Health::getStatus).collect(Collectors.toSet()));
