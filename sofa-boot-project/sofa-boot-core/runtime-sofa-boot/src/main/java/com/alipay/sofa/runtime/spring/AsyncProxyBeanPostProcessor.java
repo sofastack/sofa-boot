@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.runtime.spring;
 
-import com.alipay.sofa.boot.context.processor.SingletonSofaPostProcessor;
 import com.alipay.sofa.runtime.async.AsyncInitMethodManager;
 import com.alipay.sofa.runtime.async.AsyncInitializeBeanMethodInvoker;
 import org.springframework.aop.framework.ProxyFactory;
@@ -40,7 +39,6 @@ import static com.alipay.sofa.runtime.async.AsyncInitMethodManager.ASYNC_INIT_ME
  * @author xuanbei
  * @since 2.6.0
  */
-@SingletonSofaPostProcessor
 public class AsyncProxyBeanPostProcessor implements BeanPostProcessor, InitializingBean,
                                         BeanFactoryAware, Ordered {
 
@@ -55,7 +53,7 @@ public class AsyncProxyBeanPostProcessor implements BeanPostProcessor, Initializ
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName)
                                                                                throws BeansException {
-        String methodName = asyncInitMethodManager.findAsyncInitMethod(beanName);
+        String methodName = asyncInitMethodManager.findAsyncInitMethod(beanFactory, beanName);
         if (!StringUtils.hasText(methodName)) {
             return bean;
         }
@@ -86,7 +84,8 @@ public class AsyncProxyBeanPostProcessor implements BeanPostProcessor, Initializ
             String asyncInitMethodName = (String) beanDefinition
                 .getAttribute(ASYNC_INIT_METHOD_NAME);
             if (StringUtils.hasText(asyncInitMethodName)) {
-                asyncInitMethodManager.registerAsyncInitBean(beanName, asyncInitMethodName);
+                asyncInitMethodManager.registerAsyncInitBean(beanFactory, beanName,
+                    asyncInitMethodName);
             }
         }
     }

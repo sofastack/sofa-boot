@@ -49,6 +49,14 @@ public class SofaBootEnvironmentPostProcessorTests {
     }
 
     @Test
+    public void registerExposureEndpoint() {
+        MockEnvironment environment = new MockEnvironment();
+        sofaBootEnvironmentPostProcessor.postProcessEnvironment(environment, null);
+        assertThat(environment.getProperty(SofaBootConstants.ENDPOINTS_WEB_EXPOSURE_INCLUDE_CONFIG))
+            .isEqualTo(SofaBootConstants.SOFA_DEFAULT_ENDPOINTS_WEB_EXPOSURE_VALUE);
+    }
+
+    @Test
     public void registerRequiredProperty() {
         MockEnvironment environment = new MockEnvironment();
         environment.validateRequiredProperties();

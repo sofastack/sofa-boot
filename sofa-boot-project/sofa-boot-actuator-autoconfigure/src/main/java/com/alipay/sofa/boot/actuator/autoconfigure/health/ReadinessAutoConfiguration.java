@@ -131,8 +131,8 @@ public class ReadinessAutoConfiguration {
         } else {
             threadPoolSize = 1;
         }
-        LOGGER.info("Create health-check thread pool, corePoolSize: {}, maxPoolSize: {}.", 0,
-            threadPoolSize);
+        LOGGER.info("Create health-check thread pool, corePoolSize: {}, maxPoolSize: {}.",
+            threadPoolSize, threadPoolSize);
         return new SofaThreadPoolExecutor(threadPoolSize, threadPoolSize, 30, TimeUnit.SECONDS,
             new SynchronousQueue<>(), new NamedThreadFactory("health-check"),
             new ThreadPoolExecutor.CallerRunsPolicy(), "health-check",
