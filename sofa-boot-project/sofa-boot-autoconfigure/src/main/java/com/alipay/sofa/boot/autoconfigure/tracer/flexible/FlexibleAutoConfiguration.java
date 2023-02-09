@@ -19,8 +19,6 @@ package com.alipay.sofa.boot.autoconfigure.tracer.flexible;
 import com.alipay.common.tracer.core.reporter.facade.Reporter;
 import com.alipay.common.tracer.core.samplers.Sampler;
 import com.alipay.common.tracer.core.samplers.SamplerFactory;
-import com.alipay.common.tracer.core.utils.StringUtils;
-import com.alipay.sofa.boot.autoconfigure.tracer.SofaTracerAutoConfiguration;
 import com.alipay.sofa.boot.autoconfigure.tracer.SofaTracerProperties;
 import com.alipay.sofa.boot.tracer.flexible.MethodInvocationProcessor;
 import com.alipay.sofa.boot.tracer.flexible.SofaTracerAdvisingBeanPostProcessor;
@@ -28,12 +26,15 @@ import com.alipay.sofa.boot.tracer.flexible.SofaTracerIntroductionInterceptor;
 import com.alipay.sofa.boot.tracer.flexible.SofaTracerMethodInvocationProcessor;
 import com.alipay.sofa.tracer.plugin.flexible.FlexibleTracer;
 import io.opentracing.Tracer;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
+import org.springframework.util.StringUtils;
 
 /**
  * {@link EnableAutoConfiguration Auto-configuration} for Flexible.
@@ -41,12 +42,32 @@ import org.springframework.context.annotation.Bean;
  * @author guolei.sgl (guolei.sgl@antfin.com) 2019/8/9 3:20 PM
  * @author huzijie
  **/
-@AutoConfiguration(after = SofaTracerAutoConfiguration.class)
-@ConditionalOnProperty(name = "sofa.boot.tracer.flexible.enabled", havingValue = "true", matchIfMissing = true)
+@AutoConfiguration
 @ConditionalOnClass({ Tracer.class,
                      com.alipay.sofa.tracer.plugin.flexible.annotations.Tracer.class,
                      SofaTracerIntroductionInterceptor.class })
+@ConditionalOnBean(SofaTracerProperties.class)
+@ConditionalOnProperty(name = "sofa.boot.tracer.flexible.enabled", havingValue = "true", matchIfMissing = true)
 public class FlexibleAutoConfiguration {
+
+    @Bean
+    @ConditionalOnMissingBean
+    public Tracer sofaTracer(ObjectProvider<SofaTracerProperties> sofaTracerPropertiesObjectProvider)
+                                                                                                     throws Exception {
+        SofaTracerProperties sofaTracerProperties = sofaTracerPropertiesObjectProvider
+            .getIfUnique();
+        String reporterName = null;
+        if (sofaTracerProperties != null) {
+            reporterName = sofaTracerProperties.getReporterName();
+        }
+        if (StringUtils.hasText(reporterName)) {
+            Reporter reporter = (Reporter) Class.forName(reporterName).getDeclaredConstructor()
+                .newInstance();
+            Sampler sampler = SamplerFactory.getSampler();
+            return new FlexibleTracer(sampler, reporter);
+        }
+        return new FlexibleTracer();
+    }
 
     @Bean
     @ConditionalOnMissingBean
@@ -64,18 +85,5 @@ public class FlexibleAutoConfiguration {
     @ConditionalOnMissingBean
     public SofaTracerAdvisingBeanPostProcessor tracerAnnotationBeanPostProcessor(SofaTracerIntroductionInterceptor methodInterceptor) {
         return new SofaTracerAdvisingBeanPostProcessor(methodInterceptor);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public Tracer sofaTracer(SofaTracerProperties sofaTracerProperties) throws Exception {
-        String reporterName = sofaTracerProperties.getReporterName();
-        if (StringUtils.isNotBlank(reporterName)) {
-            Reporter reporter = (Reporter) Class.forName(reporterName).getDeclaredConstructor()
-                .newInstance();
-            Sampler sampler = SamplerFactory.getSampler();
-            return new FlexibleTracer(sampler, reporter);
-        }
-        return new FlexibleTracer();
     }
 }

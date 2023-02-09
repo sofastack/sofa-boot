@@ -69,8 +69,8 @@ import java.util.function.Supplier;
  * @author xuanbei 18/3/17
  */
 @AutoConfiguration
-@EnableConfigurationProperties(SofaRuntimeProperties.class)
 @ConditionalOnClass(SofaRuntimeContext.class)
+@EnableConfigurationProperties(SofaRuntimeProperties.class)
 public class SofaRuntimeAutoConfiguration {
 
     private static final Logger LOGGER = SofaBootLoggerFactory

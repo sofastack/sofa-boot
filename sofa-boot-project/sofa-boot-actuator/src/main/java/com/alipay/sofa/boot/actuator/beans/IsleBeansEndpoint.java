@@ -40,26 +40,26 @@ import java.util.Map;
  */
 public class IsleBeansEndpoint extends BeansEndpoint {
 
-    private final ConfigurableApplicationContext context;
+    private final ApplicationRuntimeModel        applicationRuntimeModel;
 
     /**
      * Creates a new {@code BeansEndpoint} that will describe the beans in the given
      * {@code context} and all of its ancestors.
      *
      * @param context the application context
+     * @param applicationRuntimeModel the application runtime model
      * @see ConfigurableApplicationContext#getParent()
      */
-    public IsleBeansEndpoint(ConfigurableApplicationContext context) {
+    public IsleBeansEndpoint(ConfigurableApplicationContext context,
+                             ApplicationRuntimeModel applicationRuntimeModel) {
         super(context);
-        this.context = context;
+        this.applicationRuntimeModel = applicationRuntimeModel;
     }
 
     @ReadOperation
     @Override
     public BeansEndpoint.BeansDescriptor beans() {
         BeansEndpoint.BeansDescriptor beansDescriptor = super.beans();
-        ApplicationRuntimeModel applicationRuntimeModel = context.getBean(
-            ApplicationRuntimeModel.APPLICATION_RUNTIME_MODEL_NAME, ApplicationRuntimeModel.class);
         Map<String, BeansEndpoint.ContextBeansDescriptor> moduleApplicationContexts = getModuleApplicationContexts(applicationRuntimeModel);
         beansDescriptor.getContexts().putAll(moduleApplicationContexts);
         return beansDescriptor;

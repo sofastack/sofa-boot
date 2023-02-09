@@ -20,7 +20,6 @@ import com.alipay.sofa.boot.actuator.health.ModuleHealthChecker;
 import com.alipay.sofa.boot.actuator.health.ReadinessEndpoint;
 import com.alipay.sofa.boot.autoconfigure.isle.SofaModuleAutoConfiguration;
 import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
-import com.alipay.sofa.boot.isle.stage.ModelCreatingStage;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -38,14 +37,14 @@ import org.springframework.context.annotation.Bean;
  */
 @AutoConfiguration(after = SofaModuleAutoConfiguration.class)
 @ConditionalOnClass(ApplicationRuntimeModel.class)
-@ConditionalOnProperty(value = "sofa.boot.isle.enabled", matchIfMissing = true)
+@ConditionalOnBean(ApplicationRuntimeModel.class)
+@ConditionalOnProperty(value = "sofa.boot.isle.enabled", havingValue = "true", matchIfMissing = true)
 @ConditionalOnAvailableEndpoint(endpoint = ReadinessEndpoint.class)
 public class ReadinessIsleAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    @ConditionalOnBean(ModelCreatingStage.class)
-    public ModuleHealthChecker sofaModuleHealthChecker() {
-        return new ModuleHealthChecker();
+    public ModuleHealthChecker sofaModuleHealthChecker(ApplicationRuntimeModel applicationRuntimeModel) {
+        return new ModuleHealthChecker(applicationRuntimeModel);
     }
 }

@@ -19,11 +19,11 @@ package com.alipay.sofa.boot.autoconfigure.ark;
 import com.alipay.sofa.boot.ark.SofaRuntimeContainer;
 import com.alipay.sofa.boot.ark.invoke.ArkDynamicServiceProxyManager;
 import com.alipay.sofa.boot.autoconfigure.runtime.SofaRuntimeAutoConfiguration;
-import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import com.alipay.sofa.runtime.spi.service.DynamicServiceProxyManager;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -36,8 +36,9 @@ import org.springframework.context.annotation.Bean;
  * @version SofaArkAutoConfiguration.java, v 0.1 2023年01月16日 11:31 AM huzijie Exp $
  */
 @AutoConfiguration(after = SofaRuntimeAutoConfiguration.class)
+@ConditionalOnBean(SofaRuntimeManager.class)
+@ConditionalOnClass({ SofaRuntimeContainer.class, SofaRuntimeManager.class })
 @EnableConfigurationProperties(SofaArkProperties.class)
-@ConditionalOnClass({ SofaRuntimeContainer.class, SofaRuntimeContext.class })
 public class SofaArkAutoConfiguration {
 
     @Bean

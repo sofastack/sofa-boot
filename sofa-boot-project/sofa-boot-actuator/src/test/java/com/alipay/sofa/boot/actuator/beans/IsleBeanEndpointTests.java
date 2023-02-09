@@ -47,9 +47,7 @@ public class IsleBeanEndpointTests {
         ApplicationRuntimeModel model = new ApplicationRuntimeModel();
         model.addInstalled(new MockDeploymentDescriptor("A"));
         model.addInstalled(new MockDeploymentDescriptor("B"));
-        context.getBeanFactory().registerSingleton(
-            ApplicationRuntimeModel.APPLICATION_RUNTIME_MODEL_NAME, model);
-        IsleBeansEndpoint isleBeansEndpoint = new IsleBeansEndpoint(context);
+        IsleBeansEndpoint isleBeansEndpoint = new IsleBeansEndpoint(context, model);
         BeansEndpoint.BeansDescriptor applicationBeans = isleBeansEndpoint.beans();
         assertThat(applicationBeans).isNotNull();
         Map<String, BeansEndpoint.ContextBeansDescriptor> beansMap = applicationBeans.getContexts();

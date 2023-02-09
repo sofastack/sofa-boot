@@ -34,9 +34,9 @@ import org.springframework.context.annotation.Bean;
  * @since 2020/7/7
  */
 @AutoConfiguration(before = StartupEndpointAutoConfiguration.class)
+@ConditionalOnBean(StartupReporter.class)
 @ConditionalOnAvailableEndpoint(endpoint = StartupEndPoint.class)
 @EnableConfigurationProperties(StartupProperties.class)
-@ConditionalOnBean(StartupReporter.class)
 public class StartupEndPointAutoConfiguration {
 
     @Bean
