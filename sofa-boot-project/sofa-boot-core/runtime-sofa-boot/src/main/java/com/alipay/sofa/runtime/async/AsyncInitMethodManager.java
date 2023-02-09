@@ -16,29 +16,24 @@
  */
 package com.alipay.sofa.runtime.async;
 
-import com.alipay.sofa.boot.constant.SofaBootConstants;
-import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
-import com.alipay.sofa.common.thread.NamedThreadFactory;
-import com.alipay.sofa.common.thread.SofaThreadPoolExecutor;
-import org.slf4j.Logger;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.Ordered;
 import org.springframework.core.PriorityOrdered;
-import org.springframework.util.Assert;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
-import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Supplier;
 
 /**
  * Manager to store and invoke async init method beans.
@@ -50,28 +45,19 @@ public class AsyncInitMethodManager implements PriorityOrdered,
                                    ApplicationListener<ContextRefreshedEvent>,
                                    ApplicationContextAware {
 
-    private static final Logger                       LOGGER                 = SofaBootLoggerFactory
-                                                                                 .getLogger(AsyncInitMethodManager.class);
+    public static final String                          ASYNC_INIT_METHOD_EXECUTOR_BEAN_NAME = "async-init-method-executor";
 
-    public static final String                        ASYNC_INIT_METHOD_NAME = "async-init-method-name";
+    public static final String                          ASYNC_INIT_METHOD_NAME               = "async-init-method-name";
 
-    private final AtomicReference<ThreadPoolExecutor> threadPoolExecutorRef  = new AtomicReference<>();
+    private final AtomicReference<ThreadPoolExecutor>   threadPoolExecutorRef                = new AtomicReference<>();
 
-    private final Map<String, String>                 asyncInitBeanNameMap   = new HashMap<>();
+    private final Map<BeanFactory, Map<String, String>> asyncInitBeanNameMap                 = new ConcurrentHashMap<>();
 
-    private final List<Future<?>>                     futures                = new ArrayList<>();
+    private final List<Future<?>>                       futures                              = new ArrayList<>();
 
-    private ApplicationContext                        applicationContext;
+    private ApplicationContext                          applicationContext;
 
-    private boolean                                   startUpFinish          = false;
-
-    private int                                       executorCoreSize       = Runtime
-                                                                                 .getRuntime()
-                                                                                 .availableProcessors() + 1;
-
-    private int                                       executorMaxSize        = Runtime
-                                                                                 .getRuntime()
-                                                                                 .availableProcessors() + 1;
+    private boolean                                     startUpFinish                        = false;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -102,17 +88,23 @@ public class AsyncInitMethodManager implements PriorityOrdered,
         futures.add(future);
     }
 
+    private ThreadPoolExecutor createAsyncExecutor() {
+        return (ThreadPoolExecutor) applicationContext.getBean(
+            ASYNC_INIT_METHOD_EXECUTOR_BEAN_NAME, Supplier.class).get();
+    }
+
     private void ensureAsyncTasksFinish() {
         for (Future<?> future : futures) {
             try {
                 future.get();
             } catch (Throwable e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException("Async init task finish fail", e);
             }
         }
 
         startUpFinish = true;
         futures.clear();
+        asyncInitBeanNameMap.clear();
         if (threadPoolExecutorRef.get() != null) {
             threadPoolExecutorRef.get().shutdown();
             threadPoolExecutorRef.set(null);
@@ -123,38 +115,17 @@ public class AsyncInitMethodManager implements PriorityOrdered,
         return startUpFinish;
     }
 
-    public void registerAsyncInitBean(String beanName, String asyncInitMethodName) {
-        asyncInitBeanNameMap.put(beanName, asyncInitMethodName);
+    public void registerAsyncInitBean(ConfigurableListableBeanFactory beanFactory, String beanName, String asyncInitMethodName) {
+        Map<String, String> map = asyncInitBeanNameMap.computeIfAbsent(beanFactory, k -> new ConcurrentHashMap<>());
+        map.put(beanName, asyncInitMethodName);
     }
 
-    public String findAsyncInitMethod(String beanName) {
-        return asyncInitBeanNameMap.get(beanName);
-    }
-
-    private ThreadPoolExecutor createAsyncExecutor() {
-        Assert.isTrue(executorCoreSize >= 0, "executorCoreSize must no less than zero");
-        Assert.isTrue(executorMaxSize >= 0, "executorMaxSize must no less than zero");
-        LOGGER.info("create async-init-bean thread pool, corePoolSize: {}, maxPoolSize: {}.",
-            executorCoreSize, executorMaxSize);
-        return new SofaThreadPoolExecutor(executorCoreSize, executorMaxSize, 30, TimeUnit.SECONDS,
-            new SynchronousQueue<>(), new NamedThreadFactory("async-init-bean"),
-            new ThreadPoolExecutor.CallerRunsPolicy(), "async-init-bean",
-            SofaBootConstants.SOFA_BOOT_SPACE_NAME);
-    }
-
-    public int getExecutorCoreSize() {
-        return executorCoreSize;
-    }
-
-    public void setExecutorCoreSize(int executorCoreSize) {
-        this.executorCoreSize = executorCoreSize;
-    }
-
-    public int getExecutorMaxSize() {
-        return executorMaxSize;
-    }
-
-    public void setExecutorMaxSize(int executorMaxSize) {
-        this.executorMaxSize = executorMaxSize;
+    public String findAsyncInitMethod(ConfigurableListableBeanFactory beanFactory, String beanName) {
+        Map<String, String> map = asyncInitBeanNameMap.get(beanFactory);
+        if (map == null) {
+            return null;
+        } else {
+            return map.get(beanName);
+        }
     }
 }

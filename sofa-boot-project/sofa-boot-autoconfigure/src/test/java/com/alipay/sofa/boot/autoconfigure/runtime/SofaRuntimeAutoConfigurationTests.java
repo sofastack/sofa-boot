@@ -112,16 +112,15 @@ public class SofaRuntimeAutoConfigurationTests {
                     assertThat(properties.isServiceInterfaceTypeCheck()).isTrue();
                 });
     }
-
-    @Test
-    public void customAsyncInitMethodManager() {
-        this.contextRunner
-                .withPropertyValues("sofa.boot.runtime.asyncInitExecutorCoreSize=10")
-                .withPropertyValues("sofa.boot.runtime.asyncInitExecutorMaxSize=10")
-                .run((context) -> {
-                    AsyncInitMethodManager asyncInitMethodManager = context.getBean(AsyncInitMethodManager.class);
-                    assertThat(asyncInitMethodManager.getExecutorCoreSize()).isEqualTo(10);
-                    assertThat(asyncInitMethodManager.getExecutorMaxSize()).isEqualTo(10);
-                });
-    }
+    //    @Test
+    //    public void customAsyncInitMethodManager() {
+    //        this.contextRunner
+    //                .withPropertyValues("sofa.boot.runtime.asyncInitExecutorCoreSize=10")
+    //                .withPropertyValues("sofa.boot.runtime.asyncInitExecutorMaxSize=10")
+    //                .run((context) -> {
+    //                    AsyncInitMethodManager asyncInitMethodManager = context.getBean(AsyncInitMethodManager.class);
+    //                    assertThat(asyncInitMethodManager.getExecutorCoreSize()).isEqualTo(10);
+    //                    assertThat(asyncInitMethodManager.getExecutorMaxSize()).isEqualTo(10);
+    //                });
+    //    }
 }
