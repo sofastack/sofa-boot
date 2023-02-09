@@ -1,0 +1,37 @@
+2023-02-06 15:03:54,771 [  - /// - ] ERROR diagnostics.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+A component required a bean of type 'com.alipay.sofa.runtime.spi.component.ComponentManager' that could not be found.
+
+
+Action:
+
+Consider defining a bean of type 'com.alipay.sofa.runtime.spi.component.ComponentManager' in your configuration.
+
+2023-02-06 15:03:54,906 [  - /// - ] ERROR sofaboot4demo.Sofaboot4DemoApplication - SOFABoot Application Start Fail!!! More logs can be found on 1) logs/sofa-runtime/common-error.log 2) logs/spring/spring.log 3) logs/mvc/common-error.log 4) logs/health-check/common-error.log
+org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type 'com.alipay.sofa.runtime.spi.component.ComponentManager' available
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.getBean(DefaultListableBeanFactory.java:340)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.getBean(DefaultListableBeanFactory.java:331)
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1148)
+	at com.alipay.sofa.rpc.boot.swagger.SwaggerServiceApplicationListener.onApplicationEvent(SwaggerServiceApplicationListener.java:40)
+	at com.alipay.sofa.rpc.boot.swagger.SwaggerServiceApplicationListener.onApplicationEvent(SwaggerServiceApplicationListener.java:33)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.doInvokeListener(SimpleApplicationEventMulticaster.java:176)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.invokeListener(SimpleApplicationEventMulticaster.java:169)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:143)
+	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:413)
+	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:370)
+	at org.springframework.boot.context.event.EventPublishingRunListener.started(EventPublishingRunListener.java:103)
+	at org.springframework.boot.SpringApplicationRunListeners.lambda$started$5(SpringApplicationRunListeners.java:76)
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
+	at org.springframework.boot.SpringApplicationRunListeners.doWithListeners(SpringApplicationRunListeners.java:118)
+	at org.springframework.boot.SpringApplicationRunListeners.doWithListeners(SpringApplicationRunListeners.java:112)
+	at org.springframework.boot.SpringApplicationRunListeners.started(SpringApplicationRunListeners.java:76)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:314)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1302)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1291)
+	at com.alipay.sofa.sofaboot4demo.Sofaboot4DemoApplication.main(Sofaboot4DemoApplication.java:19)
