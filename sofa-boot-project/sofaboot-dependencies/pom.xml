@@ -45,7 +45,6 @@
         <zipkin.reporter.version>2.7.7</zipkin.reporter.version>
         <jackson.version>2.9.10</jackson.version>
         <jboss.jaxrs.api.version>1.0.2.Final</jboss.jaxrs.api.version>
-        <mysql.version>5.1.40</mysql.version>
 
         <resteasy.version>3.6.3.Final</resteasy.version>
         <curator.version>4.0.1</curator.version>
