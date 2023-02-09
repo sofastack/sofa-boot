@@ -23,6 +23,7 @@ import com.alipay.sofa.rpc.boot.context.RpcStartApplicationListener;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -34,7 +35,8 @@ import org.springframework.context.annotation.Bean;
  * @version RpcActuatorAutoConfiguration.java, v 0.1 2023年02月08日 4:45 PM huzijie Exp $
  */
 @AutoConfiguration
-@ConditionalOnClass({ ProviderConfigContainer.class, })
+@ConditionalOnClass(ProviderConfigContainer.class)
+@ConditionalOnBean(ProviderConfigContainer.class)
 @ConditionalOnAvailableEndpoint(endpoint = ReadinessEndpoint.class)
 public class RpcActuatorAutoConfiguration {
 

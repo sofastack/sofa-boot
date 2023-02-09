@@ -33,8 +33,8 @@ import org.springframework.web.client.RestTemplate;
  * @author huzijie
  **/
 @AutoConfiguration
-@ConditionalOnProperty(name = "sofa.boot.tracer.resttemplate.enabled", havingValue = "true", matchIfMissing = true)
 @ConditionalOnClass({ RestTemplateTracer.class, RestTemplateEnhance.class, RestTemplate.class })
+@ConditionalOnProperty(name = "sofa.boot.tracer.resttemplate.enabled", havingValue = "true", matchIfMissing = true)
 public class RestTemplateAutoConfiguration {
 
     @Bean

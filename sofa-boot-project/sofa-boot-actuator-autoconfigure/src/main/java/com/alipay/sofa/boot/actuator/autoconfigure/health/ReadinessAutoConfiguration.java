@@ -47,8 +47,8 @@ import java.util.concurrent.TimeUnit;
  * @since 2.5.0
  */
 @AutoConfiguration
-@EnableConfigurationProperties(HealthProperties.class)
 @ConditionalOnAvailableEndpoint(endpoint = ReadinessEndpoint.class)
+@EnableConfigurationProperties(HealthProperties.class)
 public class ReadinessAutoConfiguration {
 
     private static final Logger LOGGER = SofaBootLoggerFactory

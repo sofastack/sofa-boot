@@ -35,8 +35,8 @@ import org.springframework.core.env.Environment;
  * @since 2.2.0
  */
 @AutoConfiguration
-@ConditionalOnProperty(name = "sofa.boot.tracer.datasource.enabled", havingValue = "true", matchIfMissing = true)
 @ConditionalOnClass({ SmartDataSource.class, DataSourceBeanPostProcessor.class })
+@ConditionalOnProperty(name = "sofa.boot.tracer.datasource.enabled", havingValue = "true", matchIfMissing = true)
 public class DataSourceAutoConfiguration {
 
     @Bean

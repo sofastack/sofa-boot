@@ -35,6 +35,7 @@ import org.springframework.context.annotation.Bean;
  */
 @AutoConfiguration(after = SofaRuntimeAutoConfiguration.class)
 @ConditionalOnClass(SofaRuntimeContext.class)
+@ConditionalOnBean(SofaRuntimeContext.class)
 @ConditionalOnAvailableEndpoint(endpoint = ComponentsEndPoint.class)
 public class ComponentsEndpointAutoConfiguration {
 

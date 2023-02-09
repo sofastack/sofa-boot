@@ -26,7 +26,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.Status;
-import org.springframework.context.ApplicationContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,19 +46,11 @@ public class ModuleHealthCheckerTests {
     private ModuleHealthChecker     moduleHealthChecker;
 
     @Mock
-    private ApplicationContext      applicationContext;
-
-    @Mock
     private ApplicationRuntimeModel applicationRuntimeModel;
 
     @Test
     public void moduleHealthCheckSuccess() {
         Mockito.doReturn(new ArrayList<>()).when(applicationRuntimeModel).getFailed();
-        Mockito
-            .doReturn(applicationRuntimeModel)
-            .when(applicationContext)
-            .getBean(ApplicationRuntimeModel.APPLICATION_RUNTIME_MODEL_NAME,
-                ApplicationRuntimeModel.class);
         Health health = moduleHealthChecker.isHealthy();
         assertThat(health.getStatus()).isEqualTo(Status.UP);
     }
@@ -71,11 +62,6 @@ public class ModuleHealthCheckerTests {
         Mockito.doReturn("failedModule").when(deploymentDescriptor).getName();
         failed.add(deploymentDescriptor);
         Mockito.doReturn(failed).when(applicationRuntimeModel).getFailed();
-        Mockito
-            .doReturn(applicationRuntimeModel)
-            .when(applicationContext)
-            .getBean(ApplicationRuntimeModel.APPLICATION_RUNTIME_MODEL_NAME,
-                ApplicationRuntimeModel.class);
         Health health = moduleHealthChecker.isHealthy();
         assertThat(health.getStatus()).isEqualTo(Status.DOWN);
         assertThat(health.getDetails().toString()).isEqualTo("{failedModule=failed}");
