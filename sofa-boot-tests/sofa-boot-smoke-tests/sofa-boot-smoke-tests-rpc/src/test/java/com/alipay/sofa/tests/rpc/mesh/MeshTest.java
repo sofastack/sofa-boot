@@ -20,15 +20,13 @@ import com.alipay.sofa.rpc.core.exception.SofaRpcException;
 import com.alipay.sofa.tests.rpc.ActivelyDestroyTest;
 import com.alipay.sofa.tests.rpc.bean.SampleService;
 import com.alipay.sofa.tests.rpc.bean.invoke.HelloSyncService;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ImportResource;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -40,9 +38,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootApplication
 @SpringBootTest(properties = { "sofa.boot.rpc.registries.mesh=mesh://127.0.0.1:13330",
                               "sofa.boot.rpc.enable.mesh=bolt" }, classes = MeshTest.class)
-@RunWith(SpringRunner.class)
 @ImportResource("/spring/test_only_mesh.xml")
-@Ignore
+@Disabled
 public class MeshTest extends ActivelyDestroyTest {
 
     @Autowired
@@ -53,7 +50,7 @@ public class MeshTest extends ActivelyDestroyTest {
     private SampleService    sampleService;
 
     @Test
-    @Ignore("需要有 mesh 环境")
+    @Disabled("需要有 mesh 环境")
     public void testInvokeWithMesh() throws InterruptedException {
 
         try {

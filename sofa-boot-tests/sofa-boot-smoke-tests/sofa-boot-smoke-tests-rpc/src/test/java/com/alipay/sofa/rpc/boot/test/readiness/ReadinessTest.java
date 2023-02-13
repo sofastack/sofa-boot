@@ -16,16 +16,13 @@
  */
 package com.alipay.sofa.rpc.boot.test.readiness;
 
-import java.util.concurrent.TimeUnit;
-
 import com.alipay.sofa.boot.autoconfigure.rpc.SofaRpcAutoConfiguration;
+import com.alipay.sofa.rpc.boot.config.SofaBootRpcConfigConstants;
+import com.alipay.sofa.rpc.core.exception.SofaRouteException;
 import com.alipay.sofa.tests.rpc.ActivelyDestroyTest;
 import com.alipay.sofa.tests.rpc.bean.SampleFacade;
 import com.alipay.sofa.tests.rpc.util.TestUtils;
-import org.junit.Assert;
-import org.junit.Rule;
 import org.junit.jupiter.api.Test;
-import org.junit.rules.ExpectedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
@@ -36,31 +33,32 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 
-import com.alipay.sofa.rpc.boot.config.SofaBootRpcConfigConstants;
+import java.util.concurrent.TimeUnit;
 
-import com.alipay.sofa.rpc.core.exception.SofaRouteException;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootApplication
 @SpringBootTest(properties = { "sofa.boot.rpc.registry.address=zookeeper://localhost:2181" }, classes = ReadinessTest.class)
 @ImportResource("/spring/readiness.xml")
 @Import({ ReadinessTest.Config.class, SofaRpcAutoConfiguration.class })
 public class ReadinessTest extends ActivelyDestroyTest {
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
     @Autowired
-    private SampleFacade     sampleFacade;
+    private SampleFacade sampleFacade;
 
     @Test
     public void testCannotFoundAddress() throws InterruptedException {
-        thrown.expect(SofaRouteException.class);
-        thrown.expectMessage("RPC-020060001");
         TimeUnit.SECONDS.sleep(1);
-        Assert.assertEquals("hi World!", sampleFacade.sayHi("World"));
+        SofaRouteException thrown = assertThrows(SofaRouteException.class, () -> {
+            sampleFacade.sayHi("World");
+        });
+        assertThat(thrown.getMessage()).contains("RPC-020060001");
     }
 
     @Test
     public void testPortNotOpen() {
-        Assert.assertTrue(TestUtils.available(SofaBootRpcConfigConstants.BOLT_PORT_DEFAULT));
+        assertTrue(TestUtils.available(SofaBootRpcConfigConstants.BOLT_PORT_DEFAULT));
     }
 
     @TestConfiguration

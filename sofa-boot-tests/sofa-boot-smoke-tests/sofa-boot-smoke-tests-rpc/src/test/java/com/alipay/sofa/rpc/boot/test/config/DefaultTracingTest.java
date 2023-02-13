@@ -19,12 +19,13 @@ package com.alipay.sofa.rpc.boot.test.config;
 import com.alipay.sofa.tests.rpc.boot.SofaBootRpcApplication;
 import com.alipay.sofa.rpc.module.Module;
 import com.alipay.sofa.rpc.module.ModuleFactory;
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.lang.reflect.Field;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * @author khotyn
@@ -39,6 +40,6 @@ public class DefaultTracingTest {
         @SuppressWarnings("unchecked")
         ConcurrentHashMap<String, Module> modules = (ConcurrentHashMap<String, Module>) installedModulesField
             .get(ModuleFactory.class);
-        Assert.assertNotNull(modules.get("sofaTracer"));
+        assertNotNull(modules.get("sofaTracer"));
     }
 }

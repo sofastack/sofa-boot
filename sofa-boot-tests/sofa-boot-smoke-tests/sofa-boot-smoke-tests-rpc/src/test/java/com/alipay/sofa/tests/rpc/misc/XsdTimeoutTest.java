@@ -27,7 +27,6 @@ import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.tests.rpc.bean.misc.MethodElementInterface;
 import com.alipay.sofa.tests.rpc.bean.misc.WhateverInterface;
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -37,6 +36,7 @@ import org.springframework.context.annotation.ImportResource;
 import java.util.Collection;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author <a href="mailto:guaner.zzx@alipay.com">guaner.zzx</a>
@@ -53,7 +53,7 @@ public class XsdTimeoutTest {
 
     @Test
     public void testService() {
-        Assert.assertEquals(whatever.say(), "whatever");
+        assertEquals(whatever.say(), "whatever");
     }
 
     @Test

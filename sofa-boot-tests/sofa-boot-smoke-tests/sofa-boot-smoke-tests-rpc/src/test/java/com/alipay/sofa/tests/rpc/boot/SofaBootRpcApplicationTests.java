@@ -54,7 +54,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -68,6 +67,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  *
@@ -163,7 +165,7 @@ public class SofaBootRpcApplicationTests {
         try {
             //If all timeout configuration is not configured, the default timeout time 3000ms will take effect.The call will be time out.
             annotationService.testTimeout(4000);
-            Assert.fail();
+            fail();
         } catch (SofaTimeOutException e) {
 
         }
@@ -174,7 +176,7 @@ public class SofaBootRpcApplicationTests {
             // of 3000ms are invalid.
             annotationConsumerTimeoutService.testTimeout(2000);
 
-            Assert.fail();
+            fail();
         } catch (SofaTimeOutException e) {
 
         }
@@ -336,8 +338,8 @@ public class SofaBootRpcApplicationTests {
         HttpClient httpClient = HttpClientBuilder.create().build();
         HttpUriRequest request = new HttpGet("http://localhost:8341/swagger/openapi");
         HttpResponse response = httpClient.execute(request);
-        Assert.assertEquals(200, response.getStatusLine().getStatusCode());
-        Assert.assertTrue(EntityUtils.toString(response.getEntity()).contains("/webapi/add_service"));
+        assertEquals(200, response.getStatusLine().getStatusCode());
+        assertTrue(EntityUtils.toString(response.getEntity()).contains("/webapi/add_service"));
     }
 
     @Test
