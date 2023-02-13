@@ -19,9 +19,10 @@ package com.alipay.sofa.rpc.boot.test.config;
 import com.alipay.sofa.rpc.boot.log.SofaBootRpcLoggerFactory;
 import com.alipay.sofa.rpc.log.Logger;
 import com.alipay.sofa.rpc.log.LoggerFactory;
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * logger must be init when use. or will init by test case .not starter framework.
@@ -36,28 +37,28 @@ public class SofaRpcLoggerLevelConfigTest {
     @Test
     public void testRpcLoggerLevel() {
         Logger rpcLogger = LoggerFactory.getLogger("sofa.boot.rpc.transport");
-        Assert.assertTrue(rpcLogger.isDebugEnabled());
+        assertTrue(rpcLogger.isDebugEnabled());
     }
 
     @Test
     public void testStarterLoggerLevel() {
         org.slf4j.Logger starterLogger = SofaBootRpcLoggerFactory
             .getLogger("sofa.boot.rpc.boot.xxx");
-        Assert.assertTrue(starterLogger.isErrorEnabled());
+        assertTrue(starterLogger.isErrorEnabled());
     }
 
     @Test
     public void testOtherLoggerLevel() {
         contextRunner.run(context -> {
             Logger rpcLogger = LoggerFactory.getLogger("sofa.boot.rpc.xxx");
-            Assert.assertTrue(rpcLogger.isDebugEnabled());
+            assertTrue(rpcLogger.isDebugEnabled());
         });
     }
 
     @Test
     public void testUserAppLoggerLevel() {
         org.slf4j.Logger userLogger = org.slf4j.LoggerFactory.getLogger("com.user.app.xxx");
-        Assert.assertTrue(userLogger.isWarnEnabled());
+        assertTrue(userLogger.isWarnEnabled());
     }
 
 }
