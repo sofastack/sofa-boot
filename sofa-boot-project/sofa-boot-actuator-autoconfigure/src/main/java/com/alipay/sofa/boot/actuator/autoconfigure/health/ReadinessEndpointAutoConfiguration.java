@@ -25,7 +25,6 @@ import org.springframework.boot.actuate.autoconfigure.health.HealthEndpointPrope
 import org.springframework.boot.actuate.health.HealthEndpoint;
 import org.springframework.boot.actuate.health.HttpCodeStatusMapper;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -38,7 +37,8 @@ import org.springframework.context.annotation.Configuration;
  * @author huzijie
  * @version HealthEndpointAutoConfiguration.java, v 0.1 2022年12月29日 4:52 PM huzijie Exp $
  */
-@AutoConfiguration(after = ReadinessAutoConfiguration.class)
+@AutoConfiguration(before = HealthEndpointAutoConfiguration.class, after = ReadinessAutoConfiguration.class)
+@ConditionalOnBean(ReadinessCheckListener.class)
 @ConditionalOnAvailableEndpoint(endpoint = ReadinessEndpoint.class)
 public class ReadinessEndpointAutoConfiguration {
 
@@ -50,11 +50,10 @@ public class ReadinessEndpointAutoConfiguration {
     }
 
     @Configuration(proxyBeanMethods = false)
-    @AutoConfigureBefore(HealthEndpointAutoConfiguration.class)
+    @ConditionalOnBean(ReadinessEndpoint.class)
     @ConditionalOnAvailableEndpoint(endpoint = HealthEndpoint.class)
-    public static class ReadinessCheckExtensionConfiguration {
+    static class ReadinessCheckExtensionConfiguration {
 
-        @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
         @Bean
         @ConditionalOnMissingBean
         @ConditionalOnAvailableEndpoint(endpoint = ReadinessEndpointWebExtension.class)
@@ -65,7 +64,6 @@ public class ReadinessEndpointAutoConfiguration {
 
         @Bean
         @ConditionalOnMissingBean
-        @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
         public HttpCodeStatusMapper sofaHttpCodeStatusMapper(HealthEndpointProperties healthEndpointProperties) {
             return new SofaHttpCodeStatusMapper(healthEndpointProperties);
         }

@@ -50,6 +50,10 @@ public class SofaBootEnvironmentPostProcessor implements EnvironmentPostProcesso
         // Get SOFABoot version properties
         Properties defaultConfiguration = getSofaBootVersionProperties();
 
+        // Config default value of {@literal management.endpoints.web.exposure.include}
+        defaultConfiguration.put(SofaBootConstants.ENDPOINTS_WEB_EXPOSURE_INCLUDE_CONFIG,
+            SofaBootConstants.SOFA_DEFAULT_ENDPOINTS_WEB_EXPOSURE_VALUE);
+
         PropertiesPropertySource propertySource = new PropertiesPropertySource(
             SofaBootConstants.SOFA_DEFAULT_PROPERTY_SOURCE, defaultConfiguration);
         environment.getPropertySources().addLast(propertySource);

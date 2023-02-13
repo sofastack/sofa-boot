@@ -17,7 +17,10 @@
 package com.alipay.sofa.boot.autoconfigure.runtime;
 
 import com.alipay.sofa.boot.constant.SofaBootConstants;
+import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import com.alipay.sofa.boot.util.ServiceLoaderUtils;
+import com.alipay.sofa.common.thread.NamedThreadFactory;
+import com.alipay.sofa.common.thread.SofaThreadPoolExecutor;
 import com.alipay.sofa.runtime.api.client.ReferenceClient;
 import com.alipay.sofa.runtime.api.client.ServiceClient;
 import com.alipay.sofa.runtime.async.AsyncInitMethodManager;
@@ -44,6 +47,7 @@ import com.alipay.sofa.runtime.spring.ReferenceAnnotationBeanPostProcessor;
 import com.alipay.sofa.runtime.spring.ServiceBeanFactoryPostProcessor;
 import com.alipay.sofa.runtime.spring.SofaRuntimeAwareProcessor;
 import com.alipay.sofa.runtime.startup.ComponentBeanStatCustomizer;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -52,6 +56,12 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
+import org.springframework.util.Assert;
+
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 /**
  * {@link EnableAutoConfiguration Auto-configuration} for sofa runtime.
@@ -59,9 +69,12 @@ import org.springframework.core.env.Environment;
  * @author xuanbei 18/3/17
  */
 @AutoConfiguration
-@EnableConfigurationProperties(SofaRuntimeProperties.class)
 @ConditionalOnClass(SofaRuntimeContext.class)
+@EnableConfigurationProperties(SofaRuntimeProperties.class)
 public class SofaRuntimeAutoConfiguration {
+
+    private static final Logger LOGGER = SofaBootLoggerFactory
+                                           .getLogger(SofaRuntimeAutoConfiguration.class);
 
     @Bean
     @ConditionalOnMissingBean
@@ -119,17 +132,26 @@ public class SofaRuntimeAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public AsyncInitMethodManager asyncInitMethodManager(SofaRuntimeProperties sofaRuntimeProperties) {
-        AsyncInitMethodManager asyncInitMethodManager = new AsyncInitMethodManager();
-        if (sofaRuntimeProperties.getAsyncInitExecutorCoreSize() != null) {
-            asyncInitMethodManager.setExecutorCoreSize(sofaRuntimeProperties
-                .getAsyncInitExecutorCoreSize());
-        }
-        if (sofaRuntimeProperties.getAsyncInitExecutorMaxSize() != null) {
-            asyncInitMethodManager.setExecutorMaxSize(sofaRuntimeProperties
-                .getAsyncInitExecutorMaxSize());
-        }
-        return asyncInitMethodManager;
+    public static AsyncInitMethodManager asyncInitMethodManager() {
+        return new AsyncInitMethodManager();
+    }
+
+    @Bean(AsyncInitMethodManager.ASYNC_INIT_METHOD_EXECUTOR_BEAN_NAME)
+    @ConditionalOnMissingBean(name = AsyncInitMethodManager.ASYNC_INIT_METHOD_EXECUTOR_BEAN_NAME)
+    public Supplier<ThreadPoolExecutor> asyncInitMethodExecutor(SofaRuntimeProperties sofaRuntimeProperties) {
+        return ()-> {
+            int coreSize = sofaRuntimeProperties.getAsyncInitExecutorCoreSize();
+            int maxSize = sofaRuntimeProperties.getAsyncInitExecutorMaxSize();
+            Assert.isTrue(coreSize >= 0, "executorCoreSize must no less than zero");
+            Assert.isTrue(maxSize >= 0, "executorMaxSize must no less than zero");
+
+            LOGGER.info("create async-init-bean thread pool, corePoolSize: {}, maxPoolSize: {}.",
+                    coreSize, maxSize);
+            return new SofaThreadPoolExecutor(coreSize, maxSize, 30, TimeUnit.SECONDS,
+                    new SynchronousQueue<>(), new NamedThreadFactory("async-init-bean"),
+                    new ThreadPoolExecutor.CallerRunsPolicy(), "async-init-bean",
+                    SofaBootConstants.SOFA_BOOT_SPACE_NAME);
+        };
     }
 
     @Bean

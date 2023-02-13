@@ -48,7 +48,7 @@ public class SofaArkAutoConfigurationTests {
     }
 
     @Test
-    public void noArkBeansWhenSofaRuntimeContainerClassNotExist() {
+    public void arkBeansWhenSofaRuntimeContainerClassNotExist() {
         this.contextRunner.withClassLoader(new FilteredClassLoader(SofaRuntimeContainer.class))
                 .run((context) -> assertThat(context)
                         .doesNotHaveBean(SofaRuntimeContainer.class)

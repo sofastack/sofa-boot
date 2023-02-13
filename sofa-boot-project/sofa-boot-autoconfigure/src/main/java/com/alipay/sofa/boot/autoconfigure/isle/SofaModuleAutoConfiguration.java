@@ -63,9 +63,9 @@ import java.util.function.Supplier;
  * @author huzijie
  */
 @AutoConfiguration
-@EnableConfigurationProperties(SofaModuleProperties.class)
 @ConditionalOnClass(ApplicationRuntimeModel.class)
 @ConditionalOnProperty(value = "sofa.boot.isle.enabled", havingValue = "true", matchIfMissing = true)
+@EnableConfigurationProperties(SofaModuleProperties.class)
 public class SofaModuleAutoConfiguration {
 
     private static final Logger LOGGER = SofaBootLoggerFactory

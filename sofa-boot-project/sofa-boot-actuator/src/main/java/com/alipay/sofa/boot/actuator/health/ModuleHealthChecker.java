@@ -18,11 +18,8 @@ package com.alipay.sofa.boot.actuator.health;
 
 import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptor;
-import org.springframework.beans.BeansException;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.Status;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 
 /**
  * Implementation of {@link HealthChecker} used to check sofa modules health.
@@ -30,28 +27,25 @@ import org.springframework.context.ApplicationContextAware;
  * @author xuanbei 18/5/16
  * @author huzijie
  */
-public class ModuleHealthChecker implements ApplicationContextAware, HealthChecker {
+public class ModuleHealthChecker implements HealthChecker {
 
-    public static final String COMPONENT_NAME = "modules";
+    public static final String            COMPONENT_NAME = "modules";
 
-    private ApplicationContext applicationContext;
+    private final ApplicationRuntimeModel applicationRuntimeModel;
 
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
+    public ModuleHealthChecker(ApplicationRuntimeModel applicationRuntimeModel) {
+        this.applicationRuntimeModel = applicationRuntimeModel;
     }
 
     @Override
     public Health isHealthy() {
         Health.Builder builder = new Health.Builder();
-        ApplicationRuntimeModel application = applicationContext.getBean(
-            ApplicationRuntimeModel.APPLICATION_RUNTIME_MODEL_NAME, ApplicationRuntimeModel.class);
 
-        for (DeploymentDescriptor deploymentDescriptor : application.getFailed()) {
+        for (DeploymentDescriptor deploymentDescriptor : applicationRuntimeModel.getFailed()) {
             builder.withDetail(deploymentDescriptor.getName(), "failed");
         }
 
-        if (application.getFailed().size() == 0) {
+        if (applicationRuntimeModel.getFailed().size() == 0) {
             return builder.status(Status.UP).build();
         } else {
             return builder.status(Status.DOWN).build();

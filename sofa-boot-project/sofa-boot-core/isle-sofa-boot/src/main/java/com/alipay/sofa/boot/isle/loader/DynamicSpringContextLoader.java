@@ -82,13 +82,13 @@ public class DynamicSpringContextLoader implements SpringContextLoader, Initiali
                                   ApplicationRuntimeModel application) {
         ClassLoader classLoader = deployment.getClassLoader();
 
-        SofaDefaultListableBeanFactory beanFactory = SofaSpringContextSupport.createBeanFactory(classLoader, this::newInstanceBeanFactory);
+        SofaDefaultListableBeanFactory beanFactory = SofaSpringContextSupport.createBeanFactory(classLoader, this::createBeanFactory);
         if (!CollectionUtils.isEmpty(beanStatCustomizers)) {
             AnnotationAwareOrderComparator.sort(beanStatCustomizers);
             beanStatCustomizers.forEach(beanFactory::addBeanStatCustomizer);
         }
 
-        SofaGenericApplicationContext context = SofaSpringContextSupport.createApplicationContext(beanFactory, this::newInstanceApplicationContext);
+        SofaGenericApplicationContext context = SofaSpringContextSupport.createApplicationContext(beanFactory, this::createApplicationContext);
 
         context.setId(deployment.getModuleName());
         if (!CollectionUtils.isEmpty(activeProfiles)) {
@@ -106,8 +106,7 @@ public class DynamicSpringContextLoader implements SpringContextLoader, Initiali
         context.setParent(parentContext);
         context.getEnvironment().setConversionService(parentContext.getEnvironment().getConversionService());
 
-        XmlBeanDefinitionReader beanDefinitionReader = new XmlBeanDefinitionReader(context);
-        beanDefinitionReader.setValidating(true);
+        XmlBeanDefinitionReader beanDefinitionReader = createXmlBeanDefinitionReader(context);
         beanDefinitionReader.setNamespaceAware(true);
         beanDefinitionReader.setBeanClassLoader(classLoader);
         beanDefinitionReader.setResourceLoader(context);
@@ -117,11 +116,17 @@ public class DynamicSpringContextLoader implements SpringContextLoader, Initiali
         addPostProcessors(beanFactory);
     }
 
-    protected SofaDefaultListableBeanFactory newInstanceBeanFactory() {
+    protected XmlBeanDefinitionReader createXmlBeanDefinitionReader(SofaGenericApplicationContext context) {
+        XmlBeanDefinitionReader beanDefinitionReader = new XmlBeanDefinitionReader(context);
+        beanDefinitionReader.setValidating(true);
+        return beanDefinitionReader;
+    }
+
+    protected SofaDefaultListableBeanFactory createBeanFactory() {
         return new SofaDefaultListableBeanFactory();
     }
 
-    protected SofaGenericApplicationContext newInstanceApplicationContext(SofaDefaultListableBeanFactory beanFactory) {
+    protected SofaGenericApplicationContext createApplicationContext(SofaDefaultListableBeanFactory beanFactory) {
         return new SofaGenericApplicationContext(beanFactory);
     }
 
