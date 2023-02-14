@@ -40,7 +40,7 @@ import java.util.Map;
  */
 public class IsleBeansEndpoint extends BeansEndpoint {
 
-    private final ApplicationRuntimeModel        applicationRuntimeModel;
+    private final ApplicationRuntimeModel applicationRuntimeModel;
 
     /**
      * Creates a new {@code BeansEndpoint} that will describe the beans in the given

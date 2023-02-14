@@ -74,4 +74,10 @@ public class SofaBootConstants {
      * Default exposure web endpoint list
      */
     public static final String SOFA_DEFAULT_ENDPOINTS_WEB_EXPOSURE_VALUE = "info,health,readiness,startup,beans,components";
+
+    /**
+     * CPU core
+     */
+    public static final int    CPU_CORE                                  = Runtime.getRuntime()
+                                                                             .availableProcessors();
 }

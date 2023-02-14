@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.boot.autoconfigure.isle;
 
+import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.context.processor.SofaPostProcessorShareManager;
 import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.boot.isle.deployment.ModuleDeploymentValidator;
@@ -143,7 +144,7 @@ public class SofaModuleAutoConfigurationTests {
                 .run((context) -> {
                     SofaThreadPoolExecutor threadPoolExecutor = (SofaThreadPoolExecutor) context.getBean(
                             SpringContextInstallStage.SOFA_MODULE_REFRESH_EXECUTOR_BEAN_NAME, Supplier.class).get();
-                    assertThat(threadPoolExecutor.getCorePoolSize()).isEqualTo(Runtime.getRuntime().availableProcessors() * 2);
+                    assertThat(threadPoolExecutor.getCorePoolSize()).isEqualTo(SofaBootConstants.CPU_CORE * 2);
                     assertThat(threadPoolExecutor.getConfig().getTaskTimeout()).isEqualTo(10);
                     assertThat(threadPoolExecutor.getConfig().getPeriod()).isEqualTo(20);
                 });

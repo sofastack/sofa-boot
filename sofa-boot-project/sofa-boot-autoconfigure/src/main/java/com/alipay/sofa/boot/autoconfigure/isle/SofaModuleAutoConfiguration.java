@@ -156,7 +156,7 @@ public class SofaModuleAutoConfiguration {
     @ConditionalOnMissingBean(name = SpringContextInstallStage.SOFA_MODULE_REFRESH_EXECUTOR_BEAN_NAME)
     @ConditionalOnProperty(value = "sofa.boot.isle.moduleStartUpParallel", havingValue = "true", matchIfMissing = true)
     public Supplier<ThreadPoolExecutor> sofaModuleRefreshExecutor(SofaModuleProperties sofaModuleProperties) {
-        int coreSize = (int) (Runtime.getRuntime().availableProcessors() * sofaModuleProperties.getParallelRefreshPoolSizeFactor());
+        int coreSize = (int) (SofaBootConstants.CPU_CORE * sofaModuleProperties.getParallelRefreshPoolSizeFactor());
         long taskTimeout = sofaModuleProperties.getParallelRefreshTimeout();
         long checkPeriod = sofaModuleProperties.getParallelRefreshCheckPeriod();
 
