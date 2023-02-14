@@ -379,6 +379,12 @@
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>sofa-ark-api</artifactId>
                 <version>${sofa.ark.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.alipay.sofa</groupId>
+                        <artifactId>log-sofa-boot-starter</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>

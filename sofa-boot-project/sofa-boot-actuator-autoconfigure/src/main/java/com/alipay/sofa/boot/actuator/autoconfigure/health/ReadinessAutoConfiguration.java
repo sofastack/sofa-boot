@@ -127,7 +127,7 @@ public class ReadinessAutoConfiguration {
     public ThreadPoolExecutor healthCheckExecutor(HealthProperties properties) {
         int threadPoolSize;
         if (properties.isParallelCheck()) {
-            threadPoolSize = Runtime.getRuntime().availableProcessors() * 5;
+            threadPoolSize = SofaBootConstants.CPU_CORE * 5;
         } else {
             threadPoolSize = 1;
         }
