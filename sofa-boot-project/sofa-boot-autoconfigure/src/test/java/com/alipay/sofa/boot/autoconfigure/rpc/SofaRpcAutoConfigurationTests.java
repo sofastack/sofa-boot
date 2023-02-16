@@ -55,7 +55,8 @@ public class SofaRpcAutoConfigurationTests {
 
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
                                                              .withConfiguration(AutoConfigurations
-                                                                 .of(SofaRpcAutoConfiguration.class));
+                                                                 .of(SofaRpcAutoConfiguration.class,
+                                                                     SofaRuntimeAutoConfiguration.class));
 
     @Test
     void defaultProviderConfigContainer() {

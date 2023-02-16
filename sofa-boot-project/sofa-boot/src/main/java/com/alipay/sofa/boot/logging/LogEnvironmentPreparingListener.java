@@ -20,13 +20,13 @@ import com.alipay.sofa.boot.util.SofaBootEnvUtils;
 import com.alipay.sofa.common.log.CommonLoggingConfigurations;
 import com.alipay.sofa.common.log.Constants;
 import com.alipay.sofa.common.log.env.LogEnvUtils;
-import com.alipay.sofa.common.utils.StringUtil;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.EnumerablePropertySource;
 import org.springframework.core.env.PropertySource;
+import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -91,7 +91,7 @@ public class LogEnvironmentPreparingListener
 
     private void loadLogConfiguration(String key, String value, String defaultValue,
                                       Map<String, String> context) {
-        if (!StringUtil.isBlank(value)) {
+        if (StringUtils.hasText(value)) {
             context.put(key, value);
         } else {
             context.put(key, defaultValue);
@@ -99,7 +99,7 @@ public class LogEnvironmentPreparingListener
     }
 
     private void loadLogConfiguration(String key, String value, Map<String, String> context) {
-        if (!StringUtil.isBlank(value)) {
+        if (StringUtils.hasText(value)) {
             context.put(key, value);
         }
     }

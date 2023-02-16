@@ -22,7 +22,6 @@ import com.alipay.sofa.ark.spi.replay.ReplayContext;
 import com.alipay.sofa.ark.spi.service.ArkInject;
 import com.alipay.sofa.ark.spi.service.biz.BizManagerService;
 import com.alipay.sofa.boot.ark.SofaRuntimeContainer;
-import com.alipay.sofa.common.utils.StringUtil;
 import com.alipay.sofa.runtime.service.binding.JvmBinding;
 import com.alipay.sofa.runtime.service.component.ServiceComponent;
 import com.alipay.sofa.runtime.spi.binding.Contract;
@@ -30,6 +29,7 @@ import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.ComponentManager;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import com.alipay.sofa.runtime.spi.service.ServiceProxy;
+import org.springframework.util.StringUtils;
 
 import java.util.Collection;
 import java.util.Map;
@@ -193,7 +193,7 @@ public class DynamicJvmServiceProxyFinder {
 
         String version = ReplayContext.get();
         version = ReplayContext.PLACEHOLDER.equals(version) ? null : version;
-        if (StringUtil.isNotBlank(version)) {
+        if (StringUtils.hasText(version)) {
             return jvmServiceTargetHabitat.getServiceComponent(version);
         }
         return jvmServiceTargetHabitat.getDefaultServiceComponent();
@@ -201,7 +201,7 @@ public class DynamicJvmServiceProxyFinder {
 
     private String getUniqueName(Contract contract) {
         String uniqueName = contract.getInterfaceType().getName();
-        if (StringUtil.isNotBlank(contract.getUniqueId())) {
+        if (StringUtils.hasText(contract.getUniqueId())) {
             uniqueName += ":" + contract.getUniqueId();
         }
         return uniqueName;

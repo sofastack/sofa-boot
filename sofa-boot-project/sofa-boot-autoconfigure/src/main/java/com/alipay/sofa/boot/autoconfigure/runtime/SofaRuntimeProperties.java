@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.boot.autoconfigure.runtime;
 
+import com.alipay.sofa.boot.constant.SofaBootConstants;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
@@ -70,12 +71,12 @@ public class SofaRuntimeProperties {
     /**
      * Custom async init executor core size.
      */
-    private Integer asyncInitExecutorCoreSize;
+    private int     asyncInitExecutorCoreSize   = SofaBootConstants.CPU_CORE + 1;
 
     /**
      * Custom async init executor max size.
      */
-    private Integer asyncInitExecutorMaxSize;
+    private int     asyncInitExecutorMaxSize    = SofaBootConstants.CPU_CORE + 1;
 
     public boolean isSkipJvmReferenceHealthCheck() {
         return skipJvmReferenceHealthCheck;
@@ -141,19 +142,19 @@ public class SofaRuntimeProperties {
         this.serviceInterfaceTypeCheck = serviceInterfaceTypeCheck;
     }
 
-    public Integer getAsyncInitExecutorCoreSize() {
+    public int getAsyncInitExecutorCoreSize() {
         return asyncInitExecutorCoreSize;
     }
 
-    public void setAsyncInitExecutorCoreSize(Integer asyncInitExecutorCoreSize) {
+    public void setAsyncInitExecutorCoreSize(int asyncInitExecutorCoreSize) {
         this.asyncInitExecutorCoreSize = asyncInitExecutorCoreSize;
     }
 
-    public Integer getAsyncInitExecutorMaxSize() {
+    public int getAsyncInitExecutorMaxSize() {
         return asyncInitExecutorMaxSize;
     }
 
-    public void setAsyncInitExecutorMaxSize(Integer asyncInitExecutorMaxSize) {
+    public void setAsyncInitExecutorMaxSize(int asyncInitExecutorMaxSize) {
         this.asyncInitExecutorMaxSize = asyncInitExecutorMaxSize;
     }
 }

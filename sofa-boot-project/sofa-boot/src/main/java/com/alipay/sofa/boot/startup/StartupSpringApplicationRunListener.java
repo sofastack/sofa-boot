@@ -95,7 +95,9 @@ public class StartupSpringApplicationRunListener implements SpringApplicationRun
         stat.setName(BootStageConstants.APPLICATION_CONTEXT_LOAD_STAGE);
         stat.setStartTime(applicationContextPrepareStage.getEndTime());
         stat.setEndTime(System.currentTimeMillis());
-        context.getBeanFactory().addBeanPostProcessor(new BeanCostBeanPostProcessor());
+        BeanCostBeanPostProcessor beanCostBeanPostProcessor = new BeanCostBeanPostProcessor();
+        beanCostBeanPostProcessor.setCostThreshold(startupReporter.getCostThreshold());
+        context.getBeanFactory().addBeanPostProcessor(beanCostBeanPostProcessor);
         context.getBeanFactory().addBeanPostProcessor(
             new StartupReporterBeanPostProcessor(startupReporter));
         context.getBeanFactory().registerSingleton("STARTUP_REPORTER_BEAN", startupReporter);

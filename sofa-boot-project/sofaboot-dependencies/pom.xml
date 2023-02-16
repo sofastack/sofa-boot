@@ -22,7 +22,7 @@
         <!-- sofa stack lib-->
         <sofa.registry.version>6.1.8</sofa.registry.version>
         <tracer.core.version>3.1.1</tracer.core.version>
-        <rpc.core.version>5.9.0-SNAPSHOT</rpc.core.version>
+        <rpc.core.version>5.10.0-jdk17-SNAPSHOT</rpc.core.version>
         <sofa.common.tools.version>2.0.0-SNAPSHOT</sofa.common.tools.version>
         <sofa.bolt.version>1.6.6</sofa.bolt.version>
         <sofa.hessian.version>3.3.12</sofa.hessian.version>
@@ -36,10 +36,7 @@
         <protobuf-java.version>3.11.0</protobuf-java.version>
         <xerces.version>2.12.2</xerces.version>
         <guice.version>3.0</guice.version>
-        <guava.version>28.2-jre</guava.version>
-        <zipkin.version>2.11.3</zipkin.version>
-        <zipkin.reporter.version>2.7.7</zipkin.reporter.version>
-        <jackson.version>2.9.10</jackson.version>
+        <guava.version>31.1-jre</guava.version>
         <jboss.jaxrs.api.version>1.0.2.Final</jboss.jaxrs.api.version>
         <spring.cloud.stream.version>3.2.6</spring.cloud.stream.version>
         <rocketmq.spring.boot.starter.version>2.0.2</rocketmq.spring.boot.starter.version>
@@ -54,9 +51,8 @@
         <zkclient.version>0.11</zkclient.version>
         <nacos.version>1.0.0</nacos.version>
         <swagger.version>2.0.0</swagger.version>
-        <protoc.version>3.11.0</protoc.version>
-        <grpc.version>1.28.0</grpc.version>
-        <grpc.common.protos.version>1.17.0</grpc.common.protos.version>
+        <grpc.version>1.51.1</grpc.version>
+        <grpc.common.protos.version>2.11.0</grpc.common.protos.version>
     </properties>
 
     <licenses>
@@ -379,6 +375,12 @@
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>sofa-ark-api</artifactId>
                 <version>${sofa.ark.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.alipay.sofa</groupId>
+                        <artifactId>log-sofa-boot-starter</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>
@@ -533,6 +535,12 @@
                 <groupId>io.grpc</groupId>
                 <artifactId>grpc-all</artifactId>
                 <version>${grpc.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>junit</groupId>
+                        <artifactId>junit</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>io.grpc</groupId>
@@ -594,16 +602,6 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.zipkin.zipkin2</groupId>
-                <artifactId>zipkin</artifactId>
-                <version>${zipkin.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.zipkin.reporter2</groupId>
-                <artifactId>zipkin-reporter</artifactId>
-                <version>${zipkin.reporter.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.swagger.core.v3</groupId>
