@@ -5,7 +5,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
             http://sofastack.io/schema/sofaboot   http://sofastack.io/schema/sofaboot.xsd">
 
-    <sofa:reference jvm-first="false" id="helloSyncService" interface="com.alipay.sofa.tests.rpc.bean.invoke.HelloSyncService">
+    <sofa:reference jvm-first="false" id="helloSyncService" interface="com.alipay.sofa.smoke.tests.rpc.bean.invoke.HelloSyncService">
         <sofa:binding.bolt/>
     </sofa:reference>
 

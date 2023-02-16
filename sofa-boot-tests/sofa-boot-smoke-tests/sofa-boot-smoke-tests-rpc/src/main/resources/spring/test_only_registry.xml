@@ -6,14 +6,14 @@
             http://sofastack.io/schema/sofaboot   http://sofastack.io/schema/sofaboot.xsd">
 
     <sofa:reference jvm-first="false" id="multiRegistryServiceRef"
-                    interface="com.alipay.sofa.tests.rpc.bean.registry.MultiRegistryService">
+                    interface="com.alipay.sofa.smoke.tests.rpc.bean.registry.MultiRegistryService">
         <sofa:binding.bolt>
             <sofa:global-attrs registry="gateway"/>
         </sofa:binding.bolt>
     </sofa:reference>
 
-    <bean id="multiRegistryServiceImpl" class="com.alipay.sofa.tests.rpc.bean.registry.MultiRegistryServiceImpl"/>
-    <sofa:service id="multiRegistryServiceSer" interface="com.alipay.sofa.tests.rpc.bean.registry.MultiRegistryService"
+    <bean id="multiRegistryServiceImpl" class="com.alipay.sofa.smoke.tests.rpc.bean.registry.MultiRegistryServiceImpl"/>
+    <sofa:service id="multiRegistryServiceSer" interface="com.alipay.sofa.smoke.tests.rpc.bean.registry.MultiRegistryService"
                   ref="multiRegistryServiceImpl">
         <sofa:binding.bolt>
             <sofa:global-attrs registry="gateway"/>

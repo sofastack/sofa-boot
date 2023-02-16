@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.boot.autoconfigure.rpc;
 
+import com.alipay.sofa.boot.autoconfigure.runtime.SofaRuntimeAutoConfiguration;
 import com.alipay.sofa.rpc.boot.config.RegistryConfigureProcessor;
 import com.alipay.sofa.rpc.boot.container.ProviderConfigContainer;
 import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ConsumerMockProcessor;
@@ -48,7 +49,8 @@ public class SofaRpcAutoConfigurationTests {
 
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
                                                              .withConfiguration(AutoConfigurations
-                                                                 .of(SofaRpcAutoConfiguration.class));
+                                                                 .of(SofaRpcAutoConfiguration.class,
+                                                                     SofaRuntimeAutoConfiguration.class));
 
     @Test
     void defaultProviderConfigContainer() {

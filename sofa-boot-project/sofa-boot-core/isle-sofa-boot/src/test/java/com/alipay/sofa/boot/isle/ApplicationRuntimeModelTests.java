@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.boot.isle;
 
+import com.alipay.sofa.boot.isle.deployment.AbstractDeploymentDescriptor;
 import com.alipay.sofa.boot.isle.deployment.DefaultModuleDeploymentValidator;
 import com.alipay.sofa.boot.isle.deployment.DeploymentBuilder;
 import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptor;
@@ -23,10 +24,16 @@ import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptorConfiguration;
 import com.alipay.sofa.boot.isle.deployment.FileDeploymentDescriptor;
 import com.alipay.sofa.boot.isle.deployment.JarDeploymentDescriptor;
 import org.junit.jupiter.api.Test;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.util.ReflectionUtils;
 
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -60,6 +67,7 @@ public class ApplicationRuntimeModelTests {
         assertThat(dd instanceof JarDeploymentDescriptor).isTrue();
         assertThat(application.isModuleDeployment(dd)).isTrue();
         application.addDeployment(dd);
+        addSpringXml(dd);
 
         // add second SOFAIsle module
         props = new Properties();
@@ -71,6 +79,7 @@ public class ApplicationRuntimeModelTests {
         assertThat(dd instanceof FileDeploymentDescriptor).isTrue();
         assertThat(application.isModuleDeployment(dd)).isTrue();
         application.addDeployment(dd);
+        addSpringXml(dd);
 
         // missing com.alipay.util module
         assertThat(2).isEqualTo(application.getDeployRegistry().getPendingEntries().size());
@@ -116,6 +125,16 @@ public class ApplicationRuntimeModelTests {
         assertThat(dd).isInstanceOf(JarDeploymentDescriptor.class);
         assertThat(application.isModuleDeployment(dd)).isTrue();
         application.addDeployment(dd);
+        addSpringXml(dd);
         assertThat(0).isEqualTo(application.getDeployRegistry().getPendingEntries().size());
+    }
+
+    private void addSpringXml(DeploymentDescriptor deploymentDescriptor) {
+        Field field = ReflectionUtils.findField(AbstractDeploymentDescriptor.class,
+            "springResources");
+        field.setAccessible(true);
+        Map<String, Resource> map = new HashMap<>();
+        map.put("test", new ByteArrayResource(new byte[] {}));
+        ReflectionUtils.setField(field, deploymentDescriptor, map);
     }
 }
