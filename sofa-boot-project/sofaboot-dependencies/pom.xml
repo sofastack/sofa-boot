@@ -36,10 +36,7 @@
         <protobuf-java.version>3.11.0</protobuf-java.version>
         <xerces.version>2.12.2</xerces.version>
         <guice.version>3.0</guice.version>
-        <guava.version>28.2-jre</guava.version>
-        <zipkin.version>2.11.3</zipkin.version>
-        <zipkin.reporter.version>2.7.7</zipkin.reporter.version>
-        <jackson.version>2.9.10</jackson.version>
+        <guava.version>31.1-jre</guava.version>
         <jboss.jaxrs.api.version>1.0.2.Final</jboss.jaxrs.api.version>
         <spring.cloud.stream.version>3.2.6</spring.cloud.stream.version>
         <rocketmq.spring.boot.starter.version>2.0.2</rocketmq.spring.boot.starter.version>
@@ -54,9 +51,8 @@
         <zkclient.version>0.11</zkclient.version>
         <nacos.version>1.0.0</nacos.version>
         <swagger.version>2.0.0</swagger.version>
-        <protoc.version>3.11.0</protoc.version>
-        <grpc.version>1.28.0</grpc.version>
-        <grpc.common.protos.version>1.17.0</grpc.common.protos.version>
+        <grpc.version>1.51.1</grpc.version>
+        <grpc.common.protos.version>2.11.0</grpc.common.protos.version>
     </properties>
 
     <licenses>
@@ -600,16 +596,6 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.zipkin.zipkin2</groupId>
-                <artifactId>zipkin</artifactId>
-                <version>${zipkin.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.zipkin.reporter2</groupId>
-                <artifactId>zipkin-reporter</artifactId>
-                <version>${zipkin.reporter.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.swagger.core.v3</groupId>
