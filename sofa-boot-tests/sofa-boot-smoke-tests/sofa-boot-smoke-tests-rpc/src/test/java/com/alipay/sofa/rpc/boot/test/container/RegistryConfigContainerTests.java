@@ -23,6 +23,7 @@ import com.alipay.sofa.boot.autoconfigure.rpc.SofaBootRpcProperties;
 import com.alipay.sofa.rpc.boot.config.ZookeeperConfigurator;
 import com.alipay.sofa.rpc.boot.container.RegistryConfigContainer;
 import com.alipay.sofa.rpc.config.RegistryConfig;
+import com.alipay.sofa.tests.rpc.boot.RpcSofaBootApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -37,9 +38,9 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * @author <a href="mailto:lw111072@antfin.com">LiWei</a>
  */
-@SpringBootTest
-@SpringBootApplication
-public class RegistryConfigContainerTest {
+@SpringBootTest(classes = RpcSofaBootApplication.class)
+public class RegistryConfigContainerTests {
+
     @Autowired
     private SofaBootRpcProperties      sofaBootRpcProperties;
     @Autowired

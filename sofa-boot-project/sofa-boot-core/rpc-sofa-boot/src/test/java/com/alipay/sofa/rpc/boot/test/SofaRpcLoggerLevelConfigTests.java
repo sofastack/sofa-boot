@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.rpc.boot.test.config;
+package com.alipay.sofa.rpc.boot.test;
 
 import com.alipay.sofa.rpc.boot.log.SofaBootRpcLoggerFactory;
 import com.alipay.sofa.rpc.log.Logger;
@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * logger must be init when use. or will init by test case .not starter framework.
  */
-public class SofaRpcLoggerLevelConfigTest {
+public class SofaRpcLoggerLevelConfigTests {
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
                                                              .withPropertyValues(
                                                                  "logging.level.com.alipay.sofa.rpc=DEBUG",

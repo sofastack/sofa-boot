@@ -17,6 +17,7 @@
 package com.alipay.sofa.boot.autoconfigure.rpc;
 
 import com.alipay.sofa.boot.autoconfigure.rpc.SofaRpcAutoConfiguration.RegistryConfigurationImportSelector;
+import com.alipay.sofa.boot.autoconfigure.runtime.SofaRuntimeAutoConfiguration;
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.rpc.boot.config.FaultToleranceConfigurator;
 import com.alipay.sofa.rpc.boot.config.RegistryConfigureProcessor;
@@ -61,7 +62,7 @@ import java.util.Map;
  * @author yuanxuan
  * @author huzijie
  */
-@AutoConfiguration
+@AutoConfiguration(after = SofaRuntimeAutoConfiguration.class)
 @ConditionalOnClass(ProviderConfigContainer.class)
 @EnableConfigurationProperties(SofaBootRpcProperties.class)
 @Import({ RegistryConfigurationImportSelector.class, SwaggerConfiguration.class,

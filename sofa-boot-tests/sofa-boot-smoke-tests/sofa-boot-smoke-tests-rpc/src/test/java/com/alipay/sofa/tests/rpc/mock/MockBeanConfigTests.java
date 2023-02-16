@@ -27,10 +27,12 @@ import com.alipay.sofa.runtime.api.annotation.SofaParameter;
 import com.alipay.sofa.runtime.api.annotation.SofaReference;
 import com.alipay.sofa.runtime.api.annotation.SofaReferenceBinding;
 import com.alipay.sofa.tests.rpc.bean.invoke.HelloSyncService;
+import com.alipay.sofa.tests.rpc.boot.RpcSofaBootApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.test.context.TestPropertySource;
 
@@ -41,11 +43,10 @@ import static org.assertj.core.api.Assertions.fail;
  * @author zhaowang
  * @version : MockBeanConfigTest.java, v 0.1 2020年03月10日 9:12 下午 zhaowang Exp $
  */
-@SpringBootApplication
-@SpringBootTest
-@ImportResource("/spring/test_only_mock_bean.xml")
+@SpringBootTest(classes = RpcSofaBootApplication.class)
 @TestPropertySource(properties = { "sofa.boot.rpc" + ".consumer.repeated.reference.limit=10", })
-public class MockBeanConfigTest {
+@Import(MockBeanConfigTests.MockBeanConfiguration.class)
+public class MockBeanConfigTests {
 
     @SofaReference(binding = @SofaReferenceBinding(bindingType = "bolt", mockMode = MockMode.LOCAL, mockBean = "mockHello"))
     private HelloSyncService     helloSyncService;
@@ -84,5 +85,11 @@ public class MockBeanConfigTest {
 
         assertThat(remoteMock.saySync(("xx"))).isEqualTo("mockJson");
         HttpMockServer.stop();
+    }
+
+    @Configuration
+    @ImportResource("/spring/test_only_mock_bean.xml")
+    static class MockBeanConfiguration {
+
     }
 }

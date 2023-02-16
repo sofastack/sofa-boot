@@ -17,7 +17,8 @@
 package com.alipay.sofa.tests.rpc.shutdown;
 
 import com.alipay.sofa.rpc.boot.config.SofaBootRpcConfigConstants;
-import com.alipay.sofa.tests.rpc.ActivelyDestroyTest;
+import com.alipay.sofa.tests.rpc.ActivelyDestroyTests;
+import com.alipay.sofa.tests.rpc.boot.RpcSofaBootApplication;
 import com.alipay.sofa.tests.rpc.util.TestUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
@@ -27,15 +28,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.test.annotation.DirtiesContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootApplication
-@SpringBootTest(classes = RpcShutdownTest.class)
-@ImportResource("/spring/shutdown.xml")
-public class RpcShutdownTest extends ActivelyDestroyTest implements ApplicationContextAware {
+@SpringBootTest(classes = RpcSofaBootApplication.class)
+@Import(RpcShutdownTests.RpcShutdownConfiguration.class)
+public class RpcShutdownTests extends ActivelyDestroyTests implements ApplicationContextAware {
     private static ApplicationContext applicationContext;
 
     @Test
@@ -66,6 +68,12 @@ public class RpcShutdownTest extends ActivelyDestroyTest implements ApplicationC
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        RpcShutdownTest.applicationContext = applicationContext;
+        RpcShutdownTests.applicationContext = applicationContext;
+    }
+
+    @Configuration
+    @ImportResource("/spring/shutdown.xml")
+    static class RpcShutdownConfiguration {
+
     }
 }

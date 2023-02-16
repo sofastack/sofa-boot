@@ -17,15 +17,17 @@
 package com.alipay.sofa.tests.rpc.mesh;
 
 import com.alipay.sofa.rpc.core.exception.SofaRpcException;
-import com.alipay.sofa.tests.rpc.ActivelyDestroyTest;
+import com.alipay.sofa.tests.rpc.ActivelyDestroyTests;
 import com.alipay.sofa.tests.rpc.bean.SampleService;
 import com.alipay.sofa.tests.rpc.bean.invoke.HelloSyncService;
+import com.alipay.sofa.tests.rpc.boot.RpcSofaBootApplication;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -35,12 +37,11 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @version $Id: MeshTest.java, v 0.1 2018-06-25 19:26 zhiyuan.lzy Exp $$
  * you should change mesh address to test
  */
-@SpringBootApplication
-@SpringBootTest(properties = { "sofa.boot.rpc.registries.mesh=mesh://127.0.0.1:13330",
-                              "sofa.boot.rpc.enable.mesh=bolt" }, classes = MeshTest.class)
-@ImportResource("/spring/test_only_mesh.xml")
+@SpringBootTest(classes = RpcSofaBootApplication.class, properties = { "sofa.boot.rpc.registries.mesh=mesh://127.0.0.1:13330",
+                              "sofa.boot.rpc.enable.mesh=bolt" })
+@Import(MeshTests.MeshConfiguration.class)
 @Disabled
-public class MeshTest extends ActivelyDestroyTest {
+public class MeshTests extends ActivelyDestroyTests {
 
     @Autowired
     @Qualifier("helloSyncConsumerMesh")
@@ -60,5 +61,11 @@ public class MeshTest extends ActivelyDestroyTest {
             e.printStackTrace();
             assertThat(e.getClass()).isEqualTo(SofaRpcException.class);
         }
+    }
+
+    @Configuration
+    @ImportResource("/spring/test_only_mesh.xml")
+    static class MeshConfiguration {
+
     }
 }

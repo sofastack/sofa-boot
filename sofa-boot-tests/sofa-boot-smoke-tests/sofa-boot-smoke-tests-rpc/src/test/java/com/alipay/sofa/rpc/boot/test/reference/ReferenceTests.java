@@ -20,12 +20,14 @@ import com.alipay.sofa.rpc.boot.config.SofaBootRpcConfigConstants;
 import com.alipay.sofa.rpc.boot.container.ServerConfigContainer;
 import com.alipay.sofa.rpc.config.ServerConfig;
 import com.alipay.sofa.rpc.core.exception.SofaRouteException;
-import com.alipay.sofa.tests.rpc.ActivelyDestroyTest;
+import com.alipay.sofa.tests.rpc.ActivelyDestroyTests;
 import com.alipay.sofa.tests.rpc.bean.invoke.HelloSyncService;
+import com.alipay.sofa.tests.rpc.boot.RpcSofaBootApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 
 import java.util.List;
@@ -38,10 +40,9 @@ import static org.junit.jupiter.api.Assertions.assertNull;
  * @author zhuoyu.sjw
  * @version $Id: SofaBootRpCReferenceTest.java, v 0.1 2018-06-25 19:26 zhuoyu.sjw Exp $$
  */
-@SpringBootApplication
-@SpringBootTest(classes = ReferenceTest.class)
-@ImportResource("/spring/test_only_reference.xml")
-public class ReferenceTest extends ActivelyDestroyTest {
+@SpringBootTest(classes = RpcSofaBootApplication.class)
+@Import(ReferenceTests.ReferenceConfiguration.class)
+public class ReferenceTests extends ActivelyDestroyTests {
 
     @Autowired
     private HelloSyncService      helloSyncService;
@@ -70,6 +71,12 @@ public class ReferenceTest extends ActivelyDestroyTest {
         } catch (Exception e) {
             assertEquals(SofaRouteException.class, e.getClass());
         }
+    }
+
+    @Configuration
+    @ImportResource("/spring/test_only_reference.xml")
+    static class ReferenceConfiguration {
+
     }
 
 }

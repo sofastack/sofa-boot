@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.rpc.boot.test.config;
 
-import com.alipay.sofa.tests.rpc.boot.SofaBootRpcApplication;
+import com.alipay.sofa.tests.rpc.boot.RpcSofaBootApplication;
 import com.alipay.sofa.rpc.module.Module;
 import com.alipay.sofa.rpc.module.ModuleFactory;
 import org.junit.jupiter.api.Test;
@@ -30,8 +30,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 /**
  * @author khotyn
  */
-@SpringBootTest(classes = SofaBootRpcApplication.class)
-public class DefaultTracingTest {
+@SpringBootTest(classes = RpcSofaBootApplication.class)
+public class DefaultTracingTests {
 
     @Test
     public void testSofaTracerDefaultEnabled() throws NoSuchFieldException, IllegalAccessException {

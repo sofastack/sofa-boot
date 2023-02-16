@@ -18,19 +18,21 @@ package com.alipay.sofa.tests.rpc.boot;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.ImportResource;
 
 /**
  *
  * @author yuanxuan
- * @version : SofaBootRpcApplication.java, v 0.1 2023年02月03日 15:19 yuanxuan Exp $
+ * @version : RpcSofaBootApplication.java, v 0.1 2023年02月03日 15:19 yuanxuan Exp $
  */
 @SpringBootApplication
-@ImportResource("/spring/test_all.xml")
-public class SofaBootRpcApplication {
+@ComponentScan(excludeFilters = { @ComponentScan.Filter(type = FilterType.REGEX, pattern = "com.alipay.sofa.tests.rpc.boot.*") })
+public class RpcSofaBootApplication {
 
     public static void main(String[] args) {
 
-        SpringApplication.run(SofaBootRpcApplication.class, args);
+        SpringApplication.run(RpcSofaBootApplication.class, args);
     }
 }

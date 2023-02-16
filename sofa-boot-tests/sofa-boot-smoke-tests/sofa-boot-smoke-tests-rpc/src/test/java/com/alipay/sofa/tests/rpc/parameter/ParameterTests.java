@@ -18,10 +18,12 @@ package com.alipay.sofa.tests.rpc.parameter;
 
 import com.alipay.sofa.tests.rpc.bean.filter.ParameterFilter;
 import com.alipay.sofa.tests.rpc.bean.invoke.HelloSyncService;
+import com.alipay.sofa.tests.rpc.boot.RpcSofaBootApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.test.context.TestPropertySource;
 
@@ -33,14 +35,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * @author <a href="mailto:scienjus@gmail.com">ScienJus</a>
  */
-@SpringBootApplication
-@SpringBootTest(classes = ParameterTest.class)
+@SpringBootTest(classes = RpcSofaBootApplication.class)
+@Import(ParameterTests.ParameterConfiguration.class)
 @TestPropertySource(properties = {
                                   "sofa.boot.rpc.registry.address=", // override default zk path
                                   "dynamic_key=dynamic_test_key",
                                   "dynamic_value=dynamic_test_value" })
-@ImportResource("/spring/test_only_parameter.xml")
-public class ParameterTest {
+public class ParameterTests {
 
     @Autowired
     private HelloSyncService helloSyncService;
@@ -61,5 +62,11 @@ public class ParameterTest {
             assertThat(parameters.get("static_key")).isEqualTo("static_value");
             assertThat(parameters.get("dynamic_test_key")).isEqualTo("dynamic_test_value");
         }
+    }
+
+    @Configuration
+    @ImportResource("/spring/test_only_parameter.xml")
+    static class ParameterConfiguration {
+
     }
 }

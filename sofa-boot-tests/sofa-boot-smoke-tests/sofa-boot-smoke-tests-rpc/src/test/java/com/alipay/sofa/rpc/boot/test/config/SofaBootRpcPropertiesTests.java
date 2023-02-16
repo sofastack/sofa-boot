@@ -19,6 +19,7 @@ package com.alipay.sofa.rpc.boot.test.config;
 import com.alipay.sofa.boot.autoconfigure.rpc.SofaBootRpcProperties;
 import com.alipay.sofa.rpc.boot.container.ConsumerConfigContainer;
 import com.alipay.sofa.rpc.config.ConsumerConfig;
+import com.alipay.sofa.tests.rpc.boot.RpcSofaBootApplication;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,13 +31,13 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootApplication
-@SpringBootTest(properties = { "sofa.boot.rpc" + ".bolt.port=5000",
+@SpringBootTest(classes = RpcSofaBootApplication.class, properties = { "sofa.boot.rpc" + ".bolt.port=5000",
                               "com_alipay_sofa_rpc_bolt_thread_pool_max_size=600",
                               "sofa.boot.rpc" + ".registries.zk1=zookeeper://xxxx",
                               "sofa.boot.rpc" + ".consumer.repeated.reference.limit=10",
                               "sofa.boot.rpc" + ".rest.allowed.origins=a.com" })
-public class SofaBootRpcPropertiesTest {
+public class SofaBootRpcPropertiesTests {
+
     @Autowired
     private SofaBootRpcProperties sofaBootRpcProperties;
 

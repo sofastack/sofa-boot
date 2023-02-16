@@ -58,6 +58,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.ImportResource;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -77,9 +80,10 @@ import static org.junit.jupiter.api.Assertions.fail;
  * @author yuanxuan
  * @version : SofaBootRpcApplicationTests.java, v 0.1 15:19 yuanxuan Exp $
  */
-@SpringBootTest(properties = { "sofa.boot.rpc.rest-swagger=false",
+@SpringBootTest(classes = RpcSofaBootApplication.class, properties = { "sofa.boot.rpc.rest-swagger=false",
                               "sofa.boot.rpc.enable-swagger=true",
                               "sofa.boot.rpc" + ".defaultTracer=" })
+@Import(SofaBootRpcApplicationTests.RpcAllConfiguration.class)
 public class SofaBootRpcApplicationTests {
 
     @Autowired
@@ -369,5 +373,11 @@ public class SofaBootRpcApplicationTests {
         ConcurrentHashMap<String, Module> modules = (ConcurrentHashMap<String, Module>) installedModulesField
             .get(ModuleFactory.class);
         assertThat(modules.get("sofaTracer")).isNull();
+    }
+
+    @Configuration
+    @ImportResource("/spring/test_all.xml")
+    static class RpcAllConfiguration {
+
     }
 }

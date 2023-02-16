@@ -24,13 +24,13 @@ import com.alipay.sofa.runtime.api.annotation.SofaServiceBinding;
 import com.alipay.sofa.tests.rpc.bean.filter.ParameterFilter;
 import com.alipay.sofa.tests.rpc.bean.invoke.HelloSyncService;
 import com.alipay.sofa.tests.rpc.bean.invoke.HelloSyncServiceImpl;
-
+import com.alipay.sofa.tests.rpc.boot.RpcSofaBootApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
 
 import java.util.Arrays;
@@ -41,13 +41,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * @author <a href="mailto:scienjus@gmail.com">ScienJus</a>
  */
-@SpringBootApplication
-@SpringBootTest(classes = ParameterAnnotationTest.class)
+@SpringBootTest(classes = RpcSofaBootApplication.class)
+@Import(ParameterAnnotationTests.Config.class)
 @TestPropertySource(properties = {
                                   "sofa.boot.rpc.registry.address=", // override default zk path
                                   "dynamic_key=dynamic_test_key",
                                   "dynamic_value=dynamic_test_value" })
-public class ParameterAnnotationTest {
+public class ParameterAnnotationTests {
 
     @SofaReference(jvmFirst = false, binding = @SofaReferenceBinding(filters = "parameterFilter", bindingType = "bolt", parameters = {
             @SofaParameter(key = "static_key", value = "static_value"),

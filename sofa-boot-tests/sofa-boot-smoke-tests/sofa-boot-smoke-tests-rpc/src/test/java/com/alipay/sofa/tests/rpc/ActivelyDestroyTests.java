@@ -28,7 +28,7 @@ import org.junit.jupiter.api.BeforeAll;
  *
  * @author <a href="mailto:zhanggeng.zg@antfin.com">GengZhang</a>
  */
-public abstract class ActivelyDestroyTest {
+public abstract class ActivelyDestroyTests {
 
     @BeforeAll
     public static void adBeforeClass() {

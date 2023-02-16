@@ -18,14 +18,15 @@ package com.alipay.sofa.tests.rpc.misc;
 
 import com.alipay.sofa.boot.actuator.health.ComponentHealthChecker;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
+import com.alipay.sofa.tests.rpc.boot.RpcSofaBootApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.Health;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 
 import java.util.Map;
@@ -36,10 +37,9 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author <a href="mailto:guaner.zzx@alipay.com">guaner.zzx</a>
  * Created on 2019/12/19
  */
-@SpringBootApplication
-@SpringBootTest(classes = ComponentHealthCheckerTest.class, properties = { "timeout=10000" })
-@ImportResource("/spring/service_reference.xml")
-public class ComponentHealthCheckerTest {
+@SpringBootTest(classes = RpcSofaBootApplication.class, properties = { "timeout=10000" })
+@Import(ComponentHealthCheckerTests.ComponentHealthCheckerTestConfiguration.class)
+public class ComponentHealthCheckerTests {
     @Autowired
     private ApplicationContext applicationContext;
 
@@ -55,6 +55,7 @@ public class ComponentHealthCheckerTest {
     }
 
     @Configuration(proxyBeanMethods = false)
+    @ImportResource("/spring/service_reference.xml")
     static class ComponentHealthCheckerTestConfiguration {
         @Bean
         public ComponentHealthChecker sofaComponentHealthChecker(SofaRuntimeContext sofaRuntimeContext) {

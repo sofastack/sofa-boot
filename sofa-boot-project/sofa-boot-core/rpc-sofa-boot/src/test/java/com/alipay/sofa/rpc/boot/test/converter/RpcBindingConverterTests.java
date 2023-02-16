@@ -38,7 +38,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author qilong.zql
  * @since 3.2.0
  */
-public class RpcBindingConverterTest {
+public class RpcBindingConverterTests {
 
     @SofaReference(binding = @SofaReferenceBinding(bindingType = "bolt", methodInfos = { @SofaMethod(name = "test", retries = 1, invokeType = "callback", callbackClass = "class", callbackRef = "ref", timeout = 2000) }))
     private String testAnnotation;
@@ -50,7 +50,7 @@ public class RpcBindingConverterTest {
 
         SofaReference reference = null;
         try {
-            reference = RpcBindingConverterTest.class.getDeclaredField("testAnnotation")
+            reference = RpcBindingConverterTests.class.getDeclaredField("testAnnotation")
                 .getAnnotation(SofaReference.class);
         } catch (NoSuchFieldException e) {
             e.printStackTrace();

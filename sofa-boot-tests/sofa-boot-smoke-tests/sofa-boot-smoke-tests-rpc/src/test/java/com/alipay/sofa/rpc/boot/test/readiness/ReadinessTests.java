@@ -16,17 +16,16 @@
  */
 package com.alipay.sofa.rpc.boot.test.readiness;
 
-import com.alipay.sofa.boot.autoconfigure.rpc.SofaRpcAutoConfiguration;
 import com.alipay.sofa.rpc.boot.config.SofaBootRpcConfigConstants;
 import com.alipay.sofa.rpc.core.exception.SofaRouteException;
-import com.alipay.sofa.tests.rpc.ActivelyDestroyTest;
+import com.alipay.sofa.tests.rpc.ActivelyDestroyTests;
 import com.alipay.sofa.tests.rpc.bean.SampleFacade;
+import com.alipay.sofa.tests.rpc.boot.RpcSofaBootApplication;
 import com.alipay.sofa.tests.rpc.util.TestUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -39,11 +38,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@SpringBootApplication
-@SpringBootTest(properties = { "sofa.boot.rpc.registry.address=zookeeper://localhost:2181" }, classes = ReadinessTest.class)
-@ImportResource("/spring/readiness.xml")
-@Import({ ReadinessTest.Config.class, SofaRpcAutoConfiguration.class })
-public class ReadinessTest extends ActivelyDestroyTest {
+@SpringBootTest(properties = { "sofa.boot.rpc.registry.address=zookeeper://localhost:2181" }, classes = RpcSofaBootApplication.class)
+@Import({ ReadinessTests.Config.class })
+public class ReadinessTests extends ActivelyDestroyTests {
+
     @Autowired
     private SampleFacade sampleFacade;
 
@@ -62,6 +60,7 @@ public class ReadinessTest extends ActivelyDestroyTest {
     }
 
     @TestConfiguration
+    @ImportResource("/spring/readiness.xml")
     static class Config {
         @Bean
         public DownHealthIndicator downHealthIndicator() {

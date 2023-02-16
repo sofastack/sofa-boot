@@ -27,10 +27,12 @@ import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.tests.rpc.bean.misc.MethodElementInterface;
 import com.alipay.sofa.tests.rpc.bean.misc.WhateverInterface;
+import com.alipay.sofa.tests.rpc.boot.RpcSofaBootApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 
 import java.util.Collection;
@@ -42,10 +44,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author <a href="mailto:guaner.zzx@alipay.com">guaner.zzx</a>
  * Created on 2019/12/18
  */
-@SpringBootApplication
-@SpringBootTest(classes = XsdTimeoutTest.class, properties = { "timeout=10000" })
-@ImportResource("/spring/service_reference.xml")
-public class XsdTimeoutTest {
+@SpringBootTest(classes = RpcSofaBootApplication.class, properties = { "timeout=10000" })
+@Import(XsdTimeoutTests.XsdTimeoutConfiguration.class)
+public class XsdTimeoutTests {
     @Autowired
     WhateverInterface  whatever;
     @Autowired
@@ -124,5 +125,11 @@ public class XsdTimeoutTest {
                 }
             }
         }
+    }
+
+    @Configuration
+    @ImportResource("/spring/service_reference.xml")
+    static class XsdTimeoutConfiguration {
+
     }
 }

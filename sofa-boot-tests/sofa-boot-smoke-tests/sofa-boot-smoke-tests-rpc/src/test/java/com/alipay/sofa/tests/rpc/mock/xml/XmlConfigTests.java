@@ -18,12 +18,15 @@ package com.alipay.sofa.tests.rpc.mock.xml;
 
 import com.alipay.sofa.rpc.common.json.JSON;
 import com.alipay.sofa.tests.rpc.bean.invoke.HelloSyncService;
+import com.alipay.sofa.tests.rpc.boot.RpcSofaBootApplication;
 import com.alipay.sofa.tests.rpc.mock.HttpMockServer;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,10 +35,9 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author zhaowang
  * @version : XmlConfigTest.java, v 0.1 2020年03月10日 11:40 下午 zhaowang Exp $
  */
-@SpringBootApplication
-@SpringBootTest
-@ImportResource("/spring/test_only_mock.xml")
-public class XmlConfigTest {
+@SpringBootTest(classes = RpcSofaBootApplication.class)
+@Import(XmlConfigTests.XmlMockConfiguration.class)
+public class XmlConfigTests {
 
     @Autowired
     @Qualifier("xmlLocalMock")
@@ -60,5 +62,11 @@ public class XmlConfigTest {
         assertThat(xmlRemoteMock.saySync("xx")).isEqualTo("mockJson");
 
         HttpMockServer.stop();
+    }
+
+    @Configuration
+    @ImportResource("/spring/test_only_mock.xml")
+    static class XmlMockConfiguration {
+
     }
 }
