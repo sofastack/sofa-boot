@@ -36,6 +36,8 @@ public class BeanCostBeanPostProcessor implements BeanPostProcessor {
 
     private final List<BeanStat>        beanStatList    = new ArrayList<>();
 
+    private int                         costThreshold;
+
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName)
                                                                                throws BeansException {
@@ -55,13 +57,18 @@ public class BeanCostBeanPostProcessor implements BeanPostProcessor {
         BeanStat beanStat = beanInitCostMap.remove(beanClassName);
         if (beanStat != null) {
             beanStat.finishRefresh();
-            beanStat.finishRefresh();
-            beanStatList.add(beanStat);
+            if (beanStat.getCost() >= costThreshold) {
+                beanStatList.add(beanStat);
+            }
         }
         return bean;
     }
 
     public List<BeanStat> getBeanStatList() {
         return this.beanStatList;
+    }
+
+    public void setCostThreshold(int costThreshold) {
+        this.costThreshold = costThreshold;
     }
 }

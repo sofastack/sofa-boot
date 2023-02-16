@@ -46,6 +46,8 @@ public class SofaDefaultListableBeanFactory extends DefaultListableBeanFactory {
 
     private final List<BeanStatCustomizer>            beanStatCustomizers       = new ArrayList<>();
 
+    private int                                       costThreshold;
+
     @Override
     protected void invokeInitMethods(String beanName, final Object bean, RootBeanDefinition mbd)
                                                                                                 throws Throwable {
@@ -81,7 +83,7 @@ public class SofaDefaultListableBeanFactory extends DefaultListableBeanFactory {
         bs = customBeanStat(beanName, object, bs);
 
         parentStack.pop();
-        if (parentStack.empty()) {
+        if (parentStack.empty() && bs.getCost() >= costThreshold) {
             beanStats.add(bs);
         }
         return object;
@@ -116,5 +118,9 @@ public class SofaDefaultListableBeanFactory extends DefaultListableBeanFactory {
 
     public List<BeanStat> getBeanStats() {
         return beanStats;
+    }
+
+    public void setCostThreshold(int costThreshold) {
+        this.costThreshold = costThreshold;
     }
 }
