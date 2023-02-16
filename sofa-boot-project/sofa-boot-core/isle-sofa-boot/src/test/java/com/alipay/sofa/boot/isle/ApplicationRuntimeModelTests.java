@@ -131,7 +131,7 @@ public class ApplicationRuntimeModelTests {
 
     private void addSpringXml(DeploymentDescriptor deploymentDescriptor) {
         Field field = ReflectionUtils.findField(AbstractDeploymentDescriptor.class,
-                "springResources");
+            "springResources");
         field.setAccessible(true);
         Map<String, Resource> map = new HashMap<>();
         map.put("test", new ByteArrayResource(new byte[] {}));

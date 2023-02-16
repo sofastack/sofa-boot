@@ -154,7 +154,6 @@ public class ServerConfigContainerTests {
         assertThat(123).isEqualTo(serverConfig2.getPort());
         assertThat(serverConfig.getPort()).isEqualTo(serverConfig2.getPort());
 
-        boolean result = false;
         serverConfigContainer.unRegisterCustomServerConfig(protocol);
         assertThatThrownBy(() -> serverConfigContainer.getServerConfig(protocol))
                 .isInstanceOf(SofaBootRpcRuntimeException.class);
