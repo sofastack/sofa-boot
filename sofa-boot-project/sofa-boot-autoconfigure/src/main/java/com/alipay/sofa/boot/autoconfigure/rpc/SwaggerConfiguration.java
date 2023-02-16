@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.boot.autoconfigure.rpc;
 
+import com.alipay.sofa.boot.annotation.condition.ConditionalOnSwitch;
 import com.alipay.sofa.rpc.boot.swagger.BoltSwaggerServiceApplicationListener;
 import com.alipay.sofa.rpc.boot.swagger.SwaggerServiceApplicationListener;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
@@ -36,9 +37,11 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnClass(Swagger.class)
+@ConditionalOnSwitch
 public class SwaggerConfiguration {
 
     @Bean
+    @ConditionalOnSwitch
     @ConditionalOnProperty(name = "sofa.boot.rpc.rest-swagger", havingValue = "true")
     @ConditionalOnBean(SofaRuntimeManager.class)
     public ApplicationListener<ApplicationStartedEvent> swaggerServiceApplicationListener(SofaRuntimeManager sofaRuntimeManager) {
@@ -46,6 +49,7 @@ public class SwaggerConfiguration {
     }
 
     @Bean
+    @ConditionalOnSwitch
     @ConditionalOnProperty(name = "sofa.boot.rpc.enable-swagger", havingValue = "true")
     @ConditionalOnBean(SofaRuntimeManager.class)
     public ApplicationListener<ApplicationStartedEvent> boltSwaggerServiceApplicationListener(SofaRuntimeManager sofaRuntimeManager) {

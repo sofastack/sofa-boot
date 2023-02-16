@@ -29,10 +29,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 public class SofaRpcLoggerLevelConfigTest {
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
-                                                             .withPropertyValues(
-                                                                 "logging.level.com.alipay.sofa.rpc=DEBUG",
-                                                                 "logging.level.com.alipay.sofa.rpc.boot=ERROR",
-                                                                 "logging.level.com.user.app=WARN");
+            .withPropertyValues(
+                    "logging.level.com.alipay.sofa.rpc=DEBUG",
+                    "logging.level.com.alipay.sofa.rpc.boot=ERROR",
+                    "logging.level.com.user.app=WARN");
 
     @Test
     public void testRpcLoggerLevel() {
@@ -43,7 +43,7 @@ public class SofaRpcLoggerLevelConfigTest {
     @Test
     public void testStarterLoggerLevel() {
         org.slf4j.Logger starterLogger = SofaBootRpcLoggerFactory
-            .getLogger("sofa.boot.rpc.boot.xxx");
+                .getLogger("sofa.boot.rpc.boot.xxx");
         assertTrue(starterLogger.isErrorEnabled());
     }
 
