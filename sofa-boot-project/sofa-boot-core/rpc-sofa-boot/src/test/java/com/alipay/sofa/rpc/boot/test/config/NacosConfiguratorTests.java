@@ -16,17 +16,19 @@
  */
 package com.alipay.sofa.rpc.boot.test.config;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 import com.alipay.sofa.rpc.boot.config.NacosConfigurator;
 import com.alipay.sofa.rpc.config.RegistryConfig;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
+ * Tests for {@link NacosConfigurator}.
+ *
  * @author zhuoyu.sjw
  * @version $Id: NacosConfiguratorTest.java, v 0.1 2018-12-03 17:36 zhuoyu.sjw Exp $$
  */
-public class NacosConfiguratorTest {
+public class NacosConfiguratorTests {
 
     @Test
     public void buildFromAddress() {
@@ -35,10 +37,10 @@ public class NacosConfiguratorTest {
         NacosConfigurator nacosConfigurator = new NacosConfigurator();
         RegistryConfig registryConfig = nacosConfigurator.buildFromAddress(address);
 
-        Assert.assertNotNull(registryConfig);
-        Assert.assertEquals("nacos", registryConfig.getProtocol());
-        Assert.assertEquals("127.0.0.1:8848", registryConfig.getAddress());
-        Assert.assertNotNull(registryConfig.getParameters());
-        Assert.assertEquals("test", registryConfig.getParameter("cluster"));
+        assertThat(registryConfig).isNotNull();
+        assertThat("nacos").isEqualTo(registryConfig.getProtocol());
+        assertThat("127.0.0.1:8848").isEqualTo(registryConfig.getAddress());
+        assertThat(registryConfig.getParameters()).isNotNull();
+        assertThat("test").isEqualTo(registryConfig.getParameter("cluster"));
     }
 }

@@ -16,29 +16,28 @@
  */
 package com.alipay.sofa.rpc.boot.test.config;
 
-import org.junit.Assert;
-import org.junit.Test;
-
-import com.alipay.sofa.rpc.boot.config.SofaRegistryConfigurator;
+import com.alipay.sofa.rpc.boot.config.ZookeeperConfigurator;
 import com.alipay.sofa.rpc.config.RegistryConfig;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * @author zhiyuan.lzy
- * @version $Id: SofaRegistryConfiguratorTest.java, v 0.1 2010-03-16 17:36 zhiyuan.lzy Exp $$
+ * Tests for {@link ZookeeperConfigurator}.
+ *
+ * @author <a href="mailto:lw111072@antfin.com">LiWei</a>
  */
-public class SofaRegistryConfiguratorTest {
+public class ZookeeperConfiguratorTests {
 
     @Test
-    public void buildFromAddress() {
-        String address = "sofa://127.0.0.1:9603?cluster=test";
+    public void checkConfig() {
+        String address = "zookeeper://127.0.0.1:2181?aaa=111&rrr=666&file=/host/zk";
 
-        SofaRegistryConfigurator sofaRegistryConfigurator = new SofaRegistryConfigurator();
-        RegistryConfig registryConfig = sofaRegistryConfigurator.buildFromAddress(address);
-
-        Assert.assertNotNull(registryConfig);
-        Assert.assertEquals("sofa", registryConfig.getProtocol());
-        Assert.assertEquals("127.0.0.1:9603", registryConfig.getAddress());
-        Assert.assertNotNull(registryConfig.getParameters());
-        Assert.assertEquals("test", registryConfig.getParameter("cluster"));
+        ZookeeperConfigurator zookeeperConfigurator = new ZookeeperConfigurator();
+        RegistryConfig registryConfig = zookeeperConfigurator.buildFromAddress(address);
+        assertThat(registryConfig).isNotNull();
+        assertThat("zookeeper").isEqualTo(registryConfig.getProtocol());
+        assertThat("127.0.0.1:2181").isEqualTo(registryConfig.getAddress());
+        assertThat("/host/zk").isEqualTo(registryConfig.getFile());
     }
 }

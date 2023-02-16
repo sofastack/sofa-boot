@@ -19,23 +19,26 @@ package com.alipay.sofa.rpc.boot.test.container;
 import com.alipay.sofa.rpc.boot.config.MulticastConfigurator;
 import com.alipay.sofa.rpc.boot.config.SofaBootRpcConfigConstants;
 import com.alipay.sofa.rpc.config.RegistryConfig;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
+ * Tests for {@link MulticastConfigurator}.
+ *
  * @author zhaowang
  * @version : MulticastConfiguratorTest.java, v 0.1 2020年03月09日 3:23 下午 zhaowang Exp $
  */
-public class MulticastConfiguratorTest {
+public class MulticastConfiguratorTests {
 
     @Test
-    public void test() {
+    public void checkConfig() {
         MulticastConfigurator multicastConfigurator = new MulticastConfigurator();
         RegistryConfig registryConfig = multicastConfigurator
             .buildFromAddress("multicast://192.168.1.33:1234?a=b");
-        Assert.assertEquals(SofaBootRpcConfigConstants.REGISTRY_PROTOCOL_MULTICAST,
+        assertThat(SofaBootRpcConfigConstants.REGISTRY_PROTOCOL_MULTICAST).isEqualTo(
             registryConfig.getProtocol());
-        Assert.assertEquals("192.168.1.33:1234", registryConfig.getAddress());
-        Assert.assertEquals("b", registryConfig.getParameter("a"));
+        assertThat("192.168.1.33:1234").isEqualTo(registryConfig.getAddress());
+        assertThat("b").isEqualTo(registryConfig.getParameter("a"));
     }
 }

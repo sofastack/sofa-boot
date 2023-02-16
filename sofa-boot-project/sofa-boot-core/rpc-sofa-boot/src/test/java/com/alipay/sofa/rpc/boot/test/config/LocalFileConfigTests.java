@@ -16,28 +16,37 @@
  */
 package com.alipay.sofa.rpc.boot.test.config;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 import com.alipay.sofa.rpc.boot.config.LocalFileConfigurator;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
+ * Tests for {@link LocalFileConfigurator}.
+ *
  * @author liangen
  * @version $Id: LocalFileConfigTest.java, v 0.1 2018年04月17日 下午2:51 liangen Exp $
  */
-public class LocalFileConfigTest {
+public class LocalFileConfigTests {
 
     @Test
-    public void test() {
+    public void checkLocalFileConfigurator() {
         LocalFileConfigurator localFileConfigurator = new LocalFileConfigurator();
         String configA = "local";
 
         String file = localFileConfigurator.parseConfig(configA);
-        Assert.assertNull(file);
+        assertThat(file).isNull();
 
         String config = "local:///home/admin/registry";
 
         file = localFileConfigurator.parseConfig(config);
-        Assert.assertEquals("/home/admin/registry", file);
+        assertThat("/home/admin/registry").isEqualTo(file);
+    }
+
+    @Test
+    public void parseConfig() {
+        LocalFileConfigurator localFileConfigurator = new LocalFileConfigurator();
+        String result = localFileConfigurator.parseConfig("local://xxx");
+        assertThat("xxx").isEqualTo(result);
     }
 }

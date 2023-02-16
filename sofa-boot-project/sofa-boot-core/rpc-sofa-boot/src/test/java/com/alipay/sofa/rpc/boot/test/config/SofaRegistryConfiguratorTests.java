@@ -16,26 +16,31 @@
  */
 package com.alipay.sofa.rpc.boot.test.config;
 
-import org.junit.Assert;
-import org.junit.Test;
-
-import com.alipay.sofa.rpc.boot.config.MeshConfigurator;
+import com.alipay.sofa.rpc.boot.config.SofaRegistryConfigurator;
 import com.alipay.sofa.rpc.config.RegistryConfig;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
+ * Tests for {@link SofaRegistryConfigurator}.
  *
- * @author zhuoyu.sjw
- * @version $Id: MeshConfiguratorTest.java, v 0.1 2018-12-03 17:39 zhuoyu.sjw Exp $$
+ * @author zhiyuan.lzy
+ * @version $Id: SofaRegistryConfiguratorTest.java, v 0.1 2010-03-16 17:36 zhiyuan.lzy Exp $$
  */
-public class MeshConfiguratorTest {
+public class SofaRegistryConfiguratorTests {
 
     @Test
     public void buildFromAddress() {
-        String address = "mesh://127.0.0.1:12220";
+        String address = "sofa://127.0.0.1:9603?cluster=test";
 
-        MeshConfigurator meshConfigurator = new MeshConfigurator();
-        RegistryConfig registryConfig = meshConfigurator.buildFromAddress(address);
-        Assert.assertEquals("mesh", registryConfig.getProtocol());
-        Assert.assertEquals("http://127.0.0.1:12220", registryConfig.getAddress());
+        SofaRegistryConfigurator sofaRegistryConfigurator = new SofaRegistryConfigurator();
+        RegistryConfig registryConfig = sofaRegistryConfigurator.buildFromAddress(address);
+
+        assertThat(registryConfig).isNotNull();
+        assertThat("sofa").isEqualTo(registryConfig.getProtocol());
+        assertThat("127.0.0.1:9603").isEqualTo(registryConfig.getAddress());
+        assertThat(registryConfig.getParameters()).isNotNull();
+        assertThat("test").isEqualTo(registryConfig.getParameter("cluster"));
     }
 }

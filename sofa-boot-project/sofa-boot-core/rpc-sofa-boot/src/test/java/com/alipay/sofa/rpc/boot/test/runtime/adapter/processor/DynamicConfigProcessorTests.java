@@ -20,53 +20,57 @@ import com.alipay.sofa.rpc.boot.runtime.adapter.processor.DynamicConfigProcessor
 import com.alipay.sofa.rpc.config.ConsumerConfig;
 import com.alipay.sofa.rpc.config.ProviderConfig;
 import com.alipay.sofa.rpc.dynamic.DynamicConfigKeys;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.util.StringUtils;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
+ * Tests for {@link DynamicConfigProcessor}.
+ * 
  * @author zhaowang
  * @version : DynamicConfigProcessorTest.java, v 0.1 2020年03月11日 3:21 下午 zhaowang Exp $
  */
-public class DynamicConfigProcessorTest {
+public class DynamicConfigProcessorTests {
 
     public static final String     CONFIG    = "config";
     public static final String     ANOTHER   = "another";
     private DynamicConfigProcessor processor = new DynamicConfigProcessor("");
 
     @Test
-    public void test() {
+    public void checkConfig() {
         processor.setDynamicConfig(CONFIG);
 
         ConsumerConfig consumerConfig = new ConsumerConfig();
         processor.processorConsumer(consumerConfig);
-        Assert.assertEquals(CONFIG, consumerConfig.getParameter(DynamicConfigKeys.DYNAMIC_ALIAS));
+        assertThat(CONFIG).isEqualTo(consumerConfig.getParameter(DynamicConfigKeys.DYNAMIC_ALIAS));
 
         ProviderConfig providerConfig = new ProviderConfig();
         processor.processorProvider(providerConfig);
-        Assert.assertEquals(CONFIG, providerConfig.getParameter(DynamicConfigKeys.DYNAMIC_ALIAS));
+        assertThat(CONFIG).isEqualTo(providerConfig.getParameter(DynamicConfigKeys.DYNAMIC_ALIAS));
 
         consumerConfig = new ConsumerConfig();
         consumerConfig.setParameter(DynamicConfigKeys.DYNAMIC_ALIAS, ANOTHER);
         processor.processorConsumer(consumerConfig);
-        Assert.assertEquals(ANOTHER, consumerConfig.getParameter(DynamicConfigKeys.DYNAMIC_ALIAS));
+        assertThat(ANOTHER).isEqualTo(consumerConfig.getParameter(DynamicConfigKeys.DYNAMIC_ALIAS));
 
         providerConfig = new ProviderConfig();
         providerConfig.setParameter(DynamicConfigKeys.DYNAMIC_ALIAS, ANOTHER);
         processor.processorProvider(providerConfig);
-        Assert.assertEquals(ANOTHER, providerConfig.getParameter(DynamicConfigKeys.DYNAMIC_ALIAS));
+        assertThat(ANOTHER).isEqualTo(providerConfig.getParameter(DynamicConfigKeys.DYNAMIC_ALIAS));
 
         processor.setDynamicConfig("");
         consumerConfig = new ConsumerConfig();
         processor.processorConsumer(consumerConfig);
-        Assert.assertFalse(StringUtils.hasText(consumerConfig
-            .getParameter(DynamicConfigKeys.DYNAMIC_ALIAS)));
+        assertThat(
+            StringUtils.hasText(consumerConfig.getParameter(DynamicConfigKeys.DYNAMIC_ALIAS)))
+            .isFalse();
 
         providerConfig = new ProviderConfig();
         processor.processorProvider(providerConfig);
-        Assert.assertFalse(StringUtils.hasText(providerConfig
-            .getParameter(DynamicConfigKeys.DYNAMIC_ALIAS)));
-
+        assertThat(
+            StringUtils.hasText(providerConfig.getParameter(DynamicConfigKeys.DYNAMIC_ALIAS)))
+            .isFalse();
     }
 
 }

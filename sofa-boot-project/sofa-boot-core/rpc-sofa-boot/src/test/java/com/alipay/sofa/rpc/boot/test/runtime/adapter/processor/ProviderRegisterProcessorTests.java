@@ -18,27 +18,29 @@ package com.alipay.sofa.rpc.boot.test.runtime.adapter.processor;
 
 import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ProviderRegisterProcessor;
 import com.alipay.sofa.rpc.config.ProviderConfig;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
+ * Tests for {@link ProviderRegisterProcessor}.
+ *
  * @author BaoYi
  */
-public class ProviderRegisterProcessorTest {
+public class ProviderRegisterProcessorTests {
 
-    private ProviderRegisterProcessor providerRegisterProcessor = new ProviderRegisterProcessor();
+    private final ProviderRegisterProcessor providerRegisterProcessor = new ProviderRegisterProcessor();
 
     @Test
-    public void test() {
+    public void checkConfig() {
         ProviderConfig providerConfig = new ProviderConfig();
         providerConfig.setRegister(true);
         providerRegisterProcessor.processorProvider(providerConfig);
-        Assert.assertTrue(providerConfig.isRegister());
+        assertThat(providerConfig.isRegister()).isTrue();
 
-        System.setProperty("sofa.rpc.registry.disablePub", "true");
+        System.setProperty("sofa.boot.rpc.registry.disablePub", "true");
         providerRegisterProcessor.processorProvider(providerConfig);
-        Assert.assertFalse(providerConfig.isRegister());
-        System.clearProperty("sofa.rpc.registry.disablePub");
+        assertThat(providerConfig.isRegister()).isFalse();
+        System.clearProperty("sofa.boot.rpc.registry.disablePub");
     }
-
 }

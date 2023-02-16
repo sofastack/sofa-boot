@@ -42,8 +42,8 @@
 //import com.alipay.sofa.runtime.spring.factory.ServiceFactoryBean;
 //import com.alipay.sofa.smoke.tests.runtime.impl.SampleServiceImpl;
 //import com.alipay.sofa.smoke.tests.runtime.service.SampleService;
-//import org.junit.Assert;
-//import org.junit.Test;
+//import static org.assertj.core.api.Assertions.assertThat;
+//import org.junit.jupiter.api.Test;
 //import org.springframework.beans.factory.annotation.Value;
 //import org.springframework.boot.SpringApplication;
 //import org.springframework.boot.WebApplicationType;
