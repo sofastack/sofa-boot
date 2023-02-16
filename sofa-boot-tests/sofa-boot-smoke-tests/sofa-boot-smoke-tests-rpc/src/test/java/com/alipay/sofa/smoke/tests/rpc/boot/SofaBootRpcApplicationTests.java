@@ -58,13 +58,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
-<<<<<<< HEAD:sofa-boot-tests/sofa-boot-smoke-tests/sofa-boot-smoke-tests-rpc/src/test/java/com/alipay/sofa/tests/rpc/boot/SofaBootRpcApplicationTests.java
 import org.springframework.test.context.ActiveProfiles;
-=======
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
->>>>>>> upstream/4.0.0:sofa-boot-tests/sofa-boot-smoke-tests/sofa-boot-smoke-tests-rpc/src/test/java/com/alipay/sofa/smoke/tests/rpc/boot/SofaBootRpcApplicationTests.java
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -83,19 +79,10 @@ import static org.junit.jupiter.api.Assertions.fail;
  * @author yuanxuan
  * @version : SofaBootRpcApplicationTests.java, v 0.1 15:19 yuanxuan Exp $
  */
-<<<<<<< HEAD:sofa-boot-tests/sofa-boot-smoke-tests/sofa-boot-smoke-tests-rpc/src/test/java/com/alipay/sofa/tests/rpc/boot/SofaBootRpcApplicationTests.java
 @SpringBootTest(properties = { "sofa.boot.rpc.rest-swagger=false",
                               "sofa.boot.rpc.enable-swagger=true",
                               "sofa.boot.rpc" + ".defaultTracer=" })
 @ActiveProfiles("test")
-=======
-@SpringBootTest(classes = RpcSofaBootApplication.class, properties = {
-                                                                      "sofa.boot.rpc.rest-swagger=false",
-                                                                      "sofa.boot.rpc.enable-swagger=true",
-                                                                      "sofa.boot.rpc"
-                                                                              + ".defaultTracer=" })
-@Import(SofaBootRpcApplicationTests.RpcAllConfiguration.class)
->>>>>>> upstream/4.0.0:sofa-boot-tests/sofa-boot-smoke-tests/sofa-boot-smoke-tests-rpc/src/test/java/com/alipay/sofa/smoke/tests/rpc/boot/SofaBootRpcApplicationTests.java
 public class SofaBootRpcApplicationTests {
 
     @Autowired
@@ -387,12 +374,9 @@ public class SofaBootRpcApplicationTests {
         assertThat(modules.get("sofaTracer")).isNull();
     }
 
-<<<<<<< HEAD:sofa-boot-tests/sofa-boot-smoke-tests/sofa-boot-smoke-tests-rpc/src/test/java/com/alipay/sofa/tests/rpc/boot/SofaBootRpcApplicationTests.java
-=======
     @Configuration
     @ImportResource("/spring/test_all.xml")
     static class RpcAllConfiguration {
 
     }
->>>>>>> upstream/4.0.0:sofa-boot-tests/sofa-boot-smoke-tests/sofa-boot-smoke-tests-rpc/src/test/java/com/alipay/sofa/smoke/tests/rpc/boot/SofaBootRpcApplicationTests.java
 }

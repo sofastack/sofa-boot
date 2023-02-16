@@ -22,6 +22,7 @@ import com.alipay.sofa.rpc.log.LoggerFactory;
 import com.alipay.sofa.smoke.tests.rpc.boot.RpcSofaBootApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -29,21 +30,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * logger must be init when use. or will init by test case .not starter framework.
  */
-<<<<<<< HEAD:sofa-boot-tests/sofa-boot-smoke-tests/sofa-boot-smoke-tests-rpc/src/test/java/com/alipay/sofa/rpc/boot/test/config/SofaRpcLoggerLevelConfigTest.java
-public class SofaRpcLoggerLevelConfigTest {
+public class SofaRpcLoggerLevelConfigTests {
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
             .withPropertyValues(
                     "logging.level.com.alipay.sofa.rpc=DEBUG",
                     "logging.level.com.alipay.sofa.rpc.boot=ERROR",
                     "logging.level.com.user.app=WARN");
 
-=======
-@SpringBootTest(classes = RpcSofaBootApplication.class)
-@TestPropertySource(properties = { "logging.level.com.alipay.sofa.rpc=DEBUG",
-                                  "logging.level.com.alipay.sofa.rpc.boot=ERROR",
-                                  "logging.level.com.user.app=WARN" })
-public class SofaRpcLoggerLevelConfigTests {
->>>>>>> upstream/4.0.0:sofa-boot-tests/sofa-boot-smoke-tests/sofa-boot-smoke-tests-rpc/src/test/java/com/alipay/sofa/smoke/tests/rpc/SofaRpcLoggerLevelConfigTests.java
     @Test
     public void testRpcLoggerLevel() {
         Logger rpcLogger = LoggerFactory.getLogger("sofa.boot.rpc.transport");
