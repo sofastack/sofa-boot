@@ -1,2 +1,2 @@
 org.springframework.context.ApplicationListener=\
-com.alipay.sofa.rpc.boot.context.RpcEnvironmentApplicationListener
+  com.alipay.sofa.rpc.boot.context.RpcEnvironmentApplicationListener

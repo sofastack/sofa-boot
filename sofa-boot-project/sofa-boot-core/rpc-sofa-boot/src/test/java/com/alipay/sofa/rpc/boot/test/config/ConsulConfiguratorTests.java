@@ -16,26 +16,29 @@
  */
 package com.alipay.sofa.rpc.boot.test.config;
 
-import org.junit.Assert;
-import org.junit.Test;
+import java.util.Map;
 
-import com.alipay.sofa.rpc.boot.config.ZookeeperConfigurator;
-import com.alipay.sofa.rpc.config.RegistryConfig;
+import com.alipay.sofa.rpc.boot.config.ConsulConfigurator;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * @author <a href="mailto:lw111072@antfin.com">LiWei</a>
+ * Tests for {@link ConsulConfigurator}.
+ *
+ * @author <a href="mailto:zhiyuan.lzy@antfin.com">zhiyuan.lzy</a>
  */
-public class ZookeeperConfiguratorTest {
+public class ConsulConfiguratorTests {
 
     @Test
-    public void test() {
-        String address = "zookeeper://127.0.0.1:2181?aaa=111&rrr=666&file=/host/zk";
+    public void checkConsulConfigurator() {
+        ConsulConfigurator consulConfigurator = new ConsulConfigurator();
+        String config = "consul://127.0.0.1:8500?aaa=111&rrr=666";
+        String address = consulConfigurator.parseAddress(config);
 
-        ZookeeperConfigurator zookeeperConfigurator = new ZookeeperConfigurator();
-        RegistryConfig registryConfig = zookeeperConfigurator.buildFromAddress(address);
-        Assert.assertNotNull(registryConfig);
-        Assert.assertEquals("zookeeper", registryConfig.getProtocol());
-        Assert.assertEquals("127.0.0.1:2181", registryConfig.getAddress());
-        Assert.assertEquals("/host/zk", registryConfig.getFile());
+        Map<String, String> map = consulConfigurator.parseParam(config);
+        assertThat("111").isEqualTo(map.get("aaa"));
+        assertThat("666").isEqualTo(map.get("rrr"));
+        assertThat("127.0.0.1:8500").isEqualTo(address);
     }
 }

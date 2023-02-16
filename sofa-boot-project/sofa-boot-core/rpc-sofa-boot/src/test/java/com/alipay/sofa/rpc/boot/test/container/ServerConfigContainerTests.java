@@ -20,32 +20,54 @@ import com.alipay.sofa.rpc.boot.common.RpcThreadPoolMonitor;
 import com.alipay.sofa.rpc.boot.common.SofaBootRpcRuntimeException;
 import com.alipay.sofa.rpc.boot.config.SofaBootRpcConfigConstants;
 import com.alipay.sofa.rpc.boot.container.ServerConfigContainer;
-import com.alipay.sofa.rpc.boot.test.ActivelyDestroyTest;
 import com.alipay.sofa.rpc.common.RpcConstants;
 import com.alipay.sofa.rpc.config.ServerConfig;
 import com.alipay.sofa.rpc.config.UserThreadPoolManager;
+import com.alipay.sofa.rpc.context.RpcInternalContext;
+import com.alipay.sofa.rpc.context.RpcInvokeContext;
+import com.alipay.sofa.rpc.context.RpcRunningState;
+import com.alipay.sofa.rpc.context.RpcRuntimeContext;
 import com.alipay.sofa.rpc.server.UserThreadPool;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 /**
+ * Tests for {@link ServerConfigContainer}.
+ * 
  * @author <a href="mailto:lw111072@antfin.com">LiWei</a>
  */
-public class ServerConfigContainerTest extends ActivelyDestroyTest {
-    private ServerConfigContainer serverConfigContainer;
+public class ServerConfigContainerTests {
 
-    public ServerConfigContainerTest() {
+    private final ServerConfigContainer serverConfigContainer;
+
+    public ServerConfigContainerTests() {
         serverConfigContainer = new ServerConfigContainer();
     }
 
+    @BeforeAll
+    public static void adBeforeClass() {
+        RpcRunningState.setUnitTestMode(true);
+    }
+
+    @AfterAll
+    public static void adAfterClass() {
+        RpcRuntimeContext.destroy();
+        RpcInternalContext.removeContext();
+        RpcInvokeContext.removeContext();
+    }
+
     @Test
-    public void testBoltConfiguration() {
+    public void boltConfiguration() {
         serverConfigContainer.setBoltPortStr("9090");
         serverConfigContainer.setBoltThreadPoolCoreSizeStr("8080");
         serverConfigContainer.setBoltThreadPoolMaxSizeStr("7070");
@@ -54,32 +76,32 @@ public class ServerConfigContainerTest extends ActivelyDestroyTest {
         serverConfigContainer.setBoundHostStr("127.0.0.3");
         serverConfigContainer.setVirtualPortStr("8888");
         ServerConfig serverConfig = serverConfigContainer.createBoltServerConfig();
-        Assert.assertEquals(9090, serverConfig.getPort());
-        Assert.assertEquals(8080, serverConfig.getCoreThreads());
-        Assert.assertEquals(7070, serverConfig.getMaxThreads());
-        Assert.assertEquals(6060, serverConfig.getAccepts());
-        Assert.assertEquals(8888, serverConfig.getVirtualPort().intValue());
-        Assert.assertEquals("127.0.0.2", serverConfig.getVirtualHost());
-        Assert.assertEquals("127.0.0.3", serverConfig.getBoundHost());
+        assertThat(9090).isEqualTo(serverConfig.getPort());
+        assertThat(8080).isEqualTo(serverConfig.getCoreThreads());
+        assertThat(7070).isEqualTo(serverConfig.getMaxThreads());
+        assertThat(6060).isEqualTo(serverConfig.getAccepts());
+        assertThat(8888).isEqualTo(serverConfig.getVirtualPort().intValue());
+        assertThat("127.0.0.2").isEqualTo(serverConfig.getVirtualHost());
+        assertThat("127.0.0.3").isEqualTo(serverConfig.getBoundHost());
     }
 
     @Test
-    @Ignore("only can run in multi ip env")
-    public void testBoltIpCustomConfiguration() {
+    @Disabled("only can run in multi ip env")
+    public void boltIpCustomConfiguration() {
         serverConfigContainer.setEnabledIpRange("192.168");
         ServerConfig serverConfig = serverConfigContainer.createBoltServerConfig();
-        Assert.assertEquals("192.168", serverConfig.getVirtualHost());
+        assertThat("192.168").isEqualTo(serverConfig.getVirtualHost());
     }
 
     @Test
-    public void testBoltServerDefaultPort() {
+    public void boltServerDefaultPort() {
         serverConfigContainer.setBoltPortStr("");
         ServerConfig serverConfig = serverConfigContainer.createBoltServerConfig();
-        Assert.assertEquals(SofaBootRpcConfigConstants.BOLT_PORT_DEFAULT, serverConfig.getPort());
+        assertThat(SofaBootRpcConfigConstants.BOLT_PORT_DEFAULT).isEqualTo(serverConfig.getPort());
     }
 
     @Test
-    public void testDubboServerConfiguration() {
+    public void dubboServerConfiguration() {
         serverConfigContainer.setDubboPortStr("9696");
         serverConfigContainer.setDubboIoThreadSizeStr("8686");
         serverConfigContainer.setDubboThreadPoolMaxSizeStr("7676");
@@ -87,14 +109,14 @@ public class ServerConfigContainerTest extends ActivelyDestroyTest {
 
         ServerConfig serverConfig = serverConfigContainer.createDubboServerConfig();
 
-        Assert.assertEquals(9696, serverConfig.getPort());
-        Assert.assertEquals(8686, serverConfig.getIoThreads());
-        Assert.assertEquals(7676, serverConfig.getMaxThreads());
-        Assert.assertEquals(6666, serverConfig.getAccepts());
+        assertThat(9696).isEqualTo(serverConfig.getPort());
+        assertThat(8686).isEqualTo(serverConfig.getIoThreads());
+        assertThat(7676).isEqualTo(serverConfig.getMaxThreads());
+        assertThat(6666).isEqualTo(serverConfig.getAccepts());
     }
 
     @Test
-    public void testRestServerConfiguration() {
+    public void restServerConfiguration() {
         serverConfigContainer.setRestHostName("host_name");
         serverConfigContainer.setRestPortStr("123");
         serverConfigContainer.setRestIoThreadSizeStr("456");
@@ -106,21 +128,21 @@ public class ServerConfigContainerTest extends ActivelyDestroyTest {
         serverConfigContainer.setRestAllowedOrigins("a.com");
         ServerConfig serverConfig = serverConfigContainer.createRestServerConfig();
 
-        Assert.assertEquals("host_name", serverConfig.getBoundHost());
-        Assert.assertEquals(123, serverConfig.getPort());
-        Assert.assertEquals(456, serverConfig.getIoThreads());
-        Assert.assertEquals("/api/", serverConfig.getContextPath());
-        Assert.assertEquals(789, serverConfig.getMaxThreads());
-        Assert.assertEquals(1000, serverConfig.getPayload());
-        Assert.assertTrue(serverConfig.isTelnet());
-        Assert.assertTrue(serverConfig.isDaemon());
-        Assert
-            .assertEquals("a.com", serverConfig.getParameters().get(RpcConstants.ALLOWED_ORIGINS));
+        assertThat("host_name").isEqualTo(serverConfig.getBoundHost());
+        assertThat(123).isEqualTo(serverConfig.getPort());
+        assertThat(456).isEqualTo(serverConfig.getIoThreads());
+        assertThat("/api/").isEqualTo(serverConfig.getContextPath());
+        assertThat(789).isEqualTo(serverConfig.getMaxThreads());
+        assertThat(1000).isEqualTo(serverConfig.getPayload());
+        assertThat(serverConfig.isTelnet()).isTrue();
+        assertThat(serverConfig.isDaemon()).isTrue();
+        assertThat("a.com").isEqualTo(
+            serverConfig.getParameters().get(RpcConstants.ALLOWED_ORIGINS));
 
     }
 
     @Test
-    public void testCustomServerConfig() {
+    public void customServerConfig() {
 
         final ServerConfig serverConfig = new ServerConfig();
         serverConfig.setPort(123);
@@ -129,25 +151,19 @@ public class ServerConfigContainerTest extends ActivelyDestroyTest {
 
         ServerConfig serverConfig2 = serverConfigContainer.getServerConfig(protocol);
 
-        Assert.assertEquals(123, serverConfig2.getPort());
-        Assert.assertEquals(serverConfig.getPort(), serverConfig2.getPort());
+        assertThat(123).isEqualTo(serverConfig2.getPort());
+        assertThat(serverConfig.getPort()).isEqualTo(serverConfig2.getPort());
 
         boolean result = false;
         serverConfigContainer.unRegisterCustomServerConfig(protocol);
-        try {
-            serverConfigContainer.getServerConfig(protocol);
-
-        } catch (Exception e) {
-            Assert.assertTrue(e instanceof SofaBootRpcRuntimeException);
-            result = true;
-        }
-
-        Assert.assertTrue(result);
+        assertThatThrownBy(() -> serverConfigContainer.getServerConfig(protocol))
+                .isInstanceOf(SofaBootRpcRuntimeException.class);
+        assertThat(result).isTrue();
 
     }
 
     @Test
-    public void testCustomServerConfigTwice() {
+    public void customServerConfigTwice() {
 
         final ServerConfig serverConfig = new ServerConfig();
         serverConfig.setPort(123);
@@ -156,18 +172,18 @@ public class ServerConfigContainerTest extends ActivelyDestroyTest {
 
         ServerConfig serverConfig2 = serverConfigContainer.getServerConfig(protocol);
 
-        Assert.assertEquals(123, serverConfig2.getPort());
-        Assert.assertEquals(serverConfig.getPort(), serverConfig2.getPort());
+        assertThat(123).isEqualTo(serverConfig2.getPort());
+        assertThat(serverConfig.getPort()).isEqualTo(serverConfig2.getPort());
 
         boolean twiceResult = serverConfigContainer.registerCustomServerConfig(protocol,
             serverConfig);
 
-        Assert.assertFalse(twiceResult);
+        assertThat(twiceResult).isFalse();
 
     }
 
     @Test
-    public void testCreateHttpServerConfig() {
+    public void createHttpServerConfig() {
         serverConfigContainer.setHttpPortStr("8080");
         serverConfigContainer.setHttpThreadPoolCoreSizeStr("5");
         serverConfigContainer.setHttpThreadPoolMaxSizeStr("10");
@@ -177,17 +193,17 @@ public class ServerConfigContainerTest extends ActivelyDestroyTest {
         ServerConfig serverConfig = serverConfigContainer
             .getServerConfig(SofaBootRpcConfigConstants.RPC_PROTOCOL_HTTP);
 
-        Assert.assertEquals(8080, serverConfig.getPort());
-        Assert.assertEquals(5, serverConfig.getCoreThreads());
-        Assert.assertEquals(10, serverConfig.getMaxThreads());
-        Assert.assertEquals(1, serverConfig.getAccepts());
-        Assert.assertEquals(8, serverConfig.getQueues());
+        assertThat(8080).isEqualTo(serverConfig.getPort());
+        assertThat(5).isEqualTo(serverConfig.getCoreThreads());
+        assertThat(10).isEqualTo(serverConfig.getMaxThreads());
+        assertThat(1).isEqualTo(serverConfig.getAccepts());
+        assertThat(8).isEqualTo(serverConfig.getQueues());
     }
 
     @Test
-    public void testStartCustomThreadPoolMonitor() throws NoSuchMethodException,
-                                                  IllegalAccessException,
-                                                  InvocationTargetException, NoSuchFieldException {
+    public void startCustomThreadPoolMonitor() throws NoSuchMethodException,
+                                              IllegalAccessException, InvocationTargetException,
+                                              NoSuchFieldException {
         UserThreadPoolManager.registerUserThread("service1", new UserThreadPool());
         UserThreadPoolManager.registerUserThread("service2", new UserThreadPool());
         UserThreadPoolManager.registerUserThread("service3", new UserThreadPool("same-name"));
@@ -203,7 +219,7 @@ public class ServerConfigContainerTest extends ActivelyDestroyTest {
         privateField.setAccessible(true);
         Object value = privateField.get(serverConfigContainer);
         List<RpcThreadPoolMonitor> customThreadPoolMonitorList = (List<RpcThreadPoolMonitor>) value;
-        Assert.assertEquals(customThreadPoolMonitorList.size(), 4);
+        assertThat(customThreadPoolMonitorList.size()).isEqualTo(4);
 
         boolean hasHashCode = false;
         for (RpcThreadPoolMonitor monitor : customThreadPoolMonitorList) {
@@ -211,14 +227,14 @@ public class ServerConfigContainerTest extends ActivelyDestroyTest {
                 hasHashCode = true;
             }
         }
-        Assert.assertTrue(hasHashCode);
+        assertThat(hasHashCode).isFalse();
 
         Method privateStopMethod = serverConfigContainer.getClass().getDeclaredMethod(
             "stopCustomThreadPoolMonitor");
         privateStopMethod.setAccessible(true);
         privateStopMethod.invoke(serverConfigContainer);
 
-        Assert.assertEquals(customThreadPoolMonitorList.size(), 0);
+        assertThat(customThreadPoolMonitorList.size()).isEqualTo(0);
 
     }
 }

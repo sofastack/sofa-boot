@@ -16,21 +16,27 @@
  */
 package com.alipay.sofa.rpc.boot.test.config;
 
-import org.junit.Assert;
-import org.junit.Test;
+import com.alipay.sofa.rpc.boot.config.MeshConfigurator;
+import com.alipay.sofa.rpc.config.RegistryConfig;
+import org.junit.jupiter.api.Test;
 
-import com.alipay.sofa.rpc.boot.config.LocalFileConfigurator;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * @author qilong.zql
- * @since 3.2.0
+ * Tests for {@link MeshConfigurator}.
+ *
+ * @author zhuoyu.sjw
+ * @version $Id: MeshConfiguratorTest.java, v 0.1 2018-12-03 17:39 zhuoyu.sjw Exp $$
  */
-public class LocalFileConfiguratorTest {
+public class MeshConfiguratorTests {
 
     @Test
-    public void parseConfig() {
-        LocalFileConfigurator localFileConfigurator = new LocalFileConfigurator();
-        String result = localFileConfigurator.parseConfig("local://xxx");
-        Assert.assertEquals("xxx", result);
+    public void buildFromAddress() {
+        String address = "mesh://127.0.0.1:12220";
+
+        MeshConfigurator meshConfigurator = new MeshConfigurator();
+        RegistryConfig registryConfig = meshConfigurator.buildFromAddress(address);
+        assertThat("mesh").isEqualTo(registryConfig.getProtocol());
+        assertThat("http://127.0.0.1:12220").isEqualTo(registryConfig.getAddress());
     }
 }

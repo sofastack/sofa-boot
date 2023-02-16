@@ -18,29 +18,24 @@ package com.alipay.sofa.rpc.boot.test.common;
 
 import com.alipay.sofa.rpc.boot.common.RpcThreadPoolMonitor;
 import com.alipay.sofa.rpc.boot.log.LoggerConstant;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
+ * Tests for {@link RpcThreadPoolMonitor}.
+ *
  * @author zhaowang
  * @version : ThreadPoolMonitorTest.java, v 0.1 2020年09月08日 4:15 下午 zhaowang Exp $
  */
-public class ThreadPoolMonitorTest {
+public class ThreadPoolMonitorTests {
 
     @Test
-    public void test() throws InterruptedException {
-        ThreadPoolExecutor executorService = new ThreadPoolExecutor(10, 11, 1, TimeUnit.DAYS,
-            new LinkedBlockingQueue<>(10));
-        new RpcThreadPoolMonitor(executorService, LoggerConstant.TRIPLE_THREAD_LOGGER_NAME).start();
-        Thread.sleep(10000);
-    }
-
-    @Test
-    public void testTestStop() throws InterruptedException {
+    public void checkStop() throws InterruptedException {
         ThreadPoolExecutor executorService = new ThreadPoolExecutor(10, 11, 1, TimeUnit.DAYS,
             new LinkedBlockingQueue<>(10));
         RpcThreadPoolMonitor rpcThreadPoolMonitor = new RpcThreadPoolMonitor(executorService,
@@ -48,11 +43,10 @@ public class ThreadPoolMonitorTest {
         rpcThreadPoolMonitor.start();
 
         Thread monitor = rpcThreadPoolMonitor.getMonitor();
-        Assert.assertFalse(Thread.State.TERMINATED == monitor.getState());
+        assertThat(Thread.State.TERMINATED == monitor.getState()).isFalse();
         rpcThreadPoolMonitor.stop();
         Thread.sleep(100);
         System.out.println(monitor.getState());
-        Assert.assertTrue(Thread.State.TERMINATED == monitor.getState());
+        assertThat(Thread.State.TERMINATED == monitor.getState()).isTrue();
     }
-
 }

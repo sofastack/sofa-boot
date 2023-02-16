@@ -16,41 +16,45 @@
  */
 package com.alipay.sofa.rpc.boot.test.runtime.adapter.processor;
 
-import org.springframework.util.StringUtils;
 import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ConsumerMockProcessor;
 import com.alipay.sofa.rpc.common.MockMode;
 import com.alipay.sofa.rpc.config.ConsumerConfig;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.util.StringUtils;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
+ * Tests for {@link ConsumerMockProcessor}.
+ *
  * @author zhaowang
  * @version : ConsumerMockProcessorTest.java, v 0.1 2020年03月11日 2:32 下午 zhaowang Exp $
  */
-public class ConsumerMockProcessorTest {
+public class ConsumerMockProcessorTests {
 
-    public static final String    MOCK_URL  = "mock";
-    private ConsumerMockProcessor processor = new ConsumerMockProcessor("");
+    public static final String          MOCK_URL  = "mock";
+    private final ConsumerMockProcessor processor = new ConsumerMockProcessor("");
 
-    @Before
+    @BeforeEach
     public void before() {
         processor.setMockUrl(MOCK_URL);
     }
 
     @Test
-    public void testProcessor() {
+    public void processor() {
         ConsumerConfig consumerConfig = new ConsumerConfig();
         processor.processorConsumer(consumerConfig);
-        Assert.assertEquals(MOCK_URL, consumerConfig.getParameter(ConsumerMockProcessor.MOCK_URL));
-        Assert.assertEquals(MockMode.REMOTE, consumerConfig.getMockMode());
+        assertThat(MOCK_URL).isEqualTo(consumerConfig.getParameter(ConsumerMockProcessor.MOCK_URL));
+        assertThat(MockMode.REMOTE).isEqualTo(consumerConfig.getMockMode());
 
         processor.setMockUrl("");
         ConsumerConfig consumerConfig2 = new ConsumerConfig();
         processor.processorConsumer(consumerConfig2);
-        Assert.assertFalse(StringUtils.hasText(consumerConfig2.getMockMode()));
-        Assert.assertFalse(StringUtils.hasText(consumerConfig2
-            .getParameter(ConsumerMockProcessor.MOCK_URL)));
+        assertThat(StringUtils.hasText(consumerConfig2.getMockMode())).isFalse();
+        assertThat(
+            StringUtils.hasText(consumerConfig2.getParameter(ConsumerMockProcessor.MOCK_URL)))
+            .isFalse();
     }
 
     @Test
@@ -58,16 +62,17 @@ public class ConsumerMockProcessorTest {
         ConsumerConfig consumerConfig = new ConsumerConfig();
         consumerConfig.setMockMode(MockMode.LOCAL);
         processor.processorConsumer(consumerConfig);
-        Assert.assertFalse(StringUtils.hasText(consumerConfig
-            .getParameter(ConsumerMockProcessor.MOCK_URL)));
-        Assert.assertEquals(MockMode.LOCAL, consumerConfig.getMockMode());
+        assertThat(StringUtils.hasText(consumerConfig.getParameter(ConsumerMockProcessor.MOCK_URL)))
+            .isFalse();
+        assertThat(MockMode.LOCAL).isEqualTo(consumerConfig.getMockMode());
 
         consumerConfig = new ConsumerConfig();
         consumerConfig.setMockMode(MockMode.REMOTE);
         consumerConfig.setParameter(ConsumerMockProcessor.MOCK_URL, "another");
         processor.processorConsumer(consumerConfig);
-        Assert.assertEquals("another", consumerConfig.getParameter(ConsumerMockProcessor.MOCK_URL));
-        Assert.assertEquals(MockMode.REMOTE, consumerConfig.getMockMode());
+        assertThat("another")
+            .isEqualTo(consumerConfig.getParameter(ConsumerMockProcessor.MOCK_URL));
+        assertThat(MockMode.REMOTE).isEqualTo(consumerConfig.getMockMode());
     }
 
 }
