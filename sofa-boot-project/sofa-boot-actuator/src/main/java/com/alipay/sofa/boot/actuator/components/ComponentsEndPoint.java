@@ -55,8 +55,10 @@ public class ComponentsEndPoint {
         componentTypes.forEach(componentType -> {
             Collection<ComponentInfo> componentInfos = componentManager.getComponentInfosByType(componentType);
             Collection<ComponentDisplayInfo> componentDisplayInfos = componentInfos.stream()
-                    .map(componentInfo -> new ComponentDisplayInfo(componentInfo.getName().getName(),
-                            componentInfo.getApplicationContext().getId()))
+                    .map(componentInfo -> {
+                        String applicationId = componentInfo.getApplicationContext() == null ? "null" : componentInfo.getApplicationContext().getId();
+                        return new ComponentDisplayInfo(componentInfo.getName().getName(), applicationId);
+                    })
                     .collect(Collectors.toList());
             componentsInfoMap.put(componentType.getName(), componentDisplayInfos);
         });
