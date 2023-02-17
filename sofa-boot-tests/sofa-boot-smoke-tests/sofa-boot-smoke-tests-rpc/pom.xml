@@ -56,6 +56,11 @@
             <artifactId>dubbo</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-jaxrs2</artifactId>
+        </dependency>
+
         <!--curator-->
         <dependency>
             <groupId>org.apache.curator</groupId>

@@ -186,6 +186,7 @@ public class SofaRpcAutoConfiguration {
                                                            @Qualifier("registryConfigMap") Map<String, RegistryConfigureProcessor> registryConfigMap) {
         RegistryConfigContainer registryConfigContainer = new RegistryConfigContainer(
             registryConfigMap);
+
         registryConfigContainer.setDefaultRegistryAddress(sofaBootRpcProperties
             .getRegistryAddress());
         registryConfigContainer.setRegistries(sofaBootRpcProperties.getRegistries());

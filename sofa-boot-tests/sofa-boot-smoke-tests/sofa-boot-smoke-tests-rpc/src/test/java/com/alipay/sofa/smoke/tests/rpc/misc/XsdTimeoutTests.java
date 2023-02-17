@@ -25,8 +25,8 @@ import com.alipay.sofa.runtime.service.component.ServiceComponent;
 import com.alipay.sofa.runtime.spi.binding.Binding;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
-import com.alipay.sofa.smoke.tests.rpc.bean.misc.MethodElementInterface;
-import com.alipay.sofa.smoke.tests.rpc.bean.misc.WhateverInterface;
+import com.alipay.sofa.smoke.tests.rpc.boot.bean.misc.MethodElementInterface;
+import com.alipay.sofa.smoke.tests.rpc.boot.bean.misc.WhateverInterface;
 import com.alipay.sofa.smoke.tests.rpc.boot.RpcSofaBootApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,12 +53,12 @@ public class XsdTimeoutTests {
     SofaRuntimeContext sofaRuntimeContext;
 
     @Test
-    public void testService() {
+    public void service() {
         assertEquals(whatever.say(), "whatever");
     }
 
     @Test
-    public void testServiceTimeout() {
+    public void serviceTimeout() {
         ServiceComponent component = (ServiceComponent) sofaRuntimeContext.getComponentManager()
             .getComponentInfo(
                 new ComponentName(ServiceComponent.SERVICE_COMPONENT_TYPE, WhateverInterface.class
@@ -72,7 +72,7 @@ public class XsdTimeoutTests {
      * @see RpcBindingConverter#parseMethod
      */
     @Test
-    public void testBindingMethod() {
+    public void bindingMethod() {
         //service
         ServiceComponent component = (ServiceComponent) sofaRuntimeContext.getComponentManager()
             .getComponentInfo(
@@ -106,7 +106,7 @@ public class XsdTimeoutTests {
     }
 
     @Test
-    public void testReferenceTimeout() {
+    public void referenceTimeout() {
         Collection<ComponentInfo> c = sofaRuntimeContext.getComponentManager()
             .getComponentInfosByType(ReferenceComponent.REFERENCE_COMPONENT_TYPE);
         for (ComponentInfo componentInfo : c) {

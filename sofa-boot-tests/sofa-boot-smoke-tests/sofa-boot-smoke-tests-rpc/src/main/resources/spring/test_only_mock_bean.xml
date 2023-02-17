@@ -5,5 +5,5 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
             http://sofastack.io/schema/sofaboot   http://sofastack.io/schema/sofaboot.xsd">
 
-    <bean id="mockHello" class="com.alipay.sofa.smoke.tests.rpc.bean.invoke.HelloSyncServiceImpl"/>
+    <bean id="mockHello" class="com.alipay.sofa.smoke.tests.rpc.boot.bean.invoke.HelloSyncServiceImpl"/>
 </beans>

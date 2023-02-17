@@ -19,7 +19,7 @@ package com.alipay.sofa.smoke.tests.rpc.readiness;
 import com.alipay.sofa.rpc.boot.config.SofaBootRpcConfigConstants;
 import com.alipay.sofa.rpc.core.exception.SofaRouteException;
 import com.alipay.sofa.smoke.tests.rpc.ActivelyDestroyTests;
-import com.alipay.sofa.smoke.tests.rpc.bean.SampleFacade;
+import com.alipay.sofa.smoke.tests.rpc.boot.bean.SampleFacade;
 import com.alipay.sofa.smoke.tests.rpc.boot.RpcSofaBootApplication;
 import com.alipay.sofa.smoke.tests.rpc.util.TestUtils;
 import org.junit.jupiter.api.Test;
@@ -38,6 +38,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * Integration tests for check health.
+ */
 @SpringBootTest(properties = { "sofa.boot.rpc.registry.address=zookeeper://localhost:2181" }, classes = RpcSofaBootApplication.class)
 @Import({ ReadinessTests.Config.class })
 public class ReadinessTests extends ActivelyDestroyTests {
@@ -46,7 +49,7 @@ public class ReadinessTests extends ActivelyDestroyTests {
     private SampleFacade sampleFacade;
 
     @Test
-    public void testCannotFoundAddress() throws InterruptedException {
+    public void cannotFoundAddress() throws InterruptedException {
         TimeUnit.SECONDS.sleep(1);
         SofaRouteException thrown = assertThrows(SofaRouteException.class, () -> {
             sampleFacade.sayHi("World");
@@ -55,7 +58,7 @@ public class ReadinessTests extends ActivelyDestroyTests {
     }
 
     @Test
-    public void testPortNotOpen() {
+    public void portNotOpen() {
         assertTrue(TestUtils.available(SofaBootRpcConfigConstants.BOLT_PORT_DEFAULT));
     }
 

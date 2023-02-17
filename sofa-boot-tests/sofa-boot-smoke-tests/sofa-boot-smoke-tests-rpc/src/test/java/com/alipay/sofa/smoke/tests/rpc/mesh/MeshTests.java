@@ -18,8 +18,8 @@ package com.alipay.sofa.smoke.tests.rpc.mesh;
 
 import com.alipay.sofa.rpc.core.exception.SofaRpcException;
 import com.alipay.sofa.smoke.tests.rpc.ActivelyDestroyTests;
-import com.alipay.sofa.smoke.tests.rpc.bean.SampleService;
-import com.alipay.sofa.smoke.tests.rpc.bean.invoke.HelloSyncService;
+import com.alipay.sofa.smoke.tests.rpc.boot.bean.SampleService;
+import com.alipay.sofa.smoke.tests.rpc.boot.bean.invoke.HelloSyncService;
 import com.alipay.sofa.smoke.tests.rpc.boot.RpcSofaBootApplication;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -53,7 +53,7 @@ public class MeshTests extends ActivelyDestroyTests {
 
     @Test
     @Disabled("需要有 mesh 环境")
-    public void testInvokeWithMesh() throws InterruptedException {
+    public void invokeWithMesh() throws InterruptedException {
 
         try {
             String result = sampleService.echoStr("sync");

@@ -33,21 +33,23 @@ import com.alipay.sofa.runtime.api.client.ServiceClient;
 import com.alipay.sofa.runtime.api.client.param.BindingParam;
 import com.alipay.sofa.runtime.api.client.param.ServiceParam;
 import com.alipay.sofa.runtime.spi.binding.Binding;
-import com.alipay.sofa.smoke.tests.rpc.bean.annotation.AnnotationService;
-import com.alipay.sofa.smoke.tests.rpc.bean.connectionnum.ConnectionNumService;
-import com.alipay.sofa.smoke.tests.rpc.bean.direct.DirectService;
-import com.alipay.sofa.smoke.tests.rpc.bean.filter.FilterService;
-import com.alipay.sofa.smoke.tests.rpc.bean.globalfilter.GlobalFilterService;
-import com.alipay.sofa.smoke.tests.rpc.bean.invoke.CallbackImpl;
-import com.alipay.sofa.smoke.tests.rpc.bean.invoke.HelloCallbackService;
-import com.alipay.sofa.smoke.tests.rpc.bean.invoke.HelloFutureService;
-import com.alipay.sofa.smoke.tests.rpc.bean.invoke.HelloSyncService;
-import com.alipay.sofa.smoke.tests.rpc.bean.lazy.LazyService;
-import com.alipay.sofa.smoke.tests.rpc.bean.rest.AddService;
-import com.alipay.sofa.smoke.tests.rpc.bean.rest.RestService;
-import com.alipay.sofa.smoke.tests.rpc.bean.retry.RetriesService;
-import com.alipay.sofa.smoke.tests.rpc.bean.retry.RetriesServiceImpl;
-import com.alipay.sofa.smoke.tests.rpc.bean.threadpool.ThreadPoolService;
+import com.alipay.sofa.smoke.tests.rpc.boot.bean.annotation.AnnotationService;
+import com.alipay.sofa.smoke.tests.rpc.boot.bean.connectionnum.ConnectionNumService;
+import com.alipay.sofa.smoke.tests.rpc.boot.bean.direct.DirectService;
+import com.alipay.sofa.smoke.tests.rpc.boot.bean.filter.FilterService;
+import com.alipay.sofa.smoke.tests.rpc.boot.bean.generic.GenericParamModel;
+import com.alipay.sofa.smoke.tests.rpc.boot.bean.generic.GenericResultModel;
+import com.alipay.sofa.smoke.tests.rpc.boot.bean.globalfilter.GlobalFilterService;
+import com.alipay.sofa.smoke.tests.rpc.boot.bean.invoke.CallbackImpl;
+import com.alipay.sofa.smoke.tests.rpc.boot.bean.invoke.HelloCallbackService;
+import com.alipay.sofa.smoke.tests.rpc.boot.bean.invoke.HelloFutureService;
+import com.alipay.sofa.smoke.tests.rpc.boot.bean.invoke.HelloSyncService;
+import com.alipay.sofa.smoke.tests.rpc.boot.bean.lazy.LazyService;
+import com.alipay.sofa.smoke.tests.rpc.boot.bean.rest.AddService;
+import com.alipay.sofa.smoke.tests.rpc.boot.bean.rest.RestService;
+import com.alipay.sofa.smoke.tests.rpc.boot.bean.retry.RetriesService;
+import com.alipay.sofa.smoke.tests.rpc.boot.bean.retry.RetriesServiceImpl;
+import com.alipay.sofa.smoke.tests.rpc.boot.bean.threadpool.ThreadPoolService;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -58,8 +60,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 
 import java.io.IOException;
@@ -70,19 +73,18 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author QilongZhang
  * @author yuanxuan
  * @version : SofaBootRpcApplicationTests.java, v 0.1 15:19 yuanxuan Exp $
  */
-@SpringBootTest(properties = { "sofa.boot.rpc.rest-swagger=false",
-                              "sofa.boot.rpc.enable-swagger=true",
-                              "sofa.boot.rpc" + ".defaultTracer=" })
-@ActiveProfiles("test")
+@SpringBootTest(classes = RpcSofaBootApplication.class, properties = {
+                                                                      "sofa.boot.rpc.rest-swagger=true",
+                                                                      "sofa.boot.rpc.enable-swagger=true",
+                                                                      "sofa.boot.rpc.defaultTracer=" })
+@Import(SofaBootRpcApplicationTests.RpcAllConfiguration.class)
 public class SofaBootRpcApplicationTests {
 
     @Autowired
@@ -160,7 +162,7 @@ public class SofaBootRpcApplicationTests {
     private ConsumerConfigContainer consumerConfigContainer;
 
     @Test
-    public void testTimeoutPriority() throws InterruptedException {
+    public void timeoutPriority() throws InterruptedException {
 
         //If all timeout configuration is not configured, the default timeout time 3000ms will take effect.The interface is ok.
         assertThat(annotationService.testTimeout(2000)).isEqualTo("sleep 2000 ms");
@@ -187,7 +189,7 @@ public class SofaBootRpcApplicationTests {
     }
 
     @Test
-    public void testInvoke() throws InterruptedException {
+    public void invoke() throws InterruptedException {
         assertThat(helloSyncService.saySync("sync")).isEqualTo("sync");
 
         helloFutureService.sayFuture("future");
@@ -199,13 +201,13 @@ public class SofaBootRpcApplicationTests {
     }
 
     @Test
-    public void testGlobalFilter() {
+    public void globalFilter() {
         assertThat(globalFilterService.sayGlobalFilter("globalFilter")).isEqualTo(
             "globalFilter_change");
     }
 
     @Test
-    public void testDirect() throws InterruptedException {
+    public void direct() throws InterruptedException {
 
         Thread.sleep(5000);
 
@@ -214,34 +216,31 @@ public class SofaBootRpcApplicationTests {
     }
 
     @Test
-    public void testFilter() {
+    public void filter() {
         assertThat(filterService.sayFilter("filter")).isEqualTo("filter_change");
     }
 
     @Test
-    public void testGeneric() {
-        GenericObject genericObject = new GenericObject(
-            "com.alipay.sofa.tests.rpc.bean.generic.GenericParamModel");
+    public void generic() {
+        GenericObject genericObject = new GenericObject(GenericParamModel.class.getName());
         genericObject.putField("name", "Bible");
 
         GenericObject result = (GenericObject) genericService.$genericInvoke("sayGeneric",
-            new String[] { "com.alipay.sofa.tests.rpc.bean.generic.GenericParamModel" },
-            new Object[] { genericObject });
+            new String[] { GenericParamModel.class.getName() }, new Object[] { genericObject });
 
-        assertThat(result.getType()).isEqualTo(
-            "com.alipay.sofa.tests.rpc.bean.generic.GenericResultModel");
+        assertThat(result.getType()).isEqualTo(GenericResultModel.class.getName());
         assertThat(result.getField("name")).isEqualTo("Bible");
         assertThat(result.getField("value")).isEqualTo("sample generic value");
     }
 
     @Test
-    public void testThreadPool() {
+    public void threadPool() {
         assertThat(threadPoolService.sayThreadPool("threadPool")).startsWith(
             "threadPool[SOFA-customerThreadPool_name");
     }
 
     @Test
-    public void testRest() {
+    public void rest() {
         assertThat(restService.sayRest("rest")).isEqualTo("rest");
     }
 
@@ -251,7 +250,7 @@ public class SofaBootRpcApplicationTests {
     }
     */
     @Test
-    public void testRetries() throws InterruptedException {
+    public void retries() throws InterruptedException {
         assertThat(retriesServiceBolt.sayRetry("retries_bolt")).isEqualTo("retries_bolt");
         //TODO need dubbo version upgrade later 3.0.6 for support jdk17
         //assertThat(retriesServiceDubbo.sayRetry("retries_dubbo")).isEqualTo("retries_dubbo");
@@ -260,19 +259,19 @@ public class SofaBootRpcApplicationTests {
     }
 
     @Test
-    public void testLazy() {
+    public void lazy() {
         assertThat(lazyServiceBolt.sayLazy("lazy_bolt")).isEqualTo("lazy_bolt");
         //TODO need dubbo version upgrade later 3.0.6 for support jdk17
         //assertThat(lazyServiceDubbo.sayLazy("lazy_dubbo")).isEqualTo("lazy_dubbo");
     }
 
     @Test
-    public void testAnnotation() {
+    public void annotation() {
         assertThat(annotationService.hello()).isEqualTo("Hello, Annotation");
     }
 
     @Test
-    public void testLoadBalancerAnnotation() throws NoSuchFieldException, IllegalAccessException {
+    public void loadBalancerAnnotation() throws NoSuchFieldException, IllegalAccessException {
         Field consumerConfigMapField = ConsumerConfigContainer.class
             .getDeclaredField("consumerConfigMap");
         consumerConfigMapField.setAccessible(true);
@@ -317,7 +316,7 @@ public class SofaBootRpcApplicationTests {
      }*/
 
     @Test
-    public void testRestSwagger() throws IOException {
+    public void restSwagger() throws IOException {
         HttpClient httpClient = HttpClientBuilder.create().build();
         HttpUriRequest request = new HttpGet("http://localhost:8341/swagger/openapi");
         HttpResponse response = httpClient.execute(request);
@@ -326,7 +325,7 @@ public class SofaBootRpcApplicationTests {
     }
 
     @Test
-    public void testRestSwaggerAddService() throws IOException {
+    public void restSwaggerAddService() throws IOException {
         List<BindingParam> bindingParams = new ArrayList<>();
         bindingParams.add(new RestBindingParam());
 
@@ -346,13 +345,15 @@ public class SofaBootRpcApplicationTests {
     }
 
     @Test
-    public void testBoltSwagger() throws IOException, InterruptedException {
+    // todo rpc 需要适配 swagger-core 2.0.0 版本
+    public void boltSwagger() throws IOException {
         HttpClient httpClient = HttpClientBuilder.create().build();
         HttpUriRequest request = new HttpGet("http://localhost:8341/swagger/bolt/api");
         HttpResponse response = httpClient.execute(request);
         assertThat(response.getStatusLine().getStatusCode()).isEqualTo(200);
-        assertThat(EntityUtils.toString(response.getEntity())).contains(
-            "/com.alipay.sofa.tests.rpc.bean.threadpool.ThreadPoolService/sayThreadPool");
+        assertThat(EntityUtils.toString(response.getEntity()))
+            .contains(
+                "/com.alipay.sofa.smoke.tests.rpc.boot.bean.threadpool.ThreadPoolService/sayThreadPool");
     }
 
     /*@Test
@@ -365,7 +366,7 @@ public class SofaBootRpcApplicationTests {
      }*/
 
     @Test
-    public void testDisableTracing() throws NoSuchFieldException, IllegalAccessException {
+    public void disableTracing() throws NoSuchFieldException, IllegalAccessException {
         Field installedModulesField = ModuleFactory.class.getDeclaredField("INSTALLED_MODULES");
         installedModulesField.setAccessible(true);
         @SuppressWarnings("unchecked")
@@ -376,6 +377,7 @@ public class SofaBootRpcApplicationTests {
 
     @Configuration
     @ImportResource("/spring/test_all.xml")
+    @ComponentScan("com.alipay.sofa.smoke.tests.rpc.boot.bean")
     static class RpcAllConfiguration {
 
     }

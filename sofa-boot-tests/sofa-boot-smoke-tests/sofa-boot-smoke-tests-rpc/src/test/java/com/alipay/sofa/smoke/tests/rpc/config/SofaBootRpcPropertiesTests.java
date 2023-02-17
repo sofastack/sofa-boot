@@ -20,16 +20,17 @@ import com.alipay.sofa.boot.autoconfigure.rpc.SofaBootRpcProperties;
 import com.alipay.sofa.rpc.boot.container.ConsumerConfigContainer;
 import com.alipay.sofa.rpc.config.ConsumerConfig;
 import com.alipay.sofa.smoke.tests.rpc.boot.RpcSofaBootApplication;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.ApplicationContext;
 
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * Integration tests for {@link SofaBootRpcProperties}.
+ */
 @SpringBootTest(classes = RpcSofaBootApplication.class, properties = {
                                                                       "sofa.boot.rpc"
                                                                               + ".bolt.port=5000",
@@ -43,41 +44,32 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class SofaBootRpcPropertiesTests {
 
     @Autowired
-    private SofaBootRpcProperties sofaBootRpcProperties;
+    private SofaBootRpcProperties   sofaBootRpcProperties;
 
     @Autowired
-    private ApplicationContext    context;
+    private ConsumerConfigContainer consumerConfigContainer;
 
     @Test
-    public void testCamelCaseToDot() {
-
+    public void camelCaseToDot() {
         assertThat(sofaBootRpcProperties.camelToDot("comAlipaySofa"));
         assertThat(sofaBootRpcProperties.camelToDot("ComAlipaySofa"));
     }
 
     @Test
-    public void testDotConfig() {
+    public void dotConfig() {
         assertThat(sofaBootRpcProperties.getBoltPort()).isEqualTo("5000");
     }
 
     @Test
-    public void testConsumerRepeatedReferenceLimit() {
-        Map configMap = context.getBean(ConsumerConfigContainer.class).getConsumerConfigMap();
+    public void consumerRepeatedReferenceLimit() {
+        Map configMap = consumerConfigContainer.getConsumerConfigMap();
         for (Object consumerConfig : configMap.values()) {
             assertThat(((ConsumerConfig) consumerConfig).getRepeatedReferLimit()).isEqualTo(10);
         }
     }
 
     @Test
-    @Disabled("do not support in spring boot 2.0")
-    public void testUnderscoreConfig() {
-        SofaBootRpcProperties sofaBootRpcProperties = context.getBean(SofaBootRpcProperties.class);
-        assertThat(sofaBootRpcProperties.getBoltThreadPoolMaxSize()).isEqualTo("600");
-    }
-
-    @Test
-    public void testAllowedOriginis() {
-        SofaBootRpcProperties sofaBootRpcProperties = context.getBean(SofaBootRpcProperties.class);
+    public void allowedOriginis() {
         assertThat(sofaBootRpcProperties.getRestAllowedOrigins()).isEqualTo("a.com");
     }
 }

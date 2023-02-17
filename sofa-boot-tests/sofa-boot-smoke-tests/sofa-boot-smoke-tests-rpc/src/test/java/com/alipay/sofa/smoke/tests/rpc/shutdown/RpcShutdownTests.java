@@ -34,6 +34,9 @@ import org.springframework.test.annotation.DirtiesContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * Integration tests for rpc shutdown.
+ */
 @SpringBootTest(classes = RpcSofaBootApplication.class)
 @Import(RpcShutdownTests.RpcShutdownConfiguration.class)
 public class RpcShutdownTests extends ActivelyDestroyTests implements ApplicationContextAware {
@@ -41,12 +44,12 @@ public class RpcShutdownTests extends ActivelyDestroyTests implements Applicatio
 
     @Test
     @DirtiesContext
-    public void test() {
+    public void checkPort() {
         assertThat(TestUtils.available(SofaBootRpcConfigConstants.BOLT_PORT_DEFAULT)).isFalse();
     }
 
     @AfterAll
-    public static void testRpcGracefulShutdown() {
+    public static void rpcGracefulShutdown() {
         ((ConfigurableApplicationContext) applicationContext).close();
 
         boolean portAvailable = false;

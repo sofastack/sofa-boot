@@ -18,7 +18,7 @@ package com.alipay.sofa.smoke.tests.rpc.registry;
 
 import com.alipay.sofa.rpc.core.exception.SofaRpcException;
 import com.alipay.sofa.smoke.tests.rpc.ActivelyDestroyTests;
-import com.alipay.sofa.smoke.tests.rpc.bean.registry.MultiRegistryService;
+import com.alipay.sofa.smoke.tests.rpc.boot.bean.registry.MultiRegistryService;
 import com.alipay.sofa.smoke.tests.rpc.boot.RpcSofaBootApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +30,8 @@ import org.springframework.context.annotation.ImportResource;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
+ * Integration tests for {@link MultiRegistryService}.
+ *
  * @author zhiyuan.lzy
  * @version $Id: MeshTest.java, v 0.1 2018-06-25 19:26 zhiyuan.lzy Exp $$
  */
@@ -41,7 +43,7 @@ public class MultiRegistryTests extends ActivelyDestroyTests {
     private MultiRegistryService multiRegistryServiceRef;
 
     @Test
-    public void testInvokeWithMultiRegistry() throws InterruptedException {
+    public void invokeWithMultiRegistry() {
 
         try {
             String result = multiRegistryServiceRef.saySync("sync");

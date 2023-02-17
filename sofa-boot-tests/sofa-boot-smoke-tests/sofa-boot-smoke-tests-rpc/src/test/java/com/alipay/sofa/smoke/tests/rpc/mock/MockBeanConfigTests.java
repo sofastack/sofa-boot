@@ -26,7 +26,7 @@ import com.alipay.sofa.rpc.common.json.JSON;
 import com.alipay.sofa.runtime.api.annotation.SofaParameter;
 import com.alipay.sofa.runtime.api.annotation.SofaReference;
 import com.alipay.sofa.runtime.api.annotation.SofaReferenceBinding;
-import com.alipay.sofa.smoke.tests.rpc.bean.invoke.HelloSyncService;
+import com.alipay.sofa.smoke.tests.rpc.boot.bean.invoke.HelloSyncService;
 import com.alipay.sofa.smoke.tests.rpc.boot.RpcSofaBootApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +40,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
 /**
+ * Integration tests for mock.
+ *
  * @author zhaowang
  * @version : MockBeanConfigTest.java, v 0.1 2020年03月10日 9:12 下午 zhaowang Exp $
  */
@@ -55,13 +57,13 @@ public class MockBeanConfigTests {
     private ConsumerConfigHelper consumerConfigHelper;
 
     @Test
-    public void testLocalMock() {
+    public void localMock() {
         String s = helloSyncService.saySync("mock");
         assertThat(s).isEqualTo("mock");
     }
 
     @Test
-    public void testEmptyMockBean() {
+    public void emptyMockBean() {
         RpcBindingParam rpcBindingParam = new BoltBindingParam();
 
         RpcBinding rpcBinding = new BoltBinding(rpcBindingParam, null, true);
@@ -77,7 +79,7 @@ public class MockBeanConfigTests {
     private HelloSyncService remoteMock;
 
     @Test
-    public void testRemote() {
+    public void remote() {
 
         HttpMockServer.initSever(1235);
         HttpMockServer.addMockPath("/", JSON.toJSONString("mockJson"));

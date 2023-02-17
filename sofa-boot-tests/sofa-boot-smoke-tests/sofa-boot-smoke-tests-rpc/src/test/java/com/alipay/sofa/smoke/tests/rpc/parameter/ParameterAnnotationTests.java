@@ -21,9 +21,9 @@ import com.alipay.sofa.runtime.api.annotation.SofaReference;
 import com.alipay.sofa.runtime.api.annotation.SofaReferenceBinding;
 import com.alipay.sofa.runtime.api.annotation.SofaService;
 import com.alipay.sofa.runtime.api.annotation.SofaServiceBinding;
-import com.alipay.sofa.smoke.tests.rpc.bean.filter.ParameterFilter;
-import com.alipay.sofa.smoke.tests.rpc.bean.invoke.HelloSyncService;
-import com.alipay.sofa.smoke.tests.rpc.bean.invoke.HelloSyncServiceImpl;
+import com.alipay.sofa.smoke.tests.rpc.boot.bean.filter.ParameterFilter;
+import com.alipay.sofa.smoke.tests.rpc.boot.bean.invoke.HelloSyncService;
+import com.alipay.sofa.smoke.tests.rpc.boot.bean.invoke.HelloSyncServiceImpl;
 import com.alipay.sofa.smoke.tests.rpc.boot.RpcSofaBootApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +58,7 @@ public class ParameterAnnotationTests {
     private ParameterFilter  parameterFilter;
 
     @Test
-    public void testParameter() {
+    public void parameter() {
         assertThat(parameterFilter.getConsumerParameters()).isNull();
         assertThat(parameterFilter.getProviderParameters()).isNull();
 
