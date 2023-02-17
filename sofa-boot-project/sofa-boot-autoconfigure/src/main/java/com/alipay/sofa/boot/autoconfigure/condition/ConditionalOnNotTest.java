@@ -25,7 +25,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 只能在非测试环境下生效
+ * {@link Conditional @Conditional} that checks if the running environment is not test.
+ *
  * @author huzijie
  * @version ConditionalOnNotTest.java, v 0.1 2022年10月17日 2:54 PM huzijie Exp $
  */

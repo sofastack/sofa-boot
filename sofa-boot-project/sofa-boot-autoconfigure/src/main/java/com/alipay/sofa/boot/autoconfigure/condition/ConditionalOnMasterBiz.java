@@ -25,7 +25,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 只在非 ark 环境或者 ark 环境的 master biz 生效，非 master biz 不生效
+ * {@link Conditional @Conditional} that checks if the running environment is not ark module biz.
  *
  * @author caojie.cj@antfin.com
  * @since 2019/10/29
@@ -33,12 +33,12 @@ import java.lang.annotation.Target;
 @Target({ ElementType.TYPE, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Conditional(OnMasterBiz.class)
+@Conditional(OnMasterBizCondition.class)
 public @interface ConditionalOnMasterBiz {
 
     /**
-     * 额外的条件，用于处理某些配置在基座
-     * @return
+     * Extension condition used in master biz.
+     *
      */
     String extensionCondition() default "";
 }

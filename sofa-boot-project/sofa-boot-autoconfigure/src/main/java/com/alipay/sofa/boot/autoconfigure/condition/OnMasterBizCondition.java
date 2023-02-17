@@ -23,6 +23,7 @@ import com.alipay.sofa.ark.spi.model.Biz;
 import com.alipay.sofa.boot.util.SofaBootEnvUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionOutcome;
 import org.springframework.boot.autoconfigure.condition.SpringBootCondition;
+import org.springframework.context.annotation.Condition;
 import org.springframework.context.annotation.ConditionContext;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.type.AnnotatedTypeMetadata;
@@ -35,10 +36,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * {@link Condition} that checks if running in ark master biz environment.
+ *
  * @author caojie.cj@antfin.com
  * @since 2019/10/29
  */
-public class OnMasterBiz extends SpringBootCondition {
+public class OnMasterBizCondition extends SpringBootCondition {
 
     private static Object masterBiz;
 

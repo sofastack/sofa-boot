@@ -14,11 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.boot.annotation.condition;
+package com.alipay.sofa.boot.autoconfigure.condition;
 
 import org.springframework.boot.autoconfigure.condition.ConditionMessage;
 import org.springframework.boot.autoconfigure.condition.ConditionOutcome;
 import org.springframework.boot.autoconfigure.condition.SpringBootCondition;
+import org.springframework.context.annotation.Condition;
 import org.springframework.context.annotation.ConditionContext;
 import org.springframework.core.annotation.MergedAnnotation;
 import org.springframework.core.env.Environment;
@@ -28,12 +29,14 @@ import org.springframework.core.type.MethodMetadata;
 import org.springframework.util.StringUtils;
 
 /**
+ * {@link Condition} that checks if switch properties are defined in environment.
+ *
  * @author yuanxuan
  * @version : OnSwitchCondition.java, v 0.1 2023年02月09日 09:53 yuanxuan Exp $
  */
 public class OnSwitchCondition extends SpringBootCondition {
 
-    private static final String CONFIG_KEY_PREFIX = "sofa.boot.bean.switch";
+    private static final String CONFIG_KEY_PREFIX = "sofa.boot.switch.bean";
 
     @Override
     public ConditionOutcome getMatchOutcome(ConditionContext context, AnnotatedTypeMetadata metadata) {

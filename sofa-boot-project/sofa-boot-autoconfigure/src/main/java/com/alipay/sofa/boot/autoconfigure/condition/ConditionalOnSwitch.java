@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.boot.annotation.condition;
+package com.alipay.sofa.boot.autoconfigure.condition;
 
 import org.springframework.context.annotation.Conditional;
 
@@ -25,6 +25,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * {@link Conditional @Conditional} that checks if the switch is enabled in environment.
+ *
  * @author yuanxuan
  * @version : ConditionalOnSwitch.java, v 0.1 2023年02月09日 09:48 yuanxuan Exp $
  */
@@ -35,7 +37,7 @@ import java.lang.annotation.Target;
 public @interface ConditionalOnSwitch {
 
     /**
-     * switch key
+     * switch key.
      *
      * @return the switch key in config
      */
