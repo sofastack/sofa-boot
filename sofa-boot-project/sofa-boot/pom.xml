@@ -17,6 +17,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -39,6 +43,7 @@
             <artifactId>logback-classic</artifactId>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
 
     <build>
