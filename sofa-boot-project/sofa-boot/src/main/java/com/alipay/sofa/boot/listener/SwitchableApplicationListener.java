@@ -30,16 +30,19 @@ import org.springframework.core.env.Environment;
 import org.springframework.util.StringUtils;
 
 /**
+ * An {@link ApplicationListener} that could use property to dynamic enable listener.
+ *
  * @author yuanxuan
  * @version : SwitchableApplicationListener.java, v 0.1 2023年02月09日 17:40 yuanxuan Exp $
  */
-public abstract class SwitchableApplicationListener<EVENT extends ApplicationEvent>
+public abstract class SwitchableApplicationListener<E extends ApplicationEvent>
                                                                                     implements
-                                                                                    ApplicationListener<EVENT> {
-    protected static final String CONFIG_KEY_PREFIX = "sofa.boot.listener.switch";
+                                                                                    ApplicationListener<E> {
+
+    protected static final String CONFIG_KEY_PREFIX = "sofa.boot.switch.initializer";
 
     @Override
-    public void onApplicationEvent(EVENT event) {
+    public void onApplicationEvent(E event) {
         ApplicationContext applicationContext = null;
         Environment environment = null;
         if (event instanceof ApplicationContextEvent applicationContextEvent) {
@@ -62,14 +65,14 @@ public abstract class SwitchableApplicationListener<EVENT extends ApplicationEve
         }
         if (environment != null) {
             if (isEnable(environment)) {
-                doApplicationEvent(event);
+                doOnApplicationEvent(event);
             }
         } else {
-            doApplicationEvent(event);
+            doOnApplicationEvent(event);
         }
     }
 
-    protected abstract void doApplicationEvent(EVENT event);
+    protected abstract void doOnApplicationEvent(E event);
 
     /**
      * sofa.boot.switch.listener

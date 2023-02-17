@@ -20,10 +20,13 @@ import com.alipay.sofa.boot.util.SofaBootEnvUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionMessage;
 import org.springframework.boot.autoconfigure.condition.ConditionOutcome;
 import org.springframework.boot.autoconfigure.condition.SpringBootCondition;
+import org.springframework.context.annotation.Condition;
 import org.springframework.context.annotation.ConditionContext;
 import org.springframework.core.type.AnnotatedTypeMetadata;
 
 /**
+ * {@link Condition} that checks if running in test environment.
+ *
  * @author huzijie
  * @version OnTestCondition.java, v 0.1 2022年10月17日 2:54 PM huzijie Exp $
  */
