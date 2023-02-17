@@ -36,8 +36,8 @@ import org.springframework.util.StringUtils;
  * @version : SwitchableApplicationListener.java, v 0.1 2023年02月09日 17:40 yuanxuan Exp $
  */
 public abstract class SwitchableApplicationListener<E extends ApplicationEvent>
-                                                                                    implements
-                                                                                    ApplicationListener<E> {
+                                                                                implements
+                                                                                ApplicationListener<E> {
 
     protected static final String CONFIG_KEY_PREFIX = "sofa.boot.switch.initializer";
 

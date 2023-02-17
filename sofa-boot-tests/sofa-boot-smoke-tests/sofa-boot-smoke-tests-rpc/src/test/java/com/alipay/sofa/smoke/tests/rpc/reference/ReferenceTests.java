@@ -21,7 +21,7 @@ import com.alipay.sofa.rpc.boot.container.ServerConfigContainer;
 import com.alipay.sofa.rpc.config.ServerConfig;
 import com.alipay.sofa.rpc.core.exception.SofaRouteException;
 import com.alipay.sofa.smoke.tests.rpc.ActivelyDestroyTests;
-import com.alipay.sofa.smoke.tests.rpc.bean.invoke.HelloSyncService;
+import com.alipay.sofa.smoke.tests.rpc.boot.bean.invoke.HelloSyncService;
 import com.alipay.sofa.smoke.tests.rpc.boot.RpcSofaBootApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
+ * Integration tests for reference.
  *
  * @author zhuoyu.sjw
  * @version $Id: SofaBootRpCReferenceTest.java, v 0.1 2018-06-25 19:26 zhuoyu.sjw Exp $$
@@ -51,7 +52,7 @@ public class ReferenceTests extends ActivelyDestroyTests {
     private ServerConfigContainer serverConfigContainer;
 
     @Test
-    public void testNoServerStarted() {
+    public void noServerStarted() {
         List<String> protocols = List.of(SofaBootRpcConfigConstants.RPC_PROTOCOL_BOLT,
             SofaBootRpcConfigConstants.RPC_PROTOCOL_REST,
             SofaBootRpcConfigConstants.RPC_PROTOCOL_H2C,
@@ -64,7 +65,7 @@ public class ReferenceTests extends ActivelyDestroyTests {
     }
 
     @Test
-    public void testInvokeWithoutProvider() throws InterruptedException {
+    public void invokeWithoutProvider() {
 
         try {
             helloSyncService.saySync("sync");

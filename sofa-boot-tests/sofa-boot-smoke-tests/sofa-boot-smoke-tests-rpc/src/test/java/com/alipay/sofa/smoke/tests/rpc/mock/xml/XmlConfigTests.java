@@ -17,7 +17,7 @@
 package com.alipay.sofa.smoke.tests.rpc.mock.xml;
 
 import com.alipay.sofa.rpc.common.json.JSON;
-import com.alipay.sofa.smoke.tests.rpc.bean.invoke.HelloSyncService;
+import com.alipay.sofa.smoke.tests.rpc.boot.bean.invoke.HelloSyncService;
 import com.alipay.sofa.smoke.tests.rpc.boot.RpcSofaBootApplication;
 import com.alipay.sofa.smoke.tests.rpc.mock.HttpMockServer;
 import org.junit.jupiter.api.Test;
@@ -43,7 +43,7 @@ public class XmlConfigTests {
     private HelloSyncService xmlLocalMock;
 
     @Test
-    public void testXmlLocalMock() {
+    public void xmlLocalMock() {
         String xml = xmlLocalMock.saySync("xml");
         assertThat(xml).isEqualTo("xml");
     }
@@ -53,7 +53,7 @@ public class XmlConfigTests {
     private HelloSyncService xmlRemoteMock;
 
     @Test
-    public void testXmlRemote() {
+    public void xmlRemote() {
 
         HttpMockServer.initSever(1236);
         HttpMockServer.addMockPath("/", JSON.toJSONString("mockJson"));

@@ -22,20 +22,18 @@ import com.alipay.sofa.rpc.log.LoggerFactory;
 import com.alipay.sofa.smoke.tests.rpc.boot.RpcSofaBootApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * logger must be init when use. or will init by test case .not starter framework.
+ * Integration Tests for {@link SofaBootRpcLoggerFactory}.
  */
+@SpringBootTest(classes = RpcSofaBootApplication.class)
+@TestPropertySource(properties = { "logging.level.com.alipay.sofa.rpc=DEBUG",
+                                  "logging.level.com.alipay.sofa.rpc.boot=ERROR",
+                                  "logging.level.com.user.app=WARN" })
 public class SofaRpcLoggerLevelConfigTests {
-    private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
-            .withPropertyValues(
-                    "logging.level.com.alipay.sofa.rpc=DEBUG",
-                    "logging.level.com.alipay.sofa.rpc.boot=ERROR",
-                    "logging.level.com.user.app=WARN");
 
     @Test
     public void testRpcLoggerLevel() {
@@ -46,7 +44,7 @@ public class SofaRpcLoggerLevelConfigTests {
     @Test
     public void testStarterLoggerLevel() {
         org.slf4j.Logger starterLogger = SofaBootRpcLoggerFactory
-                .getLogger("sofa.boot.rpc.boot.xxx");
+            .getLogger("sofa.boot.rpc.boot.xxx");
         assertTrue(starterLogger.isErrorEnabled());
     }
 

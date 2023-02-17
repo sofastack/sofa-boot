@@ -8,84 +8,84 @@
             http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
     <!-- invoke sync-->
-    <bean id="helloSyncServiceImpl" class="com.alipay.sofa.smoke.tests.rpc.bean.invoke.HelloSyncServiceImpl"/>
-    <sofa:service ref="helloSyncServiceImpl" interface="com.alipay.sofa.smoke.tests.rpc.bean.invoke.HelloSyncService">
+    <bean id="helloSyncServiceImpl" class="com.alipay.sofa.smoke.tests.rpc.boot.bean.invoke.HelloSyncServiceImpl"/>
+    <sofa:service ref="helloSyncServiceImpl" interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.invoke.HelloSyncService">
         <sofa:binding.bolt/>
     </sofa:service>
     <sofa:reference jvm-first="false" id="helloSyncService"
-                    interface="com.alipay.sofa.smoke.tests.rpc.bean.invoke.HelloSyncService">
+                    interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.invoke.HelloSyncService">
         <sofa:binding.bolt/>
     </sofa:reference>
 
     <!-- invoke future -->
-    <bean id="helloFutureServiceImpl" class="com.alipay.sofa.smoke.tests.rpc.bean.invoke.HelloFutureServiceImpl"/>
-    <sofa:service ref="helloFutureServiceImpl" interface="com.alipay.sofa.smoke.tests.rpc.bean.invoke.HelloFutureService">
+    <bean id="helloFutureServiceImpl" class="com.alipay.sofa.smoke.tests.rpc.boot.bean.invoke.HelloFutureServiceImpl"/>
+    <sofa:service ref="helloFutureServiceImpl" interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.invoke.HelloFutureService">
         <sofa:binding.bolt/>
     </sofa:service>
     <sofa:reference jvm-first="false" id="helloFutureService"
-                    interface="com.alipay.sofa.smoke.tests.rpc.bean.invoke.HelloFutureService">
+                    interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.invoke.HelloFutureService">
         <sofa:binding.bolt>
             <sofa:global-attrs type="future"/>
         </sofa:binding.bolt>
     </sofa:reference>
 
     <!-- invoke callback -->
-    <bean id="helloCallbackServiceImpl" class="com.alipay.sofa.smoke.tests.rpc.bean.invoke.HelloCallbackServiceImpl"/>
-    <sofa:service ref="helloCallbackServiceImpl" interface="com.alipay.sofa.smoke.tests.rpc.bean.invoke.HelloCallbackService">
+    <bean id="helloCallbackServiceImpl" class="com.alipay.sofa.smoke.tests.rpc.boot.bean.invoke.HelloCallbackServiceImpl"/>
+    <sofa:service ref="helloCallbackServiceImpl" interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.invoke.HelloCallbackService">
         <sofa:binding.bolt/>
     </sofa:service>
-    <bean id="callbackImpl" class="com.alipay.sofa.smoke.tests.rpc.bean.invoke.CallbackImpl"/>
+    <bean id="callbackImpl" class="com.alipay.sofa.smoke.tests.rpc.boot.bean.invoke.CallbackImpl"/>
     <sofa:reference jvm-first="false" id="helloCallbackService"
-                    interface="com.alipay.sofa.smoke.tests.rpc.bean.invoke.HelloCallbackService">
+                    interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.invoke.HelloCallbackService">
         <sofa:binding.bolt>
             <sofa:global-attrs type="callback" callback-ref="callbackImpl"/>
         </sofa:binding.bolt>
     </sofa:reference>
 
     <!-- filter -->
-    <bean id="testFilter" class="com.alipay.sofa.smoke.tests.rpc.bean.filter.TestFilter"/>
-    <bean id="filterServiceImpl" class="com.alipay.sofa.smoke.tests.rpc.bean.filter.FilterServiceImpl"/>
-    <sofa:service ref="filterServiceImpl" interface="com.alipay.sofa.smoke.tests.rpc.bean.filter.FilterService">
+    <bean id="testFilter" class="com.alipay.sofa.smoke.tests.rpc.boot.bean.filter.TestFilter"/>
+    <bean id="filterServiceImpl" class="com.alipay.sofa.smoke.tests.rpc.boot.bean.filter.FilterServiceImpl"/>
+    <sofa:service ref="filterServiceImpl" interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.filter.FilterService">
         <sofa:binding.bolt>
             <sofa:global-attrs filter="testFilter"/>
         </sofa:binding.bolt>
     </sofa:service>
-    <sofa:reference jvm-first="false" id="filterService" interface="com.alipay.sofa.smoke.tests.rpc.bean.filter.FilterService">
+    <sofa:reference jvm-first="false" id="filterService" interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.filter.FilterService">
         <sofa:binding.bolt/>
     </sofa:reference>
 
     <!--Global Filter Test-->
     <sofa:rpc-global-filter ref="testGlobalFilter"/>
-    <bean id="testGlobalFilter" class="com.alipay.sofa.smoke.tests.rpc.bean.globalfilter.TestGlobalFilter"/>
+    <bean id="testGlobalFilter" class="com.alipay.sofa.smoke.tests.rpc.boot.bean.globalfilter.TestGlobalFilter"/>
 
-    <bean id="globalFilterServiceImpl" class="com.alipay.sofa.smoke.tests.rpc.bean.globalfilter.GlobalFilterServiceImpl"/>
-    <sofa:service ref="globalFilterServiceImpl" interface="com.alipay.sofa.smoke.tests.rpc.bean.globalfilter.GlobalFilterService">
+    <bean id="globalFilterServiceImpl" class="com.alipay.sofa.smoke.tests.rpc.boot.bean.globalfilter.GlobalFilterServiceImpl"/>
+    <sofa:service ref="globalFilterServiceImpl" interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.globalfilter.GlobalFilterService">
         <sofa:binding.bolt/>
     </sofa:service>
     <sofa:reference jvm-first="false" id="globalFilterService"
-                    interface="com.alipay.sofa.smoke.tests.rpc.bean.globalfilter.GlobalFilterService">
+                    interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.globalfilter.GlobalFilterService">
         <sofa:binding.bolt/>
     </sofa:reference>
 
     <!-- direct -->
-    <bean id="directServiceImpl" class="com.alipay.sofa.smoke.tests.rpc.bean.direct.DirectServiceImpl"/>
-    <sofa:service ref="directServiceImpl" interface="com.alipay.sofa.smoke.tests.rpc.bean.direct.DirectService">
+    <bean id="directServiceImpl" class="com.alipay.sofa.smoke.tests.rpc.boot.bean.direct.DirectServiceImpl"/>
+    <sofa:service ref="directServiceImpl" interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.direct.DirectService">
         <sofa:binding.bolt/>
     </sofa:service>
-    <sofa:reference jvm-first="false" id="directService" interface="com.alipay.sofa.smoke.tests.rpc.bean.direct.DirectService">
+    <sofa:reference jvm-first="false" id="directService" interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.direct.DirectService">
         <sofa:binding.bolt>
             <sofa:route target-url="bolt://127.0.0.1:12200"/>
         </sofa:binding.bolt>
     </sofa:reference>
 
     <!-- generic -->
-    <bean id="sampleGenericServiceImpl" class="com.alipay.sofa.smoke.tests.rpc.bean.generic.GenericServiceImpl"/>
-    <sofa:service ref="sampleGenericServiceImpl" interface="com.alipay.sofa.smoke.tests.rpc.bean.generic.GenericService">
+    <bean id="sampleGenericServiceImpl" class="com.alipay.sofa.smoke.tests.rpc.boot.bean.generic.GenericServiceImpl"/>
+    <sofa:service ref="sampleGenericServiceImpl" interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.generic.GenericService">
         <sofa:binding.bolt/>
     </sofa:service>
     <sofa:reference jvm-first="false" id="sampleGenericService" interface="com.alipay.sofa.rpc.api.GenericService">
         <sofa:binding.bolt>
-            <sofa:global-attrs generic-interface="com.alipay.sofa.smoke.tests.rpc.bean.generic.GenericService"/>
+            <sofa:global-attrs generic-interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.generic.GenericService"/>
         </sofa:binding.bolt>
     </sofa:reference>
 
@@ -96,23 +96,23 @@
         <property name="queueSize" value="5"/>
         <property name="threadPoolName" value="customerThreadPool_name"/>
     </bean>
-    <bean id="threadPoolServiceImpl" class="com.alipay.sofa.smoke.tests.rpc.bean.threadpool.ThreadPoolServiceImpl"/>
-    <sofa:service ref="threadPoolServiceImpl" interface="com.alipay.sofa.smoke.tests.rpc.bean.threadpool.ThreadPoolService">
+    <bean id="threadPoolServiceImpl" class="com.alipay.sofa.smoke.tests.rpc.boot.bean.threadpool.ThreadPoolServiceImpl"/>
+    <sofa:service ref="threadPoolServiceImpl" interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.threadpool.ThreadPoolService">
         <sofa:binding.bolt>
             <sofa:global-attrs thread-pool-ref="customerThreadPool"/>
         </sofa:binding.bolt>
     </sofa:service>
     <sofa:reference jvm-first="false" id="threadPoolService"
-                    interface="com.alipay.sofa.smoke.tests.rpc.bean.threadpool.ThreadPoolService">
+                    interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.threadpool.ThreadPoolService">
         <sofa:binding.bolt/>
     </sofa:reference>
 
     <!-- rest -->
-    <bean id="restServiceImpl" class="com.alipay.sofa.smoke.tests.rpc.bean.rest.RestServiceImpl"/>
-    <sofa:service ref="restServiceImpl" interface="com.alipay.sofa.smoke.tests.rpc.bean.rest.RestService">
+    <bean id="restServiceImpl" class="com.alipay.sofa.smoke.tests.rpc.boot.bean.rest.RestServiceImpl"/>
+    <sofa:service ref="restServiceImpl" interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.rest.RestService">
         <sofa:binding.rest/>
     </sofa:service>
-    <sofa:reference jvm-first="false" id="restService" interface="com.alipay.sofa.smoke.tests.rpc.bean.rest.RestService">
+    <sofa:reference jvm-first="false" id="restService" interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.rest.RestService">
         <sofa:binding.rest/>
     </sofa:reference>
 
@@ -125,12 +125,12 @@
         <sofa:binding.dubbo/>
     </sofa:reference>-->
     <!-- retries -->
-    <bean id="retriesServiceImpl" class="com.alipay.sofa.smoke.tests.rpc.bean.retry.RetriesServiceImpl"/>
-    <sofa:service ref="retriesServiceImpl" interface="com.alipay.sofa.smoke.tests.rpc.bean.retry.RetriesService">
+    <bean id="retriesServiceImpl" class="com.alipay.sofa.smoke.tests.rpc.boot.bean.retry.RetriesServiceImpl"/>
+    <sofa:service ref="retriesServiceImpl" interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.retry.RetriesService">
         <sofa:binding.bolt/>
         <!--<sofa:binding.dubbo/>-->
     </sofa:service>
-    <sofa:reference jvm-first="false" id="retriesServiceBolt" interface="com.alipay.sofa.smoke.tests.rpc.bean.retry.RetriesService">
+    <sofa:reference jvm-first="false" id="retriesServiceBolt" interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.retry.RetriesService">
         <sofa:binding.bolt>
             <sofa:global-attrs retries="2"/>
         </sofa:binding.bolt>
@@ -143,13 +143,13 @@
     </sofa:reference>-->
 
     <!-- lazy -->
-    <bean id="lazyServiceImpl" class="com.alipay.sofa.smoke.tests.rpc.bean.lazy.LazyServiceImpl"/>
-    <sofa:service ref="lazyServiceImpl" interface="com.alipay.sofa.smoke.tests.rpc.bean.lazy.LazyService">
+    <bean id="lazyServiceImpl" class="com.alipay.sofa.smoke.tests.rpc.boot.bean.lazy.LazyServiceImpl"/>
+    <sofa:service ref="lazyServiceImpl" interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.lazy.LazyService">
         <sofa:binding.bolt/>
        <!-- <sofa:binding.dubbo/>-->
     </sofa:service>
 
-    <sofa:reference jvm-first="false" id="lazyServiceBolt" interface="com.alipay.sofa.smoke.tests.rpc.bean.lazy.LazyService">
+    <sofa:reference jvm-first="false" id="lazyServiceBolt" interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.lazy.LazyService">
         <sofa:binding.bolt>
             <sofa:global-attrs lazy="true"/>
         </sofa:binding.bolt>
@@ -162,12 +162,12 @@
     </sofa:reference>-->
 
     <!-- connectionNum -->
-    <bean id="connectionNumServiceImpl" class="com.alipay.sofa.smoke.tests.rpc.bean.connectionnum.ConnectionNumServiceImpl"/>
-    <sofa:service ref="connectionNumServiceImpl" interface="com.alipay.sofa.smoke.tests.rpc.bean.connectionnum.ConnectionNumService">
+    <bean id="connectionNumServiceImpl" class="com.alipay.sofa.smoke.tests.rpc.boot.bean.connectionnum.ConnectionNumServiceImpl"/>
+    <sofa:service ref="connectionNumServiceImpl" interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.connectionnum.ConnectionNumService">
         <sofa:binding.rest/>
     </sofa:service>
 
-    <sofa:reference jvm-first="false" id="connectionNumService" interface="com.alipay.sofa.smoke.tests.rpc.bean.connectionnum.ConnectionNumService">
+    <sofa:reference jvm-first="false" id="connectionNumService" interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.connectionnum.ConnectionNumService">
         <sofa:binding.rest>
             <sofa:global-attrs connect.num="300"/>
         </sofa:binding.rest>

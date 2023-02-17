@@ -5,15 +5,15 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
             http://sofastack.io/schema/sofaboot   http://sofastack.io/schema/sofaboot.xsd">
 
-    <bean id="mockHello" class="com.alipay.sofa.smoke.tests.rpc.bean.invoke.HelloSyncServiceImpl"/>
+    <bean id="mockHello" class="com.alipay.sofa.smoke.tests.rpc.boot.bean.invoke.HelloSyncServiceImpl"/>
 
-    <sofa:reference id="xmlLocalMock" interface="com.alipay.sofa.smoke.tests.rpc.bean.invoke.HelloSyncService" repeatReferLimit="10">
+    <sofa:reference id="xmlLocalMock" interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.invoke.HelloSyncService" repeatReferLimit="10">
         <sofa:binding.bolt>
             <sofa:global-attrs mock-bean="mockHello" mock-mode="local"/>
         </sofa:binding.bolt>
     </sofa:reference>
 
-    <sofa:reference id="xmlRemoteMock" interface="com.alipay.sofa.smoke.tests.rpc.bean.invoke.HelloSyncService" repeatReferLimit="10">
+    <sofa:reference id="xmlRemoteMock" interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.invoke.HelloSyncService" repeatReferLimit="10">
         <sofa:binding.bolt>
             <sofa:global-attrs mock-mode="remote"/>
             <sofa:parameter key="mockUrl" value="http://127.0.0.1:1236/"/>

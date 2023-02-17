@@ -8,12 +8,12 @@
             http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
     <!-- invoke sync-->
-    <bean id="helloSyncServiceImpl" class="com.alipay.sofa.smoke.tests.rpc.bean.invoke.HelloSyncServiceImpl"/>
-    <sofa:service ref="helloSyncServiceImpl" interface="com.alipay.sofa.smoke.tests.rpc.bean.invoke.HelloSyncService">
+    <bean id="helloSyncServiceImpl" class="com.alipay.sofa.smoke.tests.rpc.boot.bean.invoke.HelloSyncServiceImpl"/>
+    <sofa:service ref="helloSyncServiceImpl" interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.invoke.HelloSyncService">
         <sofa:binding.bolt/>
     </sofa:service>
     <sofa:reference jvm-first="false" id="helloSyncService"
-                    interface="com.alipay.sofa.smoke.tests.rpc.bean.invoke.HelloSyncService">
+                    interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.invoke.HelloSyncService">
         <sofa:binding.bolt/>
     </sofa:reference>
 

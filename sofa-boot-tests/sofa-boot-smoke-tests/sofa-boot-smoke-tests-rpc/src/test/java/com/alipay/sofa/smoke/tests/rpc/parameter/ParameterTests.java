@@ -16,8 +16,8 @@
  */
 package com.alipay.sofa.smoke.tests.rpc.parameter;
 
-import com.alipay.sofa.smoke.tests.rpc.bean.filter.ParameterFilter;
-import com.alipay.sofa.smoke.tests.rpc.bean.invoke.HelloSyncService;
+import com.alipay.sofa.smoke.tests.rpc.boot.bean.filter.ParameterFilter;
+import com.alipay.sofa.smoke.tests.rpc.boot.bean.invoke.HelloSyncService;
 import com.alipay.sofa.smoke.tests.rpc.boot.RpcSofaBootApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +50,7 @@ public class ParameterTests {
     private ParameterFilter  parameterFilter;
 
     @Test
-    public void testParameter() {
+    public void parameter() {
         assertThat(parameterFilter.getConsumerParameters()).isNull();
         assertThat(parameterFilter.getProviderParameters()).isNull();
 

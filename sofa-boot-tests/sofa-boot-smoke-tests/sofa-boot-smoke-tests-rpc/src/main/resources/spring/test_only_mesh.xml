@@ -5,15 +5,15 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
             http://sofastack.io/schema/sofaboot   http://sofastack.io/schema/sofaboot.xsd">
 
-    <sofa:reference jvm-first="false" id="helloSyncConsumerMesh" interface="com.alipay.sofa.smoke.tests.rpc.bean.invoke.HelloSyncService">
+    <sofa:reference jvm-first="false" id="helloSyncConsumerMesh" interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.invoke.HelloSyncService">
         <sofa:binding.bolt/>
     </sofa:reference>
 
-    <bean id="helloSyncServiceImpl" class="com.alipay.sofa.smoke.tests.rpc.bean.invoke.HelloSyncServiceImpl" />
-    <sofa:service id="helloSyncProviderMesh" interface="com.alipay.sofa.smoke.tests.rpc.bean.invoke.HelloSyncService" ref="helloSyncServiceImpl">
+    <bean id="helloSyncServiceImpl" class="com.alipay.sofa.smoke.tests.rpc.boot.bean.invoke.HelloSyncServiceImpl" />
+    <sofa:service id="helloSyncProviderMesh" interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.invoke.HelloSyncService" ref="helloSyncServiceImpl">
         <sofa:binding.bolt/>
     </sofa:service>
-    <sofa:reference jvm-first="false" id="sampleServiceRef" interface="com.alipay.sofa.smoke.tests.rpc.bean.SampleService">
+    <sofa:reference jvm-first="false" id="sampleServiceRef" interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.SampleService">
         <sofa:binding.bolt/>
     </sofa:reference>
 
