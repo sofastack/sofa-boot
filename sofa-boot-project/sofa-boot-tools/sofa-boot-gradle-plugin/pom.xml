@@ -15,9 +15,6 @@
         <main.user.dir>${basedir}/../../..</main.user.dir>
         <gradle.executable>./gradlew</gradle.executable>
         <gradle.task>build</gradle.task>
-        <!--todo install 还有问题-->
-        <skip.gradle.build>true</skip.gradle.build>
-        <skip.gradle.test>true</skip.gradle.test>
     </properties>
     <dependencies>
         <dependency>
