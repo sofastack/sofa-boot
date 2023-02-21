@@ -132,7 +132,7 @@ public class SofaRpcAutoConfigurationTests {
     void boltSwaggerBeanNotCreatedWhenSwitchMatchDisable() {
         this.contextRunner.withConfiguration(AutoConfigurations
                 .of(SofaRuntimeAutoConfiguration.class)).withConfiguration(AutoConfigurations
-                .of(SwaggerTestConfiguration.class)).withPropertyValues("sofa.boot.bean.switch.boltSwaggerListener.enabled=false").run(context -> {
+                .of(SwaggerTestConfiguration.class)).withPropertyValues("sofa.boot.switch.bean.boltSwaggerListener.enabled=false").run(context -> {
             assertThat(context).doesNotHaveBean(BoltSwaggerServiceApplicationListener.class);
             assertThat(context).hasSingleBean(SwaggerServiceApplicationListener.class);
         });
@@ -142,7 +142,7 @@ public class SofaRpcAutoConfigurationTests {
     void boltSwaggerBeanNotCreatedWhenSwitchConfigurationDisable() {
         this.contextRunner.withConfiguration(AutoConfigurations
                 .of(SofaRuntimeAutoConfiguration.class)).withConfiguration(AutoConfigurations
-                .of(SwaggerTestConfiguration.class)).withPropertyValues("sofa.boot.bean.switch.testSwagger.enabled=false").run(context -> {
+                .of(SwaggerTestConfiguration.class)).withPropertyValues("sofa.boot.switch.bean.testSwagger.enabled=false").run(context -> {
             assertThat(context).doesNotHaveBean(BoltSwaggerServiceApplicationListener.class);
             assertThat(context).doesNotHaveBean(SwaggerServiceApplicationListener.class);
         });
