@@ -20,8 +20,9 @@ import com.alipay.sofa.boot.util.SofaBootEnvUtils;
 import com.alipay.sofa.common.log.CommonLoggingConfigurations;
 import com.alipay.sofa.common.log.Constants;
 import com.alipay.sofa.common.log.env.LogEnvUtils;
-import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
-import org.springframework.context.ApplicationListener;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.context.config.ConfigDataEnvironmentPostProcessor;
+import org.springframework.boot.env.EnvironmentPostProcessor;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.EnumerablePropertySource;
@@ -32,28 +33,29 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Implementation of {@link ApplicationListener<ApplicationEnvironmentPreparedEvent>}
+ * Implementation of {@link EnvironmentPostProcessor}
  * to register spring environment to {@link CommonLoggingConfigurations}.
  * 
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 2020/11/7
  */
-public class LogEnvironmentPreparingListener
-                                            implements
-                                            ApplicationListener<ApplicationEnvironmentPreparedEvent>,
-                                            Ordered {
+public class LogEnvironmentPostProcessor implements EnvironmentPostProcessor, Ordered {
+
+    public static final int ORDER = ConfigDataEnvironmentPostProcessor.ORDER + 1; ;
+
     @Override
-    public void onApplicationEvent(ApplicationEnvironmentPreparedEvent event) {
+    public void postProcessEnvironment(ConfigurableEnvironment environment,
+                                       SpringApplication application) {
         defaultConsoleLoggers();
-        prepare(event.getEnvironment());
+        initLoggingConfig(environment);
     }
 
     @Override
     public int getOrder() {
-        return Ordered.HIGHEST_PRECEDENCE + 20;
+        return ORDER;
     }
 
-    private void prepare(ConfigurableEnvironment environment) {
+    private void initLoggingConfig(ConfigurableEnvironment environment) {
         Map<String, String> context = new HashMap<>();
         loadLogConfiguration(Constants.LOG_PATH, environment.getProperty(Constants.LOG_PATH),
             Constants.LOGGING_PATH_DEFAULT, context);

@@ -46,20 +46,20 @@ import java.util.jar.JarFile;
  */
 public class SofaBootPlugin implements Plugin<Project> {
 
-    private static final String SOFA_BOOT_VERSION                               = determineSofaBootVersion();
+    private static final String SOFA_BOOT_VERSION                = determineSofaBootVersion();
 
     /**
      * The coordinates {@code (group:name:version)} of the
      * {@code sofaboot-dependencies} bom.
      */
-    static final String         BOM_COORDINATES                                 = "com.alipay.sofa:sofaboot-dependencies:"
-                                                                                  + SOFA_BOOT_VERSION;
+    static final String         BOM_COORDINATES                  = "com.alipay.sofa:sofaboot-dependencies:"
+                                                                   + SOFA_BOOT_VERSION;
 
     /**
      * The name of the {@link Configuration} that contains Spring Boot archives.
      * @since 2.0.0
      */
-    public static final String  BOOT_ARCHIVES_CONFIGURATION_NAME                = "bootArchives";
+    public static final String  BOOT_ARCHIVES_CONFIGURATION_NAME = "bootArchives";
 
     @Override
     public void apply(Project project) {
