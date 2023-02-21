@@ -27,6 +27,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.test.context.TestPropertySource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -38,6 +39,8 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @SpringBootTest(classes = RuntimeSofaBootApplication.class)
 @Import(AsyncInitTests.AsyncInitTestConfiguration.class)
+@TestPropertySource(properties = { "sofa.boot.runtime.asyncInitExecutorCoreSize=20",
+                                  "sofa.boot.runtime.asyncInitExecutorMaxSize=20" })
 public class AsyncInitTests {
 
     @Autowired
