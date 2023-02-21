@@ -18,11 +18,10 @@ package com.alipay.sofa.boot.isle;
 
 import com.alipay.sofa.boot.isle.deployment.AbstractDeploymentDescriptor;
 import com.alipay.sofa.boot.isle.deployment.DefaultModuleDeploymentValidator;
-import com.alipay.sofa.boot.isle.deployment.DeploymentBuilder;
 import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptor;
 import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptorConfiguration;
+import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptorFactory;
 import com.alipay.sofa.boot.isle.deployment.FileDeploymentDescriptor;
-import com.alipay.sofa.boot.isle.deployment.JarDeploymentDescriptor;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -52,6 +51,10 @@ public class ApplicationRuntimeModelTests {
                                                                                           Collections
                                                                                               .singletonList(DeploymentDescriptorConfiguration.REQUIRE_MODULE));
 
+    private final DeploymentDescriptorFactory       deploymentDescriptorFactory       = new DeploymentDescriptorFactory();
+
+    private final String                            testModuleConfigFile              = "test-module.config";
+
     @Test
     public void addSofaModule() throws Exception {
         // new ApplicationRuntimeModel Instance
@@ -61,25 +64,27 @@ public class ApplicationRuntimeModelTests {
         // add first SOFAIsle module
         Properties props = new Properties();
         props.setProperty(DeploymentDescriptorConfiguration.MODULE_NAME, "com.alipay.common");
-        URL jarUrl = new URL("jar:file:/whatever/path/demo.jar!/isle-module.config");
-        DeploymentDescriptor dd = DeploymentBuilder.build(jarUrl, props,
-            deploymentDescriptorConfiguration, ApplicationRuntimeModelTests.class.getClassLoader());
-        assertThat(dd instanceof JarDeploymentDescriptor).isTrue();
+        URL jarUrl = new URL("file:/" + testModuleConfigFile);
+        DeploymentDescriptor dd = deploymentDescriptorFactory.build(jarUrl, props,
+            deploymentDescriptorConfiguration, ApplicationRuntimeModelTests.class.getClassLoader(),
+            testModuleConfigFile);
+        assertThat(dd instanceof FileDeploymentDescriptor).isTrue();
+        assertThat(application.isModuleDeployment(dd)).isFalse();
+        addSpringXml(dd);
         assertThat(application.isModuleDeployment(dd)).isTrue();
         application.addDeployment(dd);
-        addSpringXml(dd);
 
         // add second SOFAIsle module
         props = new Properties();
         props.setProperty(DeploymentDescriptorConfiguration.MODULE_NAME, "com.alipay.dal");
         props.setProperty(DeploymentDescriptorConfiguration.REQUIRE_MODULE, "com.alipay.util");
-        URL fileUrl = new URL("file:/demo/path/isle-module.config");
-        dd = DeploymentBuilder.build(fileUrl, props, deploymentDescriptorConfiguration,
-            ApplicationRuntimeModelTests.class.getClassLoader());
+        URL fileUrl = new URL("file:/" + testModuleConfigFile);
+        dd = deploymentDescriptorFactory.build(fileUrl, props, deploymentDescriptorConfiguration,
+            ApplicationRuntimeModelTests.class.getClassLoader(), testModuleConfigFile);
         assertThat(dd instanceof FileDeploymentDescriptor).isTrue();
+        addSpringXml(dd);
         assertThat(application.isModuleDeployment(dd)).isTrue();
         application.addDeployment(dd);
-        addSpringXml(dd);
 
         // missing com.alipay.util module
         assertThat(2).isEqualTo(application.getDeployRegistry().getPendingEntries().size());
@@ -103,9 +108,10 @@ public class ApplicationRuntimeModelTests {
         //DeploymentDescriptor which misses Module-Name property
         Properties props = new Properties();
         props.setProperty(DeploymentDescriptorConfiguration.REQUIRE_MODULE, "com.alipay.util");
-        URL fileUrl = new URL("file:/demo/path/isle-module.config");
-        DeploymentDescriptor dd = DeploymentBuilder.build(fileUrl, props,
-            deploymentDescriptorConfiguration, ApplicationRuntimeModelTests.class.getClassLoader());
+        URL fileUrl = new URL("file:/" + testModuleConfigFile);
+        DeploymentDescriptor dd = deploymentDescriptorFactory.build(fileUrl, props,
+            deploymentDescriptorConfiguration, ApplicationRuntimeModelTests.class.getClassLoader(),
+            testModuleConfigFile);
         assertThat(dd).isInstanceOf(FileDeploymentDescriptor.class);
         assertThat(application.isModuleDeployment(dd)).isFalse();
     }
@@ -119,13 +125,14 @@ public class ApplicationRuntimeModelTests {
         // add missing module
         Properties props = new Properties();
         props.setProperty(DeploymentDescriptorConfiguration.MODULE_NAME, "com.alipay.util");
-        URL jarUrl = new URL("jar:file:/demo/path/demo.jar!/isle-module.config");
-        DeploymentDescriptor dd = DeploymentBuilder.build(jarUrl, props,
-            deploymentDescriptorConfiguration, ApplicationRuntimeModelTests.class.getClassLoader());
-        assertThat(dd).isInstanceOf(JarDeploymentDescriptor.class);
+        URL jarUrl = new URL("file:/" + testModuleConfigFile);
+        DeploymentDescriptor dd = deploymentDescriptorFactory.build(jarUrl, props,
+            deploymentDescriptorConfiguration, ApplicationRuntimeModelTests.class.getClassLoader(),
+            testModuleConfigFile);
+        assertThat(dd).isInstanceOf(FileDeploymentDescriptor.class);
+        addSpringXml(dd);
         assertThat(application.isModuleDeployment(dd)).isTrue();
         application.addDeployment(dd);
-        addSpringXml(dd);
         assertThat(0).isEqualTo(application.getDeployRegistry().getPendingEntries().size());
     }
 

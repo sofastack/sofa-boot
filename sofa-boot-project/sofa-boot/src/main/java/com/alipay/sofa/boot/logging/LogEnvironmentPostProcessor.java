@@ -42,7 +42,7 @@ import java.util.Map;
  */
 public class LogEnvironmentPostProcessor implements EnvironmentPostProcessor, Ordered {
 
-    public static final int ORDER = ConfigDataEnvironmentPostProcessor.ORDER + 1;
+    public static final int    ORDER                            = ConfigDataEnvironmentPostProcessor.ORDER + 1;
 
     /**
      * support use config to disable sofa common thread pool monitor.
@@ -115,7 +115,8 @@ public class LogEnvironmentPostProcessor implements EnvironmentPostProcessor, Or
 
     private void initSofaCommonThread(ConfigurableEnvironment environment) {
         if (Boolean.parseBoolean(environment.getProperty(SOFA_THREAD_POOL_MONITOR_DISABLE))) {
-            System.setProperty(SofaThreadPoolConstants.SOFA_THREAD_POOL_LOGGING_CAPABILITY, "false");
+            System
+                .setProperty(SofaThreadPoolConstants.SOFA_THREAD_POOL_LOGGING_CAPABILITY, "false");
         }
     }
 }

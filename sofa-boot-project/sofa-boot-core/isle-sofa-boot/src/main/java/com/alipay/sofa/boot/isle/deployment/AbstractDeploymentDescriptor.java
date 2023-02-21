@@ -23,13 +23,12 @@ import org.springframework.util.StringUtils;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
-import java.util.stream.Stream;
 
 /**
  * Base implementation of {@link DeploymentDescriptor} to create module for url.
@@ -38,16 +37,34 @@ import java.util.stream.Stream;
  * @version $Id: AbstractDeploymentDescriptor.java, v 0.1 2012-2-1 15:13:00 yangyanzhao Exp $
  */
 public abstract class AbstractDeploymentDescriptor implements DeploymentDescriptor {
+
     protected final Properties                        properties;
+
     protected final DeploymentDescriptorConfiguration deploymentDescriptorConfiguration;
+
     protected final ClassLoader                       classLoader;
+
     protected final URL                               url;
-    private final List<String>                        installedSpringXml = new ArrayList<>();
-    private ApplicationContext                        applicationContext;
-    private long                                      startTime;
-    private long                                      elapsedTime;
-    protected Map<String, Resource>                   springResources;
-    protected boolean                                 ignoreRequireModule;
+
+    protected final List<String>                      installedSpringXml = new ArrayList<>();
+
+    protected final Map<String, Resource>             springResources    = new HashMap<>();
+
+    protected final String                            moduleName;
+
+    protected final String                            name;
+
+    protected final List<String>                      requiredModules;
+
+    protected final String                            parentModule;
+
+    protected ApplicationContext                      applicationContext;
+
+    protected long                                    startTime;
+
+    protected long                                    elapsedTime;
+
+    private boolean                                   ignoreRequireModule;
 
     public AbstractDeploymentDescriptor(URL url,
                                         Properties properties,
@@ -57,82 +74,38 @@ public abstract class AbstractDeploymentDescriptor implements DeploymentDescript
         this.properties = properties;
         this.deploymentDescriptorConfiguration = deploymentDescriptorConfiguration;
         this.classLoader = classLoader;
+        this.moduleName = getModuleNameFromProperties();
+        this.name = getNameFormUrl();
+        this.parentModule = getSpringParentFromProperties();
+        this.requiredModules = getRequiredModulesFromProperties();
     }
 
     @Override
     public String getModuleName() {
-        List<String> moduleNameIdentities = deploymentDescriptorConfiguration
-            .getModuleNameIdentities();
-
-        return (String) Stream.of(moduleNameIdentities)
-                .filter(ele -> ele != null && ele.size() != 0).flatMap(Collection::stream)
-                .map(properties::get).filter(name -> StringUtils.hasText((String) name)).findFirst()
-                .orElse(null);
+        return moduleName;
     }
 
     @Override
     public String getName() {
-        int jarIndex = url.toString().lastIndexOf(".jar");
-        if (jarIndex == -1) {
-            String moduleName = getModuleName();
-            return moduleName == null ? "" : moduleName;
-        }
-
-        String jarPath = url.toString().substring(0, jarIndex + ".jar".length());
-        int lastIndex = jarPath.lastIndexOf("/");
-        return jarPath.substring(lastIndex + 1);
-    }
-
-    @Override
-    public int compareTo(DeploymentDescriptor o) {
-        return this.getName().compareTo(o.getName());
+        return name;
     }
 
     @Override
     public List<String> getRequiredModules() {
-        List<String> requires = new ArrayList<>();
-        if (ignoreRequireModule || !isSpringPowered()) {
-            return requires;
+        if (ignoreRequireModule) {
+            return null;
         }
-
-        List<String> requireModuleIdentities = deploymentDescriptorConfiguration
-            .getRequireModuleIdentities();
-
-        if (requireModuleIdentities == null || requireModuleIdentities.size() == 0) {
-            return requires;
-        }
-
-        for (String requireModuleIdentity : requireModuleIdentities) {
-            requires = getFormattedModuleInfo(requireModuleIdentity);
-            if (!CollectionUtils.isEmpty(requires)) {
-                break;
-            }
-        }
-
-        String springParent = getSpringParent();
-        if (springParent != null) {
-            if (requires == null) {
-                requires = new ArrayList<>(1);
-            }
-            requires.add(springParent);
-        }
-        return requires;
+        return requiredModules;
     }
 
     @Override
-    public void setIgnoreRequireModule(boolean ignoreRequireModule) {
-        this.ignoreRequireModule = ignoreRequireModule;
+    public String getSpringParent() {
+        return parentModule;
     }
 
     @Override
     public String getProperty(String key) {
         return properties.getProperty(key);
-    }
-
-    @Override
-    public String getSpringParent() {
-        List<String> name = getFormattedModuleInfo(DeploymentDescriptorConfiguration.SPRING_PARENT);
-        return name == null ? null : name.get(0);
     }
 
     @Override
@@ -147,23 +120,17 @@ public abstract class AbstractDeploymentDescriptor implements DeploymentDescript
 
     @Override
     public Map<String, Resource> getSpringResources() {
-        if (springResources == null) {
-            loadSpringXMLs();
-        }
         return springResources;
+    }
+
+    @Override
+    public boolean isSpringPowered() {
+        return !springResources.isEmpty();
     }
 
     @Override
     public void addInstalledSpringXml(String fileName) {
         installedSpringXml.add(fileName);
-    }
-
-    @Override
-    public boolean isSpringPowered() {
-        if (springResources == null) {
-            this.loadSpringXMLs();
-        }
-        return !springResources.isEmpty();
     }
 
     @Override
@@ -197,22 +164,90 @@ public abstract class AbstractDeploymentDescriptor implements DeploymentDescript
         return installedSpringXml;
     }
 
-    private List<String> getFormattedModuleInfo(String key) {
-        String ret = properties.getProperty(key);
-        if (ret == null || ret.length() == 0) {
+    @Override
+    public int compareTo(DeploymentDescriptor o) {
+        return this.getName().compareTo(o.getName());
+    }
+
+    @Override
+    public void setIgnoreRequireModule(boolean ignoreRequireModule) {
+        this.ignoreRequireModule = ignoreRequireModule;
+    }
+
+    protected String getModuleNameFromProperties() {
+        List<String> moduleNameIdentities = deploymentDescriptorConfiguration
+            .getModuleNameIdentities();
+
+        if (CollectionUtils.isEmpty(moduleNameIdentities)) {
             return null;
         }
 
-        String[] array = StringUtils.commaDelimitedListToStringArray(ret);
-        List<String> list = new ArrayList<>(array.length);
-        for (String item : array) {
-            int idx = item.indexOf(';');
-            if (idx > -1) {
-                item = item.substring(0, idx);
+        for (String moduleNameIdentity : moduleNameIdentities) {
+            List<String> moduleNames = getFormattedModuleInfo(moduleNameIdentity);
+            if (!CollectionUtils.isEmpty(moduleNames)) {
+                return moduleNames.get(0);
             }
-            list.add(item.trim());
         }
-        return list;
+        return null;
+    }
+
+    protected String getNameFormUrl() {
+        int jarIndex = url.toString().lastIndexOf(".jar");
+        if (jarIndex == -1) {
+            String moduleName = getModuleName();
+            return moduleName == null ? "" : moduleName;
+        }
+
+        String jarPath = url.toString().substring(0, jarIndex + ".jar".length());
+        int lastIndex = jarPath.lastIndexOf("/");
+        return jarPath.substring(lastIndex + 1);
+    }
+
+    protected List<String> getRequiredModulesFromProperties() {
+        List<String> requires = new ArrayList<>();
+
+        List<String> requireModuleIdentities = deploymentDescriptorConfiguration
+            .getRequireModuleIdentities();
+
+        if (CollectionUtils.isEmpty(requireModuleIdentities)) {
+            return requires;
+        }
+
+        for (String requireModuleIdentity : requireModuleIdentities) {
+            List<String> requireModules = getFormattedModuleInfo(requireModuleIdentity);
+            if (!CollectionUtils.isEmpty(requireModules)) {
+                requires.addAll(requireModules);
+                break;
+            }
+        }
+
+        String springParent = getSpringParent();
+        if (StringUtils.hasText(springParent)) {
+            requires.add(springParent);
+        }
+        return requires;
+    }
+
+    protected String getSpringParentFromProperties() {
+        List<String> name = getFormattedModuleInfo(DeploymentDescriptorConfiguration.SPRING_PARENT);
+        return CollectionUtils.isEmpty(name) ? null : name.get(0);
+    }
+
+    protected List<String> getFormattedModuleInfo(String key) {
+        String ret = properties.getProperty(key);
+        if (StringUtils.hasText(ret)) {
+            String[] array = StringUtils.commaDelimitedListToStringArray(ret);
+            List<String> list = new ArrayList<>(array.length);
+            for (String item : array) {
+                int idx = item.indexOf(';');
+                if (idx > -1) {
+                    item = item.substring(0, idx);
+                }
+                list.add(item.trim());
+            }
+            return list;
+        }
+        return null;
     }
 
     /**
