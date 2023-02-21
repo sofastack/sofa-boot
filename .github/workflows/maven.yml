@@ -28,8 +28,7 @@ jobs:
         && mv apache-zookeeper-3.5.6-bin/conf/zoo_sample.cfg apache-zookeeper-3.5.6-bin/conf/zoo.cfg
         && /bin/bash apache-zookeeper-3.5.6-bin/bin/zkServer.sh start
     - name: Build with Maven
-      run: mvn clean install -Pdefault -DskipTests -B -V
+      run: mvn clean install -B -V
         && sh ./tools/check_format.sh
-        && mvn clean test -Pdefault
     - name: Codecov
       uses: codecov/codecov-action@v1
