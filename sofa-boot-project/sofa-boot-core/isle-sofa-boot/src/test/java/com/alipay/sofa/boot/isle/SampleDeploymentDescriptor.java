@@ -22,7 +22,6 @@ import org.springframework.core.io.ByteArrayResource;
 
 import java.net.URL;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Properties;
 
 /**
@@ -54,11 +53,11 @@ public class SampleDeploymentDescriptor extends AbstractDeploymentDescriptor {
                                       DeploymentDescriptorConfiguration deploymentDescriptorConfiguration,
                                       ClassLoader classLoader) {
         super(url, props, deploymentDescriptorConfiguration, classLoader);
+        loadSpringXMLs();
     }
 
     @Override
     protected void loadSpringXMLs() {
-        this.springResources = new HashMap<>();
         this.springResources.put("sample", new ByteArrayResource(new byte[] {}));
     }
 }

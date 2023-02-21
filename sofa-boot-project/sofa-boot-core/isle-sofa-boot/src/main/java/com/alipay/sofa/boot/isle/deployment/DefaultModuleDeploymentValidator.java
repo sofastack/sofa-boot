@@ -27,6 +27,7 @@ public class DefaultModuleDeploymentValidator implements ModuleDeploymentValidat
 
     @Override
     public boolean isModuleDeployment(DeploymentDescriptor deploymentDescriptor) {
-        return StringUtils.hasText(deploymentDescriptor.getModuleName());
+        return StringUtils.hasText(deploymentDescriptor.getModuleName())
+               && deploymentDescriptor.isSpringPowered();
     }
 }

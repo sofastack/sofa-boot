@@ -18,35 +18,33 @@ package com.alipay.sofa.boot.logging;
 
 import com.alipay.sofa.common.log.CommonLoggingConfigurations;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
 import org.springframework.mock.env.MockEnvironment;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Tests for {@link LogEnvironmentPreparingListener}.
+ * Tests for {@link LogEnvironmentPostProcessor}.
  *
  * @author huzijie
  * @version LogEnvironmentPreparingListenerTests.java, v 0.1 2023年02月01日 3:35 PM huzijie Exp $
  */
-@ExtendWith(MockitoExtension.class)
 public class LogEnvironmentPreparingListenerTests {
-
-    @Mock
-    private ApplicationEnvironmentPreparedEvent event;
 
     @Test
     public void registerPropertiesToLoggerContext() {
-        LogEnvironmentPreparingListener logEnvironmentPreparingListener = new LogEnvironmentPreparingListener();
+        LogEnvironmentPostProcessor logEnvironmentPostProcessor = new LogEnvironmentPostProcessor();
         MockEnvironment environment = new MockEnvironment();
         environment.setProperty("sofa.middleware.log.key1", "value1");
         environment.setProperty("sofa.middleware.log.key2", "value2");
-        Mockito.doReturn(environment).when(event).getEnvironment();
-        logEnvironmentPreparingListener.onApplicationEvent(event);
+
+        assertThat(
+            CommonLoggingConfigurations.getExternalConfigurations().get("sofa.middleware.log.key1"))
+            .isEqualTo(null);
+        assertThat(
+            CommonLoggingConfigurations.getExternalConfigurations().get("sofa.middleware.log.key2"))
+            .isEqualTo(null);
+
+        logEnvironmentPostProcessor.postProcessEnvironment(environment, null);
 
         assertThat(
             CommonLoggingConfigurations.getExternalConfigurations().get("sofa.middleware.log.key1"))

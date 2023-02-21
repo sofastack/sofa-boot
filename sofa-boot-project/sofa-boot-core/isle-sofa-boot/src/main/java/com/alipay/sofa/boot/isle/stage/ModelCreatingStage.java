@@ -18,9 +18,9 @@ package com.alipay.sofa.boot.isle.stage;
 
 import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.boot.isle.deployment.DependencyTree;
-import com.alipay.sofa.boot.isle.deployment.DeploymentBuilder;
 import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptor;
 import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptorConfiguration;
+import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptorFactory;
 import com.alipay.sofa.boot.isle.deployment.DeploymentException;
 import com.alipay.sofa.boot.log.ErrorCode;
 import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
@@ -46,14 +46,16 @@ import java.util.Properties;
  */
 public class ModelCreatingStage extends AbstractPipelineStage {
 
-    private static final Logger  LOGGER                         = SofaBootLoggerFactory
-                                                                    .getLogger(ModelCreatingStage.class);
+    private static final Logger           LOGGER                         = SofaBootLoggerFactory
+                                                                             .getLogger(ModelCreatingStage.class);
 
-    public static final String   MODEL_CREATING_STAGE_NAME      = "ModelCreatingStage";
+    public static final String            MODEL_CREATING_STAGE_NAME      = "ModelCreatingStage";
 
-    protected final List<String> ignoreModules                  = new ArrayList<>();
+    protected final List<String>          ignoreModules                  = new ArrayList<>();
 
-    protected final List<String> ignoredCalculateRequireModules = new ArrayList<>();
+    protected final List<String>          ignoredCalculateRequireModules = new ArrayList<>();
+
+    protected DeploymentDescriptorFactory deploymentDescriptorFactory    = new DeploymentDescriptorFactory();
 
     @Override
     protected void doProcess() throws Exception {
@@ -103,8 +105,8 @@ public class ModelCreatingStage extends AbstractPipelineStage {
                                                               DeploymentDescriptorConfiguration deploymentDescriptorConfiguration,
                                                               ClassLoader classLoader,
                                                               String modulePropertyName) {
-        return DeploymentBuilder.build(url, props, deploymentDescriptorConfiguration, classLoader,
-            modulePropertyName);
+        return deploymentDescriptorFactory.build(url, props, deploymentDescriptorConfiguration,
+            classLoader, modulePropertyName);
     }
 
     protected void addDeploymentDescriptors(List<DeploymentDescriptor> deploymentDescriptors)
@@ -122,7 +124,7 @@ public class ModelCreatingStage extends AbstractPipelineStage {
 
     protected void validateDuplicateModule(DeploymentDescriptor exist, DeploymentDescriptor dd)
                                                                                                throws DeploymentException {
-        if (exist != null && dd.isSpringPowered() && exist.isSpringPowered()) {
+        if (exist != null) {
             throw new DeploymentException(ErrorCode.convert("01-11006", dd.getModuleName(),
                 exist.getName(), dd.getName()));
         }

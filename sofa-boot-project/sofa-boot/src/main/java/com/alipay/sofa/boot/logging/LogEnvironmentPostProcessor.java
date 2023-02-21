@@ -20,8 +20,10 @@ import com.alipay.sofa.boot.util.SofaBootEnvUtils;
 import com.alipay.sofa.common.log.CommonLoggingConfigurations;
 import com.alipay.sofa.common.log.Constants;
 import com.alipay.sofa.common.log.env.LogEnvUtils;
-import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
-import org.springframework.context.ApplicationListener;
+import com.alipay.sofa.common.thread.SofaThreadPoolConstants;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.context.config.ConfigDataEnvironmentPostProcessor;
+import org.springframework.boot.env.EnvironmentPostProcessor;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.EnumerablePropertySource;
@@ -32,28 +34,35 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Implementation of {@link ApplicationListener<ApplicationEnvironmentPreparedEvent>}
+ * Implementation of {@link EnvironmentPostProcessor}
  * to register spring environment to {@link CommonLoggingConfigurations}.
  * 
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 2020/11/7
  */
-public class LogEnvironmentPreparingListener
-                                            implements
-                                            ApplicationListener<ApplicationEnvironmentPreparedEvent>,
-                                            Ordered {
+public class LogEnvironmentPostProcessor implements EnvironmentPostProcessor, Ordered {
+
+    public static final int    ORDER                            = ConfigDataEnvironmentPostProcessor.ORDER + 1;
+
+    /**
+     * support use config to disable sofa common thread pool monitor.
+     */
+    public static final String SOFA_THREAD_POOL_MONITOR_DISABLE = "sofa.boot.threadPoolMonitor.disable";
+
     @Override
-    public void onApplicationEvent(ApplicationEnvironmentPreparedEvent event) {
+    public void postProcessEnvironment(ConfigurableEnvironment environment,
+                                       SpringApplication application) {
         defaultConsoleLoggers();
-        prepare(event.getEnvironment());
+        initLoggingConfig(environment);
+        initSofaCommonThread(environment);
     }
 
     @Override
     public int getOrder() {
-        return Ordered.HIGHEST_PRECEDENCE + 20;
+        return ORDER;
     }
 
-    private void prepare(ConfigurableEnvironment environment) {
+    private void initLoggingConfig(ConfigurableEnvironment environment) {
         Map<String, String> context = new HashMap<>();
         loadLogConfiguration(Constants.LOG_PATH, environment.getProperty(Constants.LOG_PATH),
             Constants.LOGGING_PATH_DEFAULT, context);
@@ -101,6 +110,13 @@ public class LogEnvironmentPreparingListener
     private void loadLogConfiguration(String key, String value, Map<String, String> context) {
         if (StringUtils.hasText(value)) {
             context.put(key, value);
+        }
+    }
+
+    private void initSofaCommonThread(ConfigurableEnvironment environment) {
+        if (Boolean.parseBoolean(environment.getProperty(SOFA_THREAD_POOL_MONITOR_DISABLE))) {
+            System
+                .setProperty(SofaThreadPoolConstants.SOFA_THREAD_POOL_LOGGING_CAPABILITY, "false");
         }
     }
 }

@@ -22,7 +22,6 @@ import java.io.File;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
@@ -42,12 +41,11 @@ public class FileDeploymentDescriptor extends AbstractDeploymentDescriptor {
                                     ClassLoader classLoader, String modulePropertyName) {
         super(url, props, deploymentDescriptorConfiguration, classLoader);
         this.modulePropertyName = modulePropertyName;
+        loadSpringXMLs();
     }
 
     @Override
     public void loadSpringXMLs() {
-        springResources = new HashMap<>();
-
         try {
             // When path contains special characters (e.g., white space, Chinese), URL converts them to UTF8 code point.
             // In order to process correctly, create File from URI

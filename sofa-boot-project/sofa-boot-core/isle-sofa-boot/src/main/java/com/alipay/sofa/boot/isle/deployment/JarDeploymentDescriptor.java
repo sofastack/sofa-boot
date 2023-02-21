@@ -26,7 +26,6 @@ import java.net.JarURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Properties;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -44,11 +43,11 @@ public class JarDeploymentDescriptor extends AbstractDeploymentDescriptor {
                                    DeploymentDescriptorConfiguration deploymentDescriptorConfiguration,
                                    ClassLoader classLoader) {
         super(url, props, deploymentDescriptorConfiguration, classLoader);
+        loadSpringXMLs();
     }
 
     @Override
     public void loadSpringXMLs() {
-        springResources = new HashMap<>();
         JarFile jarFile;
 
         try {

@@ -17,9 +17,12 @@
 package com.alipay.sofa.boot.isle.deployment;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.core.io.UrlResource;
 
 import java.net.URL;
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.Properties;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,6 +34,14 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class AbstractDeploymentDescriptorTests {
 
+    private final DeploymentDescriptorFactory       deploymentDescriptorFactory       = new DeploymentDescriptorFactory();
+
+    private final DeploymentDescriptorConfiguration deploymentDescriptorConfiguration = new DeploymentDescriptorConfiguration(
+                                                                                          Collections
+                                                                                              .singletonList(DeploymentDescriptorConfiguration.MODULE_NAME),
+                                                                                          Collections
+                                                                                              .singletonList(DeploymentDescriptorConfiguration.REQUIRE_MODULE));
+
     @Test
     public void whiteSpacePath() throws Exception {
         ClassLoader classLoader = this.getClass().getClassLoader();
@@ -38,7 +49,12 @@ public class AbstractDeploymentDescriptorTests {
             .getResources("white space/" + DeploymentDescriptorConfiguration.SOFA_MODULE_FILE);
         while (urls != null && urls.hasMoreElements()) {
             URL url = urls.nextElement();
-            DeploymentDescriptor dd = DeploymentBuilder.build(url, null, null, classLoader);
+            UrlResource urlResource = new UrlResource(url);
+            Properties props = new Properties();
+            props.load(urlResource.getInputStream());
+            DeploymentDescriptor dd = deploymentDescriptorFactory.build(url, props,
+                deploymentDescriptorConfiguration, classLoader,
+                DeploymentDescriptorConfiguration.SOFA_MODULE_FILE);
             assertThat(dd.isSpringPowered()).isTrue();
         }
     }
