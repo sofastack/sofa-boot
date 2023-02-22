@@ -21,6 +21,7 @@
         <module>rpc-sofa-boot-starter</module>
         <module>tracer-sofa-boot-starter</module>
         <module>ark-sofa-boot-starter</module>
+        <module>test-sofa-boot-starter</module>
     </modules>
 
     <build>
