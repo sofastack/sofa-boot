@@ -18,7 +18,7 @@ package com.alipay.sofa.boot.actuator.autoconfigure.rpc;
 
 import com.alipay.sofa.boot.actuator.health.ReadinessEndpoint;
 import com.alipay.sofa.boot.actuator.rpc.RpcAfterHealthCheckCallback;
-import com.alipay.sofa.rpc.boot.container.ProviderConfigContainer;
+import com.alipay.sofa.boot.autoconfigure.rpc.SofaRpcAutoConfiguration;
 import com.alipay.sofa.rpc.boot.context.RpcStartApplicationListener;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -34,9 +34,9 @@ import org.springframework.context.annotation.Bean;
  * @author huzijie
  * @version RpcActuatorAutoConfiguration.java, v 0.1 2023年02月08日 4:45 PM huzijie Exp $
  */
-@AutoConfiguration
-@ConditionalOnClass(ProviderConfigContainer.class)
-@ConditionalOnBean(ProviderConfigContainer.class)
+@AutoConfiguration(after = SofaRpcAutoConfiguration.class)
+@ConditionalOnClass(RpcStartApplicationListener.class)
+@ConditionalOnBean(RpcStartApplicationListener.class)
 @ConditionalOnAvailableEndpoint(endpoint = ReadinessEndpoint.class)
 public class RpcActuatorAutoConfiguration {
 

@@ -14,20 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.smoke.tests.tracer;
+package com.alipay.sofa.smoke.tests.tracer.sample;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import com.alibaba.druid.pool.DruidDataSource;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import javax.sql.DataSource;
 
 /**
  * @author huzijie
- * @version TracerSofaBootApplication.java, v 0.1 2023年01月11日 4:45 PM huzijie Exp $
+ * @version DataSourceConfiguration.java, v 0.1 2023年02月22日 2:32 PM huzijie Exp $
  */
-@SpringBootApplication
-public class TracerSofaBootApplication {
+@Configuration
+public class DataSourceConfiguration {
 
-    public static void main(String[] args) {
-        SpringApplication application = new SpringApplication();
-        application.run(args);
+    @Bean
+    public DataSource druidDataSource() {
+        DruidDataSource dataSource = new DruidDataSource();
+        dataSource.setUrl("jdbc:h2:~/test");
+        dataSource.setUsername("sofa");
+        dataSource.setPassword("123456");
+        dataSource.setDriverClassName("org.h2.Driver");
+        return dataSource;
     }
 }

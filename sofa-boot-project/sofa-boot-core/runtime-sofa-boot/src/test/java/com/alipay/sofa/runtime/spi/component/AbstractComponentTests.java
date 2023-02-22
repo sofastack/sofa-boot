@@ -34,7 +34,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author huzijie
  * @author xuanbei
  */
-public class AbstractComponentTest {
+public class AbstractComponentTests {
 
     private final AbstractComponent abstractComponent = new AbstractComponent() {
                                                           @Override

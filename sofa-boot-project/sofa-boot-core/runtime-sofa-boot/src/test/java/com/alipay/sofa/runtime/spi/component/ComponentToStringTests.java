@@ -29,26 +29,27 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author huzijie
  * @author xuanbei
  */
-public class ComponentToStringTest {
+public class ComponentToStringTests {
 
     @Test
     public void getString() throws Exception {
 
-        ServiceImpl service = new ServiceImpl("uniqueId", ComponentToStringTest.class, new Object());
+        ServiceImpl service = new ServiceImpl("uniqueId", ComponentToStringTests.class,
+            new Object());
         assertThat(service.toString()).isEqualTo(
-            "com.alipay.sofa.runtime.spi.component.ComponentToStringTest:uniqueId");
+            "com.alipay.sofa.runtime.spi.component.ComponentToStringTests:uniqueId");
 
-        service = new ServiceImpl("", ComponentToStringTest.class, new Object());
+        service = new ServiceImpl("", ComponentToStringTests.class, new Object());
         assertThat(service.toString()).isEqualTo(
-            "com.alipay.sofa.runtime.spi.component.ComponentToStringTest");
+            "com.alipay.sofa.runtime.spi.component.ComponentToStringTests");
 
-        ReferenceImpl reference = new ReferenceImpl("uniqueId", ComponentToStringTest.class,
+        ReferenceImpl reference = new ReferenceImpl("uniqueId", ComponentToStringTests.class,
             InterfaceMode.api, true);
         assertThat(reference.toString()).isEqualTo(
-            "com.alipay.sofa.runtime.spi.component.ComponentToStringTest:uniqueId");
+            "com.alipay.sofa.runtime.spi.component.ComponentToStringTests:uniqueId");
 
-        reference = new ReferenceImpl(null, ComponentToStringTest.class, InterfaceMode.api, true);
+        reference = new ReferenceImpl(null, ComponentToStringTests.class, InterfaceMode.api, true);
         assertThat(reference.toString()).isEqualTo(
-            "com.alipay.sofa.runtime.spi.component.ComponentToStringTest");
+            "com.alipay.sofa.runtime.spi.component.ComponentToStringTests");
     }
 }

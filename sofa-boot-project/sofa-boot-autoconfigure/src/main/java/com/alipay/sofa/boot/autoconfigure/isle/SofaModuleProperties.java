@@ -101,12 +101,12 @@ public class SofaModuleProperties {
         this.ignoreModules = ignoreModules;
     }
 
-    public List<String> getIgnoredCalculateRequireModules() {
+    public List<String> getIgnoreCalculateRequireModules() {
         return ignoreCalculateRequireModules;
     }
 
-    public void setIgnoredCalculateRequireModules(List<String> ignoredCalculateRequireModules) {
-        this.ignoreCalculateRequireModules = ignoredCalculateRequireModules;
+    public void setIgnoreCalculateRequireModules(List<String> ignoreCalculateRequireModules) {
+        this.ignoreCalculateRequireModules = ignoreCalculateRequireModules;
     }
 
     public boolean isAllowBeanDefinitionOverriding() {

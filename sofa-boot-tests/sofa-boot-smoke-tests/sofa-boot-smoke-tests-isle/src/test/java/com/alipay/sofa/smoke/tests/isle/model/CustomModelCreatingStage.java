@@ -64,7 +64,7 @@ public class CustomModelCreatingStage extends ModelCreatingStage {
             props.load(urlResource.getInputStream());
             DeploymentDescriptor deploymentDescriptor = createDeploymentDescriptor(url, props,
                 deploymentDescriptorConfiguration, appClassLoader, modulePropertyFileName);
-            if (ignoredCalculateRequireModules.contains(deploymentDescriptor.getModuleName())) {
+            if (ignoreCalculateRequireModules.contains(deploymentDescriptor.getModuleName())) {
                 deploymentDescriptor.setIgnoreRequireModule(true);
             }
             deploymentDescriptors.add(deploymentDescriptor);

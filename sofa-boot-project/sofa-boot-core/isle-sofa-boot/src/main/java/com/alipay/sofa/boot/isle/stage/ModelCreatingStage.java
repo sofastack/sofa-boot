@@ -46,16 +46,16 @@ import java.util.Properties;
  */
 public class ModelCreatingStage extends AbstractPipelineStage {
 
-    private static final Logger           LOGGER                         = SofaBootLoggerFactory
-                                                                             .getLogger(ModelCreatingStage.class);
+    private static final Logger           LOGGER                        = SofaBootLoggerFactory
+                                                                            .getLogger(ModelCreatingStage.class);
 
-    public static final String            MODEL_CREATING_STAGE_NAME      = "ModelCreatingStage";
+    public static final String            MODEL_CREATING_STAGE_NAME     = "ModelCreatingStage";
 
-    protected final List<String>          ignoreModules                  = new ArrayList<>();
+    protected final List<String>          ignoreModules                 = new ArrayList<>();
 
-    protected final List<String>          ignoredCalculateRequireModules = new ArrayList<>();
+    protected final List<String>          ignoreCalculateRequireModules = new ArrayList<>();
 
-    protected DeploymentDescriptorFactory deploymentDescriptorFactory    = new DeploymentDescriptorFactory();
+    protected DeploymentDescriptorFactory deploymentDescriptorFactory   = new DeploymentDescriptorFactory();
 
     @Override
     protected void doProcess() throws Exception {
@@ -92,7 +92,7 @@ public class ModelCreatingStage extends AbstractPipelineStage {
             props.load(urlResource.getInputStream());
             DeploymentDescriptor deploymentDescriptor = createDeploymentDescriptor(url, props,
                 deploymentDescriptorConfiguration, appClassLoader, modulePropertyFileName);
-            if (ignoredCalculateRequireModules.contains(deploymentDescriptor.getModuleName())) {
+            if (ignoreCalculateRequireModules.contains(deploymentDescriptor.getModuleName())) {
                 deploymentDescriptor.setIgnoreRequireModule(true);
             }
             deploymentDescriptors.add(deploymentDescriptor);
@@ -201,7 +201,15 @@ public class ModelCreatingStage extends AbstractPipelineStage {
     }
 
     public void addIgnoredCalculateRequireModule(String moduleName) {
-        this.ignoredCalculateRequireModules.add(moduleName);
+        this.ignoreCalculateRequireModules.add(moduleName);
+    }
+
+    public List<String> getIgnoreModules() {
+        return ignoreModules;
+    }
+
+    public List<String> getIgnoreCalculateRequireModules() {
+        return ignoreCalculateRequireModules;
     }
 
     @Override
