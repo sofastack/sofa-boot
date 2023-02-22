@@ -5,5 +5,4 @@
        default-autowire="byName">
 
     <bean id="sampleBean" class="com.alipay.sofa.smoke.tests.isle.SampleBean"/>
-
 </beans>

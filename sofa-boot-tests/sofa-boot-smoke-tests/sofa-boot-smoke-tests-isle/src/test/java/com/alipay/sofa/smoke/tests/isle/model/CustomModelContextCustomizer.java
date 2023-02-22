@@ -16,14 +16,20 @@
  */
 package com.alipay.sofa.smoke.tests.isle.model;
 
+import com.alipay.sofa.boot.autoconfigure.isle.SofaModuleProperties;
 import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
+import com.alipay.sofa.boot.isle.stage.ModelCreatingStage;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.config.RuntimeBeanReference;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
 import org.springframework.beans.factory.support.RootBeanDefinition;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.lang.Nullable;
 import org.springframework.test.context.ContextCustomizer;
 import org.springframework.test.context.MergedContextConfiguration;
 
@@ -31,10 +37,11 @@ import org.springframework.test.context.MergedContextConfiguration;
  * @author huzijie
  * @version CustomModelContextCustomizer.java, v 0.1 2023年02月03日 10:37 AM huzijie Exp $
  */
-public class CustomModelContextCustomizer implements ContextCustomizer,
-                                         BeanDefinitionRegistryPostProcessor {
+public class CustomModelContextCustomizer implements ContextCustomizer, ApplicationContextAware,
+                                         BeanDefinitionRegistryPostProcessor, BeanPostProcessor {
 
-    private final String[] paths;
+    private final String[]     paths;
+    private ApplicationContext applicationContext;
 
     public CustomModelContextCustomizer(String[] paths) {
         this.paths = paths;
@@ -64,9 +71,25 @@ public class CustomModelContextCustomizer implements ContextCustomizer,
         }
     }
 
+    @Nullable
+    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+        if (bean instanceof ModelCreatingStage modelCreatingStage) {
+            SofaModuleProperties sofaModuleProperties = applicationContext.getBean(SofaModuleProperties.class);
+            sofaModuleProperties.getIgnoreModules().forEach(modelCreatingStage::addIgnoreModule);
+            sofaModuleProperties.getIgnoredCalculateRequireModules().forEach(modelCreatingStage::addIgnoredCalculateRequireModule);
+            return bean;
+        }
+        return bean;
+    }
+
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory)
                                                                                    throws BeansException {
 
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
     }
 }
