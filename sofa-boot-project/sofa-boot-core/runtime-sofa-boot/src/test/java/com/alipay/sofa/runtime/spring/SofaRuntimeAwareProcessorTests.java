@@ -37,11 +37,10 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class SofaRuntimeAwareProcessorTests extends SofaRuntimeManagerTestBase {
 
-    private final SofaRuntimeAwareProcessor sofaRuntimeAwareProcessor = new SofaRuntimeAwareProcessor(
-                                                                          sofaRuntimeManager);
-
     @Test
     public void checkSofaRuntimeAware() {
+        SofaRuntimeAwareProcessor sofaRuntimeAwareProcessor = new SofaRuntimeAwareProcessor(
+                sofaRuntimeManager);
         SofaRuntimeAwareBean sofaRuntimeAwareBean = new SofaRuntimeAwareBean();
         sofaRuntimeAwareProcessor.postProcessBeforeInitialization(sofaRuntimeAwareBean, "testBean");
 
