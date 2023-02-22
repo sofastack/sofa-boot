@@ -40,7 +40,7 @@ public class SofaRuntimeAwareProcessorTests extends SofaRuntimeManagerTestBase {
     @Test
     public void checkSofaRuntimeAware() {
         SofaRuntimeAwareProcessor sofaRuntimeAwareProcessor = new SofaRuntimeAwareProcessor(
-                sofaRuntimeManager);
+            sofaRuntimeManager);
         SofaRuntimeAwareBean sofaRuntimeAwareBean = new SofaRuntimeAwareBean();
         sofaRuntimeAwareProcessor.postProcessBeforeInitialization(sofaRuntimeAwareBean, "testBean");
 
