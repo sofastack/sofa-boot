@@ -27,8 +27,8 @@ import org.springframework.util.StringUtils;
  * @version : SwitchableApplicationContextInitializer.java, v 0.1 2023年02月09日 11:57 yuanxuan Exp $
  */
 public abstract class SwitchableApplicationContextInitializer
-        implements
-        ApplicationContextInitializer<ConfigurableApplicationContext> {
+                                                             implements
+                                                             ApplicationContextInitializer<ConfigurableApplicationContext> {
 
     protected static final String CONFIG_KEY_PREFIX = "sofa.boot.switch.initializer.";
 

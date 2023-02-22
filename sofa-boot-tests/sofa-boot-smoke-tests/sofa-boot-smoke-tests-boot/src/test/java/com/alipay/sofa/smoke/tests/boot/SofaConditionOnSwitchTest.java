@@ -33,8 +33,7 @@ import static org.assertj.core.api.Assertions.catchException;
  * @author yuanxuan
  * @version : SofaConditionOnSwitchTest.java, v 0.1 2023年02月22日 10:09 yuanxuan Exp $
  */
-@SpringBootTest(classes = {BootSofaBootApplication.class, BeanTestConfiguration.class},
-        properties = {"spring.profiles.active=function"})
+@SpringBootTest(classes = { BootSofaBootApplication.class, BeanTestConfiguration.class }, properties = { "spring.profiles.active=function" })
 public class SofaConditionOnSwitchTest {
 
     @Autowired

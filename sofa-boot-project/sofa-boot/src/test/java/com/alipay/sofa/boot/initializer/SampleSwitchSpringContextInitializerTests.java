@@ -31,7 +31,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class SampleSwitchSpringContextInitializerTests {
 
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
-            .withInitializer(new SampleSwitchSpringContextInitializer());
+                                                             .withInitializer(new SampleSwitchSpringContextInitializer());
 
     @Test
     void enableFalse() {
@@ -40,7 +40,8 @@ public class SampleSwitchSpringContextInitializerTests {
         });
     }
 
-    static class SampleSwitchSpringContextInitializer extends SwitchableApplicationContextInitializer {
+    static class SampleSwitchSpringContextInitializer extends
+                                                     SwitchableApplicationContextInitializer {
 
         @Override
         protected void doInitialize(ConfigurableApplicationContext applicationContext) {
