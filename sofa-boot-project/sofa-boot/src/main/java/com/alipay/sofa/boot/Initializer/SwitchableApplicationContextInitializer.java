@@ -21,16 +21,16 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.util.StringUtils;
 
 /**
- *  An {@link ApplicationContextInitializer} that could use property to dynamic enable initializer.
+ * An {@link ApplicationContextInitializer} that could use property to dynamic enable initializer.
  *
  * @author yuanxuan
  * @version : SwitchableApplicationContextInitializer.java, v 0.1 2023年02月09日 11:57 yuanxuan Exp $
  */
 public abstract class SwitchableApplicationContextInitializer
-                                                             implements
-                                                             ApplicationContextInitializer<ConfigurableApplicationContext> {
+        implements
+        ApplicationContextInitializer<ConfigurableApplicationContext> {
 
-    protected static final String CONFIG_KEY_PREFIX = "sofa.boot.switch.initializer";
+    protected static final String CONFIG_KEY_PREFIX = "sofa.boot.switch.initializer.";
 
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
@@ -52,7 +52,8 @@ public abstract class SwitchableApplicationContextInitializer
     protected abstract String switchKey();
 
     protected boolean isEnable(ConfigurableApplicationContext applicationContext) {
-        String switchStr = applicationContext.getEnvironment().getProperty(switchKey());
+        String realKey = switchKey() + ".enabled";
+        String switchStr = applicationContext.getEnvironment().getProperty(realKey);
         if (StringUtils.hasText(switchStr)) {
             return Boolean.parseBoolean(switchStr);
         } else {

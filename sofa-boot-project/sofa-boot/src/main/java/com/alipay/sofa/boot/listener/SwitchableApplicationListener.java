@@ -36,10 +36,10 @@ import org.springframework.util.StringUtils;
  * @version : SwitchableApplicationListener.java, v 0.1 2023年02月09日 17:40 yuanxuan Exp $
  */
 public abstract class SwitchableApplicationListener<E extends ApplicationEvent>
-                                                                                implements
-                                                                                ApplicationListener<E> {
+        implements
+        ApplicationListener<E> {
 
-    protected static final String CONFIG_KEY_PREFIX = "sofa.boot.switch.initializer";
+    protected static final String CONFIG_KEY_PREFIX = "sofa.boot.switch.initializer.";
 
     @Override
     public void onApplicationEvent(E event) {
@@ -82,7 +82,8 @@ public abstract class SwitchableApplicationListener<E extends ApplicationEvent>
     protected abstract String switchKey();
 
     protected boolean isEnable(Environment environment) {
-        String switchStr = environment.getProperty(switchKey());
+        String realKey = switchKey() + ".enabled";
+        String switchStr = environment.getProperty(realKey);
         if (StringUtils.hasText(switchStr)) {
             return Boolean.parseBoolean(switchStr);
         } else {
