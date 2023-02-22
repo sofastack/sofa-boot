@@ -102,7 +102,7 @@ public class SofaModuleAutoConfiguration {
             ApplicationRuntimeModel applicationRuntimeModel) {
         ModelCreatingStage modelCreatingStage = new ModelCreatingStage();
         sofaModuleProperties.getIgnoreModules().forEach(modelCreatingStage::addIgnoreModule);
-        sofaModuleProperties.getIgnoredCalculateRequireModules().forEach(modelCreatingStage::addIgnoredCalculateRequireModule);
+        sofaModuleProperties.getIgnoreCalculateRequireModules().forEach(modelCreatingStage::addIgnoredCalculateRequireModule);
         modelCreatingStage.setApplicationRuntimeModel(applicationRuntimeModel);
         return modelCreatingStage;
     }

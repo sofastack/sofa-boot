@@ -53,7 +53,7 @@ public class ModelCreatingStage extends AbstractPipelineStage {
 
     protected final List<String>          ignoreModules                  = new ArrayList<>();
 
-    protected final List<String>          ignoredCalculateRequireModules = new ArrayList<>();
+    protected final List<String> ignoreCalculateRequireModules = new ArrayList<>();
 
     protected DeploymentDescriptorFactory deploymentDescriptorFactory    = new DeploymentDescriptorFactory();
 
@@ -92,7 +92,7 @@ public class ModelCreatingStage extends AbstractPipelineStage {
             props.load(urlResource.getInputStream());
             DeploymentDescriptor deploymentDescriptor = createDeploymentDescriptor(url, props,
                 deploymentDescriptorConfiguration, appClassLoader, modulePropertyFileName);
-            if (ignoredCalculateRequireModules.contains(deploymentDescriptor.getModuleName())) {
+            if (ignoreCalculateRequireModules.contains(deploymentDescriptor.getModuleName())) {
                 deploymentDescriptor.setIgnoreRequireModule(true);
             }
             deploymentDescriptors.add(deploymentDescriptor);
@@ -201,7 +201,15 @@ public class ModelCreatingStage extends AbstractPipelineStage {
     }
 
     public void addIgnoredCalculateRequireModule(String moduleName) {
-        this.ignoredCalculateRequireModules.add(moduleName);
+        this.ignoreCalculateRequireModules.add(moduleName);
+    }
+
+    public List<String> getIgnoreModules() {
+        return ignoreModules;
+    }
+
+    public List<String> getIgnoreCalculateRequireModules() {
+        return ignoreCalculateRequireModules;
     }
 
     @Override

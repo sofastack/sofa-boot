@@ -35,6 +35,9 @@ import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.FilteredClassLoader;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.function.Supplier;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -112,15 +115,17 @@ public class SofaRuntimeAutoConfigurationTests {
                     assertThat(properties.isServiceInterfaceTypeCheck()).isTrue();
                 });
     }
-    //    @Test
-    //    public void customAsyncInitMethodManager() {
-    //        this.contextRunner
-    //                .withPropertyValues("sofa.boot.runtime.asyncInitExecutorCoreSize=10")
-    //                .withPropertyValues("sofa.boot.runtime.asyncInitExecutorMaxSize=10")
-    //                .run((context) -> {
-    //                    AsyncInitMethodManager asyncInitMethodManager = context.getBean(AsyncInitMethodManager.class);
-    //                    assertThat(asyncInitMethodManager.getExecutorCoreSize()).isEqualTo(10);
-    //                    assertThat(asyncInitMethodManager.getExecutorMaxSize()).isEqualTo(10);
-    //                });
-    //    }
+
+    @Test
+    public void customAsyncInitMethodManager() {
+        this.contextRunner
+                .withPropertyValues("sofa.boot.runtime.asyncInitExecutorCoreSize=10")
+                .withPropertyValues("sofa.boot.runtime.asyncInitExecutorMaxSize=10")
+                .run((context) -> {
+                    ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) context.getBean(Supplier.class,
+                            AsyncInitMethodManager.ASYNC_INIT_METHOD_EXECUTOR_BEAN_NAME).get();
+                    assertThat(threadPoolExecutor.getCorePoolSize()).isEqualTo(10);
+                    assertThat(threadPoolExecutor.getMaximumPoolSize()).isEqualTo(10);
+                });
+    }
 }

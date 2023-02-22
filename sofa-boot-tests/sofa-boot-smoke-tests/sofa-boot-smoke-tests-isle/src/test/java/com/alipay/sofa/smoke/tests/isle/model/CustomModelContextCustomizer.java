@@ -76,7 +76,7 @@ public class CustomModelContextCustomizer implements ContextCustomizer, Applicat
         if (bean instanceof ModelCreatingStage modelCreatingStage) {
             SofaModuleProperties sofaModuleProperties = applicationContext.getBean(SofaModuleProperties.class);
             sofaModuleProperties.getIgnoreModules().forEach(modelCreatingStage::addIgnoreModule);
-            sofaModuleProperties.getIgnoredCalculateRequireModules().forEach(modelCreatingStage::addIgnoredCalculateRequireModule);
+            sofaModuleProperties.getIgnoreCalculateRequireModules().forEach(modelCreatingStage::addIgnoredCalculateRequireModule);
             return bean;
         }
         return bean;

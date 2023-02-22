@@ -38,7 +38,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(classes = IsleSofaBootApplication.class)
 @AddCustomJar({ "sample-module", "miss-module", "fail-module" })
 @TestPropertySource(properties = {
-                                  "sofa.boot.isle.ignoredCalculateRequireModules=com.alipay.sofa.miss",
+                                  "sofa.boot.isle.ignoreCalculateRequireModules=com.alipay.sofa.miss",
                                   "sofa.boot.isle.ignoreModules=com.alipay.sofa.fail" })
 public class ModelCreatingStageIntegrationTests {
 

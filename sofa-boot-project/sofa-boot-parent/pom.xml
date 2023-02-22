@@ -186,6 +186,13 @@
                 <version>${maven.surefire.plugin}</version>
                 <configuration>
                     <reuseForks>false</reuseForks>
+                    <includes>
+                        <include>**/*Tests.java</include>
+                        <include>**/*Test.java</include>
+                    </includes>
+                    <excludes>
+                        <exclude>**/**TestBase.java</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
 

@@ -24,7 +24,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.core.PriorityOrdered;
 
 /**
- * SOFABoot RPC 健康检查回调.会启动服务器并发布服务.
+ * Implementation of {@link ReadinessCheckCallback} to publish sofa rpc services.
  *
  * @author <a href="mailto:lw111072@antfin.com">LiWei</a>
  */

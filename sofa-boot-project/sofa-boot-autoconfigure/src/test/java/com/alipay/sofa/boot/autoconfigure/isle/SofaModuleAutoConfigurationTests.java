@@ -169,4 +169,16 @@ public class SofaModuleAutoConfigurationTests {
                     assertThat(sofaPostProcessorShareManager.isShareParentContextPostProcessors()).isFalse();
                 });
     }
+
+    @Test
+    void customModelCreatingStage() {
+        this.contextRunner
+                .withPropertyValues("sofa.boot.isle.ignoreModules=a,b,c")
+                .withPropertyValues("sofa.boot.isle.ignoreCalculateRequireModules=e,f,g")
+                .run((context) -> {
+                    ModelCreatingStage modelCreatingStage = context.getBean(ModelCreatingStage.class);
+                    assertThat(modelCreatingStage.getIgnoreModules()).contains("a", "b", "c");
+                    assertThat(modelCreatingStage.getIgnoreCalculateRequireModules()).contains("e", "f", "g");
+                });
+    }
 }

@@ -46,7 +46,7 @@ public class ClientFactoryAnnotationBeanPostProcessor implements BeanPostProcess
     public Object postProcessBeforeInitialization(final Object bean, String beanName)
                                                                                      throws BeansException {
         ReflectionUtils.doWithFields(bean.getClass(), field -> {
-            if (field.getType().equals(ClientFactory.class)) {
+            if (ClientFactory.class.isAssignableFrom(field.getType())) {
                 ReflectionUtils.makeAccessible(field);
                 ReflectionUtils.setField(field, bean, clientFactory);
             } else if ((clientFactory instanceof ClientFactoryImpl)
