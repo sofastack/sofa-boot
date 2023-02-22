@@ -17,7 +17,7 @@
 package com.alipay.sofa.smoke.tests.boot;
 
 import com.alipay.sofa.boot.autoconfigure.condition.ConditionalOnSwitch;
-import com.alipay.sofa.smoke.tests.boot.SofaConditionOnSwitchTest.BeanTestConfiguration;
+import com.alipay.sofa.smoke.tests.boot.SofaConditionOnSwitchTests.BeanTestConfiguration;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,10 +31,10 @@ import static org.assertj.core.api.Assertions.catchException;
 
 /**
  * @author yuanxuan
- * @version : SofaConditionOnSwitchTest.java, v 0.1 2023年02月22日 10:09 yuanxuan Exp $
+ * @version : SofaConditionOnSwitchTests.java, v 0.1 2023年02月22日 10:09 yuanxuan Exp $
  */
 @SpringBootTest(classes = { BootSofaBootApplication.class, BeanTestConfiguration.class }, properties = { "spring.profiles.active=function" })
-public class SofaConditionOnSwitchTest {
+public class SofaConditionOnSwitchTests {
 
     @Autowired
     private ApplicationContext context;
@@ -43,7 +43,7 @@ public class SofaConditionOnSwitchTest {
     void beanSwitchOnScene() {
         assertThat(catchException(() -> {
             context.getBean(FunctionBean.class);
-        })).hasMessage("No qualifying bean of type 'com.alipay.sofa.smoke.tests.boot.SofaConditionOnSwitchTest$FunctionBean' "
+        })).hasMessage("No qualifying bean of type 'com.alipay.sofa.smoke.tests.boot.SofaConditionOnSwitchTests$FunctionBean' "
                 + "available");
         assertThatNoException().isThrownBy(() -> {
             context.getBean(FunctionFeatureBean.class);
