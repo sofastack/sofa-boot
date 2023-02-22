@@ -34,7 +34,8 @@ public class ComponentToStringTests {
     @Test
     public void getString() throws Exception {
 
-        ServiceImpl service = new ServiceImpl("uniqueId", ComponentToStringTests.class, new Object());
+        ServiceImpl service = new ServiceImpl("uniqueId", ComponentToStringTests.class,
+            new Object());
         assertThat(service.toString()).isEqualTo(
             "com.alipay.sofa.runtime.spi.component.ComponentToStringTest:uniqueId");
 

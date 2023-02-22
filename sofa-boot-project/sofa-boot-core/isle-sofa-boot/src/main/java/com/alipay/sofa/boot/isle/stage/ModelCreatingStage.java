@@ -46,16 +46,16 @@ import java.util.Properties;
  */
 public class ModelCreatingStage extends AbstractPipelineStage {
 
-    private static final Logger           LOGGER                         = SofaBootLoggerFactory
-                                                                             .getLogger(ModelCreatingStage.class);
+    private static final Logger           LOGGER                        = SofaBootLoggerFactory
+                                                                            .getLogger(ModelCreatingStage.class);
 
-    public static final String            MODEL_CREATING_STAGE_NAME      = "ModelCreatingStage";
+    public static final String            MODEL_CREATING_STAGE_NAME     = "ModelCreatingStage";
 
-    protected final List<String>          ignoreModules                  = new ArrayList<>();
+    protected final List<String>          ignoreModules                 = new ArrayList<>();
 
-    protected final List<String> ignoreCalculateRequireModules = new ArrayList<>();
+    protected final List<String>          ignoreCalculateRequireModules = new ArrayList<>();
 
-    protected DeploymentDescriptorFactory deploymentDescriptorFactory    = new DeploymentDescriptorFactory();
+    protected DeploymentDescriptorFactory deploymentDescriptorFactory   = new DeploymentDescriptorFactory();
 
     @Override
     protected void doProcess() throws Exception {

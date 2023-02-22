@@ -1,3 +1,19 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.alipay.sofa.runtime.startup;
 
 import com.alipay.sofa.boot.startup.BeanStat;
@@ -24,7 +40,8 @@ public class ComponentBeanStatCustomizerTests {
         BeanStat beanStat = new BeanStat();
         ServiceFactoryBean serviceFactoryBean = new ServiceFactoryBean();
         serviceFactoryBean.setInterfaceType("testService");
-        BeanStat result = componentBeanStatCustomizer.customize("service", serviceFactoryBean, beanStat);
+        BeanStat result = componentBeanStatCustomizer.customize("service", serviceFactoryBean,
+            beanStat);
         assertThat(result).isNull();
         assertThat(beanStat.getInterfaceType()).isEqualTo("testService");
     }
@@ -34,7 +51,8 @@ public class ComponentBeanStatCustomizerTests {
         BeanStat beanStat = new BeanStat();
         ReferenceFactoryBean referenceFactoryBean = new ReferenceFactoryBean();
         referenceFactoryBean.setInterfaceType("testService");
-        BeanStat result = componentBeanStatCustomizer.customize("reference", referenceFactoryBean, beanStat);
+        BeanStat result = componentBeanStatCustomizer.customize("reference", referenceFactoryBean,
+            beanStat);
         assertThat(result).isNull();
         assertThat(beanStat.getInterfaceType()).isEqualTo("testService");
     }
@@ -44,9 +62,11 @@ public class ComponentBeanStatCustomizerTests {
         BeanStat beanStat = new BeanStat();
         ExtensionFactoryBean extensionFactoryBean = new ExtensionFactoryBean();
         extensionFactoryBean.setBean("testExtension");
-        BeanStat result = componentBeanStatCustomizer.customize("extension", extensionFactoryBean, beanStat);
+        BeanStat result = componentBeanStatCustomizer.customize("extension", extensionFactoryBean,
+            beanStat);
         assertThat(result).isNull();
-        assertThat(beanStat.getExtensionProperty()).isEqualTo("ExtensionPointTarget: testExtension");
+        assertThat(beanStat.getExtensionProperty())
+            .isEqualTo("ExtensionPointTarget: testExtension");
     }
 
     @Test
@@ -54,9 +74,11 @@ public class ComponentBeanStatCustomizerTests {
         BeanStat beanStat = new BeanStat();
         ExtensionPointFactoryBean extensionPointFactoryBean = new ExtensionPointFactoryBean();
         extensionPointFactoryBean.setTargetBeanName("testExtensionPoint");
-        BeanStat result = componentBeanStatCustomizer.customize("extensionPoint", extensionPointFactoryBean, beanStat);
+        BeanStat result = componentBeanStatCustomizer.customize("extensionPoint",
+            extensionPointFactoryBean, beanStat);
         assertThat(result).isNull();
-        assertThat(beanStat.getExtensionProperty()).isEqualTo("ExtensionPointTarget: testExtensionPoint");
+        assertThat(beanStat.getExtensionProperty()).isEqualTo(
+            "ExtensionPointTarget: testExtensionPoint");
     }
 
     @Test

@@ -1,3 +1,19 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.alipay.sofa.smoke.tests.runtime.spring;
 
 import com.alipay.sofa.runtime.api.annotation.SofaReference;
@@ -26,17 +42,17 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @SpringBootTest(classes = RuntimeSofaBootApplication.class)
 @Import(SofaReferenceAnnotationTests.ReferenceBeanAnnotationConfiguration.class)
-@TestPropertySource(properties = {"uniqueIdB=b", "uniqueIdC=c", "uniqueIdD=d", "bindingType=jvm"} )
+@TestPropertySource(properties = { "uniqueIdB=b", "uniqueIdC=c", "uniqueIdD=d", "bindingType=jvm" })
 public class SofaReferenceAnnotationTests {
 
     @Autowired
     private TestSofaReferenceBean testSofaReferenceBean;
 
     @Autowired
-    private ApplicationContext applicationContext;
+    private ApplicationContext    applicationContext;
 
     @Autowired
-    private SofaRuntimeManager sofaRuntimeManager;
+    private SofaRuntimeManager    sofaRuntimeManager;
 
     @Test
     public void checkFieldInject() {
@@ -53,24 +69,29 @@ public class SofaReferenceAnnotationTests {
 
     @Test
     public void checkFactoryBean() {
-        assertThat(applicationContext.containsBean(SofaBeanNameGenerator
-                .generateSofaReferenceBeanName(SampleService.class, null))).isFalse();
-        assertThat(applicationContext.containsBean(SofaBeanNameGenerator
-                .generateSofaReferenceBeanName(SampleService.class, "b"))).isFalse();
-        assertThat(applicationContext.containsBean(SofaBeanNameGenerator
-                .generateSofaReferenceBeanName(SampleService.class, "d"))).isFalse();
-        assertThat(applicationContext.containsBean(SofaBeanNameGenerator
-                .generateSofaReferenceBeanName(SampleService.class, "c"))).isTrue();
-        assertThat(applicationContext.getBean(SofaBeanNameGenerator
-                .generateSofaReferenceBeanName(SampleService.class, "c"))).isInstanceOf(SampleService.class);
+        assertThat(
+            applicationContext.containsBean(SofaBeanNameGenerator.generateSofaReferenceBeanName(
+                SampleService.class, null))).isFalse();
+        assertThat(
+            applicationContext.containsBean(SofaBeanNameGenerator.generateSofaReferenceBeanName(
+                SampleService.class, "b"))).isFalse();
+        assertThat(
+            applicationContext.containsBean(SofaBeanNameGenerator.generateSofaReferenceBeanName(
+                SampleService.class, "d"))).isFalse();
+        assertThat(
+            applicationContext.containsBean(SofaBeanNameGenerator.generateSofaReferenceBeanName(
+                SampleService.class, "c"))).isTrue();
+        assertThat(
+            applicationContext.getBean(SofaBeanNameGenerator.generateSofaReferenceBeanName(
+                SampleService.class, "c"))).isInstanceOf(SampleService.class);
     }
 
     @Test
     public void checkReferenceComponent() {
-        assertThat(sofaRuntimeManager.getComponentManager().getComponentInfosByType(REFERENCE_COMPONENT_TYPE).size())
-                .isEqualTo(4);
+        assertThat(
+            sofaRuntimeManager.getComponentManager()
+                .getComponentInfosByType(REFERENCE_COMPONENT_TYPE).size()).isEqualTo(4);
     }
-
 
     @Configuration
     static class ReferenceBeanAnnotationConfiguration {
@@ -81,17 +102,17 @@ public class SofaReferenceAnnotationTests {
         }
     }
 
-    public static class TestSofaReferenceBean  {
+    public static class TestSofaReferenceBean {
 
         @SofaReference(binding = @SofaReferenceBinding(bindingType = "${bindingType}"))
-        private SampleService sampleServiceA;
+        private SampleService       sampleServiceA;
 
         @SofaReference(uniqueId = "${uniqueIdB}")
-        private SampleService sampleServiceB;
+        private SampleService       sampleServiceB;
 
         private final SampleService sampleServiceC;
 
-        private SampleService sampleServiceD;
+        private SampleService       sampleServiceD;
 
         public TestSofaReferenceBean(SampleService sampleService) {
             sampleServiceC = sampleService;
