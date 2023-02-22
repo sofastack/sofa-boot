@@ -12,7 +12,7 @@
     <artifactId>test-sofa-boot</artifactId>
 
     <properties>
-        <main.user.dir>${basedir}/../..</main.user.dir>
+        <main.user.dir>${basedir}/../../..</main.user.dir>
     </properties>
 
     <dependencies>
