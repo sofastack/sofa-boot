@@ -243,8 +243,6 @@ public class HealthCheckerProcessor implements ApplicationContextAware {
             }
             result = health.getStatus().equals(Status.UP);
             if (result) {
-                logger.info("HealthChecker[{}] {} check success with {} retry.", beanId, checkType,
-                    retryCount);
                 break;
             } else {
                 logger.info("HealthChecker[{}] {} check fail with {} retry.", beanId, checkType,

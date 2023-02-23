@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.boot.actuator.health;
 
+import com.alipay.sofa.boot.util.LogOutPutUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,6 +26,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.Status;
 import org.springframework.boot.availability.ReadinessState;
+import org.springframework.boot.test.system.CapturedOutput;
+import org.springframework.boot.test.system.OutputCaptureExtension;
 import org.springframework.context.ApplicationContext;
 
 import java.util.HashMap;
@@ -42,9 +45,12 @@ import static org.mockito.Mockito.only;
  * @author huzijie
  * @version ReadinessCheckListenerTests.java, v 0.1 2023年01月06日 1:20 PM huzijie Exp $
  */
-//todo 补充初始化及check结果的日志校验
-@ExtendWith(MockitoExtension.class)
+@ExtendWith({ MockitoExtension.class, OutputCaptureExtension.class })
 public class ReadinessCheckListenerTests {
+
+    static {
+        LogOutPutUtils.openOutPutForLoggers(ReadinessCheckListener.class);
+    }
 
     @InjectMocks
     private ReadinessCheckListener          readinessCheckListener;
@@ -68,7 +74,7 @@ public class ReadinessCheckListenerTests {
     }
 
     @Test
-    public void allAllHealthCheckSuccess() {
+    public void allAllHealthCheckSuccess(CapturedOutput capturedOutput) {
         Mockito.doReturn(true).when(healthCheckerProcessor).readinessHealthCheck(anyMap());
         Mockito.doReturn(true).when(healthIndicatorProcessor).readinessHealthCheck(anyMap());
         Mockito.doReturn(true).when(readinessCheckCallbackProcessor)
@@ -76,6 +82,8 @@ public class ReadinessCheckListenerTests {
         readinessCheckListener.setApplicationContext(applicationContext);
         readinessCheckListener.readinessHealthCheck();
 
+        assertThat(capturedOutput.getOut()).contains("Invoking all readiness check callbacks...");
+        assertThat(capturedOutput.getOut()).contains("Readiness check result: success");
         assertThat(readinessCheckListener.getHealthCheckerStatus()).isTrue();
         assertThat(readinessCheckListener.getHealthIndicatorStatus()).isTrue();
         assertThat(readinessCheckListener.getHealthCallbackStatus()).isTrue();
@@ -92,12 +100,14 @@ public class ReadinessCheckListenerTests {
     }
 
     @Test
-    public void healthCheckerFail() {
+    public void healthCheckerFail(CapturedOutput capturedOutput) {
         Mockito.doReturn(false).when(healthCheckerProcessor).readinessHealthCheck(anyMap());
         Mockito.doReturn(true).when(healthIndicatorProcessor).readinessHealthCheck(anyMap());
         readinessCheckListener.setApplicationContext(applicationContext);
         readinessCheckListener.readinessHealthCheck();
 
+        assertThat(capturedOutput.getOut()).contains(
+            "SOFA-BOOT-01-20000: Readiness check result: fail");
         Mockito.verify(readinessCheckCallbackProcessor, never()).readinessCheckCallback(anyMap());
         assertThat(readinessCheckListener.getHealthCheckerStatus()).isFalse();
         assertThat(readinessCheckListener.getHealthIndicatorStatus()).isTrue();
@@ -115,12 +125,14 @@ public class ReadinessCheckListenerTests {
     }
 
     @Test
-    public void healthIndicatorFail() {
+    public void healthIndicatorFail(CapturedOutput capturedOutput) {
         Mockito.doReturn(true).when(healthCheckerProcessor).readinessHealthCheck(anyMap());
         Mockito.doReturn(false).when(healthIndicatorProcessor).readinessHealthCheck(anyMap());
         readinessCheckListener.setApplicationContext(applicationContext);
         readinessCheckListener.readinessHealthCheck();
 
+        assertThat(capturedOutput.getOut()).contains(
+            "SOFA-BOOT-01-20000: Readiness check result: fail");
         Mockito.verify(readinessCheckCallbackProcessor, never()).readinessCheckCallback(anyMap());
         assertThat(readinessCheckListener.getHealthCheckerStatus()).isTrue();
         assertThat(readinessCheckListener.getHealthIndicatorStatus()).isFalse();
@@ -138,7 +150,7 @@ public class ReadinessCheckListenerTests {
     }
 
     @Test
-    public void healthCallbackFail() {
+    public void healthCallbackFail(CapturedOutput capturedOutput) {
         Mockito.doReturn(true).when(healthCheckerProcessor).readinessHealthCheck(anyMap());
         Mockito.doReturn(true).when(healthIndicatorProcessor).readinessHealthCheck(anyMap());
         Mockito.doReturn(false).when(readinessCheckCallbackProcessor)
@@ -146,6 +158,9 @@ public class ReadinessCheckListenerTests {
         readinessCheckListener.setApplicationContext(applicationContext);
         readinessCheckListener.readinessHealthCheck();
 
+        assertThat(capturedOutput.getOut()).contains("Invoking all readiness check callbacks...");
+        assertThat(capturedOutput.getOut()).contains(
+            "SOFA-BOOT-01-20000: Readiness check result: fail");
         assertThat(readinessCheckListener.getHealthCheckerStatus()).isTrue();
         assertThat(readinessCheckListener.getHealthIndicatorStatus()).isTrue();
         assertThat(readinessCheckListener.getHealthCallbackStatus()).isFalse();
