@@ -223,12 +223,10 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
             }
             Status status = health.getStatus();
             result = status.equals(Status.UP);
-            if (result) {
-                logger.info("HealthIndicator[{}] readiness check success.", beanId);
-            } else {
+            if (!result) {
                 logger.error(
                         ErrorCode.convert("01-21001",
-                        beanId, status, objectMapper.writeValueAsString(health.getDetails())));
+                                beanId, status, objectMapper.writeValueAsString(health.getDetails())));
             }
         } catch (TimeoutException e) {
             result = false;
