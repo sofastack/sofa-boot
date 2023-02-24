@@ -17,10 +17,13 @@
 package com.alipay.sofa.smoke.tests.tracer.sample;
 
 import com.alibaba.druid.pool.DruidDataSource;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
+import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
+import java.beans.PropertyVetoException;
 
 /**
  * @author huzijie
@@ -38,4 +41,35 @@ public class DataSourceConfiguration {
         dataSource.setDriverClassName("org.h2.Driver");
         return dataSource;
     }
+
+    @Bean
+    public org.apache.tomcat.jdbc.pool.DataSource tomcatDatasource() {
+        org.apache.tomcat.jdbc.pool.DataSource dataSource = new org.apache.tomcat.jdbc.pool.DataSource();
+        dataSource.setUrl("jdbc:h2:~/test");
+        dataSource.setUsername("sofa");
+        dataSource.setPassword("123456");
+        dataSource.setDriverClassName("org.h2.Driver");
+        return dataSource;
+    }
+
+    @Bean
+    public HikariDataSource hikariDataSource() {
+        HikariDataSource dataSource= new HikariDataSource();
+        dataSource.setJdbcUrl("jdbc:h2:~/test");
+        dataSource.setUsername("sofa");
+        dataSource.setPassword("123456");
+        dataSource.setDriverClassName("org.h2.Driver");
+        return dataSource;
+    }
+
+    @Bean
+    public ComboPooledDataSource comboPooledDataSource() throws PropertyVetoException {
+        ComboPooledDataSource dataSource= new ComboPooledDataSource();
+        dataSource.setJdbcUrl("jdbc:h2:~/test");
+        dataSource.setUser("sofa");
+        dataSource.setPassword("123456");
+        dataSource.setDriverClass("org.h2.Driver");
+        return dataSource;
+    }
+
 }

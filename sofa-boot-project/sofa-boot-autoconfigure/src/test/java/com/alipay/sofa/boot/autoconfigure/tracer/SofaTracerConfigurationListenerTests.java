@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.boot.tracer;
+package com.alipay.sofa.boot.autoconfigure.tracer;
 
 import com.alipay.common.tracer.core.configuration.SofaTracerConfiguration;
 import com.alipay.sofa.boot.listener.SpringCloudConfigListener;
@@ -71,6 +71,7 @@ public class SofaTracerConfigurationListenerTests {
         application.setWebApplicationType(WebApplicationType.NONE);
         Map<String, Object> props = new HashMap<>();
         application.setDefaultProperties(props);
+        application.addListeners(new SofaTracerConfigurationListener());
         assertThatThrownBy(application::run)
                 .hasMessageContaining("spring.application.name must be configured!");
     }

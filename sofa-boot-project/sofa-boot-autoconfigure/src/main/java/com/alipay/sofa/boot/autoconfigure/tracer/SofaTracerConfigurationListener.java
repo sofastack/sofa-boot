@@ -14,11 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.boot.tracer;
+package com.alipay.sofa.boot.autoconfigure.tracer;
 
-import com.alipay.common.tracer.core.appender.file.TimedRollingFileAppender;
 import com.alipay.common.tracer.core.configuration.SofaTracerConfiguration;
-import com.alipay.common.tracer.core.reporter.stat.manager.SofaTracerStatisticReporterManager;
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
 import org.springframework.boot.context.properties.bind.Bindable;
@@ -28,14 +26,9 @@ import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.Environment;
 import org.springframework.util.Assert;
-import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import static com.alipay.common.tracer.core.configuration.SofaTracerConfiguration.DEFAULT_LOG_RESERVE_DAY;
 
 /**
  * Parse SOFATracer Configuration in early stage.
@@ -49,11 +42,6 @@ public class SofaTracerConfigurationListener
                                             ApplicationListener<ApplicationEnvironmentPreparedEvent>,
                                             Ordered {
 
-    private static final boolean       IS_SPRING_CLOUD = ClassUtils
-                                                           .isPresent(
-                                                               "org.springframework.cloud.bootstrap.BootstrapConfiguration",
-                                                               null);
-
     private static final AtomicBoolean EXECUTED        = new AtomicBoolean(false);
 
     @Override
@@ -66,9 +54,9 @@ public class SofaTracerConfigurationListener
 
         // check spring.application.name
         String applicationName = environment
-            .getProperty(SofaTracerConfiguration.TRACER_APPNAME_KEY);
+            .getProperty(SofaBootConstants.APP_NAME_KEY);
         Assert.isTrue(StringUtils.hasText(applicationName),
-            SofaTracerConfiguration.TRACER_APPNAME_KEY + " must be configured!");
+                SofaBootConstants.APP_NAME_KEY + " must be configured!");
         SofaTracerConfiguration.setProperty(SofaTracerConfiguration.TRACER_APPNAME_KEY,
             applicationName);
 
@@ -128,112 +116,6 @@ public class SofaTracerConfigurationListener
         } else {
             return !((ConfigurableEnvironment) environment).getPropertySources().contains(
                 SofaBootConstants.SOFA_BOOTSTRAP);
-        }
-    }
-
-    static class SofaTracerProperties {
-
-        private String              disableDigestLog          = "false";
-
-        private Map<String, String> disableConfiguration      = new HashMap<>();
-
-        private String              tracerGlobalRollingPolicy = TimedRollingFileAppender.DAILY_ROLLING_PATTERN;
-
-        private String              tracerGlobalLogReserveDay = String
-                                                                  .valueOf(DEFAULT_LOG_RESERVE_DAY);
-
-        private String              statLogInterval           = String
-                                                                  .valueOf(SofaTracerStatisticReporterManager.DEFAULT_CYCLE_SECONDS);
-
-        private String              baggageMaxLength          = String
-                                                                  .valueOf(SofaTracerConfiguration.PEN_ATTRS_LENGTH_TRESHOLD);
-
-        private String              samplerName;
-
-        private float               samplerPercentage         = 100;
-
-        private String              samplerCustomRuleClassName;
-
-        private boolean             jsonOutput                = true;
-
-        public String getDisableDigestLog() {
-            return disableDigestLog;
-        }
-
-        public void setDisableDigestLog(String disableDigestLog) {
-            this.disableDigestLog = disableDigestLog;
-        }
-
-        public Map<String, String> getDisableConfiguration() {
-            return disableConfiguration;
-        }
-
-        public void setDisableConfiguration(Map<String, String> disableConfiguration) {
-            this.disableConfiguration = disableConfiguration;
-        }
-
-        public String getTracerGlobalRollingPolicy() {
-            return tracerGlobalRollingPolicy;
-        }
-
-        public void setTracerGlobalRollingPolicy(String tracerGlobalRollingPolicy) {
-            this.tracerGlobalRollingPolicy = tracerGlobalRollingPolicy;
-        }
-
-        public String getTracerGlobalLogReserveDay() {
-            return tracerGlobalLogReserveDay;
-        }
-
-        public void setTracerGlobalLogReserveDay(String tracerGlobalLogReserveDay) {
-            this.tracerGlobalLogReserveDay = tracerGlobalLogReserveDay;
-        }
-
-        public String getStatLogInterval() {
-            return statLogInterval;
-        }
-
-        public void setStatLogInterval(String statLogInterval) {
-            this.statLogInterval = statLogInterval;
-        }
-
-        public String getBaggageMaxLength() {
-            return baggageMaxLength;
-        }
-
-        public void setBaggageMaxLength(String baggageMaxLength) {
-            this.baggageMaxLength = baggageMaxLength;
-        }
-
-        public String getSamplerName() {
-            return samplerName;
-        }
-
-        public void setSamplerName(String samplerName) {
-            this.samplerName = samplerName;
-        }
-
-        public float getSamplerPercentage() {
-            return samplerPercentage;
-        }
-
-        public void setSamplerPercentage(float samplerPercentage) {
-            this.samplerPercentage = samplerPercentage;
-        }
-
-        public String getSamplerCustomRuleClassName() {
-            return samplerCustomRuleClassName;
-        }
-
-        public void setSamplerCustomRuleClassName(String samplerCustomRuleClassName) {
-            this.samplerCustomRuleClassName = samplerCustomRuleClassName;
-        }
-
-        public boolean isJsonOutput() {
-            return jsonOutput;
-        }
-
-        public void setJsonOutput(boolean jsonOutput) {
-            this.jsonOutput = jsonOutput;
         }
     }
 }

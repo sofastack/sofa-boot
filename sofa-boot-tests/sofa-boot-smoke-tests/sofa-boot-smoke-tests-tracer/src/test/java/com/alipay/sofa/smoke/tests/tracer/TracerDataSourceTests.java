@@ -22,21 +22,18 @@ package com.alipay.sofa.smoke.tests.tracer;
  */
 
 import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.sql.Connection;
-import java.sql.Statement;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -49,42 +46,65 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(classes = TracerSofaBootApplication.class)
 public class TracerDataSourceTests {
 
-    private final File logFile = new File(System.getProperty("user.dir")
+    private static final File logFile = new File(System.getProperty("user.dir")
                                           + "/logs/tracelog/datasource-client-digest.log");
 
     @Autowired
     @Qualifier("druidDataSource")
-    private DataSource dataSource;
+    private DataSource druidDataSource;
 
-    @Value("${spring.application.name}")
-    private String     appName;
+    @Autowired
+    @Qualifier("tomcatDatasource")
+    private DataSource tomcatDatasource;
+
+    @Autowired
+    @Qualifier("hikariDataSource")
+    private DataSource hikariDataSource;
+
+    @Autowired
+    @Qualifier("comboPooledDataSource")
+    private DataSource comboPooledDataSource;
+
+
+    @BeforeAll
+    public static void clearFile() {
+        FileUtils.deleteQuietly(logFile);
+    }
 
     @Test
     public void checkDruidDataSource() throws IOException {
-        Map<String, Object> result = invokeSql(dataSource);
-        assertThat(result.get("success")).isEqualTo(true);
-        //todo 优化日志校验
-        checkLogFile();
+        invokeSql(druidDataSource);
     }
 
-    private void checkLogFile() throws IOException {
+    @Test
+    public void checkTomcatDatasource() throws IOException {
+        invokeSql(tomcatDatasource);
+    }
+
+    @Test
+    public void checkHikariDataSource() throws IOException {
+        invokeSql(hikariDataSource);
+    }
+
+    @Test
+    public void checkComboPooledDataSource() throws IOException {
+        invokeSql(comboPooledDataSource);
+    }
+    private void invokeSql(DataSource dataSource) throws IOException {
+        String dataSourceName = dataSource.getClass().getName();
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+
+        jdbcTemplate.execute("DROP TABLE IF EXISTS TEST;");
+        jdbcTemplate.execute("CREATE TABLE TEST(ID INT PRIMARY KEY, NAME VARCHAR(255));");
+        jdbcTemplate.execute("INSERT INTO TEST(ID,NAME) VALUES(1, '" + dataSourceName +"');");
+        jdbcTemplate.query("SELECT * FROM TEST", rs -> {
+            int id = rs.getInt("id");
+            String name = rs.getString("name");
+            assertThat(id).isEqualTo(1);
+            assertThat(name).isEqualTo(dataSourceName);
+        });
+
         List<String> logs = FileUtils.readLines(logFile, StandardCharsets.UTF_8);
-        assertThat(logs).anyMatch(log -> log.contains(appName));
-    }
-
-    private Map<String, Object> invokeSql(DataSource dataSource) {
-        Map<String, Object> resultMap = new HashMap<>();
-        try {
-            Connection cn = dataSource.getConnection();
-            Statement st = cn.createStatement();
-            st.execute("DROP TABLE IF EXISTS TEST;"
-                       + "CREATE TABLE TEST(ID INT PRIMARY KEY, NAME VARCHAR(255));");
-            resultMap.put("success", true);
-            resultMap.put("result", "CREATE TABLE TEST(ID INT PRIMARY KEY, NAME VARCHAR(255))");
-        } catch (Throwable throwable) {
-            resultMap.put("success", false);
-            resultMap.put("error", throwable.getMessage());
-        }
-        return resultMap;
+        assertThat(logs).anyMatch(log -> log.contains(dataSourceName));
     }
 }
