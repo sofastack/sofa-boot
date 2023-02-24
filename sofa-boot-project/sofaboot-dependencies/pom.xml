@@ -21,7 +21,7 @@
 
         <!-- sofa stack lib-->
         <sofa.registry.version>6.1.8</sofa.registry.version>
-        <tracer.core.version>3.1.1</tracer.core.version>
+        <tracer.core.version>4.0.0-SNAPSHOT</tracer.core.version>
         <rpc.core.version>5.10.0-jdk17-SNAPSHOT</rpc.core.version>
         <sofa.common.tools.version>2.0.0-SNAPSHOT</sofa.common.tools.version>
         <sofa.bolt.version>1.6.6</sofa.bolt.version>
@@ -41,8 +41,7 @@
         <spring.cloud.stream.version>3.2.6</spring.cloud.stream.version>
         <rocketmq.spring.boot.starter.version>2.0.2</rocketmq.spring.boot.starter.version>
         <commons.io.version>2.4</commons.io.version>
-        <HikariCP.version>5.0.1</HikariCP.version>
-        <druid.version>1.0.12</druid.version>
+        <druid.version>1.2.16</druid.version>
         <c3p0.version>0.9.1.1</c3p0.version>
         <common.dbcp.version>1.4</common.dbcp.version>
         <resteasy.version>3.6.3.Final</resteasy.version>
@@ -484,12 +483,6 @@
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>${commons.io.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.zaxxer</groupId>
-                <artifactId>HikariCP</artifactId>
-                <version>${HikariCP.version}</version>
             </dependency>
 
             <dependency>

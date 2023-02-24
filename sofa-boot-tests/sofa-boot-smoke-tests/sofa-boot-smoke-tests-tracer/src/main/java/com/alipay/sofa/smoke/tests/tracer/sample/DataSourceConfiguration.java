@@ -43,6 +43,26 @@ public class DataSourceConfiguration {
     }
 
     @Bean
+    public org.apache.commons.dbcp.BasicDataSource dbcpDataSource() {
+        org.apache.commons.dbcp.BasicDataSource dataSource = new org.apache.commons.dbcp.BasicDataSource();
+        dataSource.setUrl("jdbc:h2:~/test");
+        dataSource.setUsername("sofa");
+        dataSource.setPassword("123456");
+        dataSource.setDriverClassName("org.h2.Driver");
+        return dataSource;
+    }
+
+    @Bean
+    public org.apache.commons.dbcp2.BasicDataSource dbcp2DataSource() {
+        org.apache.commons.dbcp2.BasicDataSource dataSource = new org.apache.commons.dbcp2.BasicDataSource();
+        dataSource.setUrl("jdbc:h2:~/test");
+        dataSource.setUsername("sofa");
+        dataSource.setPassword("123456");
+        dataSource.setDriverClassName("org.h2.Driver");
+        return dataSource;
+    }
+
+    @Bean
     public org.apache.tomcat.jdbc.pool.DataSource tomcatDatasource() {
         org.apache.tomcat.jdbc.pool.DataSource dataSource = new org.apache.tomcat.jdbc.pool.DataSource();
         dataSource.setUrl("jdbc:h2:~/test");

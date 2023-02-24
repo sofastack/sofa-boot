@@ -16,11 +16,6 @@
  */
 package com.alipay.sofa.smoke.tests.tracer;
 
-/**
- * @author huzijie
- * @version TracerDataSourceTests.java, v 0.1 2023年02月22日 2:31 PM huzijie Exp $
- */
-
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -54,6 +49,14 @@ public class TracerDataSourceTests {
     private DataSource druidDataSource;
 
     @Autowired
+    @Qualifier("dbcpDataSource")
+    private DataSource dbcpDataSource;
+
+    @Autowired
+    @Qualifier("dbcp2DataSource")
+    private DataSource dbcp2DataSource;
+
+    @Autowired
     @Qualifier("tomcatDatasource")
     private DataSource tomcatDatasource;
 
@@ -75,6 +78,16 @@ public class TracerDataSourceTests {
     public void checkDruidDataSource() throws IOException {
         invokeSql(druidDataSource);
     }
+    @Test
+    public void checkDbcpDataSource() throws IOException {
+        invokeSql(dbcpDataSource);
+    }
+
+    @Test
+    public void checkDbcp2DataSource() throws IOException {
+        invokeSql(dbcp2DataSource);
+    }
+
 
     @Test
     public void checkTomcatDatasource() throws IOException {
