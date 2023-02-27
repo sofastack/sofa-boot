@@ -94,7 +94,6 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager, Applicati
      */
     @Override
     public void shutdown() throws ServiceRuntimeException {
-        //todo this bean should be the last destroy bean in root context
         try {
             for (RuntimeShutdownAware shutdownAware : runtimeShutdownAwareList) {
                 shutdownAware.shutdown();

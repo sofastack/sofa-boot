@@ -63,7 +63,6 @@ public class TracerDataSourceTests {
     public void checkDruidDataSource() throws IOException {
         Map<String, Object> result = invokeSql(dataSource);
         assertThat(result.get("success")).isEqualTo(true);
-        //todo 优化日志校验
         checkLogFile();
     }
 

@@ -31,6 +31,10 @@ import org.springframework.util.ClassUtils;
  */
 public class SofaBootEnvUtils {
 
+    public static final String  LOCAL_ENV_KEY            = "sofa.boot.useLocalEnv";
+
+    public static final String  INTELLIJ_IDE_MAIN_CLASS  = "com.intellij.rt.execution.application.AppMainV2";
+
     private static final String SPRING_CLOUD_MARK_NAME   = "org.springframework.cloud.bootstrap.BootstrapConfiguration";
 
     private static final String ARK_BIZ_CLASSLOADER_NAME = "com.alipay.sofa.ark.container.service.classloader.BizClassLoader";
@@ -61,9 +65,12 @@ public class SofaBootEnvUtils {
     }
 
     private static void initLocalEnv() {
+        if (Boolean.getBoolean(LOCAL_ENV_KEY)) {
+            LOCAL_ENV = true;
+            return;
+        }
         try {
-            //todo 更严谨的判断方式
-            Class.forName("com.intellij.rt.execution.application.AppMainV2");
+            Class.forName(INTELLIJ_IDE_MAIN_CLASS);
             LOCAL_ENV = true;
         } catch (ClassNotFoundException e) {
             LOCAL_ENV = false;
