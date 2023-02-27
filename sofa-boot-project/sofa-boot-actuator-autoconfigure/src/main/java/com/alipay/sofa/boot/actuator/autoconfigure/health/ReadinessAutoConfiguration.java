@@ -59,7 +59,7 @@ public class ReadinessAutoConfiguration {
     public ReadinessCheckListener readinessCheckListener(HealthCheckerProcessor healthCheckerProcessor,
                                                          HealthIndicatorProcessor healthIndicatorProcessor,
                                                          ReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor,
-                                                         ThreadPoolExecutor healthCheckExecutor,
+                                                         ThreadPoolExecutor readinessHealthCheckExecutor,
                                                          HealthProperties healthCheckProperties) {
         ReadinessCheckListener readinessCheckListener = new ReadinessCheckListener(
             healthCheckerProcessor, healthIndicatorProcessor, afterReadinessCheckCallbackProcessor);
@@ -71,16 +71,16 @@ public class ReadinessAutoConfiguration {
         readinessCheckListener.setSkipHealthChecker(healthCheckProperties.isSkipHealthChecker());
         readinessCheckListener
             .setSkipHealthIndicator(healthCheckProperties.isSkipHealthIndicator());
-        readinessCheckListener.setHealthCheckExecutor(healthCheckExecutor);
+        readinessCheckListener.setHealthCheckExecutor(readinessHealthCheckExecutor);
         return readinessCheckListener;
     }
 
     @Bean
     @ConditionalOnMissingBean
     public HealthCheckerProcessor healthCheckerProcessor(HealthProperties healthCheckProperties,
-                                                         ThreadPoolExecutor healthCheckExecutor) {
+                                                         ThreadPoolExecutor readinessHealthCheckExecutor) {
         HealthCheckerProcessor healthCheckerProcessor = new HealthCheckerProcessor();
-        healthCheckerProcessor.setHealthCheckExecutor(healthCheckExecutor);
+        healthCheckerProcessor.setHealthCheckExecutor(readinessHealthCheckExecutor);
         healthCheckerProcessor.setParallelCheck(healthCheckProperties.isParallelCheck());
         healthCheckerProcessor.setParallelCheckTimeout(healthCheckProperties
             .getParallelCheckTimeout());
@@ -94,9 +94,9 @@ public class ReadinessAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public HealthIndicatorProcessor healthIndicatorProcessor(HealthProperties healthCheckProperties,
-                                                             ThreadPoolExecutor healthCheckExecutor) {
+                                                             ThreadPoolExecutor readinessHealthCheckExecutor) {
         HealthIndicatorProcessor healthIndicatorProcessor = new HealthIndicatorProcessor();
-        healthIndicatorProcessor.setHealthCheckExecutor(healthCheckExecutor);
+        healthIndicatorProcessor.setHealthCheckExecutor(readinessHealthCheckExecutor);
         healthIndicatorProcessor.initExcludedIndicators(healthCheckProperties
             .getExcludedIndicators());
         healthIndicatorProcessor.setParallelCheck(healthCheckProperties.isParallelCheck());
@@ -122,9 +122,9 @@ public class ReadinessAutoConfiguration {
         return new SofaBootHealthIndicator(healthCheckerProcessor, readinessCheckListener);
     }
 
-    @Bean
-    @ConditionalOnMissingBean
-    public ThreadPoolExecutor healthCheckExecutor(HealthProperties properties) {
+    @Bean(name = ReadinessCheckListener.READINESS_HEALTH_CHECK_EXECUTOR_BEAN_NAME)
+    @ConditionalOnMissingBean(name = ReadinessCheckListener.READINESS_HEALTH_CHECK_EXECUTOR_BEAN_NAME)
+    public ThreadPoolExecutor readinessHealthCheckExecutor(HealthProperties properties) {
         int threadPoolSize;
         if (properties.isParallelCheck()) {
             threadPoolSize = SofaBootConstants.CPU_CORE * 5;
