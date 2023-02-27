@@ -35,7 +35,6 @@ public class StartupEndPoint {
 
     public StartupEndPoint(StartupReporter startupReporter) {
         this.startupReporter = startupReporter;
-        this.startupReporter.setStoreStatics(true);
     }
 
     @ReadOperation
