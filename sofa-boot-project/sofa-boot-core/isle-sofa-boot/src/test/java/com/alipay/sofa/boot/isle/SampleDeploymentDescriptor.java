@@ -58,6 +58,7 @@ public class SampleDeploymentDescriptor extends AbstractDeploymentDescriptor {
 
     @Override
     protected void loadSpringXMLs() {
-        this.springResources.put("sample", new ByteArrayResource(new byte[] {}));
+        this.springResources.put(properties.getProperty("xmlName", "sample"),
+            new ByteArrayResource(new byte[] {}));
     }
 }

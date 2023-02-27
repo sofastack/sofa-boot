@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Objects;
 import java.util.Properties;
 
 /**
@@ -56,6 +57,8 @@ public class ModelCreatingStage extends AbstractPipelineStage {
     protected final List<String>          ignoreCalculateRequireModules = new ArrayList<>();
 
     protected DeploymentDescriptorFactory deploymentDescriptorFactory   = new DeploymentDescriptorFactory();
+
+    protected boolean                     allowModuleOverriding;
 
     @Override
     protected void doProcess() throws Exception {
@@ -114,7 +117,9 @@ public class ModelCreatingStage extends AbstractPipelineStage {
         for (DeploymentDescriptor dd : deploymentDescriptors) {
             if (application.isModuleDeployment(dd) && !ignoreModules.contains(dd.getModuleName())) {
                 if (application.acceptModule(dd)) {
-                    validateDuplicateModule(application.addDeployment(dd), dd);
+                    if (validateDuplicateModule(dd)) {
+                        application.addDeployment(dd);
+                    }
                 } else {
                     application.addInactiveDeployment(dd);
                 }
@@ -122,12 +127,19 @@ public class ModelCreatingStage extends AbstractPipelineStage {
         }
     }
 
-    protected void validateDuplicateModule(DeploymentDescriptor exist, DeploymentDescriptor dd)
-                                                                                               throws DeploymentException {
-        if (exist != null) {
-            throw new DeploymentException(ErrorCode.convert("01-11006", dd.getModuleName(),
-                exist.getName(), dd.getName()));
+    protected boolean validateDuplicateModule(DeploymentDescriptor dd) throws DeploymentException {
+        DeploymentDescriptor exist = application.getDeploymentByName(dd.getModuleName());
+        if (exist == null) {
+            return true;
         }
+        if (Objects.equals(dd.getSpringResources(), exist.getSpringResources())) {
+            return false;
+        }
+        if (allowModuleOverriding) {
+            return true;
+        }
+        throw new DeploymentException(ErrorCode.convert("01-11006", dd.getModuleName(),
+            exist.getName(), dd.getName()));
     }
 
     protected void outputModulesMessage() throws DeploymentException {
@@ -210,6 +222,14 @@ public class ModelCreatingStage extends AbstractPipelineStage {
 
     public List<String> getIgnoreCalculateRequireModules() {
         return ignoreCalculateRequireModules;
+    }
+
+    public boolean isAllowModuleOverriding() {
+        return allowModuleOverriding;
+    }
+
+    public void setAllowModuleOverriding(boolean allowModuleOverriding) {
+        this.allowModuleOverriding = allowModuleOverriding;
     }
 
     @Override

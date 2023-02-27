@@ -103,6 +103,7 @@ public class SofaModuleAutoConfiguration {
         ModelCreatingStage modelCreatingStage = new ModelCreatingStage();
         sofaModuleProperties.getIgnoreModules().forEach(modelCreatingStage::addIgnoreModule);
         sofaModuleProperties.getIgnoreCalculateRequireModules().forEach(modelCreatingStage::addIgnoredCalculateRequireModule);
+        modelCreatingStage.setAllowModuleOverriding(sofaModuleProperties.isAllowModuleOverriding());
         modelCreatingStage.setApplicationRuntimeModel(applicationRuntimeModel);
         return modelCreatingStage;
     }

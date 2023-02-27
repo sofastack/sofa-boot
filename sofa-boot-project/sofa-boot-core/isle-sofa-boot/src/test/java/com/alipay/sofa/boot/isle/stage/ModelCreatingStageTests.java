@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Tests for {@link ModelCreatingStage}.
@@ -54,15 +54,34 @@ public class ModelCreatingStageTests {
 
     @Test
     public void duplicatedModule() {
+        List<DeploymentDescriptor> deploymentDescriptorList = new ArrayList<>();
         Properties props = new Properties();
         props.setProperty(DeploymentDescriptorConfiguration.MODULE_NAME, "com.alipay.test");
-        List<DeploymentDescriptor> deploymentDescriptorList = new ArrayList<>();
         deploymentDescriptorList.add(SampleDeploymentDescriptor.create(props));
+
+        props = new Properties();
+        props.setProperty(DeploymentDescriptorConfiguration.MODULE_NAME, "com.alipay.test");
+        props.setProperty("xmlName", "com.alipay.test");
         deploymentDescriptorList.add(SampleDeploymentDescriptor.create(props));
 
         assertThatThrownBy(() -> stage.addDeploymentDescriptors(deploymentDescriptorList))
                 .isInstanceOf(DeploymentException.class)
                 .hasMessageContaining("11006");
+    }
+
+    @Test
+    public void duplicatedModuleUseSampleXml() {
+        List<DeploymentDescriptor> deploymentDescriptorList = new ArrayList<>();
+        Properties props = new Properties();
+        props.setProperty(DeploymentDescriptorConfiguration.MODULE_NAME, "com.alipay.test");
+        deploymentDescriptorList.add(SampleDeploymentDescriptor.create(props));
+
+        props = new Properties();
+        props.setProperty(DeploymentDescriptorConfiguration.MODULE_NAME, "com.alipay.test");
+        deploymentDescriptorList.add(SampleDeploymentDescriptor.create(props));
+
+        Throwable throwable = catchThrowable(() -> stage.addDeploymentDescriptors(deploymentDescriptorList));
+        assertThat(throwable).isNull();
     }
 
     @Test

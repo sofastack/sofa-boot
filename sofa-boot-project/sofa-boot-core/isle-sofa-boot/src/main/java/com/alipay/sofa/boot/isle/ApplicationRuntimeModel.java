@@ -99,13 +99,8 @@ public class ApplicationRuntimeModel implements IsleDeploymentModel {
         return deployRegistry;
     }
 
-    public DeploymentDescriptor getDeploymentByName(String springParent) {
-        return deploymentMap.get(springParent);
-    }
-
-    @Deprecated
-    public DeploymentDescriptor getSpringPoweredDeployment(String springParent) {
-        return deploymentMap.get(springParent);
+    public DeploymentDescriptor getDeploymentByName(String moduleName) {
+        return deploymentMap.get(moduleName);
     }
 
     public void addFailed(DeploymentDescriptor failed) {

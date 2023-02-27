@@ -46,6 +46,11 @@ public class SofaModuleProperties {
     private List<String> ignoreCalculateRequireModules = new ArrayList<>();
 
     /**
+     * Allow duplicate name sofa module.
+     */
+    private boolean      allowModuleOverriding         = false;
+
+    /**
      * Allow bean definition override in sofa module application contexts.
      */
     private boolean      allowBeanDefinitionOverriding = false;
@@ -107,6 +112,14 @@ public class SofaModuleProperties {
 
     public void setIgnoreCalculateRequireModules(List<String> ignoreCalculateRequireModules) {
         this.ignoreCalculateRequireModules = ignoreCalculateRequireModules;
+    }
+
+    public boolean isAllowModuleOverriding() {
+        return allowModuleOverriding;
+    }
+
+    public void setAllowModuleOverriding(boolean allowModuleOverriding) {
+        this.allowModuleOverriding = allowModuleOverriding;
     }
 
     public boolean isAllowBeanDefinitionOverriding() {
