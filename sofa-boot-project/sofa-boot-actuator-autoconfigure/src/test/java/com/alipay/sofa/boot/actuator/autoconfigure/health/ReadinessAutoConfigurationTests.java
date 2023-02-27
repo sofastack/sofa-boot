@@ -142,7 +142,7 @@ public class ReadinessAutoConfigurationTests {
                     assertThat(context.getBean(HealthCheckerProcessor.class).getParallelCheckTimeout()).isEqualTo(30000);
                     assertThat(context.getBean(HealthIndicatorProcessor.class).isParallelCheck()).isFalse();
                     assertThat(context.getBean(HealthIndicatorProcessor.class).getParallelCheckTimeout()).isEqualTo(30000);
-                    assertThat(context.getBean("healthCheckExecutor", ThreadPoolExecutor.class).getMaximumPoolSize()).isEqualTo(1);
+                    assertThat(context.getBean(ReadinessCheckListener.READINESS_HEALTH_CHECK_EXECUTOR_BEAN_NAME, ThreadPoolExecutor.class).getMaximumPoolSize()).isEqualTo(1);
                 });
     }
 
