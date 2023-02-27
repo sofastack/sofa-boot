@@ -60,7 +60,7 @@ public class ReadinessAutoConfigurationTests {
                         .hasSingleBean(HealthIndicatorProcessor.class)
                         .hasSingleBean(ReadinessCheckCallbackProcessor.class)
                         .hasSingleBean(SofaBootHealthIndicator.class)
-                        .hasBean("healthCheckExecutor"));
+                        .hasBean(ReadinessCheckListener.READINESS_HEALTH_CHECK_EXECUTOR_BEAN_NAME));
     }
 
     @Test
@@ -73,7 +73,7 @@ public class ReadinessAutoConfigurationTests {
                         .doesNotHaveBean(HealthIndicatorProcessor.class)
                         .doesNotHaveBean(ReadinessCheckCallbackProcessor.class)
                         .doesNotHaveBean(SofaBootHealthIndicator.class)
-                        .doesNotHaveBean("healthCheckExecutor"));
+                        .doesNotHaveBean(ReadinessCheckListener.READINESS_HEALTH_CHECK_EXECUTOR_BEAN_NAME));
     }
 
     @Test
