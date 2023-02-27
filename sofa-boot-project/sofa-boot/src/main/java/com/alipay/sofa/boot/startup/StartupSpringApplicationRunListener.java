@@ -128,18 +128,6 @@ public class StartupSpringApplicationRunListener implements SpringApplicationRun
         startupReporter.addCommonStartupStat(applicationContextPrepareStage);
         startupReporter.addCommonStartupStat(applicationContextLoadStage);
         startupReporter.applicationBootFinish();
-
-        // print log
-        printLog(startupReporter.report());
-
-        // clear statics when doesn't need store
-        if (!startupReporter.isStoreStatics()) {
-            startupReporter.clear();
-        }
-    }
-
-    private void printLog(StartupReporter.StartupStaticsModel report) {
-        //todo 打印耗时日志
     }
 
     @Override

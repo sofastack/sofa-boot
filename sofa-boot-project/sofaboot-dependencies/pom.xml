@@ -375,6 +375,20 @@
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>sofa-ark-common</artifactId>
                 <version>${sofa.ark.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.alipay.sofa</groupId>
+                        <artifactId>log-sofa-boot-starter</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>ch.qos.logback</groupId>
+                        <artifactId>logback-classic</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>ch.qos.logback</groupId>
+                        <artifactId>logback-core</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>
@@ -382,16 +396,11 @@
                 <artifactId>sofa-ark-tools</artifactId>
                 <version>${sofa.ark.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>sofa-ark-api</artifactId>
                 <version>${sofa.ark.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.alipay.sofa</groupId>
-                        <artifactId>log-sofa-boot-starter</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
 
             <dependency>

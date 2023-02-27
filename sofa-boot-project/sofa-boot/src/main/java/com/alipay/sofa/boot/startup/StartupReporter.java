@@ -34,8 +34,6 @@ public class StartupReporter {
 
     private final StartupStaticsModel startupStaticsModel;
 
-    private boolean                   storeStatics  = false;
-
     private int                       costThreshold = 100;
 
     public StartupReporter() {
@@ -100,18 +98,6 @@ public class StartupReporter {
         return startupStaticsModel;
     }
 
-    public void clear() {
-        startupStaticsModel.clear();
-    }
-
-    public boolean isStoreStatics() {
-        return storeStatics;
-    }
-
-    public void setStoreStatics(boolean storeStatics) {
-        this.storeStatics = storeStatics;
-    }
-
     public int getCostThreshold() {
         return costThreshold;
     }
@@ -156,11 +142,6 @@ public class StartupReporter {
 
         public void setStageStats(List<BaseStat> stageStats) {
             this.stageStats = stageStats;
-        }
-
-        // todo clear all date
-        public void clear() {
-
         }
     }
 }
