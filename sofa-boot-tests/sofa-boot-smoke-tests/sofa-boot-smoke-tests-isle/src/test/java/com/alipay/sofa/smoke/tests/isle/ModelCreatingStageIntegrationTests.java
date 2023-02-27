@@ -36,10 +36,11 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @version ModelCreatingStageIntegrationTests.java, v 0.1 2023年02月21日 8:37 PM huzijie Exp $
  */
 @SpringBootTest(classes = IsleSofaBootApplication.class)
-@AddCustomJar({ "sample-module", "miss-module", "fail-module" })
+@AddCustomJar({ "sample-module", "sample-module", "miss-module", "fail-module", "duplicate-module" })
 @TestPropertySource(properties = {
                                   "sofa.boot.isle.ignoreCalculateRequireModules=com.alipay.sofa.miss",
-                                  "sofa.boot.isle.ignoreModules=com.alipay.sofa.fail" })
+                                  "sofa.boot.isle.ignoreModules=com.alipay.sofa.fail",
+                                  "sofa.boot.isle.allowModuleOverriding=true" })
 public class ModelCreatingStageIntegrationTests {
 
     @Autowired
@@ -48,7 +49,7 @@ public class ModelCreatingStageIntegrationTests {
     @Test
     public void verifyRuntimeModel() {
         // contains 2 Deployments
-        assertThat(applicationRuntimeModel.getAllDeployments().size()).isEqualTo(2);
+        assertThat(applicationRuntimeModel.getAllDeployments().size()).isEqualTo(3);
         assertThat(applicationRuntimeModel.getInstalled().size()).isEqualTo(2);
         assertThat(applicationRuntimeModel.getFailed().size()).isEqualTo(0);
 
@@ -57,7 +58,7 @@ public class ModelCreatingStageIntegrationTests {
         DeploymentDescriptor sample = deploymentDescriptors.stream().filter(deploymentDescriptor ->
                 deploymentDescriptor.getModuleName().equals("com.alipay.sofa.sample")).findFirst().get();
         assertThat(sample.getSpringResources().size()).isEqualTo(1);
-        assertThat(sample.getInstalledSpringXml()).allMatch(s -> s.contains("sample-module") && s.contains("service.xml"));
+        assertThat(sample.getInstalledSpringXml()).allMatch(s -> s.contains("duplicate-module") && s.contains("service.xml"));
 
         DeploymentDescriptor miss = deploymentDescriptors.stream().filter(deploymentDescriptor ->
                 deploymentDescriptor.getModuleName().equals("com.alipay.sofa.miss")).findFirst().get();

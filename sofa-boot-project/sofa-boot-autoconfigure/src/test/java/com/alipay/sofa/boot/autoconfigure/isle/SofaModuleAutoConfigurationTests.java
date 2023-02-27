@@ -175,10 +175,12 @@ public class SofaModuleAutoConfigurationTests {
         this.contextRunner
                 .withPropertyValues("sofa.boot.isle.ignoreModules=a,b,c")
                 .withPropertyValues("sofa.boot.isle.ignoreCalculateRequireModules=e,f,g")
+                .withPropertyValues("sofa.boot.isle.allowModuleOverriding=true")
                 .run((context) -> {
                     ModelCreatingStage modelCreatingStage = context.getBean(ModelCreatingStage.class);
                     assertThat(modelCreatingStage.getIgnoreModules()).contains("a", "b", "c");
                     assertThat(modelCreatingStage.getIgnoreCalculateRequireModules()).contains("e", "f", "g");
+                    assertThat(modelCreatingStage.isAllowModuleOverriding()).isTrue();
                 });
     }
 }
