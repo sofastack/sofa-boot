@@ -53,19 +53,22 @@ import java.util.stream.Collectors;
 public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
                                    GenericApplicationListener, StartupReporterAware {
 
-    private static final Logger                   logger                              = SofaBootLoggerFactory
-                                                                                          .getLogger(ReadinessCheckListener.class);
+    private static final Logger                   logger                                    = SofaBootLoggerFactory
+                                                                                                .getLogger(ReadinessCheckListener.class);
 
-    public static final String                    READINESS_CHECK_STAGE               = "ReadinessCheckStage";
+    public static final String                    READINESS_CHECK_STAGE                     = "ReadinessCheckStage";
+
+    public static final String                    READINESS_HEALTH_CHECK_EXECUTOR_BEAN_NAME = "readinessHealthCheckExecutor";
+
     /**
      * health check not ready result key
      */
-    public static final String                    HEALTH_CHECK_NOT_READY_KEY          = "HEALTH-CHECK-NOT-READY";
+    public static final String                    HEALTH_CHECK_NOT_READY_KEY                = "HEALTH-CHECK-NOT-READY";
 
     /**
      * health check not ready result
      */
-    public static final String                    HEALTH_CHECK_NOT_READY_MSG          = "App is still in startup process, please try later!";
+    public static final String                    HEALTH_CHECK_NOT_READY_MSG                = "App is still in startup process, please try later!";
 
     /**
      * processor for {@link HealthChecker}
@@ -85,43 +88,43 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
     /**
      * Check result for healthCheckerProcessor
      */
-    private boolean                               healthCheckerStatus                 = true;
+    private boolean                               healthCheckerStatus                       = true;
 
     /**
      * Check result details for healthCheckerProcessor
      */
-    private final Map<String, Health>             healthCheckerDetails                = new HashMap<>();
+    private final Map<String, Health>             healthCheckerDetails                      = new HashMap<>();
 
     /**
      * Check result for healthIndicatorProcessor
      */
-    private boolean                               healthIndicatorStatus               = true;
+    private boolean                               healthIndicatorStatus                     = true;
 
     /**
      * Check result for healthIndicatorProcessor
      */
-    private final Map<String, Health>             healthIndicatorDetails              = new HashMap<>();
+    private final Map<String, Health>             healthIndicatorDetails                    = new HashMap<>();
 
     /**
      * Check result for readinessCheckCallbackProcessor
      */
-    private boolean                               healthCallbackStatus                = true;
+    private boolean                               healthCallbackStatus                      = true;
 
     /**
      * Check result details for readinessCheckCallbackProcessor
      */
-    private final Map<String, Health>             healthCallbackDetails               = new HashMap<>();
+    private final Map<String, Health>             healthCallbackDetails                     = new HashMap<>();
 
     /**
      * ReadinessCheckCallbackProcessor trigger status
      */
-    private final AtomicBoolean                   readinessCallbackTriggered          = new AtomicBoolean(
-                                                                                          false);
+    private final AtomicBoolean                   readinessCallbackTriggered                = new AtomicBoolean(
+                                                                                                false);
 
     /**
      * Readiness check finish status
      */
-    private boolean                               readinessCheckFinish                = false;
+    private boolean                               readinessCheckFinish                      = false;
 
     /**
      * Readiness check result
@@ -132,15 +135,15 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
 
     private StartupReporter                       startupReporter;
 
-    private boolean                               skipAll                             = false;
+    private boolean                               skipAll                                   = false;
 
-    private boolean                               skipHealthChecker                   = false;
+    private boolean                               skipHealthChecker                         = false;
 
-    private boolean                               skipHealthIndicator                 = false;
+    private boolean                               skipHealthIndicator                       = false;
 
-    private boolean                               manualReadinessCallback             = false;
+    private boolean                               manualReadinessCallback                   = false;
 
-    private boolean                               throwExceptionWhenHealthCheckFailed = false;
+    private boolean                               throwExceptionWhenHealthCheckFailed       = false;
 
     private ThreadPoolExecutor                    healthCheckExecutor;
 
