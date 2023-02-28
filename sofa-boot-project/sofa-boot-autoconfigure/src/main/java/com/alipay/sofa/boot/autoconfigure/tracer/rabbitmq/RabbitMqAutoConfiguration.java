@@ -40,7 +40,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 @AutoConfiguration(after = RabbitAutoConfiguration.class)
 @ConditionalOnClass({ Message.class, RabbitTemplate.class, SofaTracerSendMessageAspect.class,
                      RabbitMqBeanPostProcessor.class })
-@ConditionalOnProperty(name = "sofa.boot.tracer.rabbitmq.enabled", havingValue = "enable", matchIfMissing = true)
+@ConditionalOnProperty(name = "sofa.boot.tracer.rabbitmq.enabled", havingValue = "true", matchIfMissing = true)
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 public class RabbitMqAutoConfiguration {
 
