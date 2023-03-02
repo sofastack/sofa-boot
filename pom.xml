@@ -37,6 +37,10 @@
     <properties>
         <revision>4.0.0-SNAPSHOT</revision>
         <sofa.boot.version>${revision}</sofa.boot.version>
+        <!--project-->
+        <java.version>17</java.version>
+        <project.encoding>UTF-8</project.encoding>
+        <project.build.encoding>UTF-8</project.build.encoding>
         <!--maven plugin-->
         <maven.staging.plugin>1.6.7</maven.staging.plugin>
         <maven.gpg.pluign>1.6</maven.gpg.pluign>
@@ -53,6 +57,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>flatten-maven-plugin</artifactId>
+                <version>${flatten-maven-plugin.version}</version>
                 <configuration>
                     <updatePomFile>true</updatePomFile>
                     <flattenMode>resolveCiFriendliesOnly</flattenMode>
@@ -75,25 +80,6 @@
                 </executions>
             </plugin>
         </plugins>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>com.alipay.sofa</groupId>
-                    <artifactId>sofa-ark-maven-plugin</artifactId>
-                    <version>${sofa.ark.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>com.alipay.sofa</groupId>
-                    <artifactId>sofa-ark-plugin-maven-plugin</artifactId>
-                    <version>${sofa.ark.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>flatten-maven-plugin</artifactId>
-                    <version>${flatten-maven-plugin.version}</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
     </build>
 
     <profiles>
