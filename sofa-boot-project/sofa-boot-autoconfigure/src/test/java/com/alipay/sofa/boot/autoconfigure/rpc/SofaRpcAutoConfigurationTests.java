@@ -199,17 +199,17 @@ public class SofaRpcAutoConfigurationTests {
 
     @Configuration(proxyBeanMethods = false)
     @ConditionalOnClass(Swagger.class)
-    @ConditionalOnSwitch(value = "testSwagger", matchIfMissing = true)
+    @ConditionalOnSwitch(value = "testSwagger")
     static class SwaggerTestConfiguration {
 
         @Bean
-        @ConditionalOnSwitch(matchIfMissing = true)
+        @ConditionalOnSwitch
         public ApplicationListener<ApplicationStartedEvent> swaggerServiceListener(SofaRuntimeManager sofaRuntimeManager) {
             return new SwaggerServiceApplicationListener(sofaRuntimeManager);
         }
 
         @Bean
-        @ConditionalOnSwitch(matchIfMissing = true)
+        @ConditionalOnSwitch
         public ApplicationListener<ApplicationStartedEvent> boltSwaggerListener(SofaRuntimeManager sofaRuntimeManager) {
             return new BoltSwaggerServiceApplicationListener(sofaRuntimeManager);
         }

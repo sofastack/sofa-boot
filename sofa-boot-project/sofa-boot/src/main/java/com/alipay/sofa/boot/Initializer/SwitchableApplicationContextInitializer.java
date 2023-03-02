@@ -18,6 +18,7 @@ package com.alipay.sofa.boot.Initializer;
 
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 /**
@@ -47,17 +48,29 @@ public abstract class SwitchableApplicationContextInitializer
     /**
      * start with :sofa.boot.switch.initializer
      *
-     * @return
+     * @return switch key, must not be null.
      */
     protected abstract String switchKey();
 
+    /**
+     * Specify if the condition should match if the property is not set. Defaults to
+     * {@code true}.
+     *
+     * @return if the condition should match if the property is missing
+     */
+    protected boolean matchIfMissing() {
+        return true;
+    }
+
     protected boolean isEnable(ConfigurableApplicationContext applicationContext) {
-        String realKey = switchKey() + ".enabled";
+        String switchKey = switchKey();
+        Assert.hasText(switchKey, "switch key must has text.");
+        String realKey = CONFIG_KEY_PREFIX + switchKey + ".enabled";
         String switchStr = applicationContext.getEnvironment().getProperty(realKey);
         if (StringUtils.hasText(switchStr)) {
             return Boolean.parseBoolean(switchStr);
         } else {
-            return true;
+            return matchIfMissing();
         }
     }
 }

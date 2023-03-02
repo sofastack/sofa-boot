@@ -27,6 +27,7 @@ import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ApplicationContextEvent;
 import org.springframework.core.env.Environment;
+import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 /**
@@ -39,7 +40,7 @@ public abstract class SwitchableApplicationListener<E extends ApplicationEvent>
                                                                                 implements
                                                                                 ApplicationListener<E> {
 
-    protected static final String CONFIG_KEY_PREFIX = "sofa.boot.switch.initializer.";
+    protected static final String CONFIG_KEY_PREFIX = "sofa.boot.switch.listener.";
 
     @Override
     public void onApplicationEvent(E event) {
@@ -77,17 +78,29 @@ public abstract class SwitchableApplicationListener<E extends ApplicationEvent>
     /**
      * sofa.boot.switch.listener
      *
-     * @return
+     * @return switch key, must not be null.
      */
     protected abstract String switchKey();
 
+    /**
+     * Specify if the condition should match if the property is not set. Defaults to
+     * {@code true}.
+     *
+     * @return if the condition should match if the property is missing
+     */
+    protected boolean matchIfMissing() {
+        return true;
+    }
+
     protected boolean isEnable(Environment environment) {
-        String realKey = switchKey() + ".enabled";
+        String switchKey = switchKey();
+        Assert.hasText(switchKey, "switch key must has text.");
+        String realKey = CONFIG_KEY_PREFIX + switchKey+ ".enabled";
         String switchStr = environment.getProperty(realKey);
         if (StringUtils.hasText(switchStr)) {
             return Boolean.parseBoolean(switchStr);
         } else {
-            return true;
+            return matchIfMissing();
         }
     }
 }

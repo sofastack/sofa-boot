@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.boot.autoconfigure.rpc;
 
+import com.alipay.sofa.boot.autoconfigure.condition.ConditionalOnSwitch;
 import com.alipay.sofa.boot.autoconfigure.rpc.SofaRpcAutoConfiguration.RegistryConfigurationImportSelector;
 import com.alipay.sofa.boot.autoconfigure.runtime.SofaRuntimeAutoConfiguration;
 import com.alipay.sofa.boot.constant.SofaBootConstants;
@@ -37,6 +38,7 @@ import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ProcessorContainer;
 import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ProviderConfigProcessor;
 import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ProviderRegisterProcessor;
 import com.alipay.sofa.rpc.common.SofaOptions;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -77,6 +79,7 @@ public class SofaRpcAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
+    @ConditionalOnSwitch(value = "rpcFaultToleranceConfigurator")
     public FaultToleranceConfigurator faultToleranceConfigurator(SofaBootRpcProperties sofaBootRpcProperties,
                                                                  Environment environment) {
         FaultToleranceConfigurator faultToleranceConfigurator = new FaultToleranceConfigurator();
@@ -219,6 +222,7 @@ public class SofaRpcAutoConfiguration {
     }
 
     @Bean(name = "registryConfigMap")
+    @ConditionalOnMissingBean(name = "registryConfigMap")
     public Map<String, RegistryConfigureProcessor> configureProcessorMap(List<RegistryConfigureProcessor> processorList) {
         Map<String, RegistryConfigureProcessor> map = new HashMap<>();
         for (RegistryConfigureProcessor processor : processorList) {
@@ -250,12 +254,12 @@ public class SofaRpcAutoConfiguration {
     @ConditionalOnMissingBean
     public SofaBootRpcStartListener sofaBootRpcStartListener(SofaBootRpcProperties sofaBootRpcProperties,
                                                              ProviderConfigContainer providerConfigContainer,
-                                                             FaultToleranceConfigurator faultToleranceConfigurator,
+                                                             ObjectProvider<FaultToleranceConfigurator> faultToleranceConfigurator,
                                                              ServerConfigContainer serverConfigContainer,
                                                              RegistryConfigContainer registryConfigContainer) {
         SofaBootRpcStartListener rpcStartListener = new SofaBootRpcStartListener(
-            providerConfigContainer, faultToleranceConfigurator, serverConfigContainer,
-            registryConfigContainer);
+            providerConfigContainer, faultToleranceConfigurator.getIfUnique(),
+            serverConfigContainer, registryConfigContainer);
         rpcStartListener.setLookoutCollectDisable(sofaBootRpcProperties.getLookoutCollectDisable());
         return rpcStartListener;
     }
