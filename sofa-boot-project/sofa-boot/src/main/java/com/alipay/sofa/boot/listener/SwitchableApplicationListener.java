@@ -95,7 +95,7 @@ public abstract class SwitchableApplicationListener<E extends ApplicationEvent>
     protected boolean isEnable(Environment environment) {
         String switchKey = switchKey();
         Assert.hasText(switchKey, "switch key must has text.");
-        String realKey = CONFIG_KEY_PREFIX + switchKey+ ".enabled";
+        String realKey = CONFIG_KEY_PREFIX + switchKey + ".enabled";
         String switchStr = environment.getProperty(realKey);
         if (StringUtils.hasText(switchStr)) {
             return Boolean.parseBoolean(switchStr);
