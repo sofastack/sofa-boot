@@ -14,11 +14,12 @@
     <packaging>pom</packaging>
 
     <properties>
-        <!--project-->
-        <java.version>17</java.version>
-        <project.encoding>UTF-8</project.encoding>
-        <project.build.encoding>UTF-8</project.build.encoding>
-
+        <!-- maven plugin -->
+        <maven-license-plugin.version>3.0</maven-license-plugin.version>
+        <maven-java-formatter-plugin.version>0.4</maven-java-formatter-plugin.version>
+        <maven-pmd-plgun.version>3.19.0</maven-pmd-plgun.version>
+        <maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
+        <maven-jacoco-plugin.version>0.8.7</maven-jacoco-plugin.version>
         <!-- sofa stack lib-->
         <sofa.registry.version>6.1.8</sofa.registry.version>
         <tracer.core.version>3.1.1</tracer.core.version>
@@ -28,7 +29,6 @@
         <sofa.hessian.version>3.3.12</sofa.hessian.version>
         <sofa.ark.version>2.0.6</sofa.ark.version>
         <sofa.lookout.version>1.6.1</sofa.lookout.version>
-
         <!--3rd lib dependency-->
         <spring.cloud.starter.version>4.0.0</spring.cloud.starter.version>
         <fastjson.version>1.2.83</fastjson.version>
@@ -742,6 +742,35 @@
     </dependencyManagement>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.mycila</groupId>
+                    <artifactId>license-maven-plugin</artifactId>
+                    <version>${maven-license-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>com.googlecode.maven-java-formatter-plugin</groupId>
+                    <artifactId>maven-java-formatter-plugin</artifactId>
+                    <version>${maven-java-formatter-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-pmd-plugin</artifactId>
+                    <version>${maven-pmd-plgun.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>${maven-checkstyle-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>${maven-jacoco-plugin.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>

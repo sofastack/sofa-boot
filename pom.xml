@@ -37,6 +37,10 @@
     <properties>
         <revision>4.0.0-SNAPSHOT</revision>
         <sofa.boot.version>${revision}</sofa.boot.version>
+        <!--project-->
+        <java.version>17</java.version>
+        <project.encoding>UTF-8</project.encoding>
+        <project.build.encoding>UTF-8</project.build.encoding>
         <!--maven plugin-->
         <maven.staging.plugin>1.6.7</maven.staging.plugin>
         <maven.gpg.pluign>1.6</maven.gpg.pluign>
