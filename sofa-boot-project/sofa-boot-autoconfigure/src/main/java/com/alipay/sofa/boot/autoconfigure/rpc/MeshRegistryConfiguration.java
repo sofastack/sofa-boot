@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.boot.autoconfigure.rpc;
 
+import com.alipay.sofa.boot.autoconfigure.condition.ConditionalOnSwitch;
 import com.alipay.sofa.rpc.boot.config.MeshConfigurator;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -27,6 +28,7 @@ import org.springframework.context.annotation.Configuration;
  * @version : MeshRegistryConfiguration.java, v 0.1 2023年01月31日 17:10 yuanxuan Exp $
  */
 @Configuration(proxyBeanMethods = false)
+@ConditionalOnSwitch(value = "rpcMeshRegistry")
 public class MeshRegistryConfiguration {
 
     @Bean

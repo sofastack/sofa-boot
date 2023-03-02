@@ -52,6 +52,7 @@ public class OnSwitchCondition extends SpringBootCondition {
                                                                             + " with value "
                                                                             + userDefinedEnabled));
         }
+
         MergedAnnotation<ConditionalOnSwitch> conditionAnnotation = metadata.getAnnotations().get(
             ConditionalOnSwitch.class);
         Boolean matchIfMissing = conditionAnnotation.getBoolean("matchIfMissing");

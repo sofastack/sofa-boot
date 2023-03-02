@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.boot.autoconfigure.rpc;
 
+import com.alipay.sofa.boot.autoconfigure.condition.ConditionalOnSwitch;
 import com.alipay.sofa.rpc.config.JAXRSProviderManager;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -34,6 +35,7 @@ import java.util.List;
  * @version : RestFilterConfiguration.java, v 0.1 2023年02月01日 14:02 yuanxuan Exp $
  */
 @Configuration(proxyBeanMethods = false)
+@ConditionalOnSwitch(value = "rpcRestFilter")
 public class RestFilterConfiguration {
 
     @Bean

@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.boot.autoconfigure.rpc;
 
+import com.alipay.sofa.boot.autoconfigure.condition.ConditionalOnSwitch;
 import com.alipay.sofa.rpc.boot.config.MulticastConfigurator;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -28,6 +29,7 @@ import org.springframework.context.annotation.Configuration;
  * @version : MulticastRegistryConfiguration.java, v 0.1 2023年01月31日 17:03 yuanxuan Exp $
  */
 @Configuration(proxyBeanMethods = false)
+@ConditionalOnSwitch(value = "rpcMulticastRegistry")
 public class MulticastRegistryConfiguration {
 
     @Bean

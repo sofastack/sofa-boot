@@ -25,6 +25,8 @@ import org.springframework.core.env.Profiles;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
+ * Tests for {@link SwitchableApplicationContextInitializer}.
+ *
  * @author yuanxuan
  * @version : SampleSwitchSpringContextInitializerTests.java, v 0.1 2023年02月22日 11:30 yuanxuan Exp $
  */
@@ -35,9 +37,17 @@ public class SampleSwitchSpringContextInitializerTests {
 
     @Test
     void enableFalse() {
-        contextRunner.withPropertyValues("sofa.boot.switch.initializer.sampleswitchabletest.enabled=false").run(context -> {
-            assertThat(context.getEnvironment().acceptsProfiles(Profiles.of("sampleswitchtest"))).isFalse();
-        });
+        contextRunner.withPropertyValues("sofa.boot.switch.initializer.sampleswitchabletest.enabled=false").run(context -> assertThat(context.getEnvironment().acceptsProfiles(Profiles.of("sampleswitchtest"))).isFalse());
+    }
+
+    @Test
+    void enableTrue() {
+        contextRunner.withPropertyValues("sofa.boot.switch.initializer.sampleswitchabletest.enabled=true").run(context -> assertThat(context.getEnvironment().acceptsProfiles(Profiles.of("sampleswitchtest"))).isTrue());
+    }
+
+    @Test
+    void enableDefault() {
+        contextRunner.run(context -> assertThat(context.getEnvironment().acceptsProfiles(Profiles.of("sampleswitchtest"))).isTrue());
     }
 
     static class SampleSwitchSpringContextInitializer extends
@@ -50,7 +60,7 @@ public class SampleSwitchSpringContextInitializerTests {
 
         @Override
         protected String switchKey() {
-            return CONFIG_KEY_PREFIX + "sampleswitchabletest";
+            return "sampleswitchabletest";
         }
 
     }

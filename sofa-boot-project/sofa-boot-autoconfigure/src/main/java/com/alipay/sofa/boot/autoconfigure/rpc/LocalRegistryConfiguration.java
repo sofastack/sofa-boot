@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.boot.autoconfigure.rpc;
 
+import com.alipay.sofa.boot.autoconfigure.condition.ConditionalOnSwitch;
 import com.alipay.sofa.rpc.boot.config.LocalFileConfigurator;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -28,6 +29,7 @@ import org.springframework.context.annotation.Configuration;
  * @version : LocalRegistryConfiguration.java, v 0.1 2023年01月31日 17:04 yuanxuan Exp $
  */
 @Configuration(proxyBeanMethods = false)
+@ConditionalOnSwitch(value = "rpcLocalRegistry")
 public class LocalRegistryConfiguration {
 
     @Bean
