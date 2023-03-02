@@ -15,18 +15,6 @@
 
     <properties>
         <main.user.dir>${basedir}/../..</main.user.dir>
-        <project.encoding>UTF-8</project.encoding>
-        <java.version>17</java.version>
-
-        <license.maven.plugin>3.0</license.maven.plugin>
-        <maven.java.formatter.plugin>0.4</maven.java.formatter.plugin>
-        <maven.pmd.plugin.version>3.19.0</maven.pmd.plugin.version>
-        <maven.checkstyle.plugin.version>3.1.2</maven.checkstyle.plugin.version>
-        <maven.compiler.plugin>3.1</maven.compiler.plugin>
-        <maven.source.plugin>3.0.0</maven.source.plugin>
-        <maven.javadoc.plugin>2.9.1</maven.javadoc.plugin>
-        <jacoco.maven.plugin>0.8.7</jacoco.maven.plugin>
-        <maven.surefire.plugin>2.22.2</maven.surefire.plugin>
     </properties>
 
     <build>
@@ -60,7 +48,6 @@
             <plugin>
                 <groupId>com.mycila</groupId>
                 <artifactId>license-maven-plugin</artifactId>
-                <version>${license.maven.plugin}</version>
                 <executions>
                     <execution>
                         <phase>generate-sources</phase>
@@ -87,7 +74,6 @@
             <plugin>
                 <groupId>com.googlecode.maven-java-formatter-plugin</groupId>
                 <artifactId>maven-java-formatter-plugin</artifactId>
-                <version>${maven.java.formatter.plugin}</version>
                 <executions>
                     <execution>
                         <phase>validate</phase>
@@ -105,7 +91,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
-                <version>${maven.pmd.plugin.version}</version>
                 <configuration>
                     <printFailingErrors>true</printFailingErrors>
                     <linkXRef>false</linkXRef>
@@ -128,7 +113,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>${maven.checkstyle.plugin.version}</version>
                 <dependencies>
                     <dependency>
                         <groupId>com.puppycrawl.tools</groupId>
@@ -156,7 +140,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven.compiler.plugin}</version>
                 <configuration>
                     <encoding>${project.encoding}</encoding>
                     <source>${java.version}</source>
@@ -170,7 +153,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>${maven.source.plugin}</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -184,7 +166,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>${maven.surefire.plugin}</version>
                 <configuration>
                     <reuseForks>false</reuseForks>
                     <includes>
@@ -213,7 +194,6 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>${jacoco.maven.plugin}</version>
                 <configuration>
                     <skip>false</skip>
                 </configuration>
