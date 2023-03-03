@@ -149,7 +149,7 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
     /**
      * Provided for readiness check.
      *
-     * @param healthMap used to save the information of {@link SofaBootHealthIndicator}.
+     * @param healthMap used to save the information.
      * @return whether readiness health check passes or not
      */
     public boolean readinessHealthCheck(Map<String, Health> healthMap) {

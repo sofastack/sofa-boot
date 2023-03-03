@@ -85,62 +85,6 @@ public class HealthCheckerProcessor implements ApplicationContextAware {
     }
 
     /**
-     * Provided for liveness check.
-     *
-     * @param healthMap used to save the information of {@link HealthChecker}.
-     * @return whether liveness health check passes or not
-     */
-    public boolean livenessHealthCheck(Map<String, Health> healthMap) {
-        Assert.notNull(healthCheckers, () -> "HealthCheckers must not be null");
-
-        logger.info("Begin SOFABoot HealthChecker liveness check.");
-        String checkComponentNames = healthCheckers.values().stream()
-                .map(HealthChecker::getComponentName).collect(Collectors.joining(","));
-        logger.info("SOFABoot HealthChecker liveness check {} item: {}.",
-                healthCheckers.size(), checkComponentNames);
-        boolean result;
-        if (isParallelCheck()) {
-            CountDownLatch countDownLatch = new CountDownLatch(healthCheckers.size());
-            AtomicBoolean parallelResult = new AtomicBoolean(true);
-            healthCheckers.forEach((key, value) -> healthCheckExecutor.execute(() -> {
-                try {
-                    if (!doHealthCheck(key, value, false, healthMap, false, false)) {
-                        parallelResult.set(false);
-                    }
-                } catch (Throwable t) {
-                    parallelResult.set(false);
-                    logger.error(ErrorCode.convert("01-22001"), t);
-                    healthMap.put(key, new Health.Builder().withException(t).status(Status.DOWN).build());
-                } finally {
-                    countDownLatch.countDown();
-                }
-            }));
-            boolean finished = false;
-            try {
-                finished = countDownLatch.await(getParallelCheckTimeout(), TimeUnit.MILLISECONDS);
-            } catch (InterruptedException e) {
-                logger.error(ErrorCode.convert("01-22002"), e);
-            }
-            if (!finished) {
-                parallelResult.set(false);
-                healthMap.put("parallelCheck", new Health.Builder().withDetail("timeout", getParallelCheckTimeout())
-                        .status(Status.UNKNOWN).build());
-            }
-            result = finished && parallelResult.get();
-        } else {
-            result = healthCheckers.entrySet().stream()
-                    .map(entry -> doHealthCheck(entry.getKey(), entry.getValue(), false, healthMap, false, true))
-                    .reduce(true, (a, b) -> a && b);
-        }
-        if (result) {
-            logger.info("SOFABoot HealthChecker liveness check result: success.");
-        } else {
-            logger.error(ErrorCode.convert("01-22000"));
-        }
-        return result;
-    }
-
-    /**
      * Provided for readiness check.
      *
      * @param healthMap used to save the information of {@link HealthChecker}.
