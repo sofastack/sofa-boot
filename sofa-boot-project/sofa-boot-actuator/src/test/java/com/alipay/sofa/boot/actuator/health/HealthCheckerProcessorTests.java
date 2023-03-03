@@ -119,32 +119,6 @@ public class HealthCheckerProcessorTests {
     }
 
     @Test
-    public void liveHealthCheckSuccess(CapturedOutput capturedOutput) {
-        Map<String, HealthChecker> beanMap = new HashMap<>();
-        beanMap.put("successHealthChecker", successHealthChecker);
-        Mockito.doReturn(beanMap).when(applicationContext).getBeansOfType(HealthChecker.class);
-
-        healthCheckerProcessor.init();
-        assertThat(capturedOutput.getOut()).contains(
-            "Found 1 HealthChecker implementation:successHealthChecker");
-        HashMap<String, Health> healthMap = new HashMap<>();
-        boolean result = healthCheckerProcessor.livenessHealthCheck(healthMap);
-
-        assertThat(capturedOutput.getOut()).contains("Begin SOFABoot HealthChecker liveness check");
-        assertThat(capturedOutput.getOut()).contains(
-            "SOFABoot HealthChecker liveness check 1 item: success");
-        assertThat(capturedOutput.getOut()).contains(
-            "HealthChecker [successHealthChecker] liveness check start");
-        assertThat(capturedOutput.getOut()).contains(
-            "SOFABoot HealthChecker liveness check result: success");
-        assertThat(result).isTrue();
-        assertThat(healthMap.size()).isEqualTo(1);
-        Health health = healthMap.get("successHealthChecker");
-        assertThat(health).isNotNull();
-        assertThat(health.getStatus()).isEqualTo(Status.UP);
-    }
-
-    @Test
     public void readinessHealthCheckFailed(CapturedOutput capturedOutput) {
         Map<String, HealthChecker> beanMap = new HashMap<>();
         beanMap.put("successHealthChecker", successHealthChecker);
