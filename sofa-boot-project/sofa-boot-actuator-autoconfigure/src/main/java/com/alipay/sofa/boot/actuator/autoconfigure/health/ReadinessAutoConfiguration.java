@@ -21,7 +21,6 @@ import com.alipay.sofa.boot.actuator.health.HealthIndicatorProcessor;
 import com.alipay.sofa.boot.actuator.health.ReadinessCheckCallbackProcessor;
 import com.alipay.sofa.boot.actuator.health.ReadinessCheckListener;
 import com.alipay.sofa.boot.actuator.health.ReadinessEndpoint;
-import com.alipay.sofa.boot.actuator.health.SofaBootHealthIndicator;
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import com.alipay.sofa.common.thread.NamedThreadFactory;
@@ -113,13 +112,6 @@ public class ReadinessAutoConfiguration {
     @ConditionalOnMissingBean
     public ReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor() {
         return new ReadinessCheckCallbackProcessor();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public SofaBootHealthIndicator sofaBootHealthIndicator(HealthCheckerProcessor healthCheckerProcessor,
-                                                           ReadinessCheckListener readinessCheckListener) {
-        return new SofaBootHealthIndicator(healthCheckerProcessor, readinessCheckListener);
     }
 
     @Bean(name = ReadinessCheckListener.READINESS_HEALTH_CHECK_EXECUTOR_BEAN_NAME)

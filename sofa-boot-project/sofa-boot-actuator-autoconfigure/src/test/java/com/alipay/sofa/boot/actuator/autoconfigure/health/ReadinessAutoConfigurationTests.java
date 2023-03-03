@@ -22,7 +22,6 @@ import com.alipay.sofa.boot.actuator.health.HealthIndicatorProcessor;
 import com.alipay.sofa.boot.actuator.health.ModuleHealthChecker;
 import com.alipay.sofa.boot.actuator.health.ReadinessCheckCallbackProcessor;
 import com.alipay.sofa.boot.actuator.health.ReadinessCheckListener;
-import com.alipay.sofa.boot.actuator.health.SofaBootHealthIndicator;
 import com.alipay.sofa.boot.autoconfigure.isle.SofaModuleAutoConfiguration;
 import com.alipay.sofa.boot.autoconfigure.runtime.SofaRuntimeAutoConfiguration;
 import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
@@ -59,7 +58,6 @@ public class ReadinessAutoConfigurationTests {
                         .hasSingleBean(HealthCheckerProcessor.class)
                         .hasSingleBean(HealthIndicatorProcessor.class)
                         .hasSingleBean(ReadinessCheckCallbackProcessor.class)
-                        .hasSingleBean(SofaBootHealthIndicator.class)
                         .hasBean(ReadinessCheckListener.READINESS_HEALTH_CHECK_EXECUTOR_BEAN_NAME));
     }
 
@@ -72,7 +70,6 @@ public class ReadinessAutoConfigurationTests {
                         .doesNotHaveBean(HealthCheckerProcessor.class)
                         .doesNotHaveBean(HealthIndicatorProcessor.class)
                         .doesNotHaveBean(ReadinessCheckCallbackProcessor.class)
-                        .doesNotHaveBean(SofaBootHealthIndicator.class)
                         .doesNotHaveBean(ReadinessCheckListener.READINESS_HEALTH_CHECK_EXECUTOR_BEAN_NAME));
     }
 
