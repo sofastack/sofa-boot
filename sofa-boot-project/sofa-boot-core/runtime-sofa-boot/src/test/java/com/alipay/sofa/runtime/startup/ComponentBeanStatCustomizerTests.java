@@ -43,7 +43,7 @@ public class ComponentBeanStatCustomizerTests {
         BeanStat result = componentBeanStatCustomizer.customize("service", serviceFactoryBean,
             beanStat);
         assertThat(result).isNull();
-        assertThat(beanStat.getInterfaceType()).isEqualTo("testService");
+        assertThat(beanStat.getAttribute("interface")).isEqualTo("testService");
     }
 
     @Test
@@ -54,7 +54,7 @@ public class ComponentBeanStatCustomizerTests {
         BeanStat result = componentBeanStatCustomizer.customize("reference", referenceFactoryBean,
             beanStat);
         assertThat(result).isNull();
-        assertThat(beanStat.getInterfaceType()).isEqualTo("testService");
+        assertThat(beanStat.getAttribute("interface")).isEqualTo("testService");
     }
 
     @Test
@@ -65,8 +65,8 @@ public class ComponentBeanStatCustomizerTests {
         BeanStat result = componentBeanStatCustomizer.customize("extension", extensionFactoryBean,
             beanStat);
         assertThat(result).isNull();
-        assertThat(beanStat.getExtensionProperty())
-            .isEqualTo("ExtensionPointTarget: testExtension");
+        assertThat(beanStat.getAttribute("extension")).isEqualTo(
+            "ExtensionPointTarget: testExtension");
     }
 
     @Test
@@ -77,7 +77,7 @@ public class ComponentBeanStatCustomizerTests {
         BeanStat result = componentBeanStatCustomizer.customize("extensionPoint",
             extensionPointFactoryBean, beanStat);
         assertThat(result).isNull();
-        assertThat(beanStat.getExtensionProperty()).isEqualTo(
+        assertThat(beanStat.getAttribute("extension")).isEqualTo(
             "ExtensionPointTarget: testExtensionPoint");
     }
 

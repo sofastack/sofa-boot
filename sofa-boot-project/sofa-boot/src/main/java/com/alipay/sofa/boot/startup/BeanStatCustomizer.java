@@ -25,14 +25,6 @@ package com.alipay.sofa.boot.startup;
 public interface BeanStatCustomizer {
 
     /**
-     * Given bean name and bean instance, return whether this {@code BeanStatCustomizer} can support it.
-     * @param beanName beanName
-     * @param bean bean
-     * @return true if support, otherwise false.
-     */
-    default boolean support(String beanName, Object bean) {return true;}
-
-    /**
      * Custom bean stat.
      * @param beanName beanName
      * @param bean bean instance

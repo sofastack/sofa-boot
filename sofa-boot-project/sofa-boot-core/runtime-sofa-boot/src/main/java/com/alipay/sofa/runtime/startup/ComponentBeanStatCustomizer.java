@@ -35,18 +35,20 @@ public class ComponentBeanStatCustomizer implements BeanStatCustomizer {
     @Override
     public BeanStat customize(String beanName, Object bean, BeanStat bs) {
         if (bean instanceof ServiceFactoryBean) {
-            bs.setInterfaceType(((ServiceFactoryBean) bean).getInterfaceType());
+            bs.putAttribute("interface", ((ServiceFactoryBean) bean).getInterfaceType());
+            bs.putAttribute("uniqueId", ((ServiceFactoryBean) bean).getUniqueId());
             return null;
         } else if (bean instanceof ReferenceFactoryBean) {
-            bs.setInterfaceType(((ReferenceFactoryBean) bean).getInterfaceType());
+            bs.putAttribute("interface", ((ReferenceFactoryBean) bean).getInterfaceType());
+            bs.putAttribute("uniqueId", ((ReferenceFactoryBean) bean).getUniqueId());
             return null;
         }
         if (bean instanceof ExtensionFactoryBean) {
-            bs.setExtensionProperty(bean.toString());
+            bs.putAttribute("extension", bean.toString());
             return null;
         }
         if (bean instanceof ExtensionPointFactoryBean) {
-            bs.setExtensionProperty(bean.toString());
+            bs.putAttribute("extension", bean.toString());
             return null;
         }
         return bs;

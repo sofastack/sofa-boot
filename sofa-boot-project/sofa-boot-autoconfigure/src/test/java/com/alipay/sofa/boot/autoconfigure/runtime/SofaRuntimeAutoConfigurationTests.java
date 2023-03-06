@@ -29,7 +29,6 @@ import com.alipay.sofa.runtime.spring.ClientFactoryAnnotationBeanPostProcessor;
 import com.alipay.sofa.runtime.spring.ReferenceAnnotationBeanPostProcessor;
 import com.alipay.sofa.runtime.spring.ServiceBeanFactoryPostProcessor;
 import com.alipay.sofa.runtime.spring.SofaRuntimeAwareProcessor;
-import com.alipay.sofa.runtime.startup.ComponentBeanStatCustomizer;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.FilteredClassLoader;
@@ -68,7 +67,6 @@ public class SofaRuntimeAutoConfigurationTests {
                         .hasSingleBean(ProxyBeanFactoryPostProcessor.class)
                         .hasSingleBean(SofaRuntimeAwareProcessor.class)
                         .hasSingleBean(ClientFactoryAnnotationBeanPostProcessor.class)
-                        .hasSingleBean(ComponentBeanStatCustomizer.class)
                         .hasSingleBean(ComponentContextRefreshInterceptor.class));
     }
 
@@ -88,7 +86,6 @@ public class SofaRuntimeAutoConfigurationTests {
                         .doesNotHaveBean(ProxyBeanFactoryPostProcessor.class)
                         .doesNotHaveBean(SofaRuntimeAwareProcessor.class)
                         .doesNotHaveBean(ClientFactoryAnnotationBeanPostProcessor.class)
-                        .doesNotHaveBean(ComponentBeanStatCustomizer.class)
                         .doesNotHaveBean(ComponentContextRefreshInterceptor.class));
     }
 

@@ -20,7 +20,6 @@ import com.alipay.sofa.boot.startup.StartupReporter;
 import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
 import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
 import org.springframework.boot.actuate.endpoint.annotation.WriteOperation;
-import org.springframework.boot.actuate.startup.StartupEndpoint;
 
 /**
  * {@link Endpoint @Endpoint} to expose details startup costs.
@@ -38,12 +37,12 @@ public class StartupEndPoint {
     }
 
     @ReadOperation
-    public StartupReporter.StartupStaticsModel startup() {
-        return startupReporter.report();
+    public StartupReporter.StartupStaticsModel startupSnapshot() {
+        return startupReporter.getStartupStaticsModel();
     }
 
     @WriteOperation
-    public StartupEndpoint.StartupDescriptor startupForSpringBoot() {
-        throw new UnsupportedOperationException("Please use GET method instead");
+    public StartupReporter.StartupStaticsModel startup() {
+        return startupReporter.drainStartupStaticsModel();
     }
 }

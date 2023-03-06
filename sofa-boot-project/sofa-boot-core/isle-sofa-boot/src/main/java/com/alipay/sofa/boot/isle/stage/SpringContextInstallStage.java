@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.boot.isle.stage;
 
-import com.alipay.sofa.boot.context.SofaDefaultListableBeanFactory;
 import com.alipay.sofa.boot.isle.deployment.DependencyTree;
 import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptor;
 import com.alipay.sofa.boot.isle.deployment.DeploymentException;
@@ -29,7 +28,6 @@ import com.alipay.sofa.boot.startup.ModuleStat;
 import com.alipay.sofa.boot.util.ClassLoaderContextUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.util.Assert;
@@ -229,11 +227,7 @@ public class SpringContextInstallStage extends AbstractPipelineStage implements 
         moduleStat.setThreadName(Thread.currentThread().getName());
         ConfigurableApplicationContext ctx = (ConfigurableApplicationContext) deployment
             .getApplicationContext();
-        ConfigurableListableBeanFactory beanFactory = ctx.getBeanFactory();
-        if (beanFactory instanceof SofaDefaultListableBeanFactory) {
-            moduleStat.setChildren(((SofaDefaultListableBeanFactory) beanFactory).getBeanStats());
-        }
-
+        moduleStat.setChildren(startupReporter.generateBeanStats(ctx));
         ((ChildrenStat<ModuleStat>) baseStat).addChild(moduleStat);
     }
 

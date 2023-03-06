@@ -26,7 +26,7 @@
     </sofa:extension>
 
     <bean id="sample" class="com.alipay.sofa.smoke.tests.actuator.startup.beans.DefaultSampleService"/>
-    <sofa:service ref="sample" interface="com.alipay.sofa.smoke.tests.actuator.startup.beans.SampleService"/>
+    <sofa:service ref="sample" interface="com.alipay.sofa.smoke.tests.actuator.startup.beans.SampleService" unique-id="abc"/>
 
     <bean id="test" class="com.alipay.sofa.smoke.tests.actuator.startup.beans.DefaultTestService"/>
     <sofa:service ref="test" interface="com.alipay.sofa.smoke.tests.actuator.startup.beans.TestService"/>

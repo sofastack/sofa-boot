@@ -1,0 +1,3 @@
+# Initializers
+com.alipay.sofa.boot.startup.BeanStatCustomizer=\
+  com.alipay.sofa.runtime.startup.ComponentBeanStatCustomizer

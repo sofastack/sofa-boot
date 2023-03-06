@@ -17,14 +17,10 @@
 package com.alipay.sofa.boot.startup;
 
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
-import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.beans.factory.support.AbstractBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.SmartLifecycle;
-
-import java.util.Optional;
 
 import static com.alipay.sofa.boot.startup.BootStageConstants.APPLICATION_CONTEXT_REFRESH_STAGE;
 
@@ -36,11 +32,11 @@ import static com.alipay.sofa.boot.startup.BootStageConstants.APPLICATION_CONTEX
  */
 public class StartupSmartLifecycle implements SmartLifecycle, ApplicationContextAware {
 
-    public static final String    ROOT_MODULE_NAME = "ROOT_APPLICATION_CONTEXT";
+    public static final String             ROOT_MODULE_NAME = "ROOT_APPLICATION_CONTEXT";
 
-    private final StartupReporter startupReporter;
+    private final StartupReporter          startupReporter;
 
-    private ApplicationContext    applicationContext;
+    private ConfigurableApplicationContext applicationContext;
 
     public StartupSmartLifecycle(StartupReporter startupReporter) {
         this.startupReporter = startupReporter;
@@ -48,7 +44,7 @@ public class StartupSmartLifecycle implements SmartLifecycle, ApplicationContext
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
+        this.applicationContext = (ConfigurableApplicationContext) applicationContext;
     }
 
     @Override
@@ -64,14 +60,8 @@ public class StartupSmartLifecycle implements SmartLifecycle, ApplicationContext
         rootModuleStat.setEndTime(stat.getEndTime());
         rootModuleStat.setThreadName(Thread.currentThread().getName());
 
-        // getBeanStatList from BeanCostBeanPostProcessor
-        AutowireCapableBeanFactory beanFactory = applicationContext.getAutowireCapableBeanFactory();
-        if (beanFactory instanceof AbstractBeanFactory) {
-            Optional<BeanPostProcessor> postProcessor =
-                    ((AbstractBeanFactory) beanFactory).getBeanPostProcessors().stream().filter(p -> p instanceof BeanCostBeanPostProcessor)
-                    .findFirst();
-            postProcessor.ifPresent(beanPostProcessor -> rootModuleStat.setChildren(((BeanCostBeanPostProcessor) beanPostProcessor).getBeanStatList()));
-        }
+        // getBeanStatList from ApplicationStartup
+        rootModuleStat.setChildren(startupReporter.generateBeanStats(applicationContext));
 
         // report ContextRefreshStageStat
         stat.addChild(rootModuleStat);

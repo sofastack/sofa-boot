@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.boot.actuator.startup;
 
+import com.alipay.sofa.boot.startup.BaseStat;
 import com.alipay.sofa.boot.startup.StartupReporter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,8 +25,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * Tests for {@link StartupEndPoint}.
@@ -43,17 +45,26 @@ public class StartupEndpointTests {
     private StartupReporter startupReporter;
 
     @Test
-    public void startup() {
+    public void startupSnapshot() {
         StartupReporter.StartupStaticsModel staticsModel = new StartupReporter.StartupStaticsModel();
         staticsModel.setAppName("StartupEndpointTests");
-        Mockito.doReturn(staticsModel).when(startupReporter).report();
+        Mockito.doReturn(staticsModel).when(startupReporter).getStartupStaticsModel();
         assertThat(startupEndPoint.startup().getAppName()).isEqualTo("StartupEndpointTests");
     }
 
     @Test
-    public void startupForSpringBoot() {
-        assertThatThrownBy(() -> startupEndPoint.startupForSpringBoot())
-                .isInstanceOf(UnsupportedOperationException.class)
-                .hasMessage("Please use GET method instead");
+    public void startup() {
+        StartupReporter.StartupStaticsModel staticsModel = new StartupReporter.StartupStaticsModel();
+        BaseStat baseStat = new BaseStat();
+        staticsModel.setStageStats(List.of(baseStat));
+        staticsModel.setAppName("StartupEndpointTests");
+        Mockito.doReturn(staticsModel).when(startupReporter).getStartupStaticsModel();
+        StartupReporter.StartupStaticsModel model = startupEndPoint.startupSnapshot();
+        assertThat(model.getAppName()).isEqualTo("StartupEndpointTests");
+        assertThat(model.getStageStats().size()).isEqualTo(1);
+
+        model = startupEndPoint.startup();
+        assertThat(model.getAppName()).isEqualTo("StartupEndpointTests");
+        assertThat(model.getStageStats().size()).isEqualTo(0);
     }
 }

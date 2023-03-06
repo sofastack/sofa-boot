@@ -28,56 +28,62 @@ public class SofaBootConstants {
     /**
      * app name key
      */
-    public static final String APP_NAME_KEY                              = "spring.application.name";
+    public static final String APP_NAME_KEY                                    = "spring.application.name";
 
     /**
      * SOFABoot config property source key
      */
-    public static final String SOFA_DEFAULT_PROPERTY_SOURCE              = "sofaConfigurationProperties";
+    public static final String SOFA_DEFAULT_PROPERTY_SOURCE                    = "sofaConfigurationProperties";
+
+    /**
+     * SOFABoot exclude autoconfiguration property source key
+     */
+    public static final String SOFA_EXCLUDE_AUTO_CONFIGURATION_PROPERTY_SOURCE = "sofaExcludeAutoConfigurationProperties";
 
     /**
      * SOFABoot bootstrap property source key
      */
-    public static final String SOFA_BOOTSTRAP                            = "sofaBootstrap";
+    public static final String SOFA_BOOTSTRAP                                  = "sofaBootstrap";
 
     /**
      * SpringCloud property source key
      */
-    public static final String SPRING_CLOUD_BOOTSTRAP                    = "bootstrap";
+    public static final String SPRING_CLOUD_BOOTSTRAP                          = "bootstrap";
 
     /**
      * SOFA High priority config key
      */
-    public static final String SOFA_HIGH_PRIORITY_CONFIG                 = "sofaHighPriorityConfig";
+    public static final String SOFA_HIGH_PRIORITY_CONFIG                       = "sofaHighPriorityConfig";
 
     /**
      * Space name for SOFABoot framework used in sofa-common-tools
      */
-    public static final String SOFA_BOOT_SPACE_NAME                      = "sofa-boot";
+    public static final String SOFA_BOOT_SPACE_NAME                            = "sofa-boot";
 
     /**
      * SOFABoot version property key
      */
-    public static final String SOFA_BOOT_VERSION                         = "sofa-boot.version";
+    public static final String SOFA_BOOT_VERSION                               = "sofa-boot.version";
 
     /**
      * SOFABoot formatted version property key
      */
-    public static final String SOFA_BOOT_FORMATTED_VERSION               = "sofa-boot.formatted-version";
+    public static final String SOFA_BOOT_FORMATTED_VERSION                     = "sofa-boot.formatted-version";
 
     /**
      * Spring Boot web endpoint exposure property key
      */
-    public static final String ENDPOINTS_WEB_EXPOSURE_INCLUDE_CONFIG     = "management.endpoints.web.exposure.include";
+    public static final String ENDPOINTS_WEB_EXPOSURE_INCLUDE_CONFIG           = "management.endpoints.web.exposure.include";
 
     /**
      * Default exposure web endpoint list
      */
-    public static final String SOFA_DEFAULT_ENDPOINTS_WEB_EXPOSURE_VALUE = "info,health,readiness,startup,beans,components";
+    public static final String SOFA_DEFAULT_ENDPOINTS_WEB_EXPOSURE_VALUE       = "info,health,readiness,startup,beans,components";
 
     /**
      * CPU core
      */
-    public static final int    CPU_CORE                                  = Runtime.getRuntime()
-                                                                             .availableProcessors();
+    public static final int    CPU_CORE                                        = Runtime
+                                                                                   .getRuntime()
+                                                                                   .availableProcessors();
 }
