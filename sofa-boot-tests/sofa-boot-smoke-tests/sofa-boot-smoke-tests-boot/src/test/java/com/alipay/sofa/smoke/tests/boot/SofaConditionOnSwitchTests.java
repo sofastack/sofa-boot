@@ -33,7 +33,7 @@ import static org.assertj.core.api.Assertions.catchException;
  * @author yuanxuan
  * @version : SofaConditionOnSwitchTests.java, v 0.1 2023年02月22日 10:09 yuanxuan Exp $
  */
-@SpringBootTest(classes = {BootSofaBootApplication.class, BeanTestConfiguration.class}, properties = {"sofa.boot.scenes.enable=function"})
+@SpringBootTest(classes = { BootSofaBootApplication.class, BeanTestConfiguration.class }, properties = { "sofa.boot.scenes.enable=function" })
 public class SofaConditionOnSwitchTests {
 
     @Autowired
@@ -49,7 +49,6 @@ public class SofaConditionOnSwitchTests {
             context.getBean(FunctionFeatureBean.class);
         });
     }
-
 
     @Test
     void beanSwitchOnSceneWithYml() {
