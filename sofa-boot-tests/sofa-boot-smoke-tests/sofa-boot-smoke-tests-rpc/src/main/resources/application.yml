@@ -1,0 +1,5 @@
+sofa:
+  boot:
+    scenes:
+      enable: function,cloud
+

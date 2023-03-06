@@ -33,7 +33,7 @@ import static org.assertj.core.api.Assertions.catchException;
  * @author yuanxuan
  * @version : SofaConditionOnSwitchTests.java, v 0.1 2023年02月22日 10:09 yuanxuan Exp $
  */
-@SpringBootTest(classes = { BootSofaBootApplication.class, BeanTestConfiguration.class }, properties = { "spring.profiles.active=function" })
+@SpringBootTest(classes = {BootSofaBootApplication.class, BeanTestConfiguration.class}, properties = {"sofa.boot.scenes.enable=function"})
 public class SofaConditionOnSwitchTests {
 
     @Autowired
@@ -47,6 +47,18 @@ public class SofaConditionOnSwitchTests {
                 + "available");
         assertThatNoException().isThrownBy(() -> {
             context.getBean(FunctionFeatureBean.class);
+        });
+    }
+
+
+    @Test
+    void beanSwitchOnSceneWithYml() {
+        assertThat(catchException(() -> {
+            context.getBean(FunctionFeature2Bean.class);
+        })).hasMessage("No qualifying bean of type 'com.alipay.sofa.smoke.tests.boot.SofaConditionOnSwitchTests$FunctionFeature2Bean' "
+                + "available");
+        assertThatNoException().isThrownBy(() -> {
+            context.getBean(FunctionFeature3Bean.class);
         });
     }
 
@@ -65,6 +77,18 @@ public class SofaConditionOnSwitchTests {
         public FunctionFeatureBean functionFeatureBean() {
             return new FunctionFeatureBean();
         }
+
+        @Bean
+        @ConditionalOnSwitch
+        public FunctionFeature2Bean functionFeature2Bean() {
+            return new FunctionFeature2Bean();
+        }
+
+        @Bean
+        @ConditionalOnSwitch
+        public FunctionFeature3Bean functionFeature3Bean() {
+            return new FunctionFeature3Bean();
+        }
     }
 
     static class FunctionBean {
@@ -72,6 +96,14 @@ public class SofaConditionOnSwitchTests {
     }
 
     static class FunctionFeatureBean {
+
+    }
+
+    static class FunctionFeature2Bean {
+
+    }
+
+    static class FunctionFeature3Bean {
 
     }
 }
