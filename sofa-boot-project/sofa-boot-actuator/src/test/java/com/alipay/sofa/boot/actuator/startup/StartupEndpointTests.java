@@ -45,7 +45,8 @@ public class StartupEndpointTests {
     @Order(1)
     public void startupSnapshot() {
         startupReporter.setAppName("StartupEndpointTests");
-        assertThat(startupEndPoint.startupSnapshot().getAppName()).isEqualTo("StartupEndpointTests");
+        assertThat(startupEndPoint.startupSnapshot().getAppName())
+            .isEqualTo("StartupEndpointTests");
     }
 
     @Test
