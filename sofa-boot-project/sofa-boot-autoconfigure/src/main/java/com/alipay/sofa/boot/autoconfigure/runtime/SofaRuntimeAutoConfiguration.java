@@ -47,7 +47,6 @@ import com.alipay.sofa.runtime.spring.ClientFactoryAnnotationBeanPostProcessor;
 import com.alipay.sofa.runtime.spring.ReferenceAnnotationBeanPostProcessor;
 import com.alipay.sofa.runtime.spring.ServiceBeanFactoryPostProcessor;
 import com.alipay.sofa.runtime.spring.SofaRuntimeAwareProcessor;
-import com.alipay.sofa.runtime.startup.ComponentBeanStatCustomizer;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -164,12 +163,6 @@ public class SofaRuntimeAutoConfiguration {
     public static ClientFactoryAnnotationBeanPostProcessor clientFactoryAnnotationBeanPostProcessor(SofaRuntimeManager sofaRuntimeManager) {
         return new ClientFactoryAnnotationBeanPostProcessor(
             sofaRuntimeManager.getClientFactoryInternal());
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public ComponentBeanStatCustomizer componentBeanStatCustomizer() {
-        return new ComponentBeanStatCustomizer();
     }
 
     @Bean

@@ -60,7 +60,7 @@ public class IsleStageStartupReporterTests {
     @Test
     public void startupReporter() {
         assertThat(startupReporter).isNotNull();
-        StartupReporter.StartupStaticsModel startupStaticsModel = startupReporter.report();
+        StartupReporter.StartupStaticsModel startupStaticsModel = startupReporter.getStartupStaticsModel();
         assertThat(startupStaticsModel).isNotNull();
         assertThat(startupStaticsModel.getStageStats().size()).isEqualTo(8);
 
@@ -82,51 +82,54 @@ public class IsleStageStartupReporterTests {
 
         List<BeanStat> beanStats = moduleStat.getChildren();
         assertThat(beanStats).isNotNull();
-        assertThat(beanStats.size() >= 4).isTrue();
+        assertThat(beanStats.size() == 1).isTrue();
+        BeanStat contextBeanStat = beanStats.get(0);
+        assertThat(contextBeanStat.getType()).isEqualTo("spring.context.refresh");
+
+        beanStats = contextBeanStat.getChildren();
 
         //test parent bean
-        BeanStat parentBeanStat = beanStats.stream().filter(beanStat -> beanStat.getBeanClassName().contains("Parent")).findFirst().orElse(null);
+        BeanStat parentBeanStat = beanStats.stream().filter(beanStat -> beanStat.getBeanClassName().contains("parent")).findFirst().orElse(null);
         assertThat(parentBeanStat).isNotNull();
         assertThat(ChildBean.CHILD_INIT_TIME + ParentBean.PARENT_INIT_TIME - parentBeanStat.getRefreshElapsedTime() < 20).isTrue();
         assertThat(ParentBean.PARENT_INIT_TIME - parentBeanStat.getRealRefreshElapsedTime() < 20).isTrue();
-        assertThat(ParentBean.PARENT_INIT_TIME - parentBeanStat.getInitMethodTime() < 20).isTrue();
         assertThat(parentBeanStat.getChildren().size()).isEqualTo(1);
-        assertThat(parentBeanStat.getBeanClassName()).isEqualTo(ParentBean.class.getName());
+        assertThat(parentBeanStat.getAttribute("classType")).isEqualTo(ParentBean.class.getName());
 
         // test child bean
         BeanStat childBeanStat = parentBeanStat.getChildren().get(0);
         assertThat(childBeanStat).isNotNull();
         assertThat(ChildBean.CHILD_INIT_TIME - childBeanStat.getRealRefreshElapsedTime() < 15).isTrue();
-        assertThat(ChildBean.CHILD_INIT_TIME - childBeanStat.getInitMethodTime() < 10).isTrue();
         assertThat(childBeanStat.getChildren().size()).isEqualTo(0);
-        assertThat(childBeanStat.getBeanClassName()).isEqualTo(ChildBean.class.getName());
+        assertThat(childBeanStat.getAttribute("classType")).isEqualTo(ChildBean.class.getName());
 
         //test sofa service
         BeanStat serviceBeanStat = beanStats.stream().filter(beanStat -> beanStat.getBeanClassName().contains("ServiceFactoryBean")).findFirst().orElse(null);
         assertThat(serviceBeanStat).isNotNull();
         assertThat(serviceBeanStat.getRefreshElapsedTime() > 0).isTrue();
-        assertThat(serviceBeanStat.getBeanClassName()).isEqualTo(ServiceFactoryBean.class.getName());
-        assertThat(serviceBeanStat.getInterfaceType()).isEqualTo("com.alipay.sofa.smoke.tests.actuator.startup.beans.SampleService");
+        assertThat(serviceBeanStat.getAttribute("classType")).isEqualTo(ServiceFactoryBean.class.getName());
+        assertThat(serviceBeanStat.getAttribute("interface")).isEqualTo("com.alipay.sofa.smoke.tests.actuator.startup.beans.SampleService");
+        assertThat(serviceBeanStat.getAttribute("uniqueId")).isEqualTo("abc");
 
         // test sofa reference
-        BeanStat referenceBeanStat = beanStats.stream().filter(beanStat -> beanStat.getBeanClassName().contains("ReferenceFactoryBean")).findFirst().orElse(null);
+        BeanStat referenceBeanStat = beanStats.stream().filter(beanStat -> beanStat.getBeanClassName().contains("&reference")).findFirst().orElse(null);
         assertThat(referenceBeanStat).isNotNull();
         assertThat(referenceBeanStat.getRefreshElapsedTime() > 0).isTrue();
-        assertThat(referenceBeanStat.getBeanClassName()).isEqualTo(ReferenceFactoryBean.class.getName());
-        assertThat(referenceBeanStat.getInterfaceType()).isEqualTo("com.alipay.sofa.smoke.tests.actuator.startup.beans.TestService");
+        assertThat(referenceBeanStat.getAttribute("classType")).isEqualTo(ReferenceFactoryBean.class.getName());
+        assertThat(referenceBeanStat.getAttribute("interface")).isEqualTo("com.alipay.sofa.smoke.tests.actuator.startup.beans.TestService");
 
         // test extension bean
         BeanStat extensionBeanStat = beanStats.stream().filter(beanStat -> beanStat.getBeanClassName().contains("ExtensionFactoryBean")).findFirst().orElse(null);
         assertThat(extensionBeanStat).isNotNull();
         assertThat(extensionBeanStat.getRefreshElapsedTime() >= 0).isTrue();
-        assertThat(extensionBeanStat.getBeanClassName()).isEqualTo(ExtensionFactoryBean.class.getName());
-        assertThat(extensionBeanStat.getExtensionProperty()).isEqualTo("ExtensionPointTarget: extension");
+        assertThat(extensionBeanStat.getAttribute("classType")).isEqualTo(ExtensionFactoryBean.class.getName());
+        assertThat(extensionBeanStat.getAttribute("extension")).isEqualTo("ExtensionPointTarget: extension");
 
         // test extension point bean
         BeanStat extensionPointBeanStat = beanStats.stream().filter(beanStat -> beanStat.getBeanClassName().contains("ExtensionPointFactoryBean")).findFirst().orElse(null);
         assertThat(extensionPointBeanStat).isNotNull();
         assertThat(extensionPointBeanStat.getRefreshElapsedTime() >= 0).isTrue();
-        assertThat(extensionPointBeanStat.getBeanClassName()).isEqualTo(ExtensionPointFactoryBean.class.getName());
-        assertThat(extensionPointBeanStat.getExtensionProperty()).isEqualTo("ExtensionPointTarget: extension");
+        assertThat(extensionPointBeanStat.getAttribute("classType")).isEqualTo(ExtensionPointFactoryBean.class.getName());
+        assertThat(extensionPointBeanStat.getAttribute("extension")).isEqualTo("ExtensionPointTarget: extension");
     }
 }

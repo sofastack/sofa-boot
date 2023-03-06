@@ -35,7 +35,6 @@ import com.alipay.sofa.boot.isle.stage.PipelineContext;
 import com.alipay.sofa.boot.isle.stage.PipelineStage;
 import com.alipay.sofa.boot.isle.stage.SpringContextInstallStage;
 import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
-import com.alipay.sofa.boot.startup.BeanStatCustomizer;
 import com.alipay.sofa.common.thread.NamedThreadFactory;
 import com.alipay.sofa.common.thread.SofaThreadPoolExecutor;
 import org.slf4j.Logger;
@@ -136,8 +135,7 @@ public class SofaModuleAutoConfiguration {
     public SpringContextLoader sofaDynamicSpringContextLoader(SofaModuleProperties sofaModuleProperties,
                                                               ApplicationContext applicationContext,
                                                               ObjectProvider<ContextRefreshInterceptor> contextRefreshInterceptors,
-                                                              SofaPostProcessorShareManager sofaPostProcessorShareManager,
-                                                              ObjectProvider<BeanStatCustomizer> beanStatCustomizers) {
+                                                              SofaPostProcessorShareManager sofaPostProcessorShareManager) {
         DynamicSpringContextLoader dynamicSpringContextLoader = new DynamicSpringContextLoader(
             applicationContext);
         dynamicSpringContextLoader.setActiveProfiles(sofaModuleProperties.getActiveProfiles());
@@ -148,8 +146,6 @@ public class SofaModuleAutoConfiguration {
         dynamicSpringContextLoader.setContextRefreshInterceptors(new ArrayList<>(
             contextRefreshInterceptors.orderedStream().toList()));
         dynamicSpringContextLoader.setSofaPostProcessorShareManager(sofaPostProcessorShareManager);
-        dynamicSpringContextLoader.setBeanStatCustomizers(beanStatCustomizers.orderedStream()
-            .toList());
         return dynamicSpringContextLoader;
     }
 

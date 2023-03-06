@@ -45,7 +45,8 @@ public class HealthStageStartupReporterTests {
     @Test
     public void startupReporter() {
         assertThat(startupReporter).isNotNull();
-        StartupReporter.StartupStaticsModel startupStaticsModel = startupReporter.report();
+        StartupReporter.StartupStaticsModel startupStaticsModel = startupReporter
+            .getStartupStaticsModel();
         assertThat(startupStaticsModel).isNotNull();
         assertThat(startupStaticsModel.getStageStats().size()).isEqualTo(6);
 

@@ -16,16 +16,17 @@
  */
 package com.alipay.sofa.boot.actuator.startup;
 
+import com.alipay.sofa.boot.startup.BaseStat;
 import com.alipay.sofa.boot.startup.StartupReporter;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.junit.jupiter.api.TestMethodOrder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * Tests for {@link StartupEndPoint}.
@@ -33,27 +34,36 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  * @author huzijie
  * @version StartupEndpointTests.java, v 0.1 2023年01月04日 11:51 AM huzijie Exp $
  */
-@ExtendWith(MockitoExtension.class)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class StartupEndpointTests {
 
-    @InjectMocks
-    private StartupEndPoint startupEndPoint;
+    private final StartupReporter startupReporter = new StartupReporter();
 
-    @Mock
-    private StartupReporter startupReporter;
+    private final StartupEndPoint startupEndPoint = new StartupEndPoint(startupReporter);
 
     @Test
-    public void startup() {
-        StartupReporter.StartupStaticsModel staticsModel = new StartupReporter.StartupStaticsModel();
-        staticsModel.setAppName("StartupEndpointTests");
-        Mockito.doReturn(staticsModel).when(startupReporter).report();
-        assertThat(startupEndPoint.startup().getAppName()).isEqualTo("StartupEndpointTests");
+    @Order(1)
+    public void startupSnapshot() {
+        startupReporter.setAppName("StartupEndpointTests");
+        assertThat(startupEndPoint.startupSnapshot().getAppName())
+            .isEqualTo("StartupEndpointTests");
     }
 
     @Test
-    public void startupForSpringBoot() {
-        assertThatThrownBy(() -> startupEndPoint.startupForSpringBoot())
-                .isInstanceOf(UnsupportedOperationException.class)
-                .hasMessage("Please use GET method instead");
+    @Order(2)
+    public void startup() {
+        StartupReporter.StartupStaticsModel staticsModel = startupReporter.getStartupStaticsModel();
+        BaseStat baseStat = new BaseStat();
+        List<BaseStat> baseStatList = new ArrayList<>();
+        baseStatList.add(baseStat);
+        staticsModel.setStageStats(baseStatList);
+        staticsModel.setAppName("StartupEndpointTests");
+        StartupReporter.StartupStaticsModel model = startupEndPoint.startup();
+        assertThat(model.getAppName()).isEqualTo("StartupEndpointTests");
+        assertThat(model.getStageStats().size()).isEqualTo(1);
+
+        model = startupEndPoint.startupSnapshot();
+        assertThat(model.getAppName()).isEqualTo("StartupEndpointTests");
+        assertThat(model.getStageStats().size()).isEqualTo(0);
     }
 }

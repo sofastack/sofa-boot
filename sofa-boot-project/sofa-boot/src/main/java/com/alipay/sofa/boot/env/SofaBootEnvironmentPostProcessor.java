@@ -18,12 +18,15 @@ package com.alipay.sofa.boot.env;
 
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.context.properties.bind.Binder;
 import org.springframework.boot.env.EnvironmentPostProcessor;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.PropertiesPropertySource;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -38,6 +41,11 @@ import java.util.Properties;
  */
 public class SofaBootEnvironmentPostProcessor implements EnvironmentPostProcessor, Ordered {
 
+    private static final String       PROPERTY_NAME_AUTOCONFIGURE_EXCLUDE        = "spring.autoconfigure.exclude";
+
+    private static final List<String> SOFABOOT_EXCLUDE_AUTOCONFIGURATION_CLASSES = List
+                                                                                     .of("org.springframework.boot.actuate.autoconfigure.startup.StartupEndpointAutoConfiguration");
+
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment,
                                        SpringApplication application) {
@@ -45,19 +53,41 @@ public class SofaBootEnvironmentPostProcessor implements EnvironmentPostProcesso
             return;
         }
 
+        addSofaBootDefaultPropertySource(environment);
+
+        addSpringExcludeConfigurationPropertySource(environment);
+
+        // set required properties, {@link MissingRequiredPropertiesException}
+        environment.setRequiredProperties(SofaBootConstants.APP_NAME_KEY);
+    }
+
+    private void addSofaBootDefaultPropertySource(ConfigurableEnvironment environment) {
         // Get SOFABoot version properties
         Properties defaultConfiguration = getSofaBootVersionProperties();
 
         // Config default value of {@literal management.endpoints.web.exposure.include}
         defaultConfiguration.put(SofaBootConstants.ENDPOINTS_WEB_EXPOSURE_INCLUDE_CONFIG,
             SofaBootConstants.SOFA_DEFAULT_ENDPOINTS_WEB_EXPOSURE_VALUE);
-
         PropertiesPropertySource propertySource = new PropertiesPropertySource(
             SofaBootConstants.SOFA_DEFAULT_PROPERTY_SOURCE, defaultConfiguration);
         environment.getPropertySources().addLast(propertySource);
+    }
 
-        // set required properties, {@link MissingRequiredPropertiesException}
-        environment.setRequiredProperties(SofaBootConstants.APP_NAME_KEY);
+    private void addSpringExcludeConfigurationPropertySource(ConfigurableEnvironment environment) {
+        // Append exclude autoconfigure classes config
+        Binder binder = Binder.get(environment);
+        List<String> excludeConfigs = new ArrayList<>();
+        List<String> stringList = binder.bind(PROPERTY_NAME_AUTOCONFIGURE_EXCLUDE, String[].class).map(List::of)
+                .orElse(new ArrayList<>());
+        excludeConfigs.addAll(SOFABOOT_EXCLUDE_AUTOCONFIGURATION_CLASSES);
+        excludeConfigs.addAll(stringList);
+
+        // Update spring.autoconfigure.exclude
+        Properties properties = new Properties();
+        properties.put(PROPERTY_NAME_AUTOCONFIGURE_EXCLUDE, StringUtils.collectionToCommaDelimitedString(excludeConfigs));
+        PropertiesPropertySource propertySource = new PropertiesPropertySource(
+                SofaBootConstants.SOFA_EXCLUDE_AUTO_CONFIGURATION_PROPERTY_SOURCE, properties);
+        environment.getPropertySources().addFirst(propertySource);
     }
 
     /**

@@ -16,13 +16,13 @@
  */
 package com.alipay.sofa.smoke.tests.actuator.startup;
 
-import com.alipay.sofa.boot.startup.StartupSmartLifecycle;
-import com.alipay.sofa.boot.startup.StartupReporter;
 import com.alipay.sofa.boot.startup.BaseStat;
 import com.alipay.sofa.boot.startup.BeanStat;
 import com.alipay.sofa.boot.startup.BootStageConstants;
 import com.alipay.sofa.boot.startup.ChildrenStat;
 import com.alipay.sofa.boot.startup.ModuleStat;
+import com.alipay.sofa.boot.startup.StartupReporter;
+import com.alipay.sofa.boot.startup.StartupSmartLifecycle;
 import com.alipay.sofa.smoke.tests.actuator.ActuatorSofaBootApplication;
 import com.alipay.sofa.smoke.tests.actuator.startup.beans.InitCostBean;
 import org.junit.jupiter.api.Test;
@@ -54,7 +54,7 @@ public class DefaultStageStartupReporterTests {
     @Test
     public void startupReporter() {
         assertThat(startupReporter).isNotNull();
-        StartupReporter.StartupStaticsModel startupStaticsModel = startupReporter.report();
+        StartupReporter.StartupStaticsModel startupStaticsModel = startupReporter.getStartupStaticsModel();
         assertThat(startupStaticsModel).isNotNull();
         assertThat(startupStaticsModel.getStageStats().size()).isEqualTo(5);
 
@@ -100,13 +100,10 @@ public class DefaultStageStartupReporterTests {
         assertThat(beanStats.size() >= 1).isTrue();
         BeanStat initBeanStat = beanStats.stream().filter(beanStat -> beanStat.getBeanClassName().contains("InitCostBean")).findFirst().orElse(null);
         assertThat(initBeanStat).isNotNull();
-        assertThat(initBeanStat.getBeanRefreshEndTime() - initBeanStat.getBeanRefreshStartTime()).isEqualTo(initBeanStat.getRefreshElapsedTime());
+        assertThat(initBeanStat.getCost()).isEqualTo(initBeanStat.getRefreshElapsedTime());
         assertThat(initBeanStat.getRealRefreshElapsedTime() - InitCostBean.INIT_COST_TIME < 20).isTrue();
-        assertThat(initBeanStat.getBeanType()).isNull();
         assertThat(initBeanStat.getBeanClassName()).isEqualTo(InitCostBean.class.getName());
         assertThat(initBeanStat.getChildren().isEmpty()).isTrue();
         assertThat(initBeanStat.getInitMethodTime()).isEqualTo(0);
-        assertThat(initBeanStat.getInterfaceType()).isNull();
-        assertThat(initBeanStat.getExtensionProperty()).isNull();
     }
 }

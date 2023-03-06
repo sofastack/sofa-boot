@@ -24,7 +24,6 @@ import com.alipay.sofa.boot.context.processor.SofaPostProcessorShareManager;
 import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptor;
 import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
-import com.alipay.sofa.boot.startup.BeanStatCustomizer;
 import com.alipay.sofa.boot.startup.StartupReporter;
 import com.alipay.sofa.boot.startup.StartupReporterAware;
 import org.slf4j.Logger;
@@ -32,6 +31,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.support.BeanDefinitionReader;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
+import org.springframework.boot.context.metrics.buffering.BufferingApplicationStartup;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
@@ -64,8 +64,6 @@ public class DynamicSpringContextLoader implements SpringContextLoader, Initiali
 
     private List<ContextRefreshInterceptor>        contextRefreshInterceptors = new ArrayList<>();
 
-    private List<BeanStatCustomizer>               beanStatCustomizers        = new ArrayList<>();
-
     private boolean                                publishEventToParent;
 
     private SofaPostProcessorShareManager          sofaPostProcessorShareManager;
@@ -89,13 +87,10 @@ public class DynamicSpringContextLoader implements SpringContextLoader, Initiali
         ClassLoader classLoader = deployment.getClassLoader();
 
         SofaDefaultListableBeanFactory beanFactory = SofaSpringContextSupport.createBeanFactory(classLoader, this::createBeanFactory);
-        beanFactory.setCostThreshold(startupReporter.getCostThreshold());
-        if (!CollectionUtils.isEmpty(beanStatCustomizers)) {
-            AnnotationAwareOrderComparator.sort(beanStatCustomizers);
-            beanStatCustomizers.forEach(beanFactory::addBeanStatCustomizer);
-        }
 
         SofaGenericApplicationContext context = SofaSpringContextSupport.createApplicationContext(beanFactory, this::createApplicationContext);
+        BufferingApplicationStartup bufferingApplicationStartup = new BufferingApplicationStartup(startupReporter.getBufferSize());
+        context.setApplicationStartup(bufferingApplicationStartup);
 
         context.setId(deployment.getModuleName());
         if (!CollectionUtils.isEmpty(activeProfiles)) {
@@ -210,14 +205,6 @@ public class DynamicSpringContextLoader implements SpringContextLoader, Initiali
 
     public void setSofaPostProcessorShareManager(SofaPostProcessorShareManager sofaPostProcessorShareManager) {
         this.sofaPostProcessorShareManager = sofaPostProcessorShareManager;
-    }
-
-    public List<BeanStatCustomizer> getBeanStatCustomizers() {
-        return beanStatCustomizers;
-    }
-
-    public void setBeanStatCustomizers(List<BeanStatCustomizer> beanStatCustomizers) {
-        this.beanStatCustomizers = beanStatCustomizers;
     }
 
     @Override

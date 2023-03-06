@@ -177,6 +177,10 @@ public abstract class AbstractContractFactoryBean implements InitializingBean, F
         this.uniqueId = uniqueId;
     }
 
+    public String getUniqueId() {
+        return uniqueId;
+    }
+
     public void setInterfaceType(String interfaceType) {
         this.interfaceType = interfaceType;
     }
