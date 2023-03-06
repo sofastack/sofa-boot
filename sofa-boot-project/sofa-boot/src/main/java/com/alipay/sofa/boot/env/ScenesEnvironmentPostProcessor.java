@@ -41,20 +41,21 @@ public class ScenesEnvironmentPostProcessor implements EnvironmentPostProcessor,
 
     private static final String SCENES_FILE_DIR = "sofa-boot/scenes";
 
-    private static final String SCENE_ENABLE = "sofa.boot.scenes.enable";
+    private static final String SCENE_ENABLE    = "sofa.boot.scenes.enable";
 
     @Override
-    public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
+    public void postProcessEnvironment(ConfigurableEnvironment environment,
+                                       SpringApplication application) {
         ResourceLoader resourceLoader = application.getResourceLoader();
         resourceLoader = (resourceLoader != null) ? resourceLoader : new DefaultResourceLoader();
-        List<PropertySourceLoader> propertySourceLoaders = SpringFactoriesLoader.loadFactories(PropertySourceLoader.class,
-                getClass().getClassLoader());
+        List<PropertySourceLoader> propertySourceLoaders = SpringFactoriesLoader.loadFactories(
+            PropertySourceLoader.class, getClass().getClassLoader());
         String scenes = environment.getProperty(SCENE_ENABLE);
         if (!StringUtils.hasText(scenes)) {
             return;
         }
-        List<SceneConfigDataReference> sceneConfigDataReferences = scenesResources(resourceLoader, propertySourceLoaders,
-                List.of(scenes.split(",")));
+        List<SceneConfigDataReference> sceneConfigDataReferences = scenesResources(resourceLoader,
+            propertySourceLoaders, List.of(scenes.split(",")));
         processAndApply(sceneConfigDataReferences, environment);
 
     }
@@ -110,7 +111,8 @@ public class ScenesEnvironmentPostProcessor implements EnvironmentPostProcessor,
         private Resource             resource;
         private PropertySourceLoader propertySourceLoader;
 
-        public SceneConfigDataReference(String name, Resource resource, PropertySourceLoader propertySourceLoader) {
+        public SceneConfigDataReference(String name, Resource resource,
+                                        PropertySourceLoader propertySourceLoader) {
             this.name = name;
             this.resource = resource;
             this.propertySourceLoader = propertySourceLoader;
