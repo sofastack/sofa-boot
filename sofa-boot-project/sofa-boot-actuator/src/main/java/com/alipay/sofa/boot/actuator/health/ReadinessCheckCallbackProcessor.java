@@ -18,6 +18,7 @@ package com.alipay.sofa.boot.actuator.health;
 
 import com.alipay.sofa.boot.log.ErrorCode;
 import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
+import com.alipay.sofa.boot.startup.BaseStat;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.springframework.beans.BeansException;
@@ -28,7 +29,9 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.util.Assert;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -40,16 +43,19 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class ReadinessCheckCallbackProcessor implements ApplicationContextAware {
 
-    private static final Logger                           logger                  = SofaBootLoggerFactory
-                                                                                      .getLogger(ReadinessCheckCallbackProcessor.class);
+    private static final Logger                           logger                                = SofaBootLoggerFactory
+                                                                                                    .getLogger(ReadinessCheckCallbackProcessor.class);
 
-    private final ObjectMapper                            objectMapper            = new ObjectMapper();
+    private final ObjectMapper                            objectMapper                          = new ObjectMapper();
 
-    private final AtomicBoolean                           isInitiated             = new AtomicBoolean(
-                                                                                      false);
+    private final AtomicBoolean                           isInitiated                           = new AtomicBoolean(
+                                                                                                    false);
+
+    private final List<BaseStat>                          readinessCheckCallbackStartupStatList = new CopyOnWriteArrayList<>();
+
     private ApplicationContext                            applicationContext;
 
-    private LinkedHashMap<String, ReadinessCheckCallback> readinessCheckCallbacks = null;
+    private LinkedHashMap<String, ReadinessCheckCallback> readinessCheckCallbacks               = null;
 
     public void init() {
         if (isInitiated.compareAndSet(false, true)) {
@@ -103,6 +109,12 @@ public class ReadinessCheckCallbackProcessor implements ApplicationContextAware 
         boolean result = false;
         Health health = null;
         logger.info("ReadinessCheckCallback [{}] check start.", beanId);
+
+        BaseStat baseStat = new BaseStat();
+        baseStat.setName(beanId);
+        baseStat.putAttribute("type", "readinessCheckCallbacn");
+        baseStat.setStartTime(System.currentTimeMillis());
+
         try {
             health = readinessCheckCallback.onHealthy(applicationContext);
             result = health.getStatus().equals(Status.UP);
@@ -119,11 +131,18 @@ public class ReadinessCheckCallbackProcessor implements ApplicationContextAware 
         } finally {
             callbackDetails.put(beanId, health);
         }
+
+        baseStat.setEndTime(System.currentTimeMillis());
+        readinessCheckCallbackStartupStatList.add(baseStat);
         return result;
     }
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
+    }
+
+    public List<BaseStat> getReadinessCheckCallbackStartupStatList() {
+        return readinessCheckCallbackStartupStatList;
     }
 }

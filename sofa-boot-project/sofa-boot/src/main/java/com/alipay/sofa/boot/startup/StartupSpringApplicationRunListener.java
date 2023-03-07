@@ -28,6 +28,8 @@ import org.springframework.core.metrics.ApplicationStartup;
 
 import java.lang.management.ManagementFactory;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Implementation of {@link SpringApplicationRunListener} to compute startup stages cost time.
@@ -99,9 +101,10 @@ public class StartupSpringApplicationRunListener implements SpringApplicationRun
             .setName(BootStageConstants.APPLICATION_CONTEXT_PREPARE_STAGE);
         applicationContextPrepareStage.setStartTime(environmentPrepareStage.getEndTime());
         applicationContextPrepareStage.setEndTime(System.currentTimeMillis());
-        if (application instanceof StartupSpringApplication) {
-            applicationContextPrepareStage.setChildren(((StartupSpringApplication) application)
-                .getInitializerStartupStatList());
+        if (application instanceof StartupSpringApplication startupSpringApplication) {
+            List<BaseStat> baseStatList = startupSpringApplication.getInitializerStartupStatList();
+            applicationContextPrepareStage.setChildren(new ArrayList<>(baseStatList));
+            baseStatList.clear();
         }
         if (applicationStartup != null) {
             context.setApplicationStartup(applicationStartup);

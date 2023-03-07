@@ -18,6 +18,7 @@ package com.alipay.sofa.boot.actuator.health;
 
 import com.alipay.sofa.boot.log.ErrorCode;
 import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
+import com.alipay.sofa.boot.startup.BaseStat;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.springframework.aop.framework.AopProxyUtils;
@@ -40,6 +41,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
@@ -58,31 +60,33 @@ import java.util.stream.Collectors;
  */
 public class HealthIndicatorProcessor implements ApplicationContextAware {
 
-    private static final Logger                    logger                     = SofaBootLoggerFactory
-                                                                                  .getLogger(HealthIndicatorProcessor.class);
+    private static final Logger                    logger                         = SofaBootLoggerFactory
+                                                                                      .getLogger(HealthIndicatorProcessor.class);
 
-    private static final List<String>              DEFAULT_EXCLUDE_INDICATORS = Arrays
-                                                                                  .asList(
-                                                                                      "com.alipay.sofa.boot.actuator.health.NonReadinessCheck",
-                                                                                      "org.springframework.boot.actuate.availability.ReadinessStateHealthIndicator",
-                                                                                      "org.springframework.boot.actuate.availability.LivenessStateHealthIndicator");
+    private static final List<String>              DEFAULT_EXCLUDE_INDICATORS     = Arrays
+                                                                                      .asList(
+                                                                                          "com.alipay.sofa.boot.actuator.health.NonReadinessCheck",
+                                                                                          "org.springframework.boot.actuate.availability.ReadinessStateHealthIndicator",
+                                                                                          "org.springframework.boot.actuate.availability.LivenessStateHealthIndicator");
 
-    private static final String                    REACTOR_CLASS              = "reactor.core.publisher.Mono";
+    private static final String                    REACTOR_CLASS                  = "reactor.core.publisher.Mono";
 
     private static final boolean                   REACTOR_CLASS_EXIST;
 
-    private final ObjectMapper                     objectMapper               = new ObjectMapper();
+    private final List<BaseStat>                   healthIndicatorStartupStatList = new CopyOnWriteArrayList<>();
 
-    private final AtomicBoolean                    isInitiated                = new AtomicBoolean(
-                                                                                  false);
+    private final ObjectMapper                     objectMapper                   = new ObjectMapper();
 
-    private LinkedHashMap<String, HealthIndicator> healthIndicators           = null;
+    private final AtomicBoolean                    isInitiated                    = new AtomicBoolean(
+                                                                                      false);
+
+    private LinkedHashMap<String, HealthIndicator> healthIndicators               = null;
 
     private ApplicationContext                     applicationContext;
 
     private ExecutorService                        healthCheckExecutor;
 
-    private Set<Class<?>>                          excludedIndicators         = new HashSet<>();
+    private Set<Class<?>>                          excludedIndicators             = new HashSet<>();
 
     private int                                    globalTimeout;
 
@@ -213,6 +217,12 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
                 .map(HealthCheckerConfig::getTimeout)
                 .orElse(getGlobalTimeout());
         Assert.isTrue(timeout > 0, "HealthIndicator timeout must lager than zero");
+
+        BaseStat baseStat = new BaseStat();
+        baseStat.setName(beanId);
+        baseStat.putAttribute("type", "healthIndicator");
+        baseStat.setStartTime(System.currentTimeMillis());
+
         try {
             if (wait) {
                 Future<Health> future = healthCheckExecutor
@@ -242,6 +252,9 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
                     e);
             health = new Health.Builder().withException(e).status(Status.DOWN).build();
         }
+
+        baseStat.setEndTime(System.currentTimeMillis());
+        healthIndicatorStartupStatList.add(baseStat);
         healthMap.put(getKey(beanId), health);
 
         return result;
@@ -297,5 +310,9 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
 
     public void setHealthIndicatorConfig(Map<String, HealthCheckerConfig> healthIndicatorConfig) {
         this.healthIndicatorConfig = healthIndicatorConfig;
+    }
+
+    public List<BaseStat> getHealthIndicatorStartupStatList() {
+        return healthIndicatorStartupStatList;
     }
 }

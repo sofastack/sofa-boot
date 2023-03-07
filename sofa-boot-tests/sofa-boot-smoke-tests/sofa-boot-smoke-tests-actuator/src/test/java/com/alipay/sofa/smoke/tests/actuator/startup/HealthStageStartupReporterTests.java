@@ -17,13 +17,16 @@
 package com.alipay.sofa.smoke.tests.actuator.startup;
 
 import com.alipay.sofa.boot.actuator.health.ReadinessCheckListener;
-import com.alipay.sofa.boot.startup.StartupReporter;
 import com.alipay.sofa.boot.startup.BaseStat;
+import com.alipay.sofa.boot.startup.ChildrenStat;
+import com.alipay.sofa.boot.startup.StartupReporter;
 import com.alipay.sofa.smoke.tests.actuator.ActuatorSofaBootApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -50,9 +53,13 @@ public class HealthStageStartupReporterTests {
         assertThat(startupStaticsModel).isNotNull();
         assertThat(startupStaticsModel.getStageStats().size()).isEqualTo(6);
 
-        BaseStat healthCheckStage = startupReporter
+        ChildrenStat<BaseStat> healthCheckStage = (ChildrenStat<BaseStat>) startupReporter
             .getStageNyName(ReadinessCheckListener.READINESS_CHECK_STAGE);
         assertThat(healthCheckStage).isNotNull();
         assertThat(healthCheckStage.getCost() > 0).isTrue();
+
+        List<BaseStat> children = healthCheckStage.getChildren();
+        assertThat(children).isNotNull();
+        assertThat(children.size() > 0).isTrue();
     }
 }
