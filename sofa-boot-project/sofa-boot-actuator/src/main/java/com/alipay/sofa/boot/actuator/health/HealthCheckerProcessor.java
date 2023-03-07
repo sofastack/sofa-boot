@@ -18,6 +18,7 @@ package com.alipay.sofa.boot.actuator.health;
 
 import com.alipay.sofa.boot.log.ErrorCode;
 import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
+import com.alipay.sofa.boot.startup.BaseStat;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -29,8 +30,10 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.util.Assert;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
@@ -49,18 +52,21 @@ import java.util.stream.Collectors;
  */
 public class HealthCheckerProcessor implements ApplicationContextAware {
 
-    private static final Logger                  logger         = SofaBootLoggerFactory
-                                                                    .getLogger(HealthCheckerProcessor.class);
+    private static final Logger                  logger                       = SofaBootLoggerFactory
+                                                                                  .getLogger(HealthCheckerProcessor.class);
 
-    private final ObjectMapper                   objectMapper   = new ObjectMapper();
+    private final ObjectMapper                   objectMapper                 = new ObjectMapper();
 
-    private final AtomicBoolean                  isInitiated    = new AtomicBoolean(false);
+    private final AtomicBoolean                  isInitiated                  = new AtomicBoolean(
+                                                                                  false);
+
+    private final List<BaseStat>                 healthCheckerStartupStatList = new CopyOnWriteArrayList<>();
 
     private ExecutorService                      healthCheckExecutor;
 
     private ApplicationContext                   applicationContext;
 
-    private LinkedHashMap<String, HealthChecker> healthCheckers = new LinkedHashMap<>();
+    private LinkedHashMap<String, HealthChecker> healthCheckers               = new LinkedHashMap<>();
 
     private int                                  globalTimeout;
 
@@ -164,6 +170,11 @@ public class HealthCheckerProcessor implements ApplicationContextAware {
 
         // 定制配置
         healthChecker = wrapperHealthCheckerForCustomProperty(healthChecker);
+
+        BaseStat baseStat = new BaseStat();
+        baseStat.setName(healthChecker.getComponentName());
+        baseStat.putAttribute("type", "HealthChecker");
+        baseStat.setStartTime(System.currentTimeMillis());
         int retryCount = 0;
         int timeout = healthChecker.getTimeout();
         do {
@@ -203,6 +214,9 @@ public class HealthCheckerProcessor implements ApplicationContextAware {
                 }
             }
         } while (isRetry && retryCount < healthChecker.getRetryCount());
+
+        baseStat.setEndTime(System.currentTimeMillis());
+        healthCheckerStartupStatList.add(baseStat);
 
         healthMap.put(beanId, health);
         try {
@@ -296,6 +310,10 @@ public class HealthCheckerProcessor implements ApplicationContextAware {
 
     public void setParallelCheckTimeout(long parallelCheckTimeout) {
         this.parallelCheckTimeout = parallelCheckTimeout;
+    }
+
+    public List<BaseStat> getHealthCheckerStartupStatList() {
+        return healthCheckerStartupStatList;
     }
 
     public static class WrapperHealthChecker implements HealthChecker {

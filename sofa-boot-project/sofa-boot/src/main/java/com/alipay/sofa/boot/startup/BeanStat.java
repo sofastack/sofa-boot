@@ -16,9 +16,6 @@
  */
 package com.alipay.sofa.boot.startup;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Stat model to record bean init.
  *
@@ -27,27 +24,25 @@ import java.util.Map;
  */
 public class BeanStat extends ChildrenStat<BeanStat> {
 
-    private final Map<String, String> attributes = new HashMap<>();
-
-    private String                    type;
+    private String type;
 
     @Deprecated
-    private String                    beanClassName;
+    private String beanClassName;
 
     @Deprecated
-    private long                      beanRefreshStartTime;
+    private long   beanRefreshStartTime;
 
     @Deprecated
-    private long                      beanRefreshEndTime;
+    private long   beanRefreshEndTime;
 
     @Deprecated
-    private long                      refreshElapsedTime;
+    private long   refreshElapsedTime;
 
     @Deprecated
-    private long                      realRefreshElapsedTime;
+    private long   realRefreshElapsedTime;
 
     @Deprecated
-    private long                      initMethodTime;
+    private long   initMethodTime;
 
     public String getType() {
         return type;
@@ -55,18 +50,6 @@ public class BeanStat extends ChildrenStat<BeanStat> {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public Map<String, String> getAttributes() {
-        return attributes;
-    }
-
-    public void putAttribute(String key, String value) {
-        this.attributes.put(key, value);
-    }
-
-    public String getAttribute(String key) {
-        return this.attributes.get(key);
     }
 
     @Deprecated

@@ -16,6 +16,9 @@
  */
 package com.alipay.sofa.boot.startup;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Base model for startup stat.
  *
@@ -24,13 +27,15 @@ package com.alipay.sofa.boot.startup;
  */
 public class BaseStat {
 
-    private String name;
+    private final Map<String, String> attributes = new HashMap<>();
 
-    private long   startTime;
+    private String                    name;
 
-    private long   endTime;
+    private long                      startTime;
 
-    private long   cost;
+    private long                      endTime;
+
+    private long                      cost;
 
     public String getName() {
         return name;
@@ -63,6 +68,18 @@ public class BaseStat {
 
     public void setCost(long cost) {
         this.cost = cost;
+    }
+
+    public Map<String, String> getAttributes() {
+        return attributes;
+    }
+
+    public void putAttribute(String key, String value) {
+        this.attributes.put(key, value);
+    }
+
+    public String getAttribute(String key) {
+        return this.attributes.get(key);
     }
 
 }

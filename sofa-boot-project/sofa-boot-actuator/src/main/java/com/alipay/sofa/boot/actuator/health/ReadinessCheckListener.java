@@ -19,6 +19,7 @@ package com.alipay.sofa.boot.actuator.health;
 import com.alipay.sofa.boot.log.ErrorCode;
 import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import com.alipay.sofa.boot.startup.BaseStat;
+import com.alipay.sofa.boot.startup.ChildrenStat;
 import com.alipay.sofa.boot.startup.StartupReporter;
 import com.alipay.sofa.boot.startup.StartupReporterAware;
 import org.slf4j.Logger;
@@ -37,7 +38,9 @@ import org.springframework.core.Ordered;
 import org.springframework.core.ResolvableType;
 import org.springframework.util.Assert;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -195,11 +198,37 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
             healthCheckerProcessor.init();
             healthIndicatorProcessor.init();
             readinessCheckCallbackProcessor.init();
-            BaseStat stat = new BaseStat();
+
+            // start collect startup stats
+            ChildrenStat<BaseStat> stat = new ChildrenStat<>();
             stat.setName(READINESS_CHECK_STAGE);
             stat.setStartTime(System.currentTimeMillis());
+
             readinessHealthCheck();
+
+            // end collect startup stats
             stat.setEndTime(System.currentTimeMillis());
+            List<BaseStat> baseStatList = new ArrayList<>();
+
+            // add healthCheckerStats
+            List<BaseStat> healthCheckerStats = healthCheckerProcessor
+                .getHealthCheckerStartupStatList();
+            baseStatList.addAll(healthCheckerStats);
+            healthCheckerStats.clear();
+
+            // add healthIndicatorStats
+            List<BaseStat> healthIndicatorStats = healthIndicatorProcessor
+                .getHealthIndicatorStartupStatList();
+            baseStatList.addAll(healthIndicatorStats);
+            healthIndicatorStats.clear();
+
+            // add readinessCheckCallbackStartupStats
+            List<BaseStat> readinessCheckCallbackStartupStats = readinessCheckCallbackProcessor
+                .getReadinessCheckCallbackStartupStatList();
+            baseStatList.addAll(readinessCheckCallbackStartupStats);
+            readinessCheckCallbackStartupStats.clear();
+
+            stat.setChildren(baseStatList);
             if (startupReporter != null) {
                 startupReporter.addCommonStartupStat(stat);
             }
