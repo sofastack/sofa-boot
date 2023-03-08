@@ -74,6 +74,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-dbcp2</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
             <groupId>com.alipay.sofa</groupId>
             <artifactId>sofa-tracer-spring-cloud-plugin</artifactId>
             <optional>true</optional>

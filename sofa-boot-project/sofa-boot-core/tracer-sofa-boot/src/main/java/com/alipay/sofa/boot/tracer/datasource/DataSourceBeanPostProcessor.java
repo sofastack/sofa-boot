@@ -63,7 +63,7 @@ public class DataSourceBeanPostProcessor implements BeanPostProcessor, PriorityO
          * Now DataSource Tracer only support the following type: Druid, C3p0, Dbcp, tomcat datasource, hikari
          */
         if (DataSourceUtils.isDruidDataSource(bean) || DataSourceUtils.isDbcpDataSource(bean)
-            || DataSourceUtils.isTomcatDataSource(bean)) {
+            || DataSourceUtils.isDbcp2DataSource(bean) || DataSourceUtils.isTomcatDataSource(bean)) {
             getUrlMethodName = DataSourceUtils.METHOD_GET_URL;
         } else if (DataSourceUtils.isC3p0DataSource(bean)
                    || DataSourceUtils.isHikariDataSource(bean)) {
