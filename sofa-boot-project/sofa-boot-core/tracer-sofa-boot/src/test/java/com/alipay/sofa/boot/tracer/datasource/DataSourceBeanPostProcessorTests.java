@@ -20,7 +20,6 @@ import com.alibaba.druid.pool.DruidDataSource;
 import com.alipay.sofa.tracer.plugins.datasource.SmartDataSource;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import com.zaxxer.hikari.HikariDataSource;
-import org.apache.commons.dbcp.BasicDataSource;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -72,7 +71,19 @@ public class DataSourceBeanPostProcessorTests {
 
     @Test
     public void wrapDbcpDataSource() {
-        BasicDataSource dataSource = new BasicDataSource();
+        org.apache.commons.dbcp.BasicDataSource dataSource = new org.apache.commons.dbcp.BasicDataSource();
+        dataSource.setUrl(testUrl);
+        Object bean = dataSourceBeanPostProcessor.postProcessAfterInitialization(dataSource,
+            "normalBean");
+        assertThat(bean).isNotNull();
+        assertThat(bean).isNotEqualTo(dataSource);
+        assertThat(bean).isInstanceOf(SmartDataSource.class);
+        assertThat(((SmartDataSource) bean).getDelegate()).isEqualTo(dataSource);
+    }
+
+    @Test
+    public void wrapDbcp2DataSource() {
+        org.apache.commons.dbcp2.BasicDataSource dataSource = new org.apache.commons.dbcp2.BasicDataSource();
         dataSource.setUrl(testUrl);
         Object bean = dataSourceBeanPostProcessor.postProcessAfterInitialization(dataSource,
             "normalBean");
