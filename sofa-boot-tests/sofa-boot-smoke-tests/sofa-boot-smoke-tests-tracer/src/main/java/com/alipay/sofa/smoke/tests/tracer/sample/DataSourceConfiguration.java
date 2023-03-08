@@ -74,7 +74,7 @@ public class DataSourceConfiguration {
 
     @Bean
     public HikariDataSource hikariDataSource() {
-        HikariDataSource dataSource= new HikariDataSource();
+        HikariDataSource dataSource = new HikariDataSource();
         dataSource.setJdbcUrl("jdbc:h2:~/test");
         dataSource.setUsername("sofa");
         dataSource.setPassword("123456");
@@ -84,7 +84,7 @@ public class DataSourceConfiguration {
 
     @Bean
     public ComboPooledDataSource comboPooledDataSource() throws PropertyVetoException {
-        ComboPooledDataSource dataSource= new ComboPooledDataSource();
+        ComboPooledDataSource dataSource = new ComboPooledDataSource();
         dataSource.setJdbcUrl("jdbc:h2:~/test");
         dataSource.setUser("sofa");
         dataSource.setPassword("123456");

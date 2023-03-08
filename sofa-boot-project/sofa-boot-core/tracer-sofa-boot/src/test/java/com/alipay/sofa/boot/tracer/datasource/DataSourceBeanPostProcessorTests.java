@@ -86,7 +86,7 @@ public class DataSourceBeanPostProcessorTests {
         org.apache.commons.dbcp2.BasicDataSource dataSource = new org.apache.commons.dbcp2.BasicDataSource();
         dataSource.setUrl(testUrl);
         Object bean = dataSourceBeanPostProcessor.postProcessAfterInitialization(dataSource,
-                "normalBean");
+            "normalBean");
         assertThat(bean).isNotNull();
         assertThat(bean).isNotEqualTo(dataSource);
         assertThat(bean).isInstanceOf(SmartDataSource.class);

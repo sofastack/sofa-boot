@@ -42,32 +42,31 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class TracerDataSourceTests {
 
     private static final File logFile = new File(System.getProperty("user.dir")
-                                          + "/logs/tracelog/datasource-client-digest.log");
+                                                 + "/logs/tracelog/datasource-client-digest.log");
 
     @Autowired
     @Qualifier("druidDataSource")
-    private DataSource druidDataSource;
+    private DataSource        druidDataSource;
 
     @Autowired
     @Qualifier("dbcpDataSource")
-    private DataSource dbcpDataSource;
+    private DataSource        dbcpDataSource;
 
     @Autowired
     @Qualifier("dbcp2DataSource")
-    private DataSource dbcp2DataSource;
+    private DataSource        dbcp2DataSource;
 
     @Autowired
     @Qualifier("tomcatDatasource")
-    private DataSource tomcatDatasource;
+    private DataSource        tomcatDatasource;
 
     @Autowired
     @Qualifier("hikariDataSource")
-    private DataSource hikariDataSource;
+    private DataSource        hikariDataSource;
 
     @Autowired
     @Qualifier("comboPooledDataSource")
-    private DataSource comboPooledDataSource;
-
+    private DataSource        comboPooledDataSource;
 
     @BeforeAll
     public static void clearFile() {
@@ -78,6 +77,7 @@ public class TracerDataSourceTests {
     public void checkDruidDataSource() throws IOException {
         invokeSql(druidDataSource);
     }
+
     @Test
     public void checkDbcpDataSource() throws IOException {
         invokeSql(dbcpDataSource);
@@ -87,7 +87,6 @@ public class TracerDataSourceTests {
     public void checkDbcp2DataSource() throws IOException {
         invokeSql(dbcp2DataSource);
     }
-
 
     @Test
     public void checkTomcatDatasource() throws IOException {
@@ -103,6 +102,7 @@ public class TracerDataSourceTests {
     public void checkComboPooledDataSource() throws IOException {
         invokeSql(comboPooledDataSource);
     }
+
     private void invokeSql(DataSource dataSource) throws IOException {
         String dataSourceName = dataSource.getClass().getName();
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);

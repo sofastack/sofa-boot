@@ -42,7 +42,7 @@ public class SofaTracerConfigurationListener
                                             ApplicationListener<ApplicationEnvironmentPreparedEvent>,
                                             Ordered {
 
-    private static final AtomicBoolean EXECUTED        = new AtomicBoolean(false);
+    private static final AtomicBoolean EXECUTED = new AtomicBoolean(false);
 
     @Override
     public void onApplicationEvent(ApplicationEnvironmentPreparedEvent event) {
@@ -53,10 +53,9 @@ public class SofaTracerConfigurationListener
         ConfigurableEnvironment environment = event.getEnvironment();
 
         // check spring.application.name
-        String applicationName = environment
-            .getProperty(SofaBootConstants.APP_NAME_KEY);
-        Assert.isTrue(StringUtils.hasText(applicationName),
-                SofaBootConstants.APP_NAME_KEY + " must be configured!");
+        String applicationName = environment.getProperty(SofaBootConstants.APP_NAME_KEY);
+        Assert.isTrue(StringUtils.hasText(applicationName), SofaBootConstants.APP_NAME_KEY
+                                                            + " must be configured!");
         SofaTracerConfiguration.setProperty(SofaTracerConfiguration.TRACER_APPNAME_KEY,
             applicationName);
 
