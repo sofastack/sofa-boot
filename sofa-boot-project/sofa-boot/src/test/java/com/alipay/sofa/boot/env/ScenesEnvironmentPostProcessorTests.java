@@ -38,8 +38,10 @@ public class ScenesEnvironmentPostProcessorTests {
         environment.setProperty("sofa.boot.scenes", "function");
         scenesEnvironmentPostProcessor.postProcessEnvironment(environment, new SpringApplication());
         assertThat(
-                environment.getPropertySources().contains("classpath:/sofa-boot/scenes" + File.separator + "function.properties")).isTrue();
+            environment.getPropertySources().contains(
+                "classpath:/sofa-boot/scenes" + File.separator + "function.properties")).isTrue();
         assertThat(
-                environment.getPropertySources().contains("classpath:/sofa-boot/scenes" + File.separator + "function.yml")).isTrue();
+            environment.getPropertySources().contains(
+                "classpath:/sofa-boot/scenes" + File.separator + "function.yml")).isTrue();
     }
 }
