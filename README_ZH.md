@@ -28,7 +28,7 @@ Spring Boot 是一个非常优秀的开源框架，可以非常方便地就构�
 
 针对 Spring Boot 缺少 Readiness Check 能力的情况，SOFABoot 增加了 Spring Boot 现有的健康检查的能力，提供了 Readiness Check 的能力。利用 Readiness Check 的能力，SOFA 中间件中的各个组件只有在 Readiness Check 通过之后，才将流量引入到应用的实例中，比如 RPC，只有在 Readiness Check 通过之后，才会向服务注册中心注册，后面来自上游应用的流量才会进入。
 
-除了中间件可以利用 Readiness Check 的事件来控制流量的进入之外，PAAS 系统也可以通过访问 `http://localhost:8080/health/readiness` 来获取应用的 Readiness Check 的状况，用来控制例如负载均衡设备等等流量的进入。
+除了中间件可以利用 Readiness Check 的事件来控制流量的进入之外，PAAS 系统也可以通过访问 `http://localhost:8080/actuator/readiness` 来获取应用的 Readiness Check 的状况，用来控制例如负载均衡设备等等流量的进入。
 
 ### 2.2 提供类隔离的能力
 
@@ -44,7 +44,7 @@ Spring Boot 是一个非常优秀的开源框架，可以非常方便地就构�
 
 ### 2.5 模块化开发
 
-SOFABoot 从 2.4.0 版本开始支持基于 Spring 上下文隔离的模块化开发能力，每个 SOFABoot 模块使用独立的 Spring 上下文，避免不同 SOFABoot 模块间的 BeanId 冲突，有效降低企业级多模块开发时团队间的沟通成本。
+SOFABoot 支持基于 Spring 上下文隔离的模块化开发能力，每个 SOFABoot 模块使用独立的 Spring 上下文，避免不同 SOFABoot 模块间的 BeanId 冲突，有效降低企业级多模块开发时团队间的沟通成本。
 
 ## 三、快速开始
 
@@ -54,7 +54,7 @@ SOFABoot 从 2.4.0 版本开始支持基于 Spring 上下文隔离的模块化�
 
 在贡献代码之前，请阅读[如何贡献](./CONTRIBUTING.md)来了解如何向 SOFABoot 贡献代码。
 
-SOFABoot 的编译环境的要求为 JDK8，需要采用 [Apache Maven 3.2.5](https://archive.apache.org/dist/maven/maven-3/3.2.5/binaries/) 或者更高的版本进行编译。
+SOFABoot 的编译环境的要求为 JDK17，需要采用 [Apache Maven 3.5.4](https://archive.apache.org/dist/maven/maven-3/3.5.4/binaries/) 或者更高的版本进行编译。
 
 ## 五、感谢
 
@@ -62,12 +62,11 @@ SOFA 的第一个版本是阿玺创造的，感谢阿玺给 SOFA 打下了坚实
 
 ## 六、示例
 
-SOFABoot 的示例工程 [sofaboot-samples](https://github.com/sofastack-guides/sofa-boot-guides/tree/master) 包含以下 demo 项目：
-* [SOFABoot 示例工程](https://github.com/sofastack-guides/sofa-boot-guides/tree/master/sofaboot-sample)
-* [SOFABoot 示例工程（包含类隔离能力）](https://github.com/sofastack-guides/sofa-boot-guides/blob/master/sofaboot-sample-with-isolation)
-* [SOFABoot 示例工程（包含模块化开发能力）](https://github.com/sofastack-guides/sofa-boot-guides/blob/master/sofaboot-sample-with-isle)
-* [SOFABoot 示例工程（使用 SOFARPC）](https://github.com/sofastack-guides/sofa-boot-guides/blob/master/sofaboot-sample-with-rpc)
-* [SOFABoot 示例工程（使用定时任务）](https://github.com/sofastack-guides/sofa-boot-guides/blob/master/sofaboot-scheduler-batch-sample)
+SOFABoot 的示例工程 [sofaboot-samples](https://github.com/sofastack-guides/sofa-boot-guides/tree/4.x) 包含以下 demo 项目：
+* [SOFABoot 示例工程](https://github.com/sofastack-guides/sofa-boot-guides/tree/4.x/sofaboot-sample)
+* [SOFABoot 示例工程（包含类隔离能力）](https://github.com/sofastack-guides/sofa-boot-guides/blob/4.x/sofaboot-sample-with-isolation)
+* [SOFABoot 示例工程（包含模块化开发能力）](https://github.com/sofastack-guides/sofa-boot-guides/blob/4.x/sofaboot-sample-with-isle)
+* [SOFABoot 示例工程（使用 SOFARPC）](https://github.com/sofastack-guides/sofa-boot-guides/blob/4.x/sofaboot-sample-with-rpc)
  
 ## 七、文档
 
