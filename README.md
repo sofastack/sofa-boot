@@ -30,10 +30,10 @@ Please refer to SOFAStack Documentation for [SOFABoot quick start guide](https:/
 
 ### Demos
 Some SOFABoot demo projects to get your hands dirty:
-- [Class Isolation](https://github.com/sofastack-guides/sofa-boot-guides/tree/master/sofaboot-sample-with-isolation)
-- [Spring Context Isolation](https://github.com/sofastack-guides/sofa-boot-guides/tree/master/sofaboot-sample-with-isolation)
-- [SOFA RPC](https://github.com/sofastack-guides/sofa-boot-guides/tree/master/sofaboot-sample-with-rpc)
-- [Scheduler with Batch](https://github.com/sofastack-guides/sofa-boot-guides/tree/master/sofaboot-scheduler-batch-sample)
+* [Standard project](https://github.com/sofastack-guides/sofa-boot-guides/tree/4.x/sofaboot-sample)
+- [Class Isolation](https://github.com/sofastack-guides/sofa-boot-guides/tree/4.x/sofaboot-sample-with-isolation)
+- [Spring Context Isolation](https://github.com/sofastack-guides/sofa-boot-guides/tree/4.x/sofaboot-sample-with-isolation)
+- [SOFA RPC](https://github.com/sofastack-guides/sofa-boot-guides/tree/4.x/sofaboot-sample-with-rpc)
 
 ## Functionality
 To supplement the abilities of deploying large-scale microservices in production environment for Spring Boot, SOFABoot offers following enhancements:
@@ -44,7 +44,7 @@ While Spring Boot health indicators are practical real-time exposure of applicat
 Therefore, readiness check is an indispensable part of deployment automation in production environment and SOFABoot provides the readiness check for application out of box.
 For reliable application startup, all SOFAStack middleware services won't reveal themselves (e.g., RPC services publishing to Service Registry) until readiness check passes.
 
-Platform PaaS can also make use of the readiness check result via URL `http://localhost:8080/health/readiness` to control gracefully external traffic originating such as gateway, load balancer, etc.
+Platform PaaS can also make use of the readiness check result via URL `http://localhost:8080/actuator/readiness` to control gracefully external traffic originating such as gateway, load balancer, etc.
 
 ### Class Isolation
 Aimed to solve class or dependency conflicts, [SOFAArk](https://github.com/sofastack/sofa-ark) is created.
@@ -78,7 +78,7 @@ All of them are packaged as self-contained "starters" to provide the correspondi
 ## Contribution
 We love contributions! Before taking any further steps, please take a look at [Contributing to SOFABoot](./CONTRIBUTING.md).
 
-SOFABoot is compiled under JDK 8 currently and needs [Apache Maven 3.2.5](https://archive.apache.org/dist/maven/maven-3/3.2.5/binaries/) or higher version.
+SOFABoot is compiled under JDK 17 currently and needs [Apache Maven 3.5.4](https://archive.apache.org/dist/maven/maven-3/3.5.4/binaries/) or higher version.
 
 ### Community
 See our community [materials](https://github.com/sofastack/community/blob/master/ROLES-EN.md).
