@@ -1,6 +1,9 @@
 # EnvironmentPostProcessor
-org.springframework.boot.env.EnvironmentPostProcessor=com.alipay.sofa.boot.env.SofaBootEnvironmentPostProcessor,\
-  com.alipay.sofa.boot.logging.LogEnvironmentPostProcessor
+org.springframework.boot.env.EnvironmentPostProcessor=\
+  com.alipay.sofa.boot.env.SofaBootEnvironmentPostProcessor,\
+  com.alipay.sofa.boot.logging.LogEnvironmentPostProcessor,\
+  com.alipay.sofa.boot.env.ScenesEnvironmentPostProcessor
+
 
 # SpringApplicationListener
 org.springframework.context.ApplicationListener=com.alipay.sofa.boot.listener.SpringCloudConfigListener,\

@@ -1,0 +1,8 @@
+sofa:
+  boot:
+    switch:
+      bean:
+        functionFeature2Bean:
+          enabled: false
+        functionFeature3Bean:
+          enabled: true
