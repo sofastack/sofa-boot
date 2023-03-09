@@ -32,6 +32,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author yuanxuan
@@ -41,7 +42,7 @@ public class ScenesEnvironmentPostProcessor implements EnvironmentPostProcessor,
 
     private static final String SCENES_FILE_DIR = "sofa-boot/scenes";
 
-    private static final String SCENE_ENABLE    = "sofa.boot.scenes.enable";
+    private static final String SCENE_ENABLE    = "sofa.boot.scenes";
 
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment,
@@ -55,7 +56,7 @@ public class ScenesEnvironmentPostProcessor implements EnvironmentPostProcessor,
             return;
         }
         List<SceneConfigDataReference> sceneConfigDataReferences = scenesResources(resourceLoader,
-            propertySourceLoaders, List.of(scenes.split(",")));
+            propertySourceLoaders, StringUtils.commaDelimitedListToSet(scenes));
         processAndApply(sceneConfigDataReferences, environment);
 
     }
@@ -66,7 +67,7 @@ public class ScenesEnvironmentPostProcessor implements EnvironmentPostProcessor,
     }
 
     private List<SceneConfigDataReference> scenesResources(ResourceLoader resourceLoader, List<PropertySourceLoader> propertySourceLoaders,
-                                                           List<String> scenes) {
+                                                           Set<String> scenes) {
         List<SceneConfigDataReference> resources = new ArrayList<>();
         if (scenes != null && !scenes.isEmpty()) {
             scenes.forEach(scene -> propertySourceLoaders.forEach(psl -> {
@@ -88,7 +89,6 @@ public class ScenesEnvironmentPostProcessor implements EnvironmentPostProcessor,
      * {@link org.springframework.core.env.Environment}.
      */
     private void processAndApply(List<SceneConfigDataReference> sceneConfigDataReferences, ConfigurableEnvironment environment) {
-        if (sceneConfigDataReferences != null && !sceneConfigDataReferences.isEmpty()) {
             for (SceneConfigDataReference sceneConfigDataReference :
                     sceneConfigDataReferences) {
                 try {
@@ -102,7 +102,6 @@ public class ScenesEnvironmentPostProcessor implements EnvironmentPostProcessor,
                     throw new IllegalStateException("IO error on loading scene config data from " + sceneConfigDataReference.name, e);
                 }
             }
-        }
     }
 
     private static class SceneConfigDataReference {
