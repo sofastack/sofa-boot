@@ -71,6 +71,11 @@ public class SofaBootConstants {
     public static final String SOFA_BOOT_FORMATTED_VERSION                     = "sofa-boot.formatted-version";
 
     /**
+     * SOFABoot scenes file dir
+     */
+    public static final String SOFA_BOOT_SCENES_FILE_DIR                       = "sofa-boot/scenes";
+
+    /**
      * Spring Boot web endpoint exposure property key
      */
     public static final String ENDPOINTS_WEB_EXPOSURE_INCLUDE_CONFIG           = "management.endpoints.web.exposure.include";

@@ -16,6 +16,8 @@
  */
 package com.alipay.sofa.boot.env;
 
+import com.alipay.sofa.boot.constant.SofaBootConstants;
+import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.env.EnvironmentPostProcessor;
 import org.springframework.boot.env.PropertySourceLoader;
@@ -35,14 +37,14 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * Implementation of {@link EnvironmentPostProcessor} to load configs by scenes.
+ *
  * @author yuanxuan
  * @version : ScenesEnvironmentPostProcessor.java, v 0.1 2023年03月03日 15:41 yuanxuan Exp $
  */
 public class ScenesEnvironmentPostProcessor implements EnvironmentPostProcessor, Ordered {
 
-    private static final String SCENES_FILE_DIR = "sofa-boot/scenes";
-
-    private static final String SCENE_ENABLE    = "sofa.boot.scenes";
+    public static final String SCENES_KEY = "sofa.boot.scenes";
 
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment,
@@ -51,12 +53,16 @@ public class ScenesEnvironmentPostProcessor implements EnvironmentPostProcessor,
         resourceLoader = (resourceLoader != null) ? resourceLoader : new DefaultResourceLoader();
         List<PropertySourceLoader> propertySourceLoaders = SpringFactoriesLoader.loadFactories(
             PropertySourceLoader.class, getClass().getClassLoader());
-        String scenes = environment.getProperty(SCENE_ENABLE);
-        if (!StringUtils.hasText(scenes)) {
+        String scenesValue = environment.getProperty(SCENES_KEY);
+        if (!StringUtils.hasText(scenesValue)) {
             return;
         }
+        Set<String> scenes = StringUtils.commaDelimitedListToSet(scenesValue);
         List<SceneConfigDataReference> sceneConfigDataReferences = scenesResources(resourceLoader,
-            propertySourceLoaders, StringUtils.commaDelimitedListToSet(scenes));
+            propertySourceLoaders, scenes);
+
+        SofaBootLoggerFactory.getLogger(ScenesEnvironmentPostProcessor.class).info(
+            "Configs for scenes {} enable", scenes);
         processAndApply(sceneConfigDataReferences, environment);
 
     }
@@ -73,7 +79,7 @@ public class ScenesEnvironmentPostProcessor implements EnvironmentPostProcessor,
             scenes.forEach(scene -> propertySourceLoaders.forEach(psl -> {
                 for (String extension : psl.getFileExtensions()) {
                     String location =
-                            "classpath:/" + SCENES_FILE_DIR + File.separator + scene + "." + extension;
+                            "classpath:/" + SofaBootConstants.SOFA_BOOT_SCENES_FILE_DIR + File.separator + scene + "." + extension;
                     Resource resource = resourceLoader.getResource(location);
                     if (resource.exists()) {
                         resources.add(new SceneConfigDataReference(location, resource, psl));
