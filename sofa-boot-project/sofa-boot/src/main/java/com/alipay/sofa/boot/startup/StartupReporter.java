@@ -251,6 +251,9 @@ public class StartupReporter {
     }
 
     private BeanStat customBeanStat(ConfigurableApplicationContext context, BeanStat beanStat) {
+        if (!context.isActive()) {
+            return beanStat;
+        }
         String type = beanStat.getType();
         if (SPRING_BEAN_INSTANTIATE_TYPES.contains(type)) {
             String beanName = beanStat.getName();
