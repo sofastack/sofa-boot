@@ -87,6 +87,7 @@ public class SofaGenericApplicationContext extends GenericApplicationContext {
             super.refresh();
         } catch (Throwable t) {
             throwable = t;
+            throw t;
         } finally {
             applyInterceptorAfterRefresh(throwable);
         }
