@@ -25,16 +25,16 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Tests for {@link SofaHttpCodeStatusMapper}.
+ * Tests for {@link ReadinessHttpCodeStatusMapper}.
  *
  * @author huzijie
- * @version SofaHttpCodeStatusMapperTests.java, v 0.1 2023年03月14日 5:58 PM huzijie Exp $
+ * @version ReadinessHttpCodeStatusMapperTests.java, v 0.1 2023年03月14日 5:58 PM huzijie Exp $
  */
-public class SofaHttpCodeStatusMapperTests {
+public class ReadinessHttpCodeStatusMapperTests {
 
     @Test
     public void checkDefaultMapper() {
-        SofaHttpCodeStatusMapper mapper = new SofaHttpCodeStatusMapper();
+        ReadinessHttpCodeStatusMapper mapper = new ReadinessHttpCodeStatusMapper();
         assertThat(mapper.getStatusCode(Status.UP)).isEqualTo(WebEndpointResponse.STATUS_OK);
         assertThat(mapper.getStatusCode(Status.DOWN)).isEqualTo(
             WebEndpointResponse.STATUS_SERVICE_UNAVAILABLE);
@@ -47,7 +47,7 @@ public class SofaHttpCodeStatusMapperTests {
     @Test
     public void checkCustomMapper() {
         Map<String, Integer> customMapping = Map.of("up", 300, "DOWN", 301, "OUTOFSERVICE", 302);
-        SofaHttpCodeStatusMapper mapper = new SofaHttpCodeStatusMapper(customMapping);
+        ReadinessHttpCodeStatusMapper mapper = new ReadinessHttpCodeStatusMapper(customMapping);
         assertThat(mapper.getStatusCode(Status.UP)).isEqualTo(300);
         assertThat(mapper.getStatusCode(Status.DOWN)).isEqualTo(301);
         assertThat(mapper.getStatusCode(Status.OUT_OF_SERVICE)).isEqualTo(302);

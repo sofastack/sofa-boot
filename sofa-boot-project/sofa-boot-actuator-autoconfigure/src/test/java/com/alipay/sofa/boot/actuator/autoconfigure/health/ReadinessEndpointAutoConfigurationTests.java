@@ -18,7 +18,7 @@ package com.alipay.sofa.boot.actuator.autoconfigure.health;
 
 import com.alipay.sofa.boot.actuator.health.ReadinessEndpoint;
 import com.alipay.sofa.boot.actuator.health.ReadinessEndpointWebExtension;
-import com.alipay.sofa.boot.actuator.health.SofaHttpCodeStatusMapper;
+import com.alipay.sofa.boot.actuator.health.ReadinessHttpCodeStatusMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.actuate.autoconfigure.health.HealthEndpointAutoConfiguration;
 import org.springframework.boot.actuate.health.HttpCodeStatusMapper;
@@ -48,7 +48,7 @@ public class ReadinessEndpointAutoConfigurationTests {
                 .run((context) -> {
                     assertThat(context).hasSingleBean(ReadinessEndpoint.class);
                     assertThat(context).hasSingleBean(ReadinessEndpointWebExtension.class);
-                    assertThat(context).getBean(HttpCodeStatusMapper.class).isInstanceOf(SofaHttpCodeStatusMapper.class);
+                    assertThat(context).getBean(HttpCodeStatusMapper.class).isInstanceOf(ReadinessHttpCodeStatusMapper.class);
                 });
     }
 
@@ -59,7 +59,7 @@ public class ReadinessEndpointAutoConfigurationTests {
                 .run((context) -> {
                     assertThat(context).doesNotHaveBean(ReadinessEndpoint.class);
                     assertThat(context).doesNotHaveBean(ReadinessEndpointWebExtension.class);
-                    assertThat(context).doesNotHaveBean(SofaHttpCodeStatusMapper.class);
+                    assertThat(context).doesNotHaveBean(ReadinessHttpCodeStatusMapper.class);
                 });
     }
 
@@ -68,7 +68,7 @@ public class ReadinessEndpointAutoConfigurationTests {
         this.contextRunner.withPropertyValues("management.endpoints.web.exposure.include=readiness")
                 .withPropertyValues("sofa.boot.actuator.health.status.http-mapping.down=400")
                 .run((context) -> {
-                    SofaHttpCodeStatusMapper sofaHttpCodeStatusMapper = (SofaHttpCodeStatusMapper) context.getBean(HttpCodeStatusMapper.class);
+                    ReadinessHttpCodeStatusMapper sofaHttpCodeStatusMapper = (ReadinessHttpCodeStatusMapper) context.getBean(HttpCodeStatusMapper.class);
                     assertThat(sofaHttpCodeStatusMapper.getStatusCode(Status.DOWN)).isEqualTo(400);
                 });
     }

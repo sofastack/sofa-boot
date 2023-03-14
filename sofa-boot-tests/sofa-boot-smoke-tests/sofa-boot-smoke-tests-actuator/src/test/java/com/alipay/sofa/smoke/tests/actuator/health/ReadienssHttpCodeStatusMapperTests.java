@@ -32,7 +32,7 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Integration tests for {@link SofaHttpCodeStatusMapperTests} web response.
+ * Integration tests for {@link ReadienssHttpCodeStatusMapperTests} web response.
  *
  * @author huzijie
  * @version SofaHttpCodeStatusMapperTests.java, v 0.1 2023年03月14日 5:53 PM huzijie Exp $
@@ -40,18 +40,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(classes = ActuatorSofaBootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {
                                                                                                                                        "management.endpoints.web.exposure.include=readiness",
                                                                                                                                        "sofa.boot.actuator.health.status.http-mapping.down=510" })
-@Import(SofaHttpCodeStatusMapperTests.ErrorHealthChecker.class)
-public class SofaHttpCodeStatusMapperTests {
+@Import(ReadienssHttpCodeStatusMapperTests.ErrorHealthChecker.class)
+public class ReadienssHttpCodeStatusMapperTests {
 
     @Autowired
     private TestRestTemplate restTemplate;
 
     @Test
     public void health() {
-        ResponseEntity<SofaHttpCodeStatusMapperTests.HealthResponse> response = restTemplate
-            .getForEntity("/actuator/readiness", SofaHttpCodeStatusMapperTests.HealthResponse.class);
+        ResponseEntity<ReadienssHttpCodeStatusMapperTests.HealthResponse> response = restTemplate
+            .getForEntity("/actuator/readiness",
+                ReadienssHttpCodeStatusMapperTests.HealthResponse.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_EXTENDED);
-        SofaHttpCodeStatusMapperTests.HealthResponse health = response.getBody();
+        ReadienssHttpCodeStatusMapperTests.HealthResponse health = response.getBody();
         assertThat(health).isNotNull();
         assertThat(health.getDetails().toString()).contains("ErrorHealthChecker");
     }

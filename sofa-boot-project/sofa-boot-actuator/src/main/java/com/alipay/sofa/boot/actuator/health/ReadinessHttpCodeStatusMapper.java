@@ -34,7 +34,7 @@ import java.util.Map;
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 2021/3/22
  */
-public class SofaHttpCodeStatusMapper implements HttpCodeStatusMapper {
+public class ReadinessHttpCodeStatusMapper implements HttpCodeStatusMapper {
 
     private static final Map<String, Integer> DEFAULT_MAPPINGS;
 
@@ -50,11 +50,11 @@ public class SofaHttpCodeStatusMapper implements HttpCodeStatusMapper {
 
     private final SimpleHttpCodeStatusMapper  statusMapper;
 
-    public SofaHttpCodeStatusMapper() {
+    public ReadinessHttpCodeStatusMapper() {
         this(null);
     }
 
-    public SofaHttpCodeStatusMapper(Map<String, Integer> mappings) {
+    public ReadinessHttpCodeStatusMapper(Map<String, Integer> mappings) {
         Map<String, Integer> mapping = new HashMap<>(8);
 
         // add custom status mapper

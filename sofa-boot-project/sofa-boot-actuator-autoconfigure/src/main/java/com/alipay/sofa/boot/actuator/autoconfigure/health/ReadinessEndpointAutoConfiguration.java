@@ -19,7 +19,7 @@ package com.alipay.sofa.boot.actuator.autoconfigure.health;
 import com.alipay.sofa.boot.actuator.health.ReadinessCheckListener;
 import com.alipay.sofa.boot.actuator.health.ReadinessEndpoint;
 import com.alipay.sofa.boot.actuator.health.ReadinessEndpointWebExtension;
-import com.alipay.sofa.boot.actuator.health.SofaHttpCodeStatusMapper;
+import com.alipay.sofa.boot.actuator.health.ReadinessHttpCodeStatusMapper;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.boot.actuate.autoconfigure.health.HealthEndpointAutoConfiguration;
 import org.springframework.boot.actuate.health.HttpCodeStatusMapper;
@@ -57,7 +57,7 @@ public class ReadinessEndpointAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public HttpCodeStatusMapper sofaHttpCodeStatusMapper(HealthProperties healthProperties) {
-        return new SofaHttpCodeStatusMapper(healthProperties.getStatus().getHttpMapping());
+    public HttpCodeStatusMapper readinessHttpCodeStatusMapper(HealthProperties healthProperties) {
+        return new ReadinessHttpCodeStatusMapper(healthProperties.getStatus().getHttpMapping());
     }
 }
