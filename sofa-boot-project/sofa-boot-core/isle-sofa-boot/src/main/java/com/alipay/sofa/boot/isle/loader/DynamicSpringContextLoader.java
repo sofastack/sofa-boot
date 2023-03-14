@@ -163,8 +163,16 @@ public class DynamicSpringContextLoader implements SpringContextLoader, Initiali
     }
 
     protected void addPostProcessors(SofaDefaultListableBeanFactory beanFactory) {
-        sofaPostProcessorShareManager.getRegisterSingletonMap().forEach(beanFactory::registerSingleton);
-        sofaPostProcessorShareManager.getRegisterBeanDefinitionMap().forEach(beanFactory::registerBeanDefinition);
+        sofaPostProcessorShareManager.getRegisterSingletonMap().forEach((beanName, singletonObject) -> {
+            if (!beanFactory.containsBeanDefinition(beanName)) {
+                beanFactory.registerSingleton(beanName, singletonObject);
+            }
+        });
+        sofaPostProcessorShareManager.getRegisterBeanDefinitionMap().forEach((beanName, beanDefinition) -> {
+            if (!beanFactory.containsBeanDefinition(beanName)) {
+                beanFactory.registerBeanDefinition(beanName, beanDefinition);
+            }
+        });
     }
 
     public boolean isAllowBeanOverriding() {
