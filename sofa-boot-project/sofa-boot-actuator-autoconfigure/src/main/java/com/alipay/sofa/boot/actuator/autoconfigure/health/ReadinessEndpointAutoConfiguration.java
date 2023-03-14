@@ -19,17 +19,15 @@ package com.alipay.sofa.boot.actuator.autoconfigure.health;
 import com.alipay.sofa.boot.actuator.health.ReadinessCheckListener;
 import com.alipay.sofa.boot.actuator.health.ReadinessEndpoint;
 import com.alipay.sofa.boot.actuator.health.ReadinessEndpointWebExtension;
+import com.alipay.sofa.boot.actuator.health.ReadinessHttpCodeStatusMapper;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.boot.actuate.autoconfigure.health.HealthEndpointAutoConfiguration;
-import org.springframework.boot.actuate.autoconfigure.health.HealthEndpointProperties;
-import org.springframework.boot.actuate.health.HealthEndpoint;
 import org.springframework.boot.actuate.health.HttpCodeStatusMapper;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 /**
  * {@link EnableAutoConfiguration Auto-configuration} for {@link ReadinessEndpoint}.
@@ -49,23 +47,17 @@ public class ReadinessEndpointAutoConfiguration {
         return new ReadinessEndpoint(readinessCheckListener);
     }
 
-    @Configuration(proxyBeanMethods = false)
-    @ConditionalOnBean(ReadinessEndpoint.class)
-    @ConditionalOnAvailableEndpoint(endpoint = HealthEndpoint.class)
-    static class ReadinessCheckExtensionConfiguration {
+    @Bean
+    @ConditionalOnMissingBean
+    @ConditionalOnAvailableEndpoint(endpoint = ReadinessEndpointWebExtension.class)
+    public ReadinessEndpointWebExtension readinessEndpointWebExtension(ReadinessEndpoint readinessEndpoint,
+                                                                       HttpCodeStatusMapper sofaHttpCodeStatusMapper) {
+        return new ReadinessEndpointWebExtension(readinessEndpoint, sofaHttpCodeStatusMapper);
+    }
 
-        @Bean
-        @ConditionalOnMissingBean
-        @ConditionalOnAvailableEndpoint(endpoint = ReadinessEndpointWebExtension.class)
-        public ReadinessEndpointWebExtension readinessEndpointWebExtension(ReadinessEndpoint readinessEndpoint,
-                                                                           HttpCodeStatusMapper sofaHttpCodeStatusMapper) {
-            return new ReadinessEndpointWebExtension(readinessEndpoint, sofaHttpCodeStatusMapper);
-        }
-
-        @Bean
-        @ConditionalOnMissingBean
-        public HttpCodeStatusMapper sofaHttpCodeStatusMapper(HealthEndpointProperties healthEndpointProperties) {
-            return new SofaHttpCodeStatusMapper(healthEndpointProperties);
-        }
+    @Bean
+    @ConditionalOnMissingBean
+    public HttpCodeStatusMapper readinessHttpCodeStatusMapper(HealthProperties healthProperties) {
+        return new ReadinessHttpCodeStatusMapper(healthProperties.getStatus().getHttpMapping());
     }
 }
