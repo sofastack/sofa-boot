@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * Tests for {@link SofaGenericApplicationContext}.
@@ -85,7 +86,7 @@ public class SofaGenericApplicationContextTests {
         interceptors.add(interceptor);
         context.setInterceptors(interceptors);
         context.registerBean(ExceptionBean.class);
-        context.refresh();
+        assertThatThrownBy(context::refresh).hasRootCauseMessage("Init failed");
         assertThat(interceptor.isStarted()).isTrue();
         assertThat(interceptor.isFinished()).isTrue();
         assertThat(interceptor.isFailed()).isTrue();
