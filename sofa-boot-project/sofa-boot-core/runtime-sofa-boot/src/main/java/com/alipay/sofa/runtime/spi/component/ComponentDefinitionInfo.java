@@ -40,36 +40,29 @@ public class ComponentDefinitionInfo {
      */
     private String             beanClassName;
 
-
     public SourceType getSourceType() {
         return sourceType;
     }
-
 
     public void setSourceType(SourceType sourceType) {
         this.sourceType = sourceType;
     }
 
-
     public String getBeanId() {
         return beanId;
     }
-
 
     public void setBeanId(String beanId) {
         this.beanId = beanId;
     }
 
-
     public String getLocation() {
         return location;
     }
 
-
     public void setLocation(String location) {
         this.location = location;
     }
-
 
     public String getBeanClassName() {
         return beanClassName;
