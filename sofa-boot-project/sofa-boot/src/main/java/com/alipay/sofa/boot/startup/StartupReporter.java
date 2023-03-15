@@ -67,7 +67,7 @@ public class StartupReporter {
 
     private int                            bufferSize                                     = 4096;
 
-    private int                            costThreshold                                  = 10;
+    private int                            costThreshold                                  = 50;
 
     public StartupReporter() {
         this.startupStaticsModel = new StartupStaticsModel();
@@ -167,7 +167,8 @@ public class StartupReporter {
      * @return list of bean stats.
      */
     public List<BeanStat> generateBeanStats(ConfigurableApplicationContext context) {
-        List<BeanStat> beanStatList = new ArrayList<>();
+
+        List<BeanStat> rootBeanStatList = new ArrayList<>();
         ApplicationStartup applicationStartup = context.getApplicationStartup();
         if (applicationStartup instanceof BufferingApplicationStartup bufferingApplicationStartup) {
             Map<Long, BeanStat> beanStatIdMap = new HashMap<>();
@@ -175,13 +176,12 @@ public class StartupReporter {
             StartupTimeline startupTimeline = bufferingApplicationStartup.drainBufferedTimeline();
 
             // filter bean initializers by cost
-            List<StartupTimeline.TimelineEvent> timelineEvents =
-                    startupTimeline.getEvents().stream().filter(this::filterBeanInitializeByCost).toList();
+            List<StartupTimeline.TimelineEvent> timelineEvents = startupTimeline.getEvents();
 
             // convert startup to bean stats
             timelineEvents.forEach(timelineEvent -> {
                         BeanStat beanStat = eventToBeanStat(timelineEvent);
-                beanStatList.add(beanStat);
+                rootBeanStatList.add(beanStat);
                 beanStatIdMap.put(timelineEvent.getStartupStep().getId(), beanStat);
             });
 
@@ -189,20 +189,35 @@ public class StartupReporter {
             timelineEvents.forEach(timelineEvent -> {
                 BeanStat parentBeanStat = beanStatIdMap.get(timelineEvent.getStartupStep().getParentId());
                 BeanStat beanStat = beanStatIdMap.get(timelineEvent.getStartupStep().getId());
+
                 if (parentBeanStat != null) {
-                    parentBeanStat.addChild(beanStat);
-                    beanStatList.remove(beanStat);
+                    // parent node real cost subtract child node
+                    parentBeanStat.setRealRefreshElapsedTime(parentBeanStat.getRealRefreshElapsedTime()
+                            - beanStat.getCost());
+                    // remove child node in root list
+                    rootBeanStatList.remove(beanStat);
+                    // if child list cost is larger than threshold, put it to parent children.
+                    if (filterBeanInitializeByCost(beanStat)) {
+                        parentBeanStat.addChild(beanStat);
+                        customBeanStat(context, beanStat);
+                    }
+                } else {
+                    // if root node is less than threshold, remove it.
+                    if (!filterBeanInitializeByCost(beanStat)) {
+                        rootBeanStatList.remove(beanStat);
+                    } else {
+                        customBeanStat(context, beanStat);
+                    }
                 }
-                customBeanStat(context, beanStat);
             });
         }
-        return beanStatList;
+        return rootBeanStatList;
     }
 
-    private boolean filterBeanInitializeByCost(StartupTimeline.TimelineEvent timelineEvent) {
-        String name = timelineEvent.getStartupStep().getName();
+    private boolean filterBeanInitializeByCost(BeanStat beanStat) {
+        String name = beanStat.getType();
         if (SPRING_BEAN_INSTANTIATE_TYPES.contains(name)) {
-            return timelineEvent.getDuration().toMillis() >= costThreshold;
+            return beanStat.getCost() >= costThreshold;
         } else {
             return true;
         }
@@ -211,14 +226,14 @@ public class StartupReporter {
     private BeanStat eventToBeanStat(StartupTimeline.TimelineEvent timelineEvent) {
         BeanStat beanStat = new BeanStat();
         beanStat.setStartTime(timelineEvent.getStartTime().toEpochMilli());
-        beanStat.setEndTime(timelineEvent.getEndTime().toEpochMilli());   beanStat.setCost(timelineEvent.getDuration().toMillis());
-
+        beanStat.setEndTime(timelineEvent.getEndTime().toEpochMilli());
+        beanStat.setCost(timelineEvent.getDuration().toMillis());
+        beanStat.setRealRefreshElapsedTime(beanStat.getCost());
 
         // for compatibility
         beanStat.setBeanRefreshStartTime(beanStat.getStartTime());
         beanStat.setBeanRefreshEndTime(beanStat.getEndTime());
         beanStat.setRefreshElapsedTime(beanStat.getCost());
-        beanStat.setRealRefreshElapsedTime(beanStat.getCost());
 
         String name = timelineEvent.getStartupStep().getName();
         beanStat.setType(name);

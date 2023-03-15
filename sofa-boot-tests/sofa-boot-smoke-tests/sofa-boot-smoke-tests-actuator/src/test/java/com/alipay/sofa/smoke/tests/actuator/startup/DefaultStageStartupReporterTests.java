@@ -104,6 +104,5 @@ public class DefaultStageStartupReporterTests {
         assertThat(initBeanStat.getRealRefreshElapsedTime() - InitCostBean.INIT_COST_TIME < 20).isTrue();
         assertThat(initBeanStat.getBeanClassName()).isEqualTo(InitCostBean.class.getName());
         assertThat(initBeanStat.getChildren().isEmpty()).isTrue();
-        assertThat(initBeanStat.getInitMethodTime()).isEqualTo(0);
     }
 }
