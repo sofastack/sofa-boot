@@ -19,6 +19,7 @@ package com.alipay.sofa.runtime.spring.factory;
 import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.annotation.SofaService;
+import com.alipay.sofa.runtime.api.component.Property;
 import com.alipay.sofa.runtime.model.InterfaceMode;
 import com.alipay.sofa.runtime.service.binding.JvmBinding;
 import com.alipay.sofa.runtime.service.binding.JvmBindingParam;
@@ -26,10 +27,14 @@ import com.alipay.sofa.runtime.service.component.Service;
 import com.alipay.sofa.runtime.service.component.ServiceComponent;
 import com.alipay.sofa.runtime.service.component.impl.ServiceImpl;
 import com.alipay.sofa.runtime.spi.binding.Binding;
+import com.alipay.sofa.runtime.spi.component.ComponentDefinitionInfo;
+import com.alipay.sofa.runtime.spi.component.ComponentDefinitionInfo.SourceType;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.DefaultImplementation;
 import com.alipay.sofa.runtime.spi.component.Implementation;
 import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
+
+import static com.alipay.sofa.runtime.spi.component.ComponentDefinitionInfo.SOURCE;
 
 /**
  * @author xuanbei 18/3/1
@@ -68,6 +73,13 @@ public class ServiceFactoryBean extends AbstractContractFactoryBean {
         ComponentInfo componentInfo = new ServiceComponent(implementation, service,
             bindingAdapterFactory, sofaRuntimeContext);
         componentInfo.setApplicationContext(applicationContext);
+        ComponentDefinitionInfo definitionInfo = new ComponentDefinitionInfo();
+        definitionInfo.setSourceType(apiType ? SourceType.ANNOTATION : SourceType.XML);
+        definitionInfo.setBeanId(beanId);
+        Property property = new Property();
+        property.setName(SOURCE);
+        property.setValue(definitionInfo);
+        componentInfo.getProperties().put(SOURCE, property);
         sofaRuntimeContext.getComponentManager().register(componentInfo);
     }
 

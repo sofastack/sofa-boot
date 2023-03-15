@@ -141,4 +141,14 @@ public class SofaRuntimeConfigurationProperties {
         return SofaRuntimeProperties.isServiceNameWithBeanId();
     }
 
+    public void setSkipJvmReferenceHealthCheckArray(String[] skipJvmReferenceHealthCheckArray) {
+        SofaRuntimeProperties.setSkipJvmReferenceHealthCheckArray(Thread.currentThread()
+            .getContextClassLoader(), skipJvmReferenceHealthCheckArray);
+    }
+
+    public String[] getSkipJvmReferenceHealthCheckArray() {
+        return SofaRuntimeProperties.getSkipJvmReferenceHealthCheckArray(Thread.currentThread()
+            .getContextClassLoader());
+    }
+
 }

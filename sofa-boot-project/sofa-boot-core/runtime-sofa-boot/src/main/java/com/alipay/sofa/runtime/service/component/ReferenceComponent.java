@@ -16,12 +16,6 @@
  */
 package com.alipay.sofa.runtime.service.component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.CountDownLatch;
-
 import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
@@ -42,6 +36,14 @@ import com.alipay.sofa.runtime.spi.component.Implementation;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.health.HealthResult;
 import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
+import org.springframework.util.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * reference component
@@ -55,6 +57,8 @@ public class ReferenceComponent extends AbstractComponent {
     private BindingAdapterFactory     bindingAdapterFactory;
     private Reference                 reference;
     private CountDownLatch            latch                    = new CountDownLatch(1);
+
+    private Map<String, Property>     properties               = new ConcurrentHashMap<>();
 
     public ReferenceComponent(Reference reference, Implementation implementation,
                               BindingAdapterFactory bindingAdapterFactory,
@@ -77,7 +81,7 @@ public class ReferenceComponent extends AbstractComponent {
 
     @Override
     public Map<String, Property> getProperties() {
-        return null;
+        return properties;
     }
 
     @Override
@@ -100,11 +104,36 @@ public class ReferenceComponent extends AbstractComponent {
         // check reference has a corresponding service
         if (!SofaRuntimeProperties.isSkipJvmReferenceHealthCheck(sofaRuntimeContext)
             && jvmBinding != null) {
-            Object serviceTarget = getServiceTarget();
-            if (serviceTarget == null && !jvmBinding.hasBackupProxy()) {
-                jvmBindingHealthResult.setHealthy(false);
-                jvmBindingHealthResult.setHealthReport("can not find corresponding jvm service");
+            //skip check reference for the specified interface with unique id
+            String[] skipCheckArray = SofaRuntimeProperties
+                .getSkipJvmReferenceHealthCheckArray(Thread.currentThread().getContextClassLoader());
+            boolean skip = false;
+            if (skipCheckArray != null && skipCheckArray.length != 0) {
+                for (String skipRef : skipCheckArray) {
+                    String[] interfaceTypeWithUniqueId = StringUtils.delimitedListToStringArray(
+                        skipRef, ":");
+                    String interfaceName = interfaceTypeWithUniqueId[0];
+                    String uniqueId = interfaceTypeWithUniqueId.length > 1 ? interfaceTypeWithUniqueId[1]
+                        : "";
+                    if (reference.getInterfaceType().getName().equals(interfaceName)
+                        && uniqueId.equals(reference.getUniqueId())) {
+                        skip = true;
+                        SofaLogger.warn("reference:{}#:{} health check skipped", interfaceName,
+                            uniqueId);
+                        break;
+                    }
+                }
             }
+
+            if (!skip) {
+                Object serviceTarget = getServiceTarget();
+                if (serviceTarget == null && !jvmBinding.hasBackupProxy()) {
+                    jvmBindingHealthResult.setHealthy(false);
+                    jvmBindingHealthResult
+                        .setHealthReport("can not find corresponding jvm service");
+                }
+            }
+
         }
 
         List<HealthResult> failedBindingHealth = new ArrayList<>();

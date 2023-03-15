@@ -16,19 +16,23 @@
  */
 package com.alipay.sofa.runtime.service.helper;
 
-import java.util.Collection;
-
 import com.alipay.sofa.runtime.SofaRuntimeProperties;
+import com.alipay.sofa.runtime.api.component.Property;
 import com.alipay.sofa.runtime.service.binding.JvmBinding;
 import com.alipay.sofa.runtime.service.component.Reference;
 import com.alipay.sofa.runtime.service.component.ReferenceComponent;
 import com.alipay.sofa.runtime.spi.binding.Binding;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
+import com.alipay.sofa.runtime.spi.component.ComponentDefinitionInfo;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.ComponentManager;
 import com.alipay.sofa.runtime.spi.component.DefaultImplementation;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import org.springframework.context.ApplicationContext;
+
+import java.util.Collection;
+
+import static com.alipay.sofa.runtime.spi.component.ComponentDefinitionInfo.SOURCE;
 
 /**
  * reference register helper
@@ -39,14 +43,15 @@ public class ReferenceRegisterHelper {
     public static Object registerReference(Reference reference,
                                            BindingAdapterFactory bindingAdapterFactory,
                                            SofaRuntimeContext sofaRuntimeContext) {
-        return registerReference(reference, bindingAdapterFactory, sofaRuntimeContext, null);
+        return registerReference(reference, bindingAdapterFactory, sofaRuntimeContext, null, null);
 
     }
 
     public static Object registerReference(Reference reference,
                                            BindingAdapterFactory bindingAdapterFactory,
                                            SofaRuntimeContext sofaRuntimeContext,
-                                           ApplicationContext applicationContext) {
+                                           ApplicationContext applicationContext,
+                                           ComponentDefinitionInfo definitionInfo) {
         Binding binding = (Binding) reference.getBindings().toArray()[0];
 
         if (!binding.getBindingType().equals(JvmBinding.JVM_BINDING_TYPE)
@@ -59,6 +64,10 @@ public class ReferenceRegisterHelper {
         ComponentManager componentManager = sofaRuntimeContext.getComponentManager();
         ReferenceComponent referenceComponent = new ReferenceComponent(reference,
             new DefaultImplementation(), bindingAdapterFactory, sofaRuntimeContext);
+        Property property = new Property();
+        property.setName(SOURCE);
+        property.setValue(definitionInfo);
+        referenceComponent.getProperties().put(SOURCE, property);
 
         if (componentManager.isRegistered(referenceComponent.getName())) {
             return componentManager.getComponentInfo(referenceComponent.getName())

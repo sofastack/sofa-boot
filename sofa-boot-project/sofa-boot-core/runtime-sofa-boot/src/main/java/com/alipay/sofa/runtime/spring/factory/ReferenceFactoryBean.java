@@ -16,6 +16,8 @@
  */
 package com.alipay.sofa.runtime.spring.factory;
 
+import com.alipay.sofa.runtime.spi.component.ComponentDefinitionInfo;
+import com.alipay.sofa.runtime.spi.component.ComponentDefinitionInfo.SourceType;
 import org.springframework.util.Assert;
 
 import com.alipay.sofa.runtime.model.InterfaceMode;
@@ -59,8 +61,11 @@ public class ReferenceFactoryBean extends AbstractContractFactoryBean {
         }
 
         reference.addBinding(bindings.get(0));
+        ComponentDefinitionInfo definitionInfo = new ComponentDefinitionInfo();
+        definitionInfo.setSourceType(apiType ? SourceType.ANNOTATION : SourceType.XML);
+        definitionInfo.setBeanId(beanId);
         proxy = ReferenceRegisterHelper.registerReference(reference, bindingAdapterFactory,
-            sofaRuntimeContext, applicationContext);
+            sofaRuntimeContext, applicationContext, definitionInfo);
     }
 
     @Override
