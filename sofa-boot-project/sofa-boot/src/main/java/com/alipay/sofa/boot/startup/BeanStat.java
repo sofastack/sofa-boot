@@ -26,6 +26,8 @@ public class BeanStat extends ChildrenStat<BeanStat> {
 
     private String type;
 
+    private long   realRefreshElapsedTime;
+
     @Deprecated
     private String beanClassName;
 
@@ -38,18 +40,20 @@ public class BeanStat extends ChildrenStat<BeanStat> {
     @Deprecated
     private long   refreshElapsedTime;
 
-    @Deprecated
-    private long   realRefreshElapsedTime;
-
-    @Deprecated
-    private long   initMethodTime;
-
     public String getType() {
         return type;
     }
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public long getRealRefreshElapsedTime() {
+        return realRefreshElapsedTime;
+    }
+
+    public void setRealRefreshElapsedTime(long realRefreshElapsedTime) {
+        this.realRefreshElapsedTime = realRefreshElapsedTime;
     }
 
     @Deprecated
@@ -90,25 +94,5 @@ public class BeanStat extends ChildrenStat<BeanStat> {
     @Deprecated
     public void setBeanRefreshEndTime(long beanRefreshEndTime) {
         this.beanRefreshEndTime = beanRefreshEndTime;
-    }
-
-    @Deprecated
-    public long getRealRefreshElapsedTime() {
-        return realRefreshElapsedTime;
-    }
-
-    @Deprecated
-    public void setRealRefreshElapsedTime(long realRefreshElapsedTime) {
-        this.realRefreshElapsedTime = realRefreshElapsedTime;
-    }
-
-    @Deprecated
-    public long getInitMethodTime() {
-        return initMethodTime;
-    }
-
-    @Deprecated
-    public void setInitMethodTime(long initMethodTime) {
-        this.initMethodTime = initMethodTime;
     }
 }
