@@ -50,11 +50,7 @@ public class ComponentDefinitionInfo {
         this.sourceType = sourceType;
     }
 
-    /**
-     * Getter method for property <tt>beanId</tt>.
-     *
-     * @return property value of beanId
-     */
+
     public String getBeanId() {
         return beanId;
     }
