@@ -21,6 +21,7 @@ import com.alipay.sofa.rpc.boot.swagger.BoltSwaggerServiceApplicationListener;
 import com.alipay.sofa.rpc.boot.swagger.SwaggerServiceApplicationListener;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import io.swagger.models.Swagger;
+import io.swagger.v3.jaxrs2.integration.JaxrsOpenApiContextBuilder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -41,7 +42,7 @@ import org.springframework.context.annotation.Configuration;
 public class SwaggerConfiguration {
 
     @ConditionalOnClass(Swagger.class)
-    @ConditionalOnProperty(name = "sofa.boot.rpc.rest-swagger", havingValue = "true")
+    @ConditionalOnProperty(name = "sofa.boot.rpc.enable-swagger", havingValue = "true")
     static class SwaggerV1Configuration {
 
         @Bean
@@ -50,8 +51,8 @@ public class SwaggerConfiguration {
         }
     }
 
-    @ConditionalOnClass(io.swagger.v3.jaxrs2.integration.JaxrsOpenApiContextBuilder.class)
-    @ConditionalOnProperty(name = "sofa.boot.rpc.enable-swagger", havingValue = "true")
+    @ConditionalOnClass(JaxrsOpenApiContextBuilder.class)
+    @ConditionalOnProperty(name = "sofa.boot.rpc.rest-swagger", havingValue = "true")
     static class SwaggerV2Configuration {
 
         @Bean
