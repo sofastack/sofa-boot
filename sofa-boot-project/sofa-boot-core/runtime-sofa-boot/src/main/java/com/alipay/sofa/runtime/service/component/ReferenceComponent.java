@@ -36,7 +36,6 @@ import com.alipay.sofa.runtime.spi.component.Implementation;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.health.HealthResult;
 import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
-import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -256,23 +255,12 @@ public class ReferenceComponent extends AbstractComponent {
     private boolean isSkipReferenceHealthCheck() {
         //skip check reference for the specified interface with unique id
         List<String> skipCheckList = SofaRuntimeProperties
-            .getSkipJvmReferenceHealthCheckArray(Thread.currentThread().getContextClassLoader());
+            .getSkipJvmReferenceHealthCheckList(Thread.currentThread().getContextClassLoader());
         boolean skip = false;
         if (skipCheckList != null && !skipCheckList.isEmpty()) {
-            for (String skipRef : skipCheckList) {
-                String[] interfaceTypeWithUniqueId = StringUtils.delimitedListToStringArray(
-                    skipRef, ":");
-                String interfaceName = interfaceTypeWithUniqueId[0];
-                String uniqueId = interfaceTypeWithUniqueId.length > 1 ? interfaceTypeWithUniqueId[1]
-                    : "";
-                if (reference.getInterfaceType().getName().equals(interfaceName)
-                    && uniqueId.equals(reference.getUniqueId())) {
-                    skip = true;
-                    SofaLogger.warn("reference:{}#:{} health check skipped", interfaceName,
-                        uniqueId);
-                    break;
-                }
-            }
+            String currentReferenceWithUniqueId = reference.getInterfaceType().getName() + ":"
+                                                  + reference.getUniqueId();
+            return skipCheckList.contains(currentReferenceWithUniqueId);
         }
         return skip;
     }

@@ -144,12 +144,12 @@ public class SofaRuntimeConfigurationProperties {
     }
 
     public void setSkipJvmReferenceHealthCheckList(List<String> skipJvmReferenceHealthCheckList) {
-        SofaRuntimeProperties.setSkipJvmReferenceHealthCheckArray(Thread.currentThread()
+        SofaRuntimeProperties.setSkipJvmReferenceHealthCheckList(Thread.currentThread()
             .getContextClassLoader(), skipJvmReferenceHealthCheckList);
     }
 
     public List<String> getSkipJvmReferenceHealthCheckList() {
-        return SofaRuntimeProperties.getSkipJvmReferenceHealthCheckArray(Thread.currentThread()
+        return SofaRuntimeProperties.getSkipJvmReferenceHealthCheckList(Thread.currentThread()
             .getContextClassLoader());
     }
 

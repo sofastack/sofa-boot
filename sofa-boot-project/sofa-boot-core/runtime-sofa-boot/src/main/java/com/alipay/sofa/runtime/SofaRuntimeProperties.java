@@ -170,12 +170,12 @@ public class SofaRuntimeProperties {
         SofaRuntimeProperties.serviceNameWithBeanId = serviceNameWithBeanId;
     }
 
-    public static void setSkipJvmReferenceHealthCheckArray(ClassLoader classLoader,
-                                                           List<String> references) {
+    public static void setSkipJvmReferenceHealthCheckList(ClassLoader classLoader,
+                                                          List<String> references) {
         skipJvmReferenceHealthCheckListMap.put(classLoader, references);
     }
 
-    public static List<String> getSkipJvmReferenceHealthCheckArray(ClassLoader classLoader) {
+    public static List<String> getSkipJvmReferenceHealthCheckList(ClassLoader classLoader) {
         return skipJvmReferenceHealthCheckListMap.get(classLoader);
 
     }
