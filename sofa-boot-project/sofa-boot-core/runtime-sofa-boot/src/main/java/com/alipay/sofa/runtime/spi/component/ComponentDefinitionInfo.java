@@ -40,20 +40,12 @@ public class ComponentDefinitionInfo {
      */
     private String             beanClassName;
 
-    /**
-     * Getter method for property <tt>sourceType</tt>.
-     *
-     * @return property value of sourceType
-     */
+
     public SourceType getSourceType() {
         return sourceType;
     }
 
-    /**
-     * Setter method for property <tt>sourceType</tt>.
-     *
-     * @param sourceType value to be assigned to property sourceType
-     */
+
     public void setSourceType(SourceType sourceType) {
         this.sourceType = sourceType;
     }
@@ -67,46 +59,29 @@ public class ComponentDefinitionInfo {
         return beanId;
     }
 
-    /**
-     * Setter method for property <tt>beanId</tt>.
-     *
-     * @param beanId value to be assigned to property beanId
-     */
+
     public void setBeanId(String beanId) {
         this.beanId = beanId;
     }
 
-    /**
-     * Getter method for property <tt>fieldName</tt>.
-     *
-     * @return property value of fieldName
-     */
+
     public String getLocation() {
         return location;
     }
 
-    /**
-     * Setter method for property <tt>fieldName</tt>.
-     *
-     * @param location value to be assigned to property fieldName
-     */
+
     public void setLocation(String location) {
         this.location = location;
     }
 
-    /**
-     * Getter method for property <tt>beanClassName</tt>.
-     *
-     * @return property value of beanClassName
-     */
+
     public String getBeanClassName() {
         return beanClassName;
     }
 
     /**
-     * Setter method for property <tt>beanClassName</tt>.
      *
-     * @param beanClassName value to be assigned to property beanClassName
+     * @param beanClassName bean class name
      */
     public void setBeanClassName(String beanClassName) {
         this.beanClassName = beanClassName;
