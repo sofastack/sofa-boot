@@ -36,6 +36,7 @@ import com.alipay.sofa.runtime.spi.component.Implementation;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.health.HealthResult;
 import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -258,9 +259,12 @@ public class ReferenceComponent extends AbstractComponent {
             .getSkipJvmReferenceHealthCheckList(Thread.currentThread().getContextClassLoader());
         boolean skip = false;
         if (skipCheckList != null && !skipCheckList.isEmpty()) {
-            String currentReferenceWithUniqueId = reference.getInterfaceType().getName() + ":"
-                                                  + reference.getUniqueId();
-            return skipCheckList.contains(currentReferenceWithUniqueId);
+            String currentReference = reference.getInterfaceType().getName()
+                                      + (StringUtils.hasText(reference.getUniqueId()) ? ":"
+                                                                                        + reference
+                                                                                            .getUniqueId()
+                                          : "");
+            return skipCheckList.contains(currentReference);
         }
         return skip;
     }
