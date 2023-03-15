@@ -99,11 +99,11 @@
             <scope>test</scope>
         </dependency>
 
-       <!-- <dependency>
+        <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
             <scope>test</scope>
-        </dependency>-->
+        </dependency>
 
         <dependency>
             <groupId>com.alipay.sofa</groupId>
