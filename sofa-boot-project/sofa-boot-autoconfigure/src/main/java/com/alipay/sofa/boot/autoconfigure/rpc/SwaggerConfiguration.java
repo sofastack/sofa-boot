@@ -36,21 +36,27 @@ import org.springframework.context.annotation.Configuration;
  * @version : SwaggerConfiguration.java, v 0.1 2023年01月31日 17:35 yuanxuan Exp $
  */
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnClass(Swagger.class)
 @ConditionalOnSwitch(value = "rpcSwagger")
+@ConditionalOnBean(SofaRuntimeManager.class)
 public class SwaggerConfiguration {
 
-    @Bean
+    @ConditionalOnClass(Swagger.class)
     @ConditionalOnProperty(name = "sofa.boot.rpc.rest-swagger", havingValue = "true")
-    @ConditionalOnBean(SofaRuntimeManager.class)
-    public ApplicationListener<ApplicationStartedEvent> swaggerServiceApplicationListener(SofaRuntimeManager sofaRuntimeManager) {
-        return new SwaggerServiceApplicationListener(sofaRuntimeManager);
+    static class SwaggerV1Configuration {
+
+        @Bean
+        public ApplicationListener<ApplicationStartedEvent> boltSwaggerServiceApplicationListener(SofaRuntimeManager sofaRuntimeManager) {
+            return new BoltSwaggerServiceApplicationListener(sofaRuntimeManager);
+        }
     }
 
-    @Bean
+    @ConditionalOnClass(io.swagger.v3.jaxrs2.integration.JaxrsOpenApiContextBuilder.class)
     @ConditionalOnProperty(name = "sofa.boot.rpc.enable-swagger", havingValue = "true")
-    @ConditionalOnBean(SofaRuntimeManager.class)
-    public ApplicationListener<ApplicationStartedEvent> boltSwaggerServiceApplicationListener(SofaRuntimeManager sofaRuntimeManager) {
-        return new BoltSwaggerServiceApplicationListener(sofaRuntimeManager);
+    static class SwaggerV2Configuration {
+
+        @Bean
+        public ApplicationListener<ApplicationStartedEvent> swaggerServiceApplicationListener(SofaRuntimeManager sofaRuntimeManager) {
+            return new SwaggerServiceApplicationListener(sofaRuntimeManager);
+        }
     }
 }
