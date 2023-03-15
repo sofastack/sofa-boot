@@ -20,6 +20,8 @@ import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.util.List;
+
 /**
  * SofaRuntimeConfigurationProperties is exported by SOFA Runtime plugin in Ark.
  * Upon installing an Ark module, Thread context classloader will be switched to Biz ClassLoader.
@@ -141,12 +143,12 @@ public class SofaRuntimeConfigurationProperties {
         return SofaRuntimeProperties.isServiceNameWithBeanId();
     }
 
-    public void setSkipJvmReferenceHealthCheckArray(String[] skipJvmReferenceHealthCheckArray) {
+    public void setSkipJvmReferenceHealthCheckList(List<String> skipJvmReferenceHealthCheckList) {
         SofaRuntimeProperties.setSkipJvmReferenceHealthCheckArray(Thread.currentThread()
-            .getContextClassLoader(), skipJvmReferenceHealthCheckArray);
+            .getContextClassLoader(), skipJvmReferenceHealthCheckList);
     }
 
-    public String[] getSkipJvmReferenceHealthCheckArray() {
+    public List<String> getSkipJvmReferenceHealthCheckList() {
         return SofaRuntimeProperties.getSkipJvmReferenceHealthCheckArray(Thread.currentThread()
             .getContextClassLoader());
     }

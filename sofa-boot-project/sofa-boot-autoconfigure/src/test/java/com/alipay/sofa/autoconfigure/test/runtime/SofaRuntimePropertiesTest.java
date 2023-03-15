@@ -42,7 +42,7 @@ import org.springframework.test.context.junit4.SpringRunner;
                                   "com.alipay.sofa.boot.skipExtensionHealthCheck=true",
                                   "com.alipay.sofa.boot.extensionFailureInsulating=true",
                                   "com.alipay.sofa.boot.serviceInterfaceTypeCheck=true",
-                                  "com.alipay.sofa.boot.skipJvmReferenceHealthCheckArray=com.alipay.sofa.isle.sample.facade.SampleJvmService:annotationImpl,com.alipay.sofa.isle.sample.facade.SampleJvmService" })
+                                  "com.alipay.sofa.boot.skipJvmReferenceHealthCheckList=com.alipay.sofa.isle.sample.facade.SampleJvmService:annotationImpl,com.alipay.sofa.isle.sample.facade.SampleJvmService" })
 public class SofaRuntimePropertiesTest {
 
     @Autowired
@@ -103,13 +103,13 @@ public class SofaRuntimePropertiesTest {
     }
 
     @Test
-    public void testSkipJvmReferenceHealthCheckArray() {
+    public void testSkipJvmReferenceHealthCheckList() {
         SofaRuntimeConfigurationProperties configurationProperties = ctx
             .getBean(SofaRuntimeConfigurationProperties.class);
         Assert.assertArrayEquals("", new String[] {
                 "com.alipay.sofa.isle.sample.facade.SampleJvmService:annotationImpl",
-                "com.alipay.sofa.isle.sample.facade.SampleJvmService" },
-            configurationProperties.getSkipJvmReferenceHealthCheckArray());
+                "com.alipay.sofa.isle.sample.facade.SampleJvmService" }, configurationProperties
+            .getSkipJvmReferenceHealthCheckList().toArray(new String[] {}));
     }
 
     @Configuration(proxyBeanMethods = false)

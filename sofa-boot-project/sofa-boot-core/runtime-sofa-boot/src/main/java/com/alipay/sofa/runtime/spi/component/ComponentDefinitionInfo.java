@@ -16,6 +16,11 @@
  */
 package com.alipay.sofa.runtime.spi.component;
 
+import com.alipay.sofa.runtime.model.InterfaceMode;
+
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Component basic source definition description.Just for showing Component info
  *
@@ -24,60 +29,40 @@ package com.alipay.sofa.runtime.spi.component;
  */
 public class ComponentDefinitionInfo {
 
-    public static final String SOURCE = "source";
+    public static final String        SOURCE               = "source";
+
+    public static final String        BEAN_ID              = "beanId";
+
+    public static final String        LOCATION             = "location";
+
+    public static final String        BEAN_CLASS_NAME      = "beanClassName";
+
+    public static final String        EXTENSION_POINT_NAME = "pointName";
+
+    private final Map<String, String> info                 = new HashMap<>();
 
     /**
      * annotation or xml
      */
-    private SourceType         sourceType;
+    private InterfaceMode             interfaceMode;
 
-    private String             beanId;
-
-    private String             location;
-
-    /**
-     * when sourceType is annotation
-     */
-    private String             beanClassName;
-
-    public SourceType getSourceType() {
-        return sourceType;
+    public InterfaceMode getInterfaceMode() {
+        return interfaceMode;
     }
 
-    public void setSourceType(SourceType sourceType) {
-        this.sourceType = sourceType;
+    public void setInterfaceMode(InterfaceMode interfaceMode) {
+        this.interfaceMode = interfaceMode;
     }
 
-    public String getBeanId() {
-        return beanId;
+    public Map<String, String> getInfo() {
+        return info;
     }
 
-    public void setBeanId(String beanId) {
-        this.beanId = beanId;
+    public void putInfo(String key, String value) {
+        info.put(key, value);
     }
 
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getBeanClassName() {
-        return beanClassName;
-    }
-
-    /**
-     *
-     * @param beanClassName bean class name
-     */
-    public void setBeanClassName(String beanClassName) {
-        this.beanClassName = beanClassName;
-    }
-
-    public enum SourceType {
-        ANNOTATION, XML;
-
+    public String info(String key) {
+        return info.get(key);
     }
 }

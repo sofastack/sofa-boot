@@ -28,12 +28,12 @@ import com.alipay.sofa.runtime.service.component.ServiceComponent;
 import com.alipay.sofa.runtime.service.component.impl.ServiceImpl;
 import com.alipay.sofa.runtime.spi.binding.Binding;
 import com.alipay.sofa.runtime.spi.component.ComponentDefinitionInfo;
-import com.alipay.sofa.runtime.spi.component.ComponentDefinitionInfo.SourceType;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.DefaultImplementation;
 import com.alipay.sofa.runtime.spi.component.Implementation;
 import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
 
+import static com.alipay.sofa.runtime.spi.component.ComponentDefinitionInfo.BEAN_ID;
 import static com.alipay.sofa.runtime.spi.component.ComponentDefinitionInfo.SOURCE;
 
 /**
@@ -74,8 +74,8 @@ public class ServiceFactoryBean extends AbstractContractFactoryBean {
             bindingAdapterFactory, sofaRuntimeContext);
         componentInfo.setApplicationContext(applicationContext);
         ComponentDefinitionInfo definitionInfo = new ComponentDefinitionInfo();
-        definitionInfo.setSourceType(apiType ? SourceType.ANNOTATION : SourceType.XML);
-        definitionInfo.setBeanId(beanId);
+        definitionInfo.setInterfaceMode(apiType ? InterfaceMode.api : InterfaceMode.spring);
+        definitionInfo.putInfo(BEAN_ID, beanId);
         Property property = new Property();
         property.setName(SOURCE);
         property.setValue(definitionInfo);

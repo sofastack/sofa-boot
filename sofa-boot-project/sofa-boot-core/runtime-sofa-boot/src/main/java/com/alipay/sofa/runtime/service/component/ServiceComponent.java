@@ -16,12 +16,6 @@
  */
 package com.alipay.sofa.runtime.service.component;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
-
 import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
@@ -37,6 +31,11 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.health.HealthResult;
 import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
 
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+
 /**
  * Service Component
  *
@@ -49,7 +48,6 @@ public class ServiceComponent extends AbstractComponent {
 
     private Service                   service;
     private BindingAdapterFactory     bindingAdapterFactory;
-    private Map<String, Property>     properties                    = new ConcurrentHashMap<>();
 
     public ServiceComponent(Implementation implementation, Service service,
                             BindingAdapterFactory bindingAdapterFactory,

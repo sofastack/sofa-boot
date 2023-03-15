@@ -16,14 +16,24 @@
  */
 package com.alipay.sofa.runtime.spring;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-
+import com.alipay.sofa.boot.annotation.PlaceHolderAnnotationInvocationHandler.AnnotationWrapperBuilder;
+import com.alipay.sofa.boot.annotation.PlaceHolderBinder;
 import com.alipay.sofa.boot.error.ErrorCode;
+import com.alipay.sofa.runtime.api.ServiceRuntimeException;
+import com.alipay.sofa.runtime.api.annotation.SofaReference;
+import com.alipay.sofa.runtime.api.binding.BindingType;
 import com.alipay.sofa.runtime.log.SofaLogger;
+import com.alipay.sofa.runtime.model.InterfaceMode;
+import com.alipay.sofa.runtime.service.component.Reference;
+import com.alipay.sofa.runtime.service.component.impl.ReferenceImpl;
+import com.alipay.sofa.runtime.service.helper.ReferenceRegisterHelper;
+import com.alipay.sofa.runtime.spi.binding.Binding;
+import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
 import com.alipay.sofa.runtime.spi.component.ComponentDefinitionInfo;
-import com.alipay.sofa.runtime.spi.component.ComponentDefinitionInfo.SourceType;
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
+import com.alipay.sofa.runtime.spi.service.BindingConverter;
+import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
+import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.ApplicationContext;
@@ -32,21 +42,13 @@ import org.springframework.core.env.Environment;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
 
-import com.alipay.sofa.boot.annotation.PlaceHolderAnnotationInvocationHandler.AnnotationWrapperBuilder;
-import com.alipay.sofa.boot.annotation.PlaceHolderBinder;
-import com.alipay.sofa.runtime.api.ServiceRuntimeException;
-import com.alipay.sofa.runtime.api.annotation.SofaReference;
-import com.alipay.sofa.runtime.api.binding.BindingType;
-import com.alipay.sofa.runtime.model.InterfaceMode;
-import com.alipay.sofa.runtime.service.component.Reference;
-import com.alipay.sofa.runtime.service.component.impl.ReferenceImpl;
-import com.alipay.sofa.runtime.service.helper.ReferenceRegisterHelper;
-import com.alipay.sofa.runtime.spi.binding.Binding;
-import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
-import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
-import com.alipay.sofa.runtime.spi.service.BindingConverter;
-import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
-import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+
+import static com.alipay.sofa.runtime.spi.component.ComponentDefinitionInfo.BEAN_CLASS_NAME;
+import static com.alipay.sofa.runtime.spi.component.ComponentDefinitionInfo.BEAN_ID;
+import static com.alipay.sofa.runtime.spi.component.ComponentDefinitionInfo.LOCATION;
 
 /**
  * Responsible to inject field annotated by @SofaReference and
@@ -65,6 +67,7 @@ public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor, 
     /**
      * To construct a ReferenceAnnotationBeanPostProcessor via a Spring Bean
      * sofaRuntimeContext and sofaRuntimeProperties will be obtained from applicationContext
+     *
      * @param applicationContext
      * @param sofaRuntimeContext
      * @param bindingAdapterFactory
@@ -185,10 +188,10 @@ public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor, 
             sofaReferenceAnnotation.binding(), bindingConverterContext);
         reference.addBinding(binding);
         ComponentDefinitionInfo definitionInfo = new ComponentDefinitionInfo();
-        definitionInfo.setSourceType(SourceType.ANNOTATION);
-        definitionInfo.setLocation(fieldName);
-        definitionInfo.setBeanId(beanName);
-        definitionInfo.setBeanClassName(beanClass.getCanonicalName());
+        definitionInfo.setInterfaceMode(InterfaceMode.annotation);
+        definitionInfo.putInfo(LOCATION, fieldName);
+        definitionInfo.putInfo(BEAN_ID, beanName);
+        definitionInfo.putInfo(BEAN_CLASS_NAME, beanClass.getCanonicalName());
         return ReferenceRegisterHelper.registerReference(reference, bindingAdapterFactory,
             sofaRuntimeContext, applicationContext, definitionInfo);
     }
