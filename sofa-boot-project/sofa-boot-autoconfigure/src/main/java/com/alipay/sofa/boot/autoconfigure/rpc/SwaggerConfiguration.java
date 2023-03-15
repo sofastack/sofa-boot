@@ -21,6 +21,7 @@ import com.alipay.sofa.rpc.boot.swagger.BoltSwaggerServiceApplicationListener;
 import com.alipay.sofa.rpc.boot.swagger.SwaggerServiceApplicationListener;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import io.swagger.models.Swagger;
+import io.swagger.v3.jaxrs2.integration.JaxrsOpenApiContextBuilder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -36,21 +37,27 @@ import org.springframework.context.annotation.Configuration;
  * @version : SwaggerConfiguration.java, v 0.1 2023年01月31日 17:35 yuanxuan Exp $
  */
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnClass(Swagger.class)
 @ConditionalOnSwitch(value = "rpcSwagger")
+@ConditionalOnBean(SofaRuntimeManager.class)
 public class SwaggerConfiguration {
 
-    @Bean
-    @ConditionalOnProperty(name = "sofa.boot.rpc.rest-swagger", havingValue = "true")
-    @ConditionalOnBean(SofaRuntimeManager.class)
-    public ApplicationListener<ApplicationStartedEvent> swaggerServiceApplicationListener(SofaRuntimeManager sofaRuntimeManager) {
-        return new SwaggerServiceApplicationListener(sofaRuntimeManager);
+    @ConditionalOnClass(Swagger.class)
+    @ConditionalOnProperty(name = "sofa.boot.rpc.enable-swagger", havingValue = "true")
+    static class SwaggerV1Configuration {
+
+        @Bean
+        public ApplicationListener<ApplicationStartedEvent> boltSwaggerServiceApplicationListener(SofaRuntimeManager sofaRuntimeManager) {
+            return new BoltSwaggerServiceApplicationListener(sofaRuntimeManager);
+        }
     }
 
-    @Bean
-    @ConditionalOnProperty(name = "sofa.boot.rpc.enable-swagger", havingValue = "true")
-    @ConditionalOnBean(SofaRuntimeManager.class)
-    public ApplicationListener<ApplicationStartedEvent> boltSwaggerServiceApplicationListener(SofaRuntimeManager sofaRuntimeManager) {
-        return new BoltSwaggerServiceApplicationListener(sofaRuntimeManager);
+    @ConditionalOnClass(JaxrsOpenApiContextBuilder.class)
+    @ConditionalOnProperty(name = "sofa.boot.rpc.rest-swagger", havingValue = "true")
+    static class SwaggerV2Configuration {
+
+        @Bean
+        public ApplicationListener<ApplicationStartedEvent> swaggerServiceApplicationListener(SofaRuntimeManager sofaRuntimeManager) {
+            return new SwaggerServiceApplicationListener(sofaRuntimeManager);
+        }
     }
 }

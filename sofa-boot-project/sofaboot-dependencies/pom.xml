@@ -49,7 +49,8 @@
         <dubbo.version>2.6.9</dubbo.version>
         <zkclient.version>0.11</zkclient.version>
         <nacos.version>1.0.0</nacos.version>
-        <swagger.version>2.0.0</swagger.version>
+        <swagger.version>1.6.7</swagger.version>
+        <swagger2.version>2.2.8</swagger2.version>
         <grpc.version>1.51.1</grpc.version>
         <grpc.common.protos.version>2.11.0</grpc.common.protos.version>
     </properties>
@@ -337,6 +338,12 @@
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>sofa-rpc-all</artifactId>
                 <version>${rpc.core.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>io.swagger</groupId>
+                        <artifactId>swagger-core</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <!-- 2nd dependency begin -->
@@ -628,13 +635,21 @@
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
             </dependency>
+
+            <!--extension dependency -->
             <dependency>
-                <groupId>io.swagger.core.v3</groupId>
-                <artifactId>swagger-jaxrs2</artifactId>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-core</artifactId>
                 <version>${swagger.version}</version>
             </dependency>
 
-            <!--extension dependency -->
+            <dependency>
+                <groupId>io.swagger.core.v3</groupId>
+                <artifactId>swagger-jaxrs2</artifactId>
+                <version>${swagger2.version}</version>
+            </dependency>
+
+
             <dependency>
                 <groupId>org.apache.curator</groupId>
                 <artifactId>curator-client</artifactId>

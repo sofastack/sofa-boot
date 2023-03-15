@@ -27,10 +27,12 @@ import com.alipay.sofa.rpc.boot.swagger.SwaggerServiceApplicationListener;
 import com.alipay.sofa.rpc.config.JAXRSProviderManager;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import io.swagger.models.Swagger;
+import io.swagger.v3.jaxrs2.integration.JaxrsOpenApiContextBuilder;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
+import org.springframework.boot.test.context.FilteredClassLoader;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
@@ -103,7 +105,7 @@ public class SofaRpcAutoConfigurationTests {
     }
 
     @Test
-    void swaggerServiceApplicationListenerBeanCreatedWhenEnable() {
+    void swaggerV2BeanCreatedWhenEnable() {
         this.contextRunner.withConfiguration(AutoConfigurations
                 .of(SofaRuntimeAutoConfiguration.class)).withPropertyValues("sofa.boot.rpc.rest-swagger=true").run(context -> {
             assertThat(context).hasSingleBean(SwaggerServiceApplicationListener.class);
@@ -111,10 +113,28 @@ public class SofaRpcAutoConfigurationTests {
     }
 
     @Test
-    void boltSwaggerServiceApplicationListenerBeanCreatedWhenEnable() {
+    void swaggerV2BeanCreatedWhenEnableWithoutSwaggerV1() {
+        this.contextRunner.withClassLoader(new FilteredClassLoader(JaxrsOpenApiContextBuilder.class))
+                .withConfiguration(AutoConfigurations
+                .of(SofaRuntimeAutoConfiguration.class)).withPropertyValues("sofa.boot.rpc.rest-swagger=true").run(context -> {
+            assertThat(context).doesNotHaveBean(SwaggerServiceApplicationListener.class);
+        });
+    }
+
+    @Test
+    void swaggerV1BeanCreatedWhenEnable() {
         this.contextRunner.withConfiguration(AutoConfigurations
                 .of(SofaRuntimeAutoConfiguration.class)).withPropertyValues("sofa.boot.rpc.enable-swagger=true").run(context -> {
             assertThat(context).hasSingleBean(BoltSwaggerServiceApplicationListener.class);
+        });
+    }
+
+    @Test
+    void swaggerV1BeanCreatedWhenEnableWithoutSwaggerV2() {
+        this.contextRunner.withClassLoader(new FilteredClassLoader(Swagger.class))
+                .withConfiguration(AutoConfigurations
+                .of(SofaRuntimeAutoConfiguration.class)).withPropertyValues("sofa.boot.rpc.enable-swagger=true").run(context -> {
+            assertThat(context).doesNotHaveBean(BoltSwaggerServiceApplicationListener.class);
         });
     }
 
