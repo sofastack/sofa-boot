@@ -175,14 +175,14 @@
 
 
     <!-- invoke sync-->
-    <!--<bean id="sofaGreeterTripleImpl" class="com.alipay.sofa.tests.rpc.bean.triple.TripleGreeterImpl"/>
+    <bean id="sofaGreeterTripleImpl" class="com.alipay.sofa.smoke.tests.rpc.boot.bean.triple.TripleGreeterImpl"/>
     <sofa:service ref="sofaGreeterTripleImpl" interface="io.grpc.examples.helloworld.SofaGreeterTriple$IGreeter">
         <sofa:binding.tri/>
     </sofa:service>
     <sofa:reference jvm-first="false" id="sofaGreeterTripleRef"
                     interface="io.grpc.examples.helloworld.SofaGreeterTriple$IGreeter">
         <sofa:binding.tri/>
-    </sofa:reference>-->
+    </sofa:reference>
 
     <!-- Annotation TestCase -->
     <context:component-scan base-package="com.alipay.sofa.tests.rpc.bean.annotation"/>

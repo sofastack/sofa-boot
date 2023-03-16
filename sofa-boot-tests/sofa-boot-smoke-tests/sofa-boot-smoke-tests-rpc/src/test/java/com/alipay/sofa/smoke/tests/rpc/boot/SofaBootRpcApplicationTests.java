@@ -50,12 +50,16 @@ import com.alipay.sofa.smoke.tests.rpc.boot.bean.rest.RestService;
 import com.alipay.sofa.smoke.tests.rpc.boot.bean.retry.RetriesService;
 import com.alipay.sofa.smoke.tests.rpc.boot.bean.retry.RetriesServiceImpl;
 import com.alipay.sofa.smoke.tests.rpc.boot.bean.threadpool.ThreadPoolService;
+import io.grpc.examples.helloworld.HelloReply;
+import io.grpc.examples.helloworld.HelloRequest;
+import io.grpc.examples.helloworld.SofaGreeterTriple;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -133,9 +137,9 @@ public class SofaBootRpcApplicationTests {
     @Autowired
     private ConnectionNumService    connectionNumService;
 
-    /*@Autowired
+    @Autowired
     @Qualifier("sofaGreeterTripleRef")
-    private SofaGreeterTriple.IGreeter sofaGreeterTripleRef;*/
+    private SofaGreeterTriple.IGreeter sofaGreeterTripleRef;
 
     @SofaReference(binding = @SofaReferenceBinding(bindingType = "bolt"), jvmFirst = false, uniqueId = "bolt")
     private AnnotationService       annotationService;
@@ -355,14 +359,15 @@ public class SofaBootRpcApplicationTests {
                 "/com.alipay.sofa.smoke.tests.rpc.boot.bean.threadpool.ThreadPoolService/sayThreadPool");
     }
 
-    /*@Test
+    @Test
+    @Disabled
      public void testGrpcSync() throws InterruptedException {
          Thread.sleep(5000);
          HelloReply reply = null;
          HelloRequest request = HelloRequest.newBuilder().setName("world").build();
          reply = sofaGreeterTripleRef.sayHello(request);
          assertThat(reply.getMessage()).isEqualTo("Hello world");
-     }*/
+     }
 
     @Test
     public void disableTracing() throws NoSuchFieldException, IllegalAccessException {
