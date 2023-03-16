@@ -37,6 +37,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -81,7 +82,7 @@ public class ReferenceComponentTests {
 
     @BeforeEach
     public void setUp() {
-        reference = new ReferenceImpl("", SampleService.class, InterfaceMode.api, true);
+        reference = new ReferenceImpl("ABC", SampleService.class, InterfaceMode.api, true);
         referenceComponent = new ReferenceComponent(reference, implementation,
             bindingAdapterFactory, sofaRuntimeContext);
     }
@@ -98,13 +99,12 @@ public class ReferenceComponentTests {
     }
 
     @Test
-    void getPropertiesShouldReturnNull() {
-        assertThat(referenceComponent.getProperties()).isNull();
+    void getPropertiesShouldReturnEmptyMap() {
+        assertThat(referenceComponent.getProperties()).hasSize(0);
     }
 
     @Test
     void isHealthyWhenWithException() {
-        skipJvmReferenceHealthCheck(true);
         referenceComponent.exception(new RuntimeException("fail"));
 
         HealthResult healthResult = referenceComponent.isHealthy();
@@ -118,7 +118,6 @@ public class ReferenceComponentTests {
         HealthResult mockBindingResult = new HealthResult("mockBinding");
         mockBindingResult.setHealthy(false);
         when(mockBinding.healthCheck()).thenReturn(mockBindingResult);
-        skipJvmReferenceHealthCheck(true);
 
         HealthResult healthResult = referenceComponent.isHealthy();
         assertThat(healthResult.isHealthy()).isFalse();
@@ -135,6 +134,16 @@ public class ReferenceComponentTests {
         assertThat(healthResult.isHealthy()).isFalse();
         assertThat(healthResult.getHealthReport()).isEqualTo(
             "[jvm,can not find corresponding jvm service]");
+    }
+
+    @Test
+    void skipJvmHealthyUseInterfaceProperties() {
+        reference.addBinding(new JvmBinding());
+        skipJvmReferenceHealthCheck(false, "com.alipay.sofa.runtime.sample.SampleService:ABC");
+
+        HealthResult healthResult = referenceComponent.isHealthy();
+        assertThat(healthResult.isHealthy()).isTrue();
+        assertThat(healthResult.getHealthReport()).isEqualTo("[jvm,passed]");
     }
 
     @Test
@@ -243,10 +252,11 @@ public class ReferenceComponentTests {
         assertThatThrownBy(() -> referenceComponent.getImplementation()).isInstanceOf(ServiceRuntimeException.class).hasMessageContaining("01-00102");
     }
 
-    private void skipJvmReferenceHealthCheck(boolean skip) {
+    private void skipJvmReferenceHealthCheck(boolean skip, String... interfaces) {
         SofaRuntimeContext.Properties properties = mock(SofaRuntimeContext.Properties.class);
         when(sofaRuntimeContext.getProperties()).thenReturn(properties);
         when(properties.isSkipJvmReferenceHealthCheck()).thenReturn(skip);
+        when(properties.getSkipJvmReferenceHealthCheckList()).thenReturn(List.of(interfaces));
     }
 
     private void registerServiceComponent(boolean found) {

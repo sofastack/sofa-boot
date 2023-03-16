@@ -100,6 +100,7 @@ public class SofaRuntimeAutoConfigurationTests {
                 .withPropertyValues("sofa.boot.runtime.skipCommonComponentShutdown=true")
                 .withPropertyValues("sofa.boot.runtime.jvmFilterEnable=true")
                 .withPropertyValues("sofa.boot.runtime.serviceInterfaceTypeCheck=true")
+                .withPropertyValues("sofa.boot.runtime.skipJvmReferenceHealthCheckList=com.alipay.sofa.isle.sample.facade.SampleJvmService:annotationImpl,com.alipay.sofa.isle.sample.facade.SampleJvmService")
                 .run((context) -> {
                     SofaRuntimeContext.Properties properties= context.getBean(SofaRuntimeContext.class).getProperties();
                     assertThat(properties.isSkipJvmReferenceHealthCheck()).isTrue();
@@ -110,6 +111,7 @@ public class SofaRuntimeAutoConfigurationTests {
                     assertThat(properties.isSkipCommonComponentShutdown()).isTrue();
                     assertThat(properties.isJvmFilterEnable()).isTrue();
                     assertThat(properties.isServiceInterfaceTypeCheck()).isTrue();
+                    assertThat(properties.getSkipJvmReferenceHealthCheckList()).containsExactly("com.alipay.sofa.isle.sample.facade.SampleJvmService:annotationImpl", "com.alipay.sofa.isle.sample.facade.SampleJvmService");
                 });
     }
 

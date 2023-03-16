@@ -16,11 +16,8 @@
  */
 package com.alipay.sofa.runtime.ext.component;
 
-import java.util.Map;
-
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.component.ComponentLifeCycle;
-import com.alipay.sofa.runtime.api.component.Property;
 import com.alipay.sofa.runtime.model.ComponentStatus;
 import com.alipay.sofa.runtime.model.ComponentType;
 import com.alipay.sofa.runtime.spi.component.AbstractComponent;
@@ -62,11 +59,6 @@ public class ExtensionPointComponent extends AbstractComponent {
     @Override
     public ComponentType getType() {
         return EXTENSION_POINT_COMPONENT_TYPE;
-    }
-
-    @Override
-    public Map<String, Property> getProperties() {
-        return null;
     }
 
     @Override

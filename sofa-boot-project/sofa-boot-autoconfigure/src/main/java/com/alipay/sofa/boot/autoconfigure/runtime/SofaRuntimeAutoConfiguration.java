@@ -103,6 +103,7 @@ public class SofaRuntimeAutoConfiguration {
         SofaRuntimeContext sofaRuntimeContext = sofaRuntimeManager.getSofaRuntimeContext();
         dynamicServiceProxyManager.ifUnique(sofaRuntimeContext::setServiceProxyManager);
         sofaRuntimeContext.getProperties().setSkipJvmReferenceHealthCheck(sofaRuntimeProperties.isSkipJvmReferenceHealthCheck());
+        sofaRuntimeContext.getProperties().setSkipJvmReferenceHealthCheckList(sofaRuntimeProperties.getSkipJvmReferenceHealthCheckList());
         sofaRuntimeContext.getProperties().setSkipExtensionHealthCheck(sofaRuntimeProperties.isSkipExtensionHealthCheck());
         sofaRuntimeContext.getProperties().setDisableJvmFirst(sofaRuntimeProperties.isDisableJvmFirst());
         sofaRuntimeContext.getProperties().setExtensionFailureInsulating(sofaRuntimeProperties.isExtensionFailureInsulating());

@@ -30,6 +30,7 @@ import com.alipay.sofa.runtime.service.component.impl.ReferenceImpl;
 import com.alipay.sofa.runtime.service.helper.ReferenceRegisterHelper;
 import com.alipay.sofa.runtime.spi.binding.Binding;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
+import com.alipay.sofa.runtime.spi.component.ComponentDefinitionInfo;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
@@ -83,11 +84,11 @@ public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor,
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName)
                                                                                throws BeansException {
-        processSofaReference(bean);
+        processSofaReference(bean, beanName);
         return bean;
     }
 
-    private void processSofaReference(final Object bean) {
+    private void processSofaReference(final Object bean, String beanName) {
         final Class<?> beanClass = bean.getClass();
 
         ReflectionUtils.doWithFields(beanClass, field -> {
@@ -103,7 +104,8 @@ public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor,
                 interfaceType = field.getType();
             }
 
-            Object proxy = createReferenceProxy(sofaReferenceAnnotation, interfaceType);
+            Object proxy = createReferenceProxy(sofaReferenceAnnotation, interfaceType,
+                    beanClass, field.getName(), beanName);
             ReflectionUtils.makeAccessible(field);
             ReflectionUtils.setField(field, bean, proxy);
         }, field -> {
@@ -135,13 +137,15 @@ public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor,
                 interfaceType = parameterTypes[0];
             }
 
-            Object proxy = createReferenceProxy(sofaReferenceAnnotation, interfaceType);
+            Object proxy = createReferenceProxy(sofaReferenceAnnotation, interfaceType,
+                    beanClass, method.getName(), beanName);
             ReflectionUtils.invokeMethod(method, bean, proxy);
         }, method -> method.isAnnotationPresent(SofaReference.class));
     }
 
     private Object createReferenceProxy(SofaReference sofaReferenceAnnotation,
-                                        Class<?> interfaceType) {
+                                        Class<?> interfaceType, Class beanClass, String fieldName,
+                                        String beanName) {
         Reference reference = new ReferenceImpl(sofaReferenceAnnotation.uniqueId(), interfaceType,
             InterfaceMode.annotation, sofaReferenceAnnotation.jvmFirst());
         BindingConverter bindingConverter = bindingConverterFactory
@@ -159,8 +163,14 @@ public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor,
         Binding binding = bindingConverter.convert(sofaReferenceAnnotation,
             sofaReferenceAnnotation.binding(), bindingConverterContext);
         reference.addBinding(binding);
+        ComponentDefinitionInfo definitionInfo = new ComponentDefinitionInfo();
+        definitionInfo.setInterfaceMode(InterfaceMode.annotation);
+        definitionInfo.putInfo(ComponentDefinitionInfo.LOCATION, fieldName);
+        definitionInfo.putInfo(ComponentDefinitionInfo.BEAN_ID, beanName);
+        definitionInfo.putInfo(ComponentDefinitionInfo.BEAN_CLASS_NAME,
+            beanClass.getCanonicalName());
         return ReferenceRegisterHelper.registerReference(reference, bindingAdapterFactory,
-            sofaRuntimeContext, applicationContext);
+            sofaRuntimeContext, applicationContext, definitionInfo);
     }
 
     @Override

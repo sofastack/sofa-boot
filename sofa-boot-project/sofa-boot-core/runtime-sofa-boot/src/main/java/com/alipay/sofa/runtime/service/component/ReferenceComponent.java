@@ -34,6 +34,7 @@ import com.alipay.sofa.runtime.spi.component.Implementation;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.health.HealthResult;
 import org.slf4j.Logger;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +51,7 @@ import java.util.concurrent.CountDownLatch;
 public class ReferenceComponent extends AbstractComponent {
 
     private static final Logger         LOGGER                   = SofaBootLoggerFactory
-                                                                     .getLogger(ServiceComponent.class);
+                                                                     .getLogger(ReferenceComponent.class);
 
     public static final ComponentType   REFERENCE_COMPONENT_TYPE = new ComponentType("reference");
 
@@ -81,7 +82,7 @@ public class ReferenceComponent extends AbstractComponent {
 
     @Override
     public Map<String, Property> getProperties() {
-        return null;
+        return properties;
     }
 
     @Override
@@ -102,8 +103,7 @@ public class ReferenceComponent extends AbstractComponent {
         }
 
         // check reference has a corresponding service
-        if (!sofaRuntimeContext.getProperties().isSkipJvmReferenceHealthCheck()
-            && jvmBinding != null) {
+        if (jvmBinding != null && !isSkipReferenceHealthCheck(sofaRuntimeContext.getProperties())) {
             Object serviceTarget = getServiceTarget();
             if (serviceTarget == null && !jvmBinding.hasBackupProxy()) {
                 jvmBindingHealthResult.setHealthy(false);
@@ -252,5 +252,19 @@ public class ReferenceComponent extends AbstractComponent {
                 reference, sofaRuntimeContext.getAppClassLoader());
         }
         return serviceTarget;
+    }
+
+    private boolean isSkipReferenceHealthCheck(SofaRuntimeContext.Properties properties) {
+        if (properties.isSkipJvmReferenceHealthCheck()) {
+            return true;
+        }
+        // skip check reference for the specified interface with unique id
+        List<String> skipCheckList = properties.getSkipJvmReferenceHealthCheckList();
+        String interfaceType = reference.getInterfaceType().getName();
+        String uniqueId = reference.getUniqueId();
+        if (StringUtils.hasText(uniqueId)) {
+            interfaceType = interfaceType + ":" + uniqueId;
+        }
+        return skipCheckList.contains(interfaceType);
     }
 }

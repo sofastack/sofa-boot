@@ -18,14 +18,21 @@ package com.alipay.sofa.runtime.ext.spring;
 
 import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import com.alipay.sofa.runtime.api.component.ComponentName;
+import com.alipay.sofa.runtime.api.component.Property;
 import com.alipay.sofa.runtime.ext.component.ExtensionComponent;
 import com.alipay.sofa.runtime.ext.component.ExtensionPointComponent;
+import com.alipay.sofa.runtime.model.InterfaceMode;
+import com.alipay.sofa.runtime.spi.component.ComponentDefinitionInfo;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.ComponentNameFactory;
 import org.slf4j.Logger;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.w3c.dom.Element;
+
+import static com.alipay.sofa.runtime.spi.component.ComponentDefinitionInfo.BEAN_ID;
+import static com.alipay.sofa.runtime.spi.component.ComponentDefinitionInfo.EXTENSION_POINT_NAME;
+import static com.alipay.sofa.runtime.spi.component.ComponentDefinitionInfo.SOURCE;
 
 /**
  * Implementation of {@link org.springframework.beans.factory.FactoryBean} to register extension.
@@ -86,6 +93,14 @@ public class ExtensionFactoryBean extends AbstractExtFactoryBean {
 
         ComponentInfo componentInfo = new ExtensionComponent(extensionBuilder.getExtension(),
             sofaRuntimeContext);
+        ComponentDefinitionInfo extensionDefinitionInfo = new ComponentDefinitionInfo();
+        extensionDefinitionInfo.setInterfaceMode(InterfaceMode.spring);
+        extensionDefinitionInfo.putInfo(BEAN_ID, bean);
+        extensionDefinitionInfo.putInfo(EXTENSION_POINT_NAME, point);
+        Property property = new Property();
+        property.setName(SOURCE);
+        property.setValue(extensionDefinitionInfo);
+        componentInfo.getProperties().put(SOURCE, property);
         componentInfo.setApplicationContext(applicationContext);
         sofaRuntimeContext.getComponentManager().register(componentInfo);
     }
