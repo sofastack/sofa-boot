@@ -37,6 +37,11 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     private Environment         environment;
 
     /**
+     * whether enable auto publish service when application start.
+     */
+    private boolean             enableAutoPublish;
+
+    /**
      * whether regulation effective (是否开启单机故障剔除功能)
      */
     private String              aftRegulationEffective;
@@ -341,6 +346,14 @@ public class SofaBootRpcProperties implements EnvironmentAware {
      * dynamic config setting
      */
     private String              dynamicConfig;
+
+    public boolean isEnableAutoPublish() {
+        return enableAutoPublish;
+    }
+
+    public void setEnableAutoPublish(boolean enableAutoPublish) {
+        this.enableAutoPublish = enableAutoPublish;
+    }
 
     public String getAftRegulationEffective() {
         return ObjectUtils.isEmpty(aftRegulationEffective) ? getDotString(new Object() {
