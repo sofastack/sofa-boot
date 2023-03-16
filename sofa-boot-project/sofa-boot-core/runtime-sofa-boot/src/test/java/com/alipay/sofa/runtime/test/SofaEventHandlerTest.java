@@ -34,14 +34,16 @@ import com.alipay.sofa.runtime.spi.service.ServiceProxy;
 import com.alipay.sofa.runtime.test.beans.facade.SampleService;
 import com.alipay.sofa.runtime.test.beans.service.DefaultSampleService;
 import com.alipay.sofa.runtime.test.configuration.RuntimeConfiguration;
-import mockit.Expectations;
-import mockit.Mock;
-import mockit.MockUp;
-import mockit.Mocked;
 import org.aopalliance.intercept.MethodInvocation;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -51,19 +53,22 @@ import org.springframework.context.annotation.Import;
 
 import java.util.Properties;
 
+import static org.mockito.ArgumentMatchers.any;
+
 /**
  * @author qilong.zql
  * @since 2.5.0
  */
+@RunWith(MockitoJUnitRunner.class)
 public class SofaEventHandlerTest {
-    @Mocked
-    private Biz                            biz;
-    @Mocked
-    private SofaRuntimeManager             sofaRuntimeManager;
-    @Mocked
-    private Contract                       contract;
-    @Mocked
-    private MethodInvocation               invocation;
+    @Mock
+    private Biz                biz;
+    @Mock
+    private SofaRuntimeManager sofaRuntimeManager;
+    @Mock
+    private Contract           contract;
+    @Mock
+    private MethodInvocation   invocation;
 
     private ConfigurableApplicationContext ctx;
 
@@ -79,7 +84,7 @@ public class SofaEventHandlerTest {
         properties.setProperty("spring.application.name", "tSofaEventHandlerTest");
         SofaFramework.getRuntimeSet().forEach(value -> SofaFramework.unRegisterSofaRuntimeManager(value));
         SpringApplication springApplication = new SpringApplication(
-            SofaEventHandlerTestConfiguration.class);
+                SofaEventHandlerTestConfiguration.class);
         springApplication.setDefaultProperties(properties);
         springApplication.setWebApplicationType(WebApplicationType.NONE);
         ctx = springApplication.run();
@@ -87,12 +92,7 @@ public class SofaEventHandlerTest {
 
     @Test
     public void testUninstallEvent() {
-        new Expectations() {
-            {
-                biz.getBizClassLoader();
-                result = this.getClass().getClassLoader();
-            }
-        };
+        Mockito.when(biz.getBizClassLoader()).thenReturn(this.getClass().getClassLoader());
         Assert.assertFalse(SofaFramework.getRuntimeSet().isEmpty());
         Assert.assertTrue(ctx.isActive());
 
@@ -101,10 +101,10 @@ public class SofaEventHandlerTest {
 
         Assert.assertFalse(SofaRuntimeProperties.isDisableJvmFirst(ctx.getClassLoader()));
         Assert
-            .assertFalse(SofaRuntimeProperties.isSkipJvmReferenceHealthCheck(ctx.getClassLoader()));
+                .assertFalse(SofaRuntimeProperties.isSkipJvmReferenceHealthCheck(ctx.getClassLoader()));
         Assert.assertFalse(SofaRuntimeProperties.isSkipExtensionHealthCheck(ctx.getClassLoader()));
         Assert
-            .assertFalse(SofaRuntimeProperties.isExtensionFailureInsulating(ctx.getClassLoader()));
+                .assertFalse(SofaRuntimeProperties.isExtensionFailureInsulating(ctx.getClassLoader()));
         Assert.assertFalse(SofaRuntimeProperties.isServiceInterfaceTypeCheck());
         Assert.assertFalse(SofaRuntimeProperties.isSkipJvmSerialize(ctx.getClassLoader()));
         Assert.assertTrue(SofaFramework.getRuntimeSet().isEmpty());
@@ -113,12 +113,7 @@ public class SofaEventHandlerTest {
 
     @Test
     public void testHealthCheck() {
-        new Expectations() {
-            {
-                biz.getBizClassLoader();
-                result = this.getClass().getClassLoader();
-            }
-        };
+        Mockito.when(biz.getBizClassLoader()).thenReturn(this.getClass().getClassLoader());
         SofaBizHealthCheckEventHandler sofaEventHandler = new SofaBizHealthCheckEventHandler();
         sofaEventHandler.handleEvent(new AfterBizStartupEvent(biz));
     }
@@ -126,53 +121,34 @@ public class SofaEventHandlerTest {
     @Test
     public void testDynamicProxyFinder() throws Exception {
         SofaFramework.registerSofaRuntimeManager(sofaRuntimeManager);
-        new MockUp<DynamicJvmServiceProxyFinder>() {
-            @Mock
-            public Biz getBiz(SofaRuntimeManager sofaRuntimeManager) {
-                return biz;
+        Mockito.when(biz.getIdentity()).thenReturn("MockName:MockVersion");
+        Mockito.when(biz.getBizState()).thenReturn(BizState.ACTIVATED);
+        Mockito.when(sofaRuntimeManager.getAppClassLoader()).thenReturn(ctx.getClassLoader().getParent());
+
+        Mockito.when(sofaRuntimeManager.getComponentManager()).thenReturn(((SofaRuntimeContext) ctx.getBean("sofaRuntimeContext"))
+                .getComponentManager());
+        Mockito.when(contract.getInterfaceType()).thenAnswer((Answer<Class>) invocationOnMock -> SampleService.class);
+        Mockito.when(contract.getUniqueId()).thenReturn("");
+        Mockito.when(contract.getBinding(JvmBinding.JVM_BINDING_TYPE)).thenReturn(new JvmBinding());
+        Mockito.when(invocation.getArguments()).thenReturn(new Object[] {});
+        Mockito.when(invocation.getMethod()).thenReturn(SampleService.class.getMethod("service"));
+
+        DynamicJvmServiceProxyFinder dynamicJvmServiceProxyFinder = DynamicJvmServiceProxyFinder.getDynamicJvmServiceProxyFinder();
+        try (MockedStatic<DynamicJvmServiceProxyFinder> utilities = Mockito.mockStatic(DynamicJvmServiceProxyFinder.class)) {
+            utilities.when(() -> DynamicJvmServiceProxyFinder.getBiz(any()))
+                    .thenReturn(biz);
+            utilities.when(DynamicJvmServiceProxyFinder::getDynamicJvmServiceProxyFinder).thenReturn(dynamicJvmServiceProxyFinder);
+            dynamicJvmServiceProxyFinder.setHasFinishStartup(true);
+            ServiceProxy serviceProxy = dynamicJvmServiceProxyFinder
+                    .findServiceProxy(ctx.getClassLoader(), contract);
+            try {
+                Assert.assertTrue(SofaEventHandlerTest.class.getName().equals(
+                        serviceProxy.invoke(invocation)));
+            } catch (Throwable throwable) {
+                throw new RuntimeException("testDynamicProxyFinder case failed.", throwable);
             }
-        };
-
-        new Expectations() {
-            {
-                biz.getIdentity();
-                result = "MockName:MockVersion";
-
-                biz.getBizState();
-                result = BizState.ACTIVATED;
-
-                sofaRuntimeManager.getAppClassLoader();
-                result = ctx.getClassLoader().getParent();
-            }
-        };
-
-        new Expectations() {
-            {
-                sofaRuntimeManager.getComponentManager();
-                result = ((SofaRuntimeContext) ctx.getBean("sofaRuntimeContext"))
-                    .getComponentManager();
-                contract.getInterfaceType();
-                result = SampleService.class;
-                contract.getUniqueId();
-                result = "";
-                contract.getBinding(JvmBinding.JVM_BINDING_TYPE);
-                result = new JvmBinding();
-
-                invocation.getArguments();
-                result = new Object[] {};
-                invocation.getMethod();
-                result = SampleService.class.getMethod("service");
-            }
-        };
-        DynamicJvmServiceProxyFinder.getDynamicJvmServiceProxyFinder().setHasFinishStartup(true);
-        ServiceProxy serviceProxy = DynamicJvmServiceProxyFinder.getDynamicJvmServiceProxyFinder()
-            .findServiceProxy(ctx.getClassLoader(), contract);
-        try {
-            Assert.assertTrue(SofaEventHandlerTest.class.getName().equals(
-                serviceProxy.invoke(invocation)));
-        } catch (Throwable throwable) {
-            throw new RuntimeException("testDynamicProxyFinder case failed.", throwable);
         }
+
     }
 
     @Configuration(proxyBeanMethods = false)
