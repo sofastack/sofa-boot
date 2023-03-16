@@ -41,9 +41,11 @@ public class RpcStartApplicationListener implements ApplicationContextAware,
 
     private ApplicationContext  applicationContext;
 
+    private boolean             enableAutoPublish;
+
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        if (applicationContext.equals(event.getApplicationContext())) {
+        if (applicationContext.equals(event.getApplicationContext()) && enableAutoPublish) {
             publishRpcStartEvent();
         }
     }
@@ -60,6 +62,14 @@ public class RpcStartApplicationListener implements ApplicationContextAware,
 
     public boolean isSuccess() {
         return success.get();
+    }
+
+    public boolean isEnableAutoPublish() {
+        return enableAutoPublish;
+    }
+
+    public void setEnableAutoPublish(boolean enableAutoPublish) {
+        this.enableAutoPublish = enableAutoPublish;
     }
 
     @Override

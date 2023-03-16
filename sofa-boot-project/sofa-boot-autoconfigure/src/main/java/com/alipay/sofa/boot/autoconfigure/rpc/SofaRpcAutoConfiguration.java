@@ -246,8 +246,11 @@ public class SofaRpcAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public RpcStartApplicationListener applicationContextRefreshedListener() {
-        return new RpcStartApplicationListener();
+    public RpcStartApplicationListener applicationContextRefreshedListener(SofaBootRpcProperties sofaBootRpcProperties) {
+        RpcStartApplicationListener rpcStartApplicationListener = new RpcStartApplicationListener();
+        rpcStartApplicationListener.setEnableAutoPublish(sofaBootRpcProperties
+            .isEnableAutoPublish());
+        return rpcStartApplicationListener;
     }
 
     @Bean
