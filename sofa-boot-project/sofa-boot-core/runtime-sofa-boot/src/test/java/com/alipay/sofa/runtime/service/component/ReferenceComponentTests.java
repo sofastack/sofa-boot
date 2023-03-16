@@ -18,6 +18,7 @@ package com.alipay.sofa.runtime.service.component;
 
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.binding.BindingType;
+import com.alipay.sofa.runtime.api.component.Property;
 import com.alipay.sofa.runtime.model.InterfaceMode;
 import com.alipay.sofa.runtime.sample.SampleService;
 import com.alipay.sofa.runtime.service.binding.JvmBinding;
@@ -25,6 +26,7 @@ import com.alipay.sofa.runtime.service.component.impl.ReferenceImpl;
 import com.alipay.sofa.runtime.spi.binding.Binding;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapter;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
+import com.alipay.sofa.runtime.spi.component.ComponentDefinitionInfo;
 import com.alipay.sofa.runtime.spi.component.ComponentManager;
 import com.alipay.sofa.runtime.spi.component.DefaultImplementation;
 import com.alipay.sofa.runtime.spi.component.Implementation;
@@ -57,28 +59,31 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class ReferenceComponentTests {
 
-    public static final Object    object         = new Object();
+    public static final Object            object         = new Object();
 
-    private final Implementation  implementation = new DefaultImplementation();
+    private final Implementation          implementation = new DefaultImplementation();
 
-    private ReferenceComponent    referenceComponent;
+    private ReferenceComponent            referenceComponent;
 
-    private Reference             reference;
-
-    @Mock
-    private BindingAdapterFactory bindingAdapterFactory;
+    private Reference                     reference;
 
     @Mock
-    private SofaRuntimeContext    sofaRuntimeContext;
+    private BindingAdapterFactory         bindingAdapterFactory;
 
     @Mock
-    private ComponentManager      componentManager;
+    private SofaRuntimeContext            sofaRuntimeContext;
 
     @Mock
-    private ServiceComponent      mockServiceComponent;
+    private ComponentManager              componentManager;
 
     @Mock
-    private Binding               mockBinding;
+    private ServiceComponent              mockServiceComponent;
+
+    @Mock
+    private Binding                       mockBinding;
+
+    @Mock
+    private SofaRuntimeContext.Properties properties;
 
     @BeforeEach
     public void setUp() {
@@ -134,6 +139,30 @@ public class ReferenceComponentTests {
         assertThat(healthResult.isHealthy()).isFalse();
         assertThat(healthResult.getHealthReport()).isEqualTo(
             "[jvm,can not find corresponding jvm service]");
+    }
+
+    @Test
+    void isHealthyWhenJvmBindingNotFoundWithDetails() {
+        reference.addBinding(new JvmBinding());
+        skipJvmReferenceHealthCheck(false);
+        registerServiceComponent(false);
+        when(properties.isReferenceHealthCheckMoreDetailEnable()).thenReturn(true);
+        Property sourceProperty = new Property();
+        sourceProperty.setName(ComponentDefinitionInfo.SOURCE);
+        ComponentDefinitionInfo componentDefinitionInfo = new ComponentDefinitionInfo();
+        sourceProperty.setValue(componentDefinitionInfo);
+        componentDefinitionInfo.setInterfaceMode(InterfaceMode.api);
+        componentDefinitionInfo.putInfo(ComponentDefinitionInfo.BEAN_ID, "beanA");
+        componentDefinitionInfo.putInfo(ComponentDefinitionInfo.BEAN_CLASS_NAME, "SampleClassImpl");
+        componentDefinitionInfo.putInfo(ComponentDefinitionInfo.LOCATION, "fieldA");
+
+        referenceComponent.getProperties().put(ComponentDefinitionInfo.SOURCE, sourceProperty);
+
+        HealthResult healthResult = referenceComponent.isHealthy();
+        assertThat(healthResult.isHealthy()).isFalse();
+        assertThat(healthResult.getHealthReport())
+            .isEqualTo(
+                "[jvm,can not find corresponding jvm service.Which first declared through:api beanId:beanA,beanClassName:SampleClassImpl,location:fieldA]");
     }
 
     @Test
@@ -253,7 +282,6 @@ public class ReferenceComponentTests {
     }
 
     private void skipJvmReferenceHealthCheck(boolean skip, String... interfaces) {
-        SofaRuntimeContext.Properties properties = mock(SofaRuntimeContext.Properties.class);
         when(sofaRuntimeContext.getProperties()).thenReturn(properties);
         when(properties.isSkipJvmReferenceHealthCheck()).thenReturn(skip);
         when(properties.getSkipJvmReferenceHealthCheckList()).thenReturn(List.of(interfaces));

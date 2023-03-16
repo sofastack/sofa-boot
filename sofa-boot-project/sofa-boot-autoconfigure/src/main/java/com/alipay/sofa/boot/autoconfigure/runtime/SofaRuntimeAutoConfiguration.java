@@ -111,6 +111,7 @@ public class SofaRuntimeAutoConfiguration {
         sofaRuntimeContext.getProperties().setSkipAllComponentShutdown(sofaRuntimeProperties.isSkipAllComponentShutdown());
         sofaRuntimeContext.getProperties().setSkipCommonComponentShutdown(sofaRuntimeProperties.isSkipCommonComponentShutdown());
         sofaRuntimeContext.getProperties().setServiceInterfaceTypeCheck(sofaRuntimeProperties.isServiceInterfaceTypeCheck());
+        sofaRuntimeContext.getProperties().setReferenceHealthCheckMoreDetailEnable(sofaRuntimeProperties.isReferenceHealthCheckMoreDetailEnable());
         return sofaRuntimeContext;
     }
 

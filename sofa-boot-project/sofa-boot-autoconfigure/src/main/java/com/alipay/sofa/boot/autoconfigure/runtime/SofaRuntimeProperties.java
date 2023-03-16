@@ -87,6 +87,11 @@ public class SofaRuntimeProperties {
      */
     private int          asyncInitExecutorMaxSize        = SofaBootConstants.CPU_CORE + 1;
 
+    /**
+     * Print details in reference health check details.
+     */
+    private boolean      referenceHealthCheckMoreDetailEnable;
+
     public boolean isSkipJvmReferenceHealthCheck() {
         return skipJvmReferenceHealthCheck;
     }
@@ -173,5 +178,13 @@ public class SofaRuntimeProperties {
 
     public void setSkipJvmReferenceHealthCheckList(List<String> skipJvmReferenceHealthCheckList) {
         this.skipJvmReferenceHealthCheckList = skipJvmReferenceHealthCheckList;
+    }
+
+    public boolean isReferenceHealthCheckMoreDetailEnable() {
+        return referenceHealthCheckMoreDetailEnable;
+    }
+
+    public void setReferenceHealthCheckMoreDetailEnable(boolean referenceHealthCheckMoreDetailEnable) {
+        this.referenceHealthCheckMoreDetailEnable = referenceHealthCheckMoreDetailEnable;
     }
 }

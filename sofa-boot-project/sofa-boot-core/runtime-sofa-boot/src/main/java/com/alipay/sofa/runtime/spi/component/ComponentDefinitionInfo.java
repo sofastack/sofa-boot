@@ -63,6 +63,6 @@ public class ComponentDefinitionInfo {
     }
 
     public String info(String key) {
-        return info.get(key);
+        return info.getOrDefault(key, "");
     }
 }

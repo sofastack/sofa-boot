@@ -28,6 +28,7 @@ import com.alipay.sofa.runtime.spi.binding.Binding;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapter;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
 import com.alipay.sofa.runtime.spi.component.AbstractComponent;
+import com.alipay.sofa.runtime.spi.component.ComponentDefinitionInfo;
 import com.alipay.sofa.runtime.spi.component.ComponentNameFactory;
 import com.alipay.sofa.runtime.spi.component.DefaultImplementation;
 import com.alipay.sofa.runtime.spi.component.Implementation;
@@ -107,7 +108,24 @@ public class ReferenceComponent extends AbstractComponent {
             Object serviceTarget = getServiceTarget();
             if (serviceTarget == null && !jvmBinding.hasBackupProxy()) {
                 jvmBindingHealthResult.setHealthy(false);
-                jvmBindingHealthResult.setHealthReport("can not find corresponding jvm service");
+                StringBuilder healthReport = new StringBuilder(64);
+                healthReport.append("can not find corresponding jvm service");
+                if (sofaRuntimeContext.getProperties().isReferenceHealthCheckMoreDetailEnable()) {
+                    Property sourceProperty = getProperties().get(ComponentDefinitionInfo.SOURCE);
+                    if (sourceProperty != null && sourceProperty.getValue() != null
+                        && sourceProperty.getValue() instanceof ComponentDefinitionInfo definitionInfo) {
+                        healthReport.append(".");
+                        healthReport
+                            .append(String
+                                .format(
+                                    "Which first declared through:%s beanId:%s,beanClassName:%s,location:%s",
+                                    definitionInfo.getInterfaceMode(),
+                                    definitionInfo.info(ComponentDefinitionInfo.BEAN_ID),
+                                    definitionInfo.info(ComponentDefinitionInfo.BEAN_CLASS_NAME),
+                                    definitionInfo.info(ComponentDefinitionInfo.LOCATION)));
+                    }
+                }
+                jvmBindingHealthResult.setHealthReport(healthReport.toString());
             }
         }
 
