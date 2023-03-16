@@ -62,13 +62,13 @@ import static org.mockito.ArgumentMatchers.any;
 @RunWith(MockitoJUnitRunner.class)
 public class SofaEventHandlerTest {
     @Mock
-    private Biz                biz;
+    private Biz                            biz;
     @Mock
-    private SofaRuntimeManager sofaRuntimeManager;
+    private SofaRuntimeManager             sofaRuntimeManager;
     @Mock
-    private Contract           contract;
+    private Contract                       contract;
     @Mock
-    private MethodInvocation   invocation;
+    private MethodInvocation               invocation;
 
     private ConfigurableApplicationContext ctx;
 
@@ -101,10 +101,10 @@ public class SofaEventHandlerTest {
 
         Assert.assertFalse(SofaRuntimeProperties.isDisableJvmFirst(ctx.getClassLoader()));
         Assert
-                .assertFalse(SofaRuntimeProperties.isSkipJvmReferenceHealthCheck(ctx.getClassLoader()));
+            .assertFalse(SofaRuntimeProperties.isSkipJvmReferenceHealthCheck(ctx.getClassLoader()));
         Assert.assertFalse(SofaRuntimeProperties.isSkipExtensionHealthCheck(ctx.getClassLoader()));
         Assert
-                .assertFalse(SofaRuntimeProperties.isExtensionFailureInsulating(ctx.getClassLoader()));
+            .assertFalse(SofaRuntimeProperties.isExtensionFailureInsulating(ctx.getClassLoader()));
         Assert.assertFalse(SofaRuntimeProperties.isServiceInterfaceTypeCheck());
         Assert.assertFalse(SofaRuntimeProperties.isSkipJvmSerialize(ctx.getClassLoader()));
         Assert.assertTrue(SofaFramework.getRuntimeSet().isEmpty());
