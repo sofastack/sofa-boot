@@ -19,6 +19,7 @@ package com.alipay.sofa.runtime.spi.component;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.component.ComponentLifeCycle;
 import com.alipay.sofa.runtime.api.component.ComponentName;
+import com.alipay.sofa.runtime.api.component.Property;
 import com.alipay.sofa.runtime.model.ComponentStatus;
 import com.alipay.sofa.runtime.spi.binding.Binding;
 import com.alipay.sofa.runtime.spi.health.HealthResult;
@@ -27,6 +28,8 @@ import org.springframework.context.ApplicationContext;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * abstract component implementation
@@ -37,17 +40,19 @@ public abstract class AbstractComponent implements ComponentInfo {
     /**
      * component status
      */
-    protected ComponentStatus    componentStatus = ComponentStatus.UNREGISTERED;
+    protected ComponentStatus       componentStatus = ComponentStatus.UNREGISTERED;
 
-    protected Implementation     implementation;
+    protected Implementation        implementation;
 
-    protected ComponentName      componentName;
+    protected ComponentName         componentName;
 
-    protected SofaRuntimeContext sofaRuntimeContext;
+    protected SofaRuntimeContext    sofaRuntimeContext;
 
-    protected Exception          e;
+    protected Exception             e;
 
-    protected ApplicationContext applicationContext;
+    protected ApplicationContext    applicationContext;
+
+    protected Map<String, Property> properties      = new ConcurrentHashMap<>();
 
     @Override
     public SofaRuntimeContext getContext() {
@@ -208,5 +213,10 @@ public abstract class AbstractComponent implements ComponentInfo {
     @Override
     public boolean canBeDuplicate() {
         return true;
+    }
+
+    @Override
+    public Map<String, Property> getProperties() {
+        return properties;
     }
 }

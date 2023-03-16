@@ -16,8 +16,11 @@
  */
 package com.alipay.sofa.runtime.ext.spring;
 
+import com.alipay.sofa.runtime.api.component.Property;
 import com.alipay.sofa.runtime.ext.component.ExtensionPointComponent;
 import com.alipay.sofa.runtime.log.SofaLogger;
+import com.alipay.sofa.runtime.model.InterfaceMode;
+import com.alipay.sofa.runtime.spi.component.ComponentDefinitionInfo;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.Implementation;
 import com.alipay.sofa.runtime.spi.spring.SpringImplementationImpl;
@@ -25,6 +28,10 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
+
+import static com.alipay.sofa.runtime.spi.component.ComponentDefinitionInfo.BEAN_ID;
+import static com.alipay.sofa.runtime.spi.component.ComponentDefinitionInfo.EXTENSION_POINT_NAME;
+import static com.alipay.sofa.runtime.spi.component.ComponentDefinitionInfo.SOURCE;
 
 /**
  * Extension point factory bean
@@ -104,6 +111,14 @@ public class ExtensionPointFactoryBean extends AbstractExtFactoryBean {
             applicationContext);
         ComponentInfo extensionPointComponent = new ExtensionPointComponent(
             extensionPointBuilder.getExtensionPoint(), sofaRuntimeContext, implementation);
+        ComponentDefinitionInfo definitionInfo = new ComponentDefinitionInfo();
+        definitionInfo.setInterfaceMode(InterfaceMode.spring);
+        definitionInfo.putInfo(EXTENSION_POINT_NAME, name);
+        definitionInfo.putInfo(BEAN_ID, targetBeanName);
+        Property property = new Property();
+        property.setName(SOURCE);
+        property.setValue(definitionInfo);
+        extensionPointComponent.getProperties().put(SOURCE, property);
         extensionPointComponent.setApplicationContext(applicationContext);
         sofaRuntimeContext.getComponentManager().register(extensionPointComponent);
     }

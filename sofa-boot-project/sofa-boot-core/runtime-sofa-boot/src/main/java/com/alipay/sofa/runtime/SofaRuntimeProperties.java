@@ -18,6 +18,7 @@ package com.alipay.sofa.runtime;
 
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -26,19 +27,22 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class SofaRuntimeProperties {
 
-    private static final ConcurrentHashMap<ClassLoader, Boolean> skipJvmReferenceHealthCheckMap = new ConcurrentHashMap<>();
-    private static final ConcurrentHashMap<ClassLoader, Boolean> skipExtensionHealthCheckMap    = new ConcurrentHashMap<>();
-    private static final ConcurrentHashMap<ClassLoader, Boolean> disableJvmFirstMap             = new ConcurrentHashMap<>();
-    private static final ConcurrentHashMap<ClassLoader, Boolean> skipJvmSerializeMap            = new ConcurrentHashMap<>();
-    private static final ConcurrentHashMap<ClassLoader, Boolean> extensionFailureInsulatingMap  = new ConcurrentHashMap<>();
-    private static final ConcurrentHashMap<ClassLoader, Boolean> manualReadinessCallbackMap     = new ConcurrentHashMap<>();
-    private static final ConcurrentHashMap<ClassLoader, Boolean> skipAllComponentShutdownMap    = new ConcurrentHashMap<>();
-    private static final ConcurrentHashMap<ClassLoader, Boolean> skipCommonComponentShutdownMap = new ConcurrentHashMap<>();
-    private static boolean                                       jvmFilterEnable                = false;
-    private static boolean                                       serviceInterfaceTypeCheck      = false;
-    private static boolean                                       dynamicJvmServiceCacheEnable   = false;
+    private static final ConcurrentHashMap<ClassLoader, Boolean>      skipJvmReferenceHealthCheckMap     = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<ClassLoader, Boolean>      skipExtensionHealthCheckMap        = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<ClassLoader, Boolean>      disableJvmFirstMap                 = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<ClassLoader, Boolean>      skipJvmSerializeMap                = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<ClassLoader, Boolean>      extensionFailureInsulatingMap      = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<ClassLoader, Boolean>      manualReadinessCallbackMap         = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<ClassLoader, Boolean>      skipAllComponentShutdownMap        = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<ClassLoader, Boolean>      skipCommonComponentShutdownMap     = new ConcurrentHashMap<>();
 
-    private static boolean                                       serviceNameWithBeanId          = false;
+    private static final ConcurrentHashMap<ClassLoader, List<String>> skipJvmReferenceHealthCheckListMap = new ConcurrentHashMap<>();
+
+    private static boolean                                            jvmFilterEnable                    = false;
+    private static boolean                                            serviceInterfaceTypeCheck          = false;
+    private static boolean                                            dynamicJvmServiceCacheEnable       = false;
+
+    private static boolean                                            serviceNameWithBeanId              = false;
 
     public static boolean isManualReadinessCallback(ClassLoader classLoader) {
         return manualReadinessCallbackMap.get(classLoader) != null
@@ -164,5 +168,15 @@ public class SofaRuntimeProperties {
 
     public static void setServiceNameWithBeanId(boolean serviceNameWithBeanId) {
         SofaRuntimeProperties.serviceNameWithBeanId = serviceNameWithBeanId;
+    }
+
+    public static void setSkipJvmReferenceHealthCheckList(ClassLoader classLoader,
+                                                          List<String> references) {
+        skipJvmReferenceHealthCheckListMap.put(classLoader, references);
+    }
+
+    public static List<String> getSkipJvmReferenceHealthCheckList(ClassLoader classLoader) {
+        return skipJvmReferenceHealthCheckListMap.get(classLoader);
+
     }
 }
