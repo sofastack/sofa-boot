@@ -153,4 +153,13 @@ public class SofaRuntimeConfigurationProperties {
             .getContextClassLoader());
     }
 
+    public boolean isReferenceHealthCheckMoreDetailEnable() {
+        return SofaRuntimeProperties.isReferenceHealthCheckMoreDetailEnable();
+    }
+
+    public void setReferenceHealthCheckMoreDetailEnable(boolean referenceHealthCheckMoreDetailEnable) {
+        SofaRuntimeProperties
+            .setReferenceHealthCheckMoreDetailEnable(referenceHealthCheckMoreDetailEnable);
+    }
+
 }
