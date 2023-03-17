@@ -384,6 +384,10 @@
                 <version>${sofa.ark.version}</version>
                 <exclusions>
                     <exclusion>
+                        <groupId>aopalliance</groupId>
+                        <artifactId>aopalliance</artifactId>
+                    </exclusion>
+                    <exclusion>
                         <groupId>com.alipay.sofa</groupId>
                         <artifactId>log-sofa-boot-starter</artifactId>
                     </exclusion>
