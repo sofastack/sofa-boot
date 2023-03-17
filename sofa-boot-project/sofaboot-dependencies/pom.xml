@@ -34,7 +34,7 @@
         <asm.version>9.4</asm.version>
         <fastjson.version>1.2.83</fastjson.version>
         <javassist.version>3.19.0-GA</javassist.version>
-        <protobuf-java.version>3.22.2</protobuf-java.version>
+        <protobuf.version>3.22.2</protobuf.version>
         <xerces.version>2.12.2</xerces.version>
         <guice.version>3.0</guice.version>
         <guava.version>31.1-jre</guava.version>
@@ -475,7 +475,7 @@
             <dependency>
                 <groupId>com.google.protobuf</groupId>
                 <artifactId>protobuf-bom</artifactId>
-                <version>${protobuf-java.version}</version>
+                <version>${protobuf.version}</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
