@@ -50,12 +50,16 @@ import com.alipay.sofa.smoke.tests.rpc.boot.bean.rest.RestService;
 import com.alipay.sofa.smoke.tests.rpc.boot.bean.retry.RetriesService;
 import com.alipay.sofa.smoke.tests.rpc.boot.bean.retry.RetriesServiceImpl;
 import com.alipay.sofa.smoke.tests.rpc.boot.bean.threadpool.ThreadPoolService;
+import io.grpc.examples.helloworld.HelloReply;
+import io.grpc.examples.helloworld.HelloRequest;
+import io.grpc.examples.helloworld.SofaGreeterTriple;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -88,78 +92,78 @@ import static org.junit.jupiter.api.Assertions.*;
 public class SofaBootRpcApplicationTests {
 
     @Autowired
-    private HelloSyncService        helloSyncService;
+    private HelloSyncService           helloSyncService;
 
     @Autowired
-    private HelloFutureService      helloFutureService;
+    private HelloFutureService         helloFutureService;
 
     @Autowired
-    private HelloCallbackService    helloCallbackService;
+    private HelloCallbackService       helloCallbackService;
 
     @Autowired
-    private FilterService           filterService;
+    private FilterService              filterService;
 
     @Autowired
-    private GlobalFilterService     globalFilterService;
+    private GlobalFilterService        globalFilterService;
 
     @Autowired
-    private DirectService           directService;
+    private DirectService              directService;
 
     @Autowired
-    private GenericService          genericService;
+    private GenericService             genericService;
 
     @Autowired
-    private ThreadPoolService       threadPoolService;
+    private ThreadPoolService          threadPoolService;
 
     @Autowired
-    private RestService             restService;
+    private RestService                restService;
 
     /*@Autowired
     private DubboService dubboService;*/
 
     @Autowired
-    private RetriesService          retriesServiceBolt;
+    private RetriesService             retriesServiceBolt;
 
     /* @Autowired
      private RetriesService retriesServiceDubbo;*/
 
     @Autowired
     @Qualifier(value = "lazyServiceBolt")
-    private LazyService             lazyServiceBolt;
+    private LazyService                lazyServiceBolt;
 
     /*@Autowired
     private LazyService lazyServiceDubbo;*/
 
     @Autowired
-    private ConnectionNumService    connectionNumService;
-
-    /*@Autowired
-    @Qualifier("sofaGreeterTripleRef")
-    private SofaGreeterTriple.IGreeter sofaGreeterTripleRef;*/
-
-    @SofaReference(binding = @SofaReferenceBinding(bindingType = "bolt"), jvmFirst = false, uniqueId = "bolt")
-    private AnnotationService       annotationService;
-
-    @SofaReference(binding = @SofaReferenceBinding(bindingType = "bolt", serializeType = "protobuf"), jvmFirst = false, uniqueId = "pb")
-    private AnnotationService       annotationServicePb;
-
-    @SofaReference(binding = @SofaReferenceBinding(bindingType = "bolt", loadBalancer = "roundRobin"), uniqueId = "loadbalancer")
-    private AnnotationService       annotationLoadBalancerService;
-
-    @SofaReference(binding = @SofaReferenceBinding(bindingType = "bolt"), jvmFirst = false, uniqueId = "timeout")
-    private AnnotationService       annotationProviderTimeoutService;
-
-    @SofaReference(binding = @SofaReferenceBinding(bindingType = "bolt", timeout = 1000), jvmFirst = false, uniqueId = "timeout")
-    private AnnotationService       annotationConsumerTimeoutService;
-
-    @SofaReference(binding = @SofaReferenceBinding(bindingType = "rest", connectionNum = 100), jvmFirst = false, uniqueId = "connectionNum")
-    private AnnotationService       annotationConsumerConnectionNumService;
-
-    @SofaClientFactory
-    private ClientFactory           clientFactory;
+    private ConnectionNumService       connectionNumService;
 
     @Autowired
-    private ConsumerConfigContainer consumerConfigContainer;
+    @Qualifier("sofaGreeterTripleRef")
+    private SofaGreeterTriple.IGreeter sofaGreeterTripleRef;
+
+    @SofaReference(binding = @SofaReferenceBinding(bindingType = "bolt"), jvmFirst = false, uniqueId = "bolt")
+    private AnnotationService          annotationService;
+
+    @SofaReference(binding = @SofaReferenceBinding(bindingType = "bolt", serializeType = "protobuf"), jvmFirst = false, uniqueId = "pb")
+    private AnnotationService          annotationServicePb;
+
+    @SofaReference(binding = @SofaReferenceBinding(bindingType = "bolt", loadBalancer = "roundRobin"), uniqueId = "loadbalancer")
+    private AnnotationService          annotationLoadBalancerService;
+
+    @SofaReference(binding = @SofaReferenceBinding(bindingType = "bolt"), jvmFirst = false, uniqueId = "timeout")
+    private AnnotationService          annotationProviderTimeoutService;
+
+    @SofaReference(binding = @SofaReferenceBinding(bindingType = "bolt", timeout = 1000), jvmFirst = false, uniqueId = "timeout")
+    private AnnotationService          annotationConsumerTimeoutService;
+
+    @SofaReference(binding = @SofaReferenceBinding(bindingType = "rest", connectionNum = 100), jvmFirst = false, uniqueId = "connectionNum")
+    private AnnotationService          annotationConsumerConnectionNumService;
+
+    @SofaClientFactory
+    private ClientFactory              clientFactory;
+
+    @Autowired
+    private ConsumerConfigContainer    consumerConfigContainer;
 
     @Test
     public void timeoutPriority() throws InterruptedException {
@@ -290,30 +294,26 @@ public class SofaBootRpcApplicationTests {
 
     }
 
-    /*@Test
-     public void testConnectionNum() throws NoSuchFieldException, IllegalAccessException {
-         Field consumerConfigMapField = ConsumerConfigContainer.class
-                 .getDeclaredField("consumerConfigMap");
-         consumerConfigMapField.setAccessible(true);
-         ConcurrentMap<Binding, ConsumerConfig> consumerConfigMap = (ConcurrentMap<Binding, ConsumerConfig>) consumerConfigMapField
-                 .get(consumerConfigContainer);
-
-         boolean found1 = false;
-         boolean found2 = false;
-         for (ConsumerConfig consumerConfig : consumerConfigMap.values()) {
-             if ("connectionNum".equals(consumerConfig.getUniqueId())
-                     && AnnotationService.class.getName().equals(consumerConfig.getInterfaceId())) {
-                 found1 = true;
-                 Assert.assertEquals(100, consumerConfig.getConnectionNum());
-             } else if (connectionNumService.getClass().getName()
-                     .startsWith(consumerConfig.getInterfaceId())) {
-                 found2 = true;
-                 Assert.assertEquals(300, consumerConfig.getConnectionNum());
-             }
-         }
-         Assert.assertTrue("Found annotation reference", found1);
-         Assert.assertTrue("Found xml reference", found2);
-     }*/
+    @Test
+    public void testConnectionNum() {
+        ConcurrentMap<Binding, ConsumerConfig> consumerConfigMap = consumerConfigContainer
+            .getConsumerConfigMap();
+        boolean found1 = false;
+        boolean found2 = false;
+        for (ConsumerConfig consumerConfig : consumerConfigMap.values()) {
+            if ("connectionNum".equals(consumerConfig.getUniqueId())
+                && AnnotationService.class.getName().equals(consumerConfig.getInterfaceId())) {
+                found1 = true;
+                assertThat(100).isEqualTo(consumerConfig.getConnectionNum());
+            } else if (ConnectionNumService.class.getName().startsWith(
+                consumerConfig.getInterfaceId())) {
+                found2 = true;
+                assertThat(300).isEqualTo(consumerConfig.getConnectionNum());
+            }
+        }
+        assertThat(found1).isTrue();
+        assertThat(found2).isTrue();
+    }
 
     @Test
     public void restSwagger() throws IOException {
@@ -355,14 +355,15 @@ public class SofaBootRpcApplicationTests {
                 "/com.alipay.sofa.smoke.tests.rpc.boot.bean.threadpool.ThreadPoolService/sayThreadPool");
     }
 
-    /*@Test
-     public void testGrpcSync() throws InterruptedException {
-         Thread.sleep(5000);
-         HelloReply reply = null;
-         HelloRequest request = HelloRequest.newBuilder().setName("world").build();
-         reply = sofaGreeterTripleRef.sayHello(request);
-         assertThat(reply.getMessage()).isEqualTo("Hello world");
-     }*/
+    @Test
+    @Disabled
+    public void testGrpcSync() throws InterruptedException {
+        Thread.sleep(1000);
+        HelloReply reply = null;
+        HelloRequest request = HelloRequest.newBuilder().setName("world").build();
+        reply = sofaGreeterTripleRef.sayHello(request);
+        assertThat(reply.getMessage()).isEqualTo("Hello world");
+    }
 
     @Test
     public void disableTracing() throws NoSuchFieldException, IllegalAccessException {

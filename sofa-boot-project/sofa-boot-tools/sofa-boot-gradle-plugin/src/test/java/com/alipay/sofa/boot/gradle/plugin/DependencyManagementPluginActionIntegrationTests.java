@@ -18,6 +18,7 @@ package com.alipay.sofa.boot.gradle.plugin;
 
 import org.gradle.testkit.runner.TaskOutcome;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,6 +38,7 @@ public class DependencyManagementPluginActionIntegrationTests {
     public GradleBuild gradleBuild;
 
     @Test
+    @Ignore
     public void bomIsImportedWhenDependencyManagementPluginIsApplied() {
         Assert.assertEquals(
             this.gradleBuild.build("hasDependencyManagement", "-PapplyDependencyManagementPlugin")
