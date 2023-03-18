@@ -12,7 +12,7 @@ jobs:
           java-version: '8'
           distribution: 'zulu'
       - name: Test
-        run: mvn test -U -pl sofa-boot-project/sofa-boot-starters/log-sofa-boot-starter -Dtest=com.alipay.sofa.common.boot.logging.test.DefaultLevelTest#testDefaultLevel
+        run: mvn dependency:purge-local-repository clean install -U && mvn test -U -pl sofa-boot-project/sofa-boot-starters/log-sofa-boot-starter -Dtest=com.alipay.sofa.common.boot.logging.test.DefaultLevelTest#testDefaultLevel
         
   Test_With_Nondex_Shuffling:
     runs-on: ubuntu-latest
