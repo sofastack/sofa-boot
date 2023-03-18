@@ -1,0 +1,28 @@
+name: Test:DefaultLevelTest.testDefaultLevel
+run-name: Verify Flaky test
+on: [push]
+jobs:
+  Test_Without_Nondex_Shuffling:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 8
+        uses: actions/setup-java@v3
+        with:
+          java-version: '8'
+          distribution: 'zulu'
+      - name: Test
+        run: mvn test -U -pl sofa-boot-project/sofa-boot-starters/log-sofa-boot-starter -Dtest=com.alipay.sofa.common.boot.logging.test.DefaultLevelTest#testDefaultLevel
+        
+  Test_With_Nondex_Shuffling:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 8
+        uses: actions/setup-java@v3
+        with:
+          java-version: '8'
+          distribution: 'zulu'
+      - name: Test
+        run: mvn edu.illinois:nondex-maven-plugin:2.1.1:nondex -pl sofa-boot-project/sofa-boot-starters/log-sofa-boot-starter -DnondexRuns=10 -Dtest=com.alipay.sofa.common.boot.logging.test.DefaultLevelTest#testDefaultLevel
+        
