@@ -27,7 +27,7 @@
         <maven.source.plugin>3.0.0</maven.source.plugin>
         <maven.javadoc.plugin>2.9.1</maven.javadoc.plugin>
         <jacoco.maven.plugin>0.8.7</jacoco.maven.plugin>
-        <maven.surefire.plugin>2.22.2</maven.surefire.plugin>
+        <maven.surefire.plugin>3.0.0-M5</maven.surefire.plugin>
 
         <!-- for dependencyManagement -->
         <spring.cloud.stream.version>2.1.0.RELEASE</spring.cloud.stream.version>
@@ -433,6 +433,7 @@
                         </dependencies>
                         <configuration>
                             <reuseForks>false</reuseForks>
+                            <forkNode implementation="org.apache.maven.plugin.surefire.extensions.SurefireForkNodeFactory"/>
                             <argLine>@{argLine} -Djdk.attach.allowAttachSelf --add-opens java.base/jdk.internal.loader=ALL-UNNAMED</argLine>
                         </configuration>
                     </plugin>
