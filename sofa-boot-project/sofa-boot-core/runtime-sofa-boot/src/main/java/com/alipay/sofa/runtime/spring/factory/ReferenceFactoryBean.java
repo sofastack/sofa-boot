@@ -16,24 +16,30 @@
  */
 package com.alipay.sofa.runtime.spring.factory;
 
-import org.springframework.util.Assert;
-
 import com.alipay.sofa.runtime.model.InterfaceMode;
 import com.alipay.sofa.runtime.service.binding.JvmBinding;
 import com.alipay.sofa.runtime.service.binding.JvmBindingParam;
 import com.alipay.sofa.runtime.service.component.Reference;
 import com.alipay.sofa.runtime.service.component.impl.ReferenceImpl;
 import com.alipay.sofa.runtime.service.helper.ReferenceRegisterHelper;
+import com.alipay.sofa.runtime.spi.component.ComponentDefinitionInfo;
 import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
+import org.springframework.util.Assert;
+
+import static com.alipay.sofa.runtime.spi.component.ComponentDefinitionInfo.BEAN_ID;
 
 /**
  * @author xuanbei 18/3/1
  */
 public class ReferenceFactoryBean extends AbstractContractFactoryBean {
     protected Object  proxy;
-    /** jvm first or not */
+    /**
+     * jvm first or not
+     */
     protected boolean jvmFirst = true;
-    /** load balance **/
+    /**
+     * load balance
+     **/
     protected String  loadBalance;
 
     public ReferenceFactoryBean() {
@@ -59,8 +65,11 @@ public class ReferenceFactoryBean extends AbstractContractFactoryBean {
         }
 
         reference.addBinding(bindings.get(0));
+        ComponentDefinitionInfo definitionInfo = new ComponentDefinitionInfo();
+        definitionInfo.setInterfaceMode(apiType ? InterfaceMode.api : InterfaceMode.spring);
+        definitionInfo.putInfo(BEAN_ID, beanId);
         proxy = ReferenceRegisterHelper.registerReference(reference, bindingAdapterFactory,
-            sofaRuntimeContext, applicationContext);
+            sofaRuntimeContext, applicationContext, definitionInfo);
     }
 
     @Override
