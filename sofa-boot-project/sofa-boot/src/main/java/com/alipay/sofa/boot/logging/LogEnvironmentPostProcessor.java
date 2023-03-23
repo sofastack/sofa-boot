@@ -47,7 +47,7 @@ public class LogEnvironmentPostProcessor implements EnvironmentPostProcessor, Or
     /**
      * support use config to disable sofa common thread pool monitor.
      */
-    public static final String SOFA_THREAD_POOL_MONITOR_DISABLE = "sofa.boot.threadPoolMonitor.disable";
+    public static final String SOFA_THREAD_POOL_MONITOR_DISABLE = "sofa.boot.tools.thread-pool-monitor";
 
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment,
