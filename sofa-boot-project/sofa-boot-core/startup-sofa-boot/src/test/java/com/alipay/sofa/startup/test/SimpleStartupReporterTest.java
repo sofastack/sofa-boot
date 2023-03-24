@@ -94,12 +94,11 @@ public class SimpleStartupReporterTest {
         List<BeanStat> beanStats =  moduleStat.getChildren();
         Assert.assertNotNull(beanStats);
         Assert.assertTrue(beanStats.size() >= 1);
-        BeanStat initBeanStat = beanStats.stream().filter(beanStat -> beanStat.getBeanClassName().contains("InitCostBean")).findFirst().orElse(null);
+        BeanStat initBeanStat = beanStats.stream().filter(beanStat -> beanStat.getBeanClassName().contains("initCostBean")).findFirst().orElse(null);
         Assert.assertNotNull(initBeanStat);
         Assert.assertEquals(initBeanStat.getRefreshElapsedTime(), initBeanStat.getBeanRefreshEndTime() - initBeanStat.getBeanRefreshStartTime());
         Assert.assertEquals(InitCostBean.INIT_COST_TIME, initBeanStat.getRealRefreshElapsedTime(), 20);
-        Assert.assertNull(initBeanStat.getBeanType());
-        Assert.assertEquals(InitCostBean.class.getName() + " (initCostBean)", initBeanStat.getBeanClassName());
+        Assert.assertNotNull(initBeanStat.getBeanType());
         Assert.assertTrue(initBeanStat.getChildren().isEmpty());
         Assert.assertEquals(0, initBeanStat.getAfterPropertiesSetTime());
         Assert.assertEquals(0, initBeanStat.getInitTime());

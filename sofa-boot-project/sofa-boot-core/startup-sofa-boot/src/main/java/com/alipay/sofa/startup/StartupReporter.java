@@ -17,11 +17,24 @@
 package com.alipay.sofa.startup;
 
 import com.alipay.sofa.boot.startup.BaseStat;
-import org.springframework.core.env.Environment;
+import com.alipay.sofa.boot.startup.BeanStat;
+import org.springframework.boot.context.metrics.buffering.BufferingApplicationStartup;
+import org.springframework.boot.context.metrics.buffering.StartupTimeline;
+import org.springframework.boot.context.properties.bind.Bindable;
+import org.springframework.boot.context.properties.bind.Binder;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.metrics.ApplicationStartup;
+import org.springframework.core.metrics.StartupStep;
 
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * Collect and report the costs
@@ -30,12 +43,51 @@ import java.util.List;
  * @since 2020/7/8
  */
 public class StartupReporter {
-    private final StartupStaticsModel startupStaticsModel = new StartupStaticsModel();
 
-    public StartupReporter(Environment environment) {
-        startupStaticsModel.setAppName(environment.getProperty("spring.application.name"));
+    public static final String             SPRING_BEANS_INSTANTIATE                       = "spring.beans.instantiate";
+
+    public static final String             SPRING_BEANS_SMART_INSTANTIATE                 = "spring.beans.smart-initialize";
+
+    public static final String             SPRING_CONTEXT_BEANDEF_REGISTRY_POST_PROCESSOR = "spring.context.beandef-registry.post-process";
+
+    public static final String             SPRING_CONTEXT_BEAN_FACTORY_POST_PROCESSOR     = "spring.context.bean-factory.post-process";
+
+    public static final Collection<String> SPRING_BEAN_INSTANTIATE_TYPES                  = new HashSet<>();
+
+    public static final Collection<String> SPRING_CONTEXT_POST_PROCESSOR_TYPES            = new HashSet<>();
+
+    static {
+        SPRING_BEAN_INSTANTIATE_TYPES.add(SPRING_BEANS_INSTANTIATE);
+        SPRING_BEAN_INSTANTIATE_TYPES.add(SPRING_BEANS_SMART_INSTANTIATE);
+        SPRING_CONTEXT_POST_PROCESSOR_TYPES.add(SPRING_CONTEXT_BEANDEF_REGISTRY_POST_PROCESSOR);
+        SPRING_CONTEXT_POST_PROCESSOR_TYPES.add(SPRING_CONTEXT_BEAN_FACTORY_POST_PROCESSOR);
+    }
+
+    private final StartupStaticsModel      startupStaticsModel                            = new StartupStaticsModel();
+
+    private int                            bufferSize                                     = 4096;
+
+    private int                            beanInitCostThreshold                          = 100;
+
+    public StartupReporter() {
         startupStaticsModel.setApplicationBootTime(ManagementFactory.getRuntimeMXBean()
             .getStartTime());
+    }
+
+    /**
+     * Bind the environment to the {@link StartupReporter}.
+     * @param environment the environment to bind
+     */
+    public void bindToStartupReporter(ConfigurableEnvironment environment) {
+        try {
+            Binder.get(environment).bind("com.alipay.sofa.boot.startup", Bindable.ofInstance(this));
+        } catch (Exception ex) {
+            throw new IllegalStateException("Cannot bind to StartupReporter", ex);
+        }
+    }
+
+    public void setAppName(String appName) {
+        this.startupStaticsModel.setAppName(appName);
     }
 
     /**
@@ -71,11 +123,129 @@ public class StartupReporter {
     }
 
     /**
+     * Convert {@link BufferingApplicationStartup} to {@link BeanStat} list.
+     * @param context the {@link ConfigurableApplicationContext}.
+     * @return list of bean stats.
+     */
+    public List<BeanStat> generateBeanStats(ConfigurableApplicationContext context) {
+
+        List<BeanStat> rootBeanStatList = new ArrayList<>();
+        ApplicationStartup applicationStartup = context.getApplicationStartup();
+        if (applicationStartup instanceof BufferingApplicationStartup) {
+            BufferingApplicationStartup bufferingApplicationStartup = (BufferingApplicationStartup) applicationStartup;
+            Map<Long, BeanStat> beanStatIdMap = new HashMap<>();
+
+            StartupTimeline startupTimeline = bufferingApplicationStartup.drainBufferedTimeline();
+
+            // filter bean initializers by cost
+            List<StartupTimeline.TimelineEvent> timelineEvents = startupTimeline.getEvents();
+
+            // convert startup to bean stats
+            timelineEvents.forEach(timelineEvent -> {
+                BeanStat beanStat = eventToBeanStat(timelineEvent);
+                rootBeanStatList.add(beanStat);
+                beanStatIdMap.put(timelineEvent.getStartupStep().getId(), beanStat);
+            });
+
+            // build stat tree
+            timelineEvents.forEach(timelineEvent -> {
+                BeanStat parentBeanStat = beanStatIdMap.get(timelineEvent.getStartupStep().getParentId());
+                BeanStat beanStat = beanStatIdMap.get(timelineEvent.getStartupStep().getId());
+
+                if (parentBeanStat != null) {
+                    // parent node real cost subtract child node
+                    parentBeanStat.setRealRefreshElapsedTime(parentBeanStat.getRealRefreshElapsedTime()
+                            - beanStat.getCost());
+                    // remove child node in root list
+                    rootBeanStatList.remove(beanStat);
+                    // if child list cost is larger than threshold, put it to parent children.
+                    if (filterBeanInitializeByCost(beanStat)) {
+                        parentBeanStat.addChild(beanStat);
+                    }
+                } else {
+                    // if root node is less than threshold, remove it.
+                    if (!filterBeanInitializeByCost(beanStat)) {
+                        rootBeanStatList.remove(beanStat);
+                    }
+                }
+            });
+        }
+        return rootBeanStatList;
+    }
+
+    private boolean filterBeanInitializeByCost(BeanStat beanStat) {
+        String name = beanStat.getBeanType();
+        if (SPRING_BEAN_INSTANTIATE_TYPES.contains(name)) {
+            return beanStat.getCost() >= beanInitCostThreshold;
+        } else {
+            return true;
+        }
+    }
+
+    private BeanStat eventToBeanStat(StartupTimeline.TimelineEvent timelineEvent) {
+        BeanStat beanStat = new BeanStat();
+        beanStat.setStartTime(timelineEvent.getStartTime().toEpochMilli());
+        beanStat.setEndTime(timelineEvent.getEndTime().toEpochMilli());
+        beanStat.setCost(timelineEvent.getDuration().toMillis());
+        beanStat.setRealRefreshElapsedTime(beanStat.getCost());
+
+        // for compatibility
+        beanStat.setBeanRefreshStartTime(beanStat.getStartTime());
+        beanStat.setBeanRefreshEndTime(beanStat.getEndTime());
+        beanStat.setRefreshElapsedTime(beanStat.getCost());
+
+        String name = timelineEvent.getStartupStep().getName();
+        beanStat.setBeanType(name);
+        if (SPRING_BEAN_INSTANTIATE_TYPES.contains(name)) {
+            StartupStep.Tags tags = timelineEvent.getStartupStep().getTags();
+            String beanName = getValueFromTags(tags, "beanName");
+            beanStat.setName(beanName);
+        } else if (SPRING_CONTEXT_POST_PROCESSOR_TYPES.contains(name)) {
+            StartupStep.Tags tags = timelineEvent.getStartupStep().getTags();
+            String beanName = getValueFromTags(tags, "postProcessor");
+            beanStat.setName(beanName);
+        } else {
+            beanStat.setName(name);
+        }
+        timelineEvent.getStartupStep().getTags().forEach(tag -> beanStat.putAttribute(tag.getKey(), tag.getValue()));
+
+        // for compatibility
+        beanStat.setBeanClassName(beanStat.getName());
+
+        return beanStat;
+    }
+
+    private String getValueFromTags(StartupStep.Tags tags, String key) {
+        for (StartupStep.Tag tag : tags) {
+            if (Objects.equals(key, tag.getKey())) {
+                return tag.getValue();
+            }
+        }
+        return null;
+    }
+
+    /**
      * Build the com.alipay.sofa.startup.SofaStartupReporter.SofaStartupCostModel
      * @return the time cost model
      */
     public StartupStaticsModel report() {
         return startupStaticsModel;
+    }
+
+    public int getBufferSize() {
+        return bufferSize;
+    }
+
+    public void setBufferSize(int bufferSize) {
+        this.bufferSize = bufferSize;
+    }
+
+    public int getBeanInitCostThreshold() {
+        return beanInitCostThreshold;
+    }
+
+    public void setBeanInitCostThreshold(int beanInitCostThreshold) {
+        this.beanInitCostThreshold = beanInitCostThreshold;
     }
 
     public static class StartupStaticsModel {

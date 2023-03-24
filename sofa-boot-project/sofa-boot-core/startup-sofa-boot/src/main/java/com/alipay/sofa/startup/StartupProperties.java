@@ -26,6 +26,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class StartupProperties {
     private long    beanInitCostThreshold = 100;
     private boolean skipSofaBean          = false;
+    private int     bufferSize            = 4096;
 
     public long getBeanInitCostThreshold() {
         return beanInitCostThreshold;
@@ -41,5 +42,13 @@ public class StartupProperties {
 
     public void setSkipSofaBean(boolean skipSofaBean) {
         this.skipSofaBean = skipSofaBean;
+    }
+
+    public int getBufferSize() {
+        return bufferSize;
+    }
+
+    public void setBufferSize(int bufferSize) {
+        this.bufferSize = bufferSize;
     }
 }
