@@ -49,5 +49,6 @@ public class DefaultLevelTest extends LogTestBase {
             environment.getProperty(Constants.LOG_ENCODING_PROP_KEY));
         Assert.assertEquals(1, contents.size());
         Assert.assertTrue(contents.get(0).contains("info level"));
+        applicationContext.close();
     }
 }
