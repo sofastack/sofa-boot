@@ -85,7 +85,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author yuanxuan
  * @version : SofaBootRpcApplicationTests.java, v 0.1 15:19 yuanxuan Exp $
  */
-@SpringBootTest(classes = RpcSofaBootApplication.class, properties = {
+@SpringBootTest(classes = RpcSofaBootApplication.class, properties = {"sofa.boot.actuator.health.skipAll=true",
                                                                       "sofa.boot.rpc.rest-swagger=true",
                                                                       "sofa.boot.rpc.enable-swagger=true",
                                                                       "sofa.boot.rpc.defaultTracer=" })

@@ -116,10 +116,10 @@
 
     <!-- dubbo -->
     <bean id="dubboServiceImpl" class="com.alipay.sofa.smoke.tests.rpc.boot.bean.dubbo.DubboServiceImpl"/>
-    <sofa:service ref="dubboServiceImpl" interface="com.alipay.sofa.tests.rpc.bean.dubbo.DubboService">
+    <sofa:service ref="dubboServiceImpl" interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.dubbo.DubboService">
         <sofa:binding.dubbo/>
     </sofa:service>
-    <sofa:reference jvm-first="false" id="dubboService" interface="com.alipay.sofa.tests.rpc.bean.dubbo.DubboService">
+    <sofa:reference jvm-first="false" id="dubboService" interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.dubbo.DubboService">
         <sofa:binding.dubbo/>
     </sofa:reference>
     <!-- retries -->
@@ -134,7 +134,7 @@
         </sofa:binding.bolt>
     </sofa:reference>
     <sofa:reference jvm-first="false" id="retriesServiceDubbo"
-                    interface="com.alipay.sofa.rpc.test.bean.bean.retry.RetriesService">
+                    interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.retry.RetriesService">
         <sofa:binding.dubbo>
             <sofa:global-attrs retries="2"/>
         </sofa:binding.dubbo>
@@ -153,7 +153,7 @@
         </sofa:binding.bolt>
     </sofa:reference>
 
-    <sofa:reference jvm-first="false" id="lazyServiceDubbo" interface="com.alipay.sofa.rpc.test.bean.bean.lazy.LazyService">
+    <sofa:reference jvm-first="false" id="lazyServiceDubbo" interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.lazy.LazyService">
         <sofa:binding.dubbo>
             <sofa:global-attrs lazy="true"/>
         </sofa:binding.dubbo>
