@@ -36,6 +36,7 @@ import com.alipay.sofa.runtime.spi.binding.Binding;
 import com.alipay.sofa.smoke.tests.rpc.boot.bean.annotation.AnnotationService;
 import com.alipay.sofa.smoke.tests.rpc.boot.bean.connectionnum.ConnectionNumService;
 import com.alipay.sofa.smoke.tests.rpc.boot.bean.direct.DirectService;
+import com.alipay.sofa.smoke.tests.rpc.boot.bean.dubbo.DubboService;
 import com.alipay.sofa.smoke.tests.rpc.boot.bean.filter.FilterService;
 import com.alipay.sofa.smoke.tests.rpc.boot.bean.generic.GenericParamModel;
 import com.alipay.sofa.smoke.tests.rpc.boot.bean.generic.GenericResultModel;
@@ -118,21 +119,21 @@ public class SofaBootRpcApplicationTests {
     @Autowired
     private RestService                restService;
 
-    /*@Autowired
-    private DubboService dubboService;*/
+    @Autowired
+    private DubboService dubboService;
 
     @Autowired
     private RetriesService             retriesServiceBolt;
 
-    /* @Autowired
-     private RetriesService retriesServiceDubbo;*/
+     @Autowired
+     private RetriesService retriesServiceDubbo;
 
     @Autowired
     @Qualifier(value = "lazyServiceBolt")
     private LazyService                lazyServiceBolt;
 
-    /*@Autowired
-    private LazyService lazyServiceDubbo;*/
+    @Autowired
+    private LazyService lazyServiceDubbo;
 
     @Autowired
     private ConnectionNumService       connectionNumService;
@@ -248,25 +249,22 @@ public class SofaBootRpcApplicationTests {
         assertThat(restService.sayRest("rest")).isEqualTo("rest");
     }
 
-    /*@Test
+    @Test
     public void testDubbo() {
-        Assert.assertEquals("dubbo", dubboService.sayDubbo("dubbo"));
+        assertThat("dubbo").isEqualTo(dubboService.sayDubbo("dubbo"));
     }
-    */
+
     @Test
     public void retries() throws InterruptedException {
         assertThat(retriesServiceBolt.sayRetry("retries_bolt")).isEqualTo("retries_bolt");
-        //TODO need dubbo version upgrade later 3.0.6 for support jdk17
-        //assertThat(retriesServiceDubbo.sayRetry("retries_dubbo")).isEqualTo("retries_dubbo");
-        //TODO add dubbo expected 6
+        assertThat(retriesServiceDubbo.sayRetry("retries_dubbo")).isEqualTo("retries_dubbo");
         assertThat(RetriesServiceImpl.count.get()).isEqualTo(3);
     }
 
     @Test
     public void lazy() {
         assertThat(lazyServiceBolt.sayLazy("lazy_bolt")).isEqualTo("lazy_bolt");
-        //TODO need dubbo version upgrade later 3.0.6 for support jdk17
-        //assertThat(lazyServiceDubbo.sayLazy("lazy_dubbo")).isEqualTo("lazy_dubbo");
+        assertThat(lazyServiceDubbo.sayLazy("lazy_dubbo")).isEqualTo("lazy_dubbo");
     }
 
     @Test

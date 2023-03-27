@@ -47,7 +47,7 @@
         <c3p0.version>0.9.1.1</c3p0.version>
         <common.dbcp.version>1.4</common.dbcp.version>
         <resteasy.version>3.6.3.Final</resteasy.version>
-        <curator.version>4.0.1</curator.version>
+        <curator.version>5.4.0</curator.version>
         <dubbo.version>3.1.8</dubbo.version>
         <zkclient.version>0.11</zkclient.version>
         <nacos.version>1.0.0</nacos.version>
@@ -685,7 +685,7 @@
 
             <!--dubbo-->
             <dependency>
-                <groupId>com.alibaba</groupId>
+                <groupId>org.apache.dubbo</groupId>
                 <artifactId>dubbo</artifactId>
                 <version>${dubbo.version}</version>
                 <exclusions>
