@@ -157,7 +157,6 @@ public class SofaRuntimeAutoConfiguration {
         return new ProxyBeanFactoryPostProcessor();
     }
 
-
     public static <T> Set<T> getClassesByServiceLoader(Class<T> clazz) {
         ServiceLoader<T> serviceLoader = ServiceLoader.load(clazz);
 
