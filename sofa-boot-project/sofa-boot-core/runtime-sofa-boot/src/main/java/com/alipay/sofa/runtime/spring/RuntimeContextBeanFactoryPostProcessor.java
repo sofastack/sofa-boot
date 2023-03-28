@@ -16,6 +16,10 @@
  */
 package com.alipay.sofa.runtime.spring;
 
+import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
+import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
+import com.alipay.sofa.runtime.spring.bean.SofaParameterNameDiscoverer;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -24,12 +28,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
-
-import com.alipay.sofa.runtime.ext.client.ExtensionClientImpl;
-import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
-import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
-import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
-import com.alipay.sofa.runtime.spring.bean.SofaParameterNameDiscoverer;
 
 /**
  * @author qilong.zql
@@ -59,17 +57,13 @@ public class RuntimeContextBeanFactoryPostProcessor implements BeanFactoryPostPr
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory)
                                                                                    throws BeansException {
         // work on all bean
-        beanFactory.addBeanPostProcessor(new SofaRuntimeContextAwareProcessor(sofaRuntimeContext));
-        beanFactory.addBeanPostProcessor(new ClientFactoryBeanPostProcessor(sofaRuntimeContext
-            .getClientFactory()));
-        beanFactory.addBeanPostProcessor(new ExtensionClientBeanPostProcessor(
-            new ExtensionClientImpl(sofaRuntimeContext)));
+        beanFactory.addBeanPostProcessor(new SofaRuntimeAwareProcessor(sofaRuntimeContext
+            .getSofaRuntimeManager()));
+        beanFactory.addBeanPostProcessor(new ClientFactoryAnnotationBeanPostProcessor(
+            sofaRuntimeContext.getClientFactory()));
         beanFactory
             .addBeanPostProcessor(new ReferenceAnnotationBeanPostProcessor(applicationContext,
                 sofaRuntimeContext, bindingAdapterFactory, bindingConverterFactory));
-
-        beanFactory.registerSingleton(RuntimeShutdownAwarePostProcessor.class.getSimpleName(),
-            new RuntimeShutdownAwarePostProcessor(sofaRuntimeContext.getSofaRuntimeManager()));
 
         if (beanFactory instanceof AbstractAutowireCapableBeanFactory) {
             ((AbstractAutowireCapableBeanFactory) beanFactory)
