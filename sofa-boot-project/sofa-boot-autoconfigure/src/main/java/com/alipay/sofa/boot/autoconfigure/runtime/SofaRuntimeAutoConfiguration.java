@@ -38,7 +38,6 @@ import com.alipay.sofa.runtime.spring.AsyncInitBeanFactoryPostProcessor;
 import com.alipay.sofa.runtime.spring.AsyncProxyBeanPostProcessor;
 import com.alipay.sofa.runtime.spring.RuntimeContextBeanFactoryPostProcessor;
 import com.alipay.sofa.runtime.spring.ServiceBeanFactoryPostProcessor;
-import com.alipay.sofa.runtime.spring.SofaRuntimeAwareProcessor;
 import com.alipay.sofa.runtime.spring.SofaShareBeanFactoryPostProcessor;
 import com.alipay.sofa.runtime.spring.async.AsyncTaskExecutionListener;
 import com.alipay.sofa.runtime.spring.share.SofaPostProcessorShareManager;
@@ -158,11 +157,6 @@ public class SofaRuntimeAutoConfiguration {
         return new ProxyBeanFactoryPostProcessor();
     }
 
-    @Bean
-    @ConditionalOnMissingBean
-    public static SofaRuntimeAwareProcessor sofaRuntimeContextAwareProcessor(SofaRuntimeManager sofaRuntimeManager) {
-        return new SofaRuntimeAwareProcessor(sofaRuntimeManager);
-    }
 
     public static <T> Set<T> getClassesByServiceLoader(Class<T> clazz) {
         ServiceLoader<T> serviceLoader = ServiceLoader.load(clazz);
