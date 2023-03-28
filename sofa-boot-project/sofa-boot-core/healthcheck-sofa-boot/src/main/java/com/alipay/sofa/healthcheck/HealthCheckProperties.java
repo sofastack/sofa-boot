@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.healthcheck;
 
-import com.alipay.sofa.boot.health.HealthCheckerConfig;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.HashMap;

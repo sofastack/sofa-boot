@@ -18,7 +18,6 @@ package com.alipay.sofa.healthcheck;
 
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.error.ErrorCode;
-import com.alipay.sofa.boot.health.HealthCheckerConfig;
 import com.alipay.sofa.boot.util.BinaryOperators;
 import com.alipay.sofa.healthcheck.core.HealthCheckExecutor;
 import com.alipay.sofa.healthcheck.log.HealthCheckLoggerFactory;
