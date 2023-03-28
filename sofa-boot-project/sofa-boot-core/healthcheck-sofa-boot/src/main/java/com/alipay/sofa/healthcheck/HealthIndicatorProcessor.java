@@ -27,8 +27,8 @@ import org.slf4j.Logger;
 import org.springframework.aop.framework.AopProxyUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.boot.actuate.health.Health;
-import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.actuate.health.HealthContributorNameFactory;
+import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.actuate.health.ReactiveHealthIndicator;
 import org.springframework.boot.actuate.health.Status;
 import org.springframework.context.ApplicationContext;
@@ -42,6 +42,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Future;
@@ -87,10 +88,13 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
 
     private int                                    defaultTimeout;
 
+    private Map<String, HealthCheckerConfig>       healthIndicatorConfigs;
+
     public HealthIndicatorProcessor(HealthCheckProperties healthCheckProperties,
                                     HealthCheckExecutor healthCheckExecutor) {
         this.healthCheckProperties = healthCheckProperties;
         this.healthCheckExecutor = healthCheckExecutor;
+        this.healthIndicatorConfigs = healthCheckProperties.getHealthIndicatorConfigs();
     }
 
     public void init() {
@@ -205,12 +209,21 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
         boolean result;
         Health health;
         logger.info("HealthIndicator[{}] readiness check start.", beanId);
-        Integer timeout = environment.getProperty(
+
+        Integer customTimeout = environment.getProperty(
                 SofaBootConstants.SOFABOOT_INDICATOR_HEALTH_CHECK_TIMEOUT_PREFIX + beanId,
                 Integer.class);
-        if (timeout == null || timeout <= 0) {
-            timeout = defaultTimeout;
+        if (customTimeout == null || customTimeout <= 0) {
+            customTimeout = defaultTimeout;
         }
+
+        // load custom HealthIndicator config
+        int timeout = Optional.ofNullable(healthIndicatorConfigs)
+                .map(v -> v.get(beanId))
+                .map(HealthCheckerConfig::getTimeout)
+                .orElse(customTimeout);
+        Assert.isTrue(timeout > 0, "Timeout must be greater than zero");
+
         try {
             if (wait) {
                 Future<Health> future = healthCheckExecutor

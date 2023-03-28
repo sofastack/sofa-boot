@@ -28,9 +28,25 @@ import com.alipay.sofa.healthcheck.core.HealthChecker;
  */
 @Order(Ordered.LOWEST_PRECEDENCE - 9)
 public class DiskHealthChecker implements HealthChecker {
+
+    private final boolean health;
+
+    public DiskHealthChecker() {
+        this.health = true;
+    }
+
+    public DiskHealthChecker(boolean health) {
+        this.health = health;
+    }
+
     @Override
     public Health isHealthy() {
-        return Health.up().withDetail("disk", "disk is ok").build();
+        if (health) {
+            return Health.up().withDetail("disk", "disk is ok").build();
+        } else {
+            return Health.down().withDetail("disk", "disk is bad").build();
+        }
+
     }
 
     @Override
