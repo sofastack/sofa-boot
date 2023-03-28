@@ -18,6 +18,7 @@ package com.alipay.sofa.healthcheck;
 
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.error.ErrorCode;
+import com.alipay.sofa.boot.health.HealthCheckerConfig;
 import com.alipay.sofa.boot.health.NonReadinessCheck;
 import com.alipay.sofa.boot.util.BinaryOperators;
 import com.alipay.sofa.healthcheck.core.HealthCheckExecutor;
@@ -36,6 +37,7 @@ import org.springframework.util.Assert;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -68,10 +70,13 @@ public class HealthCheckerProcessor implements ApplicationContextAware {
 
     private final HealthCheckExecutor            healthCheckExecutor;
 
+    private Map<String, HealthCheckerConfig>     healthCheckersConfig;
+
     public HealthCheckerProcessor(HealthCheckProperties healthCheckProperties,
                                   HealthCheckExecutor healthCheckExecutor) {
         this.healthCheckProperties = healthCheckProperties;
         this.healthCheckExecutor = healthCheckExecutor;
+        this.healthCheckersConfig = healthCheckProperties.getHealthCheckerConfigs();
     }
 
     public void init() {
@@ -212,6 +217,10 @@ public class HealthCheckerProcessor implements ApplicationContextAware {
         int retryCount = 0;
         String checkType = isReadiness ? "readiness" : "liveness";
         logger.info("HealthChecker[{}] {} check start.", beanId, checkType);
+
+        // load custom healthChecker config
+        healthChecker = wrapperHealthCheckerForCustomConfig(healthChecker);
+
         int timeout = healthChecker.getTimeout();
         if (timeout <= 0) {
             timeout = defaultTimeout;
@@ -275,11 +284,89 @@ public class HealthCheckerProcessor implements ApplicationContextAware {
         return !healthChecker.isStrictCheck() || result;
     }
 
+    public HealthChecker wrapperHealthCheckerForCustomConfig(HealthChecker healthChecker) {
+        String componentName = healthChecker.getComponentName();
+        Map<String, HealthCheckerConfig> healthCheckerConfigs = healthCheckProperties.getHealthCheckerConfigs();
+
+        int retryCount = Optional.ofNullable(healthCheckerConfigs)
+                .map(v -> v.get(componentName))
+                .map(HealthCheckerConfig::getRetryCount)
+                .orElse(healthChecker.getRetryCount());
+        Assert.isTrue(retryCount >= 0, "HealthChecker retry count must be no less than zero");
+
+        long retryTimeInterval = Optional.ofNullable(healthCheckerConfigs)
+                .map(v -> v.get(componentName))
+                .map(HealthCheckerConfig::getRetryTimeInterval)
+                .orElse(healthChecker.getRetryTimeInterval());
+        Assert.isTrue(retryTimeInterval >= 0, "HealthChecker retry time interval must be no less than zero");
+
+        boolean strictCheck = Optional.ofNullable(healthCheckerConfigs)
+                .map(v -> v.get(componentName))
+                .map(HealthCheckerConfig::getStrictCheck)
+                .orElse(healthChecker.isStrictCheck());
+
+        int timeout = Optional.ofNullable(healthCheckerConfigs)
+                .map(v -> v.get(componentName))
+                .map(HealthCheckerConfig::getTimeout)
+                .orElse(healthChecker.getTimeout());
+        Assert.isTrue(timeout >= 0, "HealthChecker timeout must be greater than zero");
+
+        return new WrapperHealthChecker(healthChecker, retryCount, retryTimeInterval, strictCheck, timeout);
+
+    }
+
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
         this.defaultTimeout = Integer.parseInt(applicationContext.getEnvironment().getProperty(
             SofaBootConstants.SOFABOOT_HEALTH_CHECK_DEFAULT_TIMEOUT,
             String.valueOf(SofaBootConstants.SOFABOOT_HEALTH_CHECK_DEFAULT_TIMEOUT_VALUE)));
+    }
+
+    public static class WrapperHealthChecker implements HealthChecker {
+        private final HealthChecker healthChecker;
+        private final int           retryCount;
+        private final long          retryTimeInterval;
+        private final boolean       strictCheck;
+        private final int           timeout;
+
+        public WrapperHealthChecker(HealthChecker healthChecker, int retryCount,
+                                    long retryTimeInterval, boolean strictCheck, int timeout) {
+            this.healthChecker = healthChecker;
+            this.retryCount = retryCount;
+            this.retryTimeInterval = retryTimeInterval;
+            this.strictCheck = strictCheck;
+            this.timeout = timeout;
+        }
+
+        @Override
+        public Health isHealthy() {
+            return this.healthChecker.isHealthy();
+        }
+
+        @Override
+        public String getComponentName() {
+            return this.healthChecker.getComponentName();
+        }
+
+        @Override
+        public int getRetryCount() {
+            return this.retryCount;
+        }
+
+        @Override
+        public long getRetryTimeInterval() {
+            return this.retryTimeInterval;
+        }
+
+        @Override
+        public boolean isStrictCheck() {
+            return this.strictCheck;
+        }
+
+        @Override
+        public int getTimeout() {
+            return this.timeout;
+        }
     }
 }
