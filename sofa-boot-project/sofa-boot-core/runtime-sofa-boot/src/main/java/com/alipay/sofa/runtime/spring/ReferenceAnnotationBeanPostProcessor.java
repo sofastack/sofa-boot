@@ -172,6 +172,7 @@ public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor, 
                                         String beanName) {
         Reference reference = new ReferenceImpl(sofaReferenceAnnotation.uniqueId(), interfaceType,
             InterfaceMode.annotation, sofaReferenceAnnotation.jvmFirst());
+
         BindingConverter bindingConverter = bindingConverterFactory
             .getBindingConverter(new BindingType(sofaReferenceAnnotation.binding().bindingType()));
         if (bindingConverter == null) {

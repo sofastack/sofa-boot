@@ -30,4 +30,10 @@ public interface Reference extends Contract {
      * @return true or false
      */
     boolean isJvmFirst();
+
+    /**
+     * Whether the reference is required.
+     * @return true or false
+     */
+    boolean isRequired();
 }
