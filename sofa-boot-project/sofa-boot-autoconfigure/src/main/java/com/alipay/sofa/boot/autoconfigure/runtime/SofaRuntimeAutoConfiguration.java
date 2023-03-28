@@ -36,9 +36,9 @@ import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
 import com.alipay.sofa.runtime.spring.AsyncInitBeanFactoryPostProcessor;
 import com.alipay.sofa.runtime.spring.AsyncProxyBeanPostProcessor;
-import com.alipay.sofa.runtime.spring.JvmFilterPostProcessor;
 import com.alipay.sofa.runtime.spring.RuntimeContextBeanFactoryPostProcessor;
 import com.alipay.sofa.runtime.spring.ServiceBeanFactoryPostProcessor;
+import com.alipay.sofa.runtime.spring.SofaRuntimeAwareProcessor;
 import com.alipay.sofa.runtime.spring.SofaShareBeanFactoryPostProcessor;
 import com.alipay.sofa.runtime.spring.async.AsyncTaskExecutionListener;
 import com.alipay.sofa.runtime.spring.share.SofaPostProcessorShareManager;
@@ -132,12 +132,6 @@ public class SofaRuntimeAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public static JvmFilterPostProcessor jvmFilterPostProcessor() {
-        return new JvmFilterPostProcessor();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
     @ConditionalOnClass(name = "com.alipay.sofa.isle.ApplicationRuntimeModel")
     @ConditionalOnProperty(value = "com.alipay.sofa.boot.enable-isle", matchIfMissing = true)
     public static SofaShareBeanFactoryPostProcessor sofaModuleBeanFactoryPostProcessor() {
@@ -162,6 +156,12 @@ public class SofaRuntimeAutoConfiguration {
     @ConditionalOnProperty(prefix = "com.alipay.sofa.proxy.bean", name = "enabled", havingValue = "true", matchIfMissing = true)
     public static ProxyBeanFactoryPostProcessor proxyBeanFactoryPostProcessor() {
         return new ProxyBeanFactoryPostProcessor();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public static SofaRuntimeAwareProcessor sofaRuntimeContextAwareProcessor(SofaRuntimeManager sofaRuntimeManager) {
+        return new SofaRuntimeAwareProcessor(sofaRuntimeManager);
     }
 
     public static <T> Set<T> getClassesByServiceLoader(Class<T> clazz) {
