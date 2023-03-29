@@ -17,7 +17,6 @@
 package com.alipay.sofa.startup.stage;
 
 import com.alipay.sofa.boot.startup.BeanStat;
-import com.alipay.sofa.runtime.spring.share.UnshareSofaPostProcessor;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 
@@ -30,7 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author huzijie
  * @version BeanCostBeanPostProcessor.java, v 0.1 2020年12月31日 2:40 下午 huzijie Exp $
  */
-@UnshareSofaPostProcessor
+@Deprecated
 public class BeanCostBeanPostProcessor implements BeanPostProcessor {
     private final static String         SOFA_CLASS_NAME_PREFIX = "com.alipay.sofa.runtime";
     private final Map<String, BeanStat> beanInitCostMap        = new ConcurrentHashMap<>();

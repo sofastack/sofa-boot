@@ -16,40 +16,37 @@
  */
 package com.alipay.sofa.runtime.spring;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-
 import com.alipay.sofa.boot.error.ErrorCode;
+import com.alipay.sofa.runtime.api.annotation.SofaClientFactory;
+import com.alipay.sofa.runtime.api.aware.ClientFactoryAware;
+import com.alipay.sofa.runtime.api.client.ClientFactory;
+import com.alipay.sofa.runtime.client.impl.ClientFactoryImpl;
+import com.alipay.sofa.runtime.spring.singleton.SingletonSofaPostProcessor;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.core.PriorityOrdered;
 import org.springframework.util.ReflectionUtils;
 
-import com.alipay.sofa.runtime.api.annotation.SofaClientFactory;
-import com.alipay.sofa.runtime.api.aware.ClientFactoryAware;
-import com.alipay.sofa.runtime.api.client.ClientFactory;
-import com.alipay.sofa.runtime.client.impl.ClientFactoryImpl;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 
 /**
- *  {@link ClientFactoryAware}
+ * {@link ClientFactoryAware}
  * {@link SofaClientFactory} handler
  *
  * @author xuanbei 18/3/2
  */
-public class ClientFactoryBeanPostProcessor implements BeanPostProcessor, PriorityOrdered {
+@SingletonSofaPostProcessor
+public class ClientFactoryAnnotationBeanPostProcessor implements BeanPostProcessor, PriorityOrdered {
     private ClientFactory clientFactory;
 
-    public ClientFactoryBeanPostProcessor(ClientFactory clientFactory) {
+    public ClientFactoryAnnotationBeanPostProcessor(ClientFactory clientFactory) {
         this.clientFactory = clientFactory;
     }
 
     @Override
     public Object postProcessBeforeInitialization(final Object bean, String beanName)
                                                                                      throws BeansException {
-        if (bean instanceof ClientFactoryAware) {
-            ((ClientFactoryAware) bean).setClientFactory(clientFactory);
-        }
-
         ReflectionUtils.doWithFields(bean.getClass(), new ReflectionUtils.FieldCallback() {
 
             @Override
@@ -77,12 +74,6 @@ public class ClientFactoryBeanPostProcessor implements BeanPostProcessor, Priori
             }
         });
 
-        return bean;
-    }
-
-    @Override
-    public Object postProcessAfterInitialization(Object bean, String beanName)
-                                                                              throws BeansException {
         return bean;
     }
 

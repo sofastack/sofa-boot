@@ -56,7 +56,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ScannedGenericBeanDefinition;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.AnnotatedElementUtils;
-import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.core.annotation.MergedAnnotation;
+import org.springframework.core.annotation.MergedAnnotations;
 import org.springframework.core.env.Environment;
 import org.springframework.core.type.MethodMetadata;
 import org.springframework.core.type.StandardMethodMetadata;
@@ -177,13 +178,20 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
         }
 
         if (candidateMethods.size() == 1) {
-            SofaService sofaServiceAnnotation = candidateMethods.get(0).getAnnotation(
-                SofaService.class);
-            if (sofaServiceAnnotation == null) {
-                sofaServiceAnnotation = returnType.getAnnotation(SofaService.class);
+            Method method = candidateMethods.get(0);
+            MergedAnnotations annotations = MergedAnnotations.from(method, MergedAnnotations.SearchStrategy.TYPE_HIERARCHY);
+            // use method @SofaService annotations
+            if (annotations.isPresent(SofaService.class)) {
+                annotations.stream(SofaService.class).map(MergedAnnotation::synthesize)
+                        .forEach((annotation) -> generateSofaServiceDefinition(beanId, annotation, returnType, beanDefinition,
+                                registry));
+            } else {
+                // use returnType class @SofaService annotations
+                annotations = MergedAnnotations.from(returnType, MergedAnnotations.SearchStrategy.TYPE_HIERARCHY);
+                annotations.stream(SofaService.class).map(MergedAnnotation::synthesize)
+                        .forEach((annotation) -> generateSofaServiceDefinition(beanId, annotation, returnType, beanDefinition,
+                                registry));
             }
-            generateSofaServiceDefinition(beanId, sofaServiceAnnotation, returnType,
-                beanDefinition, registry);
             generateSofaReferenceDefinition(beanId, candidateMethods.get(0), registry);
         } else if (candidateMethods.size() > 1) {
             for (Method m : candidateMethods) {
@@ -269,10 +277,10 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
                                                       BeanDefinition beanDefinition,
                                                       BeanDefinitionRegistry registry) {
         // See issue: https://github.com/sofastack/sofa-boot/issues/835
-        SofaService sofaServiceAnnotation = AnnotationUtils.findAnnotation(beanClass,
-            SofaService.class);
-        generateSofaServiceDefinition(beanId, sofaServiceAnnotation, beanClass, beanDefinition,
-            registry);
+        MergedAnnotations annotations = MergedAnnotations.from(beanClass, MergedAnnotations.SearchStrategy.TYPE_HIERARCHY);
+        annotations.stream(SofaService.class).map(MergedAnnotation::synthesize)
+                .forEach((annotation) -> generateSofaServiceDefinition(beanId, annotation, beanClass, beanDefinition,
+                        registry));
     }
 
     @SuppressWarnings("unchecked")

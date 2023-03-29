@@ -24,6 +24,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.SmartLifecycle;
 
 import static com.alipay.sofa.boot.startup.BootStageConstants.APPLICATION_CONTEXT_REFRESH_STAGE;
@@ -64,10 +65,9 @@ public class StartupContextRefreshedListener implements SmartLifecycle, Applicat
         rootModuleStat.setEndTime(stat.getEndTime());
         rootModuleStat.setThreadName(Thread.currentThread().getName());
 
-        // getBeanStatList from BeanCostBeanPostProcessor
-        BeanCostBeanPostProcessor beanCostBeanPostProcessor = applicationContext
-            .getBean(BeanCostBeanPostProcessor.class);
-        rootModuleStat.setChildren((beanCostBeanPostProcessor.getBeanStatList()));
+        // getBeanStatList from ApplicationStartup
+        rootModuleStat.setChildren(startupReporter
+            .generateBeanStats((ConfigurableApplicationContext) applicationContext));
 
         // report ContextRefreshStageStat
         stat.addChild(rootModuleStat);

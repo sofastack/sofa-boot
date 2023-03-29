@@ -19,7 +19,6 @@ package com.alipay.sofa.autoconfigure.test.startup;
 import com.alipay.sofa.boot.autoconfigure.startup.SofaStartupAutoConfiguration;
 import com.alipay.sofa.startup.StartupProperties;
 import com.alipay.sofa.startup.StartupReporter;
-import com.alipay.sofa.startup.stage.BeanCostBeanPostProcessor;
 import org.junit.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.FilteredClassLoader;
@@ -39,20 +38,12 @@ public class SofaStartupAutoConfigurationTest {
 
     @Test
     public void startupReporterExist() {
-        contextRunner.run((context -> {
-            assertThat(context).hasSingleBean(StartupReporter.class);
-            assertThat(context).hasSingleBean(BeanCostBeanPostProcessor.class);
-            assertThat(context).hasSingleBean(StartupProperties.class);
-        }));
+        contextRunner.run((context -> assertThat(context).hasSingleBean(StartupProperties.class)));
     }
 
     @Test
     public void startupReporterNotExist() {
         contextRunner.withClassLoader(new FilteredClassLoader(StartupReporter.class))
-                    .run((context -> {
-            assertThat(context).doesNotHaveBean(StartupReporter.class);
-            assertThat(context).doesNotHaveBean(BeanCostBeanPostProcessor.class);
-            assertThat(context).doesNotHaveBean(StartupReporter.class);
-        }));
+                    .run((context -> assertThat(context).doesNotHaveBean(StartupReporter.class)));
     }
 }
