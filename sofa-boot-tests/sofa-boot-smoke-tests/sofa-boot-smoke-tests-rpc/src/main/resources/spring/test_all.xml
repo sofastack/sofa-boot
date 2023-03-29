@@ -2,10 +2,8 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:sofa="http://sofastack.io/schema/sofaboot"
-       xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-            http://sofastack.io/schema/sofaboot http://sofastack.io/schema/sofaboot.xsd
-            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+            http://sofastack.io/schema/sofaboot http://sofastack.io/schema/sofaboot.xsd">
 
     <!-- invoke sync-->
     <bean id="helloSyncServiceImpl" class="com.alipay.sofa.smoke.tests.rpc.boot.bean.invoke.HelloSyncServiceImpl"/>
@@ -117,36 +115,36 @@
     </sofa:reference>
 
     <!-- dubbo -->
-    <!--<bean id="dubboServiceImpl" class="com.alipay.sofa.tests.rpc.bean.dubbo.DubboServiceImpl"/>
-    <sofa:service ref="dubboServiceImpl" interface="com.alipay.sofa.tests.rpc.bean.dubbo.DubboService">
+    <bean id="dubboServiceImpl" class="com.alipay.sofa.smoke.tests.rpc.boot.bean.dubbo.DubboServiceImpl"/>
+    <sofa:service ref="dubboServiceImpl" interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.dubbo.DubboService">
         <sofa:binding.dubbo/>
     </sofa:service>
-    <sofa:reference jvm-first="false" id="dubboService" interface="com.alipay.sofa.tests.rpc.bean.dubbo.DubboService">
+    <sofa:reference jvm-first="false" id="dubboService" interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.dubbo.DubboService">
         <sofa:binding.dubbo/>
-    </sofa:reference>-->
+    </sofa:reference>
     <!-- retries -->
     <bean id="retriesServiceImpl" class="com.alipay.sofa.smoke.tests.rpc.boot.bean.retry.RetriesServiceImpl"/>
     <sofa:service ref="retriesServiceImpl" interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.retry.RetriesService">
         <sofa:binding.bolt/>
-        <!--<sofa:binding.dubbo/>-->
+        <sofa:binding.dubbo/>
     </sofa:service>
     <sofa:reference jvm-first="false" id="retriesServiceBolt" interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.retry.RetriesService">
         <sofa:binding.bolt>
             <sofa:global-attrs retries="2"/>
         </sofa:binding.bolt>
     </sofa:reference>
-   <!-- <sofa:reference jvm-first="false" id="retriesServiceDubbo"
-                    interface="com.alipay.sofa.rpc.test.bean.bean.retry.RetriesService">
+    <sofa:reference jvm-first="false" id="retriesServiceDubbo"
+                    interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.retry.RetriesService">
         <sofa:binding.dubbo>
             <sofa:global-attrs retries="2"/>
         </sofa:binding.dubbo>
-    </sofa:reference>-->
+    </sofa:reference>
 
     <!-- lazy -->
     <bean id="lazyServiceImpl" class="com.alipay.sofa.smoke.tests.rpc.boot.bean.lazy.LazyServiceImpl"/>
     <sofa:service ref="lazyServiceImpl" interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.lazy.LazyService">
         <sofa:binding.bolt/>
-       <!-- <sofa:binding.dubbo/>-->
+        <sofa:binding.dubbo/>
     </sofa:service>
 
     <sofa:reference jvm-first="false" id="lazyServiceBolt" interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.lazy.LazyService">
@@ -155,11 +153,11 @@
         </sofa:binding.bolt>
     </sofa:reference>
 
-   <!-- <sofa:reference jvm-first="false" id="lazyServiceDubbo" interface="com.alipay.sofa.rpc.test.bean.bean.lazy.LazyService">
+    <sofa:reference jvm-first="false" id="lazyServiceDubbo" interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.lazy.LazyService">
         <sofa:binding.dubbo>
             <sofa:global-attrs lazy="true"/>
         </sofa:binding.dubbo>
-    </sofa:reference>-->
+    </sofa:reference>
 
     <!-- connectionNum -->
     <bean id="connectionNumServiceImpl" class="com.alipay.sofa.smoke.tests.rpc.boot.bean.connectionnum.ConnectionNumServiceImpl"/>
@@ -183,7 +181,4 @@
                     interface="io.grpc.examples.helloworld.SofaGreeterTriple$IGreeter">
         <sofa:binding.tri/>
     </sofa:reference>
-
-    <!-- Annotation TestCase -->
-    <context:component-scan base-package="com.alipay.sofa.tests.rpc.bean.annotation"/>
 </beans>

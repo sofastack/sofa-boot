@@ -20,6 +20,7 @@
         <maven-pmd-plgun.version>3.19.0</maven-pmd-plgun.version>
         <maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
         <maven-jacoco-plugin.version>0.8.7</maven-jacoco-plugin.version>
+        <maven-surefire-plugin.version>3.0.0</maven-surefire-plugin.version>
         <!-- sofa stack lib-->
         <sofa.registry.version>6.1.8</sofa.registry.version>
         <tracer.core.version>4.0.0-SNAPSHOT</tracer.core.version>
@@ -46,10 +47,10 @@
         <c3p0.version>0.9.1.1</c3p0.version>
         <common.dbcp.version>1.4</common.dbcp.version>
         <resteasy.version>3.6.3.Final</resteasy.version>
-        <curator.version>4.0.1</curator.version>
-        <dubbo.version>2.6.9</dubbo.version>
+        <curator.version>4.3.0</curator.version>
+        <dubbo.version>3.1.8</dubbo.version>
         <zkclient.version>0.11</zkclient.version>
-        <nacos.version>1.0.0</nacos.version>
+        <nacos.version>2.0.3</nacos.version>
         <swagger.version>1.6.7</swagger.version>
         <swagger2.version>2.2.8</swagger2.version>
         <grpc.version>1.51.1</grpc.version>
@@ -637,7 +638,11 @@
                 <artifactId>curator-recipes</artifactId>
                 <version>${curator.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>org.apache.curator</groupId>
+                <artifactId>curator-x-discovery</artifactId>
+                <version>${curator.version}</version>
+            </dependency>
             <!-- resteasy -->
             <dependency>
                 <groupId>org.jboss.resteasy</groupId>
@@ -684,7 +689,7 @@
 
             <!--dubbo-->
             <dependency>
-                <groupId>com.alibaba</groupId>
+                <groupId>org.apache.dubbo</groupId>
                 <artifactId>dubbo</artifactId>
                 <version>${dubbo.version}</version>
                 <exclusions>
