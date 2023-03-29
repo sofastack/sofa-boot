@@ -85,12 +85,17 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author yuanxuan
  * @version : SofaBootRpcApplicationTests.java, v 0.1 15:19 yuanxuan Exp $
  */
-@SpringBootTest(classes = RpcSofaBootApplication.class, properties = {"sofa.boot.actuator.health.skipAll=true",
+@SpringBootTest(classes = RpcSofaBootApplication.class, properties = {
+                                                                      "sofa.boot.actuator.health.skipAll=true",
                                                                       "sofa.boot.rpc.rest-swagger=true",
                                                                       "sofa.boot.rpc.enable-swagger=true",
                                                                       "sofa.boot.rpc.defaultTracer=" })
 @Import(SofaBootRpcApplicationTests.RpcAllConfiguration.class)
 public class SofaBootRpcApplicationTests {
+
+    static {
+        System.setProperty("dubbo.config.mode", "IGNORE");
+    }
 
     @Autowired
     private HelloSyncService           helloSyncService;
@@ -120,20 +125,20 @@ public class SofaBootRpcApplicationTests {
     private RestService                restService;
 
     @Autowired
-    private DubboService dubboService;
+    private DubboService               dubboService;
 
     @Autowired
     private RetriesService             retriesServiceBolt;
 
-     @Autowired
-     private RetriesService retriesServiceDubbo;
+    @Autowired
+    private RetriesService             retriesServiceDubbo;
 
     @Autowired
     @Qualifier(value = "lazyServiceBolt")
     private LazyService                lazyServiceBolt;
 
     @Autowired
-    private LazyService lazyServiceDubbo;
+    private LazyService                lazyServiceDubbo;
 
     @Autowired
     private ConnectionNumService       connectionNumService;
@@ -258,7 +263,7 @@ public class SofaBootRpcApplicationTests {
     public void retries() throws InterruptedException {
         assertThat(retriesServiceBolt.sayRetry("retries_bolt")).isEqualTo("retries_bolt");
         assertThat(retriesServiceDubbo.sayRetry("retries_dubbo")).isEqualTo("retries_dubbo");
-        assertThat(RetriesServiceImpl.count.get()).isEqualTo(3);
+        assertThat(RetriesServiceImpl.count.get()).isEqualTo(6);
     }
 
     @Test
