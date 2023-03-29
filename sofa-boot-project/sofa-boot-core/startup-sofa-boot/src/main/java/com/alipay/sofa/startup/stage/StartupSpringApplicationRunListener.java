@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.startup.stage;
 
+import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.startup.BaseStat;
 import com.alipay.sofa.boot.startup.ChildrenStat;
 import com.alipay.sofa.boot.startup.ModuleStat;
@@ -25,9 +26,11 @@ import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.boot.ConfigurableBootstrapContext;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.SpringApplicationRunListener;
+import org.springframework.boot.context.metrics.buffering.BufferingApplicationStartup;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.metrics.ApplicationStartup;
 
 import java.lang.management.ManagementFactory;
 import java.time.Duration;
@@ -41,16 +44,21 @@ import static com.alipay.sofa.boot.startup.BootStageConstants.*;
  * @since 2020/7/20
  */
 public class StartupSpringApplicationRunListener implements SpringApplicationRunListener, Ordered {
-    private final SpringApplication application;
-    private final String[]          args;
-    private BaseStat                jvmStartingStage;
-    private BaseStat                environmentPrepareStage;
-    private BaseStat                applicationContextPrepareStage;
-    private BaseStat                applicationContextLoadStage;
+    private final SpringApplication     application;
+    private final String[]              args;
+    private final StartupReporter       startupReporter;
+    private final ApplicationStartup    userApplicationStartup;
+    private BufferingApplicationStartup applicationStartup;
+    private BaseStat                    jvmStartingStage;
+    private BaseStat                    environmentPrepareStage;
+    private BaseStat                    applicationContextPrepareStage;
+    private BaseStat                    applicationContextLoadStage;
 
     public StartupSpringApplicationRunListener(SpringApplication sa, String[] args) {
         this.application = sa;
         this.args = args;
+        this.startupReporter = new StartupReporter();
+        this.userApplicationStartup = sa.getApplicationStartup();
     }
 
     @Override
@@ -70,6 +78,20 @@ public class StartupSpringApplicationRunListener implements SpringApplicationRun
         stat.setStartTime(jvmStartingStage.getEndTime());
         stat.setEndTime(System.currentTimeMillis());
         this.environmentPrepareStage = stat;
+        startupReporter.setAppName(environment.getProperty(SofaBootConstants.APP_NAME_KEY));
+        startupReporter.bindToStartupReporter(environment);
+
+        // create BufferingApplicationStartup if user not custom.
+        if (ApplicationStartup.DEFAULT == userApplicationStartup || userApplicationStartup == null) {
+            this.applicationStartup = new BufferingApplicationStartup(
+                startupReporter.getBufferSize());
+        } else if (userApplicationStartup instanceof BufferingApplicationStartup) {
+            // use user custom BufferingApplicationStartup
+            this.applicationStartup = (BufferingApplicationStartup) userApplicationStartup;
+        } else {
+            // disable startup static when user custom other type ApplicationStartup;
+            this.applicationStartup = null;
+        }
     }
 
     @Override
@@ -83,6 +105,9 @@ public class StartupSpringApplicationRunListener implements SpringApplicationRun
                 .getInitializerStartupStatList());
         }
         this.applicationContextPrepareStage = stat;
+        if (applicationStartup != null) {
+            context.setApplicationStartup(applicationStartup);
+        }
     }
 
     @Override
@@ -92,6 +117,8 @@ public class StartupSpringApplicationRunListener implements SpringApplicationRun
         stat.setStartTime(applicationContextPrepareStage.getEndTime());
         stat.setEndTime(System.currentTimeMillis());
         this.applicationContextLoadStage = stat;
+
+        context.getBeanFactory().registerSingleton("STARTUP_REPORTER_BEAN", startupReporter);
     }
 
     @Override
