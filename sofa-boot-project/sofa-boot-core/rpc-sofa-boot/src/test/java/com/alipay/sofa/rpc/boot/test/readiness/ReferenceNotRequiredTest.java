@@ -1,6 +1,18 @@
 /*
- * Ant Group
- * Copyright (c) 2004-2023 All Rights Reserved.
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.alipay.sofa.rpc.boot.test.readiness;
 
@@ -37,10 +49,10 @@ import java.util.Map;
  * @version ReferenceRequiredTest.java, v 0.1 2023/3/29
  */
 @SpringBootApplication
-@SpringBootTest(classes = ReferenceRequiredTest.class)
+@SpringBootTest(classes = ReferenceNotRequiredTest.class)
 @RunWith(SpringRunner.class)
-@ImportResource("/spring/test_reference_required.xml")
-public class ReferenceRequiredTest {
+@ImportResource("/spring/test_reference_not_required.xml")
+public class ReferenceNotRequiredTest {
     @Autowired
     private ApplicationContext applicationContext;
 
@@ -50,34 +62,32 @@ public class ReferenceRequiredTest {
     @Autowired
     private SofaRuntimeContext sofaRuntimeContext;
 
-    @SofaReference(uniqueId = "requireServiceAnnotation")
-    private RequireService requireServiceAnnotation;
+    @SofaReference(uniqueId = "notRequireServiceAnnotation", required = false)
+    private RequireService     notRequireServiceAnnotation;
 
     @PostConstruct
     public void init() {
         ReferenceClient referenceClient = clientFactoryBean.getClientFactory().getClient(
-                ReferenceClient.class);
+            ReferenceClient.class);
         ReferenceParam<RequireService> referenceParam = new ReferenceParam<>();
         referenceParam.setInterfaceType(RequireService.class);
-        referenceParam.setUniqueId("requireServiceClient");
+        referenceParam.setUniqueId("notRequireServiceClient");
+        referenceParam.setRequired(false);
         referenceClient.reference(referenceParam);
     }
 
     @Test
     public void testHealthCheckerConfig() {
         HealthCheckerProcessor healthCheckerProcessor = applicationContext
-                .getBean(HealthCheckerProcessor.class);
+            .getBean(HealthCheckerProcessor.class);
         Map<String, Health> healthMap = new HashMap<>();
         boolean result = healthCheckerProcessor.readinessHealthCheck(healthMap);
-        Assert.assertFalse(result);
+        Assert.assertTrue(result);
 
         final Collection<ComponentInfo> componentInfos = sofaRuntimeContext.getComponentManager().getComponents();
-        componentInfos.forEach(componentInfo -> {
-            Assert.assertFalse(componentInfo.isHealthy().isHealthy());
-        });
-        Assert.assertTrue(componentInfos.stream().anyMatch(componentInfo -> componentInfo.getName().getName().contains("requireServiceXml")));
-        Assert.assertTrue(componentInfos.stream().anyMatch(componentInfo -> componentInfo.getName().getName().contains("requireServiceAnnotation")));
-        Assert.assertTrue(componentInfos.stream().anyMatch(componentInfo -> componentInfo.getName().getName().contains("requireServiceClient")));
+        Assert.assertTrue(componentInfos.stream().anyMatch(componentInfo -> componentInfo.getName().getName().contains("notRequireServiceXml")));
+        Assert.assertTrue(componentInfos.stream().anyMatch(componentInfo -> componentInfo.getName().getName().contains("notRequireServiceAnnotation")));
+        Assert.assertTrue(componentInfos.stream().anyMatch(componentInfo -> componentInfo.getName().getName().contains("notRequireServiceClient")));
     }
 
     @TestConfiguration

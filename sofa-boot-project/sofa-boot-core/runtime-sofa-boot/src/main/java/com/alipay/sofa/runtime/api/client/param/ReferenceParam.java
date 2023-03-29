@@ -28,7 +28,7 @@ public class ReferenceParam<T> {
     private Class<T>     interfaceType;
     private BindingParam bindingParam;
     private boolean      jvmFirst;
-    private boolean      required;
+    private boolean      required = true;
 
     /**
      * Get the unique id of the SOFA reference to be created.
