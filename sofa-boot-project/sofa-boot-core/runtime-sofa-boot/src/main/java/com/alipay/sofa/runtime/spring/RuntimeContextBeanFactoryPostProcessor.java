@@ -36,10 +36,13 @@ import org.springframework.core.annotation.Order;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class RuntimeContextBeanFactoryPostProcessor implements BeanFactoryPostProcessor,
                                                    ApplicationContextAware {
-    private BindingAdapterFactory   bindingAdapterFactory;
-    private BindingConverterFactory bindingConverterFactory;
-    private SofaRuntimeContext      sofaRuntimeContext;
-    private ApplicationContext      applicationContext;
+    protected BindingAdapterFactory   bindingAdapterFactory;
+
+    protected BindingConverterFactory bindingConverterFactory;
+
+    protected SofaRuntimeContext      sofaRuntimeContext;
+
+    protected ApplicationContext      applicationContext;
 
     public RuntimeContextBeanFactoryPostProcessor() {
     }
