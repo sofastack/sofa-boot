@@ -44,7 +44,6 @@
         <!--maven plugin-->
         <maven.staging.plugin>1.6.13</maven.staging.plugin>
         <maven.gpg.pluign>1.6</maven.gpg.pluign>
-        <maven.nexus.skip>false</maven.nexus.skip>
         <flatten-maven-plugin.version>1.2.7</flatten-maven-plugin.version>
     </properties>
 
@@ -94,7 +93,6 @@
                         <version>${maven.staging.plugin}</version>
                         <extensions>true</extensions>
                         <configuration>
-                            <skipNexusStagingDeployMojo>${maven.nexus.skip}</skipNexusStagingDeployMojo>
                             <serverId>ossrh</serverId>
                             <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                             <autoReleaseAfterClose>false</autoReleaseAfterClose>
