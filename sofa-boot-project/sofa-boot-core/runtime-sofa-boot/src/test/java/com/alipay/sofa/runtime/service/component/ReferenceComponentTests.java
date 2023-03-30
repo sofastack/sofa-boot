@@ -176,6 +176,16 @@ public class ReferenceComponentTests {
     }
 
     @Test
+    void skipJvmHealthyUseRequired() {
+        reference.addBinding(new JvmBinding());
+        reference.setRequired(false);
+
+        HealthResult healthResult = referenceComponent.isHealthy();
+        assertThat(healthResult.isHealthy()).isTrue();
+        assertThat(healthResult.getHealthReport()).isEqualTo("[jvm,passed]");
+    }
+
+    @Test
     void isHealthyWhenJvmBindingFound() {
         reference.addBinding(new JvmBinding());
         skipJvmReferenceHealthCheck(false);

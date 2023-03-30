@@ -16,8 +16,6 @@
  */
 package com.alipay.sofa.runtime.service.client;
 
-import java.util.Collection;
-
 import com.alipay.sofa.boot.log.ErrorCode;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.client.ReferenceClient;
@@ -34,11 +32,13 @@ import com.alipay.sofa.runtime.service.helper.ReferenceRegisterHelper;
 import com.alipay.sofa.runtime.spi.binding.Binding;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
+import com.alipay.sofa.runtime.spi.component.ComponentNameFactory;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
-import com.alipay.sofa.runtime.spi.component.ComponentNameFactory;
+
+import java.util.Collection;
 
 /**
  * Reference Client Implementation，you can reference a service by this class.
@@ -66,6 +66,7 @@ public class ReferenceClientImpl implements ReferenceClient {
         BindingParam bindingParam = referenceParam.getBindingParam();
         Reference reference = new ReferenceImpl(referenceParam.getUniqueId(),
             referenceParam.getInterfaceType(), InterfaceMode.api, referenceParam.isJvmFirst(), null);
+        reference.setRequired(referenceParam.isRequired());
 
         if (bindingParam == null) {
             // default add jvm binding and reference jvm binding should set serialize as false

@@ -32,6 +32,7 @@ public class ReferenceDefinitionParser extends AbstractContractDefinitionParser 
     public static final String JVM_FIRST             = "jvm-first";
     public static final String PROPERTY_JVM_FIRST    = "jvmFirst";
     public static final String PROPERTY_LOAD_BALANCE = "loadBalance";
+    public static final String REQUIRED              = "required";
 
     @Override
     protected void doParseInternal(Element element, ParserContext parserContext,
@@ -52,6 +53,18 @@ public class ReferenceDefinitionParser extends AbstractContractDefinitionParser 
         String loadBalance = element.getAttribute(PROPERTY_LOAD_BALANCE);
         if (StringUtils.hasText(loadBalance)) {
             builder.addPropertyValue(PROPERTY_LOAD_BALANCE, loadBalance);
+        }
+
+        String required = element.getAttribute(REQUIRED);
+        if (StringUtils.hasText(required)) {
+            if ("true".equalsIgnoreCase(required)) {
+                builder.addPropertyValue(REQUIRED, true);
+            } else if ("false".equalsIgnoreCase(required)) {
+                builder.addPropertyValue(REQUIRED, false);
+            } else {
+                throw new RuntimeException(
+                    "Invalid value of property required, can only be true or false.");
+            }
         }
     }
 

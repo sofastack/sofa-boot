@@ -104,7 +104,7 @@ public class ReferenceComponent extends AbstractComponent {
         }
 
         // check reference has a corresponding service
-        if (jvmBinding != null && !isSkipReferenceHealthCheck(sofaRuntimeContext.getProperties())) {
+        if (jvmBinding != null && reference.isRequired() && !isSkipReferenceHealthCheck(sofaRuntimeContext.getProperties())) {
             Object serviceTarget = getServiceTarget();
             if (serviceTarget == null && !jvmBinding.hasBackupProxy()) {
                 jvmBindingHealthResult.setHealthy(false);
