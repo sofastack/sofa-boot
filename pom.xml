@@ -48,8 +48,8 @@
     </properties>
 
     <modules>
-        <module>sofa-boot-project</module>
         <module>sofa-boot-tests</module>
+        <module>sofa-boot-project</module>
     </modules>
 
     <build>
