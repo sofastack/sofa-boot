@@ -35,6 +35,11 @@ public class SofaBootConstants {
     public static final String  SOFA_HIGH_PRIORITY_CONFIG                                    = "sofaHighPriorityConfig";
 
     /**
+     * SOFABoot exclude autoconfiguration property source key
+     */
+    public static final String  SOFA_EXCLUDE_AUTO_CONFIGURATION_PROPERTY_SOURCE              = "sofaExcludeAutoConfigurationProperties";
+
+    /**
      * {@link org.springframework.boot.ResourceBanner#getVersionsMap}
      */
     public static final String  SOFA_BOOT_VERSION                                            = "sofa-boot.version";
