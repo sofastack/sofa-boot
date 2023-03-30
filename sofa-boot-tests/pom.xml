@@ -17,6 +17,7 @@
         <main.user.dir>${basedir}/..</main.user.dir>
         <maven.install.skip>true</maven.install.skip>
         <maven.deploy.skip>true</maven.deploy.skip>
+        <maven.nexus.skip>true</maven.nexus.skip>
     </properties>
 
     <modules>
