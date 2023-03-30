@@ -14,32 +14,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime.service.component;
+package com.alipay.sofa.rpc.boot.test.readiness;
 
-import com.alipay.sofa.runtime.spi.binding.Contract;
+import com.alipay.sofa.runtime.api.aware.ClientFactoryAware;
+import com.alipay.sofa.runtime.api.client.ClientFactory;
+import org.springframework.stereotype.Component;
 
 /**
- * Reference Definition
+ * ClientFactoryBean
  *
- * @author xuanbei 18/3/1
+ * @author xunfang
+ * @version ClientFactoryBean.java, v 0.1 2023/2/14
  */
-public interface Reference extends Contract {
-    /**
-     * jvm first or not
-     *
-     * @return true or false
-     */
-    boolean isJvmFirst();
+@Component
+public class ClientFactoryBean implements ClientFactoryAware {
 
-    /**
-     * Whether the reference is required.
-     * @return true or false
-     */
-    boolean isRequired();
+    private ClientFactory clientFactory;
 
-    /**
-     * Set the reference is required.
-     * @param required true or false
-     */
-    void setRequired(boolean required);
+    @Override
+    public void setClientFactory(ClientFactory clientFactory) {
+        this.clientFactory = clientFactory;
+    }
+
+    public ClientFactory getClientFactory() {
+        return clientFactory;
+    }
 }

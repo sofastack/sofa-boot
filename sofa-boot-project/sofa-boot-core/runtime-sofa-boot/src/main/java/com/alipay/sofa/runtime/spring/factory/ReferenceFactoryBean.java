@@ -42,6 +42,8 @@ public class ReferenceFactoryBean extends AbstractContractFactoryBean {
      **/
     protected String  loadBalance;
 
+    protected boolean required = true;
+
     public ReferenceFactoryBean() {
     }
 
@@ -78,7 +80,10 @@ public class ReferenceFactoryBean extends AbstractContractFactoryBean {
     }
 
     protected Reference buildReference() {
-        return new ReferenceImpl(uniqueId, getInterfaceClass(), InterfaceMode.spring, jvmFirst);
+        Reference reference = new ReferenceImpl(uniqueId, getInterfaceClass(),
+            InterfaceMode.spring, jvmFirst);
+        reference.setRequired(required);
+        return reference;
     }
 
     @Override
@@ -112,5 +117,13 @@ public class ReferenceFactoryBean extends AbstractContractFactoryBean {
 
     public void setLoadBalance(String loadBalance) {
         this.loadBalance = loadBalance;
+    }
+
+    public void setRequired(boolean required) {
+        this.required = required;
+    }
+
+    public boolean getRequired() {
+        return required;
     }
 }
