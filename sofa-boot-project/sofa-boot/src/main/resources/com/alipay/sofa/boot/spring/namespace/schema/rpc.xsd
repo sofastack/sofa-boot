@@ -616,6 +616,7 @@
 
                 </xsd:all>
                 <xsd:attribute name="jvm-first" use="optional" type="xsd:boolean" default="true"/>
+                <xsd:attribute name="required" type="xsd:boolean" default="true" use="optional"/>
                 <xsd:attribute name="interface" type="xsd:string" use="required"/>
                 <xsd:attribute name="abstract" type="xsd:boolean" use="optional"/>
                 <xsd:attribute name="parent" type="xsd:string" use="optional"/>

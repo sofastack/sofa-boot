@@ -14,32 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime.service.component;
-
-import com.alipay.sofa.runtime.spi.binding.Contract;
+package com.alipay.sofa.rpc.boot.test.bean.reference;
 
 /**
- * Reference Definition
+ * RequireServicce
  *
- * @author xuanbei 18/3/1
+ * @author xunfang
+ * @version RequireServicce.java, v 0.1 2023/3/29
  */
-public interface Reference extends Contract {
-    /**
-     * jvm first or not
-     *
-     * @return true or false
-     */
-    boolean isJvmFirst();
-
-    /**
-     * Whether the reference is required.
-     * @return true or false
-     */
-    boolean isRequired();
-
-    /**
-     * Set the reference is required.
-     * @param required true or false
-     */
-    void setRequired(boolean required);
+public interface RequireService {
 }
