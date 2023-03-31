@@ -48,8 +48,9 @@
     </properties>
 
     <modules>
-        <module>sofa-boot-project</module>
+        <!--tests must behind project to make sure nexus deploy success-->
         <module>sofa-boot-tests</module>
+        <module>sofa-boot-project</module>
     </modules>
 
     <build>
