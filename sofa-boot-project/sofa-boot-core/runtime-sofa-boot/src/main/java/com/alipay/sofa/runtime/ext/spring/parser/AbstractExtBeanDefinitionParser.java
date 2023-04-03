@@ -16,15 +16,17 @@
  */
 package com.alipay.sofa.runtime.ext.spring.parser;
 
+import com.alipay.sofa.boot.spring.namespace.spi.SofaBootTagNameSupport;
 import com.alipay.sofa.runtime.ext.spring.ClassLoaderWrapper;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
+import org.springframework.beans.factory.xml.BeanDefinitionParserDelegate;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.springframework.core.Conventions;
 import org.springframework.core.io.Resource;
+import org.springframework.util.StringUtils;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
-
-import com.alipay.sofa.boot.spring.namespace.spi.SofaBootTagNameSupport;
-import com.alipay.sofa.boot.util.XmlParserUtils;
+import org.w3c.dom.NamedNodeMap;
 
 /**
  * Common parser for extension and extension point.
@@ -74,7 +76,7 @@ public abstract class AbstractExtBeanDefinitionParser extends
 
     protected void parseAttribute(Element element, ParserContext parserContext,
                                   BeanDefinitionBuilder builder) {
-        XmlParserUtils.parseCustomAttributes(element, parserContext, builder,
+        parseCustomAttributes(element, parserContext, builder,
                 (parent, attribute, builder1, parserContext1) -> {
                     String name = attribute.getLocalName();
 
@@ -100,5 +102,56 @@ public abstract class AbstractExtBeanDefinitionParser extends
     @Override
     protected boolean shouldGenerateIdAsFallback() {
         return true;
+    }
+
+    /**
+     * Parse custom attributes, as ID, LAZY-INIT, DEPENDS-ON。
+     *
+     * @param element element
+     * @param parserContext parser context
+     * @param builder builder
+     * @param callback callback
+     */
+    protected void parseCustomAttributes(Element element, ParserContext parserContext,
+                                         BeanDefinitionBuilder builder, AttributeCallback callback) {
+        NamedNodeMap attributes = element.getAttributes();
+
+        for (int x = 0; x < attributes.getLength(); x++) {
+            Attr attribute = (Attr) attributes.item(x);
+            String name = attribute.getLocalName();
+
+            if (BeanDefinitionParserDelegate.DEPENDS_ON_ATTRIBUTE.equals(name)) {
+                builder.getBeanDefinition().setDependsOn(
+                    (StringUtils.tokenizeToStringArray(attribute.getValue(),
+                        BeanDefinitionParserDelegate.MULTI_VALUE_ATTRIBUTE_DELIMITERS)));
+            } else if (BeanDefinitionParserDelegate.LAZY_INIT_ATTRIBUTE.equals(name)) {
+                builder.setLazyInit(Boolean.parseBoolean(attribute.getValue()));
+            } else if (BeanDefinitionParserDelegate.ABSTRACT_ATTRIBUTE.equals(name)) {
+                builder.setAbstract(Boolean.parseBoolean(attribute.getValue()));
+            } else if (BeanDefinitionParserDelegate.PARENT_ATTRIBUTE.equals(name)) {
+                builder.setParentName(attribute.getValue());
+            } else {
+                callback.process(element, attribute, builder, parserContext);
+            }
+        }
+    }
+
+    /**
+     *
+     * @author xi.hux@alipay.com
+     * @since 2.6.0
+     */
+    public interface AttributeCallback {
+
+        /**
+         * Parser attribute
+         *
+         * @param parent element parent
+         * @param attribute attribute
+         * @param builder builder
+         * @param parserContext parser context
+         */
+        void process(Element parent, Attr attribute, BeanDefinitionBuilder builder,
+                     ParserContext parserContext);
     }
 }
