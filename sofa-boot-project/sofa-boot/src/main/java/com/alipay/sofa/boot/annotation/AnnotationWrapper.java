@@ -70,12 +70,9 @@ public class AnnotationWrapper<A extends Annotation> {
 
     @SuppressWarnings("unchecked")
     private A build() {
-        if (delegate != null) {
-            ClassLoader cl = this.getClass().getClassLoader();
-            Class<?>[] exposedInterface = { delegate.annotationType(), WrapperAnnotation.class };
-            return (A) Proxy.newProxyInstance(cl, exposedInterface,
-                new PlaceHolderAnnotationInvocationHandler(delegate, binder, environment));
-        }
-        return null;
+        ClassLoader cl = this.getClass().getClassLoader();
+        Class<?>[] exposedInterface = { delegate.annotationType(), WrapperAnnotation.class };
+        return (A) Proxy.newProxyInstance(cl, exposedInterface,
+            new PlaceHolderAnnotationInvocationHandler(delegate, binder, environment));
     }
 }

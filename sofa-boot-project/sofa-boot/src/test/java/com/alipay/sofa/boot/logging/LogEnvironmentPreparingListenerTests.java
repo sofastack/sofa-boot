@@ -17,9 +17,11 @@
 package com.alipay.sofa.boot.logging;
 
 import com.alipay.sofa.common.log.CommonLoggingConfigurations;
+import com.alipay.sofa.common.thread.SofaThreadPoolConstants;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.env.MockEnvironment;
 
+import static com.alipay.sofa.boot.logging.LogEnvironmentPostProcessor.SOFA_THREAD_POOL_MONITOR_DISABLE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -52,5 +54,18 @@ public class LogEnvironmentPreparingListenerTests {
         assertThat(
             CommonLoggingConfigurations.getExternalConfigurations().get("sofa.middleware.log.key2"))
             .isEqualTo("value2");
+    }
+
+    @Test
+    public void initSofaCommonThread() {
+        LogEnvironmentPostProcessor logEnvironmentPostProcessor = new LogEnvironmentPostProcessor();
+        MockEnvironment environment = new MockEnvironment();
+        environment.setProperty(SOFA_THREAD_POOL_MONITOR_DISABLE, "true");
+
+        logEnvironmentPostProcessor.postProcessEnvironment(environment, null);
+
+        assertThat(System.getProperty(SofaThreadPoolConstants.SOFA_THREAD_POOL_LOGGING_CAPABILITY))
+            .isEqualTo("false");
+        System.clearProperty(SofaThreadPoolConstants.SOFA_THREAD_POOL_LOGGING_CAPABILITY);
     }
 }
