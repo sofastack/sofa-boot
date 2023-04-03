@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author huzijie
  * @version SofaBootEnvUtilTests.java, v 0.1 2023年02月01日 3:34 PM huzijie Exp $
  */
-public class SofaBootEnvUtilTests {
+public class SofaBootEnvUtilsTests {
 
     @Test
     public void localEnv() {
@@ -38,5 +38,15 @@ public class SofaBootEnvUtilTests {
         } else {
             assertThat(SofaBootEnvUtils.isLocalEnv()).isFalse();
         }
+    }
+
+    @Test
+    public void testEnv() {
+        assertThat(SofaBootEnvUtils.isSpringTestEnv()).isFalse();
+    }
+
+    @Test
+    public void arkEnv() {
+        assertThat(SofaBootEnvUtils.isArkEnv()).isFalse();
     }
 }
