@@ -32,11 +32,24 @@ public class StartupProperties {
      */
     private long costThreshold = 100;
 
+    /**
+     * Startup report buffer size.
+     */
+    private int  bufferSize    = 4096;
+
     public long getCostThreshold() {
         return costThreshold;
     }
 
     public void setCostThreshold(long costThreshold) {
         this.costThreshold = costThreshold;
+    }
+
+    public int getBufferSize() {
+        return bufferSize;
+    }
+
+    public void setBufferSize(int bufferSize) {
+        this.bufferSize = bufferSize;
     }
 }

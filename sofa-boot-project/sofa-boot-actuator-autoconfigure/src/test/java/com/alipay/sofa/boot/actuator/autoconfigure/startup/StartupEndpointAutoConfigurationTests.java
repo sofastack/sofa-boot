@@ -72,4 +72,18 @@ public class StartupEndpointAutoConfigurationTests {
                 .withPropertyValues("management.endpoints.web.exposure.include=*")
                 .run((context) -> assertThat(context).doesNotHaveBean(StartupEndPoint.class));
     }
+
+    @Test
+    void customStartupProperties() {
+        this.contextRunner
+                .withBean(StartupReporter.class)
+                .withPropertyValues("management.endpoints.web.exposure.include=startup")
+                .withPropertyValues("sofa.boot.startup.costThreshold=2000")
+                .withPropertyValues("sofa.boot.startup.bufferSize=2048")
+                .run((context) -> {
+                    StartupProperties startupProperties = context.getBean(StartupProperties.class);
+                    assertThat(startupProperties.getCostThreshold()).isEqualTo(2000);
+                    assertThat(startupProperties.getBufferSize()).isEqualTo(2048);
+                });
+    }
 }
