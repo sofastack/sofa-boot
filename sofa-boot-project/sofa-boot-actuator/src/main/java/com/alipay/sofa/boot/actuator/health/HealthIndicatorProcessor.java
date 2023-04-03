@@ -140,7 +140,7 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
         }
     }
 
-    private boolean isExcluded(Object target) {
+    public boolean isExcluded(Object target) {
         Class<?> klass = AopProxyUtils.ultimateTargetClass(target);
         for (Class<?> c : excludedIndicators) {
             if (c.isAssignableFrom(klass)) {

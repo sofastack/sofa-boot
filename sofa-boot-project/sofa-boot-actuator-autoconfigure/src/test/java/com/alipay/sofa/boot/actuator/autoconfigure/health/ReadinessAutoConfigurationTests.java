@@ -120,9 +120,11 @@ public class ReadinessAutoConfigurationTests {
     @Test
     void customHealthIndicatorProcessorConfigs() {
         this.contextRunner
+                .withPropertyValues("sofa.boot.actuator.health.excludedIndicators=com.alipay.sofa.boot.actuator.autoconfigure.health.ReadinessAutoConfigurationTests")
                 .withPropertyValues("sofa.boot.actuator.health.globalHealthIndicatorTimeout=3000")
                 .withPropertyValues("sofa.boot.actuator.health.healthIndicatorConfig.demo.timeout=10")
                 .run((context) -> {
+                    assertThat(context.getBean(HealthIndicatorProcessor.class).isExcluded(this)).isTrue();
                     assertThat(context.getBean(HealthIndicatorProcessor.class).getGlobalTimeout()).isEqualTo(3000);
                     assertThat(context.getBean(HealthIndicatorProcessor.class).getHealthIndicatorConfig().get("demo").getTimeout()).isEqualTo(10);
                 });
