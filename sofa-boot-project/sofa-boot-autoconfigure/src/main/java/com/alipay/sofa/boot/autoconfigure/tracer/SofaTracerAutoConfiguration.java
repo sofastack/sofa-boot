@@ -25,6 +25,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class SofaTracerAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public SpanReportListenerHolder sofaTracerSpanReportListener(List<SpanReportListener> spanReportListenerList) {
-        if (spanReportListenerList != null && spanReportListenerList.size() > 0) {
+        if (!CollectionUtils.isEmpty(spanReportListenerList)) {
             //cache in tracer listener core
             SpanReportListenerHolder.addSpanReportListeners(spanReportListenerList);
         }

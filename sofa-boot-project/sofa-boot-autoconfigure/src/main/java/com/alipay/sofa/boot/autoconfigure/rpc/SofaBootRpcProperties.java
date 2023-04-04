@@ -174,11 +174,6 @@ public class SofaBootRpcProperties implements EnvironmentAware {
      * cors settings
      */
     private String              restAllowedOrigins;
-    // has no use
-    /**
-     * the core thread pool size of rest （rest 核心线程数）
-     */
-    private String              restThreadPoolCoreSize;
     /**
      * the max thread pool size of rest （rest 最大线程数）
      */
@@ -211,21 +206,12 @@ public class SofaBootRpcProperties implements EnvironmentAware {
      * the io thread size of dubbo io (dubbo io 线程数)
      */
     private String              dubboIoThreadSize;
-    //has no use
-    /**
-     * the core thread pool size of dubbo （dubbo 核心线程数）
-     */
-    private String              dubboThreadPoolCoreSize;
 
     /**
      * the max thread pool size of dubbo （dubbo 最大线程数）
      */
     private String              dubboThreadPoolMaxSize;
-    //has no use
-    /**
-     * the queue size of dubbo server（dubbo 线程池队列）
-     */
-    private String              dubboThreadPoolQueueSize;
+
     /**
      * the max accept size of dubbo (dubbo 服务端允许客户端建立的连接数)
      */
@@ -615,33 +601,6 @@ public class SofaBootRpcProperties implements EnvironmentAware {
 
     public void setBoltThreadPoolQueueSize(String boltThreadPoolQueueSize) {
         this.boltThreadPoolQueueSize = boltThreadPoolQueueSize;
-    }
-
-    public String getDubboThreadPoolCoreSize() {
-        return ObjectUtils.isEmpty(dubboThreadPoolCoreSize) ? getDotString(new Object() {
-        }.getClass().getEnclosingMethod().getName()) : dubboThreadPoolCoreSize;
-    }
-
-    public void setDubboThreadPoolCoreSize(String dubboThreadPoolCoreSize) {
-        this.dubboThreadPoolCoreSize = dubboThreadPoolCoreSize;
-    }
-
-    public String getDubboThreadPoolQueueSize() {
-        return ObjectUtils.isEmpty(dubboThreadPoolQueueSize) ? getDotString(new Object() {
-        }.getClass().getEnclosingMethod().getName()) : dubboThreadPoolQueueSize;
-    }
-
-    public void setDubboThreadPoolQueueSize(String dubboThreadPoolQueueSize) {
-        this.dubboThreadPoolQueueSize = dubboThreadPoolQueueSize;
-    }
-
-    public String getRestThreadPoolCoreSize() {
-        return ObjectUtils.isEmpty(restThreadPoolCoreSize) ? getDotString(new Object() {
-        }.getClass().getEnclosingMethod().getName()) : restThreadPoolCoreSize;
-    }
-
-    public void setRestThreadPoolCoreSize(String restThreadPoolCoreSize) {
-        this.restThreadPoolCoreSize = restThreadPoolCoreSize;
     }
 
     public String getVirtualHost() {
