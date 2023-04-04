@@ -57,6 +57,38 @@
             <groupId>com.alipay.sofa</groupId>
             <artifactId>test-sofa-boot</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>healthcheck-sofa-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>isle-sofa-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>log-sofa-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>rpc-sofa-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>runtime-sofa-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>startup-sofa-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>test-sofa-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>tracer-sofa-boot-starter</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
