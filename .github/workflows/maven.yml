@@ -32,3 +32,6 @@ jobs:
         && sh ./tools/check_format.sh
     - name: Codecov
       uses: codecov/codecov-action@v3
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        aws_curl_args: '--retry 5 --retry-delay 2 --connect-timeout 2 --max-time 10'
