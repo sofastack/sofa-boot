@@ -18,12 +18,16 @@ package com.alipay.sofa.boot.autoconfigure.tracer.zipkin;
 
 import com.alipay.sofa.tracer.plugins.zipkin.ZipkinSofaTracerRestTemplateCustomizer;
 import com.alipay.sofa.tracer.plugins.zipkin.ZipkinSofaTracerSpanRemoteReporter;
+import com.alipay.sofa.tracer.plugins.zipkin.sender.ZipkinRestTemplateSender;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.FilteredClassLoader;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.web.client.RestTemplate;
 import zipkin2.reporter.AsyncReporter;
+
+import java.lang.reflect.Field;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -90,5 +94,28 @@ public class ZipkinAutoConfigurationTests {
                 .run((context) -> assertThat(context)
                         .doesNotHaveBean(ZipkinSofaTracerRestTemplateCustomizer.class)
                         .doesNotHaveBean(ZipkinSofaTracerSpanRemoteReporter.class));
+    }
+
+    @Test
+    public void customZipkinProperties() {
+        this.contextRunner
+                .withPropertyValues("sofa.boot.tracer.zipkin.baseUrl=abc")
+                .withPropertyValues("sofa.boot.tracer.zipkin.gzipped=true")
+                .run((context) ->{
+                    ZipkinSofaTracerRestTemplateCustomizer customizer = context.getBean(ZipkinSofaTracerRestTemplateCustomizer.class);
+                    ZipkinSofaTracerSpanRemoteReporter remoteReporter = context.getBean(ZipkinSofaTracerSpanRemoteReporter.class);
+
+                    Field gzipped = ReflectionUtils.findField(ZipkinSofaTracerRestTemplateCustomizer.class, "gzipped");
+                    ReflectionUtils.makeAccessible(gzipped);
+                    assertThat(ReflectionUtils.getField(gzipped, customizer)).isEqualTo(true);
+
+                    Field sender = ReflectionUtils.findField(ZipkinSofaTracerSpanRemoteReporter.class, "sender");
+                    ReflectionUtils.makeAccessible(sender);
+                    ZipkinRestTemplateSender zipkinRestTemplateSender = (ZipkinRestTemplateSender) ReflectionUtils.getField(sender, remoteReporter);
+
+                    Field url = ReflectionUtils.findField(ZipkinRestTemplateSender.class, "url");
+                    ReflectionUtils.makeAccessible(url);
+                    assertThat(ReflectionUtils.getField(url, zipkinRestTemplateSender)).isEqualTo("abc/api/v2/spans");
+                });
     }
 }
