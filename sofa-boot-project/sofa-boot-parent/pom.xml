@@ -195,6 +195,9 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <configuration>
+                    <excludes>
+                        <exclude>com/alipay/sofa/smoke/tests/**</exclude>
+                    </excludes>
                     <skip>false</skip>
                 </configuration>
                 <executions>
@@ -202,13 +205,6 @@
                         <id>default-prepare-agent</id>
                         <goals>
                             <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>default-report</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report-aggregate</goal>
                         </goals>
                     </execution>
                 </executions>
