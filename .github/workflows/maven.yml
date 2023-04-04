@@ -32,4 +32,4 @@ jobs:
         && sh ./tools/check_format.sh
         && mvn clean test -Pdefault
     - name: Codecov
-      uses: codecov/codecov-action@v1
+      uses: codecov/codecov-action@v3
