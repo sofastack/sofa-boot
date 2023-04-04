@@ -34,5 +34,6 @@ jobs:
       uses: codecov/codecov-action@v3
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
+        fail_ci_if_error: true
         aws_curl_args: '--retry 5 --retry-delay 2 --connect-timeout 2 --max-time 10'
         codecov_curl_args: '--max-time 10'
