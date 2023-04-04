@@ -84,6 +84,9 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <configuration>
+                    <excludes>
+                        <exclude>*/com/alipay/sofa/smoke/tests/*</exclude>
+                    </excludes>
                     <skip>false</skip>
                 </configuration>
                 <executions>
