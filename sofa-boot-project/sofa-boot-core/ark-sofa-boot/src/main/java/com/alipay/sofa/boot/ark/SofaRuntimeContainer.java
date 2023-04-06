@@ -46,7 +46,11 @@ public class SofaRuntimeContainer implements ApplicationContextAware, Disposable
     private final ClassLoader                                 contextClassLoader;
 
     public SofaRuntimeContainer(SofaRuntimeManager sofaRuntimeManager) {
-        this.contextClassLoader = Thread.currentThread().getContextClassLoader();
+        this(sofaRuntimeManager, Thread.currentThread().getContextClassLoader());
+    }
+
+    public SofaRuntimeContainer(SofaRuntimeManager sofaRuntimeManager, ClassLoader classLoader) {
+        this.contextClassLoader = classLoader;
         SOFA_RUNTIME_MANAGER_MAP.put(contextClassLoader, sofaRuntimeManager);
     }
 
@@ -81,6 +85,13 @@ public class SofaRuntimeContainer implements ApplicationContextAware, Disposable
 
     public static Collection<SofaRuntimeManager> sofaRuntimeManagerSet() {
         return SOFA_RUNTIME_MANAGER_MAP.values();
+    }
+
+    public static void clear() {
+        APPLICATION_CONTEXT_MAP.clear();
+        SOFA_RUNTIME_MANAGER_MAP.clear();
+        JVM_SERVICE_CACHE_MAP.clear();
+        JVM_INVOKE_SERIALIZE_MAP.clear();
     }
 
     @Override
