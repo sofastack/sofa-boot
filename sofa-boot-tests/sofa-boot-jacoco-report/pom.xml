@@ -74,6 +74,10 @@
         </dependency>
         <dependency>
             <groupId>com.alipay.sofa</groupId>
+            <artifactId>rpc-sofa-boot</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
             <artifactId>test-sofa-boot</artifactId>
         </dependency>
     </dependencies>
