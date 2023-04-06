@@ -56,6 +56,11 @@
                 <artifactId>sofa-boot-smoke-tests-tracer</artifactId>
                 <version>${sofa.boot.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>sofa-boot-smoke-tests-ark</artifactId>
+                <version>${sofa.boot.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
