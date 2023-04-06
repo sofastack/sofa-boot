@@ -70,30 +70,15 @@ public class DynamicJvmServiceProxyFinder {
             return null;
         }
 
-        JvmBinding referenceJvmBinding = (JvmBinding) contract
-            .getBinding(JvmBinding.JVM_BINDING_TYPE);
-        JvmBinding serviceJvmBinding = (JvmBinding) serviceComponent.getService().getBinding(
-            JvmBinding.JVM_BINDING_TYPE);
-        boolean serialize;
-        if (serviceJvmBinding != null) {
-            serialize = referenceJvmBinding.getJvmBindingParam().isSerialize()
-                        || serviceJvmBinding.getJvmBindingParam().isSerialize();
-        } else {
-            // Service provider don't intend to publish JVM service, serialize is considered to be true in this case
-            serialize = true;
-        }
-
-        serialize &= SofaRuntimeContainer.isJvmInvokeSerialize(clientClassloader);
-
-        return new DynamicJvmServiceInvoker(clientClassloader,
-            sofaRuntimeManager.getAppClassLoader(), serviceComponent.getService().getTarget(),
-            contract, biz.getIdentity(), serialize);
+        return createDynamicJvmServiceInvoker(clientClassloader, contract, serviceComponent,
+            sofaRuntimeManager, biz);
     }
 
     public ServiceComponent findServiceComponent(ClassLoader clientClassloader, Contract contract) {
         ServiceComponent serviceComponent;
         if (hasFinishStartup && SofaRuntimeContainer.isJvmServiceCache(clientClassloader)) {
-            serviceComponent = cacheSearching(contract);
+            String uniqueName = getUniqueName(contract);
+            serviceComponent = cacheSearching(uniqueName);
             if (serviceComponent != null) {
                 return serviceComponent;
             }
@@ -154,9 +139,7 @@ public class DynamicJvmServiceProxyFinder {
             for (ComponentInfo componentInfo: sofaRuntimeManager.getComponentManager().getComponents()) {
                 if (componentInfo instanceof ServiceComponent serviceComponent) {
                     String uniqueName = getUniqueName(serviceComponent.getService());
-                    jvmServiceTargetHabitats.computeIfAbsent(uniqueName, e -> new JvmServiceTargetHabitat(biz.getBizName()));
-                    JvmServiceTargetHabitat jvmServiceTargetHabitat = jvmServiceTargetHabitats.get(uniqueName);
-                    jvmServiceTargetHabitat.addServiceComponent(biz.getBizVersion(), serviceComponent);
+                    addCache(uniqueName, biz, serviceComponent);
                 }
             }
         }
@@ -169,23 +152,51 @@ public class DynamicJvmServiceProxyFinder {
                     .getComponents()) {
                 if (componentInfo instanceof ServiceComponent serviceComponent) {
                     String uniqueName = getUniqueName(serviceComponent.getService());
-                    JvmServiceTargetHabitat jvmServiceTargetHabitat = jvmServiceTargetHabitats
-                            .get(uniqueName);
-                    if (jvmServiceTargetHabitat != null) {
-                        jvmServiceTargetHabitat.removeServiceComponent(biz.getBizVersion());
-                    }
+                    removeCache(uniqueName, biz);
                 }
             }
         }
     }
 
-    private ServiceComponent cacheSearching(Contract contract) {
-        // Master Biz is in starting phase, cache isn't ready
-        if (!hasFinishStartup) {
-            return null;
+    DynamicJvmServiceInvoker createDynamicJvmServiceInvoker(ClassLoader clientClassloader,
+                                                            Contract contract,
+                                                            ServiceComponent serviceComponent,
+                                                            SofaRuntimeManager sofaRuntimeManager,
+                                                            Biz biz) {
+        JvmBinding referenceJvmBinding = (JvmBinding) contract
+            .getBinding(JvmBinding.JVM_BINDING_TYPE);
+        JvmBinding serviceJvmBinding = (JvmBinding) serviceComponent.getService().getBinding(
+            JvmBinding.JVM_BINDING_TYPE);
+        boolean serialize;
+        if (serviceJvmBinding != null && referenceJvmBinding != null) {
+            serialize = referenceJvmBinding.getJvmBindingParam().isSerialize()
+                        || serviceJvmBinding.getJvmBindingParam().isSerialize();
+        } else {
+            // Service provider don't intend to publish JVM service, serialize is considered to be true in this case
+            serialize = true;
         }
 
-        String uniqueName = getUniqueName(contract);
+        serialize &= SofaRuntimeContainer.isJvmInvokeSerialize(clientClassloader);
+
+        return new DynamicJvmServiceInvoker(clientClassloader,
+            sofaRuntimeManager.getAppClassLoader(), serviceComponent.getService().getTarget(),
+            contract, biz.getIdentity(), serialize);
+    }
+
+    private void addCache(String uniqueName, Biz biz, ServiceComponent serviceComponent) {
+        jvmServiceTargetHabitats.computeIfAbsent(uniqueName, e -> new JvmServiceTargetHabitat(biz.getBizName()));
+        JvmServiceTargetHabitat jvmServiceTargetHabitat = jvmServiceTargetHabitats.get(uniqueName);
+        jvmServiceTargetHabitat.addServiceComponent(biz.getBizVersion(), serviceComponent);
+    }
+
+    private void removeCache(String uniqueName, Biz biz) {
+        JvmServiceTargetHabitat jvmServiceTargetHabitat = jvmServiceTargetHabitats.get(uniqueName);
+        if (jvmServiceTargetHabitat != null) {
+            jvmServiceTargetHabitat.removeServiceComponent(biz.getBizVersion());
+        }
+    }
+
+    private ServiceComponent cacheSearching(String uniqueName) {
         JvmServiceTargetHabitat jvmServiceTargetHabitat = jvmServiceTargetHabitats.get(uniqueName);
         if (jvmServiceTargetHabitat == null) {
             return null;
@@ -249,8 +260,16 @@ public class DynamicJvmServiceProxyFinder {
         return null;
     }
 
+    public boolean isHasFinishStartup() {
+        return hasFinishStartup;
+    }
+
     public void setHasFinishStartup(boolean hasFinishStartup) {
         this.hasFinishStartup = hasFinishStartup;
+    }
+
+    void setBizManagerService(BizManagerService bizManagerService) {
+        this.bizManagerService = bizManagerService;
     }
 
     public BizManagerService getBizManagerService() {

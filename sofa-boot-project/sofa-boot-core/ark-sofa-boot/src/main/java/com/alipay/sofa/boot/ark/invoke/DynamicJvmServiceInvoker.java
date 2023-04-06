@@ -128,7 +128,11 @@ public class DynamicJvmServiceInvoker extends ServiceProxy {
         LOGGER.atDebug().log(() -> getCommonInvocationLog("Finally", invocation, startTime));
     }
 
-    private Class<?> getInterfaceType() {
+    public boolean isSerialize() {
+        return serialize;
+    }
+
+    public Class<?> getInterfaceType() {
         return contract.getInterfaceType();
     }
 
