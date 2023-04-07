@@ -18,6 +18,8 @@ package com.alipay.sofa.boot.isle.stage;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -41,6 +43,20 @@ public class DefaultPipelineContextTests {
 
         assertThat(stage2.getInvokeTime() < stage1.getInvokeTime()).isTrue();
         assertThat(stage1.getInvokeTime() < stage3.getInvokeTime()).isTrue();
+    }
+
+    @Test
+    public void invokePipelineByList() throws Exception {
+        TestPipelineStage stage1 = new TestPipelineStage(200);
+        TestPipelineStage stage2 = new TestPipelineStage(100);
+        TestPipelineStage stage3 = new TestPipelineStage(300);
+        DefaultPipelineContext pipelineContext = new DefaultPipelineContext();
+        pipelineContext.appendStages(List.of(stage1, stage2, stage3));
+        pipelineContext.process();
+
+        assertThat(stage2.getInvokeTime() < stage1.getInvokeTime()).isTrue();
+        assertThat(stage1.getInvokeTime() < stage3.getInvokeTime()).isTrue();
+        assertThat(pipelineContext.getStageList()).contains(stage1, stage2, stage3);
     }
 
     static class TestPipelineStage implements PipelineStage {
