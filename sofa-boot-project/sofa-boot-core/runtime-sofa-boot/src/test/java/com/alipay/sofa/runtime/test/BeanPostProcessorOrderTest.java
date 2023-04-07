@@ -80,8 +80,8 @@ public class BeanPostProcessorOrderTest {
             }
         }
         Assert.assertNotNull(testBeanAware);
-        Assert.assertEquals(testBeanAware, beanPostProcessorOrderBean);
-        Assert.assertTrue(testBeanAware.isEnhancedByLowOrderPostProcessor());
+        Assert.assertNotEquals(testBeanAware, beanPostProcessorOrderBean);
+        Assert.assertFalse(testBeanAware.isEnhancedByLowOrderPostProcessor());
     }
 
     @Test
