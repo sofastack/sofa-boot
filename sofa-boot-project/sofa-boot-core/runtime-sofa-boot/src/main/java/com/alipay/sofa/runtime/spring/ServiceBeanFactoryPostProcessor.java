@@ -40,6 +40,7 @@ import com.alipay.sofa.runtime.spring.parser.AbstractContractDefinitionParser;
 import com.alipay.sofa.runtime.spring.parser.ServiceDefinitionParser;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.FatalBeanException;
+import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.annotation.AnnotatedGenericBeanDefinition;
@@ -260,6 +261,8 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
                 getSofaReferenceBinding(sofaReference, sofaReference.binding()));
             builder.addPropertyValue(AbstractContractDefinitionParser.DEFINITION_BUILDING_API_TYPE,
                 true);
+            builder.getBeanDefinition().setAttribute(FactoryBean.OBJECT_TYPE_ATTRIBUTE,
+                interfaceType);
             registry.registerBeanDefinition(referenceId, builder.getBeanDefinition());
         }
 
