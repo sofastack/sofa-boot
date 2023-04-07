@@ -89,8 +89,10 @@ public class DynamicSpringContextLoader implements SpringContextLoader, Initiali
         SofaDefaultListableBeanFactory beanFactory = SofaSpringContextSupport.createBeanFactory(classLoader, this::createBeanFactory);
 
         SofaGenericApplicationContext context = SofaSpringContextSupport.createApplicationContext(beanFactory, this::createApplicationContext);
-        BufferingApplicationStartup bufferingApplicationStartup = new BufferingApplicationStartup(startupReporter.getBufferSize());
-        context.setApplicationStartup(bufferingApplicationStartup);
+        if (startupReporter != null) {
+            BufferingApplicationStartup bufferingApplicationStartup = new BufferingApplicationStartup(startupReporter.getBufferSize());
+            context.setApplicationStartup(bufferingApplicationStartup);
+        }
 
         context.setId(deployment.getModuleName());
         if (!CollectionUtils.isEmpty(activeProfiles)) {
@@ -155,24 +157,28 @@ public class DynamicSpringContextLoader implements SpringContextLoader, Initiali
 
     protected void loadBeanDefinitions(DeploymentDescriptor deployment,
                                        BeanDefinitionReader beanDefinitionReader) {
-        for (Map.Entry<String, Resource> entry : deployment.getSpringResources().entrySet()) {
-            String fileName = entry.getKey();
-            beanDefinitionReader.loadBeanDefinitions(entry.getValue());
-            deployment.addInstalledSpringXml(fileName);
+        if (deployment.getSpringResources() != null) {
+            for (Map.Entry<String, Resource> entry : deployment.getSpringResources().entrySet()) {
+                String fileName = entry.getKey();
+                beanDefinitionReader.loadBeanDefinitions(entry.getValue());
+                deployment.addInstalledSpringXml(fileName);
+            }
         }
     }
 
     protected void addPostProcessors(SofaDefaultListableBeanFactory beanFactory) {
-        sofaPostProcessorShareManager.getRegisterSingletonMap().forEach((beanName, singletonObject) -> {
-            if (!beanFactory.containsBeanDefinition(beanName)) {
-                beanFactory.registerSingleton(beanName, singletonObject);
-            }
-        });
-        sofaPostProcessorShareManager.getRegisterBeanDefinitionMap().forEach((beanName, beanDefinition) -> {
-            if (!beanFactory.containsBeanDefinition(beanName)) {
-                beanFactory.registerBeanDefinition(beanName, beanDefinition);
-            }
-        });
+        if (sofaPostProcessorShareManager != null) {
+            sofaPostProcessorShareManager.getRegisterSingletonMap().forEach((beanName, singletonObject) -> {
+                if (!beanFactory.containsBeanDefinition(beanName)) {
+                    beanFactory.registerSingleton(beanName, singletonObject);
+                }
+            });
+            sofaPostProcessorShareManager.getRegisterBeanDefinitionMap().forEach((beanName, beanDefinition) -> {
+                if (!beanFactory.containsBeanDefinition(beanName)) {
+                    beanFactory.registerBeanDefinition(beanName, beanDefinition);
+                }
+            });
+        }
     }
 
     public boolean isAllowBeanOverriding() {

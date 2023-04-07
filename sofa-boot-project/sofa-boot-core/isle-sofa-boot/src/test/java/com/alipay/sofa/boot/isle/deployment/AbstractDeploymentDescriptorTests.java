@@ -57,18 +57,20 @@ public class AbstractDeploymentDescriptorTests {
                                                                                               .singletonList(DeploymentDescriptorConfiguration.REQUIRE_MODULE));
 
     @Mock
-    private Resource resource1;
+    private Resource                                resource1;
 
     @Mock
-    private Resource resource2;
+    private Resource                                resource2;
 
-    private final URL url = new URL("jar:file:/path/to/sofa-module.jar!/META-INF/sofa/sofa-module.properties");
+    private final URL                               url                               = new URL(
+                                                                                          "jar:file:/path/to/sofa-module.jar!/META-INF/sofa/sofa-module.properties");
 
-    private Properties properties;
+    private Properties                              properties;
 
-    private final ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+    private final ClassLoader                       classLoader                       = ClassLoader
+                                                                                          .getSystemClassLoader();
 
-    private AbstractDeploymentDescriptor descriptor;
+    private AbstractDeploymentDescriptor            descriptor;
 
     public AbstractDeploymentDescriptorTests() throws MalformedURLException {
     }
@@ -82,7 +84,8 @@ public class AbstractDeploymentDescriptorTests {
         properties.setProperty("Spring-Parent", "parent-module");
         properties.setProperty("Module-Name", "sample-module");
         properties.setProperty("Require-Module", "module1,module2");
-        descriptor = new AbstractDeploymentDescriptor(url, properties, deploymentDescriptorConfiguration, classLoader) {
+        descriptor = new AbstractDeploymentDescriptor(url, properties,
+            deploymentDescriptorConfiguration, classLoader) {
 
             @Override
             protected void loadSpringXMLs() {
@@ -103,7 +106,8 @@ public class AbstractDeploymentDescriptorTests {
 
     @Test
     public void getRequiredModules() {
-        assertThat(descriptor.getRequiredModules()).containsExactly("module1", "module2", "parent-module");
+        assertThat(descriptor.getRequiredModules()).containsExactly("module1", "module2",
+            "parent-module");
     }
 
     @Test

@@ -20,7 +20,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -56,7 +55,8 @@ public class DependencyTreeTests {
         assertThat(tree.get(4)).isEqualTo("test");
         assertThat(tree.getEntry(1).getDependencies()).isNull();
         assertThat(tree.getEntry(2).getDependencies()).containsExactly(tree.getEntry(1));
-        assertThat(tree.getEntry(3).getDependencies()).containsExactlyInAnyOrder(tree.getEntry(1), tree.getEntry(2));
+        assertThat(tree.getEntry(3).getDependencies()).containsExactlyInAnyOrder(tree.getEntry(1),
+            tree.getEntry(2));
     }
 
     @Test
@@ -112,7 +112,8 @@ public class DependencyTreeTests {
         assertThat(tree.getPendingEntries()).isEmpty();
         tree.unresolve(tree.getEntry(2));
         assertThat(tree.getPendingEntries()).hasSize(1);
-        assertThat(tree.getEntries()).containsExactly(tree.getEntry(1), tree.getEntry(2), tree.getEntry(3));
+        assertThat(tree.getEntries()).containsExactly(tree.getEntry(1), tree.getEntry(2),
+            tree.getEntry(3));
     }
 
     @Test
@@ -149,7 +150,8 @@ public class DependencyTreeTests {
         tree.add(3, "test", 4);
         assertThat(tree.getResolvedEntries()).isEmpty();
         tree.add(4, "test");
-        assertThat(tree.getResolvedEntries()).containsExactly(tree.getEntry(4), tree.getEntry(3), tree.getEntry(2), tree.getEntry(1));
+        assertThat(tree.getResolvedEntries()).containsExactly(tree.getEntry(4), tree.getEntry(3),
+            tree.getEntry(2), tree.getEntry(1));
     }
 
     @Test

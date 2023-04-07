@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Properties;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * Tests for {@link DefaultSofaModuleProfileChecker}.
@@ -73,6 +74,10 @@ public class DefaultSofaModuleProfileCheckerTests {
         props.setProperty(DeploymentDescriptorConfiguration.MODULE_PROFILE, "!dev");
         assertThat(sofaModuleProfileChecker.acceptModule(SampleDeploymentDescriptor.create(props)))
             .isFalse();
+
+        props.setProperty(DeploymentDescriptorConfiguration.MODULE_PROFILE, "!test");
+        assertThat(sofaModuleProfileChecker.acceptModule(SampleDeploymentDescriptor.create(props)))
+            .isTrue();
     }
 
     @Test
@@ -97,11 +102,25 @@ public class DefaultSofaModuleProfileCheckerTests {
 
     @Test
     public void noProfile() {
-
         // test no profile, default pass
         Properties props = new Properties();
         props.setProperty(DeploymentDescriptorConfiguration.MODULE_NAME, "com.alipay.dal");
         assertThat(sofaModuleProfileChecker.acceptModule(SampleDeploymentDescriptor.create(props)))
             .isTrue();
+    }
+
+    @Test
+    public void illegalProfile() {
+        // test illegal profile, throw exception
+        Properties props = new Properties();
+        props.setProperty(DeploymentDescriptorConfiguration.MODULE_NAME, "com.alipay.dal");
+
+        props.setProperty(DeploymentDescriptorConfiguration.MODULE_PROFILE, "!");
+        assertThatThrownBy(() -> sofaModuleProfileChecker.acceptModule(SampleDeploymentDescriptor.create(props)))
+                .isInstanceOf(IllegalArgumentException.class).hasMessageContaining("01-13001");
+
+        props.setProperty(DeploymentDescriptorConfiguration.MODULE_PROFILE, "!!");
+        assertThatThrownBy(() -> sofaModuleProfileChecker.acceptModule(SampleDeploymentDescriptor.create(props)))
+                .isInstanceOf(IllegalArgumentException.class).hasMessageContaining("01-13002");
     }
 }
