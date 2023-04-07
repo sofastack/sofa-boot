@@ -134,6 +134,9 @@ public class SofaRuntimeProperties {
         skipJvmReferenceHealthCheckMap.remove(classLoader);
         disableJvmFirstMap.remove(classLoader);
         skipJvmSerializeMap.remove(classLoader);
+        skipAllComponentShutdownMap.remove(classLoader);
+        skipCommonComponentShutdownMap.remove(classLoader);
+        extensionFailureInsulatingMap.remove(classLoader);
     }
 
     public static Boolean isSkipJvmSerialize(ClassLoader classLoader) {
