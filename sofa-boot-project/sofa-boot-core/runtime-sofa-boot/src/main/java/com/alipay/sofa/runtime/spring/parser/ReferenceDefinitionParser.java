@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.runtime.spring.parser;
 
+import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.springframework.util.StringUtils;
@@ -64,6 +65,16 @@ public class ReferenceDefinitionParser extends AbstractContractDefinitionParser 
                     "Invalid value of property required, can only be true or false.");
             }
         }
+
+        String interfaceType = element.getAttribute(INTERFACE_ELEMENT);
+        Class<?> interfaceClass;
+        try {
+            interfaceClass = this.getClass().getClassLoader().loadClass(interfaceType);
+        } catch (Throwable t) {
+            throw new IllegalArgumentException("Failed to load class for interface: "
+                    + interfaceType, t);
+        }
+        builder.getBeanDefinition().setAttribute(FactoryBean.OBJECT_TYPE_ATTRIBUTE, interfaceClass);
     }
 
     @Override
