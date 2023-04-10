@@ -93,7 +93,7 @@ public class AsyncInitMethodManager implements PriorityOrdered,
             ASYNC_INIT_METHOD_EXECUTOR_BEAN_NAME, Supplier.class).get();
     }
 
-    private void ensureAsyncTasksFinish() {
+    void ensureAsyncTasksFinish() {
         for (Future<?> future : futures) {
             try {
                 future.get();

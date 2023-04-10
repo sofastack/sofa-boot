@@ -61,9 +61,7 @@ public class ComponentContextRefreshInterceptor implements ContextRefreshInterce
             ComponentInfo componentInfo = new SpringContextComponent(componentName, implementation,
                 sofaRuntimeContext);
             componentManager.register(componentInfo);
-        }
-
-        if (throwable != null) {
+        } else {
             Collection<ComponentInfo> componentInfos = componentManager
                 .getComponentInfosByApplicationContext(context);
             for (ComponentInfo componentInfo : componentInfos) {
