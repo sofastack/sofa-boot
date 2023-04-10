@@ -142,7 +142,7 @@ public class HealthIndicatorCheckProcessorTest {
         properties.put("timeout-health-indicator.health", true);
         if (!health) {
             properties.put("com.alipay.sofa.healthcheck.indicator.timeout.timeoutHealthIndicator",
-                "1");
+                "0");
         }
         properties.put("com.alipay.sofa.healthcheck.skip.indicator", "true");
         properties.put("spring.application.name", "HealthIndicatorCheckProcessorTest");
