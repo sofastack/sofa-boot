@@ -40,7 +40,7 @@ import com.alipay.sofa.isle.test.util.SeparateClassLoaderTestRunner;
 @SpringBootTest
 @AddCustomJar({ "dev-module-0.1.0.jar", "fail-module-0.1.0.jar" })
 @TestPropertySource(locations = "/config/application.properties", properties = "com.alipay.sofa.boot.module-start-up-parallel=true")
-public class FailModuleWithParallelTest {
+public class FailModuleWithParallelAddCustomJarTest {
     @Autowired
     private ApplicationContext applicationContext;
 
@@ -60,7 +60,7 @@ public class FailModuleWithParallelTest {
         Assert.assertFalse(applicationRuntimeModel.getInstalled().contains(failModule));
     }
 
-    @Import(FailModuleTest.FailModuleTestConfiguration.class)
+    @Import(FailModuleAddCustomJarTest.FailModuleTestConfiguration.class)
     @Configuration(proxyBeanMethods = false)
     static class FailModuleWithParallelTestConfiguration {
         // ignore

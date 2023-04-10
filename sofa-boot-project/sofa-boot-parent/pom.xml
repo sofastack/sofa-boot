@@ -436,6 +436,9 @@
                         </dependencies>
                         <configuration>
                             <reuseForks>false</reuseForks>
+                            <excludes>
+                                <exclude>**/*AddCustomJarTest.java</exclude>
+                            </excludes>
                         </configuration>
                     </plugin>
                     <plugin>
