@@ -14,16 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime.sample;
+package com.alipay.sofa.runtime.async;
+
+import com.alipay.sofa.runtime.sample.SampleService;
 
 /**
- * @author qilong.zql
- * @since 3.2.0
+ * @author huzijie
+ * @version AsyncSampleServiceImpl.java, v 0.1 2023年04月10日 10:54 AM huzijie Exp $
  */
-public interface SampleService {
-    String service();
+public class AsyncSampleServiceImpl implements SampleService {
 
-    default String test() {
-        return "test";
+    @Override
+    public String service() {
+        Thread thread = Thread.currentThread();
+        return thread.getName();
+    }
+
+    @Override
+    public String test() {
+        Thread thread = Thread.currentThread();
+        return thread.getName();
     }
 }

@@ -31,8 +31,20 @@ public class DemoComponent extends AbstractComponent {
 
     public static ComponentType DEMO_COMPONENT_TYPE = new ComponentType("Demo");
 
+    private boolean             canBeDuplicate      = true;
+
+    private boolean             registerException   = false;
+
+    private boolean             resolveException    = false;
+
+    private boolean             activateException   = false;
+
     public DemoComponent() {
         this.componentName = ComponentNameFactory.createComponentName(DEMO_COMPONENT_TYPE, "demo");
+    }
+
+    public DemoComponent(String name) {
+        this.componentName = ComponentNameFactory.createComponentName(DEMO_COMPONENT_TYPE, name);
     }
 
     @Override
@@ -43,5 +55,50 @@ public class DemoComponent extends AbstractComponent {
     @Override
     public Map<String, Property> getProperties() {
         return null;
+    }
+
+    @Override
+    public void register() {
+        if (registerException) {
+            throw new RuntimeException("register error");
+        }
+        super.register();
+    }
+
+    @Override
+    public boolean resolve() {
+        if (resolveException) {
+            throw new RuntimeException("resolve error");
+        }
+        return super.resolve();
+    }
+
+    @Override
+    public void activate() {
+        if (activateException) {
+            throw new RuntimeException("activate error");
+        }
+        super.activate();
+    }
+
+    @Override
+    public boolean canBeDuplicate() {
+        return canBeDuplicate;
+    }
+
+    public void setCanBeDuplicate(boolean canBeDuplicate) {
+        this.canBeDuplicate = canBeDuplicate;
+    }
+
+    public void setRegisterException(boolean registerException) {
+        this.registerException = registerException;
+    }
+
+    public void setResolveException(boolean resolveException) {
+        this.resolveException = resolveException;
+    }
+
+    public void setActivateException(boolean activateException) {
+        this.activateException = activateException;
     }
 }
