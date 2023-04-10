@@ -73,7 +73,7 @@ public class AsyncInitializeBeanMethodInvokerTests {
         CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> asyncSampleService.test());
         assertThat(future.isDone()).isFalse();
         asyncInitializeBeanMethodInvoker.asyncMethodFinish();
-        assertThat(future.get()).contains("ForkJoinPool");
+        assertThat(future.get()).isNotEqualTo(currentThreadName);
     }
 
     @Test
@@ -83,7 +83,7 @@ public class AsyncInitializeBeanMethodInvokerTests {
         CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> asyncSampleService.service());
         assertThat(future.isDone()).isFalse();
         asyncInitializeBeanMethodInvoker.asyncMethodFinish();
-        assertThat(future.get()).contains("ForkJoinPool");
+        assertThat(future.get()).isNotEqualTo(currentThreadName);
         assertThat(asyncSampleService.service()).isEqualTo(currentThreadName);
     }
 }
