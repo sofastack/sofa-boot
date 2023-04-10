@@ -155,7 +155,7 @@ public class HealthIndicatorCheckProcessorParallelTest {
         properties.put("disk-health-indicator.health", true);
         properties.put("spring.application.name", "HealthIndicatorCheckProcessorTest");
         //        properties.put(SofaBootConstants.SOFABOOT_SKIP_HEALTH_INDICATOR_CHECK, "true");
-        properties.put("com.alipay.sofa.boot.health-check-parallel-timeout", "1");
+        properties.put("com.alipay.sofa.boot.health-check-parallel-timeout", "0");
         SpringApplication springApplication = new SpringApplication(
             HealthIndicatorConfiguration.class);
         springApplication.setDefaultProperties(properties);
