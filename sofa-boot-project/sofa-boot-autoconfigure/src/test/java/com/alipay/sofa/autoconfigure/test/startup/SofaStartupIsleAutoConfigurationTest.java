@@ -41,11 +41,12 @@ public class SofaStartupIsleAutoConfigurationTest {
 
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
                                                              .withBean(StartupReporter.class)
-                                                             .withConfiguration(AutoConfigurations
-                                                                 .of(SofaStartupAutoConfiguration.class,
-                                                                     SofaStartupIsleAutoConfiguration.class,
-                                                                     SofaModuleAutoConfiguration.class,
-                                                                     SofaRuntimeAutoConfiguration.class));
+                                                             .withConfiguration(
+                                                                 AutoConfigurations
+                                                                     .of(SofaStartupAutoConfiguration.class,
+                                                                         SofaStartupIsleAutoConfiguration.class,
+                                                                         SofaModuleAutoConfiguration.class,
+                                                                         SofaRuntimeAutoConfiguration.class));
 
     @Test
     public void startupReporterAndApplicationRuntimeModelExist() {
