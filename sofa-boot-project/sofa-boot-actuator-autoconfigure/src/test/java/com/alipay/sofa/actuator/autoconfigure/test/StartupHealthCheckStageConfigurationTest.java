@@ -43,12 +43,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class StartupHealthCheckStageConfigurationTest {
 
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
-                                                             .withConfiguration(AutoConfigurations
-                                                                 .of(SofaStartupAutoConfiguration.class,
-                                                                     SofaBootHealthCheckAutoConfiguration.class,
-                                                                     StartupHealthCheckStageConfiguration.class,
-                                                                     SofaRuntimeAutoConfiguration.class,
-                                                                     TestHealthCheckConfiguration.class));
+                                                             .withBean(StartupReporter.class)
+                                                             .withConfiguration(
+                                                                 AutoConfigurations
+                                                                     .of(SofaStartupAutoConfiguration.class,
+                                                                         SofaBootHealthCheckAutoConfiguration.class,
+                                                                         StartupHealthCheckStageConfiguration.class,
+                                                                         SofaRuntimeAutoConfiguration.class,
+                                                                         TestHealthCheckConfiguration.class));
 
     @Test
     public void startupReporterAndHealthCheckerExist() {
