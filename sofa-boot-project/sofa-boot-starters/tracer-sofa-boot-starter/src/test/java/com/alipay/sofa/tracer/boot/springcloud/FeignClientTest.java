@@ -19,6 +19,7 @@ package com.alipay.sofa.tracer.boot.springcloud;
 import java.io.IOException;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.http.HttpMessageConvertersAutoConfiguration;
@@ -34,6 +35,8 @@ import com.alipay.sofa.tracer.boot.base.AbstractTestCloudBase;
 @ActiveProfiles("feign")
 @Import({ FeignAutoConfiguration.class, HttpMessageConvertersAutoConfiguration.class })
 @EnableFeignClients
+@Ignore
+// todo 待升级 tracer 客户端
 public class FeignClientTest extends AbstractTestCloudBase {
 
     @FeignClient(value = "feign-client", url = "http://localhost:8085")
