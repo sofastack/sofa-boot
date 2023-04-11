@@ -48,8 +48,8 @@ import java.util.List;
 @TestPropertySource(locations = "/config/application.properties", properties = {
                                                                                 "com.alipay.sofa.boot.allowModuleOverriding=true",
                                                                                 "spring.main.allow-bean-definition-overriding=true" })
-@Import(DuplicateModuleTest.DuplicateModuleTestConfiguration.class)
-public class DuplicateModuleTest {
+@Import(DuplicateModuleAddCustomJarTest.DuplicateModuleTestConfiguration.class)
+public class DuplicateModuleAddCustomJarTest {
     @Autowired
     private ApplicationContext applicationContext;
 

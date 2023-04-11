@@ -260,7 +260,7 @@ public class HealthCheckerProcessorParallelTest {
         properties.put("memory-health-checker.retry-count", retryCount);
         properties.put("spring.application.name", "HealthCheckerProcessorTest");
         properties.put(SofaBootConstants.SOFABOOT_SKIP_COMPONENT_HEALTH_CHECK, true);
-        properties.put("com.alipay.sofa.boot.health-check-parallel-timeout", "1");
+        properties.put("com.alipay.sofa.boot.health-check-parallel-timeout", "0");
 
         SpringApplication springApplication = new SpringApplication(
             HealthCheckerProcessorTestConfiguration.class);
