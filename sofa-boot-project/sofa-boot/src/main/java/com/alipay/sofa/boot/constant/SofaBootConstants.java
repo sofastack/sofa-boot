@@ -29,6 +29,8 @@ public class SofaBootConstants {
      */
     public static final String  APP_NAME_KEY                                                 = "spring.application.name";
 
+    public static final String  STARTUP_LOG_EXTRA_INFO                                       = "startupLogExtraInfo";
+
     public static final String  SOFA_DEFAULT_PROPERTY_SOURCE                                 = "sofaConfigurationProperties";
     public static final String  SOFA_BOOTSTRAP                                               = "sofaBootstrap";
     public static final String  SPRING_CLOUD_BOOTSTRAP                                       = "bootstrap";

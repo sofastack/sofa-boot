@@ -28,6 +28,7 @@ import com.alipay.sofa.runtime.spring.SpringContextImplementation;
 import com.alipay.sofa.runtime.test.beans.facade.SampleService;
 import com.alipay.sofa.runtime.test.beans.service.DefaultSampleService;
 import com.alipay.sofa.runtime.test.configuration.RuntimeConfiguration;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,6 +48,11 @@ import static com.alipay.sofa.runtime.spring.SpringContextComponent.SPRING_COMPO
  */
 @RunWith(BlockJUnit4ClassRunner.class)
 public class ComponentManagerShutdownTest {
+
+    @After
+    public void clear() {
+        SofaRuntimeProperties.unRegisterProperties(Thread.currentThread().getContextClassLoader());
+    }
 
     @Test
     public void testNormalShutdown() {

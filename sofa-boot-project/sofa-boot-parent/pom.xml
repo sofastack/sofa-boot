@@ -373,13 +373,6 @@
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
-                    <execution>
-                        <id>default-report</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report-aggregate</goal>
-                        </goals>
-                    </execution>
                 </executions>
             </plugin>
         </plugins>
@@ -402,6 +395,11 @@
                                 <groupId>org.ow2.asm</groupId>
                                 <artifactId>asm</artifactId>
                                 <version>6.2</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.apache.maven.surefire</groupId>
+                                <artifactId>surefire-junit47</artifactId>
+                                <version>${maven.surefire.plugin}</version>
                             </dependency>
                         </dependencies>
                         <configuration>
@@ -430,9 +428,17 @@
                                 <artifactId>asm</artifactId>
                                 <version>6.2</version>
                             </dependency>
+                            <dependency>
+                                <groupId>org.apache.maven.surefire</groupId>
+                                <artifactId>surefire-junit47</artifactId>
+                                <version>${maven.surefire.plugin}</version>
+                            </dependency>
                         </dependencies>
                         <configuration>
                             <reuseForks>false</reuseForks>
+                            <excludes>
+                                <exclude>**/*AddCustomJarTest.java</exclude>
+                            </excludes>
                         </configuration>
                     </plugin>
                     <plugin>

@@ -40,11 +40,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class SofaStartupIsleAutoConfigurationTest {
 
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
-                                                             .withConfiguration(AutoConfigurations
-                                                                 .of(SofaStartupAutoConfiguration.class,
-                                                                     SofaStartupIsleAutoConfiguration.class,
-                                                                     SofaModuleAutoConfiguration.class,
-                                                                     SofaRuntimeAutoConfiguration.class));
+                                                             .withBean(StartupReporter.class)
+                                                             .withConfiguration(
+                                                                 AutoConfigurations
+                                                                     .of(SofaStartupAutoConfiguration.class,
+                                                                         SofaStartupIsleAutoConfiguration.class,
+                                                                         SofaModuleAutoConfiguration.class,
+                                                                         SofaRuntimeAutoConfiguration.class));
 
     @Test
     public void startupReporterAndApplicationRuntimeModelExist() {

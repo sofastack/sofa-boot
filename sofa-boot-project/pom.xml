@@ -25,6 +25,7 @@
         <module>sofaboot-dependencies</module>
         <!--imported or configured as parent by sofa boot module self-->
         <module>sofa-boot-parent</module>
+        <module>sofa-boot-jacoco-report</module>
     </modules>
 
     <properties>
