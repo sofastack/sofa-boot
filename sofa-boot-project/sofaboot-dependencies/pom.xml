@@ -37,7 +37,7 @@
         <!--FIXME 1.7.36 will cause compatibility problem, see #https://www.slf4j.org/manual.html-->
         <slf4j.version>1.7.32</slf4j.version>
         <fastjson.version>1.2.69</fastjson.version>
-        <javassist.version>3.19.0-GA</javassist.version>
+        <javassist.version>3.28.0-GA</javassist.version>
         <protobuf-java.version>3.11.0</protobuf-java.version>
         <guice.version>3.0</guice.version>
         <guava.version>28.2-jre</guava.version>
