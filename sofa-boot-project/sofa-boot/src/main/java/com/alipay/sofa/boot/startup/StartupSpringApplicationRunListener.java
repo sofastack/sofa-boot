@@ -17,6 +17,7 @@
 package com.alipay.sofa.boot.startup;
 
 import com.alipay.sofa.boot.constant.SofaBootConstants;
+import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import org.springframework.boot.ConfigurableBootstrapContext;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.SpringApplicationRunListener;
@@ -24,7 +25,9 @@ import org.springframework.boot.context.metrics.buffering.BufferingApplicationSt
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.Environment;
 import org.springframework.core.metrics.ApplicationStartup;
+import org.springframework.util.StringUtils;
 
 import java.lang.management.ManagementFactory;
 import java.time.Duration;
@@ -146,10 +149,30 @@ public class StartupSpringApplicationRunListener implements SpringApplicationRun
         startupReporter.addCommonStartupStat(applicationContextPrepareStage);
         startupReporter.addCommonStartupStat(applicationContextLoadStage);
         startupReporter.applicationBootFinish();
+
+        SofaBootLoggerFactory.getLogger(StartupSpringApplicationRunListener.class).info(
+            getStartedMessage(context.getEnvironment(), timeTaken));
     }
 
     @Override
     public int getOrder() {
         return Ordered.LOWEST_PRECEDENCE;
+    }
+
+    private String getStartedMessage(Environment environment, Duration timeTakenToStartup) {
+        StringBuilder message = new StringBuilder();
+        message.append("Started ");
+        message.append(environment.getProperty(SofaBootConstants.APP_NAME_KEY));
+        String startupLogExtraInfo = environment
+            .getProperty(SofaBootConstants.STARTUP_LOG_EXTRA_INFO);
+        if (StringUtils.hasText(startupLogExtraInfo)) {
+            message.append(" with extra info [");
+            message.append(startupLogExtraInfo);
+            message.append("]");
+        }
+        message.append(" in ");
+        message.append(timeTakenToStartup.toMillis() / 1000.0);
+        message.append(" seconds");
+        return message.toString();
     }
 }
