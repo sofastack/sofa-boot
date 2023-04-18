@@ -1,0 +1,3 @@
+# AutoConfigurationImportListener
+org.springframework.boot.autoconfigure.AutoConfigurationImportListener=\
+  com.alipay.sofa.boot.autoconfigure.detect.LegacyAutoConfigurationDetectListener
