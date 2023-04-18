@@ -68,8 +68,18 @@ public class ReferenceDefinitionParser extends AbstractContractDefinitionParser 
 
         String interfaceType = element.getAttribute(INTERFACE_ELEMENT);
         Class<?> interfaceClass;
+
+        // search classloader
+        ClassLoader beanClassLoader = parserContext.getReaderContext().getBeanClassLoader();
+        if (beanClassLoader == null) {
+            beanClassLoader = Thread.currentThread().getContextClassLoader();
+        }
+        if (beanClassLoader == null) {
+            beanClassLoader = this.getClass().getClassLoader();
+        }
+
         try {
-            interfaceClass = this.getClass().getClassLoader().loadClass(interfaceType);
+            interfaceClass = beanClassLoader.loadClass(interfaceType);
         } catch (Throwable t) {
             throw new IllegalArgumentException("Failed to load class for interface: "
                                                + interfaceType, t);
