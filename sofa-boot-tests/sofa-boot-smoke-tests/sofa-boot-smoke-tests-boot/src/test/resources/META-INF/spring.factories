@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.alipay.sofa.smoke.tests.boot.LegacyAutoConfigurationDetectListenerTests$LegacyAutoConfiguration,\
+  com.alipay.sofa.smoke.tests.boot.LegacyAutoConfigurationDetectListenerTests$BothAutoConfiguration
