@@ -149,7 +149,8 @@ public abstract class AbstractContractFactoryBean implements InitializingBean, F
     public Class<?> getInterfaceClass() {
         if (interfaceClass == null) {
             try {
-                interfaceClass = this.getClass().getClassLoader().loadClass(interfaceType);
+                interfaceClass = Thread.currentThread().getContextClassLoader()
+                    .loadClass(interfaceType);
             } catch (ClassNotFoundException e) {
                 throw new RuntimeException(e);
             } catch (NullPointerException e) {
