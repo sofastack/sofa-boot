@@ -35,13 +35,13 @@ import org.springframework.core.Ordered;
 public class RuntimeContextBeanFactoryPostProcessor implements BeanFactoryPostProcessor,
                                                    ApplicationContextAware, Ordered {
 
-    private BindingAdapterFactory   bindingAdapterFactory;
+    protected BindingAdapterFactory   bindingAdapterFactory;
 
-    private BindingConverterFactory bindingConverterFactory;
+    protected BindingConverterFactory bindingConverterFactory;
 
-    private SofaRuntimeManager      sofaRuntimeManager;
+    protected SofaRuntimeManager      sofaRuntimeManager;
 
-    private ApplicationContext      applicationContext;
+    protected ApplicationContext      applicationContext;
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory)
