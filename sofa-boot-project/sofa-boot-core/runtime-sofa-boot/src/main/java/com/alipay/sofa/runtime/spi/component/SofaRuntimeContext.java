@@ -91,7 +91,7 @@ public class SofaRuntimeContext {
         return jvmFilterHolder;
     }
 
-    public class Properties {
+    public static class Properties {
 
         private boolean      skipJvmReferenceHealthCheck          = false;
         private boolean      skipExtensionHealthCheck             = false;
