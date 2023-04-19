@@ -22,6 +22,9 @@ import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
 import com.alipay.sofa.runtime.spi.service.DefaultDynamicServiceProxyManager;
 import com.alipay.sofa.runtime.spi.service.DynamicServiceProxyManager;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * SOFA Runtime Context.
  *
@@ -88,16 +91,18 @@ public class SofaRuntimeContext {
         return jvmFilterHolder;
     }
 
-    public class Properties {
+    public static class Properties {
 
-        private boolean skipJvmReferenceHealthCheck = false;
-        private boolean skipExtensionHealthCheck    = false;
-        private boolean disableJvmFirst             = false;
-        private boolean extensionFailureInsulating  = false;
-        private boolean skipAllComponentShutdown    = false;
-        private boolean skipCommonComponentShutdown = false;
-        private boolean jvmFilterEnable             = false;
-        private boolean serviceInterfaceTypeCheck   = false;
+        private boolean      skipJvmReferenceHealthCheck          = false;
+        private boolean      skipExtensionHealthCheck             = false;
+        private boolean      disableJvmFirst                      = false;
+        private boolean      extensionFailureInsulating           = false;
+        private boolean      skipAllComponentShutdown             = false;
+        private boolean      skipCommonComponentShutdown          = false;
+        private boolean      jvmFilterEnable                      = false;
+        private boolean      serviceInterfaceTypeCheck            = false;
+        private List<String> skipJvmReferenceHealthCheckList      = new ArrayList<>();
+        private boolean      referenceHealthCheckMoreDetailEnable = false;
 
         public boolean isSkipJvmReferenceHealthCheck() {
             return skipJvmReferenceHealthCheck;
@@ -161,6 +166,22 @@ public class SofaRuntimeContext {
 
         public void setServiceInterfaceTypeCheck(boolean serviceInterfaceTypeCheck) {
             this.serviceInterfaceTypeCheck = serviceInterfaceTypeCheck;
+        }
+
+        public List<String> getSkipJvmReferenceHealthCheckList() {
+            return skipJvmReferenceHealthCheckList;
+        }
+
+        public void setSkipJvmReferenceHealthCheckList(List<String> skipJvmReferenceHealthCheckList) {
+            this.skipJvmReferenceHealthCheckList = skipJvmReferenceHealthCheckList;
+        }
+
+        public boolean isReferenceHealthCheckMoreDetailEnable() {
+            return referenceHealthCheckMoreDetailEnable;
+        }
+
+        public void setReferenceHealthCheckMoreDetailEnable(boolean referenceHealthCheckMoreDetailEnable) {
+            this.referenceHealthCheckMoreDetailEnable = referenceHealthCheckMoreDetailEnable;
         }
     }
 }

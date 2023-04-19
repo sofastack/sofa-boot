@@ -20,7 +20,6 @@ import com.alipay.sofa.boot.log.ErrorCode;
 import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.component.ComponentName;
-import com.alipay.sofa.runtime.api.component.Property;
 import com.alipay.sofa.runtime.ext.Extensible;
 import com.alipay.sofa.runtime.ext.Extension;
 import com.alipay.sofa.runtime.ext.ExtensionPoint;
@@ -37,7 +36,6 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Method;
-import java.util.Map;
 
 /**
  * SOFA Extension Component.
@@ -69,11 +67,6 @@ public class ExtensionComponent extends AbstractComponent {
     @Override
     public ComponentType getType() {
         return EXTENSION_COMPONENT_TYPE;
-    }
-
-    @Override
-    public Map<String, Property> getProperties() {
-        return null;
     }
 
     @Override

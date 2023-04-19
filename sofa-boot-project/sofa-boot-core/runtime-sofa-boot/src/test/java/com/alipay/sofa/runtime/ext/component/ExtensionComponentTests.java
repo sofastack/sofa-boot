@@ -80,8 +80,8 @@ public class ExtensionComponentTests {
     }
 
     @Test
-    void getPropertiesShouldReturnNull() {
-        assertThat(extensionComponent.getProperties()).isNull();
+    void getPropertiesShouldReturnEmptyMap() {
+        assertThat(extensionComponent.getProperties()).hasSize(0);
     }
 
     @Test

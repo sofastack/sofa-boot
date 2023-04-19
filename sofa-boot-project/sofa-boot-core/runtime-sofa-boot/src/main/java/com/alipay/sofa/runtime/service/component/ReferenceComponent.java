@@ -28,12 +28,14 @@ import com.alipay.sofa.runtime.spi.binding.Binding;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapter;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
 import com.alipay.sofa.runtime.spi.component.AbstractComponent;
+import com.alipay.sofa.runtime.spi.component.ComponentDefinitionInfo;
 import com.alipay.sofa.runtime.spi.component.ComponentNameFactory;
 import com.alipay.sofa.runtime.spi.component.DefaultImplementation;
 import com.alipay.sofa.runtime.spi.component.Implementation;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.health.HealthResult;
 import org.slf4j.Logger;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +52,7 @@ import java.util.concurrent.CountDownLatch;
 public class ReferenceComponent extends AbstractComponent {
 
     private static final Logger         LOGGER                   = SofaBootLoggerFactory
-                                                                     .getLogger(ServiceComponent.class);
+                                                                     .getLogger(ReferenceComponent.class);
 
     public static final ComponentType   REFERENCE_COMPONENT_TYPE = new ComponentType("reference");
 
@@ -81,7 +83,7 @@ public class ReferenceComponent extends AbstractComponent {
 
     @Override
     public Map<String, Property> getProperties() {
-        return null;
+        return properties;
     }
 
     @Override
@@ -102,12 +104,28 @@ public class ReferenceComponent extends AbstractComponent {
         }
 
         // check reference has a corresponding service
-        if (!sofaRuntimeContext.getProperties().isSkipJvmReferenceHealthCheck()
-            && jvmBinding != null) {
+        if (jvmBinding != null && reference.isRequired() && !isSkipReferenceHealthCheck(sofaRuntimeContext.getProperties())) {
             Object serviceTarget = getServiceTarget();
             if (serviceTarget == null && !jvmBinding.hasBackupProxy()) {
                 jvmBindingHealthResult.setHealthy(false);
-                jvmBindingHealthResult.setHealthReport("can not find corresponding jvm service");
+                StringBuilder healthReport = new StringBuilder(64);
+                healthReport.append("can not find corresponding jvm service");
+                if (sofaRuntimeContext.getProperties().isReferenceHealthCheckMoreDetailEnable()) {
+                    Property sourceProperty = getProperties().get(ComponentDefinitionInfo.SOURCE);
+                    if (sourceProperty != null && sourceProperty.getValue() != null
+                        && sourceProperty.getValue() instanceof ComponentDefinitionInfo definitionInfo) {
+                        healthReport.append(".");
+                        healthReport
+                            .append(String
+                                .format(
+                                    "Which first declared through:%s beanId:%s,beanClassName:%s,location:%s",
+                                    definitionInfo.getInterfaceMode(),
+                                    definitionInfo.info(ComponentDefinitionInfo.BEAN_ID),
+                                    definitionInfo.info(ComponentDefinitionInfo.BEAN_CLASS_NAME),
+                                    definitionInfo.info(ComponentDefinitionInfo.LOCATION)));
+                    }
+                }
+                jvmBindingHealthResult.setHealthReport(healthReport.toString());
             }
         }
 
@@ -252,5 +270,19 @@ public class ReferenceComponent extends AbstractComponent {
                 reference, sofaRuntimeContext.getAppClassLoader());
         }
         return serviceTarget;
+    }
+
+    private boolean isSkipReferenceHealthCheck(SofaRuntimeContext.Properties properties) {
+        if (properties.isSkipJvmReferenceHealthCheck()) {
+            return true;
+        }
+        // skip check reference for the specified interface with unique id
+        List<String> skipCheckList = properties.getSkipJvmReferenceHealthCheckList();
+        String interfaceType = reference.getInterfaceType().getName();
+        String uniqueId = reference.getUniqueId();
+        if (StringUtils.hasText(uniqueId)) {
+            interfaceType = interfaceType + ":" + uniqueId;
+        }
+        return skipCheckList.contains(interfaceType);
     }
 }

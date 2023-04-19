@@ -14,33 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime.service.component;
+package com.alipay.sofa.runtime.api.annotation;
 
-import com.alipay.sofa.runtime.spi.binding.Contract;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * Reference Definition.
+ * {@code @SofaServices} is a container for one or more
+ * {@link SofaService @SofaService} declarations.
  *
- * @author xuanbei 18/3/1
+ * @author huzijie
+ * @version SofaServices.java, v 0.1 2023年03月28日 8:16 PM huzijie Exp $
  */
-public interface Reference extends Contract {
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ ElementType.TYPE, ElementType.METHOD })
+public @interface SofaServices {
 
     /**
-     * Jvm first or not.
-     *
-     * @return true or false
+     * An array of one or more {@link SofaService @SofaService}
+     * declarations.
      */
-    boolean isJvmFirst();
-
-    /**
-     * Whether the reference is required.
-     * @return true or false
-     */
-    boolean isRequired();
-
-    /**
-     * Set the reference is required.
-     * @param required true or false
-     */
-    void setRequired(boolean required);
+    SofaService[] value();
 }

@@ -93,8 +93,8 @@ public class ExtensionPointComponentTests {
     }
 
     @Test
-    void testGetProperties() {
-        assertThat(component.getProperties()).isNull();
+    void getPropertiesShouldReturnEmptyMap() {
+        assertThat(component.getProperties()).hasSize(0);
     }
 
     @Test

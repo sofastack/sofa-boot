@@ -17,6 +17,7 @@
 package com.alipay.sofa.boot.actuator.components;
 
 import com.alipay.sofa.runtime.api.component.ComponentName;
+import com.alipay.sofa.runtime.api.component.Property;
 import com.alipay.sofa.runtime.ext.component.ExtensionComponent;
 import com.alipay.sofa.runtime.model.ComponentType;
 import com.alipay.sofa.runtime.service.component.ServiceComponent;
@@ -80,6 +81,11 @@ public class ComponentsEndpointTests {
         Mockito.doReturn(contextA).when(serviceComponent).getApplicationContext();
         Mockito.doReturn(serviceComponents).when(componentManager)
             .getComponentInfosByType(ServiceComponent.SERVICE_COMPONENT_TYPE);
+        Property propertyA = new Property();
+        propertyA.setName("serviceA");
+        propertyA.setValue("valueA");
+        Map<String, Property> servicePropertyMap = Map.of("A", propertyA);
+        Mockito.doReturn(servicePropertyMap).when(serviceComponent).getProperties();
 
         List<ExtensionComponent> extensionComponents = new ArrayList<>();
         extensionComponents.add(extensionComponent);
@@ -110,6 +116,15 @@ public class ComponentsEndpointTests {
         assertThat(
             ((List<ComponentsEndPoint.ComponentDisplayInfo>) serviceComponentCollection).get(0)
                 .getApplicationId()).isEqualTo("moduleA");
+        assertThat(
+            ((List<ComponentsEndPoint.ComponentDisplayInfo>) serviceComponentCollection).get(0)
+                .getName()).isEqualTo("testSofaService");
+        assertThat(
+            ((List<ComponentsEndPoint.ComponentDisplayInfo>) serviceComponentCollection).get(0)
+                .getProperties().get(0).getName()).isEqualTo("serviceA");
+        assertThat(
+            ((List<ComponentsEndPoint.ComponentDisplayInfo>) serviceComponentCollection).get(0)
+                .getProperties().get(0).getValue()).isEqualTo("valueA");
 
         Collection<ComponentsEndPoint.ComponentDisplayInfo> extComponentCollection = componentTypeCollectionMap
             .get(ExtensionComponent.EXTENSION_COMPONENT_TYPE.getName());
