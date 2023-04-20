@@ -35,13 +35,10 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class RuntimeContextBeanFactoryPostProcessorTests extends SofaRuntimeManagerTestBase {
 
-    private GenericApplicationContext              genericApplicationContext;
-
-    private RuntimeContextBeanFactoryPostProcessor runtimeContextBeanFactoryPostProcessor;
+    private GenericApplicationContext genericApplicationContext;
 
     @BeforeEach
     public void setUp() {
-        runtimeContextBeanFactoryPostProcessor = new RuntimeContextBeanFactoryPostProcessor();
         genericApplicationContext = new AnnotationConfigApplicationContext();
         genericApplicationContext.registerBean(RuntimeContextBeanFactoryPostProcessor.class);
         genericApplicationContext.getBeanFactory().registerSingleton("sofaRuntimeManager",

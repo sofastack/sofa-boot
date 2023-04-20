@@ -16,10 +16,12 @@
  */
 package com.alipay.sofa.runtime.spring;
 
+import com.alipay.sofa.boot.context.processor.SingletonSofaPostProcessor;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.ApplicationContext;
@@ -32,25 +34,31 @@ import org.springframework.core.Ordered;
  * @author huzijie
  * @version RuntimeContextBeanFactoryPostProcessor.java, v 0.1 2023年04月19日 4:16 PM huzijie Exp $
  */
+@SingletonSofaPostProcessor
 public class RuntimeContextBeanFactoryPostProcessor implements BeanFactoryPostProcessor,
-                                                   ApplicationContextAware, Ordered {
+                                                   ApplicationContextAware, InitializingBean,
+                                                   Ordered {
 
-    protected BindingAdapterFactory   bindingAdapterFactory;
+    protected BindingAdapterFactory                    bindingAdapterFactory;
 
-    protected BindingConverterFactory bindingConverterFactory;
+    protected BindingConverterFactory                  bindingConverterFactory;
 
-    protected SofaRuntimeManager      sofaRuntimeManager;
+    protected SofaRuntimeManager                       sofaRuntimeManager;
 
-    protected ApplicationContext      applicationContext;
+    protected ApplicationContext                       applicationContext;
+
+    protected SofaRuntimeAwareProcessor                sofaRuntimeAwareProcessor;
+
+    protected ClientFactoryAnnotationBeanPostProcessor clientFactoryAnnotationBeanPostProcessor;
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory)
                                                                                    throws BeansException {
         // make sure those BeanPostProcessor work on other BeanPostProcessor
-        beanFactory.addBeanPostProcessor(new SofaRuntimeAwareProcessor(sofaRuntimeManager));
-        beanFactory.addBeanPostProcessor(new ClientFactoryAnnotationBeanPostProcessor(
-            sofaRuntimeManager.getClientFactoryInternal()));
+        beanFactory.addBeanPostProcessor(sofaRuntimeAwareProcessor);
+        beanFactory.addBeanPostProcessor(clientFactoryAnnotationBeanPostProcessor);
 
+        // none singleton bean
         ReferenceAnnotationBeanPostProcessor referenceAnnotationBeanPostProcessor = new ReferenceAnnotationBeanPostProcessor(
             sofaRuntimeManager.getSofaRuntimeContext(), bindingAdapterFactory,
             bindingConverterFactory);
@@ -72,5 +80,12 @@ public class RuntimeContextBeanFactoryPostProcessor implements BeanFactoryPostPr
     @Override
     public int getOrder() {
         return HIGHEST_PRECEDENCE;
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        this.sofaRuntimeAwareProcessor = new SofaRuntimeAwareProcessor(sofaRuntimeManager);
+        this.clientFactoryAnnotationBeanPostProcessor = new ClientFactoryAnnotationBeanPostProcessor(
+            sofaRuntimeManager.getClientFactoryInternal());
     }
 }
