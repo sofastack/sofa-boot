@@ -35,7 +35,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class RuntimeContextBeanFactoryPostProcessorTests extends SofaRuntimeManagerTestBase {
 
-    private GenericApplicationContext              genericApplicationContext;
+    private GenericApplicationContext genericApplicationContext;
 
     @BeforeEach
     public void setUp() {
