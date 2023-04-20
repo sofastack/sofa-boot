@@ -31,6 +31,11 @@ public class SofaBootConstants {
     public static final String APP_NAME_KEY                                    = "spring.application.name";
 
     /**
+     * SOFABoot startup log extra info
+     */
+    public static final String STARTUP_LOG_EXTRA_INFO                          = "startupLogExtraInfo";
+
+    /**
      * SOFABoot config property source key
      */
     public static final String SOFA_DEFAULT_PROPERTY_SOURCE                    = "sofaConfigurationProperties";

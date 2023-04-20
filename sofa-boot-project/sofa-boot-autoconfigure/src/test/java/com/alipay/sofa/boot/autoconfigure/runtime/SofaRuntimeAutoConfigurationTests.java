@@ -25,10 +25,8 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
 import com.alipay.sofa.runtime.spring.AsyncInitBeanFactoryPostProcessor;
 import com.alipay.sofa.runtime.spring.AsyncProxyBeanPostProcessor;
-import com.alipay.sofa.runtime.spring.ClientFactoryAnnotationBeanPostProcessor;
-import com.alipay.sofa.runtime.spring.ReferenceAnnotationBeanPostProcessor;
+import com.alipay.sofa.runtime.spring.RuntimeContextBeanFactoryPostProcessor;
 import com.alipay.sofa.runtime.spring.ServiceBeanFactoryPostProcessor;
-import com.alipay.sofa.runtime.spring.SofaRuntimeAwareProcessor;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.FilteredClassLoader;
@@ -63,10 +61,8 @@ public class SofaRuntimeAutoConfigurationTests {
                         .hasSingleBean(AsyncProxyBeanPostProcessor.class)
                         .hasSingleBean(AsyncInitBeanFactoryPostProcessor.class)
                         .hasSingleBean(ServiceBeanFactoryPostProcessor.class)
-                        .hasSingleBean(ReferenceAnnotationBeanPostProcessor.class)
+                        .hasSingleBean(RuntimeContextBeanFactoryPostProcessor.class)
                         .hasSingleBean(ProxyBeanFactoryPostProcessor.class)
-                        .hasSingleBean(SofaRuntimeAwareProcessor.class)
-                        .hasSingleBean(ClientFactoryAnnotationBeanPostProcessor.class)
                         .hasSingleBean(ComponentContextRefreshInterceptor.class));
     }
 
@@ -82,10 +78,8 @@ public class SofaRuntimeAutoConfigurationTests {
                         .doesNotHaveBean(AsyncProxyBeanPostProcessor.class)
                         .doesNotHaveBean(AsyncInitBeanFactoryPostProcessor.class)
                         .doesNotHaveBean(ServiceBeanFactoryPostProcessor.class)
-                        .doesNotHaveBean(ReferenceAnnotationBeanPostProcessor.class)
+                        .doesNotHaveBean(RuntimeContextBeanFactoryPostProcessor.class)
                         .doesNotHaveBean(ProxyBeanFactoryPostProcessor.class)
-                        .doesNotHaveBean(SofaRuntimeAwareProcessor.class)
-                        .doesNotHaveBean(ClientFactoryAnnotationBeanPostProcessor.class)
                         .doesNotHaveBean(ComponentContextRefreshInterceptor.class));
     }
 
@@ -100,6 +94,8 @@ public class SofaRuntimeAutoConfigurationTests {
                 .withPropertyValues("sofa.boot.runtime.skipCommonComponentShutdown=true")
                 .withPropertyValues("sofa.boot.runtime.jvmFilterEnable=true")
                 .withPropertyValues("sofa.boot.runtime.serviceInterfaceTypeCheck=true")
+                .withPropertyValues("sofa.boot.runtime.skipJvmReferenceHealthCheckList=com.alipay.sofa.isle.sample.facade.SampleJvmService:annotationImpl,com.alipay.sofa.isle.sample.facade.SampleJvmService")
+                .withPropertyValues("sofa.boot.runtime.referenceHealthCheckMoreDetailEnable=true")
                 .run((context) -> {
                     SofaRuntimeContext.Properties properties= context.getBean(SofaRuntimeContext.class).getProperties();
                     assertThat(properties.isSkipJvmReferenceHealthCheck()).isTrue();
@@ -110,6 +106,8 @@ public class SofaRuntimeAutoConfigurationTests {
                     assertThat(properties.isSkipCommonComponentShutdown()).isTrue();
                     assertThat(properties.isJvmFilterEnable()).isTrue();
                     assertThat(properties.isServiceInterfaceTypeCheck()).isTrue();
+                    assertThat(properties.getSkipJvmReferenceHealthCheckList()).containsExactly("com.alipay.sofa.isle.sample.facade.SampleJvmService:annotationImpl", "com.alipay.sofa.isle.sample.facade.SampleJvmService");
+                    assertThat(properties.isReferenceHealthCheckMoreDetailEnable()).isTrue();
                 });
     }
 

@@ -53,7 +53,7 @@ public class ModuleLogOutputStage extends AbstractPipelineStage {
         logFailedModules();
     }
 
-    private void logInstalledModules() {
+    protected void logInstalledModules() {
         List<DeploymentDescriptor> deploys = application.getInstalled();
         StringBuilder stringBuilder = new StringBuilder();
         long totalTime = 0;
@@ -100,7 +100,7 @@ public class ModuleLogOutputStage extends AbstractPipelineStage {
         LOGGER.info(stringBuilder.toString());
     }
 
-    private void logFailedModules() {
+    protected void logFailedModules() {
         List<DeploymentDescriptor> deploys = application.getFailed();
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("\n").append("Spring context initialize failed module list")

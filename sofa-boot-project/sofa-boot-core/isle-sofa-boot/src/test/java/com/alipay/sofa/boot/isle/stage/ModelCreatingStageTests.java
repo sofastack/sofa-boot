@@ -17,14 +17,22 @@
 package com.alipay.sofa.boot.isle.stage;
 
 import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
+import com.alipay.sofa.boot.isle.MockDeploymentDescriptor;
 import com.alipay.sofa.boot.isle.SampleDeploymentDescriptor;
 import com.alipay.sofa.boot.isle.deployment.DefaultModuleDeploymentValidator;
+import com.alipay.sofa.boot.isle.deployment.DependencyTree;
+import com.alipay.sofa.boot.isle.deployment.DeployRegistry;
 import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptor;
 import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptorConfiguration;
 import com.alipay.sofa.boot.isle.deployment.DeploymentException;
 import com.alipay.sofa.boot.isle.profile.DefaultSofaModuleProfileChecker;
+import com.alipay.sofa.boot.util.LogOutPutUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
+import org.springframework.boot.test.system.CapturedOutput;
+import org.springframework.boot.test.system.OutputCaptureExtension;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +46,12 @@ import static org.assertj.core.api.Assertions.*;
  * @author huzijie
  * @version ModelCreatingStageTests.java, v 0.1 2023年02月02日 8:25 PM huzijie Exp $
  */
+@ExtendWith(OutputCaptureExtension.class)
 public class ModelCreatingStageTests {
+
+    static {
+        LogOutPutUtils.openOutPutForLoggers(ModelCreatingStage.class);
+    }
 
     private final ModelCreatingStage stage = new ModelCreatingStage();
 
@@ -97,4 +110,89 @@ public class ModelCreatingStageTests {
                 .isInstanceOf(DeploymentException.class)
                 .hasMessageContaining("01-12000");
     }
+
+    @Test
+    void outputModulesMessage(CapturedOutput capturedOutput) throws DeploymentException {
+        ApplicationRuntimeModel application = Mockito.mock(ApplicationRuntimeModel.class);
+        DeployRegistry deployRegistry = Mockito.mock(DeployRegistry.class);
+        Mockito.when(application.getDeployRegistry()).thenReturn(deployRegistry);
+        Mockito.when(application.getAllInactiveDeployments()).thenReturn(List.of(
+                new MockDeploymentDescriptor("inactive1"),
+                new MockDeploymentDescriptor("inactive2")
+        ));
+        Mockito.when(application.getAllDeployments()).thenReturn(List.of(
+                new MockDeploymentDescriptor("active1"),
+                new MockDeploymentDescriptor("active2")
+        ));
+        Mockito.when(application.getResolvedDeployments()).thenReturn(List.of(
+                new MockDeploymentDescriptor("resolved1"),
+                new MockDeploymentDescriptor("resolved2")
+        ));
+        MockDeploymentDescriptor deploymentDescriptor1 = new MockDeploymentDescriptor("pending1");
+        MockDeploymentDescriptor deploymentDescriptor2 = new MockDeploymentDescriptor("pending2");
+        List<DependencyTree.Entry<String, DeploymentDescriptor>> pendingEntries = List.of(
+                new DependencyTree.Entry<>("pending1", deploymentDescriptor1),
+                new DependencyTree.Entry<>("pending2", deploymentDescriptor2));
+        Mockito.when(application.getAllDeployments()).thenReturn(List.of(deploymentDescriptor1, deploymentDescriptor2));
+        Mockito.when(application.getDeployRegistry().getPendingEntries()).thenReturn(pendingEntries);
+
+        ModelCreatingStage stage = new ModelCreatingStage();
+        stage.setApplicationRuntimeModel(application);
+
+        assertThatThrownBy(stage::outputModulesMessage)
+                .isInstanceOf(DeploymentException.class)
+                .hasMessageContaining("01-12000");
+
+        assertThat(capturedOutput.getOut()).contains("All unactivated module list")
+                .contains("inactive1").contains("inactive2")
+                .contains("All activated module list")
+                .contains("active1").contains("active2")
+                .contains("Modules that could install")
+                .contains("resolved1").contains("resolved2")
+                .contains("01-12000").contains("pending1").contains("pending2")
+                .contains("depends on").contains("can not be resolved");
+    }
+
+    @Test
+    void testGetErrorMessageByApplicationModule() {
+        ApplicationRuntimeModel application = Mockito.mock(ApplicationRuntimeModel.class);
+        DeployRegistry deployRegistry = Mockito.mock(DeployRegistry.class);
+        Mockito.when(application.getDeployRegistry()).thenReturn(deployRegistry);
+        MockDeploymentDescriptor deploymentDescriptor1 = new MockDeploymentDescriptor("pending1");
+        MockDeploymentDescriptor deploymentDescriptor2 = new MockDeploymentDescriptor("pending2");
+        List<DependencyTree.Entry<String, DeploymentDescriptor>> pendingEntries = List.of(
+            new DependencyTree.Entry<>("pending1", deploymentDescriptor1),
+            new DependencyTree.Entry<>("pending2", deploymentDescriptor2));
+        Mockito.when(application.getAllDeployments()).thenReturn(
+            List.of(deploymentDescriptor1, deploymentDescriptor2));
+        Mockito.when(application.getDeployRegistry().getPendingEntries())
+            .thenReturn(pendingEntries);
+        Mockito.when(application.getDeployRegistry().getMissingRequirements()).thenReturn(
+            List.of(
+                new DependencyTree.Entry<>("missing1", new MockDeploymentDescriptor("missing1")),
+                new DependencyTree.Entry<>("missing2", new MockDeploymentDescriptor("missing2"))));
+
+        ModelCreatingStage stage = new ModelCreatingStage();
+        stage.setApplicationRuntimeModel(application);
+
+        String errorMessage = stage.getErrorMessageByApplicationModule(application);
+
+        assertThat(errorMessage).contains("01-12000").contains("pending1").contains("pending2")
+            .contains("depends on").contains("can not be resolved").contains("Missing modules")
+            .contains("missing1").contains("missing2")
+            .contains("Please add the corresponding modules");
+    }
+
+    @Test
+    void testWriteMessageToStringBuilder() {
+        StringBuilder sb = new StringBuilder();
+        List<DeploymentDescriptor> deploys = List.of(new MockDeploymentDescriptor("dd1"),
+            new MockDeploymentDescriptor("dd2"));
+
+        ModelCreatingStage stage = new ModelCreatingStage();
+        stage.writeMessageToStringBuilder(sb, deploys, "Test");
+
+        assertThat(sb.toString()).contains("Test").contains("dd1").contains("dd2");
+    }
+
 }

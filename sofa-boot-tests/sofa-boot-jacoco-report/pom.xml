@@ -78,6 +78,10 @@
         </dependency>
         <dependency>
             <groupId>com.alipay.sofa</groupId>
+            <artifactId>rpc-sofa-boot</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
             <artifactId>test-sofa-boot</artifactId>
         </dependency>
     </dependencies>
@@ -91,6 +95,7 @@
                     <skip>false</skip>
                     <excludes>
                         <exclude>com/alipay/sofa/smoke/tests/**</exclude>
+                        <exclude>com/alipay/sofa/common/xmap/**</exclude>
                     </excludes>
                 </configuration>
                 <executions>

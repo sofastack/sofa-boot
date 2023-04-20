@@ -52,20 +52,20 @@ import java.util.stream.Collectors;
  */
 public class SpringContextInstallStage extends AbstractPipelineStage implements InitializingBean {
 
-    private static final Logger LOGGER                                 = SofaBootLoggerFactory
-                                                                           .getLogger(SpringContextInstallStage.class);
+    private static final Logger   LOGGER                                 = SofaBootLoggerFactory
+                                                                             .getLogger(SpringContextInstallStage.class);
 
-    public static final String  SOFA_MODULE_REFRESH_EXECUTOR_BEAN_NAME = "sofaModuleRefreshExecutor";
+    public static final String    SOFA_MODULE_REFRESH_EXECUTOR_BEAN_NAME = "sofaModuleRefreshExecutor";
 
-    public static final String  SPRING_CONTEXT_INSTALL_STAGE_NAME      = "SpringContextInstallStage";
+    public static final String    SPRING_CONTEXT_INSTALL_STAGE_NAME      = "SpringContextInstallStage";
 
-    private SpringContextLoader springContextLoader;
+    protected SpringContextLoader springContextLoader;
 
-    private boolean             moduleStartUpParallel;
+    protected boolean             moduleStartUpParallel;
 
-    private boolean             ignoreModuleInstallFailure;
+    protected boolean             ignoreModuleInstallFailure;
 
-    private ExecutorService     moduleRefreshExecutorService;
+    protected ExecutorService     moduleRefreshExecutorService;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -227,8 +227,10 @@ public class SpringContextInstallStage extends AbstractPipelineStage implements 
         moduleStat.setThreadName(Thread.currentThread().getName());
         ConfigurableApplicationContext ctx = (ConfigurableApplicationContext) deployment
             .getApplicationContext();
-        moduleStat.setChildren(startupReporter.generateBeanStats(ctx));
-        ((ChildrenStat<ModuleStat>) baseStat).addChild(moduleStat);
+        if (startupReporter != null && baseStat != null) {
+            moduleStat.setChildren(startupReporter.generateBeanStats(ctx));
+            ((ChildrenStat<ModuleStat>) baseStat).addChild(moduleStat);
+        }
     }
 
     protected void doRefreshSpringContext(DeploymentDescriptor deployment) {
@@ -257,10 +259,6 @@ public class SpringContextInstallStage extends AbstractPipelineStage implements 
         throw new DeploymentException(ErrorCode.convert("01-11007", failedModuleNames));
     }
 
-    public SpringContextLoader getSpringContextLoader() {
-        return springContextLoader;
-    }
-
     public void setSpringContextLoader(SpringContextLoader springContextLoader) {
         this.springContextLoader = springContextLoader;
     }
@@ -279,14 +277,6 @@ public class SpringContextInstallStage extends AbstractPipelineStage implements 
 
     public void setModuleStartUpParallel(boolean moduleStartUpParallel) {
         this.moduleStartUpParallel = moduleStartUpParallel;
-    }
-
-    public ExecutorService getModuleRefreshExecutorService() {
-        return moduleRefreshExecutorService;
-    }
-
-    public void setModuleRefreshExecutorService(ExecutorService moduleRefreshExecutorService) {
-        this.moduleRefreshExecutorService = moduleRefreshExecutorService;
     }
 
     @Override

@@ -16,6 +16,8 @@
  */
 package com.alipay.sofa.runtime.impl;
 
+import com.alipay.sofa.boot.util.LogOutPutUtils;
+import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.context.SpringContextComponent;
 import com.alipay.sofa.runtime.context.SpringContextImplementation;
@@ -25,23 +27,132 @@ import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.ComponentManager;
 import com.alipay.sofa.runtime.spi.component.ComponentNameFactory;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
-import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.system.CapturedOutput;
+import org.springframework.boot.test.system.OutputCaptureExtension;
 import org.springframework.context.support.GenericApplicationContext;
 
 import static com.alipay.sofa.runtime.context.SpringContextComponent.SPRING_COMPONENT_TYPE;
 import static com.alipay.sofa.runtime.sample.DemoComponent.DEMO_COMPONENT_TYPE;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
- * Tests for {@link SofaRuntimeManager#shutdown()}.
+ * Tests for {@link ComponentManagerImpl}.
  *
  * @author huzijie
- * @version SofaRuntimeManagerShutDownTests.java, v 0.1 2022年04月29日 5:19 PM huzijie Exp $
+ * @version ComponentManagerImplTests.java, v 0.1 2023年04月10日 3:37 PM huzijie Exp $
  */
-public class SofaRuntimeManagerShutDownTests {
+@ExtendWith({ MockitoExtension.class, OutputCaptureExtension.class })
+public class ComponentManagerImplTests {
+
+    static {
+        LogOutPutUtils.openOutPutForLoggers(ComponentManagerImpl.class);
+    }
+
+    @Mock
+    private ClientFactoryInternal       clientFactoryInternal;
+
+    @Mock
+    private DemoComponent               componentInfoA;
+
+    @Mock
+    private DemoComponent               componentInfoB;
+
+    private ComponentManagerImpl        componentManager;
 
     private final ClientFactoryInternal clientFactory = new ClientFactoryImpl();
+
+    @BeforeEach
+    public void setUp() {
+        componentManager = new ComponentManagerImpl(clientFactoryInternal, this.getClass()
+            .getClassLoader());
+    }
+
+    @Test
+    public void registerAndGetComponents() {
+        componentInfoA = new DemoComponent("A");
+        componentInfoB = new DemoComponent("B");
+        componentManager.register(componentInfoA);
+
+        assertThat(componentManager.registerAndGet(componentInfoB)).isEqualTo(componentInfoB);
+        assertThat(componentManager.getComponentInfos()).contains(componentInfoA, componentInfoB);
+        assertThat(componentManager.getComponents()).contains(componentInfoA, componentInfoB);
+        assertThat(componentManager.getComponentTypes()).containsExactly(componentInfoA.getType());
+        assertThat(componentManager.getComponentInfosByType(componentInfoA.getType()))
+            .containsExactly(componentInfoA, componentInfoB);
+        assertThat(componentManager.getComponentInfo(componentInfoA.getName())).isEqualTo(
+            componentInfoA);
+        assertThat(componentManager.getComponentInfosByApplicationContext(null)).containsExactly(
+            componentInfoA, componentInfoB);
+    }
+
+    @Test
+    public void unRegister() {
+        componentInfoA = new DemoComponent("A");
+        componentManager.register(componentInfoA);
+        assertThat(componentManager.getComponents()).contains(componentInfoA);
+        assertThat(componentManager.getComponentInfosByType(componentInfoA.getType()))
+            .containsExactly(componentInfoA);
+
+        componentManager.unregister(componentInfoA);
+        assertThat(componentManager.getComponents()).doesNotContain(componentInfoA);
+        assertThat(componentManager.getComponentInfosByType(componentInfoA.getType()))
+            .doesNotContain(componentInfoA);
+    }
+
+    @Test
+    public void resolvePendingResolveComponent() {
+        componentInfoA = new DemoComponent("A");
+        componentManager.register(componentInfoA);
+        componentInfoA.unresolve();
+
+        componentInfoA.setActivateException(true);
+        componentManager.resolvePendingResolveComponent(componentInfoA.getName());
+
+        componentInfoA.setActivateException(false);
+        componentInfoA.activate();
+        assertThat(componentInfoA.isHealthy().isHealthy()).isFalse();
+        assertThat(componentInfoA.isHealthy().getHealthReport()).contains("activate error");
+    }
+
+    @Test
+    public void registerDuplicate() {
+        componentInfoA = new DemoComponent("A");
+        assertThat(componentManager.registerAndGet(componentInfoA)).isEqualTo(componentInfoA);
+
+        componentInfoB = new DemoComponent("A");
+        assertThat(componentManager.registerAndGet(componentInfoB)).isEqualTo(componentInfoA);
+
+        componentInfoB.setCanBeDuplicate(false);
+        assertThatThrownBy(() -> componentManager.register(componentInfoB)).isInstanceOf(ServiceRuntimeException.class)
+                .hasMessageContaining("01-03002");
+    }
+
+    @Test
+    public void registerException(CapturedOutput capturedOutput) {
+        componentInfoA = new DemoComponent("A");
+        componentInfoA.setRegisterException(true);
+
+        assertThat(componentManager.registerAndGet(componentInfoA)).isNull();
+        assertThat(capturedOutput.getOut()).contains("01-03003");
+        assertThat(capturedOutput.getOut()).contains(componentInfoA.getName().toString());
+    }
+
+    @Test
+    public void resolveException(CapturedOutput capturedOutput) {
+        componentInfoA = new DemoComponent("A");
+        componentInfoA.setResolveException(true);
+
+        assertThat(componentManager.registerAndGet(componentInfoA)).isEqualTo(componentInfoA);
+        assertThat(componentInfoA.isHealthy().isHealthy()).isFalse();
+        assertThat(capturedOutput.getOut()).contains("01-03004");
+        assertThat(capturedOutput.getOut()).contains(componentInfoA.getName().toString());
+    }
 
     @Test
     public void normalShutdown() {

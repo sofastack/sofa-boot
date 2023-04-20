@@ -22,6 +22,7 @@ import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptor;
 import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptorConfiguration;
 import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptorFactory;
 import com.alipay.sofa.boot.isle.deployment.FileDeploymentDescriptor;
+import com.alipay.sofa.boot.isle.profile.DefaultSofaModuleProfileChecker;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -60,6 +61,9 @@ public class ApplicationRuntimeModelTests {
         // new ApplicationRuntimeModel Instance
         ApplicationRuntimeModel application = new ApplicationRuntimeModel();
         application.setModuleDeploymentValidator(new DefaultModuleDeploymentValidator());
+        DefaultSofaModuleProfileChecker checker = new DefaultSofaModuleProfileChecker();
+        application.setSofaModuleProfileChecker(checker);
+        assertThat(application.getSofaModuleProfileChecker()).isEqualTo(checker);
 
         // add first SOFAIsle module
         Properties props = new Properties();
@@ -103,7 +107,9 @@ public class ApplicationRuntimeModelTests {
     public void addMissModuleNameModule() throws Exception {
         // new ApplicationRuntimeModel Instance
         ApplicationRuntimeModel application = new ApplicationRuntimeModel();
-        application.setModuleDeploymentValidator(new DefaultModuleDeploymentValidator());
+        DefaultModuleDeploymentValidator validator = new DefaultModuleDeploymentValidator();
+        application.setModuleDeploymentValidator(validator);
+        assertThat(application.getModuleDeploymentValidator()).isEqualTo(validator);
 
         //DeploymentDescriptor which misses Module-Name property
         Properties props = new Properties();

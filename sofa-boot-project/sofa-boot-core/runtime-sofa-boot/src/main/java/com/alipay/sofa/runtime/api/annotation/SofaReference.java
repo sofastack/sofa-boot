@@ -66,4 +66,10 @@ public @interface SofaReference {
      * @return binding of reference
      */
     SofaReferenceBinding binding() default @SofaReferenceBinding;
+
+    /**
+     * Declares whether the annotated dependency is required.
+     * <p>Defaults to {@code true}.
+     */
+    boolean required() default true;
 }

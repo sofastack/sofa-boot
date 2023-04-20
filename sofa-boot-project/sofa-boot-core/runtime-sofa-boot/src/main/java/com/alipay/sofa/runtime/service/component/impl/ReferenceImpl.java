@@ -16,12 +16,12 @@
  */
 package com.alipay.sofa.runtime.service.component.impl;
 
-import java.util.Map;
-
-import org.springframework.util.StringUtils;
 import com.alipay.sofa.runtime.model.InterfaceMode;
 import com.alipay.sofa.runtime.service.component.AbstractContract;
 import com.alipay.sofa.runtime.service.component.Reference;
+import org.springframework.util.StringUtils;
+
+import java.util.Map;
 
 /**
  * Reference Implementation.
@@ -31,6 +31,9 @@ import com.alipay.sofa.runtime.service.component.Reference;
 public class ReferenceImpl extends AbstractContract implements Reference {
     /** jvm first or not */
     private final boolean jvmFirst;
+
+    /** jvm reference health check or not */
+    private boolean       required = true;
 
     public ReferenceImpl(String uniqueId, Class<?> interfaceType, InterfaceMode interfaceMode,
                          boolean jvmFirst) {
@@ -53,5 +56,15 @@ public class ReferenceImpl extends AbstractContract implements Reference {
     public String toString() {
         return this.getInterfaceType().getName()
                + (StringUtils.hasText(uniqueId) ? ":" + uniqueId : "");
+    }
+
+    @Override
+    public boolean isRequired() {
+        return required;
+    }
+
+    @Override
+    public void setRequired(boolean required) {
+        this.required = required;
     }
 }

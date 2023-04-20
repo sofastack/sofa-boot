@@ -55,7 +55,7 @@ public class SofaModuleContextLifecycle implements SmartLifecycle {
                 pipelineContext.process();
             } catch (Throwable t) {
                 LOGGER.error(ErrorCode.convert("01-10000"), t);
-                throw new RuntimeException(t);
+                throw new RuntimeException(ErrorCode.convert("01-10000"), t);
             }
         }
     }

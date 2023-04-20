@@ -22,4 +22,8 @@ package com.alipay.sofa.runtime.sample;
  */
 public interface SampleService {
     String service();
+
+    default String test() {
+        return "test";
+    }
 }

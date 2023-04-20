@@ -197,6 +197,7 @@
                 <configuration>
                     <excludes>
                         <exclude>com/alipay/sofa/smoke/tests/**</exclude>
+                        <exclude>com/alipay/sofa/common/xmap/**</exclude>
                     </excludes>
                     <skip>false</skip>
                 </configuration>

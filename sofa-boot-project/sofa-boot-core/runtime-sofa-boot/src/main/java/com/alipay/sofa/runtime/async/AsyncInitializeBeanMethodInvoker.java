@@ -85,8 +85,7 @@ public class AsyncInitializeBeanMethodInvoker implements MethodInterceptor {
                 } catch (Throwable e) {
                     throw new RuntimeException(e);
                 } finally {
-                    initCountDownLatch.countDown();
-                    isAsyncCalling = false;
+                    asyncMethodFinish();
                 }
             });
             return null;
@@ -100,5 +99,10 @@ public class AsyncInitializeBeanMethodInvoker implements MethodInterceptor {
                     (System.currentTimeMillis() - startTime));
         }
         return invocation.getMethod().invoke(targetObject, invocation.getArguments());
+    }
+
+    void asyncMethodFinish() {
+        this.initCountDownLatch.countDown();
+        this.isAsyncCalling = false;
     }
 }

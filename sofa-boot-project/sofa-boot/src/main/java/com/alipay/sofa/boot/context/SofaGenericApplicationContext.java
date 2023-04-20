@@ -65,6 +65,10 @@ public class SofaGenericApplicationContext extends GenericApplicationContext {
         }
     }
 
+    public SofaGenericApplicationContext() {
+        this(new SofaDefaultListableBeanFactory());
+    }
+
     /**
      * Create a new SofaApplicationContext with the given DefaultListableBeanFactory.
      * @param beanFactory the DefaultListableBeanFactory instance to use for this context
