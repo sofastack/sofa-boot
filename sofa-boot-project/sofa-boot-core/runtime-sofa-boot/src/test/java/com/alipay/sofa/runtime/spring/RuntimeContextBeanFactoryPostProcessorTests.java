@@ -37,11 +37,8 @@ public class RuntimeContextBeanFactoryPostProcessorTests extends SofaRuntimeMana
 
     private GenericApplicationContext              genericApplicationContext;
 
-    private RuntimeContextBeanFactoryPostProcessor runtimeContextBeanFactoryPostProcessor;
-
     @BeforeEach
     public void setUp() {
-        runtimeContextBeanFactoryPostProcessor = new RuntimeContextBeanFactoryPostProcessor();
         genericApplicationContext = new AnnotationConfigApplicationContext();
         genericApplicationContext.registerBean(RuntimeContextBeanFactoryPostProcessor.class);
         genericApplicationContext.getBeanFactory().registerSingleton("sofaRuntimeManager",
