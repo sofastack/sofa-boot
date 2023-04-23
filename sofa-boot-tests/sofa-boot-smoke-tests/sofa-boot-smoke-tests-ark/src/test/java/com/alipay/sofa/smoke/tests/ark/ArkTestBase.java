@@ -23,8 +23,6 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.net.URL;
-
 /**
  * Ark environment base test.
  *
@@ -42,11 +40,12 @@ public class ArkTestBase {
 
     @BeforeAll
     public static void init() {
-        URL arkPluginUrl = ArkHandlerTests.class.getClassLoader().getResource(
-            "sofa-boot-ark-plugin.jar");
-        String classpath = System.getProperty("java.class.path");
-        classpath += ":" + arkPluginUrl.getPath();
-        System.setProperty("java.class.path", classpath);
+        // if work in ide, open this code
+        //        String classpath = System.getProperty("java.class.path");
+        //        URL arkPluginUrl = ArkHandlerTests.class.getClassLoader().getResource(
+        //            "sofa-boot-ark-plugin.jar");
+        //        classpath += ":" + arkPluginUrl.getPath();
+        //        System.setProperty("java.class.path", classpath);
         System.setProperty("sofa.ark.embed.enable", "true");
     }
 
