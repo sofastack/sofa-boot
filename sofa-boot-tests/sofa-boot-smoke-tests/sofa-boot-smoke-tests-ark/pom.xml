@@ -21,6 +21,16 @@
             <groupId>com.alipay.sofa</groupId>
             <artifactId>ark-sofa-boot-starter</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>actuator-sofa-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>sofa-ark-container</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

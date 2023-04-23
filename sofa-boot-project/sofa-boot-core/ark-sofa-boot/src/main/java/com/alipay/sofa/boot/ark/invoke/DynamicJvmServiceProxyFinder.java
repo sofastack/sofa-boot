@@ -253,7 +253,7 @@ public class DynamicJvmServiceProxyFinder {
         }
 
         for (Biz biz : getInstance().bizManagerService.getBizInOrder()) {
-            if (sofaRuntimeManager.getAppClassLoader().equals(biz.getBizClassLoader())) {
+            if (biz.getBizClassLoader().equals(sofaRuntimeManager.getAppClassLoader())) {
                 return biz;
             }
         }

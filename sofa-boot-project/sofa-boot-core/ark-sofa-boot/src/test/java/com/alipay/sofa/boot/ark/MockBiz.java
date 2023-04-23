@@ -48,12 +48,7 @@ public class MockBiz implements Biz {
     }
 
     @Override
-    public boolean isDeclared(String s) {
-        return false;
-    }
-
-    @Override
-    public boolean isDeclared(URL url) {
+    public boolean isDeclared(URL url, String s) {
         return false;
     }
 
