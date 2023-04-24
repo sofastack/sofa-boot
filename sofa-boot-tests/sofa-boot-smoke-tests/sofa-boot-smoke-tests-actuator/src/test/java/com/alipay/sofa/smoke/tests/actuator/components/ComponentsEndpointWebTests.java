@@ -46,10 +46,9 @@ public class ComponentsEndpointWebTests {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody())
             .contains(
-                "\"reference\":[{\"name\":\"com.alipay.sofa.smoke.tests.actuator.startup.beans.TestService")
+                "\"reference\":[{\"name\":\"com.alipay.sofa.smoke.tests.actuator.sample.beans.TestService")
             .contains("\"extension\":[{\"name\":\"extension$word")
-            .contains(
-                "\"service\":[{\"name\":\"com.alipay.sofa.smoke.tests.actuator.startup.beans.SampleService")
+            .contains("\"name\":\"com.alipay.sofa.smoke.tests.actuator.sample.beans.SampleService")
             .contains("\"extension-point\":[{\"name\":\"extension$word")
             .contains("\"Spring\":[{\"name\":\"testModule");
     }

@@ -108,7 +108,7 @@ public class IsleStageStartupReporterTests {
         assertThat(serviceBeanStat).isNotNull();
         assertThat(serviceBeanStat.getRefreshElapsedTime() > 0).isTrue();
         assertThat(serviceBeanStat.getAttribute("classType")).isEqualTo(ServiceFactoryBean.class.getName());
-        assertThat(serviceBeanStat.getAttribute("interface")).isEqualTo("com.alipay.sofa.smoke.tests.actuator.startup.beans.SampleService");
+        assertThat(serviceBeanStat.getAttribute("interface")).isEqualTo("com.alipay.sofa.smoke.tests.actuator.sample.beans.SampleService");
         assertThat(serviceBeanStat.getAttribute("uniqueId")).isEqualTo("abc");
 
         // test sofa reference
@@ -116,7 +116,7 @@ public class IsleStageStartupReporterTests {
         assertThat(referenceBeanStat).isNotNull();
         assertThat(referenceBeanStat.getRefreshElapsedTime() > 0).isTrue();
         assertThat(referenceBeanStat.getAttribute("classType")).isEqualTo(ReferenceFactoryBean.class.getName());
-        assertThat(referenceBeanStat.getAttribute("interface")).isEqualTo("com.alipay.sofa.smoke.tests.actuator.startup.beans.TestService");
+        assertThat(referenceBeanStat.getAttribute("interface")).isEqualTo("com.alipay.sofa.smoke.tests.actuator.sample.beans.TestService");
 
         // test extension bean
         BeanStat extensionBeanStat = beanStats.stream().filter(beanStat -> beanStat.getBeanClassName().contains("ExtensionFactoryBean")).findFirst().orElse(null);
