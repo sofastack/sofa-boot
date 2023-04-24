@@ -59,12 +59,9 @@ public class SofaBootEnvUtils {
 
     private static boolean      TEST_ENV                                   = false;
 
-    private static boolean      ARK_ENV                                    = false;
-
     static {
         initLocalEnv();
         initSpringTestEnv();
-        initArkEnv();
     }
 
     private static void initSpringTestEnv() {
@@ -90,14 +87,6 @@ public class SofaBootEnvUtils {
             LOCAL_ENV = true;
         } catch (ClassNotFoundException e) {
             LOCAL_ENV = false;
-        }
-    }
-
-    private static void initArkEnv() {
-        ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
-        if (contextClassLoader != null
-            && ARK_BIZ_CLASSLOADER_NAME.equals(contextClassLoader.getClass().getName())) {
-            ARK_ENV = true;
         }
     }
 
@@ -161,7 +150,9 @@ public class SofaBootEnvUtils {
      * @return true indicates in sofa ark environment
      */
     public static boolean isArkEnv() {
-        return ARK_ENV;
+        ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
+        return contextClassLoader != null
+               && ARK_BIZ_CLASSLOADER_NAME.equals(contextClassLoader.getClass().getName());
     }
 
 }
