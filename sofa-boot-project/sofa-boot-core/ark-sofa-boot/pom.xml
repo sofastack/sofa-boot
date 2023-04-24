@@ -28,6 +28,11 @@
 
         <dependency>
             <groupId>com.alipay.sofa</groupId>
+            <artifactId>sofa-ark-springboot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
             <artifactId>sofa-ark-api</artifactId>
         </dependency>
 
@@ -63,7 +68,8 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <activator>com.alipay.sofa.serverless.runtime.ark.activator.ServerlessRuntimeActivator</activator>
+                    <priority>1500</priority>
+                    <activator>com.alipay.sofa.boot.ark.SofaRuntimeActivator</activator>
                     <!-- 配置导出类、资源 -->
                     <exported>
                         <!-- 配置包级别导出的类 -->

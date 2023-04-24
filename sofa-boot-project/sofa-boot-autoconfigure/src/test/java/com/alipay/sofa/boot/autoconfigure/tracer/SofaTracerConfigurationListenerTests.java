@@ -31,7 +31,6 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -47,12 +46,8 @@ public class SofaTracerConfigurationListenerTests {
     private ConfigurableApplicationContext context;
 
     @BeforeEach
-    public void resetSofaTracerConfiguration() throws IllegalAccessException {
-        Field field = ReflectionUtils.findField(SofaTracerConfigurationListener.class, "EXECUTED");
-        ReflectionUtils.makeAccessible(field);
-        ((AtomicBoolean) field.get(null)).set(false);
-
-        field = ReflectionUtils.findField(SofaTracerConfiguration.class, "properties");
+    public void resetSofaTracerConfiguration() {
+        Field field = ReflectionUtils.findField(SofaTracerConfiguration.class, "properties");
         ReflectionUtils.makeAccessible(field);
         ReflectionUtils.setField(field, null, new ConcurrentHashMap<String, Object>());
     }

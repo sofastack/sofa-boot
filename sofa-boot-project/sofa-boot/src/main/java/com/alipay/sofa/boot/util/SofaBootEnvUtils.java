@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.boot.util;
 
-import com.alipay.sofa.boot.constant.SofaBootConstants;
+import org.springframework.cloud.util.PropertyUtils;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.Environment;
@@ -31,24 +31,37 @@ import org.springframework.util.ClassUtils;
  */
 public class SofaBootEnvUtils {
 
-    public static final String  LOCAL_ENV_KEY            = "sofa.boot.useLocalEnv";
+    /**
+     * Property name for bootstrap configuration class name.
+     */
+    public static final String  CLOUD_BOOTSTRAP_CONFIGURATION_CLASS        = "org.springframework.cloud.bootstrap.BootstrapConfiguration";
 
-    public static final String  INTELLIJ_IDE_MAIN_CLASS  = "com.intellij.rt.execution.application.AppMainV2";
+    /**
+     * Boolean if bootstrap configuration class exists.
+     */
+    public static final boolean CLOUD_BOOTSTRAP_CONFIGURATION_CLASS_EXISTS = ClassUtils
+                                                                               .isPresent(
+                                                                                   CLOUD_BOOTSTRAP_CONFIGURATION_CLASS,
+                                                                                   null);
 
-    private static final String SPRING_CLOUD_MARK_NAME   = "org.springframework.cloud.bootstrap.BootstrapConfiguration";
+    /**
+     * Property source name for bootstrap.
+     */
+    public static final String  BOOTSTRAP_PROPERTY_SOURCE_NAME             = "bootstrap";
 
-    private static final String ARK_BIZ_CLASSLOADER_NAME = "com.alipay.sofa.ark.container.service.classloader.BizClassLoader";
+    public static final String  LOCAL_ENV_KEY                              = "sofa.boot.useLocalEnv";
 
-    private static boolean      LOCAL_ENV                = false;
+    public static final String  INTELLIJ_IDE_MAIN_CLASS                    = "com.intellij.rt.execution.application.AppMainV2";
 
-    private static boolean      TEST_ENV                 = false;
+    private static final String ARK_BIZ_CLASSLOADER_NAME                   = "com.alipay.sofa.ark.container.service.classloader.BizClassLoader";
 
-    private static boolean      ARK_ENV                  = false;
+    private static boolean      LOCAL_ENV                                  = false;
+
+    private static boolean      TEST_ENV                                   = false;
 
     static {
         initLocalEnv();
         initSpringTestEnv();
-        initArkEnv();
     }
 
     private static void initSpringTestEnv() {
@@ -77,14 +90,6 @@ public class SofaBootEnvUtils {
         }
     }
 
-    private static void initArkEnv() {
-        ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
-        if (contextClassLoader != null
-            && ARK_BIZ_CLASSLOADER_NAME.equals(contextClassLoader.getClass().getName())) {
-            ARK_ENV = true;
-        }
-    }
-
     /**
      * Determine whether the {@link org.springframework.core.env.Environment} is Spring Cloud bootstrap environment.
      *
@@ -98,12 +103,21 @@ public class SofaBootEnvUtils {
      * @return true indicates Spring Cloud environment
      */
     public static boolean isSpringCloudBootstrapEnvironment(Environment environment) {
-        if (environment instanceof ConfigurableEnvironment) {
-            return !((ConfigurableEnvironment) environment).getPropertySources().contains(
-                SofaBootConstants.SOFA_BOOTSTRAP)
-                   && isSpringCloud();
+        if (environment != null && isSpringCloudEnvironmentEnabled(environment)) {
+            return ((ConfigurableEnvironment) environment).getPropertySources().contains(
+                BOOTSTRAP_PROPERTY_SOURCE_NAME);
+        } else {
+            return false;
         }
-        return false;
+    }
+
+    /**
+     * Check whether spring cloud Bootstrap environment enabled
+     * @return true indicates spring cloud Bootstrap environment enabled
+     */
+    public static boolean isSpringCloudEnvironmentEnabled(Environment environment) {
+        return CLOUD_BOOTSTRAP_CONFIGURATION_CLASS_EXISTS
+               && PropertyUtils.bootstrapEnabled(environment);
     }
 
     /**
@@ -111,7 +125,7 @@ public class SofaBootEnvUtils {
      * @return true indicates spring cloud BootstrapConfiguration is imported
      */
     public static boolean isSpringCloud() {
-        return ClassUtils.isPresent(SPRING_CLOUD_MARK_NAME, null);
+        return CLOUD_BOOTSTRAP_CONFIGURATION_CLASS_EXISTS;
     }
 
     /**
@@ -136,7 +150,9 @@ public class SofaBootEnvUtils {
      * @return true indicates in sofa ark environment
      */
     public static boolean isArkEnv() {
-        return ARK_ENV;
+        ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
+        return contextClassLoader != null
+               && ARK_BIZ_CLASSLOADER_NAME.equals(contextClassLoader.getClass().getName());
     }
 
 }

@@ -28,10 +28,10 @@
         <sofa.common.tools.version>2.0.0-SNAPSHOT</sofa.common.tools.version>
         <sofa.bolt.version>1.6.6</sofa.bolt.version>
         <sofa.hessian.version>3.3.12</sofa.hessian.version>
-        <sofa.ark.version>2.0.6</sofa.ark.version>
+        <sofa.ark.version>2.2.0-SNAPSHOT</sofa.ark.version>
         <sofa.lookout.version>1.6.1</sofa.lookout.version>
         <!--3rd lib dependency-->
-        <spring.cloud.starter.version>4.0.0</spring.cloud.starter.version>
+        <spring.cloud.version>2022.0.0</spring.cloud.version>
         <asm.version>9.4</asm.version>
         <fastjson.version>1.2.83</fastjson.version>
         <javassist.version>3.29.2-GA</javassist.version>
@@ -40,7 +40,6 @@
         <guice.version>5.1.0</guice.version>
         <guava.version>31.1-jre</guava.version>
         <jboss.jaxrs.api.version>1.0.2.Final</jboss.jaxrs.api.version>
-        <spring.cloud.stream.version>3.2.6</spring.cloud.stream.version>
         <rocketmq.spring.boot.starter.version>2.0.2</rocketmq.spring.boot.starter.version>
         <commons.io.version>2.4</commons.io.version>
         <druid.version>1.2.16</druid.version>
@@ -112,6 +111,14 @@
     <dependencyManagement>
 
         <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>2022.0.0</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
             <dependency>
                 <groupId>com.alipay.sofa</groupId>
                 <artifactId>sofa-boot</artifactId>
@@ -503,24 +510,6 @@
                 <version>${grpc.version}</version>
                 <scope>import</scope>
                 <type>pom</type>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-starter-bootstrap</artifactId>
-                <version>${spring.cloud.starter.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-starter-openfeign</artifactId>
-                <version>${spring.cloud.starter.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-stream</artifactId>
-                <version>${spring.cloud.stream.version}</version>
             </dependency>
 
             <dependency>

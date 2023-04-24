@@ -41,11 +41,12 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.StreamSupport;
 
 /**
  * Implementation of {@link ApplicationListener<ApplicationEnvironmentPreparedEvent>} to suit spring cloud environment.
+ * <p> used to register sofa logs properties to spring cloud bootstrap env.
+ * @see org.springframework.cloud.bootstrap.BootstrapApplicationListener
  * 
  * @author qilong.zql
  * @since 3.0.0
@@ -53,8 +54,6 @@ import java.util.stream.StreamSupport;
 public class SpringCloudConfigListener implements
                                       ApplicationListener<ApplicationEnvironmentPreparedEvent>,
                                       Ordered {
-
-    private static final AtomicBoolean     EXECUTED             = new AtomicBoolean(false);
 
     private final static MapPropertySource HIGH_PRIORITY_CONFIG = new MapPropertySource(
                                                                     SofaBootConstants.SOFA_HIGH_PRIORITY_CONFIG,
@@ -82,21 +81,6 @@ public class SpringCloudConfigListener implements
         }
     }
 
-    /**
-     * Mark this environment as SOFA bootstrap environment
-     */
-    private void assemblyEnvironmentMark(ConfigurableEnvironment environment) {
-        environment.getPropertySources().addFirst(
-            new MapPropertySource(SofaBootConstants.SOFA_BOOTSTRAP, new HashMap<>()));
-    }
-
-    /**
-     * Un-Mark this environment as SOFA bootstrap environment
-     */
-    private void unAssemblyEnvironmentMark(ConfigurableEnvironment environment) {
-        environment.getPropertySources().remove(SofaBootConstants.SOFA_BOOTSTRAP);
-    }
-
     @Override
     public int getOrder() {
         return HIGHEST_PRECEDENCE;
@@ -105,45 +89,46 @@ public class SpringCloudConfigListener implements
     @Override
     public void onApplicationEvent(ApplicationEnvironmentPreparedEvent event) {
         ConfigurableEnvironment environment = event.getEnvironment();
-        SpringApplication application = event.getSpringApplication();
-        if (SofaBootEnvUtils.isSpringCloud() && EXECUTED.compareAndSet(false, true)) {
-            StandardEnvironment bootstrapEnvironment = new StandardEnvironment();
-            StreamSupport.stream(environment.getPropertySources().spliterator(), false)
-                    .filter(source->!(source instanceof PropertySource.StubPropertySource))
-                    .forEach(source -> bootstrapEnvironment.getPropertySources().addLast(source));
+        // only work in spring cloud application
+        if (SofaBootEnvUtils.isSpringCloudEnvironmentEnabled(environment)) {
+            if (environment.getPropertySources().contains(SofaBootConstants.SPRING_CLOUD_BOOTSTRAP)) {
+                // in bootstrap application context, add high priority config
+                environment.getPropertySources().addLast(HIGH_PRIORITY_CONFIG);
+            } else {
+                // in application context, build high priority config
+                SpringApplication application = event.getSpringApplication();
+                StandardEnvironment bootstrapEnvironment = new StandardEnvironment();
+                StreamSupport.stream(environment.getPropertySources().spliterator(), false)
+                        .filter(source -> !(source instanceof PropertySource.StubPropertySource))
+                        .forEach(source -> bootstrapEnvironment.getPropertySources().addLast(source));
 
-            List<Class<?>> sources = new ArrayList<>();
-            for (Object s : application.getAllSources()) {
-                if (s instanceof Class) {
-                    sources.add((Class<?>) s);
-                } else if (s instanceof String) {
-                    sources.add(ClassUtils.resolveClassName((String) s, null));
+                List<Class<?>> sources = new ArrayList<>();
+                for (Object s : application.getAllSources()) {
+                    if (s instanceof Class) {
+                        sources.add((Class<?>) s);
+                    } else if (s instanceof String) {
+                        sources.add(ClassUtils.resolveClassName((String) s, null));
+                    }
                 }
+
+                SpringApplication bootstrapApplication = new SpringApplicationBuilder()
+                        .profiles(environment.getActiveProfiles()).bannerMode(Banner.Mode.OFF)
+                        .environment(bootstrapEnvironment).sources(sources.toArray(new Class[]{}))
+                        .registerShutdownHook(false).logStartupInfo(false).web(WebApplicationType.NONE)
+                        .listeners().initializers().build(event.getArgs());
+
+                ConfigurableBootstrapContext bootstrapContext = event.getBootstrapContext();
+                ApplicationEnvironmentPreparedEvent bootstrapEvent = new ApplicationEnvironmentPreparedEvent(
+                        bootstrapContext, bootstrapApplication, event.getArgs(), bootstrapEnvironment);
+
+                application.getListeners().stream()
+                        .filter(listener -> listener instanceof EnvironmentPostProcessorApplicationListener)
+                        .forEach(listener -> ((EnvironmentPostProcessorApplicationListener) listener)
+                                .onApplicationEvent(bootstrapEvent));
+
+                assemblyLogSetting(bootstrapEnvironment);
+                assemblyRequireProperties(bootstrapEnvironment);
             }
-
-            SpringApplication bootstrapApplication = new SpringApplicationBuilder()
-                    .profiles(environment.getActiveProfiles()).bannerMode(Banner.Mode.OFF)
-                    .environment(bootstrapEnvironment).sources(sources.toArray(new Class[] {}))
-                    .registerShutdownHook(false).logStartupInfo(false).web(WebApplicationType.NONE)
-                    .listeners().initializers().build(event.getArgs());
-
-            ConfigurableBootstrapContext bootstrapContext = event.getBootstrapContext();
-            ApplicationEnvironmentPreparedEvent bootstrapEvent = new ApplicationEnvironmentPreparedEvent(
-                    bootstrapContext, bootstrapApplication, event.getArgs(), bootstrapEnvironment);
-
-            application.getListeners().stream()
-                    .filter(listener -> listener instanceof EnvironmentPostProcessorApplicationListener)
-                    .forEach(listener -> ((EnvironmentPostProcessorApplicationListener) listener)
-                            .onApplicationEvent(bootstrapEvent));
-
-            assemblyLogSetting(bootstrapEnvironment);
-            assemblyRequireProperties(bootstrapEnvironment);
-            assemblyEnvironmentMark(environment);
-        } else {
-            unAssemblyEnvironmentMark(environment);
-        }
-        if (environment.getPropertySources().contains(SofaBootConstants.SPRING_CLOUD_BOOTSTRAP)) {
-            environment.getPropertySources().addLast(HIGH_PRIORITY_CONFIG);
         }
     }
 }
