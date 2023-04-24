@@ -17,6 +17,7 @@
 package com.alipay.sofa.boot.actuator.autoconfigure.rpc;
 
 import com.alipay.sofa.boot.actuator.rpc.RpcAfterHealthCheckCallback;
+import com.alipay.sofa.boot.actuator.rpc.SofaRpcEndPoint;
 import com.alipay.sofa.rpc.boot.context.RpcStartApplicationListener;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
@@ -38,14 +39,15 @@ public class RpcActuatorAutoConfigurationTests {
                                                                  AutoConfigurations
                                                                      .of(RpcActuatorAutoConfiguration.class))
                                                              .withPropertyValues(
-                                                                 "management.endpoints.web.exposure.include=readiness");
+                                                                 "management.endpoints.web.exposure.include=readiness,rpc");
 
     @Test
     void runShouldHaveRpcActuatorBeans() {
         this.contextRunner
                 .withBean(RpcStartApplicationListener.class)
                 .run((context) -> assertThat(context)
-                        .hasSingleBean(RpcAfterHealthCheckCallback.class));
+                        .hasSingleBean(RpcAfterHealthCheckCallback.class)
+                        .hasSingleBean(SofaRpcEndPoint.class));
     }
 
     @Test
@@ -54,7 +56,8 @@ public class RpcActuatorAutoConfigurationTests {
                 .withBean(RpcStartApplicationListener.class)
                 .withPropertyValues("management.endpoints.web.exposure.include=info")
                 .run((context) -> assertThat(context)
-                        .doesNotHaveBean(RpcAfterHealthCheckCallback.class));
+                        .doesNotHaveBean(RpcAfterHealthCheckCallback.class)
+                        .doesNotHaveBean(SofaRpcEndPoint.class));
     }
 
     @Test
@@ -63,13 +66,15 @@ public class RpcActuatorAutoConfigurationTests {
                 .withBean(RpcStartApplicationListener.class)
                 .withClassLoader(new FilteredClassLoader(RpcStartApplicationListener.class))
                 .run((context) -> assertThat(context)
-                        .doesNotHaveBean(RpcAfterHealthCheckCallback.class));
+                        .doesNotHaveBean(RpcAfterHealthCheckCallback.class)
+                        .doesNotHaveBean(SofaRpcEndPoint.class));
     }
 
     @Test
     void runWhenRpcBeanNotExist() {
         this.contextRunner
                 .run((context) -> assertThat(context)
-                        .doesNotHaveBean(RpcAfterHealthCheckCallback.class));
+                        .doesNotHaveBean(RpcAfterHealthCheckCallback.class)
+                        .doesNotHaveBean(SofaRpcEndPoint.class));
     }
 }

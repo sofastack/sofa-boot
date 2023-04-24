@@ -14,24 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.smoke.tests.actuator.startup.beans;
+package com.alipay.sofa.smoke.tests.actuator.sample.beans;
 
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.alipay.sofa.common.xmap.annotation.XNode;
+import com.alipay.sofa.common.xmap.annotation.XObject;
 
 /**
  * @author huzijie
- * @version FatherBean.java, v 0.1 2021年01月04日 9:28 下午 huzijie Exp $
+ * @version ExtensionDescriptor.java, v 0.1 2021年01月05日 11:18 上午 huzijie Exp $
  */
-public class ParentBean implements InitializingBean {
+@XObject("word")
+public class ExtensionDescriptor {
 
-    public static final int PARENT_INIT_TIME = 30;
+    @XNode("value")
+    private String value;
 
-    @Autowired
-    private ChildBean       childBean;
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        Thread.sleep(PARENT_INIT_TIME);
+    public String getValue() {
+        return value;
     }
 }

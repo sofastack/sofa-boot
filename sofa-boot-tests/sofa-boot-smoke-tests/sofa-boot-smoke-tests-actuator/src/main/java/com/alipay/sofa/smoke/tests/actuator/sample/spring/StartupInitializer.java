@@ -14,20 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.smoke.tests.actuator.startup.beans;
+package com.alipay.sofa.smoke.tests.actuator.sample.spring;
 
-import org.springframework.beans.factory.InitializingBean;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
 
 /**
- * @author Zhijie
- * @since 2020/7/13
+ * @author huzijie
+ * @version StartupInitializer.java, v 0.1 2022年03月14日 2:41 PM huzijie Exp $
  */
-public class InitCostBean implements InitializingBean {
-
-    public static final long INIT_COST_TIME = 120L;
+public class StartupInitializer implements
+                               ApplicationContextInitializer<ConfigurableApplicationContext> {
 
     @Override
-    public void afterPropertiesSet() throws Exception {
-        Thread.sleep(INIT_COST_TIME);
+    public void initialize(ConfigurableApplicationContext applicationContext) {
+        try {
+            Thread.sleep(10);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

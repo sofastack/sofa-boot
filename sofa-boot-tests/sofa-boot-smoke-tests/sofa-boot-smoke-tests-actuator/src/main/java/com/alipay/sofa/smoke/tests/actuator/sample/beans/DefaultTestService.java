@@ -14,17 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.smoke.tests.actuator.startup.beans;
+package com.alipay.sofa.smoke.tests.actuator.sample.beans;
 
 /**
  * @author huzijie
- * @version ChildBean.java, v 0.1 2021年01月04日 9:14 下午 huzijie Exp $
+ * @version DefaultTestService.java, v 0.1 2023年01月04日 5:09 PM huzijie Exp $
  */
-public class ChildBean {
+public class DefaultTestService implements TestService {
+    @Override
+    public void test() {
 
-    public static final int CHILD_INIT_TIME = 50;
-
-    public void init() throws InterruptedException {
-        Thread.sleep(CHILD_INIT_TIME);
     }
 }

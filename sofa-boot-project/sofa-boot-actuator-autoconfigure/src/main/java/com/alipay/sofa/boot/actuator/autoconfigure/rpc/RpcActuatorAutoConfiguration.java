@@ -18,6 +18,7 @@ package com.alipay.sofa.boot.actuator.autoconfigure.rpc;
 
 import com.alipay.sofa.boot.actuator.health.ReadinessEndpoint;
 import com.alipay.sofa.boot.actuator.rpc.RpcAfterHealthCheckCallback;
+import com.alipay.sofa.boot.actuator.rpc.SofaRpcEndPoint;
 import com.alipay.sofa.boot.autoconfigure.rpc.SofaRpcAutoConfiguration;
 import com.alipay.sofa.rpc.boot.context.RpcStartApplicationListener;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
@@ -37,12 +38,19 @@ import org.springframework.context.annotation.Bean;
 @AutoConfiguration(after = SofaRpcAutoConfiguration.class)
 @ConditionalOnClass(RpcStartApplicationListener.class)
 @ConditionalOnBean(RpcStartApplicationListener.class)
-@ConditionalOnAvailableEndpoint(endpoint = ReadinessEndpoint.class)
 public class RpcActuatorAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
+    @ConditionalOnAvailableEndpoint(endpoint = ReadinessEndpoint.class)
     public RpcAfterHealthCheckCallback rpcAfterHealthCheckCallback(RpcStartApplicationListener rpcStartApplicationListener) {
         return new RpcAfterHealthCheckCallback(rpcStartApplicationListener);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    @ConditionalOnAvailableEndpoint(endpoint = SofaRpcEndPoint.class)
+    public SofaRpcEndPoint sofaRpcEndPoint() {
+        return new SofaRpcEndPoint();
     }
 }

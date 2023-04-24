@@ -14,22 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.smoke.tests.actuator.startup.beans;
-
-import com.alipay.sofa.common.xmap.annotation.XNode;
-import com.alipay.sofa.common.xmap.annotation.XObject;
+package com.alipay.sofa.smoke.tests.actuator.sample.beans;
 
 /**
  * @author huzijie
- * @version ExtensionDescriptor.java, v 0.1 2021年01月05日 11:18 上午 huzijie Exp $
+ * @version ChildBean.java, v 0.1 2021年01月04日 9:14 下午 huzijie Exp $
  */
-@XObject("word")
-public class ExtensionDescriptor {
+public class ChildBean {
 
-    @XNode("value")
-    private String value;
+    public static final int CHILD_INIT_TIME = 50;
 
-    public String getValue() {
-        return value;
+    public void init() throws InterruptedException {
+        Thread.sleep(CHILD_INIT_TIME);
     }
 }

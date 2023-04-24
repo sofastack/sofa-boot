@@ -24,7 +24,7 @@ import com.alipay.sofa.boot.startup.ModuleStat;
 import com.alipay.sofa.boot.startup.StartupReporter;
 import com.alipay.sofa.boot.startup.StartupSmartLifecycle;
 import com.alipay.sofa.smoke.tests.actuator.ActuatorSofaBootApplication;
-import com.alipay.sofa.smoke.tests.actuator.startup.beans.InitCostBean;
+import com.alipay.sofa.smoke.tests.actuator.sample.beans.InitCostBean;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
