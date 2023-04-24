@@ -1,3 +1,19 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.alipay.sofa.boot.actuator.rpc;
 
 import com.alipay.sofa.rpc.bootstrap.ConsumerBootstrap;
@@ -34,7 +50,8 @@ public class SofaRpcEndPoint {
         List<ProviderDescriptor> providerDescriptors = getProviderDescriptors();
         List<ConsumerDescriptor> consumerDescriptors = getConsumerDescriptors();
         List<RegistryDescriptor> registryDescriptors = getRegistryDescriptors();
-        return new RpcServicesDescriptor(providerDescriptors, consumerDescriptors, registryDescriptors);
+        return new RpcServicesDescriptor(providerDescriptors, consumerDescriptors,
+            registryDescriptors);
     }
 
     @SuppressWarnings("rawtypes")
@@ -97,7 +114,7 @@ public class SofaRpcEndPoint {
     }
 
     protected RegistryDescriptor createRegistryDescriptor(RegistryConfig registryConfig) {
-        String protocol =  registryConfig.getProtocol();
+        String protocol = registryConfig.getProtocol();
         String address = registryConfig.getAddress();
         String index = registryConfig.getIndex();
         return new RegistryDescriptor(protocol, address, index);
@@ -118,9 +135,9 @@ public class SofaRpcEndPoint {
         private RpcServicesDescriptor(List<ProviderDescriptor> providerDescriptors,
                                       List<ConsumerDescriptor> consumerDescriptors,
                                       List<RegistryDescriptor> registryDescriptors) {
-           this.providers = providerDescriptors;
-           this.consumers = consumerDescriptors;
-           this.registries = registryDescriptors;
+            this.providers = providerDescriptors;
+            this.consumers = consumerDescriptors;
+            this.registries = registryDescriptors;
         }
 
         public List<ProviderDescriptor> getProvider() {
@@ -142,23 +159,25 @@ public class SofaRpcEndPoint {
      */
     public static class ProviderDescriptor {
 
-        protected final String interfaceId;
+        protected final String              interfaceId;
 
-        protected final String uniqueId;
+        protected final String              uniqueId;
 
-        protected final List<String> protocols;
+        protected final List<String>        protocols;
 
-        protected final List<String> registries;
+        protected final List<String>        registries;
 
-        protected final String serialization;
+        protected final String              serialization;
 
-        protected final boolean register;
+        protected final boolean             register;
 
-        protected final String targetClassName;
+        protected final String              targetClassName;
 
         protected final Map<String, Object> extraInfos = new HashMap<>();
 
-        public ProviderDescriptor(String interfaceId, String uniqueId, List<String> protocols, List<String> registries, String serialization, boolean register, String targetClassName) {
+        public ProviderDescriptor(String interfaceId, String uniqueId, List<String> protocols,
+                                  List<String> registries, String serialization, boolean register,
+                                  String targetClassName) {
             this.interfaceId = interfaceId;
             this.uniqueId = uniqueId;
             this.protocols = protocols;
@@ -206,29 +225,31 @@ public class SofaRpcEndPoint {
      */
     public static class ConsumerDescriptor {
 
-        protected final String interfaceId;
+        protected final String              interfaceId;
 
-        protected final String uniqueId;
+        protected final String              uniqueId;
 
-        protected final String protocol;
+        protected final String              protocol;
 
-        protected final List<String> registries;
+        protected final List<String>        registries;
 
-        protected final String serialization;
+        protected final String              serialization;
 
-        protected final String directUrl;
+        protected final String              directUrl;
 
-        protected final String invokeType;
+        protected final String              invokeType;
 
-        protected final boolean subscribe;
+        protected final boolean             subscribe;
 
-        protected final int timeout;
+        protected final int                 timeout;
 
-        protected final int retries;
+        protected final int                 retries;
 
         protected final Map<String, Object> extraInfos = new HashMap<>();
 
-        public ConsumerDescriptor(String interfaceId, String uniqueId, String protocol, List<String> registries, String serialization, String directUrl, String invokeType, boolean subscribe, int timeout, int retries) {
+        public ConsumerDescriptor(String interfaceId, String uniqueId, String protocol,
+                                  List<String> registries, String serialization, String directUrl,
+                                  String invokeType, boolean subscribe, int timeout, int retries) {
             this.interfaceId = interfaceId;
             this.uniqueId = uniqueId;
             this.protocol = protocol;
@@ -291,11 +312,11 @@ public class SofaRpcEndPoint {
      */
     public static class RegistryDescriptor {
 
-        protected final String                protocol;
+        protected final String protocol;
 
-        protected final String                address;
+        protected final String address;
 
-        protected final String                index;
+        protected final String index;
 
         public RegistryDescriptor(String protocol, String address, String index) {
             this.protocol = protocol;
