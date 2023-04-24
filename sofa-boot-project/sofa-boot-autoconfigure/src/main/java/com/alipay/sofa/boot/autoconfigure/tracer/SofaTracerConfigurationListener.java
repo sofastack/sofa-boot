@@ -18,17 +18,15 @@ package com.alipay.sofa.boot.autoconfigure.tracer;
 
 import com.alipay.common.tracer.core.configuration.SofaTracerConfiguration;
 import com.alipay.sofa.boot.constant.SofaBootConstants;
+import com.alipay.sofa.boot.util.SofaBootEnvUtils;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
 import org.springframework.boot.context.properties.bind.Bindable;
 import org.springframework.boot.context.properties.bind.Binder;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.core.env.Environment;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
-
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Parse SOFATracer Configuration in early stage.
@@ -42,11 +40,9 @@ public class SofaTracerConfigurationListener
                                             ApplicationListener<ApplicationEnvironmentPreparedEvent>,
                                             Ordered {
 
-    private static final AtomicBoolean EXECUTED = new AtomicBoolean(false);
-
     @Override
     public void onApplicationEvent(ApplicationEnvironmentPreparedEvent event) {
-        if (!EXECUTED.compareAndSet(false, true)) {
+        if (SofaBootEnvUtils.isSpringCloudBootstrapEnvironment(event.getEnvironment())) {
             return;
         }
 
@@ -107,14 +103,5 @@ public class SofaTracerConfigurationListener
     @Override
     public int getOrder() {
         return HIGHEST_PRECEDENCE + 30;
-    }
-
-    private boolean isSpringCloudBootstrapEnvironment(Environment environment) {
-        if (!(environment instanceof ConfigurableEnvironment)) {
-            return false;
-        } else {
-            return !((ConfigurableEnvironment) environment).getPropertySources().contains(
-                SofaBootConstants.SOFA_BOOTSTRAP);
-        }
     }
 }
