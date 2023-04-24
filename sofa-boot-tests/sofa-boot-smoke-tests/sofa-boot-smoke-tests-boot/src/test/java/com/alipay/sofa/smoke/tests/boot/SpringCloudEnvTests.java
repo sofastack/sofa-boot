@@ -46,6 +46,8 @@ public class SpringCloudEnvTests {
         assertThat(SampleSpringContextInitializer.bootstrapContext.get()).isEqualTo(1L);
         assertThat(SampleSpringContextInitializer.applicationContext.get()).isEqualTo(1L);
         assertThat(SofaBootEnvUtils.isSpringCloudBootstrapEnvironment(null)).isFalse();
+        assertThat(SofaBootEnvUtils.isSpringCloud()).isTrue();
+        assertThat(SofaBootEnvUtils.isSpringCloudEnvironmentEnabled(environment)).isTrue();
         assertThat("smoke-tests-boot").isEqualTo(
             SampleSpringContextInitializer.bootstrapEnvironment
                 .getProperty(SofaBootConstants.APP_NAME_KEY));
