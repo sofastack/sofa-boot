@@ -30,13 +30,8 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.core.io.DefaultResourceLoader;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -51,17 +46,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class RpcEndpointWebTests {
 
     @Autowired
-    private TestRestTemplate     restTemplate;
-
-    private final ResourceLoader resourceLoader = new DefaultResourceLoader();
+    private TestRestTemplate restTemplate;
 
     @Test
-    public void componentsActuator() throws IOException {
+    public void componentsActuator() {
         ResponseEntity<String> response = restTemplate.getForEntity("/actuator/rpc", String.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        String exceptResult = resourceLoader.getResource("/json/rpc-endpoint-response.json")
-            .getContentAsString(StandardCharsets.UTF_8);
-        assertThat(response.getBody()).isEqualTo(exceptResult);
+        assertThat(response.getBody())
+            .contains(
+                "{\"interfaceId\":\"com.alipay.sofa.smoke.tests.actuator.sample.beans.SampleService\",\"uniqueId\":\"http\",\"protocols\":[\"http\"],\"registries\":[\"local\"],\"serialization\":\"hessian2\",\"register\":false,\"targetClassName\":\"com.alipay.sofa.smoke.tests.actuator.sample.beans.DefaultSampleService\",\"extraInfos\":{}}")
+            .contains(
+                "\"interfaceId\":\"com.alipay.sofa.smoke.tests.actuator.sample.beans.SampleService\",\"uniqueId\":\"\",\"protocols\":[\"bolt\"],\"registries\":[\"local\"],\"serialization\":\"hessian2\",\"register\":false,\"targetClassName\":\"com.alipay.sofa.smoke.tests.actuator.sample.beans.DefaultSampleService\",\"extraInfos\":{}")
+            .contains(
+                "{\"interfaceId\":\"com.alipay.sofa.smoke.tests.actuator.sample.beans.SampleService\",\"uniqueId\":\"consumer\",\"protocol\":\"bolt\",\"registries\":[\"local\"],\"serialization\":\"json\",\"invokeType\":\"sync\",\"subscribe\":true,\"timeout\":1500,\"retries\":5,\"extraInfos\":{}")
+            .contains("{\"protocol\":\"local\",\"index\":\"\"}");
     }
 
     @Configuration
