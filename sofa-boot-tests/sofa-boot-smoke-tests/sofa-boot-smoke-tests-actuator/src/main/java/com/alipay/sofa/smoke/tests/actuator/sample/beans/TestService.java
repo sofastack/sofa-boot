@@ -14,20 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.smoke.tests.actuator.startup.beans;
-
-import org.springframework.beans.factory.InitializingBean;
+package com.alipay.sofa.smoke.tests.actuator.sample.beans;
 
 /**
- * @author Zhijie
- * @since 2020/7/13
+ * @author huzijie
+ * @version TestService.java, v 0.1 2021年01月05日 10:30 上午 huzijie Exp $
  */
-public class InitCostBean implements InitializingBean {
+public interface TestService {
 
-    public static final long INIT_COST_TIME = 120L;
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        Thread.sleep(INIT_COST_TIME);
-    }
+    void test();
 }

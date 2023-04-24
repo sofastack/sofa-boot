@@ -14,17 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.smoke.tests.actuator.startup.beans;
+package com.alipay.sofa.smoke.tests.actuator.sample.beans;
+
+import org.springframework.beans.factory.InitializingBean;
 
 /**
- * @author huzijie
- * @version ChildBean.java, v 0.1 2021年01月04日 9:14 下午 huzijie Exp $
+ * @author Zhijie
+ * @since 2020/7/13
  */
-public class ChildBean {
+public class InitCostBean implements InitializingBean {
 
-    public static final int CHILD_INIT_TIME = 50;
+    public static final long INIT_COST_TIME = 120L;
 
-    public void init() throws InterruptedException {
-        Thread.sleep(CHILD_INIT_TIME);
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        Thread.sleep(INIT_COST_TIME);
     }
 }

@@ -54,7 +54,7 @@ public class InitializerStartupReporterTests {
         assertThat(applicationContextPrepareStage).isNotNull();
         List<BaseStat> baseStatList = applicationContextPrepareStage.getChildren();
         assertThat(baseStatList.isEmpty()).isFalse();
-        assertThat(baseStatList.stream().filter(stat -> stat.getName().equals("com.alipay.sofa.smoke.tests.actuator.startup.spring.StartupInitializer")).findFirst().get()
+        assertThat(baseStatList.stream().filter(stat -> stat.getName().equals("com.alipay.sofa.smoke.tests.actuator.sample.spring.StartupInitializer")).findFirst().get()
                 .getCost() >= 10).isTrue();
     }
 }

@@ -14,15 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.smoke.tests.actuator.startup.beans;
+package com.alipay.sofa.smoke.tests.actuator.sample.beans;
 
 /**
- * @author huzijie
- * @version DefaultTestService.java, v 0.1 2023年01月04日 5:09 PM huzijie Exp $
+ * @author Zhijie
+ * @since 2020/7/13
  */
-public class DefaultTestService implements TestService {
-    @Override
-    public void test() {
+public class DefaultSampleService implements SampleService {
 
+    protected String message;
+
+    public DefaultSampleService() {
+        this("init");
+    }
+
+    public DefaultSampleService(String message) {
+        this.message = message;
+    }
+
+    @Override
+    public String service() {
+        return message;
     }
 }

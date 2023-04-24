@@ -14,24 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.smoke.tests.actuator.startup.spring;
+package com.alipay.sofa.smoke.tests.actuator.sample.beans;
 
-import org.springframework.context.ApplicationContextInitializer;
-import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author huzijie
- * @version StartupInitializer.java, v 0.1 2022年03月14日 2:41 PM huzijie Exp $
+ * @version FatherBean.java, v 0.1 2021年01月04日 9:28 下午 huzijie Exp $
  */
-public class StartupInitializer implements
-                               ApplicationContextInitializer<ConfigurableApplicationContext> {
+public class ParentBean implements InitializingBean {
+
+    public static final int PARENT_INIT_TIME = 30;
+
+    @Autowired
+    private ChildBean       childBean;
 
     @Override
-    public void initialize(ConfigurableApplicationContext applicationContext) {
-        try {
-            Thread.sleep(10);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    public void afterPropertiesSet() throws Exception {
+        Thread.sleep(PARENT_INIT_TIME);
     }
 }

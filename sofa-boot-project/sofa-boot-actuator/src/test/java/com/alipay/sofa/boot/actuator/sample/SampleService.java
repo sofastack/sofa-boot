@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.smoke.tests.actuator.startup.beans;
+package com.alipay.sofa.boot.actuator.sample;
 
 /**
  * @author huzijie
- * @version TestService.java, v 0.1 2021年01月05日 10:30 上午 huzijie Exp $
+ * @version SampleService.java, v 0.1 2023年04月24日 10:58 AM huzijie Exp $
  */
-public interface TestService {
+public interface SampleService {
 
-    void test();
+    String hello();
 }

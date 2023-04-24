@@ -28,9 +28,9 @@ import com.alipay.sofa.runtime.ext.spring.ExtensionPointFactoryBean;
 import com.alipay.sofa.runtime.spring.factory.ReferenceFactoryBean;
 import com.alipay.sofa.runtime.spring.factory.ServiceFactoryBean;
 import com.alipay.sofa.smoke.tests.actuator.ActuatorSofaBootApplication;
-import com.alipay.sofa.smoke.tests.actuator.startup.beans.ChildBean;
-import com.alipay.sofa.smoke.tests.actuator.startup.beans.InitCostBean;
-import com.alipay.sofa.smoke.tests.actuator.startup.beans.ParentBean;
+import com.alipay.sofa.smoke.tests.actuator.sample.beans.ChildBean;
+import com.alipay.sofa.smoke.tests.actuator.sample.beans.InitCostBean;
+import com.alipay.sofa.smoke.tests.actuator.sample.beans.ParentBean;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -108,7 +108,7 @@ public class IsleStageStartupReporterTests {
         assertThat(serviceBeanStat).isNotNull();
         assertThat(serviceBeanStat.getRefreshElapsedTime() > 0).isTrue();
         assertThat(serviceBeanStat.getAttribute("classType")).isEqualTo(ServiceFactoryBean.class.getName());
-        assertThat(serviceBeanStat.getAttribute("interface")).isEqualTo("com.alipay.sofa.smoke.tests.actuator.startup.beans.SampleService");
+        assertThat(serviceBeanStat.getAttribute("interface")).isEqualTo("com.alipay.sofa.smoke.tests.actuator.sample.beans.SampleService");
         assertThat(serviceBeanStat.getAttribute("uniqueId")).isEqualTo("abc");
 
         // test sofa reference
@@ -116,7 +116,7 @@ public class IsleStageStartupReporterTests {
         assertThat(referenceBeanStat).isNotNull();
         assertThat(referenceBeanStat.getRefreshElapsedTime() > 0).isTrue();
         assertThat(referenceBeanStat.getAttribute("classType")).isEqualTo(ReferenceFactoryBean.class.getName());
-        assertThat(referenceBeanStat.getAttribute("interface")).isEqualTo("com.alipay.sofa.smoke.tests.actuator.startup.beans.TestService");
+        assertThat(referenceBeanStat.getAttribute("interface")).isEqualTo("com.alipay.sofa.smoke.tests.actuator.sample.beans.TestService");
 
         // test extension bean
         BeanStat extensionBeanStat = beanStats.stream().filter(beanStat -> beanStat.getBeanClassName().contains("ExtensionFactoryBean")).findFirst().orElse(null);
