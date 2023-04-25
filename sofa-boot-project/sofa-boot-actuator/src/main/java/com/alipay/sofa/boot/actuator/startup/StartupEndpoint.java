@@ -28,11 +28,11 @@ import org.springframework.boot.actuate.endpoint.annotation.WriteOperation;
  * @since 2020/7/7
  */
 @Endpoint(id = "startup")
-public class StartupEndPoint {
+public class StartupEndpoint {
 
     private final StartupReporter startupReporter;
 
-    public StartupEndPoint(StartupReporter startupReporter) {
+    public StartupEndpoint(StartupReporter startupReporter) {
         this.startupReporter = startupReporter;
     }
 

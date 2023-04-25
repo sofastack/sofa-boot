@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.smoke.tests.actuator.components;
 
-import com.alipay.sofa.boot.actuator.components.ComponentsEndPoint;
+import com.alipay.sofa.boot.actuator.components.ComponentsEndpoint;
 import com.alipay.sofa.smoke.tests.actuator.ActuatorSofaBootApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ import org.springframework.http.ResponseEntity;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Integration tests for {@link ComponentsEndPoint} web response.
+ * Integration tests for {@link ComponentsEndpoint} web response.
  *
  * @author huzijie
  * @version ComponentsEndpointWebTests.java, v 0.1 2022年03月17日 4:46 PM huzijie Exp $

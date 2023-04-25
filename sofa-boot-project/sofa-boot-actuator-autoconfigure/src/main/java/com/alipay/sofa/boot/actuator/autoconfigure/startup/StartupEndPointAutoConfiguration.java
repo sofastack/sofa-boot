@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.boot.actuator.autoconfigure.startup;
 
-import com.alipay.sofa.boot.actuator.startup.StartupEndPoint;
+import com.alipay.sofa.boot.actuator.startup.StartupEndpoint;
 import com.alipay.sofa.boot.startup.StartupReporter;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.boot.actuate.autoconfigure.startup.StartupEndpointAutoConfiguration;
@@ -28,20 +28,20 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 
 /**
- * {@link EnableAutoConfiguration Auto-configuration} for {@link StartupEndPoint}.
+ * {@link EnableAutoConfiguration Auto-configuration} for {@link StartupEndpoint}.
  *
  * @author Zhijie
  * @since 2020/7/7
  */
 @AutoConfiguration(before = StartupEndpointAutoConfiguration.class)
 @ConditionalOnBean(StartupReporter.class)
-@ConditionalOnAvailableEndpoint(endpoint = StartupEndPoint.class)
+@ConditionalOnAvailableEndpoint(endpoint = StartupEndpoint.class)
 @EnableConfigurationProperties(StartupProperties.class)
 public class StartupEndPointAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public StartupEndPoint startupEndpoint(StartupReporter startupReporter) {
-        return new StartupEndPoint(startupReporter);
+    public StartupEndpoint startupEndpoint(StartupReporter startupReporter) {
+        return new StartupEndpoint(startupReporter);
     }
 }

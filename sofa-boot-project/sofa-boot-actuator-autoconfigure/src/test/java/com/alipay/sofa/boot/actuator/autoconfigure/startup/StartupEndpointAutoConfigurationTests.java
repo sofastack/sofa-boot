@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.boot.actuator.autoconfigure.startup;
 
-import com.alipay.sofa.boot.actuator.startup.StartupEndPoint;
+import com.alipay.sofa.boot.actuator.startup.StartupEndpoint;
 import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.boot.startup.StartupReporter;
 import org.junit.jupiter.api.Test;
@@ -47,21 +47,21 @@ public class StartupEndpointAutoConfigurationTests {
         this.contextRunner
                 .withBean(StartupReporter.class)
                 .withPropertyValues("management.endpoints.web.exposure.include=startup")
-                .run((context) -> assertThat(context).hasSingleBean(StartupEndPoint.class));
+                .run((context) -> assertThat(context).hasSingleBean(StartupEndpoint.class));
     }
 
     @Test
     void runWhenNotStartupReporterBeanShouldNotHaveEndpointBean() {
         this.contextRunner
                 .withPropertyValues("management.endpoints.web.exposure.include=startup")
-                .run((context) -> assertThat(context).doesNotHaveBean(StartupEndPoint.class));
+                .run((context) -> assertThat(context).doesNotHaveBean(StartupEndpoint.class));
     }
 
     @Test
     void runWhenNotExposedShouldNotHaveEndpointBean() {
         this.contextRunner
                 .withBean(StartupReporter.class)
-                .run((context) -> assertThat(context).doesNotHaveBean(StartupEndPoint.class));
+                .run((context) -> assertThat(context).doesNotHaveBean(StartupEndpoint.class));
     }
 
     @Test
@@ -70,7 +70,7 @@ public class StartupEndpointAutoConfigurationTests {
                 .withBean(StartupReporter.class)
                 .withPropertyValues("management.endpoint.startup.enabled:false")
                 .withPropertyValues("management.endpoints.web.exposure.include=*")
-                .run((context) -> assertThat(context).doesNotHaveBean(StartupEndPoint.class));
+                .run((context) -> assertThat(context).doesNotHaveBean(StartupEndpoint.class));
     }
 
     @Test

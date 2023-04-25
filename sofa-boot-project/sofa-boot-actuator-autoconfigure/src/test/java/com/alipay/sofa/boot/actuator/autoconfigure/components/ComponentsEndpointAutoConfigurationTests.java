@@ -17,7 +17,7 @@
 package com.alipay.sofa.boot.actuator.autoconfigure.components;
 
 import com.alipay.sofa.boot.actuator.autoconfigure.beans.IsleBeansEndpointAutoConfiguration;
-import com.alipay.sofa.boot.actuator.components.ComponentsEndPoint;
+import com.alipay.sofa.boot.actuator.components.ComponentsEndpoint;
 import com.alipay.sofa.boot.autoconfigure.runtime.SofaRuntimeAutoConfiguration;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import org.junit.jupiter.api.Test;
@@ -43,24 +43,24 @@ public class ComponentsEndpointAutoConfigurationTests {
     @Test
     void runShouldHaveEndpointBean() {
         this.contextRunner.withPropertyValues("management.endpoints.web.exposure.include=components")
-                .run((context) -> assertThat(context).hasSingleBean(ComponentsEndPoint.class));
+                .run((context) -> assertThat(context).hasSingleBean(ComponentsEndpoint.class));
     }
 
     @Test
     void runWhenNotExposedShouldNotHaveEndpointBean() {
-        this.contextRunner.run((context) -> assertThat(context).doesNotHaveBean(ComponentsEndPoint.class));
+        this.contextRunner.run((context) -> assertThat(context).doesNotHaveBean(ComponentsEndpoint.class));
     }
 
     @Test
     void runWhenNotExposedShouldNotHaveIsleClass() {
         this.contextRunner.withClassLoader(new FilteredClassLoader(SofaRuntimeContext.class))
-                .run((context) -> assertThat(context).doesNotHaveBean(ComponentsEndPoint.class));
+                .run((context) -> assertThat(context).doesNotHaveBean(ComponentsEndpoint.class));
     }
 
     @Test
     void runWhenEnabledPropertyIsFalseShouldNotHaveEndpointBean() {
         this.contextRunner.withPropertyValues("management.endpoint.components.enabled:false")
                 .withPropertyValues("management.endpoints.web.exposure.include=*")
-                .run((context) -> assertThat(context).doesNotHaveBean(ComponentsEndPoint.class));
+                .run((context) -> assertThat(context).doesNotHaveBean(ComponentsEndpoint.class));
     }
 }

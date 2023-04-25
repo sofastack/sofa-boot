@@ -34,10 +34,10 @@ import java.util.stream.Collectors;
  * {@link Endpoint @Endpoint} to expose details of components registered in {@link SofaRuntimeContext}.
  *
  * @author huzijie
- * @version SofaBootComponentsEndPoint.java, v 0.1 2022年03月17日 3:55 PM huzijie Exp $
+ * @version ComponentsEndpoint.java, v 0.1 2022年03月17日 3:55 PM huzijie Exp $
  */
 @Endpoint(id = "components")
-public class ComponentsEndPoint {
+public class ComponentsEndpoint {
 
     private final SofaRuntimeContext sofaRuntimeContext;
 
@@ -46,7 +46,7 @@ public class ComponentsEndPoint {
      *
      * @param sofaRuntimeContext the sofa runtime context
      */
-    public ComponentsEndPoint(SofaRuntimeContext sofaRuntimeContext) {
+    public ComponentsEndpoint(SofaRuntimeContext sofaRuntimeContext) {
         this.sofaRuntimeContext = sofaRuntimeContext;
     }
 

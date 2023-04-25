@@ -26,11 +26,11 @@ import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
  * Created on 2020/11/17
  */
 @Endpoint(id = "triggerReadinessCallback")
-public class ManualReadinessCallbackEndPoint {
+public class ManualReadinessCallbackEndpoint {
 
     private final ReadinessCheckListener readinessCheckListener;
 
-    public ManualReadinessCallbackEndPoint(ReadinessCheckListener readinessCheckListener) {
+    public ManualReadinessCallbackEndpoint(ReadinessCheckListener readinessCheckListener) {
         this.readinessCheckListener = readinessCheckListener;
     }
 

@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.smoke.tests.actuator.health;
 
-import com.alipay.sofa.boot.actuator.health.ManualReadinessCallbackEndPoint;
+import com.alipay.sofa.boot.actuator.health.ManualReadinessCallbackEndpoint;
 import com.alipay.sofa.boot.actuator.health.ReadinessCheckListener;
 import com.alipay.sofa.smoke.tests.actuator.ActuatorSofaBootApplication;
 import org.junit.jupiter.api.Test;
@@ -32,7 +32,7 @@ import java.lang.reflect.Field;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Integration tests for {@link ManualReadinessCallbackEndPoint} web response.
+ * Integration tests for {@link ManualReadinessCallbackEndpoint} web response.
  *
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 2020/11/18

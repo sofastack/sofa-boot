@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.boot.actuator.autoconfigure.components;
 
-import com.alipay.sofa.boot.actuator.components.ComponentsEndPoint;
+import com.alipay.sofa.boot.actuator.components.ComponentsEndpoint;
 import com.alipay.sofa.boot.autoconfigure.runtime.SofaRuntimeAutoConfiguration;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
@@ -28,7 +28,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 
 /**
- * {@link EnableAutoConfiguration Auto-configuration} for {@link ComponentsEndPoint}.
+ * {@link EnableAutoConfiguration Auto-configuration} for {@link ComponentsEndpoint}.
  *
  * @author huzijie
  * @version ComponentsEndpointAutoConfiguration.java, v 0.1 2022年03月17日 3:56 PM huzijie Exp $
@@ -36,14 +36,14 @@ import org.springframework.context.annotation.Bean;
 @AutoConfiguration(after = SofaRuntimeAutoConfiguration.class)
 @ConditionalOnClass(SofaRuntimeContext.class)
 @ConditionalOnBean(SofaRuntimeContext.class)
-@ConditionalOnAvailableEndpoint(endpoint = ComponentsEndPoint.class)
+@ConditionalOnAvailableEndpoint(endpoint = ComponentsEndpoint.class)
 public class ComponentsEndpointAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
     @ConditionalOnBean(SofaRuntimeContext.class)
-    public ComponentsEndPoint sofaBootComponentsEndPoint(SofaRuntimeContext sofaRuntimeContext) {
-        return new ComponentsEndPoint(sofaRuntimeContext);
+    public ComponentsEndpoint sofaBootComponentsEndPoint(SofaRuntimeContext sofaRuntimeContext) {
+        return new ComponentsEndpoint(sofaRuntimeContext);
     }
 
 }
