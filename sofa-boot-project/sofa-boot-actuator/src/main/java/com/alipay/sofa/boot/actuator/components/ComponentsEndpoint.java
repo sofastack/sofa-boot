@@ -21,6 +21,7 @@ import com.alipay.sofa.runtime.model.ComponentType;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.ComponentManager;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
+import org.springframework.boot.actuate.endpoint.OperationResponseBody;
 import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
 import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
 
@@ -72,7 +73,7 @@ public class ComponentsEndpoint {
         return new ComponentsDescriptor(componentsInfoMap);
     }
 
-    public static final class ComponentsDescriptor {
+    public static final class ComponentsDescriptor implements OperationResponseBody {
 
         private final Map<String, Collection<ComponentDisplayInfo>> componentsInfoMap;
 
