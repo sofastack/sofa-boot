@@ -38,7 +38,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 /**
- * Tests for {@link SofaRpcEndPoint}.
+ * Tests for {@link SofaRpcEndpoint}.
  *
  * @author huzijie
  * @version SofaRpcEndPointTests.java, v 0.1 2023年04月24日 10:56 AM huzijie Exp $
@@ -48,7 +48,7 @@ public class SofaRpcEndPointTests {
 
     private final SampleServiceImpl target          = new SampleServiceImpl();
 
-    private final SofaRpcEndPoint   sofaRpcEndPoint = new SofaRpcEndPoint();
+    private final SofaRpcEndpoint   sofaRpcEndPoint = new SofaRpcEndpoint();
 
     @Mock
     private ProviderBootstrap       providerBootstrap;
@@ -90,11 +90,11 @@ public class SofaRpcEndPointTests {
         when(serverConfig.getProtocol()).thenReturn("bolt");
         when(registryConfig.getProtocol()).thenReturn("nacos");
 
-        SofaRpcEndPoint.RpcServicesDescriptor rpcServicesDescriptor = sofaRpcEndPoint.rpcServices();
-        List<SofaRpcEndPoint.ProviderDescriptor> providerDescriptors = rpcServicesDescriptor
+        SofaRpcEndpoint.RpcServicesDescriptor rpcServicesDescriptor = sofaRpcEndPoint.rpcServices();
+        List<SofaRpcEndpoint.ProviderDescriptor> providerDescriptors = rpcServicesDescriptor
             .getProvider();
         assertThat(providerDescriptors.size()).isEqualTo(1);
-        SofaRpcEndPoint.ProviderDescriptor descriptor = providerDescriptors.get(0);
+        SofaRpcEndpoint.ProviderDescriptor descriptor = providerDescriptors.get(0);
 
         assertThat(descriptor.getInterfaceId()).isEqualTo(SampleService.class.getName());
         assertThat(descriptor.getUniqueId()).isEqualTo("A");
@@ -123,11 +123,11 @@ public class SofaRpcEndPointTests {
         when(consumerConfig.getRetries()).thenReturn(5);
         when(registryConfig.getProtocol()).thenReturn("nacos");
 
-        SofaRpcEndPoint.RpcServicesDescriptor rpcServicesDescriptor = sofaRpcEndPoint.rpcServices();
-        List<SofaRpcEndPoint.ConsumerDescriptor> consumerDescriptors = rpcServicesDescriptor
+        SofaRpcEndpoint.RpcServicesDescriptor rpcServicesDescriptor = sofaRpcEndPoint.rpcServices();
+        List<SofaRpcEndpoint.ConsumerDescriptor> consumerDescriptors = rpcServicesDescriptor
             .getConsumer();
         assertThat(consumerDescriptors.size()).isEqualTo(1);
-        SofaRpcEndPoint.ConsumerDescriptor descriptor = consumerDescriptors.get(0);
+        SofaRpcEndpoint.ConsumerDescriptor descriptor = consumerDescriptors.get(0);
 
         assertThat(descriptor.getInterfaceId()).isEqualTo(SampleService.class.getName());
         assertThat(descriptor.getUniqueId()).isEqualTo("A");
@@ -150,11 +150,11 @@ public class SofaRpcEndPointTests {
 
         RegistryFactory.getRegistry(registryConfig);
 
-        SofaRpcEndPoint.RpcServicesDescriptor rpcServicesDescriptor = sofaRpcEndPoint.rpcServices();
-        List<SofaRpcEndPoint.RegistryDescriptor> registryDescriptors = rpcServicesDescriptor
+        SofaRpcEndpoint.RpcServicesDescriptor rpcServicesDescriptor = sofaRpcEndPoint.rpcServices();
+        List<SofaRpcEndpoint.RegistryDescriptor> registryDescriptors = rpcServicesDescriptor
             .getRegistry();
         assertThat(registryDescriptors.size()).isEqualTo(1);
-        SofaRpcEndPoint.RegistryDescriptor descriptor = registryDescriptors.get(0);
+        SofaRpcEndpoint.RegistryDescriptor descriptor = registryDescriptors.get(0);
 
         assertThat(descriptor.getProtocol()).isEqualTo("mesh");
         assertThat(descriptor.getAddress()).isEqualTo("http://127.0.0.1:8888");

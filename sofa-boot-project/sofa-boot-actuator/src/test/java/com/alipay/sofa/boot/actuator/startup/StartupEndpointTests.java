@@ -29,7 +29,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Tests for {@link StartupEndPoint}.
+ * Tests for {@link StartupEndpoint}.
  *
  * @author huzijie
  * @version StartupEndpointTests.java, v 0.1 2023年01月04日 11:51 AM huzijie Exp $
@@ -39,7 +39,7 @@ public class StartupEndpointTests {
 
     private final StartupReporter startupReporter = new StartupReporter();
 
-    private final StartupEndPoint startupEndPoint = new StartupEndPoint(startupReporter);
+    private final StartupEndpoint startupEndPoint = new StartupEndpoint(startupReporter);
 
     @Test
     @Order(1)

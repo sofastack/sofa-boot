@@ -39,7 +39,7 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Tests for {@link ComponentsEndPoint}.
+ * Tests for {@link ComponentsEndpoint}.
  *
  * @author huzijie
  * @version ComponentsEndpointTests.java, v 0.1 2022年03月17日 4:15 PM huzijie Exp $
@@ -60,7 +60,7 @@ public class ComponentsEndpointTests {
     private ExtensionComponent extensionComponent;
 
     @InjectMocks
-    private ComponentsEndPoint sofaBootComponentsEndPoint;
+    private ComponentsEndpoint sofaBootComponentsEndPoint;
 
     @Test
     public void components() {
@@ -98,43 +98,43 @@ public class ComponentsEndpointTests {
         Mockito.doReturn(extensionComponents).when(componentManager)
             .getComponentInfosByType(ExtensionComponent.EXTENSION_COMPONENT_TYPE);
 
-        ComponentsEndPoint.ComponentsDescriptor applicationComponents = sofaBootComponentsEndPoint
+        ComponentsEndpoint.ComponentsDescriptor applicationComponents = sofaBootComponentsEndPoint
             .components();
         assertThat(applicationComponents).isNotNull();
-        Map<String, Collection<ComponentsEndPoint.ComponentDisplayInfo>> componentTypeCollectionMap = applicationComponents
+        Map<String, Collection<ComponentsEndpoint.ComponentDisplayInfo>> componentTypeCollectionMap = applicationComponents
             .getComponentsInfoMap();
         assertThat(componentTypeCollectionMap).isNotNull();
         assertThat(componentTypeCollectionMap.size()).isEqualTo(2);
 
-        Collection<ComponentsEndPoint.ComponentDisplayInfo> serviceComponentCollection = componentTypeCollectionMap
+        Collection<ComponentsEndpoint.ComponentDisplayInfo> serviceComponentCollection = componentTypeCollectionMap
             .get(ServiceComponent.SERVICE_COMPONENT_TYPE.getName());
         assertThat(serviceComponents.size()).isEqualTo(1);
         assertThat(serviceComponentCollection).isInstanceOf(List.class);
         assertThat(
-            ((List<ComponentsEndPoint.ComponentDisplayInfo>) serviceComponentCollection).get(0)
+            ((List<ComponentsEndpoint.ComponentDisplayInfo>) serviceComponentCollection).get(0)
                 .getName()).isEqualTo("testSofaService");
         assertThat(
-            ((List<ComponentsEndPoint.ComponentDisplayInfo>) serviceComponentCollection).get(0)
+            ((List<ComponentsEndpoint.ComponentDisplayInfo>) serviceComponentCollection).get(0)
                 .getApplicationId()).isEqualTo("moduleA");
         assertThat(
-            ((List<ComponentsEndPoint.ComponentDisplayInfo>) serviceComponentCollection).get(0)
+            ((List<ComponentsEndpoint.ComponentDisplayInfo>) serviceComponentCollection).get(0)
                 .getName()).isEqualTo("testSofaService");
         assertThat(
-            ((List<ComponentsEndPoint.ComponentDisplayInfo>) serviceComponentCollection).get(0)
+            ((List<ComponentsEndpoint.ComponentDisplayInfo>) serviceComponentCollection).get(0)
                 .getProperties().get(0).getName()).isEqualTo("serviceA");
         assertThat(
-            ((List<ComponentsEndPoint.ComponentDisplayInfo>) serviceComponentCollection).get(0)
+            ((List<ComponentsEndpoint.ComponentDisplayInfo>) serviceComponentCollection).get(0)
                 .getProperties().get(0).getValue()).isEqualTo("valueA");
 
-        Collection<ComponentsEndPoint.ComponentDisplayInfo> extComponentCollection = componentTypeCollectionMap
+        Collection<ComponentsEndpoint.ComponentDisplayInfo> extComponentCollection = componentTypeCollectionMap
             .get(ExtensionComponent.EXTENSION_COMPONENT_TYPE.getName());
         assertThat(extComponentCollection.size()).isEqualTo(1);
         assertThat(extComponentCollection).isInstanceOf(List.class);
         assertThat(
-            ((List<ComponentsEndPoint.ComponentDisplayInfo>) extComponentCollection).get(0)
+            ((List<ComponentsEndpoint.ComponentDisplayInfo>) extComponentCollection).get(0)
                 .getName()).isEqualTo("testSofaExt");
         assertThat(
-            ((List<ComponentsEndPoint.ComponentDisplayInfo>) extComponentCollection).get(0)
+            ((List<ComponentsEndpoint.ComponentDisplayInfo>) extComponentCollection).get(0)
                 .getApplicationId()).isEqualTo("moduleB");
     }
 

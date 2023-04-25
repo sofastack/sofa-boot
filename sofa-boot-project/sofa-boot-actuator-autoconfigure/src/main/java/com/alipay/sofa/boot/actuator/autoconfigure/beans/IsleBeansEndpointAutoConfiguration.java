@@ -18,6 +18,7 @@ package com.alipay.sofa.boot.actuator.autoconfigure.beans;
 
 import com.alipay.sofa.boot.actuator.beans.IsleBeansEndpoint;
 import com.alipay.sofa.boot.autoconfigure.isle.SofaModuleAutoConfiguration;
+import com.alipay.sofa.boot.autoconfigure.isle.SofaModuleAvailableCondition;
 import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
 import org.springframework.boot.actuate.autoconfigure.beans.BeansEndpointAutoConfiguration;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
@@ -25,11 +26,10 @@ import org.springframework.boot.actuate.beans.BeansEndpoint;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Conditional;
 
 /**
  * {@link EnableAutoConfiguration Auto-configuration} for {@link BeansEndpoint}.
@@ -38,10 +38,9 @@ import org.springframework.context.annotation.Bean;
  * @version IsleBeansEndpointAutoConfiguration.java, v 0.1 2022年03月17日 11:03 AM huzijie Exp $
  */
 @AutoConfiguration(before = BeansEndpointAutoConfiguration.class, after = SofaModuleAutoConfiguration.class)
-@ConditionalOnClass(ApplicationRuntimeModel.class)
+@Conditional(SofaModuleAvailableCondition.class)
 @ConditionalOnBean(ApplicationRuntimeModel.class)
 @ConditionalOnAvailableEndpoint(endpoint = BeansEndpoint.class)
-@ConditionalOnProperty(value = "sofa.boot.isle.enabled", havingValue = "true", matchIfMissing = true)
 public class IsleBeansEndpointAutoConfiguration {
 
     @Bean

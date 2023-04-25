@@ -18,7 +18,7 @@ package com.alipay.sofa.boot.actuator.autoconfigure.health;
 
 import com.alipay.sofa.boot.actuator.health.HealthCheckerProcessor;
 import com.alipay.sofa.boot.actuator.health.HealthIndicatorProcessor;
-import com.alipay.sofa.boot.actuator.health.ManualReadinessCallbackEndPoint;
+import com.alipay.sofa.boot.actuator.health.ManualReadinessCallbackEndpoint;
 import com.alipay.sofa.boot.actuator.health.ReadinessCheckCallbackProcessor;
 import com.alipay.sofa.boot.actuator.health.ReadinessCheckListener;
 import org.junit.jupiter.api.Test;
@@ -46,19 +46,19 @@ public class ManualReadinessCallbackEndpointAutoConfigurationTests {
     @Test
     void runShouldHaveEndpointBean() {
         this.contextRunner.withPropertyValues("management.endpoints.web.exposure.include=triggerReadinessCallback")
-                .run((context) -> assertThat(context).hasSingleBean(ManualReadinessCallbackEndPoint.class));
+                .run((context) -> assertThat(context).hasSingleBean(ManualReadinessCallbackEndpoint.class));
     }
 
     @Test
     void runWhenNotExposedShouldNotHaveEndpointBean() {
-        this.contextRunner.run((context) -> assertThat(context).doesNotHaveBean(ManualReadinessCallbackEndPoint.class));
+        this.contextRunner.run((context) -> assertThat(context).doesNotHaveBean(ManualReadinessCallbackEndpoint.class));
     }
 
     @Test
     void runWhenEnabledPropertyIsFalseShouldNotHaveEndpointBean() {
         this.contextRunner.withPropertyValues("management.endpoint.triggerReadinessCallback.enabled:false")
                 .withPropertyValues("management.endpoints.web.exposure.include=*")
-                .run((context) -> assertThat(context).doesNotHaveBean(ManualReadinessCallbackEndPoint.class));
+                .run((context) -> assertThat(context).doesNotHaveBean(ManualReadinessCallbackEndpoint.class));
     }
 
     @AutoConfiguration(before = ManualReadinessCallbackEndpointAutoConfiguration.class)

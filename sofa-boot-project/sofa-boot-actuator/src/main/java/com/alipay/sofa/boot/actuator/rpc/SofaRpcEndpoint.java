@@ -40,10 +40,10 @@ import java.util.Optional;
  * {@link Endpoint @Endpoint} to expose details of sofa rpc information.
  *
  * @author huzijie
- * @version SofaRpcEndPoint.java, v 0.1 2023年04月23日 5:38 PM huzijie Exp $
+ * @version SofaRpcEndpoint.java, v 0.1 2023年04月23日 5:38 PM huzijie Exp $
  */
 @Endpoint(id = "rpc")
-public class SofaRpcEndPoint {
+public class SofaRpcEndpoint {
 
     @ReadOperation
     public RpcServicesDescriptor rpcServices() {

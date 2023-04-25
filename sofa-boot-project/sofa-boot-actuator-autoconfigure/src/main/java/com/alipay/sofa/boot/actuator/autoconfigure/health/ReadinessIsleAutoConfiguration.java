@@ -19,15 +19,15 @@ package com.alipay.sofa.boot.actuator.autoconfigure.health;
 import com.alipay.sofa.boot.actuator.health.ModuleHealthChecker;
 import com.alipay.sofa.boot.actuator.health.ReadinessEndpoint;
 import com.alipay.sofa.boot.autoconfigure.isle.SofaModuleAutoConfiguration;
+import com.alipay.sofa.boot.autoconfigure.isle.SofaModuleAvailableCondition;
 import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Conditional;
 
 /**
  * {@link EnableAutoConfiguration Auto-configuration} for readiness isle components.
@@ -36,9 +36,8 @@ import org.springframework.context.annotation.Bean;
  * @version ReadinessIsleAutoConfiguration.java, v 0.1 2023年01月04日 2:42 PM huzijie Exp $
  */
 @AutoConfiguration(after = SofaModuleAutoConfiguration.class)
-@ConditionalOnClass(ApplicationRuntimeModel.class)
+@Conditional(SofaModuleAvailableCondition.class)
 @ConditionalOnBean(ApplicationRuntimeModel.class)
-@ConditionalOnProperty(value = "sofa.boot.isle.enabled", havingValue = "true", matchIfMissing = true)
 @ConditionalOnAvailableEndpoint(endpoint = ReadinessEndpoint.class)
 public class ReadinessIsleAutoConfiguration {
 

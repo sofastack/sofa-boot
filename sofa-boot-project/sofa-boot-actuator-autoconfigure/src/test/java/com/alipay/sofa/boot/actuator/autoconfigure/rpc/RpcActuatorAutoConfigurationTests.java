@@ -17,7 +17,7 @@
 package com.alipay.sofa.boot.actuator.autoconfigure.rpc;
 
 import com.alipay.sofa.boot.actuator.rpc.RpcAfterHealthCheckCallback;
-import com.alipay.sofa.boot.actuator.rpc.SofaRpcEndPoint;
+import com.alipay.sofa.boot.actuator.rpc.SofaRpcEndpoint;
 import com.alipay.sofa.rpc.boot.context.RpcStartApplicationListener;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
@@ -47,7 +47,7 @@ public class RpcActuatorAutoConfigurationTests {
                 .withBean(RpcStartApplicationListener.class)
                 .run((context) -> assertThat(context)
                         .hasSingleBean(RpcAfterHealthCheckCallback.class)
-                        .hasSingleBean(SofaRpcEndPoint.class));
+                        .hasSingleBean(SofaRpcEndpoint.class));
     }
 
     @Test
@@ -57,7 +57,7 @@ public class RpcActuatorAutoConfigurationTests {
                 .withPropertyValues("management.endpoints.web.exposure.include=info")
                 .run((context) -> assertThat(context)
                         .doesNotHaveBean(RpcAfterHealthCheckCallback.class)
-                        .doesNotHaveBean(SofaRpcEndPoint.class));
+                        .doesNotHaveBean(SofaRpcEndpoint.class));
     }
 
     @Test
@@ -67,7 +67,7 @@ public class RpcActuatorAutoConfigurationTests {
                 .withClassLoader(new FilteredClassLoader(RpcStartApplicationListener.class))
                 .run((context) -> assertThat(context)
                         .doesNotHaveBean(RpcAfterHealthCheckCallback.class)
-                        .doesNotHaveBean(SofaRpcEndPoint.class));
+                        .doesNotHaveBean(SofaRpcEndpoint.class));
     }
 
     @Test
@@ -75,6 +75,6 @@ public class RpcActuatorAutoConfigurationTests {
         this.contextRunner
                 .run((context) -> assertThat(context)
                         .doesNotHaveBean(RpcAfterHealthCheckCallback.class)
-                        .doesNotHaveBean(SofaRpcEndPoint.class));
+                        .doesNotHaveBean(SofaRpcEndpoint.class));
     }
 }

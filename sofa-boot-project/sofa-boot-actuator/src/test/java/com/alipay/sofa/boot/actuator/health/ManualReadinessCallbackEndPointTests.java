@@ -26,7 +26,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Tests for {@link ManualReadinessCallbackEndPoint}.
+ * Tests for {@link ManualReadinessCallbackEndpoint}.
  *
  * @author huzijie
  * @version ManualReadinessCallbackEndPointTests.java, v 0.1 2023年01月04日 3:58 PM huzijie Exp $
@@ -35,7 +35,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ManualReadinessCallbackEndPointTests {
 
     @InjectMocks
-    private ManualReadinessCallbackEndPoint manualReadinessCallbackEndPoint;
+    private ManualReadinessCallbackEndpoint manualReadinessCallbackEndPoint;
 
     @Mock
     private ReadinessCheckListener          readinessCheckListener;
