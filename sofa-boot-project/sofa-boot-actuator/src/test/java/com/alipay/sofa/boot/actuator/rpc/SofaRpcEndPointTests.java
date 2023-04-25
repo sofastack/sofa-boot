@@ -48,7 +48,7 @@ public class SofaRpcEndPointTests {
 
     private final SampleServiceImpl target          = new SampleServiceImpl();
 
-    private final SofaRpcEndpoint sofaRpcEndPoint = new SofaRpcEndpoint();
+    private final SofaRpcEndpoint   sofaRpcEndPoint = new SofaRpcEndpoint();
 
     @Mock
     private ProviderBootstrap       providerBootstrap;
