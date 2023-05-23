@@ -4,7 +4,9 @@
  */
 package com.alipay.sofa.runtime.test.beans.service;
 
+import com.alipay.sofa.runtime.api.annotation.SofaService;
 import com.alipay.sofa.runtime.api.annotation.SofaServiceBean;
+import com.alipay.sofa.runtime.test.beans.facade.SampleService;
 
 /**
  * SofaServiceBeanTest
@@ -13,7 +15,8 @@ import com.alipay.sofa.runtime.api.annotation.SofaServiceBean;
  * @version SofaServiceBeanTest.java, v 0.1 2023/5/23
  */
 @SofaServiceBean(value = "sofaServiceBeanService", uniqueId = "sofaServiceBeanService")
-public class SofaServiceBeanService {
+public class SofaServiceBeanService implements SampleService {
+    @Override
     public String service() {
             return "sofaServiceBeanService";
         }
