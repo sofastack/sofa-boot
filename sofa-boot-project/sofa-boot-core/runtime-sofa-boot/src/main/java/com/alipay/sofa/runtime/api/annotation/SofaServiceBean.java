@@ -35,7 +35,7 @@ import org.springframework.stereotype.Component;
  * }
  * </pre>
  *
- * @author xuanbei 18/3/1
+ * @author xunfang 23/5/23
  */
 @SofaService
 @Component
@@ -44,4 +44,19 @@ public @interface SofaServiceBean {
             annotation = Component.class
     )
     String value() default "";
+
+    @AliasFor(
+            annotation = SofaService.class
+    )
+    Class<?> interfaceType() default void.class;
+
+    @AliasFor(
+            annotation = SofaService.class
+    )
+    String uniqueId() default "";
+
+    @AliasFor(
+            annotation = SofaService.class
+    )
+    SofaServiceBinding[] bindings() default { @SofaServiceBinding };
 }

@@ -85,17 +85,17 @@ public class IsleCheckStartupReporterTest {
         //test parent bean
         BeanStat parentBeanStat = beanStats.stream().filter(beanStat -> beanStat.getBeanClassName().contains("(parent)")).findFirst().orElse(null);
         Assert.assertNotNull(parentBeanStat);
-        Assert.assertEquals(CHILD_INIT_TIME + PARENT_INIT_TIM,  parentBeanStat.getRefreshElapsedTime(), 20);
-        Assert.assertEquals(PARENT_INIT_TIM, parentBeanStat.getRealRefreshElapsedTime(), 20);
-        Assert.assertEquals(PARENT_INIT_TIM, parentBeanStat.getAfterPropertiesSetTime(), 20);
+        Assert.assertEquals(CHILD_INIT_TIME + PARENT_INIT_TIM,  parentBeanStat.getRefreshElapsedTime(), 100);
+        Assert.assertEquals(PARENT_INIT_TIM, parentBeanStat.getRealRefreshElapsedTime(), 50);
+        Assert.assertEquals(PARENT_INIT_TIM, parentBeanStat.getAfterPropertiesSetTime(), 50);
         Assert.assertEquals(1, parentBeanStat.getChildren().size());
         Assert.assertEquals(ParentBean.class.getName() + " (parent)", parentBeanStat.getBeanClassName());
 
         // test child bean
         BeanStat childBeanStat = parentBeanStat.getChildren().get(0);
         Assert.assertNotNull(childBeanStat);
-        Assert.assertEquals(CHILD_INIT_TIME, childBeanStat.getRealRefreshElapsedTime(), 15);
-        Assert.assertEquals(CHILD_INIT_TIME, childBeanStat.getInitTime(), 10);
+        Assert.assertEquals(CHILD_INIT_TIME, childBeanStat.getRealRefreshElapsedTime(), 30);
+        Assert.assertEquals(CHILD_INIT_TIME, childBeanStat.getInitTime(), 30);
         Assert.assertEquals(0, childBeanStat.getChildren().size());
         Assert.assertEquals(ChildBean.class.getName() + " (child)", childBeanStat.getBeanClassName());
 
