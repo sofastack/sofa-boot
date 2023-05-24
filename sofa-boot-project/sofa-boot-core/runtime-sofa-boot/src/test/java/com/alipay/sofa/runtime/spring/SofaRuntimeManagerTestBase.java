@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.runtime.spring;
 
-import com.alipay.sofa.boot.util.ServiceLoaderUtils;
 import com.alipay.sofa.runtime.api.client.ReferenceClient;
 import com.alipay.sofa.runtime.api.client.ServiceClient;
 import com.alipay.sofa.runtime.impl.ClientFactoryImpl;
@@ -34,6 +33,9 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
 import org.junit.jupiter.api.BeforeEach;
+import org.springframework.core.io.support.SpringFactoriesLoader;
+
+import java.util.HashSet;
 
 /**
  * @author huzijie
@@ -57,11 +59,11 @@ public abstract class SofaRuntimeManagerTestBase {
     public void init() {
         clientFactoryInternal = new ClientFactoryImpl();
         bindingConverterFactory = new BindingConverterFactoryImpl();
-        bindingConverterFactory.addBindingConverters(ServiceLoaderUtils
-            .getClassesByServiceLoader(BindingConverter.class));
+        bindingConverterFactory.addBindingConverters(new HashSet<>(SpringFactoriesLoader
+            .loadFactories(BindingConverter.class, null)));
         bindingAdapterFactory = new BindingAdapterFactoryImpl();
-        bindingAdapterFactory.addBindingAdapters(ServiceLoaderUtils
-            .getClassesByServiceLoader(BindingAdapter.class));
+        bindingAdapterFactory.addBindingAdapters(new HashSet<>(SpringFactoriesLoader.loadFactories(
+            BindingAdapter.class, null)));
         sofaRuntimeManager = new StandardSofaRuntimeManager("testApp", Thread.currentThread()
             .getContextClassLoader(), clientFactoryInternal);
         clientFactoryInternal.registerClient(ReferenceClient.class, new ReferenceClientImpl(

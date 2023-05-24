@@ -16,10 +16,12 @@
  */
 package com.alipay.sofa.rpc.boot.test.adapter;
 
-import com.alipay.sofa.boot.util.ServiceLoaderUtils;
 import com.alipay.sofa.runtime.service.impl.BindingAdapterFactoryImpl;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapter;
 import org.junit.jupiter.api.Test;
+import org.springframework.core.io.support.SpringFactoriesLoader;
+
+import java.util.HashSet;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -34,8 +36,8 @@ public class BindingAdapterFactoryTests {
     @Test
     public void checkOrder() {
         BindingAdapterFactoryImpl bindingAdapterFactory = new BindingAdapterFactoryImpl();
-        bindingAdapterFactory.addBindingAdapters(ServiceLoaderUtils
-            .getClassesByServiceLoader(BindingAdapter.class));
+        bindingAdapterFactory.addBindingAdapters(new HashSet<>(SpringFactoriesLoader.loadFactories(
+            BindingAdapter.class, null)));
         BindingAdapter bindingAdapter = bindingAdapterFactory.getBindingAdapter(XBindingAdapter.X);
         assertThat(bindingAdapter).isInstanceOf(XBindingAdapter2.class);
     }
