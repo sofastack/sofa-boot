@@ -19,7 +19,6 @@ package com.alipay.sofa.boot.autoconfigure.runtime;
 import com.alipay.sofa.boot.autoconfigure.condition.ConditionalOnSwitch;
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
-import com.alipay.sofa.boot.util.ServiceLoaderUtils;
 import com.alipay.sofa.common.thread.NamedThreadFactory;
 import com.alipay.sofa.common.thread.SofaThreadPoolExecutor;
 import com.alipay.sofa.runtime.api.client.ReferenceClient;
@@ -57,8 +56,10 @@ import org.springframework.boot.context.properties.bind.Binder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.support.SpringFactoriesLoader;
 import org.springframework.util.Assert;
 
+import java.util.HashSet;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -116,8 +117,8 @@ public class SofaRuntimeAutoConfiguration {
     @ConditionalOnMissingBean
     public static BindingConverterFactory bindingConverterFactory() {
         BindingConverterFactory bindingConverterFactory = new BindingConverterFactoryImpl();
-        bindingConverterFactory.addBindingConverters(ServiceLoaderUtils
-            .getClassesByServiceLoader(BindingConverter.class));
+        bindingConverterFactory.addBindingConverters(new HashSet<>(SpringFactoriesLoader
+            .loadFactories(BindingConverter.class, null)));
         return bindingConverterFactory;
     }
 
@@ -125,8 +126,8 @@ public class SofaRuntimeAutoConfiguration {
     @ConditionalOnMissingBean
     public static BindingAdapterFactory bindingAdapterFactory() {
         BindingAdapterFactory bindingAdapterFactory = new BindingAdapterFactoryImpl();
-        bindingAdapterFactory.addBindingAdapters(ServiceLoaderUtils
-            .getClassesByServiceLoader(BindingAdapter.class));
+        bindingAdapterFactory.addBindingAdapters(new HashSet<>(SpringFactoriesLoader.loadFactories(
+            BindingAdapter.class, null)));
         return bindingAdapterFactory;
     }
 

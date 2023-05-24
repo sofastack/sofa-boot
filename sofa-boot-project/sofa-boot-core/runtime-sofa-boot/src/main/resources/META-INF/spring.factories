@@ -1,3 +1,16 @@
 # Initializers
 com.alipay.sofa.boot.startup.BeanStatCustomizer=\
   com.alipay.sofa.runtime.startup.ComponentBeanStatCustomizer
+
+com.alipay.sofa.boot.spring.namespace.spi.SofaBootTagNameSupport=\
+  com.alipay.sofa.runtime.spring.parser.ReferenceDefinitionParser,\
+  com.alipay.sofa.runtime.spring.parser.ServiceDefinitionParser,\
+  com.alipay.sofa.runtime.spring.parser.AsyncInitBeanDefinitionDecorator,\
+  com.alipay.sofa.runtime.ext.spring.parser.ExtensionPointBeanDefinitionParser,\
+  com.alipay.sofa.runtime.ext.spring.parser.ExtensionBeanDefinitionParser
+
+com.alipay.sofa.runtime.spi.binding.BindingAdapter=\
+  com.alipay.sofa.runtime.service.binding.JvmBindingAdapter
+
+com.alipay.sofa.runtime.spi.service.BindingConverter=\
+  com.alipay.sofa.runtime.service.binding.JvmBindingConverter

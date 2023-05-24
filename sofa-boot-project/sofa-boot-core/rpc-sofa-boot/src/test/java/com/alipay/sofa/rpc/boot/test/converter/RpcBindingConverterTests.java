@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.rpc.boot.test.converter;
 
-import com.alipay.sofa.boot.util.ServiceLoaderUtils;
 import com.alipay.sofa.rpc.boot.runtime.binding.RpcBindingMethodInfo;
 import com.alipay.sofa.rpc.boot.runtime.converter.BoltBindingConverter;
 import com.alipay.sofa.rpc.boot.runtime.converter.RpcBindingConverter;
@@ -27,7 +26,9 @@ import com.alipay.sofa.runtime.service.impl.BindingConverterFactoryImpl;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
 import org.junit.jupiter.api.Test;
+import org.springframework.core.io.support.SpringFactoriesLoader;
 
+import java.util.HashSet;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -73,8 +74,8 @@ public class RpcBindingConverterTests {
     @Test
     public void checkOrder() {
         BindingConverterFactory factory = new BindingConverterFactoryImpl();
-        factory.addBindingConverters(ServiceLoaderUtils
-            .getClassesByServiceLoader(BindingConverter.class));
+        factory.addBindingConverters(new HashSet<>(SpringFactoriesLoader.loadFactories(
+            BindingConverter.class, null)));
         BindingConverter bindingConverter = factory.getBindingConverter(TestBindingConverter.TEST);
         BindingConverter bindingConverterByTagName = factory
             .getBindingConverterByTagName(TestBindingConverter.TARGET_NAME);

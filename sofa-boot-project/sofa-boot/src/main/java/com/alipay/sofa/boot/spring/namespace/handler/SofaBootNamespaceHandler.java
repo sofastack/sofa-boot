@@ -22,8 +22,9 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.xml.BeanDefinitionDecorator;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
+import org.springframework.core.io.support.SpringFactoriesLoader;
 
-import java.util.ServiceLoader;
+import java.util.List;
 
 /**
  * Implementation of {@link NamespaceHandlerSupport} to register {@link SofaBootTagNameSupport}.
@@ -39,8 +40,8 @@ public class SofaBootNamespaceHandler extends NamespaceHandlerSupport {
 
     @Override
     public void init() {
-        ServiceLoader<SofaBootTagNameSupport> serviceLoaderSofaBoot = ServiceLoader.load(SofaBootTagNameSupport.class);
-        serviceLoaderSofaBoot.forEach(this::registerTagParser);
+        List<SofaBootTagNameSupport> sofaBootTagNameSupports = SpringFactoriesLoader.loadFactories(SofaBootTagNameSupport.class, null);
+        sofaBootTagNameSupports.forEach(this::registerTagParser);
     }
 
     private void registerTagParser(SofaBootTagNameSupport tagNameSupport) {
