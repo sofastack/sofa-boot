@@ -47,23 +47,15 @@ import java.lang.annotation.Target;
 @SofaService
 @Component
 public @interface SofaServiceBean {
-    @AliasFor(
-            annotation = Component.class
-    )
+    @AliasFor(annotation = Component.class)
     String value() default "";
 
-    @AliasFor(
-            annotation = SofaService.class
-    )
+    @AliasFor(annotation = SofaService.class)
     Class<?> interfaceType() default void.class;
 
-    @AliasFor(
-            annotation = SofaService.class
-    )
+    @AliasFor(annotation = SofaService.class)
     String uniqueId() default "";
 
-    @AliasFor(
-            annotation = SofaService.class
-    )
+    @AliasFor(annotation = SofaService.class)
     SofaServiceBinding[] bindings() default { @SofaServiceBinding };
 }
