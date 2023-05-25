@@ -223,7 +223,9 @@ public class ComponentManagerImpl implements ComponentManager {
             ComponentType componentType = componentName.getType();
 
             Map<ComponentName, ComponentInfo> typesRi = resolvedRegistry.get(componentType);
-            typesRi.remove(componentName);
+            if (typesRi != null) {
+                typesRi.remove(componentName);
+            }
         }
 
         componentInfo.unregister();
