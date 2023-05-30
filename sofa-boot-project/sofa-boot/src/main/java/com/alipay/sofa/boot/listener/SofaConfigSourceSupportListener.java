@@ -19,6 +19,7 @@ package com.alipay.sofa.boot.listener;
 import com.alipay.sofa.common.config.SofaConfigs;
 import com.alipay.sofa.common.config.source.AbstractConfigSource;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
+import org.springframework.boot.context.logging.LoggingApplicationListener;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -63,6 +64,6 @@ public class SofaConfigSourceSupportListener
 
     @Override
     public int getOrder() {
-        return LOWEST_PRECEDENCE;
+        return LoggingApplicationListener.DEFAULT_ORDER - 10;
     }
 }
