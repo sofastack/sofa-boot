@@ -34,7 +34,7 @@ public class SofaConfigSourceSupportListener
                                             implements
                                             ApplicationListener<ApplicationEnvironmentPreparedEvent>,
                                             Ordered {
-    private static final int SOFA_BOOT_CONFIG_SOURCE_ORDER = LOWEST_PRECEDENCE;
+    private static final int SOFA_BOOT_CONFIG_SOURCE_ORDER = LoggingApplicationListener.DEFAULT_ORDER - 5;
 
     @Override
     public void onApplicationEvent(ApplicationEnvironmentPreparedEvent event) {
@@ -64,6 +64,6 @@ public class SofaConfigSourceSupportListener
 
     @Override
     public int getOrder() {
-        return LoggingApplicationListener.DEFAULT_ORDER - 10;
+        return LoggingApplicationListener.DEFAULT_ORDER - 5;
     }
 }
