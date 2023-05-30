@@ -46,8 +46,8 @@ public class LogEnvironmentPreparingListener
 
     @Override
     public int getOrder() {
-        // Must be invoked after ConfigFileApplicationListener
-        return Ordered.HIGHEST_PRECEDENCE + 20;
+        // Must be invoked after ConfigFileApplicationListener, and before SofaConfigSourceSupportListener
+        return Ordered.HIGHEST_PRECEDENCE + 12;
     }
 
     private void prepare(ConfigurableEnvironment environment) {
