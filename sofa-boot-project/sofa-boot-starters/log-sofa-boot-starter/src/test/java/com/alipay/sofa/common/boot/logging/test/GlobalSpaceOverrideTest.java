@@ -45,6 +45,7 @@ public class GlobalSpaceOverrideTest extends LogTestBase {
         Map<String, Object> properties = new HashMap<>();
         properties.put(Constants.SOFA_MIDDLEWARE_ALL_LOG_CONSOLE_SWITCH, "true");
         properties.put(Constants.SOFA_MIDDLEWARE_ALL_LOG_CONSOLE_LEVEL, "debug");
+        properties.put("logging.level.test.space", "info");
         properties
             .put(String.format(Constants.SOFA_MIDDLEWARE_SINGLE_LOG_CONSOLE_SWITCH, TEST_SPACE),
                 "false");
@@ -63,7 +64,7 @@ public class GlobalSpaceOverrideTest extends LogTestBase {
         logger.debug("debug level");
         List<String> contents = FileUtils.readLines(logFile,
             environment.getProperty(Constants.LOG_ENCODING_PROP_KEY));
-        Assert.assertEquals(2, contents.size());
+        Assert.assertEquals(1, contents.size());
         Assert.assertTrue(contents.get(0).contains("info level"));
         Assert.assertFalse(outContent.toString().contains("info level"));
         Assert.assertFalse(outContent.toString().contains("debug level"));

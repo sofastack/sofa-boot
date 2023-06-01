@@ -47,6 +47,7 @@ public class GlobbingLogLevelTest extends LogTestBase {
     public void test() throws IOException {
         Map<String, Object> properties = new HashMap<>();
         properties.put(Constants.LOG_LEVEL_PREFIX + "test.*", "debug");
+        properties.put("logging.level.test.space", "debug");
         SpringApplication springApplication = new SpringApplication(EmptyConfig.class);
         springApplication.setDefaultProperties(properties);
         ConfigurableApplicationContext applicationContext = springApplication.run();
