@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.tracer.boot.listener;
 
+import com.alipay.sofa.utils.ApplicationListenerOrderConstants;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.bind.Bindable;
@@ -109,7 +110,7 @@ public class SofaTracerConfigurationListener
 
     @Override
     public int getOrder() {
-        return HIGHEST_PRECEDENCE + 30;
+        return ApplicationListenerOrderConstants.SOFA_TRACER_CONFIGURATION_LISTENER_ORDER;
     }
 
     private boolean isSpringCloudBootstrapEnvironment(Environment environment) {

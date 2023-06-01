@@ -19,6 +19,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>utils-sofa-boot</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot</artifactId>
         </dependency>

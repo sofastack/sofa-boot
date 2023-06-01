@@ -20,6 +20,7 @@
         <module>tracer-sofa-boot</module>
         <module>log-sofa-boot</module>
         <module>startup-sofa-boot</module>
+        <module>utils-sofa-boot</module>
     </modules>
 
     <artifactId>sofa-boot-core</artifactId>
