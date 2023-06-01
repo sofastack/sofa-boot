@@ -25,7 +25,7 @@ import org.springframework.util.Assert;
  * ApplicationListener 顺序常量
  *
  * @author xunfang
- * @version ApplicationListenerOrderConstants.java, v 0.1 2023/5/31
+ * @version ApplicationListenerOrderConstants.java, v 0.1 2023/6/1
  */
 public class ApplicationListenerOrderConstants {
     /**
