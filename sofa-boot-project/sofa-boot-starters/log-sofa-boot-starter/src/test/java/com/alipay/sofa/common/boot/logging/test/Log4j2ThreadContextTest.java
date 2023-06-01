@@ -27,13 +27,12 @@ import org.springframework.boot.SpringApplication;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 2020/12/15
  */
-public class Log4j2ThreadContextTest extends LogTestBase{
+public class Log4j2ThreadContextTest extends LogTestBase {
     @BeforeClass
     public static void before() {
         System.setProperty(Constants.LOGBACK_MIDDLEWARE_LOG_DISABLE_PROP_KEY, "true");
