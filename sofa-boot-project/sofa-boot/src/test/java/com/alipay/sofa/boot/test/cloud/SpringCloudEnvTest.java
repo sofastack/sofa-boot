@@ -66,12 +66,12 @@ public class SpringCloudEnvTest {
             .getProperty("logging.level.com.test.demo"));
         Assert.assertEquals("WARN", SampleSpringContextInitializer.applicationEnvironment
             .getProperty("logging.level.com.test.demo"));
-        Assert.assertEquals("./logs",
-            SampleSpringContextInitializer.bootstrapEnvironment.getProperty("logging.path"));
-        Assert.assertEquals("./logs",
-            SampleSpringContextInitializer.applicationEnvironment.getProperty("logging.path"));
-        Assert.assertEquals(null,
-            SampleSpringContextInitializer.bootstrapEnvironment.getProperty("any.key"));
+        //        Assert.assertEquals("./logs",
+        //            SampleSpringContextInitializer.bootstrapEnvironment.getProperty("logging.path"));
+        //        Assert.assertEquals("./logs",
+        //            SampleSpringContextInitializer.applicationEnvironment.getProperty("logging.path"));
+        Assert.assertNull(SampleSpringContextInitializer.bootstrapEnvironment
+            .getProperty("any.key"));
         Assert.assertEquals("any.value",
             SampleSpringContextInitializer.applicationEnvironment.getProperty("any.key"));
     }

@@ -14,8 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.boot.logging;
+package com.alipay.sofa.boot.test.util;
 
+import com.alipay.sofa.boot.util.LocalEnvUtil;
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -23,11 +23,6 @@
 
         <dependency>
             <groupId>com.alipay.sofa</groupId>
-            <artifactId>utils-sofa-boot</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.alipay.sofa</groupId>
             <artifactId>tracer-core</artifactId>
         </dependency>
 

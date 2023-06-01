@@ -16,11 +16,12 @@
  */
 package com.alipay.sofa.boot.logging;
 
+import com.alipay.sofa.boot.util.ApplicationListenerOrderConstants;
+import com.alipay.sofa.boot.util.LocalEnvUtil;
 import com.alipay.sofa.common.log.CommonLoggingConfigurations;
 import com.alipay.sofa.common.log.Constants;
 import com.alipay.sofa.common.log.env.LogEnvUtils;
 import com.alipay.sofa.common.utils.StringUtil;
-import com.alipay.sofa.utils.ApplicationListenerOrderConstants;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.Ordered;
