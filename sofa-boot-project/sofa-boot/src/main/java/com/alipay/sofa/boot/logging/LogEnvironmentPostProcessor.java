@@ -16,13 +16,13 @@
  */
 package com.alipay.sofa.boot.logging;
 
+import com.alipay.sofa.boot.util.ApplicationListenerOrderConstants;
 import com.alipay.sofa.boot.util.SofaBootEnvUtils;
 import com.alipay.sofa.common.log.CommonLoggingConfigurations;
 import com.alipay.sofa.common.log.Constants;
 import com.alipay.sofa.common.log.env.LogEnvUtils;
 import com.alipay.sofa.common.thread.SofaThreadPoolConstants;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.context.config.ConfigDataEnvironmentPostProcessor;
 import org.springframework.boot.env.EnvironmentPostProcessor;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -42,7 +42,7 @@ import java.util.Map;
  */
 public class LogEnvironmentPostProcessor implements EnvironmentPostProcessor, Ordered {
 
-    public static final int    ORDER                            = ConfigDataEnvironmentPostProcessor.ORDER + 1;
+    public static final int    ORDER                            = ApplicationListenerOrderConstants.LOG_ENVIRONMENT_PREPARING_LISTENER_ORDER;
 
     /**
      * support use config to disable sofa common thread pool monitor.
