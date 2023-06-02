@@ -19,6 +19,7 @@ package com.alipay.sofa.boot.listener;
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.util.SofaBootEnvUtils;
 import com.alipay.sofa.common.log.env.LogEnvUtils;
+import com.alipay.sofa.boot.util.ApplicationListenerOrderConstants;
 import org.springframework.boot.Banner;
 import org.springframework.boot.ConfigurableBootstrapContext;
 import org.springframework.boot.SpringApplication;
@@ -99,7 +100,7 @@ public class SofaBootstrapRunListener implements
 
     @Override
     public int getOrder() {
-        return HIGHEST_PRECEDENCE;
+        return ApplicationListenerOrderConstants.SOFA_BOOTSTRAP_RUN_LISTENER_ORDER;
     }
 
     public void onApplicationEvent(ApplicationEnvironmentPreparedEvent event) {

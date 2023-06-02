@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.boot.logging;
 
+import com.alipay.sofa.boot.util.ApplicationListenerOrderConstants;
 import com.alipay.sofa.common.log.CommonLoggingConfigurations;
 import com.alipay.sofa.common.log.Constants;
 import com.alipay.sofa.common.log.env.LogEnvUtils;
@@ -47,7 +48,7 @@ public class LogEnvironmentPreparingListener
     @Override
     public int getOrder() {
         // Must be invoked after ConfigFileApplicationListener, and before SofaConfigSourceSupportListener
-        return Ordered.HIGHEST_PRECEDENCE + 12;
+        return ApplicationListenerOrderConstants.LOG_ENVIRONMENT_PREPARING_LISTENER_ORDER;
     }
 
     private void prepare(ConfigurableEnvironment environment) {

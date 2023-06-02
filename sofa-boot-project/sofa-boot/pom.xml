@@ -25,8 +25,8 @@
         </dependency>
 
         <dependency>
-            <groupId>com.alipay.sofa</groupId>
-            <artifactId>log-sofa-boot-starter</artifactId>
+            <groupId>com.alipay.sofa.common</groupId>
+            <artifactId>sofa-common-tools</artifactId>
         </dependency>
 
         <!-- Test -->

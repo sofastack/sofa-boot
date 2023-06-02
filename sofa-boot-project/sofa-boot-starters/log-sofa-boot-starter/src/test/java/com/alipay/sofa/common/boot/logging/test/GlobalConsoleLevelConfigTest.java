@@ -37,6 +37,7 @@ public class GlobalConsoleLevelConfigTest extends LogTestBase {
         Map<String, Object> properties = new HashMap<>();
         properties.put(Constants.SOFA_MIDDLEWARE_ALL_LOG_CONSOLE_SWITCH, "true");
         properties.put(Constants.SOFA_MIDDLEWARE_ALL_LOG_CONSOLE_LEVEL, "debug");
+        properties.put("logging.level.test.space", "debug");
         SpringApplication springApplication = new SpringApplication(EmptyConfig.class);
         springApplication.setDefaultProperties(properties);
         springApplication.run();
