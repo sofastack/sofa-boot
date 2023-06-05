@@ -179,8 +179,10 @@ public class BeanLoadCostBeanFactory extends DefaultListableBeanFactory {
         });
         int size = beanStats.size();
         for (int i = 0; i < size; ++i) {
-            rtn.append(beanStats.get(i).toString(indent, i == size - 1));
-            rtn.append("\n");
+            if (beanStats.get(i) != null) {
+                rtn.append(beanStats.get(i).toString(indent, i == size - 1));
+                rtn.append("\n");
+            }
         }
         return rtn.toString();
     }
