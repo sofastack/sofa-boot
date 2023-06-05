@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.boot.util;
+package com.alipay.sofa.boot.constant;
 
-import org.springframework.boot.context.logging.LoggingApplicationListener;
+import org.springframework.boot.env.EnvironmentPostProcessorApplicationListener;
 import org.springframework.core.Ordered;
 import org.springframework.util.Assert;
 
@@ -27,26 +27,31 @@ import org.springframework.util.Assert;
  * @version ApplicationListenerOrderConstants.java, v 0.1 2023/6/1
  */
 public class ApplicationListenerOrderConstants {
+
+    // ApplicationEnvironmentPreparedEvent order start
     /**
      * 必须最先执行
      */
     public static final int SOFA_BOOTSTRAP_RUN_LISTENER_ORDER         = Ordered.HIGHEST_PRECEDENCE;
 
     /**
-     * 必须在其他会触发 sofa-common-tools 日志上下文初始化的组件之前
+     * LogEnvironmentPostProcessor 在此阶段初始化，Ordered.HIGHEST_PRECEDENCE + 10
      */
-    public static final int LOG_ENVIRONMENT_PREPARING_LISTENER_ORDER  = Ordered.HIGHEST_PRECEDENCE + 12;
+    public static final int ENVIRONMENT_POST_PROCESSOR_LISTENER_ORDER = EnvironmentPostProcessorApplicationListener.DEFAULT_ORDER;
 
     /**
-     * 必须在 LogEnvironmentPreparingListener 之后, 且 LoggingApplicationListener 之前
+     * 必须在 LogEnvironmentPreparingListener 之后, 且 LoggingApplicationListener 之前，Ordered.HIGHEST_PRECEDENCE + 13
      */
-    public static final int SOFA_CONFIG_SOURCE_SUPPORT_LISTENER_ORDER = LOG_ENVIRONMENT_PREPARING_LISTENER_ORDER + 3;
+    public static final int SOFA_CONFIG_SOURCE_SUPPORT_LISTENER_ORDER = ENVIRONMENT_POST_PROCESSOR_LISTENER_ORDER + 3;
 
     public static final int SOFA_TRACER_CONFIGURATION_LISTENER_ORDER  = Ordered.HIGHEST_PRECEDENCE + 50;
 
     static {
-        Assert.isTrue(
-            SOFA_CONFIG_SOURCE_SUPPORT_LISTENER_ORDER < LoggingApplicationListener.DEFAULT_ORDER,
-            "SofaConfigSourceSupportListener must init after LogEnvironmentPostProcessor");
+        Assert
+            .isTrue(
+                ENVIRONMENT_POST_PROCESSOR_LISTENER_ORDER < SOFA_CONFIG_SOURCE_SUPPORT_LISTENER_ORDER,
+                "ENVIRONMENT_POST_PROCESSOR_LISTENER_ORDER must init before SofaConfigSourceSupportListener");
     }
+
+    // ApplicationEnvironmentPreparedEvent order end
 }

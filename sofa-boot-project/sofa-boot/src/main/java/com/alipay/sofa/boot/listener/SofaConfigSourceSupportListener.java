@@ -17,7 +17,7 @@
 package com.alipay.sofa.boot.listener;
 
 import com.alipay.sofa.boot.constant.SofaBootConstants;
-import com.alipay.sofa.boot.util.ApplicationListenerOrderConstants;
+import com.alipay.sofa.boot.constant.ApplicationListenerOrderConstants;
 import com.alipay.sofa.common.config.SofaConfigs;
 import com.alipay.sofa.common.config.source.AbstractConfigSource;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
