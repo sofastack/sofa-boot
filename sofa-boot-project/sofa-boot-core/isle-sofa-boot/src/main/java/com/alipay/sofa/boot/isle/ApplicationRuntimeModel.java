@@ -26,9 +26,11 @@ import org.springframework.lang.NonNull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -51,6 +53,8 @@ public class ApplicationRuntimeModel implements IsleDeploymentModel {
     private final Map<String, DeploymentDescriptor> deploymentMap                  = new LinkedHashMap<>();
     /** deploy registry */
     private final DeployRegistry                    deployRegistry                 = new DeployRegistry();
+    /** no spring powered deploys name*/
+    private final Set<String>                       noSpringPoweredDeploys         = new HashSet<>();
     /** module deployment validator */
     private ModuleDeploymentValidator               moduleDeploymentValidator;
     /** module profiles checker */
@@ -91,8 +95,21 @@ public class ApplicationRuntimeModel implements IsleDeploymentModel {
             return resolvedDeployments;
         }
 
+        //remove all required when no spring powered module exist
+        deploymentMap.values().forEach(dd -> {
+            List<String> requiredModules = dd.getRequiredModules();
+            if (requiredModules != null) {
+                // if required module is no spring powered, remove it
+                requiredModules.removeIf(module -> !deploymentMap.containsKey(module) && noSpringPoweredDeploys.contains(module));
+            }
+        });
+
         resolvedDeployments = deployRegistry.getResolvedObjects();
         return resolvedDeployments;
+    }
+
+    public void addNoSpringPoweredDeployment(DeploymentDescriptor dd) {
+        noSpringPoweredDeploys.add(dd.getModuleName());
     }
 
     public DeployRegistry getDeployRegistry() {
