@@ -33,7 +33,8 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @version DefaultSofaModuleProfileCheckerIntegrationTests.java, v 0.1 2023年02月21日 8:25 PM huzijie Exp $
  */
 @SpringBootTest(classes = IsleSofaBootApplication.class)
-@AddCustomJar({ "dev-module", "test-module", "sample-module" })
+@AddCustomJar({ "dev-module", "test-module", "sample-module", "nospring-module",
+               "nospringchild-module" })
 @TestPropertySource(properties = "sofa.boot.isle.activeProfiles=dev")
 public class DefaultSofaModuleProfileCheckerIntegrationTests {
 
@@ -43,12 +44,14 @@ public class DefaultSofaModuleProfileCheckerIntegrationTests {
     @Test
     public void verifyRuntimeModel() {
         // contains 2 Deployments
-        assertThat(applicationRuntimeModel.getAllDeployments().size()).isEqualTo(2);
-        assertThat(applicationRuntimeModel.getInstalled().size()).isEqualTo(2);
+        assertThat(applicationRuntimeModel.getAllDeployments().size()).isEqualTo(3);
+        assertThat(applicationRuntimeModel.getInstalled().size()).isEqualTo(3);
         assertThat(applicationRuntimeModel.getFailed().size()).isEqualTo(0);
 
         // check module init success
         assertThat(applicationRuntimeModel.getInstalled().stream()).noneMatch(deploymentDescriptor ->
                 deploymentDescriptor.getModuleName().equals("com.alipay.sofa.test"));
+        assertThat(applicationRuntimeModel.getInstalled().stream()).noneMatch(deploymentDescriptor ->
+                deploymentDescriptor.getModuleName().equals("com.alipay.sofa.no-spring"));
     }
 }

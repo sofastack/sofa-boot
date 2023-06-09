@@ -91,8 +91,7 @@ public class ModelCreatingStage extends AbstractPipelineStage {
         while (urls.hasMoreElements()) {
             URL url = urls.nextElement();
             UrlResource urlResource = new UrlResource(url);
-            Properties props = new Properties();
-            props.load(urlResource.getInputStream());
+            Properties props = loadPropertiesFormUrlResource(urlResource);
             DeploymentDescriptor deploymentDescriptor = createDeploymentDescriptor(url, props,
                 deploymentDescriptorConfiguration, appClassLoader, modulePropertyFileName);
             if (ignoreCalculateRequireModules.contains(deploymentDescriptor.getModuleName())) {
@@ -101,6 +100,12 @@ public class ModelCreatingStage extends AbstractPipelineStage {
             deploymentDescriptors.add(deploymentDescriptor);
         }
         return deploymentDescriptors;
+    }
+
+    protected Properties loadPropertiesFormUrlResource(UrlResource urlResource) throws IOException {
+        Properties props = new Properties();
+        props.load(urlResource.getInputStream());
+        return props;
     }
 
     protected DeploymentDescriptor createDeploymentDescriptor(URL url,
@@ -115,10 +120,14 @@ public class ModelCreatingStage extends AbstractPipelineStage {
     protected void addDeploymentDescriptors(List<DeploymentDescriptor> deploymentDescriptors)
                                                                                              throws DeploymentException {
         for (DeploymentDescriptor dd : deploymentDescriptors) {
-            if (application.isModuleDeployment(dd) && !ignoreModules.contains(dd.getModuleName())) {
-                if (application.acceptModule(dd)) {
-                    if (validateDuplicateModule(dd)) {
-                        application.addDeployment(dd);
+            if (application.isModuleDeployment(dd)) {
+                if (application.acceptModule(dd) && !ignoreModules.contains(dd.getModuleName())) {
+                    if (dd.isSpringPowered()) {
+                        if (validateDuplicateModule(dd)) {
+                            application.addDeployment(dd);
+                        }
+                    } else {
+                        application.addNoSpringPoweredDeployment(dd);
                     }
                 } else {
                     application.addInactiveDeployment(dd);

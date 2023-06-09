@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 /**
  * Base implementation of {@link DeploymentDescriptor} to create module for url.
@@ -225,7 +226,7 @@ public abstract class AbstractDeploymentDescriptor implements DeploymentDescript
         if (StringUtils.hasText(springParent)) {
             requires.add(springParent);
         }
-        return requires;
+        return requires.stream().distinct().collect(Collectors.toList());
     }
 
     protected String getSpringParentFromProperties() {
