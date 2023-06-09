@@ -17,7 +17,7 @@
 package com.alipay.sofa.runtime.ext.component;
 
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
-import com.alipay.sofa.runtime.ext.ExtensionPoint;
+import com.alipay.sofa.service.api.component.ExtensionPoint;
 import com.alipay.sofa.runtime.model.ComponentStatus;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.ComponentManager;

@@ -14,44 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime.ext;
-
-import java.util.List;
+package com.alipay.sofa.service.api.component;
 
 /**
- * SOFA Extension Point Object.
+ * Interface to register or unregister extension.
  *
  * @author xi.hux@alipay.com
  * @author ruoshan
  * @since 2.6.0
  */
-public interface ExtensionPoint {
+
+public interface Extensible {
+    /**
+     * Register extension.
+     *
+     * @param extension need to be registered
+     */
+    void registerExtension(Extension extension) throws Exception;
 
     /**
-     * Get extension point name.
+     * Un register extension.
      *
-     * @return extension point name
+     * @param extension need to be unregistered
      */
-    String getName();
-
-    /**
-     * Get all contributions class.
-     *
-     * @return all contributions class
-     */
-    List<Class<?>> getContributions();
-
-    /**
-     * Get the comment.
-     *
-     * @return the comment
-     */
-    String getDocumentation();
-
-    /**
-     * Has contribution or not.
-     *
-     * @return true or false
-     */
-    boolean hasContribution();
+    void unregisterExtension(Extension extension) throws Exception;
 }

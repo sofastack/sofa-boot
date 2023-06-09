@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.runtime.ext;
+package com.alipay.sofa.service.api.component;
 
 import org.w3c.dom.Element;
 

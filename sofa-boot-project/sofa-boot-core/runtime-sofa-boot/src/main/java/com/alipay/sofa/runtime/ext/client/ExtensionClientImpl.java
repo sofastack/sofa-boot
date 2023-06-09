@@ -30,7 +30,7 @@ import com.alipay.sofa.runtime.spi.component.DefaultImplementation;
 import com.alipay.sofa.runtime.spi.component.Implementation;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.component.ComponentNameFactory;
-import com.alipay.sofa.runtime.ext.ExtensionPoint;
+import com.alipay.sofa.service.api.component.ExtensionPoint;
 
 /**
  * Programming API Implementation of Extension/Extension-Point.
