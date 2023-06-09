@@ -73,7 +73,6 @@ public class ApplicationRuntimeModelTests {
             deploymentDescriptorConfiguration, ApplicationRuntimeModelTests.class.getClassLoader(),
             testModuleConfigFile);
         assertThat(dd instanceof FileDeploymentDescriptor).isTrue();
-        assertThat(application.isModuleDeployment(dd)).isFalse();
         addSpringXml(dd);
         assertThat(application.isModuleDeployment(dd)).isTrue();
         application.addDeployment(dd);

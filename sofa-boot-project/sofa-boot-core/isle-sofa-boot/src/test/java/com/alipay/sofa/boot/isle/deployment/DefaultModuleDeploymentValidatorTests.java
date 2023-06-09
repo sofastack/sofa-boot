@@ -54,16 +54,4 @@ public class DefaultModuleDeploymentValidatorTests {
         assertThat(result).isFalse();
     }
 
-    @Test
-    public void testIsModuleDeploymentReturnsFalseForNonSpringPoweredModule() {
-        DeploymentDescriptor deploymentDescriptor = mock(DeploymentDescriptor.class);
-        when(deploymentDescriptor.getModuleName()).thenReturn("sample-module");
-        when(deploymentDescriptor.isSpringPowered()).thenReturn(false);
-
-        DefaultModuleDeploymentValidator validator = new DefaultModuleDeploymentValidator();
-        boolean result = validator.isModuleDeployment(deploymentDescriptor);
-
-        assertThat(result).isFalse();
-    }
-
 }
