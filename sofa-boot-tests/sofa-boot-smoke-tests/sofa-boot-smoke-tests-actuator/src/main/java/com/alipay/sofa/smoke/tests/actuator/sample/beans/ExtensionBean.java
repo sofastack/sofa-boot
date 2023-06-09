@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.smoke.tests.actuator.sample.beans;
 
-import com.alipay.sofa.runtime.ext.Extension;
+import com.alipay.sofa.service.api.component.Extension;
 
 /**
  * @author huzijie

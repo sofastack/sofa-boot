@@ -27,7 +27,7 @@ import com.alipay.sofa.runtime.spi.component.Implementation;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.ext.spring.SpringImplementationImpl;
 import com.alipay.sofa.runtime.spi.component.ComponentNameFactory;
-import com.alipay.sofa.runtime.ext.ExtensionPoint;
+import com.alipay.sofa.service.api.component.ExtensionPoint;
 
 /**
  * SOFA ExtensionPoint Component.
