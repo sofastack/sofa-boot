@@ -34,6 +34,10 @@ import java.util.Map;
 @ConfigurationProperties("sofa.boot.rpc")
 public class SofaBootRpcProperties implements EnvironmentAware {
 
+    public static final String  PREFIX     = "sofa.boot.rpc";
+
+    public static final String  OLD_PREFIX = "com.alipay.sofa.rpc";
+
     private Environment         environment;
 
     /**
@@ -858,8 +862,13 @@ public class SofaBootRpcProperties implements EnvironmentAware {
         if (environment == null) {
             return null;
         }
-        return environment.getProperty("sofa.boot.rpc."
-                                       + camelToDot(enclosingMethodName.substring(3)));
+        String key = camelToDot(enclosingMethodName.substring(3));
+        String result = environment.getProperty(PREFIX + "." + key);
+        if (result != null) {
+            return result;
+        } else {
+            return environment.getProperty(OLD_PREFIX + "." + key);
+        }
     }
 
     public String camelToDot(String camelCaseString) {
