@@ -36,9 +36,9 @@ public class SmartAnnotationUtils {
 
     /**
      * 使用 {@link MergedAnnotations.SearchStrategy#TYPE_HIERARCHY} 搜索策略获取最近的注解集合
-     * <li> 如果元素上无注解，返回空的集合
-     * <li> 如果元素上仅有一个注解，返回包含该注解的集合
-     * <li> 如果元素上有多个注解，通过 {@link MergedAnnotations#get(Class)} 方法拿到最近的注解，返回的集合仅包含最近的注解所在元素上的注解
+     * <p> 如果元素上无注解，返回空的集合
+     * <p> 如果元素上仅有一个注解，返回包含该注解的集合
+     * <p> 如果元素上有多个注解，通过 {@link MergedAnnotations#get(Class)} 方法拿到最近的注解，返回的集合仅包含最近的注解所在元素上的注解
      *
      * @param element 注解所在元素
      * @param annotationType 注解类
@@ -53,9 +53,9 @@ public class SmartAnnotationUtils {
 
     /**
      * 使用指定搜索策略获取最近的注解集合
-     * <li> 如果元素上无注解，返回空的集合
-     * <li> 如果元素上仅有一个注解，返回包含该注解的集合
-     * <li> 如果元素上有多个注解，通过 {@link MergedAnnotations#get(Class)} 方法拿到最近的注解，返回的集合仅包含最近的注解所在元素上的注解
+     * <p> 如果元素上无注解，返回空的集合
+     * <p> 如果元素上仅有一个注解，返回包含该注解的集合
+     * <p> 如果元素上有多个注解，通过 {@link MergedAnnotations#get(Class)} 方法拿到最近的注解，返回的集合仅包含最近的注解所在元素上的注解
      *
      * @param element 注解所在元素
      * @param annotationType 注解类
