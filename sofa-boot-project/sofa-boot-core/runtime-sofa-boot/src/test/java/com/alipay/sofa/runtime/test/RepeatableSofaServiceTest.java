@@ -49,7 +49,7 @@ import java.util.Collection;
 @Import({ RepeatableSofaServiceTest.RepeatableClassA.class,
          RepeatableSofaServiceTest.RepeatableClassB.class,
          RepeatableSofaServiceTest.RepeatableClassD.class,
-        RepeatableSofaServiceTest.RepeatableClassE.class,
+         RepeatableSofaServiceTest.RepeatableClassE.class,
          RepeatableSofaServiceTest.RepeatableConfiguration.class })
 public class RepeatableSofaServiceTest {
 
@@ -111,7 +111,6 @@ public class RepeatableSofaServiceTest {
             return null;
         }
     }
-
 
     @SofaServices({ @SofaService(interfaceType = SampleService.class, uniqueId = "I"),
             @SofaService(interfaceType = SampleService.class, uniqueId = "J") })
