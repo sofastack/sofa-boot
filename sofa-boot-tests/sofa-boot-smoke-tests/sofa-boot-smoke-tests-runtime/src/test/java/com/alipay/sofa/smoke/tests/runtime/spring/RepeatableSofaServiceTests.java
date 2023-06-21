@@ -45,6 +45,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Import({ RepeatableSofaServiceTests.RepeatableClassA.class,
          RepeatableSofaServiceTests.RepeatableClassB.class,
          RepeatableSofaServiceTests.RepeatableClassD.class,
+         RepeatableSofaServiceTests.RepeatableClassE.class,
          RepeatableSofaServiceTests.RepeatableConfiguration.class })
 public class RepeatableSofaServiceTests {
 
@@ -65,6 +66,8 @@ public class RepeatableSofaServiceTests {
         assertThat((findServiceByUniqueId(components, "H"))).isTrue();
         assertThat((findServiceByUniqueId(components, "I"))).isTrue();
         assertThat((findServiceByUniqueId(components, "J"))).isTrue();
+        assertThat((findServiceByUniqueId(components, "K"))).isTrue();
+        assertThat((findServiceByUniqueId(components, "L"))).isTrue();
     }
 
     private boolean findServiceByUniqueId(Collection<ComponentInfo> componentInfos, String value) {
@@ -108,6 +111,16 @@ public class RepeatableSofaServiceTests {
     @SofaServices({ @SofaService(interfaceType = SampleService.class, uniqueId = "I"),
             @SofaService(interfaceType = SampleService.class, uniqueId = "J") })
     static class RepeatableClassD implements SampleService {
+
+        @Override
+        public String service() {
+            return null;
+        }
+    }
+
+    @SofaServices({ @SofaService(interfaceType = SampleService.class, uniqueId = "L"),
+            @SofaService(interfaceType = SampleService.class, uniqueId = "K") })
+    static class RepeatableClassE extends RepeatableClassC {
 
         @Override
         public String service() {
