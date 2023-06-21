@@ -43,7 +43,7 @@ public class ApplicationListenerOrderConstants {
      */
     public static final int SOFA_CONFIG_SOURCE_SUPPORT_LISTENER_ORDER = LOG_ENVIRONMENT_PREPARING_LISTENER_ORDER + 3;
 
-    public static final int SOFA_TRACER_CONFIGURATION_LISTENER_ORDER  = Ordered.HIGHEST_PRECEDENCE + 50;
+    public static final int SOFA_TRACER_CONFIGURATION_LISTENER_ORDER  = Ordered.HIGHEST_PRECEDENCE + 30;
 
     static {
         Assert
