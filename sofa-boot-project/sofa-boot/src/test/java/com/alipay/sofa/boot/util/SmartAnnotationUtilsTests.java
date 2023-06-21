@@ -2,15 +2,15 @@
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License).isEqualTo(Version 2.0
+ * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing).isEqualTo(software
+ * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND).isEqualTo(either express or implied.
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
@@ -92,15 +92,16 @@ public class SmartAnnotationUtilsTests {
 
     @Test
     public void testAnnotationOnMethod() {
-        assertThat(0).isEqualTo(getAnnotations(getMethod(ChildMethodClass.class, "noMethod")).size());
+        assertThat(0).isEqualTo(
+            getAnnotations(getMethod(ChildMethodClass.class, "noMethod")).size());
 
-        assertThat(1).isEqualTo(getAnnotations(getMethod(ChildMethodClass.class, "parentMethod"))
-            .size());
+        assertThat(1).isEqualTo(
+            getAnnotations(getMethod(ChildMethodClass.class, "parentMethod")).size());
         assertThat("overrideParentMethod").isEqualTo(
             getAnnotations(getMethod(ChildMethodClass.class, "parentMethod")).get(0));
 
-        assertThat(2).isEqualTo(getAnnotations(getMethod(ChildMethodClass.class, "selfMethod"))
-            .size());
+        assertThat(2).isEqualTo(
+            getAnnotations(getMethod(ChildMethodClass.class, "selfMethod")).size());
         assertThat("selfMethodA").isEqualTo(
             getAnnotations(getMethod(ChildMethodClass.class, "selfMethod")).get(0));
         assertThat("selfMethodB").isEqualTo(
@@ -111,8 +112,8 @@ public class SmartAnnotationUtilsTests {
         assertThat("parentSelfMethod").isEqualTo(
             getAnnotations(getMethod(ChildMethodClass.class, "parentSelfMethod")).get(0));
 
-        assertThat(1).isEqualTo(getAnnotations(getMethod(ParentMethodClass.class, "parentMethod"))
-            .size());
+        assertThat(1).isEqualTo(
+            getAnnotations(getMethod(ParentMethodClass.class, "parentMethod")).size());
         assertThat("parentMethod").isEqualTo(
             getAnnotations(getMethod(ParentMethodClass.class, "parentMethod")).get(0));
     }
