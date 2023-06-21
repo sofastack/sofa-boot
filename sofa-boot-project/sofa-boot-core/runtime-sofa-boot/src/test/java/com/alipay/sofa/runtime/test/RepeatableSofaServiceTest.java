@@ -49,6 +49,7 @@ import java.util.Collection;
 @Import({ RepeatableSofaServiceTest.RepeatableClassA.class,
          RepeatableSofaServiceTest.RepeatableClassB.class,
          RepeatableSofaServiceTest.RepeatableClassD.class,
+         RepeatableSofaServiceTest.RepeatableClassE.class,
          RepeatableSofaServiceTest.RepeatableConfiguration.class })
 public class RepeatableSofaServiceTest {
 
@@ -69,6 +70,8 @@ public class RepeatableSofaServiceTest {
         Assert.assertTrue(findServiceByUniqueId(components, "H"));
         Assert.assertTrue(findServiceByUniqueId(components, "I"));
         Assert.assertTrue(findServiceByUniqueId(components, "J"));
+        Assert.assertTrue(findServiceByUniqueId(components, "K"));
+        Assert.assertTrue(findServiceByUniqueId(components, "L"));
     }
 
     private boolean findServiceByUniqueId(Collection<ComponentInfo> componentInfos, String value) {
@@ -112,6 +115,16 @@ public class RepeatableSofaServiceTest {
     @SofaServices({ @SofaService(interfaceType = SampleService.class, uniqueId = "I"),
             @SofaService(interfaceType = SampleService.class, uniqueId = "J") })
     static class RepeatableClassD implements SampleService {
+
+        @Override
+        public String service() {
+            return null;
+        }
+    }
+
+    @SofaServices({ @SofaService(interfaceType = SampleService.class, uniqueId = "L"),
+            @SofaService(interfaceType = SampleService.class, uniqueId = "K") })
+    static class RepeatableClassE extends RepeatableClassC {
 
         @Override
         public String service() {
