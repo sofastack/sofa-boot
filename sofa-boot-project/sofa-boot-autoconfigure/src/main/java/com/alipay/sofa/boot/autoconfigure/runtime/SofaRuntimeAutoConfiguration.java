@@ -16,12 +16,17 @@
  */
 package com.alipay.sofa.boot.autoconfigure.runtime;
 
-import com.alipay.sofa.runtime.SofaFramework;
+import com.alipay.sofa.boot.autoconfigure.condition.ConditionalOnSwitch;
+import com.alipay.sofa.boot.constant.SofaBootConstants;
+import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
+import com.alipay.sofa.common.thread.NamedThreadFactory;
+import com.alipay.sofa.common.thread.SofaThreadPoolExecutor;
 import com.alipay.sofa.runtime.api.client.ReferenceClient;
 import com.alipay.sofa.runtime.api.client.ServiceClient;
-import com.alipay.sofa.runtime.client.impl.ClientFactoryImpl;
-import com.alipay.sofa.runtime.component.impl.StandardSofaRuntimeManager;
-import com.alipay.sofa.runtime.configure.SofaRuntimeConfigurationProperties;
+import com.alipay.sofa.runtime.async.AsyncInitMethodManager;
+import com.alipay.sofa.runtime.context.ComponentContextRefreshInterceptor;
+import com.alipay.sofa.runtime.impl.ClientFactoryImpl;
+import com.alipay.sofa.runtime.impl.StandardSofaRuntimeManager;
 import com.alipay.sofa.runtime.proxy.ProxyBeanFactoryPostProcessor;
 import com.alipay.sofa.runtime.service.client.ReferenceClientImpl;
 import com.alipay.sofa.runtime.service.client.ServiceClientImpl;
@@ -34,86 +39,71 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
+import com.alipay.sofa.runtime.spi.service.DynamicServiceProxyManager;
 import com.alipay.sofa.runtime.spring.AsyncInitBeanFactoryPostProcessor;
 import com.alipay.sofa.runtime.spring.AsyncProxyBeanPostProcessor;
 import com.alipay.sofa.runtime.spring.RuntimeContextBeanFactoryPostProcessor;
 import com.alipay.sofa.runtime.spring.ServiceBeanFactoryPostProcessor;
-import com.alipay.sofa.runtime.spring.SofaShareBeanFactoryPostProcessor;
-import com.alipay.sofa.runtime.spring.async.AsyncTaskExecutionListener;
-import com.alipay.sofa.runtime.spring.share.SofaPostProcessorShareManager;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.context.properties.bind.Bindable;
+import org.springframework.boot.context.properties.bind.Binder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.support.SpringFactoriesLoader;
+import org.springframework.util.Assert;
 
 import java.util.HashSet;
-import java.util.ServiceLoader;
-import java.util.Set;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 /**
+ * {@link EnableAutoConfiguration Auto-configuration} for sofa runtime.
+ *
  * @author xuanbei 18/3/17
  */
-@Configuration(proxyBeanMethods = false)
-@EnableConfigurationProperties(SofaRuntimeConfigurationProperties.class)
-@ConditionalOnClass(SofaFramework.class)
+@AutoConfiguration
+@ConditionalOnClass(SofaRuntimeContext.class)
+@EnableConfigurationProperties(SofaRuntimeProperties.class)
 public class SofaRuntimeAutoConfiguration {
 
-    @Bean
-    @ConditionalOnMissingBean
-    public AsyncTaskExecutionListener asyncTaskExecutionListener() {
-        return new AsyncTaskExecutionListener();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public static AsyncProxyBeanPostProcessor asyncProxyBeanPostProcessor() {
-        return new AsyncProxyBeanPostProcessor();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public static AsyncInitBeanFactoryPostProcessor asyncInitBeanFactoryPostProcessor() {
-        return new AsyncInitBeanFactoryPostProcessor();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public static BindingConverterFactory bindingConverterFactory() {
-        BindingConverterFactory bindingConverterFactory = new BindingConverterFactoryImpl();
-        bindingConverterFactory
-            .addBindingConverters(getClassesByServiceLoader(BindingConverter.class));
-        return bindingConverterFactory;
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public static BindingAdapterFactory bindingAdapterFactory() {
-        BindingAdapterFactory bindingAdapterFactory = new BindingAdapterFactoryImpl();
-        bindingAdapterFactory.addBindingAdapters(getClassesByServiceLoader(BindingAdapter.class));
-        return bindingAdapterFactory;
-    }
+    private static final Logger LOGGER = SofaBootLoggerFactory
+                                           .getLogger(SofaRuntimeAutoConfiguration.class);
 
     @Bean
     @ConditionalOnMissingBean
     public static SofaRuntimeManager sofaRuntimeManager(Environment environment,
                                                         BindingConverterFactory bindingConverterFactory,
-                                                        BindingAdapterFactory bindingAdapterFactory) {
+                                                        BindingAdapterFactory bindingAdapterFactory,
+                                                        ObjectProvider<DynamicServiceProxyManager> dynamicServiceProxyManager) {
         ClientFactoryInternal clientFactoryInternal = new ClientFactoryImpl();
         SofaRuntimeManager sofaRuntimeManager = new StandardSofaRuntimeManager(
-            environment.getProperty("spring.application.name"), Thread.currentThread()
+            environment.getProperty(SofaBootConstants.APP_NAME_KEY), Thread.currentThread()
                 .getContextClassLoader(), clientFactoryInternal);
-        sofaRuntimeManager.getComponentManager().registerComponentClient(
-            ReferenceClient.class,
-            new ReferenceClientImpl(sofaRuntimeManager.getSofaRuntimeContext(),
-                bindingConverterFactory, bindingAdapterFactory));
-        sofaRuntimeManager.getComponentManager().registerComponentClient(
-            ServiceClient.class,
-            new ServiceClientImpl(sofaRuntimeManager.getSofaRuntimeContext(),
-                bindingConverterFactory, bindingAdapterFactory));
-        SofaFramework.registerSofaRuntimeManager(sofaRuntimeManager);
+        clientFactoryInternal.registerClient(ReferenceClient.class, new ReferenceClientImpl(
+            sofaRuntimeManager.getSofaRuntimeContext(), bindingConverterFactory,
+            bindingAdapterFactory));
+        clientFactoryInternal.registerClient(ServiceClient.class, new ServiceClientImpl(
+            sofaRuntimeManager.getSofaRuntimeContext(), bindingConverterFactory,
+            bindingAdapterFactory));
+
+        // use bind to inject properties, avoid bean early init problem.
+        SofaRuntimeContext sofaRuntimeContext = sofaRuntimeManager.getSofaRuntimeContext();
+        dynamicServiceProxyManager.ifUnique(sofaRuntimeContext::setServiceProxyManager);
+        Binder binder = Binder.get(environment);
+        SofaRuntimeContext.Properties properties = sofaRuntimeContext.getProperties();
+        Bindable<SofaRuntimeContext.Properties> bindable = Bindable.of(SofaRuntimeContext.Properties.class)
+                .withExistingValue(properties);
+        binder.bind("sofa.boot.runtime", bindable);
+
         return sofaRuntimeManager;
     }
 
@@ -125,24 +115,26 @@ public class SofaRuntimeAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
+    public static BindingConverterFactory bindingConverterFactory() {
+        BindingConverterFactory bindingConverterFactory = new BindingConverterFactoryImpl();
+        bindingConverterFactory.addBindingConverters(new HashSet<>(SpringFactoriesLoader
+            .loadFactories(BindingConverter.class, null)));
+        return bindingConverterFactory;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public static BindingAdapterFactory bindingAdapterFactory() {
+        BindingAdapterFactory bindingAdapterFactory = new BindingAdapterFactoryImpl();
+        bindingAdapterFactory.addBindingAdapters(new HashSet<>(SpringFactoriesLoader.loadFactories(
+            BindingAdapter.class, null)));
+        return bindingAdapterFactory;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
     public static RuntimeContextBeanFactoryPostProcessor runtimeContextBeanFactoryPostProcessor() {
         return new RuntimeContextBeanFactoryPostProcessor();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    @ConditionalOnClass(name = "com.alipay.sofa.isle.ApplicationRuntimeModel")
-    @ConditionalOnProperty(value = "com.alipay.sofa.boot.enable-isle", matchIfMissing = true)
-    public static SofaShareBeanFactoryPostProcessor sofaModuleBeanFactoryPostProcessor() {
-        return new SofaShareBeanFactoryPostProcessor();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    @ConditionalOnClass(name = "com.alipay.sofa.isle.ApplicationRuntimeModel")
-    @ConditionalOnProperty(value = "com.alipay.sofa.boot.enable-isle", matchIfMissing = true)
-    public SofaPostProcessorShareManager sofaModulePostProcessorShareManager() {
-        return new SofaPostProcessorShareManager();
     }
 
     @Bean
@@ -152,18 +144,55 @@ public class SofaRuntimeAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnProperty(prefix = "com.alipay.sofa.proxy.bean", name = "enabled", havingValue = "true", matchIfMissing = true)
+    @ConditionalOnMissingBean
     public static ProxyBeanFactoryPostProcessor proxyBeanFactoryPostProcessor() {
         return new ProxyBeanFactoryPostProcessor();
     }
 
-    public static <T> Set<T> getClassesByServiceLoader(Class<T> clazz) {
-        ServiceLoader<T> serviceLoader = ServiceLoader.load(clazz);
+    @Bean
+    @ConditionalOnMissingBean
+    public ComponentContextRefreshInterceptor componentContextRefreshInterceptor(SofaRuntimeManager sofaRuntimeManager) {
+        return new ComponentContextRefreshInterceptor(sofaRuntimeManager);
+    }
 
-        Set<T> result = new HashSet<>();
-        for (T t : serviceLoader) {
-            result.add(t);
+    @Configuration(proxyBeanMethods = false)
+    @ConditionalOnSwitch(value = "runtimeAsyncInit")
+    static class AsyncInitConfiguration {
+
+        @Bean
+        @ConditionalOnMissingBean
+        public static AsyncInitMethodManager asyncInitMethodManager() {
+            return new AsyncInitMethodManager();
         }
-        return result;
+
+        @Bean(AsyncInitMethodManager.ASYNC_INIT_METHOD_EXECUTOR_BEAN_NAME)
+        @ConditionalOnMissingBean(name = AsyncInitMethodManager.ASYNC_INIT_METHOD_EXECUTOR_BEAN_NAME)
+        public Supplier<ThreadPoolExecutor> asyncInitMethodExecutor(SofaRuntimeProperties sofaRuntimeProperties) {
+            return ()-> {
+                int coreSize = sofaRuntimeProperties.getAsyncInitExecutorCoreSize();
+                int maxSize = sofaRuntimeProperties.getAsyncInitExecutorMaxSize();
+                Assert.isTrue(coreSize >= 0, "executorCoreSize must no less than zero");
+                Assert.isTrue(maxSize >= 0, "executorMaxSize must no less than zero");
+
+                LOGGER.info("create async-init-bean thread pool, corePoolSize: {}, maxPoolSize: {}.",
+                        coreSize, maxSize);
+                return new SofaThreadPoolExecutor(coreSize, maxSize, 30, TimeUnit.SECONDS,
+                        new SynchronousQueue<>(), new NamedThreadFactory("async-init-bean"),
+                        new ThreadPoolExecutor.CallerRunsPolicy(), "async-init-bean",
+                        SofaBootConstants.SOFA_BOOT_SPACE_NAME);
+            };
+        }
+
+        @Bean
+        @ConditionalOnMissingBean
+        public static AsyncProxyBeanPostProcessor asyncProxyBeanPostProcessor(AsyncInitMethodManager asyncInitMethodManager) {
+            return new AsyncProxyBeanPostProcessor(asyncInitMethodManager);
+        }
+
+        @Bean
+        @ConditionalOnMissingBean
+        public static AsyncInitBeanFactoryPostProcessor asyncInitBeanFactoryPostProcessor() {
+            return new AsyncInitBeanFactoryPostProcessor();
+        }
     }
 }

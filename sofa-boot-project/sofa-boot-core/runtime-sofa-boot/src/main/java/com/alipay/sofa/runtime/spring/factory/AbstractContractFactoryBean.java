@@ -22,7 +22,7 @@ import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import com.alipay.sofa.boot.error.ErrorCode;
+import com.alipay.sofa.boot.log.ErrorCode;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
@@ -41,7 +41,7 @@ import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
 
 /**
- * Abstract Contract Factory Bean
+ * Abstract Contract Factory Bean.
  *
  * @author xuanbei 18/3/1
  */
@@ -100,7 +100,6 @@ public abstract class AbstractContractFactoryBean implements InitializingBean, F
         if (!apiType) {
             this.bindings = parseBindings(tempElements, applicationContext, isInBinding());
         }
-        doAfterPropertiesSet();
     }
 
     protected List<Binding> parseBindings(List<Element> parseElements,
@@ -179,6 +178,10 @@ public abstract class AbstractContractFactoryBean implements InitializingBean, F
         this.uniqueId = uniqueId;
     }
 
+    public String getUniqueId() {
+        return uniqueId;
+    }
+
     public void setInterfaceType(String interfaceType) {
         this.interfaceType = interfaceType;
     }
@@ -233,13 +236,16 @@ public abstract class AbstractContractFactoryBean implements InitializingBean, F
     }
 
     /**
-     * is in binding or not
+     * Is in binding or not.
      *
      * @return true or false
      */
     protected abstract boolean isInBinding();
 
-    protected abstract void doAfterPropertiesSet() throws Exception;
-
+    /**
+     * Set properties to bindingConverterContext.
+     *
+     * @param bindingConverterContext bindingConverterContext
+     */
     protected abstract void setProperties(BindingConverterContext bindingConverterContext);
 }

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:sofa="http://sofastack.io/schema/sofaboot"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://sofastack.io/schema/sofaboot http://sofastack.io/schema/sofaboot.xsd">
+    <bean id="whateverBean" class="com.alipay.sofa.smoke.tests.rpc.boot.bean.misc.WhateverClass" />
+    <sofa:service ref="whateverBean" interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.misc.WhateverInterface">
+        <sofa:binding.bolt>
+            <sofa:global-attrs timeout="${timeout}" />
+        </sofa:binding.bolt>
+    </sofa:service>
+
+    <sofa:reference id="whatever" jvm-first="false" interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.misc.WhateverInterface">
+        <sofa:binding.bolt>
+            <sofa:global-attrs timeout="${timeout}" />
+        </sofa:binding.bolt>
+    </sofa:reference>
+
+    <sofa:reference id="whateverJvm" jvm-first="false" interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.misc.WhateverInterface" />
+
+    <bean id="methodElementInterfaceImpl" class="com.alipay.sofa.smoke.tests.rpc.boot.bean.misc.MethodElementInterfaceImpl" />
+    <sofa:service ref="methodElementInterfaceImpl" interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.misc.MethodElementInterface">
+        <sofa:binding.bolt>
+            <sofa:method name="service" timeout="${timeout}"/>
+        </sofa:binding.bolt>
+    </sofa:service>
+
+    <bean id="callback" class="com.alipay.sofa.smoke.tests.rpc.boot.bean.invoke.CallbackImpl"/>
+    <sofa:reference id="methodElementInterface" interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.misc.MethodElementInterface">
+        <sofa:binding.bolt>
+            <sofa:method name="service" type="callback" callback-ref="callback"/>
+        </sofa:binding.bolt>
+    </sofa:reference>
+</beans>

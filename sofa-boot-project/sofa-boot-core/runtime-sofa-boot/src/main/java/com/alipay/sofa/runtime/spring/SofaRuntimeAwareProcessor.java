@@ -16,25 +16,31 @@
  */
 package com.alipay.sofa.runtime.spring;
 
-import com.alipay.sofa.runtime.SofaRuntimeUtils;
+import com.alipay.sofa.boot.context.processor.SingletonSofaPostProcessor;
 import com.alipay.sofa.runtime.api.aware.ClientFactoryAware;
 import com.alipay.sofa.runtime.api.aware.ExtensionClientAware;
+import com.alipay.sofa.runtime.api.client.ClientFactory;
+import com.alipay.sofa.runtime.api.client.ExtensionClient;
 import com.alipay.sofa.runtime.ext.client.ExtensionClientImpl;
 import com.alipay.sofa.runtime.filter.JvmFilter;
-import com.alipay.sofa.runtime.filter.JvmFilterHolder;
 import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import com.alipay.sofa.runtime.spi.spring.RuntimeShutdownAware;
 import com.alipay.sofa.runtime.spi.spring.SofaRuntimeContextAware;
-import com.alipay.sofa.runtime.spring.singleton.SingletonSofaPostProcessor;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.core.PriorityOrdered;
 
 /**
- * @author yuanxuan
- * @version : SofaRuntimeAwareProcessor.java, v 0.1 2023年03月28日 15:52 yuanxuan Exp $
+ * Implementation of {@link BeanPostProcessor} to inject {@link SofaRuntimeContext},
+ * {@link ClientFactory}, {@link ExtensionClient}, {@link RuntimeShutdownAware}
+ * and register {@link JvmFilter}.
+ *
+ * @author qilong.zql
+ * @author khotyn
+ * @author huzijie
+ * @since  2.5.0
  */
 @SingletonSofaPostProcessor
 public class SofaRuntimeAwareProcessor implements BeanPostProcessor, PriorityOrdered {
@@ -55,11 +61,6 @@ public class SofaRuntimeAwareProcessor implements BeanPostProcessor, PriorityOrd
     }
 
     @Override
-    public int getOrder() {
-        return PriorityOrdered.HIGHEST_PRECEDENCE;
-    }
-
-    @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName)
                                                                                throws BeansException {
         if (bean instanceof SofaRuntimeContextAware) {
@@ -71,14 +72,18 @@ public class SofaRuntimeAwareProcessor implements BeanPostProcessor, PriorityOrd
         if (bean instanceof ExtensionClientAware) {
             ((ExtensionClientAware) bean).setExtensionClient(extensionClient);
         }
-        if (!SofaRuntimeUtils.isArkEnvironment() || SofaRuntimeUtils.onMasterBiz()) {
-            if (bean instanceof JvmFilter) {
-                JvmFilterHolder.addJvmFilter((JvmFilter) bean);
-            }
+        if (bean instanceof JvmFilter) {
+            sofaRuntimeContext.getJvmFilterHolder().addJvmFilter((JvmFilter) bean);
         }
         if (bean instanceof RuntimeShutdownAware) {
             sofaRuntimeManager.registerShutdownAware((RuntimeShutdownAware) bean);
         }
+
         return bean;
+    }
+
+    @Override
+    public int getOrder() {
+        return PriorityOrdered.HIGHEST_PRECEDENCE;
     }
 }

@@ -49,20 +49,18 @@ public class SofaBootPlugin implements Plugin<Project> {
     private static final String SOFA_BOOT_VERSION                = determineSofaBootVersion();
 
     /**
-     * The name of the {@link Configuration} that contains Spring Boot archives.
-     *
-     * @since 2.0.0
-     */
-    private static final String BOOT_ARCHIVES_CONFIGURATION_NAME = "bootArchives";
-
-    /**
      * The coordinates {@code (group:name:version)} of the
      * {@code sofaboot-dependencies} bom.
      */
     static final String         BOM_COORDINATES                  = "com.alipay.sofa:sofaboot-dependencies:"
                                                                    + SOFA_BOOT_VERSION;
 
-    @SuppressWarnings("NullableProblems")
+    /**
+     * The name of the {@link Configuration} that contains Spring Boot archives.
+     * @since 2.0.0
+     */
+    public static final String  BOOT_ARCHIVES_CONFIGURATION_NAME = "bootArchives";
+
     @Override
     public void apply(Project project) {
         verifyGradleVersion();
@@ -73,12 +71,9 @@ public class SofaBootPlugin implements Plugin<Project> {
 
     private void verifyGradleVersion() {
         GradleVersion currentVersion = GradleVersion.current();
-        if (currentVersion.compareTo(GradleVersion.version("5.6")) < 0
-            || (currentVersion.getBaseVersion().compareTo(GradleVersion.version("6.0")) >= 0 && currentVersion
-                .compareTo(GradleVersion.version("6.3")) < 0)) {
-            throw new GradleException(
-                "SOFABoot plugin requires Gradle 5 (5.6.x only) or Gradle 6 (6.3 or later). "
-                        + "The current version is " + currentVersion);
+        if (currentVersion.compareTo(GradleVersion.version("7.4")) < 0) {
+            throw new GradleException("Spring Boot plugin requires Gradle 7.x (7.4 or later). "
+                                      + "The current version is " + currentVersion);
         }
     }
 
@@ -95,14 +90,11 @@ public class SofaBootPlugin implements Plugin<Project> {
     }
 
     private void registerPluginActions(Project project, Configuration bootArchives) {
-        SinglePublishedArtifact singlePublishedArtifact = new SinglePublishedArtifact(
-                bootArchives.getArtifacts());
-        List<PluginApplicationAction> actions = Arrays.asList(
-                new JavaPluginAction(singlePublishedArtifact),
-                new WarPluginAction(singlePublishedArtifact),
-                new MavenPluginAction(bootArchives.getUploadTaskName()),
-                new SofaDependencyManagementPluginAction(), new ApplicationPluginAction(),
-                new KotlinPluginAction());
+        SinglePublishedArtifact singlePublishedArtifact = new SinglePublishedArtifact(bootArchives,
+                project.getArtifacts());
+        List<PluginApplicationAction> actions = Arrays.asList(new JavaPluginAction(singlePublishedArtifact),
+                new WarPluginAction(singlePublishedArtifact), new SofaDependencyManagementPluginAction(),
+                new ApplicationPluginAction(), new KotlinPluginAction(), new NativeImagePluginAction());
         for (PluginApplicationAction action : actions) {
             withPluginClassOfAction(action,
                     (pluginClass) -> project.getPlugins().withType(pluginClass, (plugin) -> action.execute(project)));
@@ -111,11 +103,14 @@ public class SofaBootPlugin implements Plugin<Project> {
 
     private void withPluginClassOfAction(PluginApplicationAction action,
                                          Consumer<Class<? extends Plugin<? extends Project>>> consumer) {
+        Class<? extends Plugin<? extends Project>> pluginClass;
         try {
-            consumer.accept(action.getPluginClass());
+            pluginClass = action.getPluginClass();
         } catch (Throwable ex) {
-            // Plugin class unavailable. Continue.
+            // Plugin class unavailable.
+            return;
         }
+        consumer.accept(pluginClass);
     }
 
     // This method always returns null when executing gradle test

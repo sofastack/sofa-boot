@@ -17,7 +17,8 @@
 package com.alipay.sofa.runtime.service.binding;
 
 /**
- * Used to mark JvmBindingProxy
+ * Interface used to mark class already wrapped by jvm proxy.
+ *
  * @author huzijie
  * @version JvmBindingInterface.java, v 0.1 2022年05月26日 3:25 PM huzijie Exp $
  */

@@ -1,0 +1,9 @@
+com.alipay.sofa.boot.actuator.autoconfigure.beans.IsleBeansEndpointAutoConfiguration
+com.alipay.sofa.boot.actuator.autoconfigure.components.ComponentsEndpointAutoConfiguration
+com.alipay.sofa.boot.actuator.autoconfigure.health.ReadinessAutoConfiguration
+com.alipay.sofa.boot.actuator.autoconfigure.health.ReadinessIsleAutoConfiguration
+com.alipay.sofa.boot.actuator.autoconfigure.health.ReadinessEndpointAutoConfiguration
+com.alipay.sofa.boot.actuator.autoconfigure.health.ReadinessRuntimeAutoConfiguration
+com.alipay.sofa.boot.actuator.autoconfigure.health.ManualReadinessCallbackEndpointAutoConfiguration
+com.alipay.sofa.boot.actuator.autoconfigure.startup.StartupEndPointAutoConfiguration
+com.alipay.sofa.boot.actuator.autoconfigure.rpc.RpcActuatorAutoConfiguration

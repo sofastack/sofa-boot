@@ -1,0 +1,17 @@
+com.alipay.sofa.boot.autoconfigure.runtime.SofaRuntimeAutoConfiguration
+com.alipay.sofa.boot.autoconfigure.isle.SofaModuleAutoConfiguration
+com.alipay.sofa.boot.autoconfigure.rpc.SofaRpcAutoConfiguration
+com.alipay.sofa.boot.autoconfigure.tracer.SofaTracerAutoConfiguration
+com.alipay.sofa.boot.autoconfigure.tracer.datasource.DataSourceAutoConfiguration
+com.alipay.sofa.boot.autoconfigure.tracer.zipkin.ZipkinAutoConfiguration
+com.alipay.sofa.boot.autoconfigure.tracer.resttemplate.RestTemplateAutoConfiguration
+com.alipay.sofa.boot.autoconfigure.tracer.kafka.KafkaAutoConfiguration
+com.alipay.sofa.boot.autoconfigure.tracer.rabbitmq.RabbitMqAutoConfiguration
+com.alipay.sofa.boot.autoconfigure.tracer.rocketmq.RocketMqAutoConfiguration
+com.alipay.sofa.boot.autoconfigure.tracer.springmessage.SpringMessageAutoConfiguration
+com.alipay.sofa.boot.autoconfigure.tracer.redis.RedisAutoConfiguration
+com.alipay.sofa.boot.autoconfigure.tracer.mongo.MongoAutoConfiguration
+com.alipay.sofa.boot.autoconfigure.tracer.flexible.FlexibleAutoConfiguration
+com.alipay.sofa.boot.autoconfigure.tracer.springmvc.OpenTracingSpringMvcAutoConfiguration
+com.alipay.sofa.boot.autoconfigure.tracer.feign.FeignClientAutoConfiguration
+com.alipay.sofa.boot.autoconfigure.ark.SofaArkAutoConfiguration

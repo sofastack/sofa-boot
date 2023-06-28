@@ -16,29 +16,27 @@
  */
 package com.alipay.sofa.runtime.spring;
 
-import com.alipay.sofa.boot.error.ErrorCode;
+import com.alipay.sofa.boot.context.processor.SingletonSofaPostProcessor;
+import com.alipay.sofa.boot.log.ErrorCode;
 import com.alipay.sofa.runtime.api.annotation.SofaClientFactory;
-import com.alipay.sofa.runtime.api.aware.ClientFactoryAware;
 import com.alipay.sofa.runtime.api.client.ClientFactory;
-import com.alipay.sofa.runtime.client.impl.ClientFactoryImpl;
-import com.alipay.sofa.runtime.spring.singleton.SingletonSofaPostProcessor;
+import com.alipay.sofa.runtime.impl.ClientFactoryImpl;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.core.PriorityOrdered;
 import org.springframework.util.ReflectionUtils;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 /**
- * {@link ClientFactoryAware}
- * {@link SofaClientFactory} handler
+ * Implementation of {@link BeanPostProcessor} to inject value to field with {@link SofaClientFactory}.
  *
  * @author xuanbei 18/3/2
  */
 @SingletonSofaPostProcessor
 public class ClientFactoryAnnotationBeanPostProcessor implements BeanPostProcessor, PriorityOrdered {
-    private ClientFactory clientFactory;
+
+    private final ClientFactory clientFactory;
 
     public ClientFactoryAnnotationBeanPostProcessor(ClientFactory clientFactory) {
         this.clientFactory = clientFactory;
@@ -47,32 +45,22 @@ public class ClientFactoryAnnotationBeanPostProcessor implements BeanPostProcess
     @Override
     public Object postProcessBeforeInitialization(final Object bean, String beanName)
                                                                                      throws BeansException {
-        ReflectionUtils.doWithFields(bean.getClass(), new ReflectionUtils.FieldCallback() {
+        ReflectionUtils.doWithFields(bean.getClass(), field -> {
+            if (ClientFactory.class.isAssignableFrom(field.getType())) {
+                ReflectionUtils.makeAccessible(field);
+                ReflectionUtils.setField(field, bean, clientFactory);
+            } else if ((clientFactory instanceof ClientFactoryImpl)
+                       && ((ClientFactoryImpl) clientFactory).getAllClientTypes().contains(
+                           field.getType())) {
+                Object client = clientFactory.getClient(field.getType());
 
-            @Override
-            public void doWith(Field field) throws IllegalArgumentException, IllegalAccessException {
-                if (field.getType().equals(ClientFactory.class)) {
-                    ReflectionUtils.makeAccessible(field);
-                    ReflectionUtils.setField(field, bean, clientFactory);
-                } else if ((clientFactory instanceof ClientFactoryImpl)
-                           && ((ClientFactoryImpl) clientFactory).getAllClientTypes().contains(
-                               field.getType())) {
-                    Object client = clientFactory.getClient(field.getType());
-
-                    ReflectionUtils.makeAccessible(field);
-                    ReflectionUtils.setField(field, bean, client);
-                } else {
-                    throw new RuntimeException(ErrorCode.convert("01-02000"));
-                }
+                ReflectionUtils.makeAccessible(field);
+                ReflectionUtils.setField(field, bean, client);
+            } else {
+                throw new RuntimeException(ErrorCode.convert("01-02000"));
             }
-        }, new ReflectionUtils.FieldFilter() {
-
-            @Override
-            public boolean matches(Field field) {
-                return !Modifier.isStatic(field.getModifiers())
-                       && field.isAnnotationPresent(SofaClientFactory.class);
-            }
-        });
+        }, field -> !Modifier.isStatic(field.getModifiers())
+               && field.isAnnotationPresent(SofaClientFactory.class));
 
         return bean;
     }

@@ -17,73 +17,35 @@
 package com.alipay.sofa.boot.startup;
 
 /**
+ * Stat model to record bean init.
+ *
  * @author <a href="mailto:guaner.zzx@alipay.com">Alaneuler</a>
  * Created on 2020/11/23
  */
 public class BeanStat extends ChildrenStat<BeanStat> {
-    private static final String LAST_PREFIX        = "└─";
-    private static final String MIDDLE_PREFIX      = "├─";
-    private static final String INDENT_PREFIX      = "│   ";
-    private static final String EMPTY_INDEX_PREFIX = "    ";
 
-    private String              beanClassName;
-    private long                beanRefreshStartTime;
-    private long                beanRefreshEndTime;
-    private long                refreshElapsedTime;
-    private long                realRefreshElapsedTime;
-    private long                initTime;
-    private long                afterPropertiesSetTime;
-    private String              interfaceType      = null;
-    private String              beanType;
-    private String              extensionProperty;
+    private String type;
 
-    public void startRefresh() {
-        beanRefreshStartTime = System.currentTimeMillis();
-        setStartTime(beanRefreshStartTime);
+    private long   realRefreshElapsedTime;
+
+    @Deprecated
+    private String beanClassName;
+
+    @Deprecated
+    private long   beanRefreshStartTime;
+
+    @Deprecated
+    private long   beanRefreshEndTime;
+
+    @Deprecated
+    private long   refreshElapsedTime;
+
+    public String getType() {
+        return type;
     }
 
-    public void finishRefresh() {
-        beanRefreshEndTime = System.currentTimeMillis();
-        refreshElapsedTime = beanRefreshEndTime - beanRefreshStartTime;
-
-        long childRefreshTime = 0;
-        for (BeanStat child : getChildren()) {
-            childRefreshTime += child.getRealRefreshElapsedTime();
-        }
-        realRefreshElapsedTime = refreshElapsedTime - childRefreshTime;
-        setEndTime(beanRefreshEndTime);
-    }
-
-    public String getBeanClassName() {
-        return beanClassName;
-    }
-
-    public void setBeanClassName(String beanClassName) {
-        this.beanClassName = beanClassName;
-    }
-
-    public long getRefreshElapsedTime() {
-        return refreshElapsedTime;
-    }
-
-    public void setRefreshElapsedTime(long refreshElapsedTime) {
-        this.refreshElapsedTime = refreshElapsedTime;
-    }
-
-    public long getBeanRefreshStartTime() {
-        return beanRefreshStartTime;
-    }
-
-    public void setBeanRefreshStartTime(long beanRefreshStartTime) {
-        this.beanRefreshStartTime = beanRefreshStartTime;
-    }
-
-    public long getBeanRefreshEndTime() {
-        return beanRefreshEndTime;
-    }
-
-    public void setBeanRefreshEndTime(long beanRefreshEndTime) {
-        this.beanRefreshEndTime = beanRefreshEndTime;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public long getRealRefreshElapsedTime() {
@@ -94,62 +56,43 @@ public class BeanStat extends ChildrenStat<BeanStat> {
         this.realRefreshElapsedTime = realRefreshElapsedTime;
     }
 
-    public long getInitTime() {
-        return initTime;
+    @Deprecated
+    public String getBeanClassName() {
+        return beanClassName;
     }
 
-    public void setInitTime(long initTime) {
-        this.initTime = initTime;
+    @Deprecated
+    public void setBeanClassName(String beanClassName) {
+        this.beanClassName = beanClassName;
     }
 
-    public long getAfterPropertiesSetTime() {
-        return afterPropertiesSetTime;
+    @Deprecated
+    public long getRefreshElapsedTime() {
+        return refreshElapsedTime;
     }
 
-    public void setAfterPropertiesSetTime(long afterPropertiesSetTime) {
-        this.afterPropertiesSetTime = afterPropertiesSetTime;
+    @Deprecated
+    public void setRefreshElapsedTime(long refreshElapsedTime) {
+        this.refreshElapsedTime = refreshElapsedTime;
     }
 
-    public String getInterfaceType() {
-        return interfaceType;
+    @Deprecated
+    public long getBeanRefreshStartTime() {
+        return beanRefreshStartTime;
     }
 
-    public void setInterfaceType(String interfaceType) {
-        this.interfaceType = interfaceType;
+    @Deprecated
+    public void setBeanRefreshStartTime(long beanRefreshStartTime) {
+        this.beanRefreshStartTime = beanRefreshStartTime;
     }
 
-    public String getBeanType() {
-        return beanType;
+    @Deprecated
+    public long getBeanRefreshEndTime() {
+        return beanRefreshEndTime;
     }
 
-    public void setBeanType(String beanType) {
-        this.beanType = beanType;
-    }
-
-    public String getExtensionProperty() {
-        return extensionProperty;
-    }
-
-    public void setExtensionProperty(String extensionProperty) {
-        this.extensionProperty = extensionProperty;
-    }
-
-    public String toString(String indent, boolean last) {
-        StringBuilder rtn = new StringBuilder();
-        rtn.append(indent).append(last ? LAST_PREFIX : MIDDLE_PREFIX).append(beanClassName)
-            .append("  [").append(refreshElapsedTime).append("ms]");
-
-        int size = getChildren().size();
-        for (int i = 0; i < size; ++i) {
-            rtn.append("\n").append(
-                getChildren().get(i).toString(indent + (last ? EMPTY_INDEX_PREFIX : INDENT_PREFIX),
-                    i == size - 1));
-        }
-        return rtn.toString();
-    }
-
-    @Override
-    public String toString() {
-        return toString("", false);
+    @Deprecated
+    public void setBeanRefreshEndTime(long beanRefreshEndTime) {
+        this.beanRefreshEndTime = beanRefreshEndTime;
     }
 }

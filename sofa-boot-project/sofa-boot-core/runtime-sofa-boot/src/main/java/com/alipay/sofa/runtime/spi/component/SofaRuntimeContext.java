@@ -17,24 +17,42 @@
 package com.alipay.sofa.runtime.spi.component;
 
 import com.alipay.sofa.runtime.api.client.ClientFactory;
+import com.alipay.sofa.runtime.filter.JvmFilterHolder;
+import com.alipay.sofa.runtime.spi.client.ClientFactoryInternal;
+import com.alipay.sofa.runtime.spi.service.DefaultDynamicServiceProxyManager;
+import com.alipay.sofa.runtime.spi.service.DynamicServiceProxyManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * SOFA Runtime Context
+ * SOFA Runtime Context.
  *
  * @author xuanbei 18/2/28
  */
 public class SofaRuntimeContext {
-    /** component manager */
-    private ComponentManager   componentManager;
-    /** client factory */
-    private ClientFactory      clientFactory;
-    private SofaRuntimeManager sofaRuntimeManager;
 
-    public SofaRuntimeContext(SofaRuntimeManager sofaRuntimeManager,
-                              ComponentManager componentManager, ClientFactory clientFactory) {
+    /** component manager */
+    private final ComponentManager      componentManager;
+
+    private final SofaRuntimeManager    sofaRuntimeManager;
+
+    /** client factory */
+    private final ClientFactoryInternal clientFactory;
+
+    private final Properties            properties;
+
+    private final JvmFilterHolder       jvmFilterHolder;
+
+    private DynamicServiceProxyManager  serviceProxyManager;
+
+    public SofaRuntimeContext(SofaRuntimeManager sofaRuntimeManager) {
         this.sofaRuntimeManager = sofaRuntimeManager;
-        this.componentManager = componentManager;
-        this.clientFactory = clientFactory;
+        this.componentManager = sofaRuntimeManager.getComponentManager();
+        this.clientFactory = sofaRuntimeManager.getClientFactoryInternal();
+        this.properties = new Properties();
+        this.jvmFilterHolder = new JvmFilterHolder();
+        this.serviceProxyManager = new DefaultDynamicServiceProxyManager();
     }
 
     public String getAppName() {
@@ -55,5 +73,115 @@ public class SofaRuntimeContext {
 
     public SofaRuntimeManager getSofaRuntimeManager() {
         return sofaRuntimeManager;
+    }
+
+    public DynamicServiceProxyManager getServiceProxyManager() {
+        return serviceProxyManager;
+    }
+
+    public void setServiceProxyManager(DynamicServiceProxyManager serviceProxyManager) {
+        this.serviceProxyManager = serviceProxyManager;
+    }
+
+    public Properties getProperties() {
+        return properties;
+    }
+
+    public JvmFilterHolder getJvmFilterHolder() {
+        return jvmFilterHolder;
+    }
+
+    public static class Properties {
+
+        private boolean      skipJvmReferenceHealthCheck          = false;
+        private boolean      skipExtensionHealthCheck             = false;
+        private boolean      disableJvmFirst                      = false;
+        private boolean      extensionFailureInsulating           = false;
+        private boolean      skipAllComponentShutdown             = false;
+        private boolean      skipCommonComponentShutdown          = false;
+        private boolean      jvmFilterEnable                      = false;
+        private boolean      serviceInterfaceTypeCheck            = false;
+        private List<String> skipJvmReferenceHealthCheckList      = new ArrayList<>();
+        private boolean      referenceHealthCheckMoreDetailEnable = false;
+
+        public boolean isSkipJvmReferenceHealthCheck() {
+            return skipJvmReferenceHealthCheck;
+        }
+
+        public void setSkipJvmReferenceHealthCheck(boolean skipJvmReferenceHealthCheck) {
+            this.skipJvmReferenceHealthCheck = skipJvmReferenceHealthCheck;
+        }
+
+        public boolean isSkipExtensionHealthCheck() {
+            return skipExtensionHealthCheck;
+        }
+
+        public void setSkipExtensionHealthCheck(boolean skipExtensionHealthCheck) {
+            this.skipExtensionHealthCheck = skipExtensionHealthCheck;
+        }
+
+        public boolean isDisableJvmFirst() {
+            return disableJvmFirst;
+        }
+
+        public void setDisableJvmFirst(boolean disableJvmFirst) {
+            this.disableJvmFirst = disableJvmFirst;
+        }
+
+        public boolean isExtensionFailureInsulating() {
+            return extensionFailureInsulating;
+        }
+
+        public void setExtensionFailureInsulating(boolean extensionFailureInsulating) {
+            this.extensionFailureInsulating = extensionFailureInsulating;
+        }
+
+        public boolean isSkipAllComponentShutdown() {
+            return skipAllComponentShutdown;
+        }
+
+        public void setSkipAllComponentShutdown(boolean skipAllComponentShutdown) {
+            this.skipAllComponentShutdown = skipAllComponentShutdown;
+        }
+
+        public boolean isSkipCommonComponentShutdown() {
+            return skipCommonComponentShutdown;
+        }
+
+        public void setSkipCommonComponentShutdown(boolean skipCommonComponentShutdown) {
+            this.skipCommonComponentShutdown = skipCommonComponentShutdown;
+        }
+
+        public boolean isJvmFilterEnable() {
+            return jvmFilterEnable;
+        }
+
+        public void setJvmFilterEnable(boolean jvmFilterEnable) {
+            this.jvmFilterEnable = jvmFilterEnable;
+        }
+
+        public boolean isServiceInterfaceTypeCheck() {
+            return serviceInterfaceTypeCheck;
+        }
+
+        public void setServiceInterfaceTypeCheck(boolean serviceInterfaceTypeCheck) {
+            this.serviceInterfaceTypeCheck = serviceInterfaceTypeCheck;
+        }
+
+        public List<String> getSkipJvmReferenceHealthCheckList() {
+            return skipJvmReferenceHealthCheckList;
+        }
+
+        public void setSkipJvmReferenceHealthCheckList(List<String> skipJvmReferenceHealthCheckList) {
+            this.skipJvmReferenceHealthCheckList = skipJvmReferenceHealthCheckList;
+        }
+
+        public boolean isReferenceHealthCheckMoreDetailEnable() {
+            return referenceHealthCheckMoreDetailEnable;
+        }
+
+        public void setReferenceHealthCheckMoreDetailEnable(boolean referenceHealthCheckMoreDetailEnable) {
+            this.referenceHealthCheckMoreDetailEnable = referenceHealthCheckMoreDetailEnable;
+        }
     }
 }

@@ -29,9 +29,12 @@ import org.springframework.util.Assert;
 import static com.alipay.sofa.runtime.spi.component.ComponentDefinitionInfo.BEAN_ID;
 
 /**
+ * Implementation of {@link org.springframework.beans.factory.FactoryBean} to register reference.
+ *
  * @author xuanbei 18/3/1
  */
 public class ReferenceFactoryBean extends AbstractContractFactoryBean {
+
     protected Object  proxy;
     /**
      * jvm first or not
@@ -52,7 +55,8 @@ public class ReferenceFactoryBean extends AbstractContractFactoryBean {
     }
 
     @Override
-    protected void doAfterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() throws Exception {
+        super.afterPropertiesSet();
         Reference reference = buildReference();
         Assert
             .isTrue(bindings.size() <= 1,

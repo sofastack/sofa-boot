@@ -17,6 +17,8 @@
 package com.alipay.sofa.runtime.ext.spring;
 
 /**
+ * A wrapper to hold classloader.
+ *
  * @author huzijie
  * @version ClassLoaderWrapper.java, v 0.1 2022年04月01日 11:20 AM huzijie Exp $
  */

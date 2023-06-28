@@ -18,59 +18,36 @@ package com.alipay.sofa.boot.autoconfigure.tracer;
 
 import com.alipay.common.tracer.core.listener.SpanReportListener;
 import com.alipay.common.tracer.core.listener.SpanReportListenerHolder;
-import com.alipay.common.tracer.core.reporter.facade.Reporter;
-import com.alipay.common.tracer.core.samplers.Sampler;
-import com.alipay.common.tracer.core.samplers.SamplerFactory;
-import com.alipay.common.tracer.core.utils.StringUtils;
-import com.alipay.sofa.tracer.boot.properties.SofaTracerProperties;
-import com.alipay.sofa.tracer.plugin.flexible.FlexibleTracer;
 import io.opentracing.Tracer;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
 /**
- * SofaTracerAutoConfiguration
+ * {@link EnableAutoConfiguration Auto-configuration} for sofa tracer.
  *
  * @author yangguanchao
+ * @author huzijie
  * @since 2018/05/08
  */
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration
 @EnableConfigurationProperties(SofaTracerProperties.class)
-@ConditionalOnClass({ SpanReportListenerHolder.class, Tracer.class, SofaTracerProperties.class,
-                     FlexibleTracer.class })
+@ConditionalOnClass({ SpanReportListenerHolder.class, Tracer.class })
 public class SofaTracerAutoConfiguration {
-
-    private final List<SpanReportListener> spanReportListenerList;
-
-    public SofaTracerAutoConfiguration(List<SpanReportListener> spanReportListenerList) {
-        this.spanReportListenerList = spanReportListenerList;
-    }
 
     @Bean
     @ConditionalOnMissingBean
-    public SpanReportListenerHolder sofaTracerSpanReportListener() {
-        if (this.spanReportListenerList != null && this.spanReportListenerList.size() > 0) {
+    public SpanReportListenerHolder sofaTracerSpanReportListener(List<SpanReportListener> spanReportListenerList) {
+        if (!CollectionUtils.isEmpty(spanReportListenerList)) {
             //cache in tracer listener core
             SpanReportListenerHolder.addSpanReportListeners(spanReportListenerList);
         }
         return null;
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public Tracer sofaTracer(SofaTracerProperties sofaTracerProperties) throws Exception {
-        String reporterName = sofaTracerProperties.getReporterName();
-        if (StringUtils.isNotBlank(reporterName)) {
-            Reporter reporter = (Reporter) Class.forName(reporterName).newInstance();
-            Sampler sampler = SamplerFactory.getSampler();
-            return new FlexibleTracer(sampler, reporter);
-        }
-        Tracer tracer = new FlexibleTracer();
-        return tracer;
     }
 }

@@ -27,5 +27,11 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
  * @since 2.5.0
  */
 public interface SofaRuntimeContextAware {
+
+    /**
+     * Set the SofaRuntimeContext that this object runs in.
+     *
+     * @param sofaRuntimeContext the SofaRuntimeContext object to be used by this object
+     */
     void setSofaRuntimeContext(SofaRuntimeContext sofaRuntimeContext);
 }

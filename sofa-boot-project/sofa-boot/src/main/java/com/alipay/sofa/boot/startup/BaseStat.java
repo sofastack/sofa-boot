@@ -20,15 +20,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Base model for startup stat.
+ *
  * @author huzijie
  * @version BaseStat.java, v 0.1 2022年03月14日 12:08 PM huzijie Exp $
  */
 public class BaseStat {
 
     private final Map<String, String> attributes = new HashMap<>();
+
     private String                    name;
+
     private long                      startTime;
+
     private long                      endTime;
+
     private long                      cost;
 
     public String getName() {

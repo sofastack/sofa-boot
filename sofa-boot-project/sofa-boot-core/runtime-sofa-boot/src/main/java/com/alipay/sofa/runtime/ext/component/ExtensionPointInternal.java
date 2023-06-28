@@ -19,7 +19,7 @@ package com.alipay.sofa.runtime.ext.component;
 import com.alipay.sofa.service.api.component.ExtensionPoint;
 
 /**
- * SOFA Extension Point Internal Object
+ * SOFA Extension Point Internal Object.
  *
  * @author xi.hux@alipay.com
  * @author ruoshan
@@ -28,7 +28,7 @@ import com.alipay.sofa.service.api.component.ExtensionPoint;
 public interface ExtensionPointInternal extends ExtensionPoint {
 
     /**
-     * load contributions
+     * Load contributions.
      *
      * @param extension extension info
      * @return All contributions
@@ -37,21 +37,21 @@ public interface ExtensionPointInternal extends ExtensionPoint {
     Object[] loadContributions(ExtensionInternal extension) throws Exception;
 
     /**
-     * add contribution
+     * Add contribution.
      *
      * @param className contribution class name
      */
     void addContribution(String className);
 
     /**
-     * add contribution
+     * Add contribution.
      *
      * @param javaClass contribution class
      */
     void addContribution(Class<?> javaClass);
 
     /**
-     * set classloader
+     * Set classloader.
      *
      * @param beanClassLoader bean classloader
      */

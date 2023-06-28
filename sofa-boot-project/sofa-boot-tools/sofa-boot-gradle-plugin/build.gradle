@@ -7,8 +7,6 @@ description = "SOFABoot Gradle Plugin"
 
 group 'com.alipay.sofa'
 
-sourceCompatibility = 1.8
-
 repositories {
     mavenLocal()
     mavenCentral()
@@ -17,11 +15,11 @@ repositories {
 dependencies {
     implementation localGroovy()
     implementation gradleApi()
-    implementation 'org.springframework.boot:spring-boot-gradle-plugin:2.4.13'
-    implementation 'org.springframework.boot:spring-boot-loader-tools:2.4.13'
-    implementation 'io.spring.gradle:dependency-management-plugin:1.0.11.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-gradle-plugin:3.0.2'
+    implementation 'org.springframework.boot:spring-boot-loader-tools:3.0.2'
+    implementation 'io.spring.gradle:dependency-management-plugin:1.1.0'
     implementation "org.apache.commons:commons-compress:1.19"
-    implementation "org.springframework:spring-core:5.3.18"
+    implementation "org.springframework:spring-core:6.0.2"
     testImplementation 'junit:junit:4.13.1'
     testImplementation gradleTestKit()
 }
@@ -45,4 +43,7 @@ jar {
 
 java {
     withSourcesJar()
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }

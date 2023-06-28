@@ -19,7 +19,7 @@ package com.alipay.sofa.runtime.spi.service;
 import org.springframework.context.ApplicationContext;
 
 /**
- * context information for binding convert
+ * Context information for binding convert.
  *
  * @author xuanbei 18/2/28
  */

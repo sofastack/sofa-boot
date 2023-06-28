@@ -29,11 +29,11 @@ import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.DefaultImplementation;
 import com.alipay.sofa.runtime.spi.component.Implementation;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
-import com.alipay.sofa.runtime.spi.util.ComponentNameFactory;
+import com.alipay.sofa.runtime.spi.component.ComponentNameFactory;
 import com.alipay.sofa.service.api.component.ExtensionPoint;
 
 /**
- * Programming API Implement for Extension/Extension-Point
+ * Programming API Implementation of Extension/Extension-Point.
  *
  * @author khotyn
  * @author ruoshan
@@ -41,7 +41,7 @@ import com.alipay.sofa.service.api.component.ExtensionPoint;
  */
 public class ExtensionClientImpl implements ExtensionClient {
 
-    private SofaRuntimeContext sofaRuntimeContext;
+    private final SofaRuntimeContext sofaRuntimeContext;
 
     public ExtensionClientImpl(SofaRuntimeContext sofaRuntimeContext) {
         this.sofaRuntimeContext = sofaRuntimeContext;

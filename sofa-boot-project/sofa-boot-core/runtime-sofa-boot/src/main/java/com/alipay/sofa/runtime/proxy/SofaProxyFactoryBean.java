@@ -20,6 +20,7 @@ import org.springframework.aop.framework.ProxyFactoryBean;
 import org.springframework.beans.factory.BeanFactory;
 
 /**
+ * Extension of {@link ProxyFactoryBean} to avoid early init.
  *
  * @author ruoshan
  * @since 3.12.0

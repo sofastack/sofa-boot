@@ -19,7 +19,7 @@ package com.alipay.sofa.service.api.component;
 import java.util.List;
 
 /**
- * SOFA Extension Point Object
+ * SOFA Extension Point Object.
  *
  * @author xi.hux@alipay.com
  * @author ruoshan
@@ -28,28 +28,28 @@ import java.util.List;
 public interface ExtensionPoint {
 
     /**
-     * Get extension point name
+     * Get extension point name.
      *
      * @return extension point name
      */
     String getName();
 
     /**
-     * Get all contributions class
+     * Get all contributions class.
      *
      * @return all contributions class
      */
     List<Class<?>> getContributions();
 
     /**
-     * Get the comment
+     * Get the comment.
      *
      * @return the comment
      */
     String getDocumentation();
 
     /**
-     * Whether has contribution or not
+     * Has contribution or not.
      *
      * @return true or false
      */

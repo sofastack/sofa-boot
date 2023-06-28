@@ -20,6 +20,8 @@ import com.alipay.sofa.runtime.api.binding.BindingType;
 import com.alipay.sofa.runtime.api.client.param.BindingParam;
 
 /**
+ * Implementation of {@link BindingParam} for jvm service.
+ *
  * @author qilong.zql
  * @since 3.1.2
  */

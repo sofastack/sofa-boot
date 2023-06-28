@@ -24,22 +24,28 @@ import org.springframework.context.ApplicationContext;
 import java.util.Collection;
 
 /**
- * Component Manager
+ * Component Manager.
  *
  * @author xuanbei 18/2/28
  */
 public interface ComponentManager {
+
     /**
-     * get all component types in this manager
+     * Get all component types in this manager.
      *
      * @return all component types
      */
     Collection<ComponentType> getComponentTypes();
 
+    /**
+     * Register component info.
+     *
+     * @param componentInfo component info
+     */
     void register(ComponentInfo componentInfo);
 
     /**
-     * register and get component in this manager
+     * Register and get component in this manager.
      *
      * @param componentInfo component that should be registered
      * @return component info
@@ -47,7 +53,7 @@ public interface ComponentManager {
     ComponentInfo registerAndGet(ComponentInfo componentInfo);
 
     /**
-     * remove component in this manager
+     * Remove component in this manager.
      *
      * @param componentInfo component that should unregister
      * @throws ServiceRuntimeException throws when exception occur
@@ -55,7 +61,7 @@ public interface ComponentManager {
     void unregister(ComponentInfo componentInfo) throws ServiceRuntimeException;
 
     /**
-     * register component client in this manager
+     * Register component client in this manager.
      *
      * @param clientType client type
      * @param client     client implementation
@@ -63,7 +69,7 @@ public interface ComponentManager {
     void registerComponentClient(Class<?> clientType, Object client);
 
     /**
-     * get concrete component by component name
+     * Get concrete component by component name.
      *
      * @param name component name
      * @return concrete component
@@ -71,7 +77,7 @@ public interface ComponentManager {
     ComponentInfo getComponentInfo(ComponentName name);
 
     /**
-     * whether the component is registered or not
+     * Whether the component is registered or not.
      *
      * @param name name
      * @return true or false
@@ -79,7 +85,7 @@ public interface ComponentManager {
     boolean isRegistered(ComponentName name);
 
     /**
-     * get all components in this manager
+     * Get all components in this manager.
      *
      * @return all components
      */
@@ -101,7 +107,7 @@ public interface ComponentManager {
     void shutdown();
 
     /**
-     * get components by component type
+     * Get components by component type.
      *
      * @param type component type
      * @return components
@@ -109,14 +115,14 @@ public interface ComponentManager {
     Collection<ComponentInfo> getComponentInfosByType(ComponentType type);
 
     /**
-     * resolve pending component
+     * Resolve pending component.
      *
      * @param componentName component name
      */
     void resolvePendingResolveComponent(ComponentName componentName);
 
     /**
-     * get components by component application
+     * Get components by component application.
      *
      * @param application component application
      * @return components

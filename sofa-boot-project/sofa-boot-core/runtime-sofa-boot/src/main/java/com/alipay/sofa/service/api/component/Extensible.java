@@ -17,6 +17,7 @@
 package com.alipay.sofa.service.api.component;
 
 /**
+ * Interface to register or unregister extension.
  *
  * @author xi.hux@alipay.com
  * @author ruoshan
@@ -25,14 +26,14 @@ package com.alipay.sofa.service.api.component;
 
 public interface Extensible {
     /**
-     * register extension
+     * Register extension.
      *
      * @param extension need to be registered
      */
     void registerExtension(Extension extension) throws Exception;
 
     /**
-     * un-register extension
+     * Un register extension.
      *
      * @param extension need to be unregistered
      */

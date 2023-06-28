@@ -25,6 +25,8 @@ import org.w3c.dom.Element;
 import com.alipay.sofa.runtime.spring.factory.ReferenceFactoryBean;
 
 /**
+ * Reference definition parser.
+ *
  * @author xuanbei 18/3/1
  */
 public class ReferenceDefinitionParser extends AbstractContractDefinitionParser {

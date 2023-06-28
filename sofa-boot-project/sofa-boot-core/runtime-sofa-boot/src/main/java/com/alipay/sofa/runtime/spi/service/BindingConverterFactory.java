@@ -16,18 +16,20 @@
  */
 package com.alipay.sofa.runtime.spi.service;
 
-import java.util.Set;
-
 import com.alipay.sofa.runtime.api.binding.BindingType;
 
+import java.util.Set;
+
 /**
- * Binding Converter Factory
+ * Interface to get {@link BindingConverter}.
  *
  * @author xuanbei 18/2/28
  */
+@SuppressWarnings("rawtypes")
 public interface BindingConverterFactory {
+
     /**
-     * get binding converter by binding type
+     * Get binding converter by binding type.
      *
      * @param bindingType Binding type
      * @return binding converter
@@ -35,17 +37,17 @@ public interface BindingConverterFactory {
     BindingConverter getBindingConverter(BindingType bindingType);
 
     /**
-     * get binding converter by tag name
+     * Get binding converter by tag name.
      *
      * @param tagName tag name
      * @return binding converter
      */
     BindingConverter getBindingConverterByTagName(String tagName);
 
-    /***
-     * add binding converters
+    /**
+     * Add binding converters.
      *
-     * @param bindingConverters
+     * @param bindingConverters bindingConverters to be added
      */
     void addBindingConverters(Set<BindingConverter> bindingConverters);
 }

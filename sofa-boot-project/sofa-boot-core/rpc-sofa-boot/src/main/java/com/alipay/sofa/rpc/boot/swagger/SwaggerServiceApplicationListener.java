@@ -16,23 +16,28 @@
  */
 package com.alipay.sofa.rpc.boot.swagger;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.boot.context.event.ApplicationStartedEvent;
-import org.springframework.context.ApplicationListener;
-
 import com.alipay.sofa.rpc.boot.runtime.param.RestBindingParam;
-import com.alipay.sofa.runtime.api.aware.ClientFactoryAware;
 import com.alipay.sofa.runtime.api.client.ClientFactory;
 import com.alipay.sofa.runtime.api.client.ServiceClient;
 import com.alipay.sofa.runtime.api.client.param.BindingParam;
 import com.alipay.sofa.runtime.api.client.param.ServiceParam;
+import com.alipay.sofa.runtime.spi.component.ComponentManager;
+import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
+import org.springframework.context.ApplicationListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SwaggerServiceApplicationListener implements
-                                              ApplicationListener<ApplicationStartedEvent>,
-                                              ClientFactoryAware {
-    private ClientFactory clientFactory;
+                                              ApplicationListener<ApplicationStartedEvent> {
+    private final ComponentManager componentManager;
+    private final ClientFactory    clientFactory;
+
+    public SwaggerServiceApplicationListener(SofaRuntimeManager sofaRuntimeManager) {
+        this.componentManager = sofaRuntimeManager.getComponentManager();
+        this.clientFactory = sofaRuntimeManager.getClientFactoryInternal();
+    }
 
     @Override
     public void onApplicationEvent(ApplicationStartedEvent event) {
@@ -41,15 +46,10 @@ public class SwaggerServiceApplicationListener implements
 
         ServiceParam serviceParam = new ServiceParam();
         serviceParam.setInterfaceType(SwaggerService.class);
-        serviceParam.setInstance(new SwaggerServiceImpl());
+        serviceParam.setInstance(new SwaggerServiceImpl(componentManager));
         serviceParam.setBindingParams(bindingParams);
 
         ServiceClient serviceClient = clientFactory.getClient(ServiceClient.class);
         serviceClient.service(serviceParam);
-    }
-
-    @Override
-    public void setClientFactory(ClientFactory clientFactory) {
-        this.clientFactory = clientFactory;
     }
 }

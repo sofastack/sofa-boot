@@ -28,9 +28,9 @@ import java.util.List;
  */
 public class ProcessorContainer {
 
-    private List<ProviderConfigProcessor> providerProcessors;
+    private final List<ProviderConfigProcessor> providerProcessors;
 
-    private List<ConsumerConfigProcessor> consumerProcessors;
+    private final List<ConsumerConfigProcessor> consumerProcessors;
 
     public ProcessorContainer(List<ProviderConfigProcessor> providerProcessors,
                               List<ConsumerConfigProcessor> consumerProcessors) {

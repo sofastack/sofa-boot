@@ -17,7 +17,7 @@
 package com.alipay.sofa.runtime.api.client.param;
 
 /**
- * Extension-Point Param
+ * Extension-Point Param.
  *
  * @author khotyn
  * @author ruoshan

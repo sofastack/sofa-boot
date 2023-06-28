@@ -26,27 +26,28 @@ import org.springframework.context.ApplicationContext;
 import java.util.Map;
 
 /**
- * Component info interface
+ * Component info interface.
  *
  * @author xuanbei 18/2/28
  */
 public interface ComponentInfo extends Component {
+
     /**
-     * get component type
+     * Get component type.
      *
      * @return component type
      */
     ComponentType getType();
 
     /**
-     * get component name
+     * Get component name.
      *
      * @return component name
      */
     ComponentName getName();
 
     /**
-     * get component create in which {@link ApplicationContext}, default for compatibility
+     * Get component create in which {@link ApplicationContext}, default for compatibility.
      *
      * @return component applicationContext
      */
@@ -55,72 +56,72 @@ public interface ComponentInfo extends Component {
     }
 
     /**
-     * set component create in which {@link ApplicationContext}, default for compatibility
+     * Set component create in which {@link ApplicationContext}, default for compatibility.
      *
      * @param applicationContext applicationContext
      */
     default void setApplicationContext(ApplicationContext applicationContext) {}
 
     /**
-     * get component implementation
+     * Get component implementation.
      *
      * @return component implementation
      */
     Implementation getImplementation();
 
     /**
-     * get sofa runtime context
+     * Get sofa runtime context.
      *
      * @return {@link SofaRuntimeContext}
      */
     SofaRuntimeContext getContext();
 
     /**
-     * get all properties
+     * Get all properties.
      *
      * @return properties
      */
     Map<String, Property> getProperties();
 
     /**
-     * get component status
+     * Get component status.
      *
      * @return component status
      */
     ComponentStatus getState();
 
     /**
-     * check component is activated or not
+     * Check component is activated or not.
      *
      * @return true or false
      */
     boolean isActivated();
 
     /**
-     * check component is resolved or not
+     * Check component is resolved or not.
      *
      * @return true or false
      */
     boolean isResolved();
 
     /**
-     * get component information
+     * Get component information.
      *
-     * @return
+     * @return dump
      */
     String dump();
 
     /**
-     * check component is health or not
+     * Check component is health or not.
      *
      * @return health result
      */
     HealthResult isHealthy();
 
     /**
-     * whether component can be duplicated defined, default is true
+     * Whether component can be duplicated defined, default is true.
      *
-     * @return
+     * @return can be duplicate
      */
     boolean canBeDuplicate();
 }

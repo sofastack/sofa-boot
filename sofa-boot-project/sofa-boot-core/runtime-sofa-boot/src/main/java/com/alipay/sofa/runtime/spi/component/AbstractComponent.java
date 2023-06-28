@@ -32,7 +32,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * abstract component implementation
+ * Abstract component implementation.
  *
  * @author xuanbei 18/3/1
  */
@@ -155,6 +155,7 @@ public abstract class AbstractComponent implements ComponentInfo {
         componentStatus = ComponentStatus.ACTIVATED;
     }
 
+    @Override
     public void exception(Exception e) throws ServiceRuntimeException {
         this.e = e;
     }

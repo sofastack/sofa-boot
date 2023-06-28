@@ -23,34 +23,34 @@ import com.alipay.sofa.runtime.api.binding.BindingType;
 import com.alipay.sofa.runtime.model.InterfaceMode;
 
 /**
- * Contract Description Interface
+ * Contract description interface.
  *
  * @author xuanbei 18/2/28
  */
 public interface Contract {
     /**
-     * get interface type
+     * Get interface type.
      *
      * @return interface type
      */
     Class<?> getInterfaceType();
 
     /**
-     * has binding or not
+     * Has binding or not.
      *
      * @return true or false
      */
     boolean hasBinding();
 
     /**
-     * get supported binding set
+     * Get supported binding set.
      *
      * @return supported binding set
      */
     <T extends Binding> Set<T> getBindings();
 
     /**
-     * get binding object by binding type
+     * Get binding object by binding type.
      *
      * @param bindingType binding type
      * @return binding object
@@ -58,14 +58,14 @@ public interface Contract {
     Binding getBinding(BindingType bindingType);
 
     /**
-     * get unique id, to support distribute service from same interface
+     * Get unique id, to support distribute service from same interface.
      *
-     * @return
+     * @return unique id
      */
     String getUniqueId();
 
     /**
-     * get property
+     * Get property.
      *
      * @param key property key
      * @return property value
@@ -73,28 +73,28 @@ public interface Contract {
     String getProperty(String key);
 
     /***
-     * get all properties
+     * Get all properties.
      *
      * @return all properties
      */
     Map<String, String> getProperty();
 
     /**
-     * get interface mode
+     * Get interface mode.
      *
      * @return interface mode
      */
     InterfaceMode getInterfaceMode();
 
     /**
-     * add binding object, Contract supports multiple binding
+     * Add binding object, Contract supports multiple binding.
      *
      * @param binding binding object
      */
     <T extends Binding> void addBinding(T binding);
 
     /**
-     * add binding object, Contract supports multiple binding
+     * Add binding object, Contract supports multiple binding.
      *
      * @param bindings binding objects
      */

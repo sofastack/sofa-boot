@@ -16,26 +16,19 @@
  */
 package com.alipay.sofa.boot.autoconfigure.rpc;
 
-import com.alipay.sofa.healthcheck.startup.ReadinessCheckCallback;
-import com.alipay.sofa.rpc.boot.config.ConsulConfigurator;
+import com.alipay.sofa.boot.autoconfigure.condition.ConditionalOnSwitch;
+import com.alipay.sofa.boot.autoconfigure.rpc.SofaRpcAutoConfiguration.RegistryConfigurationImportSelector;
+import com.alipay.sofa.boot.autoconfigure.runtime.SofaRuntimeAutoConfiguration;
+import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.rpc.boot.config.FaultToleranceConfigurator;
-import com.alipay.sofa.rpc.boot.config.LocalFileConfigurator;
-import com.alipay.sofa.rpc.boot.config.MeshConfigurator;
-import com.alipay.sofa.rpc.boot.config.MulticastConfigurator;
-import com.alipay.sofa.rpc.boot.config.NacosConfigurator;
 import com.alipay.sofa.rpc.boot.config.RegistryConfigureProcessor;
-import com.alipay.sofa.rpc.boot.config.SofaBootRpcConfigConstants;
-import com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties;
-import com.alipay.sofa.rpc.boot.config.SofaRegistryConfigurator;
-import com.alipay.sofa.rpc.boot.config.ZookeeperConfigurator;
 import com.alipay.sofa.rpc.boot.container.ConsumerConfigContainer;
 import com.alipay.sofa.rpc.boot.container.ProviderConfigContainer;
 import com.alipay.sofa.rpc.boot.container.RegistryConfigContainer;
 import com.alipay.sofa.rpc.boot.container.ServerConfigContainer;
-import com.alipay.sofa.rpc.boot.context.ApplicationContextClosedListener;
-import com.alipay.sofa.rpc.boot.context.ApplicationContextRefreshedListener;
+import com.alipay.sofa.rpc.boot.context.RpcStartApplicationListener;
+import com.alipay.sofa.rpc.boot.context.RpcStopApplicationListener;
 import com.alipay.sofa.rpc.boot.context.SofaBootRpcStartListener;
-import com.alipay.sofa.rpc.boot.health.RpcAfterHealthCheckCallback;
 import com.alipay.sofa.rpc.boot.runtime.adapter.helper.ConsumerConfigHelper;
 import com.alipay.sofa.rpc.boot.runtime.adapter.helper.ProviderConfigHelper;
 import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ConsumerConfigProcessor;
@@ -44,37 +37,40 @@ import com.alipay.sofa.rpc.boot.runtime.adapter.processor.DynamicConfigProcessor
 import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ProcessorContainer;
 import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ProviderConfigProcessor;
 import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ProviderRegisterProcessor;
-import com.alipay.sofa.rpc.boot.swagger.BoltSwaggerServiceApplicationListener;
-import com.alipay.sofa.rpc.boot.swagger.SwaggerServiceApplicationListener;
-import com.alipay.sofa.rpc.config.JAXRSProviderManager;
+import com.alipay.sofa.rpc.common.SofaOptions;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.actuate.health.Health;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.ImportSelector;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.env.Environment;
+import org.springframework.core.type.AnnotationMetadata;
 
-import javax.ws.rs.client.ClientRequestFilter;
-import javax.ws.rs.client.ClientResponseFilter;
-import javax.ws.rs.container.ContainerRequestFilter;
-import javax.ws.rs.container.ContainerResponseFilter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
+ * {@link EnableAutoConfiguration Auto-configuration} for sofa Rpc.
+ *
  * @author <a href="mailto:lw111072@antfin.com">LiWei</a>
+ * @author yuanxuan
+ * @author huzijie
  */
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration(after = SofaRuntimeAutoConfiguration.class)
+@ConditionalOnClass(ProviderConfigContainer.class)
 @EnableConfigurationProperties(SofaBootRpcProperties.class)
-@ConditionalOnClass(SofaBootRpcProperties.class)
+@Import({ RegistryConfigurationImportSelector.class, SwaggerConfiguration.class,
+         RestFilterConfiguration.class })
 public class SofaRpcAutoConfiguration {
+
     @Bean
     @ConditionalOnMissingBean
     public ProviderConfigContainer providerConfigContainer() {
@@ -83,23 +79,124 @@ public class SofaRpcAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public FaultToleranceConfigurator faultToleranceConfigurator(SofaBootRpcProperties properties,
+    @ConditionalOnSwitch(value = "rpcFaultToleranceConfigurator")
+    public FaultToleranceConfigurator faultToleranceConfigurator(SofaBootRpcProperties sofaBootRpcProperties,
                                                                  Environment environment) {
-        return new FaultToleranceConfigurator(properties,
-            environment.getProperty(SofaBootRpcConfigConstants.APP_NAME));
+        FaultToleranceConfigurator faultToleranceConfigurator = new FaultToleranceConfigurator();
+        faultToleranceConfigurator.setAppName(environment
+            .getProperty(SofaBootConstants.APP_NAME_KEY));
+        faultToleranceConfigurator.setRegulationEffectiveStr(sofaBootRpcProperties
+            .getAftRegulationEffective());
+        faultToleranceConfigurator.setDegradeEffectiveStr(sofaBootRpcProperties
+            .getAftDegradeEffective());
+        faultToleranceConfigurator.setTimeWindowStr(sofaBootRpcProperties.getAftTimeWindow());
+        faultToleranceConfigurator.setLeastWindowCountStr(sofaBootRpcProperties
+            .getAftLeastWindowCount());
+        faultToleranceConfigurator.setLeastWindowExceptionRateMultipleStr(sofaBootRpcProperties
+            .getAftLeastWindowExceptionRateMultiple());
+        faultToleranceConfigurator.setWeightDegradeRateStr(sofaBootRpcProperties
+            .getAftWeightDegradeRate());
+        faultToleranceConfigurator.setWeightRecoverRateStr(sofaBootRpcProperties
+            .getAftWeightRecoverRate());
+        faultToleranceConfigurator.setDegradeLeastWeightStr(sofaBootRpcProperties
+            .getAftDegradeLeastWeight());
+        faultToleranceConfigurator.setDegradeMaxIpCountStr(sofaBootRpcProperties
+            .getAftDegradeMaxIpCount());
+        return faultToleranceConfigurator;
     }
 
     @Bean
     @ConditionalOnMissingBean
     public ServerConfigContainer serverConfigContainer(SofaBootRpcProperties sofaBootRpcProperties) {
-        return new ServerConfigContainer(sofaBootRpcProperties);
+        ServerConfigContainer serverConfigContainer = new ServerConfigContainer();
+
+        serverConfigContainer.setEnabledIpRange(sofaBootRpcProperties.getEnabledIpRange());
+        serverConfigContainer.setBindNetworkInterface(sofaBootRpcProperties
+            .getBindNetworkInterface());
+        serverConfigContainer.setBoundHostStr(sofaBootRpcProperties.getBoundHost());
+        serverConfigContainer.setVirtualHostStr(sofaBootRpcProperties.getVirtualHost());
+        serverConfigContainer.setVirtualPortStr(sofaBootRpcProperties.getVirtualPort());
+
+        // init h2c property
+        serverConfigContainer.setH2cPortStr(sofaBootRpcProperties.getH2cPort());
+        serverConfigContainer.setH2cThreadPoolCoreSizeStr(sofaBootRpcProperties
+            .getH2cThreadPoolCoreSize());
+        serverConfigContainer.setH2cThreadPoolMaxSizeStr(sofaBootRpcProperties
+            .getH2cThreadPoolMaxSize());
+        serverConfigContainer.setH2cAcceptsSizeStr(sofaBootRpcProperties.getH2cAcceptsSize());
+        serverConfigContainer.setH2cThreadPoolQueueSizeStr(sofaBootRpcProperties
+            .getH2cThreadPoolQueueSize());
+
+        // init bolt property
+        serverConfigContainer.setBoltPortStr(sofaBootRpcProperties.getBoltPort());
+        serverConfigContainer.setBoltThreadPoolCoreSizeStr(sofaBootRpcProperties
+            .getBoltThreadPoolCoreSize());
+        serverConfigContainer.setBoltThreadPoolMaxSizeStr(sofaBootRpcProperties
+            .getBoltThreadPoolMaxSize());
+        serverConfigContainer.setBoltAcceptsSizeStr(sofaBootRpcProperties.getBoltAcceptsSize());
+        serverConfigContainer.setBoltThreadPoolQueueSizeStr(sofaBootRpcProperties
+            .getBoltThreadPoolQueueSize());
+        serverConfigContainer.setBoltProcessInIoThread(sofaBootRpcProperties
+            .getBoltProcessInIoThread());
+
+        // init rest property
+        serverConfigContainer.setRestHostName(sofaBootRpcProperties.getRestHostname());
+        serverConfigContainer.setRestPortStr(sofaBootRpcProperties.getRestPort());
+        serverConfigContainer.setRestIoThreadSizeStr(sofaBootRpcProperties.getRestIoThreadSize());
+        serverConfigContainer.setRestContextPath(sofaBootRpcProperties.getRestContextPath());
+        serverConfigContainer.setRestThreadPoolMaxSizeStr(sofaBootRpcProperties
+            .getRestThreadPoolMaxSize());
+        serverConfigContainer.setRestMaxRequestSizeStr(sofaBootRpcProperties
+            .getRestMaxRequestSize());
+        serverConfigContainer.setRestTelnetStr(sofaBootRpcProperties.getRestTelnet());
+        serverConfigContainer.setRestDaemonStr(sofaBootRpcProperties.getRestDaemon());
+        serverConfigContainer.setRestAllowedOrigins(sofaBootRpcProperties.getRestAllowedOrigins());
+
+        // init dubbo property
+        serverConfigContainer.setDubboPortStr(sofaBootRpcProperties.getDubboPort());
+        serverConfigContainer.setDubboIoThreadSizeStr(sofaBootRpcProperties.getDubboIoThreadSize());
+        serverConfigContainer.setDubboThreadPoolMaxSizeStr(sofaBootRpcProperties
+            .getDubboThreadPoolMaxSize());
+        serverConfigContainer.setDubboAcceptsSizeStr(sofaBootRpcProperties.getDubboAcceptsSize());
+
+        // init http property
+        serverConfigContainer.setHttpPortStr(sofaBootRpcProperties.getHttpPort());
+        serverConfigContainer.setHttpThreadPoolCoreSizeStr(sofaBootRpcProperties
+            .getHttpThreadPoolCoreSize());
+        serverConfigContainer.setHttpThreadPoolMaxSizeStr(sofaBootRpcProperties
+            .getHttpThreadPoolMaxSize());
+        serverConfigContainer.setHttpAcceptsSizeStr(sofaBootRpcProperties.getHttpAcceptsSize());
+        serverConfigContainer.setHttpThreadPoolQueueSizeStr(sofaBootRpcProperties
+            .getHttpThreadPoolQueueSize());
+
+        // init triple property
+        serverConfigContainer.setTriplePortStr(sofaBootRpcProperties.getTriplePort());
+        serverConfigContainer.setTripleThreadPoolCoreSizeStr(sofaBootRpcProperties
+            .getTripleThreadPoolCoreSize());
+        serverConfigContainer.setTripleThreadPoolMaxSizeStr(sofaBootRpcProperties
+            .getTripleThreadPoolMaxSize());
+        serverConfigContainer.setTripleAcceptsSizeStr(sofaBootRpcProperties.getTripleAcceptsSize());
+        serverConfigContainer.setTripleThreadPoolQueueSizeStr(sofaBootRpcProperties
+            .getTripleThreadPoolQueueSize());
+
+        return serverConfigContainer;
     }
 
     @Bean
     @ConditionalOnMissingBean
     public RegistryConfigContainer registryConfigContainer(SofaBootRpcProperties sofaBootRpcProperties,
+                                                           Environment environment,
                                                            @Qualifier("registryConfigMap") Map<String, RegistryConfigureProcessor> registryConfigMap) {
-        return new RegistryConfigContainer(sofaBootRpcProperties, registryConfigMap);
+        RegistryConfigContainer registryConfigContainer = new RegistryConfigContainer(
+            registryConfigMap);
+
+        registryConfigContainer.setDefaultRegistryAddress(sofaBootRpcProperties
+            .getRegistryAddress());
+        registryConfigContainer.setRegistries(sofaBootRpcProperties.getRegistries());
+        registryConfigContainer.setMeshConfig(sofaBootRpcProperties.getEnableMesh());
+        registryConfigContainer.setIgnoreRegistry(Boolean.parseBoolean(environment
+            .getProperty(SofaOptions.CONFIG_RPC_REGISTER_REGISTRY_IGNORE)));
+        return registryConfigContainer;
     }
 
     @Bean
@@ -107,8 +204,12 @@ public class SofaRpcAutoConfiguration {
     public ConsumerConfigHelper consumerConfigHelper(SofaBootRpcProperties sofaBootRpcProperties,
                                                      @Lazy RegistryConfigContainer registryConfigContainer,
                                                      Environment environment) {
-        String appName = environment.getProperty(SofaBootRpcConfigConstants.APP_NAME);
-        return new ConsumerConfigHelper(sofaBootRpcProperties, registryConfigContainer, appName);
+        String appName = environment.getProperty(SofaBootConstants.APP_NAME_KEY);
+        ConsumerConfigHelper configHelper = new ConsumerConfigHelper(registryConfigContainer,
+            appName);
+        configHelper.setReferenceLimit(sofaBootRpcProperties.getConsumerRepeatedReferenceLimit());
+        configHelper.setHystrixEnable(sofaBootRpcProperties.getHystrixEnable());
+        return configHelper;
     }
 
     @Bean
@@ -116,59 +217,18 @@ public class SofaRpcAutoConfiguration {
     public ProviderConfigHelper providerConfigHelper(ServerConfigContainer serverConfigContainer,
                                                      RegistryConfigContainer registryConfigContainer,
                                                      Environment environment) {
-        String appName = environment.getProperty(SofaBootRpcConfigConstants.APP_NAME);
+        String appName = environment.getProperty(SofaBootConstants.APP_NAME_KEY);
         return new ProviderConfigHelper(serverConfigContainer, registryConfigContainer, appName);
     }
 
-    @Bean
-    @ConditionalOnMissingBean
-    public ZookeeperConfigurator zookeeperConfigurator() {
-        return new ZookeeperConfigurator();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public MulticastConfigurator multicastConfigurator() {
-        return new MulticastConfigurator();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public LocalFileConfigurator localFileConfigurator() {
-        return new LocalFileConfigurator();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public MeshConfigurator meshConfigurator() {
-        return new MeshConfigurator();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public NacosConfigurator nacosConfigurator() {
-        return new NacosConfigurator();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public SofaRegistryConfigurator sofaRegistryConfigurator() {
-        return new SofaRegistryConfigurator();
-    }
-
     @Bean(name = "registryConfigMap")
+    @ConditionalOnMissingBean(name = "registryConfigMap")
     public Map<String, RegistryConfigureProcessor> configureProcessorMap(List<RegistryConfigureProcessor> processorList) {
-        Map<String, RegistryConfigureProcessor> map = new HashMap<String, RegistryConfigureProcessor>();
+        Map<String, RegistryConfigureProcessor> map = new HashMap<>();
         for (RegistryConfigureProcessor processor : processorList) {
             map.put(processor.registryType(), processor);
         }
         return map;
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public ConsulConfigurator consulConfigurator() {
-        return new ConsulConfigurator();
     }
 
     @Bean
@@ -179,88 +239,32 @@ public class SofaRpcAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public ApplicationContextClosedListener applicationContextClosedListener(ProviderConfigContainer providerConfigContainer,
-                                                                             ServerConfigContainer serverConfigContainer) {
-        return new ApplicationContextClosedListener(providerConfigContainer, serverConfigContainer);
+    public RpcStopApplicationListener applicationContextClosedListener(ProviderConfigContainer providerConfigContainer,
+                                                                       ServerConfigContainer serverConfigContainer) {
+        return new RpcStopApplicationListener(providerConfigContainer, serverConfigContainer);
     }
 
     @Bean
-    @ConditionalOnMissingClass({ "com.alipay.sofa.healthcheck.startup.ReadinessCheckCallback" })
-    @ConditionalOnClass(SofaBootRpcProperties.class)
-    public ApplicationContextRefreshedListener applicationContextRefreshedListener() {
-        return new ApplicationContextRefreshedListener();
+    @ConditionalOnMissingBean
+    public RpcStartApplicationListener applicationContextRefreshedListener(SofaBootRpcProperties sofaBootRpcProperties) {
+        RpcStartApplicationListener rpcStartApplicationListener = new RpcStartApplicationListener();
+        rpcStartApplicationListener.setEnableAutoPublish(sofaBootRpcProperties
+            .isEnableAutoPublish());
+        return rpcStartApplicationListener;
     }
 
     @Bean
     @ConditionalOnMissingBean
     public SofaBootRpcStartListener sofaBootRpcStartListener(SofaBootRpcProperties sofaBootRpcProperties,
                                                              ProviderConfigContainer providerConfigContainer,
-                                                             FaultToleranceConfigurator faultToleranceConfigurator,
+                                                             ObjectProvider<FaultToleranceConfigurator> faultToleranceConfigurator,
                                                              ServerConfigContainer serverConfigContainer,
                                                              RegistryConfigContainer registryConfigContainer) {
-        return new SofaBootRpcStartListener(sofaBootRpcProperties, providerConfigContainer,
-            faultToleranceConfigurator, serverConfigContainer, registryConfigContainer);
-    }
-
-    @Bean
-    @ConditionalOnProperty(name = "com.alipay.sofa.rpc.rest-swagger", havingValue = "true")
-    public ApplicationListener swaggerServiceApplicationListener() {
-        return new SwaggerServiceApplicationListener();
-    }
-
-    @Bean
-    @ConditionalOnProperty(name = "com.alipay.sofa.rpc.enable-swagger", havingValue = "true")
-    public ApplicationListener boltSwaggerServiceApplicationListener() {
-        return new BoltSwaggerServiceApplicationListener();
-    }
-
-    @Configuration(proxyBeanMethods = false)
-    @ConditionalOnClass({ SofaBootRpcProperties.class, ReadinessCheckCallback.class, Health.class })
-    public static class RpcAfterHealthCheckCallbackConfiguration {
-        @Bean
-        public RpcAfterHealthCheckCallback rpcAfterHealthCheckCallback() {
-            return new RpcAfterHealthCheckCallback();
-        }
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public List<ContainerRequestFilter> containerRequestFilters(List<ContainerRequestFilter> containerRequestFilters) {
-
-        for (ContainerRequestFilter filter : containerRequestFilters) {
-            JAXRSProviderManager.registerCustomProviderInstance(filter);
-        }
-        return containerRequestFilters;
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public List<ContainerResponseFilter> containerResponseFilters(List<ContainerResponseFilter> containerResponseFilters) {
-
-        for (ContainerResponseFilter filter : containerResponseFilters) {
-            JAXRSProviderManager.registerCustomProviderInstance(filter);
-        }
-        return containerResponseFilters;
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public List<ClientRequestFilter> clientRequestFilters(List<ClientRequestFilter> clientRequestFilters) {
-
-        for (ClientRequestFilter filter : clientRequestFilters) {
-            JAXRSProviderManager.registerCustomProviderInstance(filter);
-        }
-        return clientRequestFilters;
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public List<ClientResponseFilter> clientResponseFilters(List<ClientResponseFilter> clientResponseFilters) {
-
-        for (ClientResponseFilter filter : clientResponseFilters) {
-            JAXRSProviderManager.registerCustomProviderInstance(filter);
-        }
-        return clientResponseFilters;
+        SofaBootRpcStartListener rpcStartListener = new SofaBootRpcStartListener(
+            providerConfigContainer, faultToleranceConfigurator.getIfUnique(),
+            serverConfigContainer, registryConfigContainer);
+        rpcStartListener.setLookoutCollectDisable(sofaBootRpcProperties.getLookoutCollectDisable());
+        return rpcStartListener;
     }
 
     @Bean
@@ -271,16 +275,15 @@ public class SofaRpcAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnProperty(name = "com.alipay.sofa.rpc.mock-url")
+    @ConditionalOnProperty(name = "sofa.boot.rpc.mock-url")
     public ConsumerMockProcessor consumerMockProcessor(Environment environment) {
-        return new ConsumerMockProcessor(environment.getProperty("com.alipay.sofa.rpc.mock-url"));
+        return new ConsumerMockProcessor(environment.getProperty("sofa.boot.rpc.mock-url"));
     }
 
     @Bean
-    @ConditionalOnProperty(name = "com.alipay.sofa.rpc.dynamic-config")
+    @ConditionalOnProperty(name = "sofa.boot.rpc.dynamic-config")
     public DynamicConfigProcessor dynamicConfigProcessor(Environment environment) {
-        return new DynamicConfigProcessor(
-            environment.getProperty("com.alipay.sofa.rpc.dynamic-config"));
+        return new DynamicConfigProcessor(environment.getProperty("sofa.boot.rpc.dynamic-config"));
     }
 
     @Bean
@@ -288,4 +291,13 @@ public class SofaRpcAutoConfiguration {
     public ProviderRegisterProcessor providerRegisterProcessor() {
         return new ProviderRegisterProcessor();
     }
+
+    static class RegistryConfigurationImportSelector implements ImportSelector {
+
+        @Override
+        public String[] selectImports(AnnotationMetadata importingClassMetadata) {
+            return RegistryConfigurations.registryConfigurationClass();
+        }
+    }
+
 }

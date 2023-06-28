@@ -16,14 +16,14 @@
  */
 package com.alipay.sofa.runtime.ext.spring;
 
+import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import com.alipay.sofa.runtime.api.component.Property;
 import com.alipay.sofa.runtime.ext.component.ExtensionPointComponent;
-import com.alipay.sofa.runtime.log.SofaLogger;
 import com.alipay.sofa.runtime.model.InterfaceMode;
 import com.alipay.sofa.runtime.spi.component.ComponentDefinitionInfo;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
 import com.alipay.sofa.runtime.spi.component.Implementation;
-import com.alipay.sofa.runtime.spi.spring.SpringImplementationImpl;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.util.Assert;
@@ -34,7 +34,7 @@ import static com.alipay.sofa.runtime.spi.component.ComponentDefinitionInfo.EXTE
 import static com.alipay.sofa.runtime.spi.component.ComponentDefinitionInfo.SOURCE;
 
 /**
- * Extension point factory bean
+ * Implementation of {@link org.springframework.beans.factory.FactoryBean} to register extension point.
  *
  * @author xi.hux@alipay.com
  * @author yangyanzhao@alipay.com
@@ -42,11 +42,14 @@ import static com.alipay.sofa.runtime.spi.component.ComponentDefinitionInfo.SOUR
  */
 public class ExtensionPointFactoryBean extends AbstractExtFactoryBean {
 
+    private static final Logger LOGGER = SofaBootLoggerFactory
+                                           .getLogger(ExtensionPointFactoryBean.class);
+
     /* extension point name */
-    private String   name;
+    private String              name;
 
     /* contributions for the extension point */
-    private String[] contribution;
+    private String[]            contribution;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -73,12 +76,11 @@ public class ExtensionPointFactoryBean extends AbstractExtFactoryBean {
                     .getBeanDefinition(targetBeanName);
 
                 if (beanDef.isSingleton() && !beanDef.isLazyInit()) {
-                    if (SofaLogger.isDebugEnabled()) {
-                        SofaLogger
-                            .debug("target bean ["
-                                   + targetBeanName
-                                   + "] is a non-lazy singleton; forcing initialization before publishing");
-                    }
+                    LOGGER
+                        .atDebug()
+                        .log(
+                            "target bean [{}] is a non-lazy singleton; forcing initialization before publishing",
+                            targetBeanName);
                     beanFactory.getBean(targetBeanName);
                 }
             }
@@ -87,7 +89,7 @@ public class ExtensionPointFactoryBean extends AbstractExtFactoryBean {
         try {
             publishAsNuxeoExtensionPoint(extensionPointClass);
         } catch (Exception e) {
-            SofaLogger.error("Failed to publish extension point.", e);
+            LOGGER.error("Failed to publish extension point.", e);
             throw e;
         }
     }
@@ -99,8 +101,8 @@ public class ExtensionPointFactoryBean extends AbstractExtFactoryBean {
             this.name, applicationContext.getClassLoader());
 
         if (this.contribution != null && this.contribution.length != 0) {
-            for (int i = 0; i < contribution.length; i++) {
-                extensionPointBuilder.addContribution(contribution[i]);
+            for (String s : contribution) {
+                extensionPointBuilder.addContribution(s);
             }
         }
         Assert.hasLength(beanName,

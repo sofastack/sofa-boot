@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.runtime.service.helper;
 
-import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import com.alipay.sofa.runtime.api.component.Property;
 import com.alipay.sofa.runtime.service.binding.JvmBinding;
 import com.alipay.sofa.runtime.service.component.Reference;
@@ -35,15 +34,25 @@ import java.util.Collection;
 import static com.alipay.sofa.runtime.spi.component.ComponentDefinitionInfo.SOURCE;
 
 /**
- * reference register helper
+ * Reference register helper.
  *
  * @author xuanbei 18/3/1
  */
 public class ReferenceRegisterHelper {
+
     public static Object registerReference(Reference reference,
                                            BindingAdapterFactory bindingAdapterFactory,
                                            SofaRuntimeContext sofaRuntimeContext) {
         return registerReference(reference, bindingAdapterFactory, sofaRuntimeContext, null, null);
+
+    }
+
+    public static Object registerReference(Reference reference,
+                                           BindingAdapterFactory bindingAdapterFactory,
+                                           SofaRuntimeContext sofaRuntimeContext,
+                                           ApplicationContext applicationContext) {
+        return registerReference(reference, bindingAdapterFactory, sofaRuntimeContext,
+            applicationContext, null);
 
     }
 
@@ -55,8 +64,7 @@ public class ReferenceRegisterHelper {
         Binding binding = (Binding) reference.getBindings().toArray()[0];
 
         if (!binding.getBindingType().equals(JvmBinding.JVM_BINDING_TYPE)
-            && !SofaRuntimeProperties.isDisableJvmFirst(sofaRuntimeContext)
-            && reference.isJvmFirst()) {
+            && !sofaRuntimeContext.getProperties().isDisableJvmFirst() && reference.isJvmFirst()) {
             // as rpc invocation would be serialized, so here would Not ignore serialized
             reference.addBinding(new JvmBinding());
         }

@@ -26,6 +26,8 @@ import com.alipay.sofa.runtime.spring.bean.SofaBeanNameGenerator;
 import com.alipay.sofa.runtime.spring.factory.ServiceFactoryBean;
 
 /**
+ * Service definition parser.
+ *
  * @author xuanbei 18/3/1
  */
 public class ServiceDefinitionParser extends AbstractContractDefinitionParser {

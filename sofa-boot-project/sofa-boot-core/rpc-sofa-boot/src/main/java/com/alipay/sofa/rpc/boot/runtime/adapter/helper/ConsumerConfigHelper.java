@@ -16,16 +16,8 @@
  */
 package com.alipay.sofa.rpc.boot.runtime.adapter.helper;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.context.ApplicationContext;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
-
 import com.alipay.sofa.rpc.boot.common.SofaBootRpcRuntimeException;
 import com.alipay.sofa.rpc.boot.config.SofaBootRpcConfigConstants;
-import com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties;
 import com.alipay.sofa.rpc.boot.container.RegistryConfigContainer;
 import com.alipay.sofa.rpc.boot.runtime.binding.RpcBinding;
 import com.alipay.sofa.rpc.boot.runtime.binding.RpcBindingMethodInfo;
@@ -38,6 +30,12 @@ import com.alipay.sofa.rpc.core.invoke.SofaResponseCallback;
 import com.alipay.sofa.rpc.filter.Filter;
 import com.alipay.sofa.rpc.hystrix.HystrixConstants;
 import com.alipay.sofa.runtime.spi.binding.Contract;
+import org.springframework.context.ApplicationContext;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * ConsumerConfig 工厂。
@@ -45,13 +43,16 @@ import com.alipay.sofa.runtime.spi.binding.Contract;
  * @author <a href="mailto:lw111072@antfin.com">LiWei</a>
  */
 public class ConsumerConfigHelper {
-    private final RegistryConfigContainer registryConfigContainer;
-    private final String                  appName;
-    private final SofaBootRpcProperties   sofaBootRpcProperties;
 
-    public ConsumerConfigHelper(SofaBootRpcProperties sofaBootRpcProperties,
-                                RegistryConfigContainer registryConfigContainer, String appName) {
-        this.sofaBootRpcProperties = sofaBootRpcProperties;
+    private final RegistryConfigContainer registryConfigContainer;
+
+    private final String                  appName;
+
+    private String                        referenceLimit;
+
+    private String                        hystrixEnable;
+
+    public ConsumerConfigHelper(RegistryConfigContainer registryConfigContainer, String appName) {
         this.registryConfigContainer = registryConfigContainer;
         this.appName = appName;
     }
@@ -86,8 +87,6 @@ public class ConsumerConfigHelper {
         List<Filter> filters = param.getFilters();
         List<MethodConfig> methodConfigs = convertToMethodConfig(param.getMethodInfos());
         String targetUrl = param.getTargetUrl();
-
-        String referenceLimit = sofaBootRpcProperties.getConsumerRepeatedReferenceLimit();
 
         ConsumerConfig consumerConfig = new ConsumerConfig();
         if (StringUtils.hasText(appName)) {
@@ -186,7 +185,7 @@ public class ConsumerConfigHelper {
             consumerConfig.setSerialization(serialization);
         }
 
-        if (Boolean.TRUE.toString().equals(sofaBootRpcProperties.getHystrixEnable())) {
+        if (Boolean.TRUE.toString().equals(hystrixEnable)) {
             consumerConfig.setParameter(HystrixConstants.SOFA_HYSTRIX_ENABLED,
                 Boolean.TRUE.toString());
         }
@@ -250,5 +249,13 @@ public class ConsumerConfigHelper {
         } else {
             throw new IllegalArgumentException("Mock mode is open, mock bean can't be empty.");
         }
+    }
+
+    public void setReferenceLimit(String referenceLimit) {
+        this.referenceLimit = referenceLimit;
+    }
+
+    public void setHystrixEnable(String hystrixEnable) {
+        this.hystrixEnable = hystrixEnable;
     }
 }

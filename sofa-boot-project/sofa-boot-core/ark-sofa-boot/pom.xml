@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>sofa-boot-core</artifactId>
+        <groupId>com.alipay.sofa</groupId>
+        <version>${revision}</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>ark-sofa-boot</artifactId>
+
+    <properties>
+        <main.user.dir>${basedir}/../../..</main.user.dir>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>sofa-boot</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>runtime-sofa-boot</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>sofa-ark-springboot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>sofa-ark-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>sofa-ark-spi</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>hessian</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>sofa-boot-actuator</artifactId>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>sofa-ark-plugin-maven-plugin</artifactId>
+                <version>${sofa.ark.version}</version>
+                <executions>
+                    <execution>
+                        <id>default-cli</id>
+                        <goals>
+                            <goal>ark-plugin</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <priority>1500</priority>
+                    <activator>com.alipay.sofa.boot.ark.SofaRuntimeActivator</activator>
+                    <!-- 配置导出类、资源 -->
+                    <exported>
+                        <!-- 配置包级别导出的类 -->
+                        <packages>
+                            <!-- spring 相关的必须导出 -->
+                            <package>org.springframework.*</package>
+                            <!-- validation -->
+                            <package>jakarta.validation.*</package>
+                            <!-- servlet -->
+                            <package>jakarta.servlet.*</package>
+                            <!-- script -->
+                            <package>jakarta.script.*</package>
+                            <!-- aop -->
+                            <package>org.aopalliance.*</package>
+                            <!-- tomcat -->
+                            <package>org.apache.*</package>
+                            <!-- sofa -->
+                            <package>com.alipay.sofa.*</package>
+                            <!-- tracer -->
+                            <package>com.alipay.common.tracer.core.*</package>
+                            <!-- zsearch -->
+                            <package>com.google.gson.*</package>
+                            <package>com.google.protobuf.*</package>
+                            <package>com.google.common.*</package>
+                            <package>com.google.code.*</package>
+
+                            <!-- mybatis -->
+                            <package>org.mybatis.spring.boot.autoconfigure.*</package>
+                            <package>org.mybatis.spring.*</package>
+                            <package>com.ibatis.*</package>
+                            <!-- lookout -->
+                            <package>com.alipay.lookout.*</package>
+                            <!-- quartz -->
+                            <package>org.quartz.*</package>
+                            <!-- hessian -->
+                            <package>com.caucho.hessian.*</package>
+                            <!-- aspect -->
+                            <package>org.aspectj.*</package>
+                            <!-- cglib -->
+                            <package>net.sf.cglib.*</package>
+                            <!-- groovy -->
+                            <package>org.codehaus.groovy.*</package>
+                            <package>groovy.*</package>
+                            <package>org.slf4j.*</package>
+                            <package>org.mvel2.*</package>
+                            <package>org.dom4j.*</package>
+                            <package>javax.el.*</package>
+                            <package>net.sf.acegisecurity.*</package>
+                            <package>org.junit.*</package>
+                            <package>io.grpc.*</package>
+                            <package>io.netty.*</package>
+                            <!-- prometheus -->
+                            <package>io.prometheus.*</package>
+                        </packages>
+
+                        <!-- 配置 ark plugin 对外导出的资源 -->
+                        <resources>
+                            <resource>META-INF/spring.*</resource>
+                            <resource>META-INF/spring/org.springframework.boot.*</resource>
+                            <resource>META-INF/services/*</resource>
+                            <resource>META-INF/com/alipay/boot/middleware/service/config/*</resource>
+                            <resource>org/springframework/boot/logging/*</resource>
+                            <resource>*.xsd</resource>
+                            <resource>*/sql-map-2.dtd</resource>
+                            <resource>*/sql-map-config-2.dtd</resource>
+                            <resource>*/mybatis-3-config.dtd</resource>
+                            <resource>*/mybatis-3-mapper.dtd</resource>
+                        </resources>
+                    </exported>
+
+                    <!-- 打包插件时，排除指定的包依赖；格式为: ${groupId:artifactId} 或者 ${groupId:artifactId:classifier} -->
+                    <excludes>
+                        <exclude>*:*:*</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

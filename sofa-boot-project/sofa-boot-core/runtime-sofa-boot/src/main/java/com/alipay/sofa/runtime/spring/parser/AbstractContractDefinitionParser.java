@@ -37,25 +37,41 @@ import com.alipay.sofa.boot.spring.namespace.spi.SofaBootTagNameSupport;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 
 /**
+ * Abstract parser of contract bean definition.
+ *
  * @author xuanbei 18/3/1
  */
 public abstract class AbstractContractDefinitionParser extends AbstractSingleBeanDefinitionParser
                                                                                                  implements
                                                                                                  SofaBootTagNameSupport {
     public static final String INTERFACE_ELEMENT            = "interface";
+
     public static final String INTERFACE_PROPERTY           = "interfaceType";
+
     public static final String INTERFACE_CLASS_PROPERTY     = "interfaceClass";
+
     public static final String BEAN_ID_ELEMENT              = "id";
+
     public static final String BEAN_ID_PROPERTY             = "beanId";
+
     public static final String UNIQUE_ID_ELEMENT            = "unique-id";
+
     public static final String UNIQUE_ID_PROPERTY           = "uniqueId";
+
     public static final String ELEMENTS                     = "elements";
+
     public static final String BINDINGS                     = "bindings";
+
     public static final String REPEAT_REFER_LIMIT_ELEMENT   = "repeatReferLimit";
+
     public static final String REPEAT_REFER_LIMIT_PROPERTY  = "repeatReferLimit";
+
     public static final String DEFINITION_BUILDING_API_TYPE = "apiType";
+
     public static final String SOFA_RUNTIME_CONTEXT         = "sofaRuntimeContext";
+
     public static final String BINDING_CONVERTER_FACTORY    = "bindingConverterFactory";
+
     public static final String BINDING_ADAPTER_FACTORY      = "bindingAdapterFactory";
 
     @Override
@@ -102,6 +118,13 @@ public abstract class AbstractContractDefinitionParser extends AbstractSingleBea
         doParseInternal(element, parserContext, builder);
     }
 
+    /**
+     * Actually parse internal element.
+     *
+     * @param element element
+     * @param parserContext parserContext
+     * @param builder builder
+     */
     protected abstract void doParseInternal(Element element, ParserContext parserContext,
                                             BeanDefinitionBuilder builder);
 }

@@ -21,7 +21,7 @@ import org.w3c.dom.Element;
 import com.alipay.sofa.runtime.api.component.ComponentName;
 
 /**
- * SOFA Extension Object
+ * SOFA Extension Object.
  *
  * @author xi.hux@alipay.com
  * @author ruoshan
@@ -30,42 +30,43 @@ import com.alipay.sofa.runtime.api.component.ComponentName;
 public interface Extension {
 
     /**
-     * Get component name for the extension
+     * Get component name for the extension.
      *
      * @return Component name for the extension
      */
     ComponentName getComponentName();
 
     /**
-     * Get Target Component Name。
+     * Get Target Component Name.
      *
      * @return Target Component Name
      */
     ComponentName getTargetComponentName();
 
     /**
-     * Get extension point Name
+     * Get extension point Name.
      *
      * @return Extension point Name
      */
     String getExtensionPoint();
 
     /**
-     * Get extension element
+     * Get extension element.
      *
      * @return extension element
      */
     Element getElement();
 
     /**
-     * Get contributions
+     * Get contributions.
      *
      * @return contributions
      */
     Object[] getContributions();
 
     /**
-     * Get AppClassLoader
+     * Get AppClassLoader.
+     *
      * @return appClassLoader
      */
     ClassLoader getAppClassLoader();

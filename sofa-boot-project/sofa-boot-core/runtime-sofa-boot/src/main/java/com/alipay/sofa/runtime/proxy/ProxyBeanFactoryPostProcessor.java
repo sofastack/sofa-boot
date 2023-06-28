@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.runtime.proxy;
 
-import com.alipay.sofa.runtime.spring.singleton.SingletonSofaPostProcessor;
+import com.alipay.sofa.boot.context.processor.SingletonSofaPostProcessor;
 import org.springframework.aop.framework.ProxyFactoryBean;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactoryUtils;
@@ -27,9 +27,11 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProce
 import org.springframework.core.PriorityOrdered;
 
 /**
- * 更新 ProxyFactoryBean 以避免被提前初始化
- * <p> 这里必须实现 BeanDefinitionRegistryPostProcessor 接口且声明最高优先级的 Ordered，
- * 否则如果其他 BeanDefinitionRegistryPostProcessor 使用了构造函数注入则会导致 ProxyFactoryBean 被提前初始化
+ * Implementation of {@link BeanDefinitionRegistryPostProcessor} to update {@link ProxyFactoryBean} to avoid early init.
+ *
+ * <p> This bean must implement BeanDefinitionRegistryPostProcessor and use the highest precedence, otherwise other
+ * BeanDefinitionRegistryPostProcessor may trigger construct inject then cause ProxyFactoryBean early init.
+ *
  * @author ruoshan
  * @since 3.12.0
  */

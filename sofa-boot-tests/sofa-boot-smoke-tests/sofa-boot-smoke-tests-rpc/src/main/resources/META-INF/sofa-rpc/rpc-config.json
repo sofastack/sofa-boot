@@ -1,0 +1,5 @@
+{
+  "default.proxy": "javassist",
+  "rpc.config.order": 1000,
+  "consumer.address.wait": 1
+}

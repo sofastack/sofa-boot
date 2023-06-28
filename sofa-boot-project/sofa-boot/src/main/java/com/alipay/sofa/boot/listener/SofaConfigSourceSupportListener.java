@@ -16,9 +16,10 @@
  */
 package com.alipay.sofa.boot.listener;
 
+import com.alipay.sofa.boot.constant.SofaBootConstants;
+import com.alipay.sofa.boot.constant.ApplicationListenerOrderConstants;
 import com.alipay.sofa.common.config.SofaConfigs;
 import com.alipay.sofa.common.config.source.AbstractConfigSource;
-import com.alipay.sofa.boot.util.ApplicationListenerOrderConstants;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.Ordered;
@@ -26,7 +27,8 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.util.StringUtils;
 
 /**
- * add a config source based on {@link ConfigurableEnvironment}
+ * Register a config source based on {@link ConfigurableEnvironment} to {@link SofaConfigs}.
+ *
  * @author huzijie
  * @version SofaConfigSourceListener.java, v 0.1 2020年12月22日 7:34 下午 huzijie Exp $
  */
@@ -34,20 +36,23 @@ public class SofaConfigSourceSupportListener
                                             implements
                                             ApplicationListener<ApplicationEnvironmentPreparedEvent>,
                                             Ordered {
-    private static final int SOFA_BOOT_CONFIG_SOURCE_ORDER = ApplicationListenerOrderConstants.SOFA_CONFIG_SOURCE_SUPPORT_LISTENER_ORDER;
 
     @Override
     public void onApplicationEvent(ApplicationEnvironmentPreparedEvent event) {
-        ConfigurableEnvironment environment = event.getEnvironment();
+        registerSofaConfigs(event.getEnvironment());
+    }
+
+    private void registerSofaConfigs(ConfigurableEnvironment environment) {
         SofaConfigs.addConfigSource(new AbstractConfigSource() {
+
             @Override
             public int getOrder() {
-                return SOFA_BOOT_CONFIG_SOURCE_ORDER;
+                return LOWEST_PRECEDENCE;
             }
 
             @Override
             public String getName() {
-                return "SOFABootEnv";
+                return SofaBootConstants.SOFA_BOOT_SPACE_NAME;
             }
 
             @Override
@@ -57,7 +62,7 @@ public class SofaConfigSourceSupportListener
 
             @Override
             public boolean hasKey(String key) {
-                return !StringUtils.isEmpty(environment.getProperty(key));
+                return StringUtils.hasText(environment.getProperty(key));
             }
         });
     }

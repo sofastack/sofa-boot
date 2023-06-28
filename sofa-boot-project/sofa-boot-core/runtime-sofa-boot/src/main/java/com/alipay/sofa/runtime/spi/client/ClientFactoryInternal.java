@@ -19,13 +19,14 @@ package com.alipay.sofa.runtime.spi.client;
 import com.alipay.sofa.runtime.api.client.ClientFactory;
 
 /**
- * Internal Client Factory, you can register client implementation
+ * Internal Client Factory, you can register client implementation.
  *
  * @author xuanbei 18/2/28
  */
 public interface ClientFactoryInternal extends ClientFactory {
+
     /**
-     * register concrete client to client factory
+     * Register concrete client to client factory.
      *
      * @param clientType client type
      * @param clientInstance client instance
