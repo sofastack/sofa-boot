@@ -21,6 +21,7 @@ import com.alipay.sofa.boot.annotation.PlaceHolderBinder;
 import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.boot.util.BeanDefinitionUtil;
 import com.alipay.sofa.boot.util.SmartAnnotationUtils;
+import com.alipay.sofa.runtime.SofaRuntimeProperties;
 import com.alipay.sofa.runtime.api.ServiceRuntimeException;
 import com.alipay.sofa.runtime.api.annotation.SofaReference;
 import com.alipay.sofa.runtime.api.annotation.SofaReferenceBinding;
@@ -332,7 +333,11 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
             builder.addDependsOn(beanId);
             registry.registerBeanDefinition(serviceId, builder.getBeanDefinition());
         } else {
-            SofaLogger.warn("SofaService was already registered: {}", serviceId);
+            if (SofaRuntimeProperties.isServiceCanBeDuplicate()) {
+                SofaLogger.warn("SofaService was already registered: {}", serviceId);
+            } else {
+                throw new ServiceRuntimeException(ErrorCode.convert("01-00203", serviceId));
+            }
         }
     }
 
