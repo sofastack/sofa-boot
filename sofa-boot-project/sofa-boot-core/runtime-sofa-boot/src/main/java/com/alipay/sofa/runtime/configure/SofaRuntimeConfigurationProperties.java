@@ -162,4 +162,12 @@ public class SofaRuntimeConfigurationProperties {
             .setReferenceHealthCheckMoreDetailEnable(referenceHealthCheckMoreDetailEnable);
     }
 
+    public boolean isServiceDuplicate() {
+        return SofaRuntimeProperties.isServiceCanBeDuplicate();
+    }
+
+    public void setServiceDuplicate(boolean serviceCanBeDuplicate) {
+        SofaRuntimeProperties.setServiceCanBeDuplicate(serviceCanBeDuplicate);
+    }
+
 }

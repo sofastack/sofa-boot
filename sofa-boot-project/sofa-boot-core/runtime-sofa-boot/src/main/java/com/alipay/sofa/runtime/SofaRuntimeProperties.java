@@ -41,10 +41,9 @@ public class SofaRuntimeProperties {
     private static boolean                                            jvmFilterEnable                      = false;
     private static boolean                                            serviceInterfaceTypeCheck            = false;
     private static boolean                                            dynamicJvmServiceCacheEnable         = false;
-
     private static boolean                                            serviceNameWithBeanId                = false;
-
     private static boolean                                            referenceHealthCheckMoreDetailEnable = false;
+    private static boolean                                            serviceCanBeDuplicate                = true;
 
     public static boolean isManualReadinessCallback(ClassLoader classLoader) {
         return manualReadinessCallbackMap.get(classLoader) != null
@@ -191,5 +190,13 @@ public class SofaRuntimeProperties {
 
     public static void setReferenceHealthCheckMoreDetailEnable(boolean referenceHealthCheckMoreDetailEnable) {
         SofaRuntimeProperties.referenceHealthCheckMoreDetailEnable = referenceHealthCheckMoreDetailEnable;
+    }
+
+    public static boolean isServiceCanBeDuplicate() {
+        return serviceCanBeDuplicate;
+    }
+
+    public static void setServiceCanBeDuplicate(boolean serviceCanBeDuplicate) {
+        SofaRuntimeProperties.serviceCanBeDuplicate = serviceCanBeDuplicate;
     }
 }
