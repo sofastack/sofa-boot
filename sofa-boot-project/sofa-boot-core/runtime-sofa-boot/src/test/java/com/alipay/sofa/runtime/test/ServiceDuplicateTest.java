@@ -84,10 +84,6 @@ public class ServiceDuplicateTest implements BeanFactoryAware {
 
         String serviceId = SofaBeanNameGenerator.generateSofaServiceBeanName(SampleService.class,
             "sofaServiceBeanService", null);
-        BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition();
-        builder.getRawBeanDefinition().setBeanClass(ServiceFactoryBean.class);
-        ((BeanDefinitionRegistry) beanFactory).registerBeanDefinition("duplicateService",
-            builder.getBeanDefinition());
 
         try {
             serviceBeanFactoryPostProcessor
