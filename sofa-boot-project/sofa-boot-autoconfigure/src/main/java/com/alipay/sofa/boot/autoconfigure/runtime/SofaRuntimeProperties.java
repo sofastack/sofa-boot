@@ -92,6 +92,11 @@ public class SofaRuntimeProperties {
      */
     private boolean      referenceHealthCheckMoreDetailEnable;
 
+    /**
+     * Whether support register duplicate service component.
+     */
+    private boolean serviceCanBeDuplicate = true;
+
     public boolean isSkipJvmReferenceHealthCheck() {
         return skipJvmReferenceHealthCheck;
     }
@@ -186,5 +191,13 @@ public class SofaRuntimeProperties {
 
     public void setReferenceHealthCheckMoreDetailEnable(boolean referenceHealthCheckMoreDetailEnable) {
         this.referenceHealthCheckMoreDetailEnable = referenceHealthCheckMoreDetailEnable;
+    }
+
+    public boolean isServiceCanBeDuplicate() {
+        return serviceCanBeDuplicate;
+    }
+
+    public void setServiceCanBeDuplicate(boolean serviceCanBeDuplicate) {
+        this.serviceCanBeDuplicate = serviceCanBeDuplicate;
     }
 }
