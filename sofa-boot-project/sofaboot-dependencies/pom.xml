@@ -56,6 +56,7 @@
         <grpc.common.protos.version>2.11.0</grpc.common.protos.version>
         <!--FIXME LOGBACK-1756 cause NPE when use logback in sofa-common-tools -->
         <logback.version>1.4.7</logback.version>
+        <mockito.version>4.8.1</mockito.version>
     </properties>
 
     <licenses>
