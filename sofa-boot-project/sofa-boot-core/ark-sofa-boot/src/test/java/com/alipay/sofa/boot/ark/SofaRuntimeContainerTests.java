@@ -126,4 +126,27 @@ public class SofaRuntimeContainerTests {
         assertThat(SofaRuntimeContainer.isJvmInvokeSerialize(classLoaderA)).isFalse();
         assertThat(SofaRuntimeContainer.isJvmServiceCache(classLoaderA)).isTrue();
     }
+
+    @Test
+    public void updatePropertiesAfterStaticSet() {
+        Thread.currentThread().setContextClassLoader(classLoaderA);
+        SofaRuntimeContainer sofaRuntimeContainer = new SofaRuntimeContainer(sofaRuntimeManagerA);
+        GenericApplicationContext genericApplicationContext = new GenericApplicationContext();
+        sofaRuntimeContainer.setApplicationContext(genericApplicationContext);
+
+        assertThat(SofaRuntimeContainer.isJvmInvokeSerialize(classLoaderA)).isTrue();
+        assertThat(SofaRuntimeContainer.isJvmServiceCache(classLoaderA)).isFalse();
+
+        SofaRuntimeContainer.updateJvmInvokeSerialize(classLoaderA, false);
+        SofaRuntimeContainer.updateJvmServiceCache(classLoaderA, true);
+
+        assertThat(SofaRuntimeContainer.isJvmInvokeSerialize(classLoaderA)).isFalse();
+        assertThat(SofaRuntimeContainer.isJvmServiceCache(classLoaderA)).isTrue();
+
+        sofaRuntimeContainer.setJvmInvokeSerialize(true);
+        sofaRuntimeContainer.setJvmServiceCache(false);
+
+        assertThat(SofaRuntimeContainer.isJvmInvokeSerialize(classLoaderA)).isFalse();
+        assertThat(SofaRuntimeContainer.isJvmServiceCache(classLoaderA)).isTrue();
+    }
 }
