@@ -55,11 +55,11 @@ public class SofaRuntimeContainer implements ApplicationContextAware, Disposable
     }
 
     public void setJvmServiceCache(boolean jvmServiceCache) {
-        JVM_SERVICE_CACHE_MAP.put(contextClassLoader, jvmServiceCache);
+        JVM_SERVICE_CACHE_MAP.putIfAbsent(contextClassLoader, jvmServiceCache);
     }
 
     public void setJvmInvokeSerialize(boolean jvmInvokeSerialize) {
-        JVM_INVOKE_SERIALIZE_MAP.put(contextClassLoader, jvmInvokeSerialize);
+        JVM_INVOKE_SERIALIZE_MAP.putIfAbsent(contextClassLoader, jvmInvokeSerialize);
     }
 
     @Override
@@ -75,8 +75,16 @@ public class SofaRuntimeContainer implements ApplicationContextAware, Disposable
         return SOFA_RUNTIME_MANAGER_MAP.get(classLoader);
     }
 
+    public static void updateJvmServiceCache(ClassLoader classLoader, Boolean value) {
+        JVM_SERVICE_CACHE_MAP.put(classLoader, value);
+    }
+
     public static boolean isJvmServiceCache(ClassLoader classLoader) {
         return JVM_SERVICE_CACHE_MAP.getOrDefault(classLoader, false);
+    }
+
+    public static void updateJvmInvokeSerialize(ClassLoader classLoader, Boolean value) {
+        JVM_INVOKE_SERIALIZE_MAP.put(classLoader, value);
     }
 
     public static boolean isJvmInvokeSerialize(ClassLoader classLoader) {
