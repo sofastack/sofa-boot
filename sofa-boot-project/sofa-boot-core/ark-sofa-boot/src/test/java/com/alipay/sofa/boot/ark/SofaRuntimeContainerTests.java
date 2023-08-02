@@ -71,14 +71,14 @@ public class SofaRuntimeContainerTests {
         sofaRuntimeContainerB.setApplicationContext(genericApplicationContextB);
 
         assertThat(SofaRuntimeContainer.getSofaRuntimeManager(classLoaderA)).isEqualTo(
-            sofaRuntimeManagerA);
+                sofaRuntimeManagerA);
         assertThat(SofaRuntimeContainer.getSofaRuntimeManager(classLoaderB)).isEqualTo(
-            sofaRuntimeManagerB);
+                sofaRuntimeManagerB);
 
         assertThat(SofaRuntimeContainer.getApplicationContext(classLoaderA)).isEqualTo(
-            genericApplicationContextA);
+                genericApplicationContextA);
         assertThat(SofaRuntimeContainer.getApplicationContext(classLoaderB)).isEqualTo(
-            genericApplicationContextB);
+                genericApplicationContextB);
 
         assertThat(SofaRuntimeContainer.sofaRuntimeManagerSet()).contains(sofaRuntimeManagerA);
         assertThat(SofaRuntimeContainer.sofaRuntimeManagerSet()).contains(sofaRuntimeManagerB);
@@ -92,7 +92,7 @@ public class SofaRuntimeContainerTests {
         sofaRuntimeContainer.setApplicationContext(genericApplicationContext);
 
         assertThat(SofaRuntimeContainer.getApplicationContext(classLoaderA)).isEqualTo(
-            genericApplicationContext);
+                genericApplicationContext);
         sofaRuntimeContainer.destroy();
         assertThat(SofaRuntimeContainer.getApplicationContext(classLoaderA)).isNull();
     }
@@ -105,7 +105,7 @@ public class SofaRuntimeContainerTests {
         sofaRuntimeContainer.setApplicationContext(genericApplicationContext);
 
         assertThat(SofaRuntimeContainer.getApplicationContext(classLoaderA)).isEqualTo(
-            genericApplicationContext);
+                genericApplicationContext);
         SofaRuntimeContainer.clear();
         assertThat(SofaRuntimeContainer.getApplicationContext(classLoaderA)).isNull();
     }
