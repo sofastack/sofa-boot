@@ -31,7 +31,7 @@
         <sofa.ark.version>2.2.0</sofa.ark.version>
         <sofa.lookout.version>1.6.1</sofa.lookout.version>
         <!--3rd lib dependency-->
-        <spring.cloud.version>2022.0.0</spring.cloud.version>
+        <spring.cloud.version>2022.0.3</spring.cloud.version>
         <asm.version>9.4</asm.version>
         <fastjson.version>1.2.83</fastjson.version>
         <javassist.version>3.29.2-GA</javassist.version>
@@ -54,6 +54,9 @@
         <swagger2.version>2.2.8</swagger2.version>
         <grpc.version>1.51.1</grpc.version>
         <grpc.common.protos.version>2.11.0</grpc.common.protos.version>
+        <!--FIXME LOGBACK-1756 cause NPE when use logback in sofa-common-tools -->
+        <logback.version>1.4.7</logback.version>
+        <mockito.version>4.8.1</mockito.version>
     </properties>
 
     <licenses>
@@ -114,7 +117,7 @@
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
-                <version>2022.0.0</version>
+                <version>${spring.cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
