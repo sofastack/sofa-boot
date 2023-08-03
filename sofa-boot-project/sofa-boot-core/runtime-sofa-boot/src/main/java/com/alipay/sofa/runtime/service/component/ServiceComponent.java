@@ -315,4 +315,9 @@ public class ServiceComponent extends AbstractComponent {
         healthResult.setHealthReport(report);
         return healthResult;
     }
+
+    @Override
+    public boolean canBeDuplicate() {
+        return SofaRuntimeProperties.isServiceCanBeDuplicate();
+    }
 }
