@@ -16,18 +16,21 @@
  */
 package com.alipay.sofa.boot.compatibility;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
- * Interface for compatibility verifier, for form spring cloud.
+ * Exception for not compatibility met.
  *
  * @author huzijie
- * @version CompatibilityVerifier.java, v 0.1 2023年08月03日 4:08 PM huzijie Exp $
+ * @version CompatibilityNotMetException.java, v 0.1 2023年08月03日 4:40 PM huzijie Exp $
  */
-public interface CompatibilityVerifier {
+public class CompatibilityNotMetException extends RuntimeException {
 
-    /**
-     * verify compatibility
-     * @return verify result
-     */
-    VerificationResult verify();
+    final List<VerificationResult> results;
 
+    CompatibilityNotMetException(List<VerificationResult> results) {
+        super("Compatibility checks have failed: " + Arrays.toString(results.toArray()));
+        this.results = results;
+    }
 }

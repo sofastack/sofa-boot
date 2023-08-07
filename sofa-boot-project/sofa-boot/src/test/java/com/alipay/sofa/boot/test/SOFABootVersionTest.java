@@ -14,20 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.boot.compatibility;
+package com.alipay.sofa.boot.test;
+
+import com.alipay.sofa.boot.SofaBootVersion;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
- * Interface for compatibility verifier, for form spring cloud.
- *
  * @author huzijie
- * @version CompatibilityVerifier.java, v 0.1 2023年08月03日 4:08 PM huzijie Exp $
+ * @version SOFABootVersionTest.java, v 0.1 2023年08月07日 12:10 PM huzijie Exp $
  */
-public interface CompatibilityVerifier {
+public class SOFABootVersionTest {
 
-    /**
-     * verify compatibility
-     * @return verify result
-     */
-    VerificationResult verify();
-
+    @Test
+    public void testVersion() {
+        Assert.assertEquals("3.20.0", SofaBootVersion.getVersion());
+    }
 }
