@@ -1,1 +1,2 @@
-org.springframework.context.ApplicationContextInitializer=com.alipay.sofa.runtime.SofaRuntimeSpringContextInitializer
+org.springframework.context.ApplicationContextInitializer=com.alipay.sofa.runtime.SofaRuntimeSpringContextInitializer,\
+  com.alipay.sofa.runtime.compatibility.CompatibilityVerifierApplicationContextInitializer
