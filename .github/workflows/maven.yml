@@ -5,9 +5,11 @@ name: CI
 
 on:
   push:
-    branches: [ master,3.**,4.** ]
+    branches:
+      - '**'
   pull_request:
-    branches: [ master,3.**,4.** ]
+    branches:
+      - '**'
 
 jobs:
   build:
