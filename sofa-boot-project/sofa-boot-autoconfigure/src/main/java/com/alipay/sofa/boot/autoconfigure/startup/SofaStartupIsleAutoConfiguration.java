@@ -29,7 +29,6 @@ import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.condition.SearchStrategy;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -46,7 +45,7 @@ import org.springframework.context.support.AbstractApplicationContext;
 public class SofaStartupIsleAutoConfiguration {
 
     @Bean
-    @ConditionalOnMissingBean(value = SpringContextInstallStage.class, search = SearchStrategy.CURRENT)
+    @ConditionalOnMissingBean(value = SpringContextInstallStage.class)
     public StartupSpringContextInstallStage startupSpringContextInstallStage(ApplicationContext applicationContext,
                                                                              SofaModuleProperties sofaModuleProperties,
                                                                              StartupReporter startupReporter) {
@@ -55,7 +54,7 @@ public class SofaStartupIsleAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(value = ModelCreatingStage.class, search = SearchStrategy.CURRENT)
+    @ConditionalOnMissingBean(value = ModelCreatingStage.class)
     public StartupModelCreatingStage startupModelCreatingStage(ApplicationContext applicationContext,
                                                                SofaModuleProperties sofaModuleProperties,
                                                                SofaModuleProfileChecker sofaModuleProfileChecker,

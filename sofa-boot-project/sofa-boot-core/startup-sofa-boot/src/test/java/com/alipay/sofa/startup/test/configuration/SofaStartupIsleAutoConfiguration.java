@@ -40,7 +40,6 @@ import com.alipay.sofa.startup.stage.isle.StartupSpringContextInstallStage;
 import com.alipay.sofa.startup.test.stage.TestModelCreatingStage;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.SearchStrategy;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -59,7 +58,7 @@ import java.util.List;
 public class SofaStartupIsleAutoConfiguration {
 
     @Bean
-    @ConditionalOnMissingBean(value = SpringContextInstallStage.class, search = SearchStrategy.CURRENT)
+    @ConditionalOnMissingBean(value = SpringContextInstallStage.class)
     public StartupSpringContextInstallStage startupSpringContextInstallStage(ApplicationContext applicationContext,
                                                                              SofaModuleProperties sofaModuleProperties,
                                                                              StartupReporter startupReporter) {
@@ -68,7 +67,7 @@ public class SofaStartupIsleAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(value = ModelCreatingStage.class, search = SearchStrategy.CURRENT)
+    @ConditionalOnMissingBean(value = ModelCreatingStage.class)
     public StartupModelCreatingStage startupModelCreatingStage(ApplicationContext applicationContext,
                                                                SofaModuleProperties sofaModuleProperties,
                                                                SofaModuleProfileChecker sofaModuleProfileChecker,
