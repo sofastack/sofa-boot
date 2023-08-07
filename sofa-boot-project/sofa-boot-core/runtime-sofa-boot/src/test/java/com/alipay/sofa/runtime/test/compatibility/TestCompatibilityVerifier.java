@@ -39,6 +39,9 @@ public class TestCompatibilityVerifier implements CompatibilityVerifier {
     public VerificationResult verify() {
         Assert.notNull(environment, "environment must not null");
         invoked = true;
+        if (!environment.containsProperty("enable.test.compatibility")) {
+            return VerificationResult.compatible();
+        }
         return VerificationResult.notCompatible("test error", "test action");
     }
 }

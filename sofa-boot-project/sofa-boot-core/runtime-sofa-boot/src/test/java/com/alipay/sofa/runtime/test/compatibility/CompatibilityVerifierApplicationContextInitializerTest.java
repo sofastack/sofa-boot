@@ -37,7 +37,9 @@ public class CompatibilityVerifierApplicationContextInitializerTest {
 
     @Before
     public void setUp() {
+        TestCompatibilityVerifier.invoked = false;
         applicationContext.setEnvironment(mockEnvironment);
+        mockEnvironment.setProperty("enable.test.compatibility", "true");
     }
 
     @Test
