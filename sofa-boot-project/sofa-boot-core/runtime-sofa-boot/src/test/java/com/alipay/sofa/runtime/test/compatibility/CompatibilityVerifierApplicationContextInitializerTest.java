@@ -49,8 +49,8 @@ public class CompatibilityVerifierApplicationContextInitializerTest {
             initializer.initialize(applicationContext);
             Assert.fail();
         } catch (CompatibilityNotMetException e) {
-            Assert.assertTrue(e.getMessage().contains(
-                "compatible = false, description = 'test error', action = 'test action'"));
+            Assert.assertTrue(e.getMessage().contains("description: test error"));
+            Assert.assertTrue(e.getMessage().contains("action: test action"));
         }
 
         Assert.assertTrue(TestCompatibilityVerifier.invoked);

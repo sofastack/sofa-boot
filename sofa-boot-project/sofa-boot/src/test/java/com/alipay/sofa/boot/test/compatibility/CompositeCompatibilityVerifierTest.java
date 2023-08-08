@@ -58,7 +58,8 @@ public class CompositeCompatibilityVerifierTest {
             verifier.verifyCompatibilities();
             Assert.fail();
         } catch (CompatibilityNotMetException e) {
-            Assert.assertTrue(e.getMessage().contains("description = 'verify error', action = 'do action'"));
+            Assert.assertTrue(e.getMessage().contains("description: verify error"));
+            Assert.assertTrue(e.getMessage().contains("action: do action"));
         }
     }
 }

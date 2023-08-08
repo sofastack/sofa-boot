@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.boot.compatibility;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -29,8 +28,8 @@ public class CompatibilityNotMetException extends RuntimeException {
 
     final List<VerificationResult> results;
 
-    CompatibilityNotMetException(List<VerificationResult> results) {
-        super("Compatibility checks have failed: " + Arrays.toString(results.toArray()));
+    CompatibilityNotMetException(List<VerificationResult> results, String errorMessage) {
+        super("Compatibility checks have failed: " + errorMessage);
         this.results = results;
     }
 }

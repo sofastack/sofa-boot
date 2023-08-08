@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.boot.compatibility;
 
-import org.springframework.core.style.ToStringCreator;
+import org.springframework.util.StringUtils;
 
 import java.util.Objects;
 
@@ -28,22 +28,18 @@ import java.util.Objects;
  */
 public class VerificationResult {
 
-    private final boolean compatible;
+    private final String description;
 
-    private final String  description;
-
-    private final String  action;
+    private final String action;
 
     // if OK
     private VerificationResult() {
-        this.compatible = true;
         this.description = "";
         this.action = "";
     }
 
     // if not OK
     private VerificationResult(String errorDescription, String action) {
-        this.compatible = false;
         this.description = errorDescription;
         this.action = action;
     }
@@ -57,7 +53,20 @@ public class VerificationResult {
     }
 
     public boolean isNotCompatible() {
-        return !compatible;
+        return StringUtils.hasText(this.description) || StringUtils.hasText(this.action);
+    }
+
+    public String toErrorMessage() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("\n");
+        stringBuilder.append("VerificationResult:");
+        stringBuilder.append("\n");
+        stringBuilder.append("—— description: ");
+        stringBuilder.append(description);
+        stringBuilder.append("\n");
+        stringBuilder.append("—— action: ");
+        stringBuilder.append(action);
+        return stringBuilder.toString();
     }
 
     @Override
@@ -69,22 +78,11 @@ public class VerificationResult {
             return false;
         }
         VerificationResult that = (VerificationResult) o;
-        return compatible == that.compatible && description.equals(that.description)
-               && action.equals(that.action);
+        return description.equals(that.description) && action.equals(that.action);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(compatible, description, action);
+        return Objects.hash(description, action);
     }
-
-    @Override
-    public String toString() {
-        ToStringCreator toStringCreator = new ToStringCreator(this);
-        toStringCreator.append("compatible", compatible);
-        toStringCreator.append("description", description);
-        toStringCreator.append("action", action);
-        return toStringCreator.toString();
-    }
-
 }
