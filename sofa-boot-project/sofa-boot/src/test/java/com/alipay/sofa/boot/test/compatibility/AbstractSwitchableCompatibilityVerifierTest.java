@@ -61,12 +61,12 @@ public class AbstractSwitchableCompatibilityVerifierTest {
 
         @Override
         public String errorDescription() {
-            return "";
+            return "fafa";
         }
 
         @Override
         public String action() {
-            return "";
+            return "fafa";
         }
 
         @Override
