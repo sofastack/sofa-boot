@@ -18,6 +18,7 @@ package com.alipay.sofa.boot.compatibility;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Composite compatibility verifier.
@@ -38,7 +39,8 @@ public class CompositeCompatibilityVerifier {
         if (errors.isEmpty()) {
             return;
         }
-        throw new CompatibilityNotMetException(errors);
+        String errorMessage = errors.stream().map(VerificationResult::toErrorMessage).collect(Collectors.toList()).toString();
+        throw new CompatibilityNotMetException(errors, errorMessage);
     }
 
     private List<VerificationResult> verifierErrors() {
