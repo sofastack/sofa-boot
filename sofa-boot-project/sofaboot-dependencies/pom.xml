@@ -435,6 +435,18 @@
             </dependency>
 
             <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>sofa-ark-all</artifactId>
+                <version>${sofa.ark.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alipay.sofa</groupId>
+                <artifactId>sofa-ark-exception</artifactId>
+                <version>${sofa.ark.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>com.alipay.sofa.lookout</groupId>
                 <artifactId>lookout-api</artifactId>
                 <version>${sofa.lookout.version}</version>
