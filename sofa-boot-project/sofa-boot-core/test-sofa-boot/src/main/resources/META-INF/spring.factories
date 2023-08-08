@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.alipay.sofa.testing.SofaBootTestAutoConfiguration
+org.springframework.test.context.TestExecutionListener=com.alipay.sofa.testing.SofaBootTestExecutionListener
