@@ -147,6 +147,7 @@ public class ModuleLogOutputStage extends AbstractPipelineStage {
                 sb.append(prefix).append("[Module] ").append(dd.getName()).append(" [")
                     .append(dd.getElapsedTime()).append(" ms]\n");
                 sb.append(((BeanLoadCostBeanFactory) beanFactory).outputBeanStats(indexPrefix));
+                ((BeanLoadCostBeanFactory) beanFactory).clearParentStackThreadLocal();
             }
         }
         stringBuilder.append(" [totalTime = ").append(totalTime).append(" ms, realTime = ")
