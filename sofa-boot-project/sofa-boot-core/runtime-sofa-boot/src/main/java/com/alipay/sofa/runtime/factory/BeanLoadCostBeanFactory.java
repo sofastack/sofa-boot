@@ -186,4 +186,8 @@ public class BeanLoadCostBeanFactory extends DefaultListableBeanFactory {
         }
         return rtn.toString();
     }
+
+    public void clearParentStackThreadLocal() {
+        parentStackThreadLocal.remove();
+    }
 }

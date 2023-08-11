@@ -351,7 +351,7 @@ public class DynamicJvmServiceProxyFinder {
                 if (getDynamicJvmServiceProxyFinder().bizManagerService != null) {
                     ReplayContext.clearPlaceHolder();
                 }
-                setClientClassloader(null);
+                clearClientClassloader();
             }
         }
 
@@ -379,6 +379,10 @@ public class DynamicJvmServiceProxyFinder {
 
         public void setClientClassloader(ClassLoader clientClassloader) {
             this.clientClassloader.set(clientClassloader);
+        }
+
+        public void clearClientClassloader() {
+            this.clientClassloader.remove();
         }
 
         private Method getTargetMethod(Method method, Class[] argumentTypes) {
