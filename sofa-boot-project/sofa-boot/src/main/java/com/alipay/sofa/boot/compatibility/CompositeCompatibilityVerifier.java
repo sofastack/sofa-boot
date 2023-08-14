@@ -18,7 +18,6 @@ package com.alipay.sofa.boot.compatibility;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Composite compatibility verifier.
