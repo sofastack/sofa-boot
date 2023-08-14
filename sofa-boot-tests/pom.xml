@@ -22,7 +22,6 @@
     <modules>
         <module>sofa-boot-smoke-tests</module>
         <module>sofa-boot-jacoco-report</module>
-        <module>sofa-boot-smoke-tests/sofa-boot-smoke-tests-integration-test</module>
     </modules>
 
     <dependencyManagement>

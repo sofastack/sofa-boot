@@ -24,6 +24,7 @@
         <module>sofa-boot-smoke-tests-rpc</module>
         <module>sofa-boot-smoke-tests-isle</module>
         <module>sofa-boot-smoke-tests-ark</module>
+        <module>sofa-boot-smoke-tests-test</module>
     </modules>
 
     <dependencies>
