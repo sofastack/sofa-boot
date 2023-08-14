@@ -14,21 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.testing.model.stub;
+package com.alipay.sofa.test;
 
-import org.springframework.test.context.TestContext;
-
-import java.util.Set;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * @author pengym
- * @version Stub.java, v 0.1 2023年08月07日 17:52 pengym
+ * @version SofaTestAutoConfiguration.java, v 0.1 2023年08月07日 15:45 pengym
  */
-public interface Stub {
-    /**
-     * Resolve the actual stub targets
-     * @param testContext TestContext
-     * @return The actual stub targets
-     */
-    Set<Object> resolveTargets(TestContext testContext);
+@Configuration
+@ComponentScan(basePackages = "com.alipay.sofa.test")
+public class SofaBootTestAutoConfiguration {
 }

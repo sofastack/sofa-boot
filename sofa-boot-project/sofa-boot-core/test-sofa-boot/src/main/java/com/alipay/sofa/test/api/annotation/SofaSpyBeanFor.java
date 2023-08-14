@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.testing.api.annotation;
+package com.alipay.sofa.test.api.annotation;
 
 import com.alipay.sofa.runtime.api.annotation.SofaReference;
-import com.alipay.sofa.testing.api.annotation.SofaSpyBeanFor.SofaSpyBeans;
+import com.alipay.sofa.test.api.annotation.SofaSpyBeanFor.SofaSpyBeans;
 import org.mockito.Spy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.AliasFor;

@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.testing;
+package com.alipay.sofa.test;
 
 import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import com.alipay.sofa.runtime.api.aware.ClientFactoryAware;
 import com.alipay.sofa.runtime.api.client.ClientFactory;
-import com.alipay.sofa.testing.model.definition.MockDefinition;
-import com.alipay.sofa.testing.model.definition.StubDefinition;
-import com.alipay.sofa.testing.model.stub.Stub;
-import com.alipay.sofa.testing.parser.SofaBootTestAnnotationParser;
-import com.alipay.sofa.testing.resolver.SofaBootReferenceResolver;
+import com.alipay.sofa.test.model.definition.MockDefinition;
+import com.alipay.sofa.test.model.definition.StubDefinition;
+import com.alipay.sofa.test.model.stub.Stub;
+import com.alipay.sofa.test.parser.SofaBootTestAnnotationParser;
+import com.alipay.sofa.test.resolver.SofaBootReferenceResolver;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.springframework.core.Ordered;

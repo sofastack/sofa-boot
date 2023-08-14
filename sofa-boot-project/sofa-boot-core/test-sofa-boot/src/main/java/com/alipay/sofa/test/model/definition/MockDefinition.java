@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.testing.model.definition;
+package com.alipay.sofa.test.model.definition;
 
 import org.mockito.MockSettings;
 import org.mockito.Mockito;
@@ -23,38 +23,33 @@ import org.springframework.core.ResolvableType;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
+import static org.mockito.Mockito.mock;
+
 /**
  * @author pengym
- * @version SpyDefinition.java, v 0.1 2023年08月07日 19:42 pengym
+ * @version MockDefinition.java, v 0.1 2023年08月07日 19:42 pengym
  */
-public class SpyDefinition extends StubDefinition {
-    public SpyDefinition(ResolvableType typeToSpy, @Nullable String beanName, @Nullable String fieldName) {
-        super(typeToSpy, beanName, fieldName);
+public class MockDefinition extends StubDefinition {
+    public MockDefinition(ResolvableType typeToMock, @Nullable String name, @Nullable String fieldName) {
+        super(typeToMock, name, fieldName);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public <T> T create(Object originalValue) {
-        Class<?> cls = this.resolvableType.resolve();
+        Class<?> cls = resolvableType.resolve();
         Assert.notNull(cls, "cannot resolve resolvableType");
-        Assert.isInstanceOf(cls, originalValue);
+        Assert.state(!Mockito.mockingDetails(originalValue).isMock(), "originalValue is already a mock");
 
-        // Avoid spying a Spy object
-        Assert.state(!Mockito.mockingDetails(originalValue).isSpy(), "originalValue is already a spy!");
-
-        MockSettings settings = MockReset
-                .withSettings(MockReset.AFTER)
-                .name(beanName)
-                .spiedInstance(originalValue)
-                .defaultAnswer(Mockito.CALLS_REAL_METHODS);
-
-        return (T) Mockito.mock(originalValue.getClass(), settings);
+        MockSettings settings = MockReset.withSettings(MockReset.AFTER);
+        settings.name(beanName);
+        return (T) mock(resolvableType.resolve(), settings);
     }
 
     @Override
     public String toString() {
-        return "SpyDefinition{" +
-                "typeToSpy=" + resolvableType +
+        return "MockDefinition{" +
+                "typeToMock=" + resolvableType +
                 ", beanName='" + beanName + '\'' +
                 ", fieldName='" + fieldName + '\'' +
                 '}';

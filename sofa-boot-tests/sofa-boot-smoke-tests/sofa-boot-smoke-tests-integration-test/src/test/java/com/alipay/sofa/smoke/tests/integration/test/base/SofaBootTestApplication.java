@@ -27,7 +27,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication(scanBasePackages = {
         "com.alipay.sofa.smoke.tests.integration.test",
-        "com.alipay.sofa.testing"
+        "com.alipay.sofa.test"
 })
 public class SofaBootTestApplication {
     private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(SofaBootTestApplication.class);

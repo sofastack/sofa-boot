@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.testing.model.stub;
+package com.alipay.sofa.test.model.stub;
 
-import com.alipay.sofa.testing.resolver.SofaBootBeanResolver;
-import com.alipay.sofa.testing.resolver.SofaBootReferenceResolver;
+import com.alipay.sofa.test.resolver.SofaBootBeanResolver;
+import com.alipay.sofa.test.resolver.SofaBootReferenceResolver;
 import com.google.common.base.Preconditions;
 import lombok.Builder;
 import lombok.Data;

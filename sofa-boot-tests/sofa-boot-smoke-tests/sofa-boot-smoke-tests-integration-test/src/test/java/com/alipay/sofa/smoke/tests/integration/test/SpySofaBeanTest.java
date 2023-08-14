@@ -18,7 +18,7 @@ package com.alipay.sofa.smoke.tests.integration.test;
 
 import com.alipay.sofa.runtime.api.annotation.SofaReference;
 import com.alipay.sofa.smoke.tests.integration.test.base.SofaIntegrationTestBaseCase;
-import com.alipay.sofa.testing.api.annotation.SofaSpyBeanFor;
+import com.alipay.sofa.test.api.annotation.SofaSpyBeanFor;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

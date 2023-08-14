@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.testing.parser;
+package com.alipay.sofa.test.parser;
 
-import com.alipay.sofa.testing.api.annotation.SofaMockBeanFor;
-import com.alipay.sofa.testing.api.annotation.SofaSpyBeanFor;
-import com.alipay.sofa.testing.model.definition.MockDefinition;
-import com.alipay.sofa.testing.model.definition.SpyDefinition;
-import com.alipay.sofa.testing.model.definition.StubDefinition;
-import com.alipay.sofa.testing.model.stub.SofaStub;
-import com.alipay.sofa.testing.model.stub.Stub;
+import com.alipay.sofa.test.api.annotation.SofaMockBeanFor;
+import com.alipay.sofa.test.api.annotation.SofaSpyBeanFor;
+import com.alipay.sofa.test.model.definition.MockDefinition;
+import com.alipay.sofa.test.model.definition.SpyDefinition;
+import com.alipay.sofa.test.model.definition.StubDefinition;
+import com.alipay.sofa.test.model.stub.SofaStub;
+import com.alipay.sofa.test.model.stub.Stub;
 import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.ResolvableType;

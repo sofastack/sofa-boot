@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.testing.model.definition;
+package com.alipay.sofa.test.model.definition;
 
 import com.google.common.base.Preconditions;
 import lombok.Getter;
