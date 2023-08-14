@@ -20,7 +20,7 @@ import org.springframework.beans.CachedIntrospectionResults;
 import org.springframework.beans.factory.annotation.QualifierAnnotationAutowireCandidateResolver;
 import org.springframework.beans.propertyeditors.ClassArrayEditor;
 import org.springframework.beans.propertyeditors.ClassEditor;
-import org.springframework.core.StandardReflectionParameterNameDiscoverer;
+import org.springframework.core.DefaultParameterNameDiscoverer;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -40,7 +40,7 @@ public class SofaSpringContextSupport {
         if (!(beanFactory.getAutowireCandidateResolver() instanceof QualifierAnnotationAutowireCandidateResolver)) {
             beanFactory.setAutowireCandidateResolver(new QualifierAnnotationAutowireCandidateResolver());
         }
-        beanFactory.setParameterNameDiscoverer(new StandardReflectionParameterNameDiscoverer());
+        beanFactory.setParameterNameDiscoverer(new DefaultParameterNameDiscoverer());
         beanFactory.setBeanClassLoader(beanClassLoader);
         beanFactory.addPropertyEditorRegistrar(registry -> {
             registry.registerCustomEditor(Class.class, new ClassEditor(beanClassLoader));
