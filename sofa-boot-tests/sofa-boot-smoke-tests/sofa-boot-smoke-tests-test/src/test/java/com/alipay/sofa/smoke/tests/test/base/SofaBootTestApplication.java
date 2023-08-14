@@ -25,10 +25,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author pengym
  * @version SofaBootTestApplication.java, v 0.1 2023年08月08日 11:24 pengym
  */
-@SpringBootApplication(scanBasePackages = {
-        "com.alipay.sofa.smoke.tests.test",
-        "com.alipay.sofa.test"
-})
+@SpringBootApplication
 public class SofaBootTestApplication {
     private static final Logger LOGGER = SofaBootLoggerFactory.getLogger(SofaBootTestApplication.class);
 
