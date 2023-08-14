@@ -19,7 +19,6 @@ package com.alipay.sofa.runtime.spring.bean;
 import com.alipay.sofa.boot.annotation.AnnotationWrapper;
 import com.alipay.sofa.runtime.api.annotation.SofaReference;
 import org.springframework.core.ParameterNameDiscoverer;
-import org.springframework.core.StandardReflectionParameterNameDiscoverer;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -33,18 +32,19 @@ import java.lang.reflect.Method;
  */
 public class SofaParameterNameDiscoverer implements ParameterNameDiscoverer {
 
-    private final StandardReflectionParameterNameDiscoverer standardReflectionParameterNameDiscoverer = new StandardReflectionParameterNameDiscoverer();
+    private final ParameterNameDiscoverer          parameterNameDiscoverer;
 
-    private final AnnotationWrapper<SofaReference>          referenceAnnotationWrapper;
+    private final AnnotationWrapper<SofaReference> referenceAnnotationWrapper;
 
-    public SofaParameterNameDiscoverer(AnnotationWrapper<SofaReference> referenceAnnotationWrapper) {
+    public SofaParameterNameDiscoverer(ParameterNameDiscoverer parameterNameDiscoverer,
+                                       AnnotationWrapper<SofaReference> referenceAnnotationWrapper) {
+        this.parameterNameDiscoverer = parameterNameDiscoverer;
         this.referenceAnnotationWrapper = referenceAnnotationWrapper;
     }
 
     @Override
     public String[] getParameterNames(Method method) {
-        String[] parameterNames = standardReflectionParameterNameDiscoverer
-            .getParameterNames(method);
+        String[] parameterNames = parameterNameDiscoverer.getParameterNames(method);
         Class<?>[] parameterTypes = method.getParameterTypes();
         Annotation[][] annotations = method.getParameterAnnotations();
         return transformParameterNames(parameterNames, parameterTypes, annotations);
@@ -52,7 +52,7 @@ public class SofaParameterNameDiscoverer implements ParameterNameDiscoverer {
 
     @Override
     public String[] getParameterNames(Constructor<?> ctor) {
-        String[] parameterNames = standardReflectionParameterNameDiscoverer.getParameterNames(ctor);
+        String[] parameterNames = parameterNameDiscoverer.getParameterNames(ctor);
         Class<?>[] parameterTypes = ctor.getParameterTypes();
         Annotation[][] annotations = ctor.getParameterAnnotations();
         return transformParameterNames(parameterNames, parameterTypes, annotations);
