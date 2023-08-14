@@ -23,6 +23,7 @@ import com.alipay.sofa.test.SofaBootTestExecutionListener;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.TestExecutionListener;
@@ -33,8 +34,9 @@ import org.springframework.test.context.TestExecutionListener;
  * @author pengym
  * @version SofaTestAutoConfiguration.java, v 0.1 2023年08月07日 15:45 pengym
  */
-@AutoConfigureAfter(SofaRuntimeAutoConfiguration.class)
 @AutoConfiguration
+@AutoConfigureAfter(SofaRuntimeAutoConfiguration.class)
+@ConditionalOnClass(TestExecutionListener.class)
 public class SofaTestAutoConfiguration implements ClientFactoryAware {
     private ClientFactory clientFactory;
 
