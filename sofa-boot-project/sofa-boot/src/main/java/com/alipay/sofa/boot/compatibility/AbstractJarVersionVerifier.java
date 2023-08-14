@@ -46,16 +46,16 @@ public abstract class AbstractJarVersionVerifier extends AbstractSwitchableCompa
     @Override
     public String errorDescription() {
         return String.format("SOFABoot is not compatible with jar [%s] for current version.",
-                name());
+            name());
     }
 
     @Override
     public String action() {
         return String.format(
-                "Change [%s] to appropriate version,"
-                        + "you can visit this doc [%s] and find an appropriate version,"
-                        + "If you want to disable this check, just set the property [%s=false].",
-                name(), doc(), this.enableKey);
+            "Change [%s] to appropriate version,"
+                    + "you can visit this doc [%s] and find an appropriate version,"
+                    + "If you want to disable this check, just set the property [%s=false].",
+            name(), doc(), this.enableKey);
     }
 
     public abstract Collection<CompatibilityPredicate> getJarCompatibilityPredicates();

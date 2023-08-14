@@ -58,7 +58,7 @@ public class ServiceComponent extends AbstractComponent {
 
     private final Map<String, Property> properties                    = new ConcurrentHashMap<>();
 
-    private final boolean canBeDuplicate;
+    private final boolean               canBeDuplicate;
 
     public ServiceComponent(Implementation implementation, Service service,
                             BindingAdapterFactory bindingAdapterFactory,

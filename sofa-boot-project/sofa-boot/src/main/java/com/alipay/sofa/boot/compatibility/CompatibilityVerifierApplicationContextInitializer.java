@@ -42,7 +42,8 @@ public class CompatibilityVerifierApplicationContextInitializer
     public void initialize(ConfigurableApplicationContext applicationContext) {
         Environment environment = applicationContext.getEnvironment();
         if (!Boolean.parseBoolean(environment.getProperty(COMPATIBILITY_VERIFIER_ENABLED, "true"))) {
-            Logger logger = LoggerFactory.getLogger(CompatibilityVerifierApplicationContextInitializer.class);
+            Logger logger = LoggerFactory
+                .getLogger(CompatibilityVerifierApplicationContextInitializer.class);
             logger.info("Skip SOFABoot compatibility Verifier");
             return;
         }
@@ -56,11 +57,12 @@ public class CompatibilityVerifierApplicationContextInitializer
     private List<CompatibilityVerifier> getCompatibilityVerifierInstances(Environment environment) {
 
         SpringFactoriesLoader.ArgumentResolver argumentResolver = SpringFactoriesLoader.ArgumentResolver
-                .of(Environment.class, environment);
-        SpringFactoriesLoader springFactoriesLoader = SpringFactoriesLoader.forDefaultResourceLocation();
+            .of(Environment.class, environment);
+        SpringFactoriesLoader springFactoriesLoader = SpringFactoriesLoader
+            .forDefaultResourceLocation();
         // Use names and ensure unique to protect against duplicates
         List<CompatibilityVerifier> instances = springFactoriesLoader.load(
-                CompatibilityVerifier.class, argumentResolver);
+            CompatibilityVerifier.class, argumentResolver);
         AnnotationAwareOrderComparator.sort(instances);
         return instances;
     }

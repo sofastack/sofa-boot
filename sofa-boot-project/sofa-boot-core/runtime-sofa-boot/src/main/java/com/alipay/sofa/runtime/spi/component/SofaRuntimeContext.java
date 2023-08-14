@@ -103,7 +103,7 @@ public class SofaRuntimeContext {
         private boolean      serviceInterfaceTypeCheck            = false;
         private List<String> skipJvmReferenceHealthCheckList      = new ArrayList<>();
         private boolean      referenceHealthCheckMoreDetailEnable = false;
-        private boolean      serviceCanBeDuplicate = true;
+        private boolean      serviceCanBeDuplicate                = true;
 
         public boolean isSkipJvmReferenceHealthCheck() {
             return skipJvmReferenceHealthCheck;

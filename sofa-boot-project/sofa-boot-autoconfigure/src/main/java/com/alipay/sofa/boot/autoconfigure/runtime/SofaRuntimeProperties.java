@@ -95,7 +95,7 @@ public class SofaRuntimeProperties {
     /**
      * Whether support register duplicate service component.
      */
-    private boolean serviceCanBeDuplicate = true;
+    private boolean      serviceCanBeDuplicate           = true;
 
     public boolean isSkipJvmReferenceHealthCheck() {
         return skipJvmReferenceHealthCheck;

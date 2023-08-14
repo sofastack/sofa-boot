@@ -47,18 +47,18 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class ServiceComponentTests {
 
-    private Service               service;
+    private Service                       service;
 
-    private ServiceComponent      serviceComponent;
-
-    @Mock
-    private Implementation        implementation;
+    private ServiceComponent              serviceComponent;
 
     @Mock
-    private BindingAdapterFactory bindingAdapterFactory;
+    private Implementation                implementation;
 
     @Mock
-    private SofaRuntimeContext    sofaRuntimeContext;
+    private BindingAdapterFactory         bindingAdapterFactory;
+
+    @Mock
+    private SofaRuntimeContext            sofaRuntimeContext;
 
     private SofaRuntimeContext.Properties properties;
 
@@ -318,7 +318,7 @@ public class ServiceComponentTests {
     void canBeDuplicate() {
         properties.setServiceCanBeDuplicate(true);
         serviceComponent = new ServiceComponent(implementation, service, bindingAdapterFactory,
-                sofaRuntimeContext);
+            sofaRuntimeContext);
         assertThat(serviceComponent.canBeDuplicate()).isTrue();
     }
 
