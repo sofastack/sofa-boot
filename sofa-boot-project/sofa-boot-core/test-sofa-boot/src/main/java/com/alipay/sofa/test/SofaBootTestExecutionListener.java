@@ -17,7 +17,6 @@
 package com.alipay.sofa.test;
 
 import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
-import com.alipay.sofa.runtime.api.aware.ClientFactoryAware;
 import com.alipay.sofa.runtime.api.client.ClientFactory;
 import com.alipay.sofa.test.model.definition.MockDefinition;
 import com.alipay.sofa.test.model.definition.StubDefinition;
@@ -27,19 +26,14 @@ import com.alipay.sofa.test.resolver.SofaBootReferenceResolver;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.springframework.core.Ordered;
-import org.springframework.stereotype.Component;
 import org.springframework.test.context.TestContext;
 import org.springframework.test.context.support.AbstractTestExecutionListener;
 import org.springframework.util.ReflectionUtils;
 
 import javax.annotation.Nonnull;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import static java.util.Objects.isNull;
 
@@ -47,11 +41,10 @@ import static java.util.Objects.isNull;
  * @author pengym
  * @version SofaBootTestExecutionListener.java, v 0.1 2023年08月07日 15:51 pengym
  */
-@Component
-public class SofaBootTestExecutionListener extends AbstractTestExecutionListener implements ClientFactoryAware {
+public class SofaBootTestExecutionListener extends AbstractTestExecutionListener {
     private static final Logger LOGGER         = SofaBootLoggerFactory
             .getLogger(SofaBootTestExecutionListener.class);
-    private static final String STUBBED_FIELDS = "SOFA_BOOT_STUBBED_FIELDS";
+    private static final String STUBBED_FIELDS = "_SOFA_BOOT_STUBBED_FIELDS";
 
     private static ClientFactory clientFactory;
 
@@ -157,7 +150,6 @@ public class SofaBootTestExecutionListener extends AbstractTestExecutionListener
         stubbedFields.add(stubField);
     }
 
-    @Override
     public void setClientFactory(ClientFactory clientFactory) {
         if (clientFactory != null) {
             SofaBootTestExecutionListener.clientFactory = clientFactory;

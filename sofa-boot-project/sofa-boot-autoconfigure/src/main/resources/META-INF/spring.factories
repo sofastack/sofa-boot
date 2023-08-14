@@ -1,3 +1,6 @@
 # AutoConfigurationImportListener
 org.springframework.boot.autoconfigure.AutoConfigurationImportListener=\
   com.alipay.sofa.boot.autoconfigure.detect.LegacyAutoConfigurationDetectListener
+
+# Add TestExecutionListener
+org.springframework.test.context.TestExecutionListener=com.alipay.sofa.test.SofaBootTestExecutionListener
