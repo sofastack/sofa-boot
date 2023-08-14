@@ -16,12 +16,12 @@
  */
 package com.alipay.sofa.test.model.definition;
 
+import com.google.common.base.Preconditions;
 import org.mockito.MockSettings;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockReset;
 import org.springframework.core.ResolvableType;
 import org.springframework.lang.Nullable;
-import org.springframework.util.Assert;
 
 import static org.mockito.Mockito.mock;
 
@@ -39,8 +39,8 @@ public class MockDefinition extends StubDefinition {
     @Override
     public <T> T create(Object originalValue) {
         Class<?> cls = resolvableType.resolve();
-        Assert.notNull(cls, "cannot resolve resolvableType");
-        Assert.state(!Mockito.mockingDetails(originalValue).isMock(),
+        Preconditions.checkNotNull(cls, "cannot resolve resolvableType");
+        Preconditions.checkState(!Mockito.mockingDetails(originalValue).isMock(),
             "originalValue is already a mock");
 
         MockSettings settings = MockReset.withSettings(MockReset.AFTER);

@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.test.model.definition;
 
+import com.google.common.base.Preconditions;
 import org.mockito.MockSettings;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockReset;
@@ -37,11 +38,11 @@ public class SpyDefinition extends StubDefinition {
     @Override
     public <T> T create(Object originalValue) {
         Class<?> cls = this.resolvableType.resolve();
-        Assert.notNull(cls, "cannot resolve resolvableType");
+        Preconditions.checkNotNull(cls, "cannot resolve resolvableType");
         Assert.isInstanceOf(cls, originalValue);
 
         // Avoid spying a Spy object
-        Assert.state(!Mockito.mockingDetails(originalValue).isSpy(),
+        Preconditions.checkState(!Mockito.mockingDetails(originalValue).isSpy(),
             "originalValue is already a spy!");
 
         MockSettings settings = MockReset.withSettings(MockReset.AFTER).name(beanName)

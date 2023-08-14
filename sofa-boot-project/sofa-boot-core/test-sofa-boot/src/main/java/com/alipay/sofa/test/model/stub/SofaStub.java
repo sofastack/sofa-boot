@@ -23,7 +23,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.test.context.TestContext;
-import org.springframework.util.Assert;
 
 import javax.annotation.Nullable;
 import java.util.LinkedHashSet;
@@ -59,7 +58,7 @@ public class SofaStub implements Stub {
 
     @Override
     public Set<Object> resolveTargets(TestContext testContext) {
-        Assert.notNull(type, "Stub target type is unknown");
+        Preconditions.checkNotNull(type, "Stub target type is unknown");
 
         Set<Object> result = new LinkedHashSet<>();
 
