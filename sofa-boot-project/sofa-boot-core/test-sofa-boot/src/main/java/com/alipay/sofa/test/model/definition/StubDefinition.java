@@ -17,7 +17,6 @@
 package com.alipay.sofa.test.model.definition;
 
 import com.google.common.base.Preconditions;
-import lombok.Getter;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.core.ResolvableType;
@@ -32,11 +31,8 @@ import java.lang.reflect.Type;
  * @author pengym
  */
 public abstract class StubDefinition {
-    @Getter
     protected final ResolvableType resolvableType;
-    @Getter
     protected       String         beanName;
-    @Getter
     protected       String         fieldName;
 
     public StubDefinition(ResolvableType resolvableType, @Nullable String beanName, @Nullable String fieldName) {
@@ -92,5 +88,17 @@ public abstract class StubDefinition {
                 ", beanName='" + beanName + '\'' +
                 ", fieldName='" + fieldName + '\'' +
                 '}';
+    }
+
+    public ResolvableType getResolvableType() {
+        return this.resolvableType;
+    }
+
+    public String getBeanName() {
+        return this.beanName;
+    }
+
+    public String getFieldName() {
+        return this.fieldName;
     }
 }
