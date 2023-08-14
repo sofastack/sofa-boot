@@ -26,7 +26,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @version SofaBootTestApplication.java, v 0.1 2023年08月08日 11:24 pengym
  */
 @SpringBootApplication(scanBasePackages = {
-        "com.alipay.sofa.smoke.tests.integration.test",
+        "com.alipay.sofa.smoke.tests.test",
         "com.alipay.sofa.test"
 })
 public class SofaBootTestApplication {
