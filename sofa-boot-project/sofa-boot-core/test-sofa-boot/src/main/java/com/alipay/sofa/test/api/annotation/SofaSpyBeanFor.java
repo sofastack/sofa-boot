@@ -34,7 +34,7 @@ import java.lang.annotation.Target;
  * @author pengym
  * @version SofaSpyBeanFor.java, v 0.1 2023年08月07日 15:38 pengym
  */
-@Target({ElementType.FIELD})
+@Target({ ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 @Repeatable(SofaSpyBeans.class)
 public @interface SofaSpyBeanFor {
@@ -70,7 +70,7 @@ public @interface SofaSpyBeanFor {
      */
     String module() default "";
 
-    @Target({ElementType.FIELD})
+    @Target({ ElementType.FIELD })
     @Retention(RetentionPolicy.RUNTIME)
     @interface SofaSpyBeans {
         SofaSpyBeanFor[] value();

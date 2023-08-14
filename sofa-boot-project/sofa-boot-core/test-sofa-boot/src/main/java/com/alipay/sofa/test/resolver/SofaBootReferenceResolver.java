@@ -48,12 +48,14 @@ import static java.util.Objects.nonNull;
  * @version SofaBootReferenceResolver.java, v 0.1 2023年08月07日 16:10 pengym
  */
 public class SofaBootReferenceResolver {
-    public static final Map<ApplicationContext, SofaBootReferenceResolver> RESOLVERS = new HashMap<>();
+    public static final Map<ApplicationContext, SofaBootReferenceResolver> RESOLVERS  = new HashMap<>();
 
-    private final ReferenceClient         referenceClient;
-    private final Cache<CacheKey, Object> BEAN_CACHE = CacheBuilder.newBuilder()
-            .maximumSize(100)
-            .build();
+    private final ReferenceClient                                          referenceClient;
+    private final Cache<CacheKey, Object>                                  BEAN_CACHE = CacheBuilder
+                                                                                          .newBuilder()
+                                                                                          .maximumSize(
+                                                                                              100)
+                                                                                          .build();
 
     /**
      * Constructor
@@ -77,8 +79,10 @@ public class SofaBootReferenceResolver {
         Preconditions.checkNotNull(testContext);
 
         ApplicationContext context = testContext.getApplicationContext();
-        Preconditions.checkState(RESOLVERS.containsKey(context), new RuntimeException(
-                String.format("Cannot find SofaBootReferenceResolver for ApplicationContext: %s", context)));
+        Preconditions.checkState(
+            RESOLVERS.containsKey(context),
+            new RuntimeException(String.format(
+                "Cannot find SofaBootReferenceResolver for ApplicationContext: %s", context)));
         return RESOLVERS.get(context);
     }
 
@@ -143,7 +147,8 @@ public class SofaBootReferenceResolver {
             // extract impl recursively
             return extractProxiedObject(obj);
         } catch (Throwable t) {
-            throw new RuntimeException(String.format("Failed to extract implementation for SOFA reference: %s", obj), t);
+            throw new RuntimeException(String.format(
+                "Failed to extract implementation for SOFA reference: %s", obj), t);
         }
     }
 
@@ -158,21 +163,20 @@ public class SofaBootReferenceResolver {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) {return true;}
-            if (o == null || getClass() != o.getClass()) {return false;}
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
             CacheKey cacheKey = (CacheKey) o;
-            return new EqualsBuilder()
-                    .append(uniqueId, cacheKey.uniqueId)
-                    .append(clazz, cacheKey.clazz)
-                    .isEquals();
+            return new EqualsBuilder().append(uniqueId, cacheKey.uniqueId)
+                .append(clazz, cacheKey.clazz).isEquals();
         }
 
         @Override
         public int hashCode() {
-            return new HashCodeBuilder(17, 37)
-                    .append(uniqueId)
-                    .append(clazz)
-                    .toHashCode();
+            return new HashCodeBuilder(17, 37).append(uniqueId).append(clazz).toHashCode();
         }
     }
 }

@@ -28,7 +28,8 @@ import org.springframework.util.Assert;
  * @version SpyDefinition.java, v 0.1 2023年08月07日 19:42 pengym
  */
 public class SpyDefinition extends StubDefinition {
-    public SpyDefinition(ResolvableType typeToSpy, @Nullable String beanName, @Nullable String fieldName) {
+    public SpyDefinition(ResolvableType typeToSpy, @Nullable String beanName,
+                         @Nullable String fieldName) {
         super(typeToSpy, beanName, fieldName);
     }
 
@@ -40,23 +41,18 @@ public class SpyDefinition extends StubDefinition {
         Assert.isInstanceOf(cls, originalValue);
 
         // Avoid spying a Spy object
-        Assert.state(!Mockito.mockingDetails(originalValue).isSpy(), "originalValue is already a spy!");
+        Assert.state(!Mockito.mockingDetails(originalValue).isSpy(),
+            "originalValue is already a spy!");
 
-        MockSettings settings = MockReset
-                .withSettings(MockReset.AFTER)
-                .name(beanName)
-                .spiedInstance(originalValue)
-                .defaultAnswer(Mockito.CALLS_REAL_METHODS);
+        MockSettings settings = MockReset.withSettings(MockReset.AFTER).name(beanName)
+            .spiedInstance(originalValue).defaultAnswer(Mockito.CALLS_REAL_METHODS);
 
         return (T) Mockito.mock(originalValue.getClass(), settings);
     }
 
     @Override
     public String toString() {
-        return "SpyDefinition{" +
-                "typeToSpy=" + resolvableType +
-                ", beanName='" + beanName + '\'' +
-                ", fieldName='" + fieldName + '\'' +
-                '}';
+        return "SpyDefinition{" + "typeToSpy=" + resolvableType + ", beanName='" + beanName + '\''
+               + ", fieldName='" + fieldName + '\'' + '}';
     }
 }

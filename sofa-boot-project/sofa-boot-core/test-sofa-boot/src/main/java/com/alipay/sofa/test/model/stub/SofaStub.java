@@ -39,13 +39,14 @@ import java.util.stream.Collectors;
 public class SofaStub implements Stub {
     private final Class<?> type;
     @Nullable
-    private final String moduleName;
+    private final String   moduleName;
     @Nullable
-    private final String uniqueId;
+    private final String   uniqueId;
     @Nullable
-    private final String qualifier;
+    private final String   qualifier;
 
-    SofaStub(Class<?> type, @Nullable String moduleName, @Nullable String uniqueId, @Nullable String qualifier) {
+    SofaStub(Class<?> type, @Nullable String moduleName, @Nullable String uniqueId,
+             @Nullable String qualifier) {
         this.type = type;
         this.moduleName = moduleName;
         this.uniqueId = uniqueId;
@@ -125,36 +126,33 @@ public class SofaStub implements Stub {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
 
         SofaStub sofaStub = (SofaStub) o;
-        return new EqualsBuilder()
-                .append(type, sofaStub.type)
-                .append(moduleName, sofaStub.moduleName)
-                .append(uniqueId, sofaStub.uniqueId)
-                .append(qualifier, sofaStub.qualifier).isEquals();
+        return new EqualsBuilder().append(type, sofaStub.type)
+            .append(moduleName, sofaStub.moduleName).append(uniqueId, sofaStub.uniqueId)
+            .append(qualifier, sofaStub.qualifier).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37)
-                .append(type)
-                .append(moduleName)
-                .append(uniqueId)
-                .append(qualifier)
-                .toHashCode();
+        return new HashCodeBuilder(17, 37).append(type).append(moduleName).append(uniqueId)
+            .append(qualifier).toHashCode();
     }
 
     public String toString() {
-        return "SofaStub(type=" + this.getType() + ", moduleName=" + this.getModuleName() + ", uniqueId=" + this.getUniqueId() + ", qualifier=" + this.getQualifier() + ")";
+        return "SofaStub(type=" + this.getType() + ", moduleName=" + this.getModuleName()
+               + ", uniqueId=" + this.getUniqueId() + ", qualifier=" + this.getQualifier() + ")";
     }
 
     public static class SofaStubBuilder {
         private Class<?> type;
-        private String moduleName;
-        private String uniqueId;
-        private String qualifier;
+        private String   moduleName;
+        private String   uniqueId;
+        private String   qualifier;
 
         SofaStubBuilder() {
         }
@@ -184,7 +182,8 @@ public class SofaStub implements Stub {
         }
 
         public String toString() {
-            return "SofaStub.SofaStubBuilder(type=" + this.type + ", moduleName=" + this.moduleName + ", uniqueId=" + this.uniqueId + ", qualifier=" + this.qualifier + ")";
+            return "SofaStub.SofaStubBuilder(type=" + this.type + ", moduleName=" + this.moduleName
+                   + ", uniqueId=" + this.uniqueId + ", qualifier=" + this.qualifier + ")";
         }
     }
 }

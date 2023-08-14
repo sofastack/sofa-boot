@@ -32,10 +32,11 @@ import java.lang.reflect.Type;
  */
 public abstract class StubDefinition {
     protected final ResolvableType resolvableType;
-    protected       String         beanName;
-    protected       String         fieldName;
+    protected String               beanName;
+    protected String               fieldName;
 
-    public StubDefinition(ResolvableType resolvableType, @Nullable String beanName, @Nullable String fieldName) {
+    public StubDefinition(ResolvableType resolvableType, @Nullable String beanName,
+                          @Nullable String fieldName) {
         Preconditions.checkNotNull(resolvableType, "resolvableType must not be null!");
 
         this.beanName = beanName;
@@ -61,33 +62,28 @@ public abstract class StubDefinition {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {return true;}
-        if (o == null || getClass() != o.getClass()) {return false;}
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         StubDefinition that = (StubDefinition) o;
-        return new EqualsBuilder()
-                .append(resolvableType, that.resolvableType)
-                .append(beanName, that.beanName)
-                .append(fieldName, that.fieldName)
-                .isEquals();
+        return new EqualsBuilder().append(resolvableType, that.resolvableType)
+            .append(beanName, that.beanName).append(fieldName, that.fieldName).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37)
-                .append(resolvableType)
-                .append(beanName)
-                .append(fieldName)
-                .toHashCode();
+        return new HashCodeBuilder(17, 37).append(resolvableType).append(beanName)
+            .append(fieldName).toHashCode();
     }
 
     @Override
     public String toString() {
-        return "StubDefinition{" +
-                "resolvableType=" + resolvableType +
-                ", beanName='" + beanName + '\'' +
-                ", fieldName='" + fieldName + '\'' +
-                '}';
+        return "StubDefinition{" + "resolvableType=" + resolvableType + ", beanName='" + beanName
+               + '\'' + ", fieldName='" + fieldName + '\'' + '}';
     }
 
     public ResolvableType getResolvableType() {

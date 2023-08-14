@@ -47,24 +47,28 @@ public class SofaBootBeanResolver {
      * During each execution of integration testing, multiple Spring {@link ApplicationContext}s may be generated (if cache is not hit),
      * thus requiring the storage of multiple resolvers instance.
      */
-    private static final Map<ApplicationContext, SofaBootBeanResolver> RESOLVERS = Maps.newHashMap();
+    private static final Map<ApplicationContext, SofaBootBeanResolver> RESOLVERS            = Maps
+                                                                                                .newHashMap();
 
     /**
      * Mapping from SOFA module name to the associated {@link ApplicationContext}
      */
-    private static final Map<String, ApplicationContext> SOFA_MODULE_CONTEXTS = Maps.newHashMap();
+    private static final Map<String, ApplicationContext>               SOFA_MODULE_CONTEXTS = Maps
+                                                                                                .newHashMap();
 
     /**
      * The root {@link ApplicationContext}
      */
-    private final ApplicationContext rootApplicationContext;
+    private final ApplicationContext                                   rootApplicationContext;
 
     private SofaBootBeanResolver(@Nonnull TestContext testContext) {
         String name = ApplicationRuntimeModel.APPLICATION_RUNTIME_MODEL_NAME;
 
         this.rootApplicationContext = testContext.getApplicationContext();
-        Preconditions.checkState(rootApplicationContext.containsBean(name), "ApplicationContext state is illegal!");
-        ApplicationRuntimeModel applicationRuntimeModel = rootApplicationContext.getBean(name, ApplicationRuntimeModel.class);
+        Preconditions.checkState(rootApplicationContext.containsBean(name),
+            "ApplicationContext state is illegal!");
+        ApplicationRuntimeModel applicationRuntimeModel = rootApplicationContext.getBean(name,
+            ApplicationRuntimeModel.class);
 
         // iterate all installed SOFA modules and store moduleContext accordingly
         for (DeploymentDescriptor descriptor : applicationRuntimeModel.getResolvedDeployments()) {
@@ -132,7 +136,8 @@ public class SofaBootBeanResolver {
      * @param <T>        type parameter
      * @return Spring beans, if found any
      */
-    public <T> Set<T> findModuleBeans(@Nullable String moduleName, @Nonnull Class<T> type, @Nullable String qualifier) {
+    public <T> Set<T> findModuleBeans(@Nullable String moduleName, @Nonnull Class<T> type,
+                                      @Nullable String qualifier) {
         Preconditions.checkNotNull(type);
 
         Set<T> beans = new HashSet<>();
@@ -160,14 +165,17 @@ public class SofaBootBeanResolver {
     private ApplicationContext getModuleApplicationContext(String moduleName) {
         // fetch root context
         if (StringUtils.isBlank(moduleName)) {
-            Preconditions.checkNotNull(rootApplicationContext, "Root ApplicationContext is not initialized");
+            Preconditions.checkNotNull(rootApplicationContext,
+                "Root ApplicationContext is not initialized");
             return rootApplicationContext;
         }
 
         // fetch module context
-        Preconditions.checkState(!SOFA_MODULE_CONTEXTS.isEmpty(), "SofaBootBeanResolver is not initialized");
+        Preconditions.checkState(!SOFA_MODULE_CONTEXTS.isEmpty(),
+            "SofaBootBeanResolver is not initialized");
         ApplicationContext moduleContext = SOFA_MODULE_CONTEXTS.get(moduleName);
-        Preconditions.checkNotNull(moduleContext, String.format("Cannot find ApplicationContext for SOFA module %s", moduleName));
+        Preconditions.checkNotNull(moduleContext,
+            String.format("Cannot find ApplicationContext for SOFA module %s", moduleName));
         return moduleContext;
     }
 }

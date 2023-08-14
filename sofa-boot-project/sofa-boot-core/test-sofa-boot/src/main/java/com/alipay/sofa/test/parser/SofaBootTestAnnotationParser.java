@@ -83,29 +83,27 @@ public class SofaBootTestAnnotationParser {
                 .forEach(annotation -> parseSofaSpyBeanAnnotation(annotation, testField, testClass));
     }
 
-    private void parseSofaMockBeanAnnotation(SofaMockBeanFor annotation, Field testField, Class<?> testClass) {
+    private void parseSofaMockBeanAnnotation(SofaMockBeanFor annotation, Field testField,
+                                             Class<?> testClass) {
         ResolvableType typeToMock = deduceType(testField, testClass);
-        String targetField = StringUtils.isNotBlank(annotation.field()) ? annotation.field() : testField.getName();
+        String targetField = StringUtils.isNotBlank(annotation.field()) ? annotation.field()
+            : testField.getName();
         StubDefinition definition = new MockDefinition(typeToMock, testField.getName(), targetField);
-        SofaStub target = SofaStub.builder()
-                .type(annotation.target())
-                .qualifier(annotation.qualifier())
-                .uniqueId(annotation.uniqueId())
-                .moduleName(annotation.module())
-                .build();
+        SofaStub target = SofaStub.builder().type(annotation.target())
+            .qualifier(annotation.qualifier()).uniqueId(annotation.uniqueId())
+            .moduleName(annotation.module()).build();
         registerStubTarget(definition, target);
     }
 
-    private void parseSofaSpyBeanAnnotation(SofaSpyBeanFor annotation, Field testField, Class<?> testClass) {
+    private void parseSofaSpyBeanAnnotation(SofaSpyBeanFor annotation, Field testField,
+                                            Class<?> testClass) {
         ResolvableType typeToSpy = deduceType(testField, testClass);
-        String targetField = StringUtils.isNotBlank(annotation.field()) ? annotation.field() : testField.getName();
+        String targetField = StringUtils.isNotBlank(annotation.field()) ? annotation.field()
+            : testField.getName();
         StubDefinition definition = new SpyDefinition(typeToSpy, testField.getName(), targetField);
-        SofaStub target = SofaStub.builder()
-                .type(annotation.target())
-                .qualifier(annotation.qualifier())
-                .uniqueId(annotation.uniqueId())
-                .moduleName(annotation.module())
-                .build();
+        SofaStub target = SofaStub.builder().type(annotation.target())
+            .qualifier(annotation.qualifier()).uniqueId(annotation.uniqueId())
+            .moduleName(annotation.module()).build();
         registerStubTarget(definition, target);
     }
 

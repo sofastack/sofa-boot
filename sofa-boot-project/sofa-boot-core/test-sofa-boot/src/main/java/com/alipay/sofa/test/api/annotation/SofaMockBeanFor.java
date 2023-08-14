@@ -63,7 +63,7 @@ import java.lang.annotation.Target;
  * @author pengym
  * @version SofaMockBeanFor.java, v 0.1 2023年08月07日 15:32 pengym
  */
-@Target({ElementType.FIELD})
+@Target({ ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 @Repeatable(SofaMockBeans.class)
 public @interface SofaMockBeanFor {
@@ -99,7 +99,7 @@ public @interface SofaMockBeanFor {
      */
     String module() default "";
 
-    @Target({ElementType.FIELD})
+    @Target({ ElementType.FIELD })
     @Retention(RetentionPolicy.RUNTIME)
     @interface SofaMockBeans {
         SofaMockBeanFor[] value();

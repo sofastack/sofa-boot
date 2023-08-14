@@ -42,9 +42,9 @@ import static java.util.Objects.isNull;
  * @version SofaBootTestExecutionListener.java, v 0.1 2023年08月07日 15:51 pengym
  */
 public class SofaBootTestExecutionListener extends AbstractTestExecutionListener {
-    private static final Logger LOGGER         = SofaBootLoggerFactory
-            .getLogger(SofaBootTestExecutionListener.class);
-    private static final String STUBBED_FIELDS = "_SOFA_BOOT_STUBBED_FIELDS";
+    private static final Logger  LOGGER         = SofaBootLoggerFactory
+                                                    .getLogger(SofaBootTestExecutionListener.class);
+    private static final String  STUBBED_FIELDS = "_SOFA_BOOT_STUBBED_FIELDS";
 
     private static ClientFactory clientFactory;
 
@@ -73,7 +73,8 @@ public class SofaBootTestExecutionListener extends AbstractTestExecutionListener
             StubDefinition stubDefinition = entry.getKey();
             Class<?> stubClass = stubDefinition.extractClass();
             for (Stub target : entry.getValue()) {
-                registerStubBeanFields(testContext, stubbedFields, stubDefinition, stubClass, target);
+                registerStubBeanFields(testContext, stubbedFields, stubDefinition, stubClass,
+                    target);
             }
             registerStubTestField(testContext, stubbedFields, stubDefinition, stubClass);
         }
@@ -109,41 +110,46 @@ public class SofaBootTestExecutionListener extends AbstractTestExecutionListener
         super.afterTestMethod(testContext);
     }
 
-    @SuppressWarnings({"rawtypes"})
-    private static void registerStubBeanFields(TestContext testContext, List<StubbedField> stubbedFields,
-                                               StubDefinition stubDefinition, Class<?> stubClass, Stub target) {
+    @SuppressWarnings({ "rawtypes" })
+    private static void registerStubBeanFields(TestContext testContext,
+                                               List<StubbedField> stubbedFields,
+                                               StubDefinition stubDefinition, Class<?> stubClass,
+                                               Stub target) {
         Set targetBeans = target.resolveTargets(testContext);
         for (Object bean : targetBeans) {
-            if (isNull(bean)) {continue;}
+            if (isNull(bean)) {
+                continue;
+            }
 
-            Field beanField = ReflectionUtils.findField(bean.getClass(), stubDefinition.getFieldName(), stubClass);
+            Field beanField = ReflectionUtils.findField(bean.getClass(),
+                stubDefinition.getFieldName(), stubClass);
 
             if (beanField == null) {
                 String stubType = (stubDefinition instanceof MockDefinition) ? "mock" : "spy";
-                LOGGER.error(
-                        String.format("No fields can be found in Bean [%s] with type [%s] and name [%s], skipped injecting [%s] instance",
-                                bean.getClass(), stubClass,
-                                stubDefinition.getFieldName(), stubType));
+                LOGGER
+                    .error(String
+                        .format(
+                            "No fields can be found in Bean [%s] with type [%s] and name [%s], skipped injecting [%s] instance",
+                            bean.getClass(), stubClass, stubDefinition.getFieldName(), stubType));
                 continue;
             }
 
             beanField.setAccessible(true);
 
-            BeanStubbedField stubField = new BeanStubbedField(
-                    stubDefinition,
-                    beanField,
-                    ReflectionUtils.getField(beanField, bean),
-                    bean);
+            BeanStubbedField stubField = new BeanStubbedField(stubDefinition, beanField,
+                ReflectionUtils.getField(beanField, bean), bean);
             stubbedFields.add(stubField);
         }
     }
 
-    private static void registerStubTestField(TestContext testContext, List<StubbedField> stubbedFields, StubDefinition stubDefinition,
-                                              Class<?> stubClass) {
-        Field testField = ReflectionUtils.findField(testContext.getTestClass(), stubDefinition.getBeanName(), stubClass);
-        Preconditions.checkNotNull(testField,
-                String.format("Cannot find field in testClass: [%s] with type [%s] and/or name [%s]", testContext.getTestClass(),
-                        stubDefinition.getBeanName(), stubClass));
+    private static void registerStubTestField(TestContext testContext,
+                                              List<StubbedField> stubbedFields,
+                                              StubDefinition stubDefinition, Class<?> stubClass) {
+        Field testField = ReflectionUtils.findField(testContext.getTestClass(),
+            stubDefinition.getBeanName(), stubClass);
+        Preconditions.checkNotNull(testField, String.format(
+            "Cannot find field in testClass: [%s] with type [%s] and/or name [%s]",
+            testContext.getTestClass(), stubDefinition.getBeanName(), stubClass));
         testField.setAccessible(true);
 
         TestStubbedField stubField = new TestStubbedField(stubDefinition, testField);
@@ -203,7 +209,8 @@ public class SofaBootTestExecutionListener extends AbstractTestExecutionListener
          */
         private final Object         bean;
 
-        public BeanStubbedField(StubDefinition definition, Field field, Object originalValue, Object bean) {
+        public BeanStubbedField(StubDefinition definition, Field field, Object originalValue,
+                                Object bean) {
             this.definition = definition;
             this.field = field;
             this.originalValue = originalValue;
@@ -223,7 +230,8 @@ public class SofaBootTestExecutionListener extends AbstractTestExecutionListener
             ReflectionUtils.setField(field, bean, stub);
 
             String stubType = (definition instanceof MockDefinition) ? "Mocked" : "Spied";
-            info(String.format("%s field [%s] for bean [%s] with value [%s]", stubType, field, bean, stub));
+            info(String.format("%s field [%s] for bean [%s] with value [%s]", stubType, field,
+                bean, stub));
         }
 
         @Override

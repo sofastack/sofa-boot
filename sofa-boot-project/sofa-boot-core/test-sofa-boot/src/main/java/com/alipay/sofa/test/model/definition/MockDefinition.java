@@ -30,7 +30,8 @@ import static org.mockito.Mockito.mock;
  * @version MockDefinition.java, v 0.1 2023年08月07日 19:42 pengym
  */
 public class MockDefinition extends StubDefinition {
-    public MockDefinition(ResolvableType typeToMock, @Nullable String name, @Nullable String fieldName) {
+    public MockDefinition(ResolvableType typeToMock, @Nullable String name,
+                          @Nullable String fieldName) {
         super(typeToMock, name, fieldName);
     }
 
@@ -39,7 +40,8 @@ public class MockDefinition extends StubDefinition {
     public <T> T create(Object originalValue) {
         Class<?> cls = resolvableType.resolve();
         Assert.notNull(cls, "cannot resolve resolvableType");
-        Assert.state(!Mockito.mockingDetails(originalValue).isMock(), "originalValue is already a mock");
+        Assert.state(!Mockito.mockingDetails(originalValue).isMock(),
+            "originalValue is already a mock");
 
         MockSettings settings = MockReset.withSettings(MockReset.AFTER);
         settings.name(beanName);
@@ -48,10 +50,7 @@ public class MockDefinition extends StubDefinition {
 
     @Override
     public String toString() {
-        return "MockDefinition{" +
-                "typeToMock=" + resolvableType +
-                ", beanName='" + beanName + '\'' +
-                ", fieldName='" + fieldName + '\'' +
-                '}';
+        return "MockDefinition{" + "typeToMock=" + resolvableType + ", beanName='" + beanName
+               + '\'' + ", fieldName='" + fieldName + '\'' + '}';
     }
 }
