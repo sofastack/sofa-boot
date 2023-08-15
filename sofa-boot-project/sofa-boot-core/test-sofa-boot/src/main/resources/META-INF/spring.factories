@@ -1,0 +1,2 @@
+# Add TestExecutionListener
+org.springframework.test.context.TestExecutionListener=com.alipay.sofa.test.mock.injector.InjectorMockTestExecutionListener

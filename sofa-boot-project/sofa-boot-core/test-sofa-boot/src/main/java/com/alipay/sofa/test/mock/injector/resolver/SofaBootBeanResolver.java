@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.test.resolver;
+package com.alipay.sofa.test.mock.injector.resolver;
 
 import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.boot.isle.deployment.DeploymentDescriptor;
@@ -24,7 +24,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.aop.framework.AopProxyUtils;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.context.ApplicationContext;
-import org.springframework.test.context.TestContext;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -61,10 +60,10 @@ public class SofaBootBeanResolver {
      */
     private final ApplicationContext                                   rootApplicationContext;
 
-    private SofaBootBeanResolver(@Nonnull TestContext testContext) {
+    public SofaBootBeanResolver(ApplicationContext applicationContext) {
         String name = ApplicationRuntimeModel.APPLICATION_RUNTIME_MODEL_NAME;
 
-        this.rootApplicationContext = testContext.getApplicationContext();
+        this.rootApplicationContext = applicationContext;
         Preconditions.checkState(rootApplicationContext.containsBean(name),
             "ApplicationContext state is illegal!");
         ApplicationRuntimeModel applicationRuntimeModel = rootApplicationContext.getBean(name,
@@ -78,18 +77,6 @@ public class SofaBootBeanResolver {
         }
     }
 
-    /**
-     * Get the {@link SofaBootReferenceResolver} instance associated with the given `testContext`
-     *
-     * @param testContext the given {@link TestContext}
-     * @return the SofaBootReferenceResolver
-     */
-    public static SofaBootBeanResolver getInstance(@Nonnull TestContext testContext) {
-        Preconditions.checkNotNull(testContext);
-
-        ApplicationContext context = testContext.getApplicationContext();
-        return RESOLVERS.computeIfAbsent(context, ctx -> new SofaBootBeanResolver(testContext));
-    }
 
     /**
      * Find the Spring beans corresponding to {@code type} and {@code qualifier}

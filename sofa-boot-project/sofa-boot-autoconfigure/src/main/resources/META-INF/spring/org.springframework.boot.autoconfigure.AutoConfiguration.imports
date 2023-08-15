@@ -15,4 +15,3 @@ com.alipay.sofa.boot.autoconfigure.tracer.flexible.FlexibleAutoConfiguration
 com.alipay.sofa.boot.autoconfigure.tracer.springmvc.OpenTracingSpringMvcAutoConfiguration
 com.alipay.sofa.boot.autoconfigure.tracer.feign.FeignClientAutoConfiguration
 com.alipay.sofa.boot.autoconfigure.ark.SofaArkAutoConfiguration
-com.alipay.sofa.boot.autoconfigure.test.SofaTestAutoConfiguration
