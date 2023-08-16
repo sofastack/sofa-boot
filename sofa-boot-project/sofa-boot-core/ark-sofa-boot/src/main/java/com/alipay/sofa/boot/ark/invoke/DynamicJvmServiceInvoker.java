@@ -114,7 +114,7 @@ public class DynamicJvmServiceInvoker extends ServiceProxy {
             if (DynamicJvmServiceProxyFinder.getInstance().getBizManagerService() != null) {
                 ReplayContext.clearPlaceHolder();
             }
-            setClientClassloader(null);
+            clearClientClassloader();
         }
     }
 
@@ -142,6 +142,10 @@ public class DynamicJvmServiceInvoker extends ServiceProxy {
 
     public void setClientClassloader(ClassLoader clientClassloader) {
         this.clientClassloader.set(clientClassloader);
+    }
+
+    public void clearClientClassloader() {
+        this.clientClassloader.remove();
     }
 
     private Method getTargetMethod(Method method, Class<?>[] argumentTypes) {
