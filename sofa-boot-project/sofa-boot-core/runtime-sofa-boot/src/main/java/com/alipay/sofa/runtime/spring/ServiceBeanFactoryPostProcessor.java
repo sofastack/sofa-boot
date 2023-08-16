@@ -59,7 +59,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ScannedGenericBeanDefinition;
+import org.springframework.core.DefaultParameterNameDiscoverer;
 import org.springframework.core.Ordered;
+import org.springframework.core.ParameterNameDiscoverer;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.core.type.MethodMetadata;
 import org.springframework.core.type.StandardMethodMetadata;
@@ -107,8 +109,12 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory)
                                                                                    throws BeansException {
         if (beanFactory instanceof AbstractAutowireCapableBeanFactory) {
+            ParameterNameDiscoverer parameterNameDiscoverer = ((AbstractAutowireCapableBeanFactory) beanFactory).getParameterNameDiscoverer();
+            if (parameterNameDiscoverer == null) {
+                parameterNameDiscoverer = new DefaultParameterNameDiscoverer();
+            }
             ((AbstractAutowireCapableBeanFactory) beanFactory)
-                    .setParameterNameDiscoverer(new SofaParameterNameDiscoverer(referenceAnnotationWrapper));
+                    .setParameterNameDiscoverer(new SofaParameterNameDiscoverer(parameterNameDiscoverer, referenceAnnotationWrapper));
         }
 
         Arrays.stream(beanFactory.getBeanDefinitionNames())
