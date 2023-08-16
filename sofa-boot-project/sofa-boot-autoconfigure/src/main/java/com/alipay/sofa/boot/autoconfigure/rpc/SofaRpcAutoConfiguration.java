@@ -49,7 +49,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportSelector;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.core.env.Environment;
 import org.springframework.core.type.AnnotationMetadata;
 
@@ -202,7 +201,7 @@ public class SofaRpcAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public ConsumerConfigHelper consumerConfigHelper(SofaBootRpcProperties sofaBootRpcProperties,
-                                                     @Lazy RegistryConfigContainer registryConfigContainer,
+                                                     RegistryConfigContainer registryConfigContainer,
                                                      Environment environment) {
         String appName = environment.getProperty(SofaBootConstants.APP_NAME_KEY);
         ConsumerConfigHelper configHelper = new ConsumerConfigHelper(registryConfigContainer,

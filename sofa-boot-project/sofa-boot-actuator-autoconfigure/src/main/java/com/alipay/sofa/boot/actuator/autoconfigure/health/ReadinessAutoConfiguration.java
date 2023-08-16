@@ -30,7 +30,6 @@ import org.springframework.boot.actuate.autoconfigure.endpoint.condition.Conditi
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.SearchStrategy;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
@@ -54,7 +53,7 @@ public class ReadinessAutoConfiguration {
                                            .getLogger(ReadinessAutoConfiguration.class);
 
     @Bean
-    @ConditionalOnMissingBean(value = ReadinessCheckListener.class, search = SearchStrategy.CURRENT)
+    @ConditionalOnMissingBean(value = ReadinessCheckListener.class)
     public ReadinessCheckListener readinessCheckListener(HealthCheckerProcessor healthCheckerProcessor,
                                                          HealthIndicatorProcessor healthIndicatorProcessor,
                                                          ReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor,

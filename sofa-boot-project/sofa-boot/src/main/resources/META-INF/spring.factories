@@ -12,3 +12,7 @@ org.springframework.context.ApplicationListener=com.alipay.sofa.boot.listener.Sp
 # Startup Listeners
 org.springframework.boot.SpringApplicationRunListener=\
   com.alipay.sofa.boot.startup.StartupSpringApplicationRunListener
+
+# Initializers
+org.springframework.context.ApplicationContextInitializer=\
+  com.alipay.sofa.boot.compatibility.CompatibilityVerifierApplicationContextInitializer

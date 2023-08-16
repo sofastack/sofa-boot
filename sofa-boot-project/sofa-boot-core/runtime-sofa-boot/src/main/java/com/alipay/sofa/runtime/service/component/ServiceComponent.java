@@ -58,6 +58,8 @@ public class ServiceComponent extends AbstractComponent {
 
     private final Map<String, Property> properties                    = new ConcurrentHashMap<>();
 
+    private final boolean               canBeDuplicate;
+
     public ServiceComponent(Implementation implementation, Service service,
                             BindingAdapterFactory bindingAdapterFactory,
                             SofaRuntimeContext sofaRuntimeContext) {
@@ -67,6 +69,7 @@ public class ServiceComponent extends AbstractComponent {
         this.service = service;
         this.bindingAdapterFactory = bindingAdapterFactory;
         this.sofaRuntimeContext = sofaRuntimeContext;
+        this.canBeDuplicate = sofaRuntimeContext.getProperties().isServiceCanBeDuplicate();
     }
 
     @Override
@@ -321,5 +324,10 @@ public class ServiceComponent extends AbstractComponent {
 
         healthResult.setHealthReport(report);
         return healthResult;
+    }
+
+    @Override
+    public boolean canBeDuplicate() {
+        return this.canBeDuplicate;
     }
 }
