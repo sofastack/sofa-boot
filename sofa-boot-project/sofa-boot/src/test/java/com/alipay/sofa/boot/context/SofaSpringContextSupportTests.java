@@ -18,7 +18,7 @@ package com.alipay.sofa.boot.context;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.QualifierAnnotationAutowireCandidateResolver;
-import org.springframework.core.StandardReflectionParameterNameDiscoverer;
+import org.springframework.core.DefaultParameterNameDiscoverer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -39,7 +39,7 @@ public class SofaSpringContextSupportTests {
         assertThat(beanFactory).isNotNull();
         assertThat(beanFactory.getAutowireCandidateResolver()).isInstanceOf(QualifierAnnotationAutowireCandidateResolver.class);
         assertThat(beanFactory.getBeanClassLoader()).isEqualTo(classLoader);
-        assertThat(beanFactory.getParameterNameDiscoverer()).isInstanceOf(StandardReflectionParameterNameDiscoverer.class);
+        assertThat(beanFactory.getParameterNameDiscoverer()).isInstanceOf(DefaultParameterNameDiscoverer.class);
         assertThat(beanFactory.getPropertyEditorRegistrars().size() >= 1).isTrue();
     }
 

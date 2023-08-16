@@ -21,6 +21,7 @@ import com.alipay.sofa.boot.annotation.DefaultPlaceHolderBinder;
 import com.alipay.sofa.runtime.api.annotation.SofaReference;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.core.DefaultParameterNameDiscoverer;
 import org.springframework.mock.env.MockEnvironment;
 import org.springframework.util.ReflectionUtils;
 
@@ -48,7 +49,8 @@ public class SofaParameterNameDiscovererTests {
         mockEnvironment = new MockEnvironment();
         annotationWrapper = AnnotationWrapper.create(SofaReference.class)
             .withEnvironment(mockEnvironment).withBinder(DefaultPlaceHolderBinder.INSTANCE);
-        parameterNameDiscoverer = new SofaParameterNameDiscoverer(annotationWrapper);
+        parameterNameDiscoverer = new SofaParameterNameDiscoverer(
+            new DefaultParameterNameDiscoverer(), annotationWrapper);
     }
 
     @Test
