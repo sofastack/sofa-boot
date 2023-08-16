@@ -21,6 +21,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.util.Assert;
 
 import java.util.Collection;
 import java.util.Map;
@@ -50,16 +51,17 @@ public class SofaRuntimeContainer implements ApplicationContextAware, Disposable
     }
 
     public SofaRuntimeContainer(SofaRuntimeManager sofaRuntimeManager, ClassLoader classLoader) {
+        Assert.notNull(classLoader, "classLoader must not be null");
         this.contextClassLoader = classLoader;
         SOFA_RUNTIME_MANAGER_MAP.put(contextClassLoader, sofaRuntimeManager);
     }
 
     public void setJvmServiceCache(boolean jvmServiceCache) {
-        JVM_SERVICE_CACHE_MAP.put(contextClassLoader, jvmServiceCache);
+        JVM_SERVICE_CACHE_MAP.putIfAbsent(contextClassLoader, jvmServiceCache);
     }
 
     public void setJvmInvokeSerialize(boolean jvmInvokeSerialize) {
-        JVM_INVOKE_SERIALIZE_MAP.put(contextClassLoader, jvmInvokeSerialize);
+        JVM_INVOKE_SERIALIZE_MAP.putIfAbsent(contextClassLoader, jvmInvokeSerialize);
     }
 
     @Override
@@ -75,8 +77,16 @@ public class SofaRuntimeContainer implements ApplicationContextAware, Disposable
         return SOFA_RUNTIME_MANAGER_MAP.get(classLoader);
     }
 
+    public static void updateJvmServiceCache(ClassLoader classLoader, Boolean value) {
+        JVM_SERVICE_CACHE_MAP.put(classLoader, value);
+    }
+
     public static boolean isJvmServiceCache(ClassLoader classLoader) {
         return JVM_SERVICE_CACHE_MAP.getOrDefault(classLoader, false);
+    }
+
+    public static void updateJvmInvokeSerialize(ClassLoader classLoader, Boolean value) {
+        JVM_INVOKE_SERIALIZE_MAP.put(classLoader, value);
     }
 
     public static boolean isJvmInvokeSerialize(ClassLoader classLoader) {
@@ -95,7 +105,10 @@ public class SofaRuntimeContainer implements ApplicationContextAware, Disposable
     }
 
     @Override
-    public void destroy() throws Exception {
+    public void destroy() {
         APPLICATION_CONTEXT_MAP.remove(contextClassLoader);
+        SOFA_RUNTIME_MANAGER_MAP.remove(contextClassLoader);
+        JVM_SERVICE_CACHE_MAP.remove(contextClassLoader);
+        JVM_INVOKE_SERIALIZE_MAP.remove(contextClassLoader);
     }
 }
