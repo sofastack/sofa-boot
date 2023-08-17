@@ -38,13 +38,13 @@
         <slf4j.version>1.7.32</slf4j.version>
         <fastjson.version>1.2.69</fastjson.version>
         <javassist.version>3.28.0-GA</javassist.version>
-        <protobuf-java.version>3.11.0</protobuf-java.version>
         <guice.version>3.0</guice.version>
         <guava.version>28.2-jre</guava.version>
         <zipkin.version>2.11.3</zipkin.version>
         <zipkin.reporter.version>2.7.7</zipkin.reporter.version>
         <jackson.version>2.9.10</jackson.version>
         <jboss.jaxrs.api.version>1.0.2.Final</jboss.jaxrs.api.version>
+        <protobuf.version>3.22.2</protobuf.version>
 
         <resteasy.version>3.6.3.Final</resteasy.version>
         <curator.version>4.0.1</curator.version>
@@ -470,6 +470,13 @@
 
             <!-- 3rd lib dependency begin -->
             <dependency>
+                <groupId>com.google.protobuf</groupId>
+                <artifactId>protobuf-bom</artifactId>
+                <version>${protobuf.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
                 <version>${fastjson.version}</version>
@@ -483,11 +490,6 @@
                 <groupId>com.google.inject.extensions</groupId>
                 <artifactId>guice-multibindings</artifactId>
                 <version>${guice.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.google.protobuf</groupId>
-                <artifactId>protobuf-java</artifactId>
-                <version>${protobuf-java.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.javassist</groupId>
