@@ -14,17 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.smoke.tests.test.stub;
+package com.alipay.sofa.smoke.tests.test.mock.injector;
 
-import com.alipay.sofa.smoke.tests.test.GenericExternalServiceClient;
+public interface ExampleService {
+    String execute(String target, Object... args);
 
-/**
- * @author pengym
- * @version GenericServiceClientImpl.java, v 0.1 2023年08月08日 20:36 pengym
- */
-public class GenericServiceClientImpl<T> implements GenericExternalServiceClient<T> {
-    @Override
-    public String invoke(T... input) {
-        throw new UnsupportedOperationException();
-    }
+    Object getDependency(String name);
 }

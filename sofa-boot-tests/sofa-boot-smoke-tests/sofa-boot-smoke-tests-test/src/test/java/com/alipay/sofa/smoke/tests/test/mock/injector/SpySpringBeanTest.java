@@ -14,12 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.smoke.tests.test;
+package com.alipay.sofa.smoke.tests.test.mock.injector;
 
-import com.alipay.sofa.runtime.api.annotation.SofaReference;
-import com.alipay.sofa.smoke.tests.test.base.SofaIntegrationTestBaseCase;
-import com.alipay.sofa.test.mock.injector.annotation.SofaSpyBeanFor;
+import com.alipay.sofa.smoke.tests.test.TestSofaBootApplication;
+import com.alipay.sofa.test.mock.injector.annotation.SpyBeanInjector;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -30,13 +31,16 @@ import static org.mockito.Mockito.doReturn;
  * @author pengym
  * @version SpySpringBeanTest.java, v 0.1 2023年08月08日 20:19 pengym
  */
-public class SpySpringBeanTest extends SofaIntegrationTestBaseCase {
-    @SofaReference
-    private ExampleGenericService service;
+@SpringBootTest(classes = TestSofaBootApplication.class)
+public class SpySpringBeanTest {
 
-    @SofaSpyBeanFor(target = ExampleGenericService.class, field = "clientA")
+    @Autowired
+    private ExampleGenericService                 service;
+
+    @SpyBeanInjector(type = ExampleGenericService.class, field = "clientA")
     private GenericExternalServiceClient<Integer> mock1;
-    @SofaSpyBeanFor(target = ExampleGenericService.class, field = "clientB")
+
+    @SpyBeanInjector(type = ExampleGenericService.class, field = "clientB")
     private GenericExternalServiceClient<String>  mock2;
 
     @Test

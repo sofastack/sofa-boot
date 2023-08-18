@@ -14,12 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.smoke.tests.test;
+package com.alipay.sofa.smoke.tests.test.mock.injector;
 
-import com.alipay.sofa.runtime.api.annotation.SofaReference;
-import com.alipay.sofa.smoke.tests.test.base.SofaIntegrationTestBaseCase;
-import com.alipay.sofa.test.mock.injector.annotation.SofaMockBeanFor;
+import com.alipay.sofa.smoke.tests.test.TestSofaBootApplication;
+import com.alipay.sofa.test.mock.injector.annotation.MockBeanInjector;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -29,13 +30,16 @@ import static org.mockito.BDDMockito.given;
  * @author pengym
  * @version MockSpringBeanTest.java, v 0.1 2023年08月08日 20:19 pengym
  */
-public class MockSpringBeanTest extends SofaIntegrationTestBaseCase {
-    @SofaReference
-    private ExampleGenericService service;
+@SpringBootTest(classes = TestSofaBootApplication.class)
+public class MockSpringBeanTest {
 
-    @SofaMockBeanFor(target = ExampleGenericService.class, field = "clientA")
+    @Autowired
+    private ExampleGenericService                 service;
+
+    @MockBeanInjector(type = ExampleGenericService.class, field = "clientA")
     private GenericExternalServiceClient<Integer> mock1;
-    @SofaMockBeanFor(target = ExampleGenericService.class, field = "clientB")
+
+    @MockBeanInjector(type = ExampleGenericService.class, field = "clientB")
     private GenericExternalServiceClient<String>  mock2;
 
     @Test
@@ -59,9 +63,7 @@ public class MockSpringBeanTest extends SofaIntegrationTestBaseCase {
         given(mock1.invoke(any())).willReturn(msg1);
         given(mock2.invoke(any())).willReturn(msg2);
 
-        assertThat(service.execute("A"))
-                .isEqualTo(msg1);
-        assertThat(service.execute("B"))
-                .isEqualTo(msg2);
+        assertThat(service.execute("A")).isEqualTo(msg1);
+        assertThat(service.execute("B")).isEqualTo(msg2);
     }
 }

@@ -14,14 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.smoke.tests.test;
+package com.alipay.sofa.smoke.tests.test.mock.injector;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
- * @author pengym
- * @version ExampleGenericService.java, v 0.1 2023年08月08日 20:02 pengym
+ * @author huzijie
+ * @version BaseConfiguration.java, v 0.1 2023年08月17日 8:55 PM huzijie Exp $
  */
-public interface ExampleGenericService {
-    String execute(String target);
+@Configuration
+public class BaseConfiguration {
 
-    Object getDependency(String name);
+    @Bean("GenericExternalServiceClientA")
+    GenericExternalServiceClient<Integer> integerGenericExternalServiceClient() {
+        return new GenericServiceClientImpl<>();
+    }
+
+    @Bean("GenericExternalServiceClientB")
+    GenericExternalServiceClient<String> stringGenericExternalServiceClient() {
+        return new GenericServiceClientImpl<>();
+    }
 }

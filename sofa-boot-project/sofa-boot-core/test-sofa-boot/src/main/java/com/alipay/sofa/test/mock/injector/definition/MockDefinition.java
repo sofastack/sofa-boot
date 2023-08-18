@@ -32,21 +32,25 @@ import java.util.Set;
 import static org.mockito.Mockito.mock;
 
 /**
+ * A complete definition that can be used to create a Mockito mock.
+ *
  * @author pengym
  * @version MockDefinition.java, v 0.1 2023年08月07日 19:42 pengym
  */
 public class MockDefinition extends Definition {
 
-    private static final int MULTIPLIER = 31;
+    private static final int    MULTIPLIER = 31;
 
     private final Set<Class<?>> extraInterfaces;
 
-    private final Answers answer;
+    private final Answers       answer;
 
-    private final boolean serializable;
+    private final boolean       serializable;
 
-    public MockDefinition(String name, ResolvableType resolvableType, String module, String field, Class<?>[] extraInterfaces, Answers answer, boolean serializable, MockReset reset, QualifierDefinition qualifier) {
-        super(name, resolvableType, module, field, reset, qualifier);
+    public MockDefinition(ResolvableType resolvableType, String name, ResolvableType type,
+                          String module, String field, Class<?>[] extraInterfaces, Answers answer,
+                          boolean serializable, MockReset reset, QualifierDefinition qualifier) {
+        super(resolvableType, name, type, module, field, reset, qualifier);
         this.extraInterfaces = asClassSet(extraInterfaces);
         this.answer = (answer != null) ? answer : Answers.RETURNS_DEFAULTS;
         this.serializable = serializable;
@@ -63,6 +67,7 @@ public class MockDefinition extends Definition {
     public boolean isSerializable() {
         return serializable;
     }
+
     @SuppressWarnings("unchecked")
     public <T> T createMock() {
         if (mockInstance == null) {
@@ -106,17 +111,12 @@ public class MockDefinition extends Definition {
 
     @Override
     public String toString() {
-        return new ToStringCreator(this)
-                .append("name", this.getName())
-                .append("resolvableType", this.getResolvableType())
-                .append("module", this.getModule())
-                .append("field", this.getField())
-                .append("extraInterfaces", this.extraInterfaces)
-                .append("answer", this.answer)
-                .append("serializable", this.serializable)
-                .append("reset", getReset())
-                .append("qualifier", getQualifier())
-                .toString();
+        return new ToStringCreator(this).append("resolvableType", this.getResolvableType())
+            .append("name", this.getName()).append("type", this.getType())
+            .append("module", this.getModule()).append("field", this.getField())
+            .append("extraInterfaces", this.extraInterfaces).append("answer", this.answer)
+            .append("serializable", this.serializable).append("reset", getReset())
+            .append("qualifier", getQualifier()).toString();
     }
 
     private Set<Class<?>> asClassSet(Class<?>[] classes) {

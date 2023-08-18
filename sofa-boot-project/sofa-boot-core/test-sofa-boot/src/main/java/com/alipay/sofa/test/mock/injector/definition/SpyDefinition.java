@@ -32,6 +32,8 @@ import java.lang.reflect.Proxy;
 import static org.mockito.Mockito.mock;
 
 /**
+ * A complete definition that can be used to create a Mockito spy.
+ *
  * @author pengym
  * @version SpyDefinition.java, v 0.1 2023年08月07日 19:42 pengym
  */
@@ -39,14 +41,17 @@ public class SpyDefinition extends Definition {
 
     private static final int MULTIPLIER = 31;
 
-    private final boolean proxyTargetAware;
+    private final boolean    proxyTargetAware;
 
-    public SpyDefinition(String name, ResolvableType resolvableType, String module, String field, MockReset reset, boolean proxyTargetAware, QualifierDefinition qualifier) {
-        super(name, resolvableType, module, field, reset, qualifier);
+    public SpyDefinition(ResolvableType resolvableType, String name, ResolvableType type,
+                         String module, String field, MockReset reset, boolean proxyTargetAware,
+                         QualifierDefinition qualifier) {
+        super(resolvableType, name, type, module, field, reset, qualifier);
         this.proxyTargetAware = proxyTargetAware;
     }
 
-    public <T> T createMock(Object instance) {
+    @SuppressWarnings("unchecked")
+    public <T> T createSpy(Object instance) {
         if (mockInstance == null) {
             Assert.notNull(instance, "Instance must not be null");
             Assert.isInstanceOf(this.getResolvableType().resolve(), instance);
@@ -55,14 +60,14 @@ public class SpyDefinition extends Definition {
             }
             MockSettings settings = MockReset.withSettings(getReset());
             if (this.proxyTargetAware) {
-                settings.verificationStartedListeners(new SpyDefinition.SpringAopBypassingVerificationStartedListener());
+                settings
+                    .verificationStartedListeners(new SpyDefinition.SpringAopBypassingVerificationStartedListener());
             }
             Class<?> toSpy;
             if (Proxy.isProxyClass(instance.getClass())) {
                 settings.defaultAnswer(AdditionalAnswers.delegatesTo(instance));
                 toSpy = this.getResolvableType().toClass();
-            }
-            else {
+            } else {
                 settings.defaultAnswer(Mockito.CALLS_REAL_METHODS);
                 settings.spiedInstance(instance);
                 toSpy = instance.getClass();
@@ -95,22 +100,19 @@ public class SpyDefinition extends Definition {
 
     @Override
     public String toString() {
-        return new ToStringCreator(this)
-                .append("name", this.getName())
-                .append("resolvableType", this.getResolvableType())
-                .append("module", this.getModule())
-                .append("field", this.getField())
-                .append("proxyTargetAware", this.proxyTargetAware)
-                .append("reset", getReset())
-                .append("qualifier", getQualifier())
-                .toString();
+        return new ToStringCreator(this).append("resolvableType", this.getResolvableType())
+            .append("name", this.getName()).append("type", this.getType())
+            .append("module", this.getModule()).append("field", this.getField())
+            .append("proxyTargetAware", this.proxyTargetAware).append("reset", getReset())
+            .append("qualifier", getQualifier()).toString();
     }
 
     /**
      * A {@link VerificationStartedListener} that bypasses any proxy created by Spring AOP
      * when the verification of a spy starts.
      */
-    private static final class SpringAopBypassingVerificationStartedListener implements VerificationStartedListener {
+    private static final class SpringAopBypassingVerificationStartedListener implements
+                                                                            VerificationStartedListener {
 
         @Override
         public void onVerificationStarted(VerificationStartedEvent event) {

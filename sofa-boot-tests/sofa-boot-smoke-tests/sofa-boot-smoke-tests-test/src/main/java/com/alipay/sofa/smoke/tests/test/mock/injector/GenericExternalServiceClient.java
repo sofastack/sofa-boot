@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.smoke.tests.test;
+package com.alipay.sofa.smoke.tests.test.mock.injector;
 
 /**
  * @author pengym

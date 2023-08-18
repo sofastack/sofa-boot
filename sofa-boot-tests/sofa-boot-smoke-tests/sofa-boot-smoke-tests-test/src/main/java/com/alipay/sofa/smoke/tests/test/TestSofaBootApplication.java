@@ -14,27 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.smoke.tests.test.stub;
+package com.alipay.sofa.smoke.tests.test;
 
-import com.alipay.sofa.runtime.api.annotation.SofaService;
-import com.alipay.sofa.smoke.tests.test.AnotherExternalServiceClient;
-import jakarta.annotation.PostConstruct;
-import org.springframework.stereotype.Service;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * @author pengym
- * @version ExternalServiceClientB.java, v 0.1 2023年08月08日 15:53 pengym
+ * @author huzijie
+ * @version TestSofaBootApplication.java, v 0.1 2023年08月17日 8:46 PM huzijie Exp $
  */
-@SofaService
-@Service
-public class AnotherExternalServiceClientImpl implements AnotherExternalServiceClient {
-    @PostConstruct
-    public void postConstruct() {
-        System.out.println("ExternalServiceClientB has been constructed");
-    }
+@SpringBootApplication
+public class TestSofaBootApplication {
 
-    @Override
-    public String invoke(Object... args) {
-        return "B";
+    public static void main(String[] args) {
+        SpringApplication application = new SpringApplication();
+        application.run(args);
     }
 }

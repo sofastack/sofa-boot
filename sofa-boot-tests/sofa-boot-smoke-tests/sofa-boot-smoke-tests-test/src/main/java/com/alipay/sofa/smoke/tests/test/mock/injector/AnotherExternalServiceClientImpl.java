@@ -14,22 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.smoke.tests.test;
+package com.alipay.sofa.smoke.tests.test.mock.injector;
 
-import org.mockito.MockingDetails;
-import org.mockito.Mockito;
+import org.springframework.stereotype.Service;
 
 /**
  * @author pengym
- * @version TestUtils.java, v 0.1 2023年08月08日 15:57 pengym
+ * @version ExternalServiceClientB.java, v 0.1 2023年08月08日 15:53 pengym
  */
-public class TestUtils {
-    public static boolean isMock(Object object) {
-        final MockingDetails mockingDetails = Mockito.mockingDetails(object);
-        return mockingDetails.isMock() && !mockingDetails.isSpy();
-    }
+@Service
+public class AnotherExternalServiceClientImpl implements AnotherExternalServiceClient {
 
-    public static boolean isSpy(Object object) {
-        return Mockito.mockingDetails(object).isSpy();
+    @Override
+    public String invoke(Object... args) {
+        return "B";
     }
 }

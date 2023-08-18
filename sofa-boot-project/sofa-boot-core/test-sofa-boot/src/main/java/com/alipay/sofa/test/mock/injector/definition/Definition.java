@@ -23,31 +23,35 @@ import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 
 /**
- * Base definition of a stub (e.g., {@link org.mockito.Mock} or {@link org.mockito.Spy})
+ * Base class for {@link MockDefinition} or {@link SpyDefinition}
  *
  * @author pengym
  */
 public abstract class Definition {
 
-    private static final int MULTIPLIER = 31;
+    private static final int          MULTIPLIER = 31;
 
-    private final String               name;
+    private final String              name;
 
-    private final ResolvableType resolvableType;
+    private final ResolvableType      type;
 
-    private final String               module;
+    private final String              module;
 
-    private final String               field;
+    private final String              field;
 
-    private final MockReset        reset;
+    private final MockReset           reset;
 
     private final QualifierDefinition qualifier;
 
-    protected Object mockInstance;
+    private final ResolvableType      resolvableType;
 
-    public Definition(String name, ResolvableType resolvableType, String module, String field, MockReset reset, QualifierDefinition qualifier) {
+    protected Object                  mockInstance;
+
+    public Definition(ResolvableType resolvableType, String name, ResolvableType type,
+                      String module, String field, MockReset reset, QualifierDefinition qualifier) {
         Assert.notNull(resolvableType, "ResolvableType must not be null");
         this.resolvableType = resolvableType;
+        this.type = type;
         this.name = name;
         this.module = module;
         this.field = field;
@@ -57,6 +61,10 @@ public abstract class Definition {
 
     public String getName() {
         return name;
+    }
+
+    public ResolvableType getType() {
+        return type;
     }
 
     public String getModule() {
@@ -79,7 +87,7 @@ public abstract class Definition {
         return qualifier;
     }
 
-    public Object getStub() {
+    public Object getMockInstance() {
         return mockInstance;
     }
 
@@ -99,8 +107,9 @@ public abstract class Definition {
         }
         Definition other = (Definition) obj;
         boolean result = true;
-        result = result && ObjectUtils.nullSafeEquals(this.name, other.name);
         result = result && ObjectUtils.nullSafeEquals(this.resolvableType, other.resolvableType);
+        result = result && ObjectUtils.nullSafeEquals(this.name, other.name);
+        result = result && ObjectUtils.nullSafeEquals(this.type, other.type);
         result = result && ObjectUtils.nullSafeEquals(this.module, other.module);
         result = result && ObjectUtils.nullSafeEquals(this.field, other.field);
         result = result && ObjectUtils.nullSafeEquals(this.reset, other.reset);
@@ -111,8 +120,9 @@ public abstract class Definition {
     @Override
     public int hashCode() {
         int result = 1;
-        result = MULTIPLIER * result + ObjectUtils.nullSafeHashCode(this.name);
         result = MULTIPLIER * result + ObjectUtils.nullSafeHashCode(this.resolvableType);
+        result = MULTIPLIER * result + ObjectUtils.nullSafeHashCode(this.name);
+        result = MULTIPLIER * result + ObjectUtils.nullSafeHashCode(this.type);
         result = MULTIPLIER * result + ObjectUtils.nullSafeHashCode(this.module);
         result = MULTIPLIER * result + ObjectUtils.nullSafeHashCode(this.field);
         result = MULTIPLIER * result + ObjectUtils.nullSafeHashCode(this.reset);

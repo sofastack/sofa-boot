@@ -26,11 +26,9 @@ import org.springframework.core.ResolvableType;
 import org.springframework.core.annotation.MergedAnnotation;
 import org.springframework.core.annotation.MergedAnnotations;
 import org.springframework.core.annotation.MergedAnnotations.SearchStrategy;
-import org.springframework.lang.NonNull;
 import org.springframework.test.context.TestContext;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
-import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Field;
 import java.util.Collections;
@@ -47,7 +45,7 @@ import java.util.Set;
  */
 public class DefinitionParser {
 
-    private final Set<Definition> definitions;
+    private final Set<Definition>        definitions;
 
     private final Map<Definition, Field> definitionFields;
 
@@ -55,13 +53,13 @@ public class DefinitionParser {
         this.definitions = new LinkedHashSet<>();
         this.definitionFields = new LinkedHashMap<>();
     }
+
     /**
      * Parse the {@link MockBeanInjector} and {@link SpyBeanInjector} annotations for the testClass
      *
      * @param testClass The testClass, see {@link TestContext#getTestClass()}
-     * @return An Unmodifiable view of StubDefinitions
      */
-    public void parse(@NonNull Class<?> testClass) {
+    public void parse(Class<?> testClass) {
         Assert.notNull(testClass, "testClass must not be null");
         ReflectionUtils.doWithFields(testClass, field -> parseTestField(field, testClass));
     }
@@ -81,20 +79,12 @@ public class DefinitionParser {
 
     private void parseSofaMockBeanAnnotation(MockBeanInjector annotation, Field field,
                                              Class<?> testClass) {
-        Set<ResolvableType> typesToMock = deduceType(field, annotation.value(), testClass);
-        Assert.state(!typesToMock.isEmpty(), () -> "Unable to deduce type to mock from " + field);
-        if (StringUtils.hasLength(annotation.name())) {
-            Assert.state(typesToMock.size() == 1, "The name attribute can only be used when mocking a single class");
-        }
-        for (ResolvableType typeToMock : typesToMock) {
-            MockDefinition mockDefinition = new MockDefinition(annotation.name(), typeToMock,
-                    annotation.module(),
-                    annotation.field(),
-                    annotation.extraInterfaces(),
-                    annotation.answer(), annotation.serializable(), annotation.reset(),
-                    QualifierDefinition.forElement(field));
-            registerDefinition(mockDefinition, field, "mock");
-        }
+        ResolvableType typesToMock = deduceType(field, testClass);
+        MockDefinition mockDefinition = new MockDefinition(typesToMock, annotation.name(),
+            ResolvableType.forClass(annotation.value()), annotation.module(), annotation.field(),
+            annotation.extraInterfaces(), annotation.answer(), annotation.serializable(),
+            annotation.reset(), QualifierDefinition.forElement(field));
+        registerDefinition(mockDefinition, field, "mock");
     }
 
     private void registerDefinition(Definition definition, Field field, String type) {
@@ -105,32 +95,17 @@ public class DefinitionParser {
 
     private void parseSofaSpyBeanAnnotation(SpyBeanInjector annotation, Field field,
                                             Class<?> testClass) {
-        Set<ResolvableType> typesToMock = deduceType(field, annotation.value(), testClass);
-        Assert.state(!typesToMock.isEmpty(), () -> "Unable to deduce type to spy from " + field);
-        if (StringUtils.hasLength(annotation.name())) {
-            Assert.state(typesToMock.size() == 1, "The name attribute can only be used when spying a single class");
-        }
-        for (ResolvableType typeToMock : typesToMock) {
-            SpyDefinition spyDefinition = new SpyDefinition(annotation.name(), typeToMock,
-                    annotation.module(),
-                    annotation.field(),
-                    annotation.reset(),
-                    annotation.proxyTargetAware(),
-                    QualifierDefinition.forElement(field));
-            registerDefinition(spyDefinition, field, "spy");
-        }
+        ResolvableType typesToMock = deduceType(field, testClass);
+        SpyDefinition spyDefinition = new SpyDefinition(typesToMock, annotation.name(),
+            ResolvableType.forClass(annotation.value()), annotation.module(), annotation.field(),
+            annotation.reset(), annotation.proxyTargetAware(),
+            QualifierDefinition.forElement(field));
+        registerDefinition(spyDefinition, field, "spy");
     }
 
-    private Set<ResolvableType> deduceType(Field field, Class<?>[] value, Class<?> source) {
-        Set<ResolvableType> types = new LinkedHashSet<>();
-        for (Class<?> clazz : value) {
-            types.add(ResolvableType.forClass(clazz));
-        }
-        if (types.isEmpty()) {
-            types.add((field.getGenericType() instanceof java.lang.reflect.TypeVariable) ? ResolvableType.forField(field, source)
-                    : ResolvableType.forField(field));
-        }
-        return types;
+    private ResolvableType deduceType(Field field, Class<?> source) {
+        return (field.getGenericType() instanceof java.lang.reflect.TypeVariable) ? ResolvableType
+            .forField(field, source) : ResolvableType.forField(field);
     }
 
     public Set<Definition> getDefinitions() {

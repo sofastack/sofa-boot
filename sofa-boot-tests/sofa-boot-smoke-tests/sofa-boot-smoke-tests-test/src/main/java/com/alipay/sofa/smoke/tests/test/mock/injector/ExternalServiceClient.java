@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.smoke.tests.test;
+package com.alipay.sofa.smoke.tests.test.mock.injector;
 
 /**
  * @author pengym
- * @version AnotherExternalServiceClient.java, v 0.1 2023年08月08日 17:15 pengym
+ * @version ExternalServiceClient.java, v 0.1 2023年08月08日 15:29 pengym
  */
-public interface AnotherExternalServiceClient {
+public interface ExternalServiceClient {
     String invoke(Object... args);
 }

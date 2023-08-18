@@ -14,12 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.smoke.tests.test;
+package com.alipay.sofa.smoke.tests.test.mock.injector;
 
 /**
  * @author pengym
- * @version ExternalServiceClient.java, v 0.1 2023年08月08日 15:29 pengym
+ * @version GenericServiceClientImpl.java, v 0.1 2023年08月08日 20:36 pengym
  */
-public interface ExternalServiceClient {
-    String invoke(Object... args);
+public class GenericServiceClientImpl<T> implements GenericExternalServiceClient<T> {
+    @Override
+    public String invoke(T... input) {
+        throw new UnsupportedOperationException();
+    }
 }

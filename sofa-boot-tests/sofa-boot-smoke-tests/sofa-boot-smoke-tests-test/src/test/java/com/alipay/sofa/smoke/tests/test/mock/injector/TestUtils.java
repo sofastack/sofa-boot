@@ -14,9 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.smoke.tests.test;
+package com.alipay.sofa.smoke.tests.test.mock.injector;
 
-public interface ExampleService {
-    String execute(String target, Object... args);
-    Object getDependency(String name);
+import org.mockito.MockingDetails;
+import org.mockito.Mockito;
+
+/**
+ * @author pengym
+ * @version TestUtils.java, v 0.1 2023年08月08日 15:57 pengym
+ */
+public class TestUtils {
+    public static boolean isMock(Object object) {
+        final MockingDetails mockingDetails = Mockito.mockingDetails(object);
+        return mockingDetails.isMock() && !mockingDetails.isSpy();
+    }
+
+    public static boolean isSpy(Object object) {
+        return Mockito.mockingDetails(object).isSpy();
+    }
 }

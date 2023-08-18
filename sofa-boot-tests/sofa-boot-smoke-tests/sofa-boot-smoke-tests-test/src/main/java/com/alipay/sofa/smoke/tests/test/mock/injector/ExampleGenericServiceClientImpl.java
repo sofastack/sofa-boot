@@ -14,33 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.smoke.tests.test.stub;
+package com.alipay.sofa.smoke.tests.test.mock.injector;
 
-import com.alipay.sofa.runtime.api.annotation.SofaService;
-import com.alipay.sofa.smoke.tests.test.ExampleGenericService;
-import com.alipay.sofa.smoke.tests.test.GenericExternalServiceClient;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 
 /**
  * @author pengym
  * @version ExampleGenericServiceClientImpl.java, v 0.1 2023年08月08日 20:03 pengym
  */
-@SofaService
 @Service
 public class ExampleGenericServiceClientImpl implements ExampleGenericService {
+
     @Autowired
     private GenericExternalServiceClient<Integer> clientA;
 
     @Autowired
-    private GenericExternalServiceClient<String> clientB;
+    private GenericExternalServiceClient<String>  clientB;
 
     @Override
     public String execute(String target) {
-        if (StringUtils.equals(target, "A")) {
+        if (Objects.equals(target, "A")) {
             return clientA.invoke(1, 2, 3, 4);
-        } else if (StringUtils.equals(target, "B")) {
+        } else if (Objects.equals(target, "B")) {
             return clientB.invoke("1", "2", "3", "4");
         } else {
             throw new UnsupportedOperationException();
@@ -49,9 +47,9 @@ public class ExampleGenericServiceClientImpl implements ExampleGenericService {
 
     @Override
     public Object getDependency(String target) {
-        if (StringUtils.equals(target, "A")) {
+        if (Objects.equals(target, "A")) {
             return clientA;
-        } else if (StringUtils.equals(target, "B")) {
+        } else if (Objects.equals(target, "B")) {
             return clientB;
         } else {
             throw new IllegalArgumentException(String.format("Unknown target %s", target));
