@@ -17,9 +17,25 @@
 package com.alipay.sofa.smoke.tests.test.mock.injector;
 
 /**
- * @author pengym
- * @version GenericExternalServiceClient.java, v 0.1 2023年08月08日 19:59 pengym
+ * @author huzijie
+ * @version RealExampleService.java, v 0.1 2023年08月21日 3:16 PM huzijie Exp $
  */
-public interface GenericExternalServiceClient<T> {
-    String invoke(T... input);
+public class RealExampleService implements ExampleService {
+
+    private final String greeting;
+
+    public RealExampleService(String greeting) {
+        this.greeting = greeting;
+    }
+
+    @Override
+    public String greeting() {
+        return this.greeting;
+    }
+
+    @Override
+    public String hello() {
+        return "hello";
+    }
+
 }

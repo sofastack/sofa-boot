@@ -16,8 +16,13 @@
  */
 package com.alipay.sofa.smoke.tests.test.mock.injector;
 
+/**
+ * @author huzijie
+ * @version ExampleService.java, v 0.1 2023年08月21日 3:14 PM huzijie Exp $
+ */
 public interface ExampleService {
-    String execute(String target, Object... args);
 
-    Object getDependency(String name);
+    String greeting();
+
+    String hello();
 }

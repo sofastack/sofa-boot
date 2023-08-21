@@ -57,6 +57,10 @@ public class BeanInjectorStub {
         this.bean = bean;
         ReflectionUtils.makeAccessible(field);
         this.originalValue = ReflectionUtils.getField(field, bean);
+        if (definition instanceof SpyDefinition && this.originalValue == null) {
+            throw new IllegalStateException("Unable to create spy to inject target field " + field
+                                            + " when origin value is null");
+        }
     }
 
     /**

@@ -17,9 +17,12 @@
 package com.alipay.sofa.smoke.tests.test.mock.injector;
 
 /**
- * @author pengym
- * @version ExternalServiceClient.java, v 0.1 2023年08月08日 15:29 pengym
+ * Concrete implementation of {@link InjectMockToGenericBeanTestBase}.
+ *
+ * @author huzijie
+ * @version InjectMockToGenericBeanExtensionTests.java, v 0.1 2023年08月21日 8:19 PM huzijie Exp $
  */
-public interface ExternalServiceClient {
-    String invoke(Object... args);
+public class InjectMockToGenericBeanExtensionTests
+                                                  extends
+                                                  InjectMockToGenericBeanTestBase<InjectMockToGenericBeanTestBase.ThingImpl, InjectMockToGenericBeanTestBase.SomethingImpl> {
 }

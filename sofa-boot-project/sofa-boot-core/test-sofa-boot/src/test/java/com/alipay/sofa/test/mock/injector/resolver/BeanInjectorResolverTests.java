@@ -21,7 +21,9 @@ import com.alipay.sofa.boot.isle.IsleDeploymentModel;
 import com.alipay.sofa.test.mock.injector.definition.Definition;
 import com.alipay.sofa.test.mock.injector.definition.MockDefinition;
 import com.alipay.sofa.test.mock.injector.definition.QualifierDefinition;
+import com.alipay.sofa.test.mock.injector.definition.SpyDefinition;
 import com.alipay.sofa.test.mock.injector.example.ExampleService;
+import com.alipay.sofa.test.mock.injector.example.RealExampleService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator;
@@ -221,7 +223,7 @@ public class BeanInjectorResolverTests {
     }
 
     @Test
-    public void testJdkProxyBeanInject() {
+    public void jdkProxyBeanInject() {
         GenericApplicationContext applicationContext = new AnnotationConfigApplicationContext(
             JdkProxyTargetClass.class);
         BeanInjectorResolver beanInjectorResolver = new BeanInjectorResolver(applicationContext);
@@ -236,7 +238,7 @@ public class BeanInjectorResolverTests {
     }
 
     @Test
-    public void testCglibProxyBeanInject() {
+    public void cglibProxyBeanInject() {
         GenericApplicationContext applicationContext = new AnnotationConfigApplicationContext(
             CglibProxyTargetClass.class);
         BeanInjectorResolver beanInjectorResolver = new BeanInjectorResolver(applicationContext);
@@ -248,6 +250,34 @@ public class BeanInjectorResolverTests {
 
         TargetInterface targetClass = applicationContext.getBean(TargetInterface.class);
         assertThat(Mockito.mockingDetails(targetClass.getExampleService()).isMock()).isTrue();
+    }
+
+    @Test
+    public void spyTargetBeanWhenFieldIsNull() {
+        GenericApplicationContext applicationContext = new AnnotationConfigApplicationContext(
+                TargetClass.class);
+        BeanInjectorResolver beanInjectorResolver = new BeanInjectorResolver(applicationContext);
+
+        Definition definition = new SpyDefinition(ResolvableType.forClass(ExampleService.class),
+                "targetClass", null, null, "exampleService", null, false, null);
+        assertThatIllegalStateException().isThrownBy(() -> beanInjectorResolver.resolveStub(definition))
+                .withMessageContaining("Unable to create spy to inject target field private com.alipay.sofa.test.mock.injector.example.ExampleService com.alipay.sofa.test.mock.injector.resolver.BeanInjectorResolverTests$TargetClass.exampleService when origin value is null");
+    }
+
+    @Test
+    public void spyTargetBean() {
+        GenericApplicationContext applicationContext = new AnnotationConfigApplicationContext(
+            TargetClass.class);
+        BeanInjectorResolver beanInjectorResolver = new BeanInjectorResolver(applicationContext);
+        TargetClass targetClass = applicationContext.getBean(TargetClass.class);
+        targetClass.setExampleService(new RealExampleService("test"));
+
+        Definition definition = new SpyDefinition(ResolvableType.forClass(ExampleService.class),
+            "targetClass", null, null, "exampleService", null, false, null);
+        BeanInjectorStub stub = beanInjectorResolver.resolveStub(definition);
+        stub.inject();
+
+        assertThat(Mockito.mockingDetails(targetClass.getExampleService()).isSpy()).isTrue();
     }
 
     interface TargetInterface {
@@ -263,6 +293,10 @@ public class BeanInjectorResolverTests {
 
         public ExampleService getExampleService() {
             return exampleService;
+        }
+
+        public void setExampleService(ExampleService exampleService) {
+            this.exampleService = exampleService;
         }
     }
 

@@ -16,17 +16,14 @@
  */
 package com.alipay.sofa.smoke.tests.test.mock.injector;
 
-import org.springframework.stereotype.Service;
-
 /**
- * @author pengym
- * @version ExternalServiceClientA.java, v 0.1 2023年08月08日 15:53 pengym
+ * @author huzijie
+ * @version ExampleServiceCallerInterface.java, v 0.1 2023年08月21日 3:16 PM huzijie Exp $
  */
-@Service
-public class ExternalServiceClientImpl implements ExternalServiceClient {
+public interface ExampleServiceCallerInterface {
 
-    @Override
-    public String invoke(Object... args) {
-        throw new UnsupportedOperationException();
-    }
+    String sayGreeting();
+
+    String sayHello();
+
 }

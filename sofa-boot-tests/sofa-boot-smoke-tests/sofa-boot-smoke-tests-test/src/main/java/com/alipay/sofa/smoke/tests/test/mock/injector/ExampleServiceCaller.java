@@ -17,12 +17,29 @@
 package com.alipay.sofa.smoke.tests.test.mock.injector;
 
 /**
- * @author pengym
- * @version GenericServiceClientImpl.java, v 0.1 2023年08月08日 20:36 pengym
+ * @author huzijie
+ * @version ExampleServiceCaller.java, v 0.1 2023年08月21日 3:16 PM huzijie Exp $
  */
-public class GenericServiceClientImpl<T> implements GenericExternalServiceClient<T> {
-    @Override
-    public String invoke(T... input) {
-        throw new UnsupportedOperationException();
+public class ExampleServiceCaller implements ExampleServiceCallerInterface {
+
+    private ExampleService service;
+
+    public ExampleService getService() {
+        return this.service;
     }
+
+    public void setService(ExampleService service) {
+        this.service = service;
+    }
+
+    @Override
+    public String sayGreeting() {
+        return this.service.greeting();
+    }
+
+    @Override
+    public String sayHello() {
+        return service.hello();
+    }
+
 }
