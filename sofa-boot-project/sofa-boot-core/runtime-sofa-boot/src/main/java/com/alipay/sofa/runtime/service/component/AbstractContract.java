@@ -38,6 +38,8 @@ public abstract class AbstractContract implements Contract {
     protected String              uniqueId      = "";
     /** interface class type */
     protected Class<?>            interfaceType;
+    /** interface class type name*/
+    protected String              interfaceTypeCanonicalName;
     /** interface mode */
     protected InterfaceMode       interfaceMode = InterfaceMode.spring;
     /** properties of contract */
@@ -50,6 +52,7 @@ public abstract class AbstractContract implements Contract {
             this.uniqueId = uniqueId;
         }
         this.interfaceType = interfaceType;
+        this.interfaceTypeCanonicalName = interfaceType.getCanonicalName();
     }
 
     protected AbstractContract(String uniqueId, Class<?> interfaceType, InterfaceMode interfaceMode) {
@@ -113,5 +116,10 @@ public abstract class AbstractContract implements Contract {
     @Override
     public Map<String, String> getProperty() {
         return property;
+    }
+
+    @Override
+    public String getInterfaceTypeCanonicalName() {
+        return interfaceTypeCanonicalName;
     }
 }
