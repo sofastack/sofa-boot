@@ -69,7 +69,7 @@ import java.lang.annotation.Target;
  *      }
  * }
  * </pre>
- * </pre> If there is more than one bean of the requested type, qualifier metadata must be
+ * If there is more than one bean of the requested type, qualifier metadata must be
  * specified at field level: <pre class="code">
  * &#064;RunWith(SpringRunner.class)
  * public class ExampleTests {
