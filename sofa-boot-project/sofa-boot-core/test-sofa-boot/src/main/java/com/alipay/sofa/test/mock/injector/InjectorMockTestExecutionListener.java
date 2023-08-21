@@ -45,9 +45,9 @@ import java.util.Set;
  */
 public class InjectorMockTestExecutionListener extends AbstractTestExecutionListener {
 
-    private static final String STUBBED_FIELDS      = "_SOFA_BOOT_STUBBED_FIELDS";
+    static final String STUBBED_FIELDS      = "_SOFA_BOOT_STUBBED_FIELDS";
 
-    private static final String STUBBED_DEFINITIONS = "_SOFA_BOOT_STUBBED_DEFINITIONS";
+    static final String STUBBED_DEFINITIONS = "_SOFA_BOOT_STUBBED_DEFINITIONS";
 
     @Override
     public int getOrder() {

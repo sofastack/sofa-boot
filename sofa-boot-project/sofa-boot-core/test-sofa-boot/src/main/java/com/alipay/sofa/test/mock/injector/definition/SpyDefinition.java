@@ -54,7 +54,7 @@ public class SpyDefinition extends Definition {
     public <T> T createSpy(Object instance) {
         if (mockInstance == null) {
             Assert.notNull(instance, "Instance must not be null");
-            Assert.isInstanceOf(this.getResolvableType().resolve(), instance);
+            Assert.isInstanceOf(this.getMockType().resolve(), instance);
             if (Mockito.mockingDetails(instance).isSpy()) {
                 return (T) instance;
             }
@@ -66,7 +66,7 @@ public class SpyDefinition extends Definition {
             Class<?> toSpy;
             if (Proxy.isProxyClass(instance.getClass())) {
                 settings.defaultAnswer(AdditionalAnswers.delegatesTo(instance));
-                toSpy = this.getResolvableType().toClass();
+                toSpy = this.getMockType().toClass();
             } else {
                 settings.defaultAnswer(Mockito.CALLS_REAL_METHODS);
                 settings.spiedInstance(instance);
@@ -100,7 +100,7 @@ public class SpyDefinition extends Definition {
 
     @Override
     public String toString() {
-        return new ToStringCreator(this).append("resolvableType", this.getResolvableType())
+        return new ToStringCreator(this).append("mockType", this.getMockType())
             .append("name", this.getName()).append("type", this.getType())
             .append("module", this.getModule()).append("field", this.getField())
             .append("proxyTargetAware", this.proxyTargetAware).append("reset", getReset())

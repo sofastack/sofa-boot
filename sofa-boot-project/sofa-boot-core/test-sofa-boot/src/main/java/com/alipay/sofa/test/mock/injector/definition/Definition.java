@@ -43,19 +43,19 @@ public abstract class Definition {
 
     private final QualifierDefinition qualifier;
 
-    private final ResolvableType      resolvableType;
+    private final ResolvableType      mockType;
 
     protected Object                  mockInstance;
 
-    public Definition(ResolvableType resolvableType, String name, ResolvableType type,
-                      String module, String field, MockReset reset, QualifierDefinition qualifier) {
-        Assert.notNull(resolvableType, "ResolvableType must not be null");
-        this.resolvableType = resolvableType;
+    public Definition(ResolvableType mockType, String name, ResolvableType type, String module,
+                      String field, MockReset reset, QualifierDefinition qualifier) {
+        Assert.notNull(mockType, "MockType must not be null");
+        this.mockType = mockType;
         this.type = type;
         this.name = name;
         this.module = module;
         this.field = field;
-        this.reset = reset;
+        this.reset = (reset != null) ? reset : MockReset.AFTER;
         this.qualifier = qualifier;
     }
 
@@ -79,8 +79,8 @@ public abstract class Definition {
         return reset;
     }
 
-    public ResolvableType getResolvableType() {
-        return this.resolvableType;
+    public ResolvableType getMockType() {
+        return this.mockType;
     }
 
     public QualifierDefinition getQualifier() {
@@ -107,7 +107,7 @@ public abstract class Definition {
         }
         Definition other = (Definition) obj;
         boolean result = true;
-        result = result && ObjectUtils.nullSafeEquals(this.resolvableType, other.resolvableType);
+        result = result && ObjectUtils.nullSafeEquals(this.mockType, other.mockType);
         result = result && ObjectUtils.nullSafeEquals(this.name, other.name);
         result = result && ObjectUtils.nullSafeEquals(this.type, other.type);
         result = result && ObjectUtils.nullSafeEquals(this.module, other.module);
@@ -120,7 +120,7 @@ public abstract class Definition {
     @Override
     public int hashCode() {
         int result = 1;
-        result = MULTIPLIER * result + ObjectUtils.nullSafeHashCode(this.resolvableType);
+        result = MULTIPLIER * result + ObjectUtils.nullSafeHashCode(this.mockType);
         result = MULTIPLIER * result + ObjectUtils.nullSafeHashCode(this.name);
         result = MULTIPLIER * result + ObjectUtils.nullSafeHashCode(this.type);
         result = MULTIPLIER * result + ObjectUtils.nullSafeHashCode(this.module);

@@ -79,7 +79,7 @@ public class MockDefinition extends Definition {
             if (this.serializable) {
                 settings.serializable();
             }
-            mockInstance = (T) mock(this.getResolvableType().resolve(), settings);
+            mockInstance = (T) mock(this.getMockType().resolve(), settings);
         }
         return (T) mockInstance;
     }
@@ -111,7 +111,7 @@ public class MockDefinition extends Definition {
 
     @Override
     public String toString() {
-        return new ToStringCreator(this).append("resolvableType", this.getResolvableType())
+        return new ToStringCreator(this).append("mockType", this.getMockType())
             .append("name", this.getName()).append("type", this.getType())
             .append("module", this.getModule()).append("field", this.getField())
             .append("extraInterfaces", this.extraInterfaces).append("answer", this.answer)

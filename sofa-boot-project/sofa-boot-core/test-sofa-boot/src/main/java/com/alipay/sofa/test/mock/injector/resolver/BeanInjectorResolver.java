@@ -87,9 +87,8 @@ public class BeanInjectorResolver {
 
         // find target bean instance
         if (!beanFactory.containsBean(beanName)) {
-            throw new IllegalStateException(
-                "Unable to create bean injector to bean [" + beanName
-                        + "] expected a single matching bean to injector but no bean found");
+            throw new IllegalStateException("Unable to create bean injector to bean [" + beanName
+                                            + "] target bean not exist");
         }
         Object bean = resolveTargetObject(beanFactory.getBean(beanName));
 
@@ -118,7 +117,7 @@ public class BeanInjectorResolver {
 
         if (targetField == null) {
             throw new IllegalStateException("Unable to inject target field to bean " + beanName
-                                            + ", can not find field " + fieldName + " in class "
+                                            + ", can not find field " + fieldName + " in "
                                             + bean.getClass());
         }
 
@@ -127,7 +126,6 @@ public class BeanInjectorResolver {
         return beanStubbedField;
     }
 
-    //todo support aop proxy
     private Object resolveTargetObject(Object obj) {
         if (!AopUtils.isAopProxy(obj) && !AopUtils.isJdkDynamicProxy(obj)) {
             return obj;
