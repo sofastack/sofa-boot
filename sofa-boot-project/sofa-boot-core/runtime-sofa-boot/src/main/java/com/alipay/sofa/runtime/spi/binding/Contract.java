@@ -99,4 +99,12 @@ public interface Contract {
      * @param bindings binding objects
      */
     <T extends Binding> void addBinding(Set<T> bindings);
+
+    /**
+     * get interface type class canonical name
+     * @return get interface type class canonical name
+     */
+    default String getInterfaceTypeCanonicalName() {
+        return getInterfaceType().getCanonicalName();
+    }
 }
