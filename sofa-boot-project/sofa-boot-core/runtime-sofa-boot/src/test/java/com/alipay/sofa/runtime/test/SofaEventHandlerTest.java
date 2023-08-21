@@ -128,6 +128,7 @@ public class SofaEventHandlerTest {
         Mockito.when(sofaRuntimeManager.getComponentManager()).thenReturn(((SofaRuntimeContext) ctx.getBean("sofaRuntimeContext"))
                 .getComponentManager());
         Mockito.when(contract.getInterfaceType()).thenAnswer((Answer<Class>) invocationOnMock -> SampleService.class);
+        Mockito.when(contract.getInterfaceTypeCanonicalName()).thenReturn("com.alipay.sofa.runtime.test.beans.facade.SampleService");
         Mockito.when(contract.getUniqueId()).thenReturn("");
         Mockito.when(contract.getBinding(JvmBinding.JVM_BINDING_TYPE)).thenReturn(new JvmBinding());
         Mockito.when(invocation.getArguments()).thenReturn(new Object[] {});
