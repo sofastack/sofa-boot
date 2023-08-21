@@ -78,7 +78,7 @@ public class DynamicJvmServiceProxyFinder {
             }
         }
 
-        String interfaceType = contract.getInterfaceType().getCanonicalName();
+        String interfaceType = contract.getInterfaceTypeCanonicalName();
         String uniqueId = contract.getUniqueId();
         for (SofaRuntimeManager sofaRuntimeManager : SofaFramework.getRuntimeSet()) {
             if (sofaRuntimeManager.getAppClassLoader().equals(clientClassloader)) {
@@ -244,7 +244,7 @@ public class DynamicJvmServiceProxyFinder {
         for (ComponentInfo c : components) {
             ServiceComponent component = (ServiceComponent) c;
             Contract serviceContract = component.getService();
-            if (serviceContract.getInterfaceType().getCanonicalName().equals(interfaceType)
+            if (serviceContract.getInterfaceTypeCanonicalName().equals(interfaceType)
                 && uniqueId.equals(serviceContract.getUniqueId())) {
                 return component;
             }
