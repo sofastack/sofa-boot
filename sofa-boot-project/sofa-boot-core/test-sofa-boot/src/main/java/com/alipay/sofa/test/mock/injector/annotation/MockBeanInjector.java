@@ -83,7 +83,7 @@ import java.lang.annotation.Target;
  * }
  * </pre>
  * @author pengym
- * @version SofaMockBeanFor.java, v 0.1 2023年08月07日 15:32 pengym
+ * @version MockBeanInjector.java, v 0.1 2023年08月07日 15:32 pengym
  */
 @Target({ ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
