@@ -70,8 +70,9 @@ public class BeanInjectorStubTests {
     @Test
     public void spyBeanInjectorStub() {
         TargetClass targetClass = new TargetClass();
+        RealExampleService realExampleService = new RealExampleService("real");
+        targetClass.setExampleService(realExampleService);
         BeanInjectorStub beanInjectorStub = new BeanInjectorStub(spyDefinition, field, targetClass);
-        assertThat(targetClass.getExampleService()).isNull();
 
         when(spyDefinition.createSpy(any())).thenReturn(exampleService);
         beanInjectorStub.inject();
@@ -79,10 +80,14 @@ public class BeanInjectorStubTests {
         assertThat(targetClass.getExampleService()).isEqualTo(exampleService);
 
         beanInjectorStub.reset();
-        assertThat(targetClass.getExampleService()).isNull();
+        assertThat(targetClass.getExampleService()).isEqualTo(realExampleService);
     }
 
     static class TargetClass {
+
+        public void setExampleService(ExampleService exampleService) {
+            this.exampleService = exampleService;
+        }
 
         private ExampleService exampleService;
 
