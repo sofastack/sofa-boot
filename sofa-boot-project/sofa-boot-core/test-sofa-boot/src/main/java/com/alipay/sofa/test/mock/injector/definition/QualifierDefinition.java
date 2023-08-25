@@ -30,7 +30,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * see {@link org.springframework.boot.test.mock.mockito.QualifierDefinition}
+ * see org.springframework.boot.test.mock.mockito.QualifierDefinition
  *
  * @author huzijie
  * @version QualifierDefinition.java, v 0.1 2023年08月15日 10:57 AM huzijie Exp $
