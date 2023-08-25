@@ -241,7 +241,6 @@
             <artifactId>hessian</artifactId>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 
 </project>
