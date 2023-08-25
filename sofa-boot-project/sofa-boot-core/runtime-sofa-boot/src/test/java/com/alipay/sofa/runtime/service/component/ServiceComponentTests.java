@@ -47,22 +47,26 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class ServiceComponentTests {
 
-    private Service               service;
+    private Service                       service;
 
-    private ServiceComponent      serviceComponent;
-
-    @Mock
-    private Implementation        implementation;
+    private ServiceComponent              serviceComponent;
 
     @Mock
-    private BindingAdapterFactory bindingAdapterFactory;
+    private Implementation                implementation;
 
     @Mock
-    private SofaRuntimeContext    sofaRuntimeContext;
+    private BindingAdapterFactory         bindingAdapterFactory;
+
+    @Mock
+    private SofaRuntimeContext            sofaRuntimeContext;
+
+    private SofaRuntimeContext.Properties properties;
 
     @BeforeEach
     public void setUp() {
         service = new ServiceImpl("", SampleService.class, new SampleServiceImpl());
+        properties = new SofaRuntimeContext.Properties();
+        when(sofaRuntimeContext.getProperties()).thenReturn(properties);
         serviceComponent = new ServiceComponent(implementation, service, bindingAdapterFactory,
             sofaRuntimeContext);
     }
@@ -308,6 +312,14 @@ public class ServiceComponentTests {
         HealthResult healthResult = serviceComponent.isHealthy();
         assertThat(healthResult.isHealthy()).isFalse();
         assertThat(healthResult.getHealthReport()).isEqualTo("[jvm,passed] [error]");
+    }
+
+    @Test
+    void canBeDuplicate() {
+        properties.setServiceCanBeDuplicate(true);
+        serviceComponent = new ServiceComponent(implementation, service, bindingAdapterFactory,
+            sofaRuntimeContext);
+        assertThat(serviceComponent.canBeDuplicate()).isTrue();
     }
 
     static class SampleServiceImpl implements SampleService {
