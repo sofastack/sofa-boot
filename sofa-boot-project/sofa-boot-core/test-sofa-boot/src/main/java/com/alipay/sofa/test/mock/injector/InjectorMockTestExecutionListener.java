@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.test.mock.injector;
 
+import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.test.mock.injector.annotation.MockBeanInjector;
 import com.alipay.sofa.test.mock.injector.annotation.SpyBeanInjector;
 import com.alipay.sofa.test.mock.injector.definition.Definition;
@@ -85,8 +86,7 @@ public class InjectorMockTestExecutionListener extends AbstractTestExecutionList
                 if (existingValue == injectValue) {
                     return;
                 }
-                Assert.state(existingValue == null, () -> "The existing value '" + existingValue + "' of field '" + field
-                        + "' is not the same as the new value '" + injectValue + "'");
+                Assert.state(existingValue == null, () -> ErrorCode.convert("01-30000", existingValue, field, injectValue));
                 ReflectionUtils.setField(field, target, injectValue);
             }
         });
