@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.test.mock.injector.resolver;
 
+import com.alipay.sofa.boot.error.ErrorCode;
 import com.alipay.sofa.test.mock.injector.definition.Definition;
 import com.alipay.sofa.test.mock.injector.definition.MockDefinition;
 import com.alipay.sofa.test.mock.injector.definition.SpyDefinition;
@@ -58,8 +59,7 @@ public class BeanInjectorStub {
         ReflectionUtils.makeAccessible(field);
         this.originalValue = ReflectionUtils.getField(field, bean);
         if (definition instanceof SpyDefinition && this.originalValue == null) {
-            throw new IllegalStateException("Unable to create spy to inject target field " + field
-                                            + " when origin value is null");
+            throw new IllegalStateException(ErrorCode.convert("01-30001", field));
         }
     }
 
