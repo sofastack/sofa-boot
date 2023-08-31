@@ -43,7 +43,6 @@ import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.stubbing.Answer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -127,7 +126,7 @@ public class SofaEventHandlerTest {
 
         Mockito.when(sofaRuntimeManager.getComponentManager()).thenReturn(((SofaRuntimeContext) ctx.getBean("sofaRuntimeContext"))
                 .getComponentManager());
-        Mockito.when(contract.getInterfaceType()).thenAnswer((Answer<Class>) invocationOnMock -> SampleService.class);
+        Mockito.when(contract.getInterfaceTypeCanonicalName()).thenReturn("com.alipay.sofa.runtime.test.beans.facade.SampleService");
         Mockito.when(contract.getUniqueId()).thenReturn("");
         Mockito.when(contract.getBinding(JvmBinding.JVM_BINDING_TYPE)).thenReturn(new JvmBinding());
         Mockito.when(invocation.getArguments()).thenReturn(new Object[] {});
