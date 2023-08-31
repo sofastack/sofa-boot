@@ -18,6 +18,7 @@ package com.alipay.sofa.test.mock.injector.resolver;
 
 import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.boot.isle.IsleDeploymentModel;
+import com.alipay.sofa.boot.log.ErrorCode;
 import com.alipay.sofa.test.mock.injector.definition.Definition;
 import com.alipay.sofa.test.mock.injector.definition.QualifierDefinition;
 import org.springframework.aop.framework.AopProxyUtils;
@@ -87,8 +88,7 @@ public class BeanInjectorResolver {
 
         // find target bean instance
         if (!beanFactory.containsBean(beanName)) {
-            throw new IllegalStateException("Unable to create bean injector to bean [" + beanName
-                                            + "] target bean not exist");
+            throw new IllegalStateException(ErrorCode.convert("01-30005", beanName));
         }
         Object bean = resolveTargetObject(beanFactory.getBean(beanName));
 
@@ -101,8 +101,7 @@ public class BeanInjectorResolver {
         if (StringUtils.hasText(module)) {
             ApplicationContext applicationContext = isleApplicationContexts.get(module);
             if (applicationContext == null) {
-                throw new IllegalStateException("Unable to find target module [" + module
-                                                + "] when resolve injector: " + definition);
+                throw new IllegalStateException(ErrorCode.convert("01-30002", module, definition));
             }
             return applicationContext;
         } else {
@@ -142,9 +141,7 @@ public class BeanInjectorResolver {
         Set<String> existingBeans = getExistingBeans(beanFactory, definition.getType(),
             definition.getQualifier());
         if (existingBeans.isEmpty()) {
-            throw new IllegalStateException(
-                "Unable to create bean injector to bean by type [" + definition.getType()
-                        + "] expected a single matching bean to injector but no bean found");
+            throw new IllegalStateException(ErrorCode.convert("01-30003", definition.getType()));
         }
         if (existingBeans.size() == 1) {
             return existingBeans.iterator().next();
@@ -154,9 +151,8 @@ public class BeanInjectorResolver {
         if (primaryCandidate != null) {
             return primaryCandidate;
         }
-        throw new IllegalStateException(
-            "Unable to create bean injector to bean by type [" + definition.getType()
-                    + "] expected a single matching bean to injector but found " + existingBeans);
+        throw new IllegalStateException(ErrorCode.convert("01-30004", definition.getType(),
+            existingBeans));
     }
 
     private Set<String> getExistingBeans(ConfigurableListableBeanFactory beanFactory,
