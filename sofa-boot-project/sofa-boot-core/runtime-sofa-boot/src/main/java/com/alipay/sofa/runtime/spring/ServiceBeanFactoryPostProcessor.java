@@ -333,8 +333,10 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
                 interfaceType);
             builder.addPropertyValue(AbstractContractDefinitionParser.UNIQUE_ID_PROPERTY,
                 sofaServiceAnnotation.uniqueId());
-            builder.addPropertyValue(AbstractContractDefinitionParser.BINDINGS,
-                getSofaServiceBinding(sofaServiceAnnotation, sofaServiceAnnotation.bindings()));
+            builder.addPropertyValue(
+                AbstractContractDefinitionParser.BINDINGS,
+                getSofaServiceBinding(sofaServiceAnnotation, sofaServiceAnnotation.bindings(),
+                    interfaceType));
             builder.addPropertyReference(ServiceDefinitionParser.REF, beanId);
             builder.addPropertyValue(ServiceDefinitionParser.BEAN_ID, beanId);
             builder.addPropertyValue(AbstractContractDefinitionParser.DEFINITION_BUILDING_API_TYPE,
@@ -347,7 +349,8 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
     }
 
     private List<Binding> getSofaServiceBinding(SofaService sofaServiceAnnotation,
-                                                SofaServiceBinding[] sofaServiceBindings) {
+                                                SofaServiceBinding[] sofaServiceBindings,
+                                                Class<?> interfaceType) {
         List<Binding> bindings = new ArrayList<>();
         for (SofaServiceBinding sofaServiceBinding : sofaServiceBindings) {
             BindingConverter bindingConverter = bindingConverterFactory
@@ -361,6 +364,7 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
             bindingConverterContext.setApplicationContext(applicationContext);
             bindingConverterContext.setAppName(sofaRuntimeManager.getAppName());
             bindingConverterContext.setAppClassLoader(sofaRuntimeManager.getAppClassLoader());
+            bindingConverterContext.setInterfaceType(interfaceType);
             Binding binding = bindingConverter.convert(sofaServiceAnnotation, sofaServiceBinding,
                 bindingConverterContext);
             bindings.add(binding);

@@ -104,6 +104,10 @@
                     interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.threadpool.ThreadPoolService">
         <sofa:binding.bolt/>
     </sofa:reference>
+    <sofa:reference jvm-first="false" id="threadPoolAnnotationService" unique-id="annotation"
+                    interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.threadpool.ThreadPoolService">
+        <sofa:binding.bolt/>
+    </sofa:reference>
 
     <!-- rest -->
     <bean id="restServiceImpl" class="com.alipay.sofa.smoke.tests.rpc.boot.bean.rest.RestServiceImpl"/>
