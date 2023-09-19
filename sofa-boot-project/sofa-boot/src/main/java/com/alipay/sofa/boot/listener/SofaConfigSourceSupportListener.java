@@ -26,6 +26,8 @@ import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.util.StringUtils;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 /**
  * Register a config source based on {@link ConfigurableEnvironment} to {@link SofaConfigs}.
  *
@@ -37,9 +39,13 @@ public class SofaConfigSourceSupportListener
                                             ApplicationListener<ApplicationEnvironmentPreparedEvent>,
                                             Ordered {
 
+    private final AtomicBoolean registered = new AtomicBoolean();
+
     @Override
     public void onApplicationEvent(ApplicationEnvironmentPreparedEvent event) {
-        registerSofaConfigs(event.getEnvironment());
+        if (registered.compareAndSet(false, true)) {
+            registerSofaConfigs(event.getEnvironment());
+        }
     }
 
     private void registerSofaConfigs(ConfigurableEnvironment environment) {
