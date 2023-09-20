@@ -39,6 +39,8 @@ public class BindingConverterContext {
 
     private String             repeatReferLimit;
 
+    private Class              interfaceType;
+
     public ClassLoader getAppClassLoader() {
         return appClassLoader;
     }
@@ -93,5 +95,13 @@ public class BindingConverterContext {
 
     public void setRepeatReferLimit(String repeatReferLimit) {
         this.repeatReferLimit = repeatReferLimit;
+    }
+
+    public Class getInterfaceType() {
+        return interfaceType;
+    }
+
+    public void setInterfaceType(Class interfaceType) {
+        this.interfaceType = interfaceType;
     }
 }

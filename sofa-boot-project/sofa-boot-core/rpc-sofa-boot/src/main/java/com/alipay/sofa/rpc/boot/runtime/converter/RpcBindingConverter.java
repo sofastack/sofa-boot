@@ -455,7 +455,7 @@ public abstract class RpcBindingConverter implements BindingConverter<RpcBinding
 
             UserThreadPool threadPoolObj = (UserThreadPool) applicationContext.getBean(threadPool);
 
-            String interfaceName = sofaServiceAnnotation.interfaceType().getCanonicalName();
+            String interfaceName = bindingConverterContext.getInterfaceType().getCanonicalName();
             String uniqId = sofaServiceAnnotation.uniqueId();
             String uniqueName = interfaceName + ":1.0"
                                 + (StringUtils.isEmpty(uniqId) ? "" : ":" + uniqId);

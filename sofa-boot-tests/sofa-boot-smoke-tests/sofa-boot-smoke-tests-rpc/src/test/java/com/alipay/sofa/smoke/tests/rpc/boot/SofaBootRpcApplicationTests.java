@@ -119,7 +119,12 @@ public class SofaBootRpcApplicationTests {
     private GenericService             genericService;
 
     @Autowired
+    @Qualifier("threadPoolService")
     private ThreadPoolService          threadPoolService;
+
+    @Autowired
+    @Qualifier("threadPoolAnnotationService")
+    private ThreadPoolService          threadPoolAnnotationService;
 
     @Autowired
     private RestService                restService;
@@ -246,6 +251,8 @@ public class SofaBootRpcApplicationTests {
     @Test
     public void threadPool() {
         assertThat(threadPoolService.sayThreadPool("threadPool")).startsWith(
+            "threadPool[SOFA-customerThreadPool_name");
+        assertThat(threadPoolAnnotationService.sayThreadPool("threadPool")).startsWith(
             "threadPool[SOFA-customerThreadPool_name");
     }
 
