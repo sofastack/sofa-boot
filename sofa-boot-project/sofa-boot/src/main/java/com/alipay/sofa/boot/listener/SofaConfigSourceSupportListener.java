@@ -36,9 +36,9 @@ public class SofaConfigSourceSupportListener
                                             implements
                                             ApplicationListener<ApplicationEnvironmentPreparedEvent>,
                                             Ordered {
-    private static final int SOFA_BOOT_CONFIG_SOURCE_ORDER = ApplicationListenerOrderConstants.SOFA_CONFIG_SOURCE_SUPPORT_LISTENER_ORDER;
+    private static final int    SOFA_BOOT_CONFIG_SOURCE_ORDER = ApplicationListenerOrderConstants.SOFA_CONFIG_SOURCE_SUPPORT_LISTENER_ORDER;
 
-    private final AtomicBoolean registered = new AtomicBoolean();
+    private final AtomicBoolean registered                    = new AtomicBoolean();
 
     @Override
     public void onApplicationEvent(ApplicationEnvironmentPreparedEvent event) {
