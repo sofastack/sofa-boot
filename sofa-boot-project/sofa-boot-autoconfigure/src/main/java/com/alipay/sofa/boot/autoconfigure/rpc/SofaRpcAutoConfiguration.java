@@ -72,8 +72,13 @@ public class SofaRpcAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public ProviderConfigContainer providerConfigContainer() {
-        return new ProviderConfigContainer();
+    public ProviderConfigContainer providerConfigContainer(SofaBootRpcProperties sofaBootRpcProperties) {
+        ProviderConfigContainer providerConfigContainer = new ProviderConfigContainer();
+        providerConfigContainer.setProviderRegisterWhiteList(sofaBootRpcProperties
+            .getProviderRegisterWhiteList());
+        providerConfigContainer.setProviderRegisterBlackList(sofaBootRpcProperties
+            .getProviderRegisterBlackList());
+        return providerConfigContainer;
     }
 
     @Bean

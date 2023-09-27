@@ -50,6 +50,7 @@ import javax.ws.rs.client.ClientRequestFilter;
 import javax.ws.rs.client.ClientResponseFilter;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ContainerResponseFilter;
+import java.util.List;
 import java.util.Map;
 
 import static com.alipay.sofa.rpc.boot.config.SofaBootRpcConfigConstants.REGISTRY_PROTOCOL_SOFA;
@@ -365,6 +366,20 @@ public class SofaRpcAutoConfigurationTests {
                     assertThat(config.getFile()).isEqualTo("127.0.0.1:2884");
 
                     assertThat(registryConfigContainer.isMeshEnabled("local")).isTrue();
+                });
+    }
+
+    @Test
+    void customProviderConfigContainer() {
+        this.contextRunner.withPropertyValues(
+                        "sofa.boot.rpc.providerRegisterWhiteList=a,b,c",
+                        "sofa.boot.rpc.providerRegisterBlackList=e,f,g").
+                run(context -> {
+                    ProviderConfigContainer providerConfigContainer = context.getBean(ProviderConfigContainer.class);
+                    List<String> whiteList = providerConfigContainer.getProviderRegisterWhiteList();
+                    assertThat(whiteList).containsExactly("a", "b", "c");
+                    List<String> blackList = providerConfigContainer.getProviderRegisterBlackList();
+                    assertThat(blackList).containsExactly("e", "f", "g");
                 });
     }
 
