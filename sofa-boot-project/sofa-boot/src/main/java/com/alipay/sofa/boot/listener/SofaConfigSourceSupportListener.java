@@ -25,6 +25,8 @@ import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.util.StringUtils;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 /**
  * add a config source based on {@link ConfigurableEnvironment}
  * @author huzijie
@@ -34,32 +36,40 @@ public class SofaConfigSourceSupportListener
                                             implements
                                             ApplicationListener<ApplicationEnvironmentPreparedEvent>,
                                             Ordered {
-    private static final int SOFA_BOOT_CONFIG_SOURCE_ORDER = ApplicationListenerOrderConstants.SOFA_CONFIG_SOURCE_SUPPORT_LISTENER_ORDER;
+    private static final int    SOFA_BOOT_CONFIG_SOURCE_ORDER = ApplicationListenerOrderConstants.SOFA_CONFIG_SOURCE_SUPPORT_LISTENER_ORDER;
+
+    private final AtomicBoolean registered                    = new AtomicBoolean();
 
     @Override
     public void onApplicationEvent(ApplicationEnvironmentPreparedEvent event) {
-        ConfigurableEnvironment environment = event.getEnvironment();
-        SofaConfigs.addConfigSource(new AbstractConfigSource() {
-            @Override
-            public int getOrder() {
-                return SOFA_BOOT_CONFIG_SOURCE_ORDER;
-            }
+        registerSofaConfigs(event.getEnvironment());
+    }
 
-            @Override
-            public String getName() {
-                return "SOFABootEnv";
-            }
+    private void registerSofaConfigs(ConfigurableEnvironment environment) {
+        if (registered.compareAndSet(false, true)) {
+            SofaConfigs.addConfigSource(new AbstractConfigSource() {
 
-            @Override
-            public String doGetConfig(String key) {
-                return environment.getProperty(key);
-            }
+                @Override
+                public int getOrder() {
+                    return SOFA_BOOT_CONFIG_SOURCE_ORDER;
+                }
 
-            @Override
-            public boolean hasKey(String key) {
-                return !StringUtils.isEmpty(environment.getProperty(key));
-            }
-        });
+                @Override
+                public String getName() {
+                    return "SOFABootEnv";
+                }
+
+                @Override
+                public String doGetConfig(String key) {
+                    return environment.getProperty(key);
+                }
+
+                @Override
+                public boolean hasKey(String key) {
+                    return !StringUtils.isEmpty(environment.getProperty(key));
+                }
+            });
+        }
     }
 
     @Override
