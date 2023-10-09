@@ -30,6 +30,7 @@ import org.springframework.boot.actuate.endpoint.OperationResponseBody;
 import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
 import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -87,9 +88,13 @@ public class SofaRpcEndpoint {
         String interfaceId = providerConfig.getInterfaceId();
         String uniqueId = providerConfig.getUniqueId();
         List<ServerConfig> serverConfigs = providerConfig.getServer();
-        List<String> protocols = serverConfigs.stream().map(ServerConfig::getProtocol).filter(Objects::nonNull).toList();
+        List<String> protocols = Optional.ofNullable(serverConfigs)
+                .map(list -> list.stream().map(ServerConfig::getProtocol).filter(Objects::nonNull).toList())
+                .orElse(new ArrayList<>());
         List<RegistryConfig> registryConfigs = providerConfig.getRegistry();
-        List<String> registries = registryConfigs.stream().map(RegistryConfig::getProtocol).filter(Objects::nonNull).toList();
+        List<String> registries = Optional.ofNullable(registryConfigs)
+                .map(list -> list.stream().map(RegistryConfig::getProtocol).filter(Objects::nonNull).toList())
+                .orElse(new ArrayList<>());
         String serialization = providerConfig.getSerialization();
         boolean register = providerConfig.isRegister();
         String targetClassName = Optional.ofNullable(providerConfig.getRef())
@@ -103,7 +108,9 @@ public class SofaRpcEndpoint {
         String uniqueId = consumerConfig.getUniqueId();
         String protocol = consumerConfig.getProtocol();
         List<RegistryConfig> registryConfigs = consumerConfig.getRegistry();
-        List<String> registries = registryConfigs.stream().map(RegistryConfig::getProtocol).filter(Objects::nonNull).toList();
+        List<String> registries = Optional.ofNullable(registryConfigs)
+                .map(list -> list.stream().map(RegistryConfig::getProtocol).filter(Objects::nonNull).toList())
+                .orElse(new ArrayList<>());
         String directUrl = consumerConfig.getDirectUrl();
         String invokeType = consumerConfig.getInvokeType();
         String serialization = consumerConfig.getSerialization();
