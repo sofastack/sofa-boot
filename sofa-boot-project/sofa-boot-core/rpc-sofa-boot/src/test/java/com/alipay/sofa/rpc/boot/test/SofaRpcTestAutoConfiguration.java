@@ -72,8 +72,14 @@ import java.util.Map;
 @EnableConfigurationProperties(SofaBootRpcProperties.class)
 public class SofaRpcTestAutoConfiguration {
     @Bean
-    public ProviderConfigContainer providerConfigContainer() {
-        return new ProviderConfigContainer();
+    @ConditionalOnMissingBean
+    public ProviderConfigContainer providerConfigContainer(SofaBootRpcProperties sofaBootRpcProperties) {
+        ProviderConfigContainer providerConfigContainer = new ProviderConfigContainer();
+        providerConfigContainer.setProviderRegisterWhiteList(sofaBootRpcProperties
+            .getProviderRegisterWhiteList());
+        providerConfigContainer.setProviderRegisterBlackList(sofaBootRpcProperties
+            .getProviderRegisterBlackList());
+        return providerConfigContainer;
     }
 
     @Bean
