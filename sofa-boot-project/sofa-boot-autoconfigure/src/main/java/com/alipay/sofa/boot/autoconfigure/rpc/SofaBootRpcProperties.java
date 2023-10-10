@@ -24,6 +24,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.util.ObjectUtils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -336,6 +337,10 @@ public class SofaBootRpcProperties implements EnvironmentAware {
      * dynamic config setting
      */
     private String              dynamicConfig;
+
+    private List<String>        providerRegisterWhiteList;
+
+    private List<String>        providerRegisterBlackList;
 
     public boolean isEnableAutoPublish() {
         return enableAutoPublish;
@@ -918,6 +923,22 @@ public class SofaBootRpcProperties implements EnvironmentAware {
 
     public void setBoltProcessInIoThread(Boolean boltProcessInIoThread) {
         this.boltProcessInIoThread = boltProcessInIoThread;
+    }
+
+    public List<String> getProviderRegisterWhiteList() {
+        return providerRegisterWhiteList;
+    }
+
+    public void setProviderRegisterWhiteList(List<String> providerRegisterWhiteList) {
+        this.providerRegisterWhiteList = providerRegisterWhiteList;
+    }
+
+    public List<String> getProviderRegisterBlackList() {
+        return providerRegisterBlackList;
+    }
+
+    public void setProviderRegisterBlackList(List<String> providerRegisterBlackList) {
+        this.providerRegisterBlackList = providerRegisterBlackList;
     }
 
     @Override
