@@ -16,14 +16,6 @@
  */
 package com.alipay.sofa.rpc.boot.container;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-
-import org.slf4j.Logger;
-import org.springframework.util.StringUtils;
-
 import com.alipay.sofa.rpc.boot.config.SofaBootRpcConfigConstants;
 import com.alipay.sofa.rpc.boot.log.SofaBootRpcLoggerFactory;
 import com.alipay.sofa.rpc.boot.runtime.binding.RpcBinding;
@@ -33,6 +25,14 @@ import com.alipay.sofa.rpc.config.ServerConfig;
 import com.alipay.sofa.rpc.registry.Registry;
 import com.alipay.sofa.rpc.registry.RegistryFactory;
 import com.alipay.sofa.runtime.spi.binding.Contract;
+import org.slf4j.Logger;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * ProviderConfig持有者.维护编程界面级别的RPC组件。
@@ -47,6 +47,10 @@ public class ProviderConfigContainer {
      * 是否允许发布ProviderConfig
      */
     private boolean                                     allowPublish          = false;
+
+    private List<String>                                providerRegisterWhiteList;
+
+    private List<String>                                providerRegisterBlackList;
 
     /**
      * ProviderConfig 缓存
@@ -71,6 +75,23 @@ public class ProviderConfigContainer {
                 RPC_SERVICE_CONTAINER.put(key, providerConfig);
             }
         }
+    }
+
+    private boolean allowProviderRegister(ProviderConfig providerConfig) {
+        if (CollectionUtils.isEmpty(providerRegisterWhiteList)
+            && CollectionUtils.isEmpty(providerRegisterBlackList)) {
+            return true;
+        }
+        String uniqueName = createUniqueNameByProvider(providerConfig);
+        if (!CollectionUtils.isEmpty(providerRegisterBlackList)
+            && providerRegisterBlackList.contains(uniqueName)) {
+            return false;
+        }
+        if (!CollectionUtils.isEmpty(providerRegisterWhiteList)
+            && !providerRegisterWhiteList.contains(uniqueName)) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -110,7 +131,11 @@ public class ProviderConfigContainer {
             ServerConfig serverConfig = (ServerConfig) providerConfig.getServer().get(0);
             if (!serverConfig.getProtocol().equalsIgnoreCase(
                 SofaBootRpcConfigConstants.RPC_PROTOCOL_DUBBO)) {
-                providerConfig.setRegister(true);
+                if (allowProviderRegister(providerConfig)) {
+                    providerConfig.setRegister(true);
+                } else {
+                    LOGGER.info("Provider will not register: [{}]", providerConfig.buildKey());
+                }
 
                 List<RegistryConfig> registrys = providerConfig.getRegistry();
                 for (RegistryConfig registryConfig : registrys) {
@@ -206,4 +231,30 @@ public class ProviderConfigContainer {
             .append(uniqueId).append(protocol).toString();
     }
 
+    /**
+     * Create UniqueName by interfaceId and uniqueId
+     */
+    private String createUniqueNameByProvider(ProviderConfig providerConfig) {
+        String uniqueId = "";
+        if (StringUtils.hasText(providerConfig.getUniqueId())) {
+            uniqueId = ":" + providerConfig.getUniqueId();
+        }
+        return providerConfig.getInterfaceId() + uniqueId;
+    }
+
+    public void setProviderRegisterWhiteList(List<String> providerRegisterWhiteList) {
+        this.providerRegisterWhiteList = providerRegisterWhiteList;
+    }
+
+    public void setProviderRegisterBlackList(List<String> providerRegisterBlackList) {
+        this.providerRegisterBlackList = providerRegisterBlackList;
+    }
+
+    public List<String> getProviderRegisterWhiteList() {
+        return providerRegisterWhiteList;
+    }
+
+    public List<String> getProviderRegisterBlackList() {
+        return providerRegisterBlackList;
+    }
 }
