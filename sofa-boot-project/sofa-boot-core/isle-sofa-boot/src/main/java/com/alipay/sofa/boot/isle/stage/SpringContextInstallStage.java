@@ -154,7 +154,7 @@ public class SpringContextInstallStage extends AbstractPipelineStage implements 
             if (rootDescriptors == null || rootDescriptors.size() == 0) {
                 return;
             }
-            final CountDownLatch latch = new CountDownLatch(rootDescriptors.size());
+            final CountDownLatch latch = new CountDownLatch(application.getResolvedDeployments().size());
             List<Future<?>> futures = new CopyOnWriteArrayList<>();
 
             for (final DeploymentDescriptor deployment : rootDescriptors) {
