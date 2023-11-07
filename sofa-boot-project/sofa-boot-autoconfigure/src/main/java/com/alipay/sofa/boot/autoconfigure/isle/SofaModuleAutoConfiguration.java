@@ -83,7 +83,8 @@ public class SofaModuleAutoConfiguration {
         return new SofaModuleContextLifecycle(pipelineContext);
     }
 
-    @Bean(ApplicationRuntimeModel.APPLICATION_RUNTIME_MODEL_NAME)
+    @Bean({ ApplicationRuntimeModel.APPLICATION_RUNTIME_MODEL_NAME,
+            ApplicationRuntimeModel.APPLICATION })
     @ConditionalOnMissingBean
     public ApplicationRuntimeModel applicationRuntimeModel(ModuleDeploymentValidator moduleDeploymentValidator,
                                                            SofaModuleProfileChecker sofaModuleProfileChecker) {
