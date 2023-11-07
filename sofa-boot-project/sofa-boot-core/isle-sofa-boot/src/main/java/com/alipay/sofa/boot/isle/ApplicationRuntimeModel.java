@@ -41,6 +41,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class ApplicationRuntimeModel implements IsleDeploymentModel {
 
     public static final String                      APPLICATION_RUNTIME_MODEL_NAME = "APPLICATION_RUNTIME_MODEL";
+
+    @Deprecated
+    public static final String                      APPLICATION                    = "SOFABOOT-APPLICATION";
     /** deploys */
     private final List<DeploymentDescriptor>        deploys                        = new ArrayList<>();
     /** inactive deploys */
