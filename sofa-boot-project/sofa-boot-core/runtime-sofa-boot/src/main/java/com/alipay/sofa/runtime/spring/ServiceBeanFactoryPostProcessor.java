@@ -35,6 +35,7 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
+import com.alipay.sofa.runtime.spring.bean.LocalVariableTableParameterNameDiscoverer;
 import com.alipay.sofa.runtime.spring.bean.SofaBeanNameGenerator;
 import com.alipay.sofa.runtime.spring.bean.SofaParameterNameDiscoverer;
 import com.alipay.sofa.runtime.spring.factory.ReferenceFactoryBean;
@@ -60,8 +61,10 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ScannedGenericBeanDefinition;
 import org.springframework.core.DefaultParameterNameDiscoverer;
+import org.springframework.core.NativeDetector;
 import org.springframework.core.Ordered;
 import org.springframework.core.ParameterNameDiscoverer;
+import org.springframework.core.PrioritizedParameterNameDiscoverer;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.core.type.MethodMetadata;
 import org.springframework.core.type.StandardMethodMetadata;
@@ -112,6 +115,11 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
             ParameterNameDiscoverer parameterNameDiscoverer = ((AbstractAutowireCapableBeanFactory) beanFactory).getParameterNameDiscoverer();
             if (parameterNameDiscoverer == null) {
                 parameterNameDiscoverer = new DefaultParameterNameDiscoverer();
+            }
+            // keep compatible for second jars
+            if (parameterNameDiscoverer instanceof PrioritizedParameterNameDiscoverer prioritizedParameterNameDiscoverer
+                    && !NativeDetector.inNativeImage()) {
+                prioritizedParameterNameDiscoverer.addDiscoverer(new LocalVariableTableParameterNameDiscoverer());
             }
             ((AbstractAutowireCapableBeanFactory) beanFactory)
                     .setParameterNameDiscoverer(new SofaParameterNameDiscoverer(parameterNameDiscoverer, referenceAnnotationWrapper));
