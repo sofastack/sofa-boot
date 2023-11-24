@@ -19,7 +19,7 @@
         <maven-java-formatter-plugin.version>0.4</maven-java-formatter-plugin.version>
         <maven-pmd-plgun.version>3.19.0</maven-pmd-plgun.version>
         <maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
-        <maven-jacoco-plugin.version>0.8.9</maven-jacoco-plugin.version>
+        <maven-jacoco-plugin.version>0.8.11</maven-jacoco-plugin.version>
         <maven-surefire-plugin.version>3.0.0</maven-surefire-plugin.version>
         <!-- sofa stack lib-->
         <sofa.registry.version>6.1.8</sofa.registry.version>
