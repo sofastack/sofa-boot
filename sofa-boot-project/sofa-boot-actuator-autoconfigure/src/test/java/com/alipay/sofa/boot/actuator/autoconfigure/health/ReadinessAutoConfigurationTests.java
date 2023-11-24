@@ -27,10 +27,13 @@ import com.alipay.sofa.boot.autoconfigure.runtime.SofaRuntimeAutoConfiguration;
 import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledForJreRange;
+import org.junit.jupiter.api.condition.JRE;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.FilteredClassLoader;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -176,5 +179,27 @@ public class ReadinessAutoConfigurationTests {
                         SofaRuntimeAutoConfiguration.class))
                 .withClassLoader(new FilteredClassLoader(SofaRuntimeContext.class))
                 .run((context) -> assertThat(context).doesNotHaveBean(ComponentHealthChecker.class));
+    }
+
+    @Test
+    public void useReadinessHealthCheckExecutor() {
+        this.contextRunner
+                .run((context) -> {
+                    ExecutorService threadPoolExecutor = context.getBean(ReadinessCheckListener.READINESS_HEALTH_CHECK_EXECUTOR_BEAN_NAME,
+                            ExecutorService.class);
+                    assertThat(threadPoolExecutor).isInstanceOf(ThreadPoolExecutor.class);
+                });
+    }
+
+    @Test
+    @EnabledForJreRange(min = JRE.JAVA_21)
+    public void useReadinessHealthCheckVirtualExecutor() {
+        this.contextRunner
+                .withPropertyValues("spring.threads.virtual.enabled=true")
+                .run((context) -> {
+                    ExecutorService threadPoolExecutor = context.getBean(ReadinessCheckListener.READINESS_HEALTH_CHECK_EXECUTOR_BEAN_NAME,
+                            ExecutorService.class);
+                    assertThat(threadPoolExecutor).isNotInstanceOf(ThreadPoolExecutor.class);
+                });
     }
 }

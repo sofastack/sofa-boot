@@ -37,12 +37,15 @@ import com.alipay.sofa.boot.isle.stage.SpringContextInstallStage;
 import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import com.alipay.sofa.common.thread.NamedThreadFactory;
 import com.alipay.sofa.common.thread.SofaThreadPoolExecutor;
+import com.alipay.sofa.common.thread.virtual.SofaVirtualThreadFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnThreading;
+import org.springframework.boot.autoconfigure.thread.Threading;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -51,6 +54,7 @@ import org.springframework.context.annotation.Conditional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
@@ -152,7 +156,8 @@ public class SofaModuleAutoConfiguration {
     @Bean(SpringContextInstallStage.SOFA_MODULE_REFRESH_EXECUTOR_BEAN_NAME)
     @ConditionalOnMissingBean(name = SpringContextInstallStage.SOFA_MODULE_REFRESH_EXECUTOR_BEAN_NAME)
     @ConditionalOnProperty(value = "sofa.boot.isle.moduleStartUpParallel", havingValue = "true", matchIfMissing = true)
-    public Supplier<ThreadPoolExecutor> sofaModuleRefreshExecutor(SofaModuleProperties sofaModuleProperties) {
+    @ConditionalOnThreading(Threading.PLATFORM)
+    public Supplier<ExecutorService> sofaModuleRefreshExecutor(SofaModuleProperties sofaModuleProperties) {
         int coreSize = (int) (SofaBootConstants.CPU_CORE * sofaModuleProperties.getParallelRefreshPoolSizeFactor());
         long taskTimeout = sofaModuleProperties.getParallelRefreshTimeout();
         long checkPeriod = sofaModuleProperties.getParallelRefreshCheckPeriod();
@@ -165,6 +170,17 @@ public class SofaModuleAutoConfiguration {
                 new NamedThreadFactory("sofa-module-refresh"), new ThreadPoolExecutor.CallerRunsPolicy(),
                 "sofa-module-refresh", SofaBootConstants.SOFA_BOOT_SPACE_NAME, taskTimeout, checkPeriod,
                 TimeUnit.SECONDS);
+    }
+
+    @Bean(SpringContextInstallStage.SOFA_MODULE_REFRESH_EXECUTOR_BEAN_NAME)
+    @ConditionalOnMissingBean(name = SpringContextInstallStage.SOFA_MODULE_REFRESH_EXECUTOR_BEAN_NAME)
+    @ConditionalOnProperty(value = "sofa.boot.isle.moduleStartUpParallel", havingValue = "true", matchIfMissing = true)
+    @ConditionalOnThreading(Threading.VIRTUAL)
+    public Supplier<ExecutorService> sofaModuleRefreshVirtualExecutor() {
+        return () -> {
+            LOGGER.info("Create SOFA module refresh virtual executor service");
+            return SofaVirtualThreadFactory.ofExecutorService("sofa-module-refresh");
+        };
     }
 
     @Bean
