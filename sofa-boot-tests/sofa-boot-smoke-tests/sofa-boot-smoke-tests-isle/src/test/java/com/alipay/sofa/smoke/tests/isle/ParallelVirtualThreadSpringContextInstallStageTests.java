@@ -22,13 +22,13 @@ import org.junit.jupiter.api.condition.JRE;
 import org.springframework.test.context.TestPropertySource;
 
 /**
- * Integration tests for {@link SpringContextInstallStage} in parallel.
+ * Integration tests for {@link SpringContextInstallStage} in parallel when use virtual threads.
  *
  * @author huzijie
- * @version ParallelSpringContextInstallStageTests.java, v 0.1 2023年02月21日 8:06 PM huzijie Exp $
+ * @version ParallelVirtualThreadSpringContextInstallStageTests.java, v 0.1 2023年11月24日 4:03 PM huzijie Exp $
  */
-@TestPropertySource(properties = "sofa.boot.isle.moduleStartUpParallel=true")
-@EnabledForJreRange(max = JRE.JAVA_20)
-public class ParallelSpringContextInstallStageTests extends
-                                                   SpringContextInstallStageIntegrationTestBase {
+@TestPropertySource(properties = { "spring.threads.virtual.enabled=true" })
+@EnabledForJreRange(min = JRE.JAVA_21)
+public class ParallelVirtualThreadSpringContextInstallStageTests extends
+                                                                ParallelSpringContextInstallStageTests {
 }

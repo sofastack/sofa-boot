@@ -14,21 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.smoke.tests.isle;
+package com.alipay.sofa.smoke.tests.actuator.sample.readiness;
 
-import com.alipay.sofa.boot.isle.stage.SpringContextInstallStage;
-import org.junit.jupiter.api.condition.EnabledForJreRange;
-import org.junit.jupiter.api.condition.JRE;
-import org.springframework.test.context.TestPropertySource;
+import com.alipay.sofa.boot.actuator.health.ReadinessCheckCallback;
+import org.springframework.boot.actuate.health.Health;
+import org.springframework.context.ApplicationContext;
 
 /**
- * Integration tests for {@link SpringContextInstallStage} in parallel.
- *
  * @author huzijie
- * @version ParallelSpringContextInstallStageTests.java, v 0.1 2023年02月21日 8:06 PM huzijie Exp $
+ * @version SampleReadinessCheckCallback.java, v 0.1 2023年11月24日 4:09 PM huzijie Exp $
  */
-@TestPropertySource(properties = "sofa.boot.isle.moduleStartUpParallel=true")
-@EnabledForJreRange(max = JRE.JAVA_20)
-public class ParallelSpringContextInstallStageTests extends
-                                                   SpringContextInstallStageIntegrationTestBase {
+public class SampleReadinessCheckCallback implements ReadinessCheckCallback {
+    private final long sleep;
+
+    public SampleReadinessCheckCallback(long sleep) {
+        this.sleep = sleep;
+    }
+
+    @Override
+    public Health onHealthy(ApplicationContext applicationContext) {
+        return Health.up().build();
+    }
 }
