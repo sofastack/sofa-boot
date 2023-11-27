@@ -35,7 +35,7 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import com.alipay.sofa.runtime.spi.service.BindingConverter;
 import com.alipay.sofa.runtime.spi.service.BindingConverterContext;
 import com.alipay.sofa.runtime.spi.service.BindingConverterFactory;
-import com.alipay.sofa.runtime.spring.bean.LocalVariableTableParameterNameDiscoverer;
+import com.alipay.sofa.boot.spring.parameter.LocalVariableTableParameterNameDiscoverer;
 import com.alipay.sofa.runtime.spring.bean.SofaBeanNameGenerator;
 import com.alipay.sofa.runtime.spring.bean.SofaParameterNameDiscoverer;
 import com.alipay.sofa.runtime.spring.factory.ReferenceFactoryBean;
