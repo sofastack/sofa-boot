@@ -11,6 +11,7 @@ jobs:
           parent_uid: ${{ secrets.ALI_PID }}
           private_key: ${{ secrets.ALI_PK }}
           scan_type: stc
+          tips: ' '
   sca:   # 开源合规
     runs-on: ubuntu-latest
     steps:
@@ -20,3 +21,4 @@ jobs:
           parent_uid: ${{ secrets.ALI_PID }}
           private_key: ${{ secrets.ALI_PK }}
           scan_type: sca
+          tips: ' '
