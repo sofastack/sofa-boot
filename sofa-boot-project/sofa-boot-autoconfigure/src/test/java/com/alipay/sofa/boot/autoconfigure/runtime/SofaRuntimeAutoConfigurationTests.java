@@ -28,7 +28,7 @@ import com.alipay.sofa.runtime.spring.AsyncProxyBeanPostProcessor;
 import com.alipay.sofa.runtime.spring.RuntimeContextBeanFactoryPostProcessor;
 import com.alipay.sofa.runtime.spring.ServiceBeanFactoryPostProcessor;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledForJreRange;
+import org.junit.jupiter.api.condition.EnabledOnJre;
 import org.junit.jupiter.api.condition.JRE;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.FilteredClassLoader;
@@ -131,10 +131,10 @@ public class SofaRuntimeAutoConfigurationTests {
     }
 
     @Test
-    @EnabledForJreRange(min = JRE.JAVA_21)
+    @EnabledOnJre(JRE.JAVA_21)
     public void useAsyncInitMethodVirtualExecutor() {
         this.contextRunner
-                .withPropertyValues("spring.threads.virtual.enabled=true")
+                .withPropertyValues("sofa.boot.startup.threads.virtual.enabled=true")
                 .run((context) -> {
                     ExecutorService threadPoolExecutor = (ExecutorService) context.getBean(Supplier.class,
                             AsyncInitMethodManager.ASYNC_INIT_METHOD_EXECUTOR_BEAN_NAME).get();

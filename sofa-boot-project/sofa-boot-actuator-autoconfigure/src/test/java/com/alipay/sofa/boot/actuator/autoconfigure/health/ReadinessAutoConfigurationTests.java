@@ -27,7 +27,7 @@ import com.alipay.sofa.boot.autoconfigure.runtime.SofaRuntimeAutoConfiguration;
 import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledForJreRange;
+import org.junit.jupiter.api.condition.EnabledOnJre;
 import org.junit.jupiter.api.condition.JRE;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.FilteredClassLoader;
@@ -192,10 +192,10 @@ public class ReadinessAutoConfigurationTests {
     }
 
     @Test
-    @EnabledForJreRange(min = JRE.JAVA_21)
+    @EnabledOnJre(JRE.JAVA_21)
     public void useReadinessHealthCheckVirtualExecutor() {
         this.contextRunner
-                .withPropertyValues("spring.threads.virtual.enabled=true")
+                .withPropertyValues("sofa.boot.startup.threads.virtual.enabled=true")
                 .run((context) -> {
                     ExecutorService threadPoolExecutor = context.getBean(ReadinessCheckListener.READINESS_HEALTH_CHECK_EXECUTOR_BEAN_NAME,
                             ExecutorService.class);

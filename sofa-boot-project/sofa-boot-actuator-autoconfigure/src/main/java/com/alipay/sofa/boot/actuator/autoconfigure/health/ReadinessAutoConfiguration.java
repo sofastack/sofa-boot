@@ -21,6 +21,8 @@ import com.alipay.sofa.boot.actuator.health.HealthIndicatorProcessor;
 import com.alipay.sofa.boot.actuator.health.ReadinessCheckCallbackProcessor;
 import com.alipay.sofa.boot.actuator.health.ReadinessCheckListener;
 import com.alipay.sofa.boot.actuator.health.ReadinessEndpoint;
+import com.alipay.sofa.boot.autoconfigure.condition.OnVirtualThreadStartupAvailableCondition;
+import com.alipay.sofa.boot.autoconfigure.condition.OnVirtualThreadStartupDisableCondition;
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import com.alipay.sofa.common.thread.NamedThreadFactory;
@@ -31,10 +33,9 @@ import org.springframework.boot.actuate.autoconfigure.endpoint.condition.Conditi
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnThreading;
-import org.springframework.boot.autoconfigure.thread.Threading;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Conditional;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.SynchronousQueue;
@@ -119,7 +120,7 @@ public class ReadinessAutoConfiguration {
 
     @Bean(name = ReadinessCheckListener.READINESS_HEALTH_CHECK_EXECUTOR_BEAN_NAME)
     @ConditionalOnMissingBean(name = ReadinessCheckListener.READINESS_HEALTH_CHECK_EXECUTOR_BEAN_NAME)
-    @ConditionalOnThreading(Threading.PLATFORM)
+    @Conditional(OnVirtualThreadStartupDisableCondition.class)
     public ExecutorService readinessHealthCheckExecutor(HealthProperties properties) {
         int threadPoolSize;
         if (properties.isParallelCheck()) {
@@ -137,7 +138,7 @@ public class ReadinessAutoConfiguration {
 
     @Bean(name = ReadinessCheckListener.READINESS_HEALTH_CHECK_EXECUTOR_BEAN_NAME)
     @ConditionalOnMissingBean(name = ReadinessCheckListener.READINESS_HEALTH_CHECK_EXECUTOR_BEAN_NAME)
-    @ConditionalOnThreading(Threading.VIRTUAL)
+    @Conditional(OnVirtualThreadStartupAvailableCondition.class)
     public ExecutorService readinessHealthCheckVirtualExecutor() {
         LOGGER.info("Create health-check virtual executor service");
         return SofaVirtualThreadFactory.ofExecutorService("health-check");

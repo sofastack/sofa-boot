@@ -31,7 +31,7 @@ import com.alipay.sofa.boot.isle.stage.PipelineContext;
 import com.alipay.sofa.boot.isle.stage.SpringContextInstallStage;
 import com.alipay.sofa.common.thread.SofaThreadPoolExecutor;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledForJreRange;
+import org.junit.jupiter.api.condition.EnabledOnJre;
 import org.junit.jupiter.api.condition.JRE;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.FilteredClassLoader;
@@ -189,10 +189,10 @@ public class SofaModuleAutoConfigurationTests {
     }
 
     @Test
-    @EnabledForJreRange(min = JRE.JAVA_21)
+    @EnabledOnJre(JRE.JAVA_21)
     public void useSofaModuleRefreshVirtualExecutor() {
         this.contextRunner
-                .withPropertyValues("spring.threads.virtual.enabled=true")
+                .withPropertyValues("sofa.boot.startup.threads.virtual.enabled=true")
                 .run((context) -> {
                     ExecutorService threadPoolExecutor = (ExecutorService) context.getBean(Supplier.class,
                             SpringContextInstallStage.SOFA_MODULE_REFRESH_EXECUTOR_BEAN_NAME).get();

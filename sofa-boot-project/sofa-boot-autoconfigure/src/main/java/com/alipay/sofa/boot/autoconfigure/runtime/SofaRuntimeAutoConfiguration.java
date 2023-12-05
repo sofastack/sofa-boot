@@ -17,6 +17,8 @@
 package com.alipay.sofa.boot.autoconfigure.runtime;
 
 import com.alipay.sofa.boot.autoconfigure.condition.ConditionalOnSwitch;
+import com.alipay.sofa.boot.autoconfigure.condition.OnVirtualThreadStartupAvailableCondition;
+import com.alipay.sofa.boot.autoconfigure.condition.OnVirtualThreadStartupDisableCondition;
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import com.alipay.sofa.common.thread.NamedThreadFactory;
@@ -51,12 +53,11 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnThreading;
-import org.springframework.boot.autoconfigure.thread.Threading;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.context.properties.bind.Bindable;
 import org.springframework.boot.context.properties.bind.Binder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.support.SpringFactoriesLoader;
@@ -171,7 +172,7 @@ public class SofaRuntimeAutoConfiguration {
 
         @Bean(AsyncInitMethodManager.ASYNC_INIT_METHOD_EXECUTOR_BEAN_NAME)
         @ConditionalOnMissingBean(name = AsyncInitMethodManager.ASYNC_INIT_METHOD_EXECUTOR_BEAN_NAME)
-        @ConditionalOnThreading(Threading.PLATFORM)
+        @Conditional(OnVirtualThreadStartupDisableCondition.class)
         public Supplier<ExecutorService> asyncInitMethodExecutor(SofaRuntimeProperties sofaRuntimeProperties) {
             return ()-> {
                 int coreSize = sofaRuntimeProperties.getAsyncInitExecutorCoreSize();
@@ -190,7 +191,7 @@ public class SofaRuntimeAutoConfiguration {
 
         @Bean(AsyncInitMethodManager.ASYNC_INIT_METHOD_EXECUTOR_BEAN_NAME)
         @ConditionalOnMissingBean(name = AsyncInitMethodManager.ASYNC_INIT_METHOD_EXECUTOR_BEAN_NAME)
-        @ConditionalOnThreading(Threading.VIRTUAL)
+        @Conditional(OnVirtualThreadStartupAvailableCondition.class)
         public Supplier<ExecutorService> asyncInitMethodVirtualExecutor() {
             return ()-> {
                 LOGGER.info("create async-init-bean virtual executor service");

@@ -16,6 +16,8 @@
  */
 package com.alipay.sofa.boot.autoconfigure.isle;
 
+import com.alipay.sofa.boot.autoconfigure.condition.OnVirtualThreadStartupAvailableCondition;
+import com.alipay.sofa.boot.autoconfigure.condition.OnVirtualThreadStartupDisableCondition;
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.context.ContextRefreshInterceptor;
 import com.alipay.sofa.boot.context.processor.SofaPostProcessorShareFilter;
@@ -44,8 +46,6 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnThreading;
-import org.springframework.boot.autoconfigure.thread.Threading;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -156,7 +156,7 @@ public class SofaModuleAutoConfiguration {
     @Bean(SpringContextInstallStage.SOFA_MODULE_REFRESH_EXECUTOR_BEAN_NAME)
     @ConditionalOnMissingBean(name = SpringContextInstallStage.SOFA_MODULE_REFRESH_EXECUTOR_BEAN_NAME)
     @ConditionalOnProperty(value = "sofa.boot.isle.moduleStartUpParallel", havingValue = "true", matchIfMissing = true)
-    @ConditionalOnThreading(Threading.PLATFORM)
+    @Conditional(OnVirtualThreadStartupDisableCondition.class)
     public Supplier<ExecutorService> sofaModuleRefreshExecutor(SofaModuleProperties sofaModuleProperties) {
         int coreSize = (int) (SofaBootConstants.CPU_CORE * sofaModuleProperties.getParallelRefreshPoolSizeFactor());
         long taskTimeout = sofaModuleProperties.getParallelRefreshTimeout();
@@ -175,7 +175,7 @@ public class SofaModuleAutoConfiguration {
     @Bean(SpringContextInstallStage.SOFA_MODULE_REFRESH_EXECUTOR_BEAN_NAME)
     @ConditionalOnMissingBean(name = SpringContextInstallStage.SOFA_MODULE_REFRESH_EXECUTOR_BEAN_NAME)
     @ConditionalOnProperty(value = "sofa.boot.isle.moduleStartUpParallel", havingValue = "true", matchIfMissing = true)
-    @ConditionalOnThreading(Threading.VIRTUAL)
+    @Conditional(OnVirtualThreadStartupAvailableCondition.class)
     public Supplier<ExecutorService> sofaModuleRefreshVirtualExecutor() {
         return () -> {
             LOGGER.info("Create SOFA module refresh virtual executor service");

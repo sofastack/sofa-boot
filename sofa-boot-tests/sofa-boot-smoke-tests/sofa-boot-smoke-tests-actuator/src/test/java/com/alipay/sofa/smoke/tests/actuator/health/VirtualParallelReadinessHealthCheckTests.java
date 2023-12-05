@@ -24,6 +24,7 @@ import org.springframework.test.context.TestPropertySource;
  * @author huzijie
  * @version VirtualParallelReadinessHealthCheckTests.java, v 0.1 2023年11月27日 11:31 AM huzijie Exp $
  */
-@TestPropertySource(properties = { "spring.threads.virtual.enabled=true", "bean.count=300" })
+@TestPropertySource(properties = { "sofa.boot.startup.threads.virtual.enabled=true",
+                                  "bean.count=300" })
 public class VirtualParallelReadinessHealthCheckTests extends ParallelReadinessHealthCheckTests {
 }

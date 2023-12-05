@@ -17,7 +17,7 @@
 package com.alipay.sofa.smoke.tests.isle;
 
 import com.alipay.sofa.boot.isle.stage.SpringContextInstallStage;
-import org.junit.jupiter.api.condition.EnabledForJreRange;
+import org.junit.jupiter.api.condition.EnabledOnJre;
 import org.junit.jupiter.api.condition.JRE;
 import org.springframework.test.context.TestPropertySource;
 
@@ -27,8 +27,8 @@ import org.springframework.test.context.TestPropertySource;
  * @author huzijie
  * @version ParallelVirtualThreadSpringContextInstallStageTests.java, v 0.1 2023年11月24日 4:03 PM huzijie Exp $
  */
-@TestPropertySource(properties = { "spring.threads.virtual.enabled=true" })
-@EnabledForJreRange(min = JRE.JAVA_21)
+@TestPropertySource(properties = { "sofa.boot.startup.threads.virtual.enabled=true" })
+@EnabledOnJre(JRE.JAVA_21)
 public class ParallelVirtualThreadSpringContextInstallStageTests extends
                                                                 ParallelSpringContextInstallStageTests {
 }
