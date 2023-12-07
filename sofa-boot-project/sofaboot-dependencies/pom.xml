@@ -31,8 +31,7 @@
         <sofa.ark.version>3.0.1-SNAPSHOT</sofa.ark.version>
         <sofa.lookout.version>1.6.1</sofa.lookout.version>
         <!--3rd lib dependency-->
-        <!--todo 升级到 2023.0.0-->
-        <spring.cloud.version>2023.0.0-RC1</spring.cloud.version>
+        <spring.cloud.version>2023.0.0</spring.cloud.version>
         <asm.version>9.5</asm.version>
         <fastjson.version>1.2.83</fastjson.version>
         <javassist.version>3.29.2-GA</javassist.version>
