@@ -18,16 +18,13 @@ package com.alipay.sofa.smoke.tests.rpc.boot;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
 
 /**
  *
  * @author yuanxuan
  * @version : RpcSofaBootApplication.java, v 0.1 2023年02月03日 15:19 yuanxuan Exp $
  */
-@SpringBootApplication
-@ComponentScan(excludeFilters = { @ComponentScan.Filter(type = FilterType.REGEX, pattern = "com.alipay.sofa.smoke.tests.rpc.boot.*") })
+@SpringBootApplication(scanBasePackages = "none")
 public class RpcSofaBootApplication {
 
     public static void main(String[] args) {
