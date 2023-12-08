@@ -14,21 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.smoke.tests.isle;
+package com.alipay.sofa.smoke.tests.runtime.async;
 
-import com.alipay.sofa.boot.isle.stage.SpringContextInstallStage;
+import com.alipay.sofa.runtime.async.AsyncInitMethodManager;
 import org.junit.jupiter.api.condition.EnabledOnJre;
 import org.junit.jupiter.api.condition.JRE;
 import org.springframework.test.context.TestPropertySource;
 
 /**
- * Integration tests for {@link SpringContextInstallStage} in parallel.
+ * Integration tests for {@link AsyncInitMethodManager} when use virtual threads.
  *
  * @author huzijie
- * @version ParallelSpringContextInstallStageTests.java, v 0.1 2023年02月21日 8:06 PM huzijie Exp $
+ * @version AsyncInitVirtualThreadTests.java, v 0.1 2023年11月24日 4:00 PM huzijie Exp $
  */
-@TestPropertySource(properties = "sofa.boot.isle.moduleStartUpParallel=true")
-@EnabledOnJre(JRE.JAVA_17)
-public class ParallelSpringContextInstallStageTests extends
-                                                   SpringContextInstallStageIntegrationTestBase {
+@TestPropertySource(properties = { "sofa.boot.startup.threads.virtual.enabled=true" })
+@EnabledOnJre(JRE.JAVA_21)
+public class AsyncInitVirtualThreadTests extends AsyncInitTests {
 }

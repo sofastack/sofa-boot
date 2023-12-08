@@ -14,21 +14,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.smoke.tests.isle;
+package com.alipay.sofa.smoke.tests.actuator.sample.readiness;
 
-import com.alipay.sofa.boot.isle.stage.SpringContextInstallStage;
-import org.junit.jupiter.api.condition.EnabledOnJre;
-import org.junit.jupiter.api.condition.JRE;
-import org.springframework.test.context.TestPropertySource;
+import com.alipay.sofa.boot.actuator.health.HealthChecker;
+import org.springframework.boot.actuate.health.Health;
 
 /**
- * Integration tests for {@link SpringContextInstallStage} in parallel.
- *
  * @author huzijie
- * @version ParallelSpringContextInstallStageTests.java, v 0.1 2023年02月21日 8:06 PM huzijie Exp $
+ * @version SampleHealthChecker.java, v 0.1 2023年11月24日 4:08 PM huzijie Exp $
  */
-@TestPropertySource(properties = "sofa.boot.isle.moduleStartUpParallel=true")
-@EnabledOnJre(JRE.JAVA_17)
-public class ParallelSpringContextInstallStageTests extends
-                                                   SpringContextInstallStageIntegrationTestBase {
+public class SampleHealthChecker implements HealthChecker {
+
+    private final long sleep;
+
+    public SampleHealthChecker(long sleep) {
+        this.sleep = sleep;
+    }
+
+    @Override
+    public Health isHealthy() {
+        if (sleep > 0) {
+            try {
+                Thread.sleep(sleep);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return Health.up().build();
+    }
+
+    @Override
+    public String getComponentName() {
+        return "sample";
+    }
 }

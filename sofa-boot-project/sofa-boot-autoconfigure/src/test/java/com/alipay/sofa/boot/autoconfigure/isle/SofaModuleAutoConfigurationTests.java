@@ -31,10 +31,14 @@ import com.alipay.sofa.boot.isle.stage.PipelineContext;
 import com.alipay.sofa.boot.isle.stage.SpringContextInstallStage;
 import com.alipay.sofa.common.thread.SofaThreadPoolExecutor;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledOnJre;
+import org.junit.jupiter.api.condition.JRE;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.FilteredClassLoader;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.function.Supplier;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -181,6 +185,18 @@ public class SofaModuleAutoConfigurationTests {
                     assertThat(modelCreatingStage.getIgnoreModules()).contains("a", "b", "c");
                     assertThat(modelCreatingStage.getIgnoreCalculateRequireModules()).contains("e", "f", "g");
                     assertThat(modelCreatingStage.isAllowModuleOverriding()).isTrue();
+                });
+    }
+
+    @Test
+    @EnabledOnJre(JRE.JAVA_21)
+    public void useSofaModuleRefreshVirtualExecutor() {
+        this.contextRunner
+                .withPropertyValues("sofa.boot.startup.threads.virtual.enabled=true")
+                .run((context) -> {
+                    ExecutorService threadPoolExecutor = (ExecutorService) context.getBean(Supplier.class,
+                            SpringContextInstallStage.SOFA_MODULE_REFRESH_EXECUTOR_BEAN_NAME).get();
+                    assertThat(threadPoolExecutor).isNotInstanceOf(ThreadPoolExecutor.class);
                 });
     }
 }

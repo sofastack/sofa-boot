@@ -42,7 +42,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
@@ -148,7 +148,7 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
 
     private boolean                               throwExceptionWhenHealthCheckFailed       = false;
 
-    private ThreadPoolExecutor                    healthCheckExecutor;
+    private ExecutorService                       executorService;
 
     public ReadinessCheckListener(HealthCheckerProcessor healthCheckerProcessor,
                                   HealthIndicatorProcessor healthIndicatorProcessor,
@@ -232,7 +232,7 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
             if (startupReporter != null) {
                 startupReporter.addCommonStartupStat(stat);
             }
-            healthCheckExecutor.shutdown();
+            executorService.shutdown();
         }
     }
 
@@ -454,8 +454,8 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
         return readinessState;
     }
 
-    public void setHealthCheckExecutor(ThreadPoolExecutor healthCheckExecutor) {
-        this.healthCheckExecutor = healthCheckExecutor;
+    public void setHealthCheckExecutor(ExecutorService executorService) {
+        this.executorService = executorService;
     }
 
     public static class ManualReadinessCallbackResult {

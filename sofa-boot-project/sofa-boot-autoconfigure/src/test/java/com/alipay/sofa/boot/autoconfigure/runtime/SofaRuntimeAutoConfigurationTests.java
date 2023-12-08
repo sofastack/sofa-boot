@@ -28,10 +28,13 @@ import com.alipay.sofa.runtime.spring.AsyncProxyBeanPostProcessor;
 import com.alipay.sofa.runtime.spring.RuntimeContextBeanFactoryPostProcessor;
 import com.alipay.sofa.runtime.spring.ServiceBeanFactoryPostProcessor;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledOnJre;
+import org.junit.jupiter.api.condition.JRE;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.FilteredClassLoader;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.function.Supplier;
 
@@ -119,10 +122,23 @@ public class SofaRuntimeAutoConfigurationTests {
                 .withPropertyValues("sofa.boot.runtime.asyncInitExecutorCoreSize=10")
                 .withPropertyValues("sofa.boot.runtime.asyncInitExecutorMaxSize=10")
                 .run((context) -> {
-                    ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) context.getBean(Supplier.class,
+                    ExecutorService threadPoolExecutor = (ExecutorService) context.getBean(Supplier.class,
                             AsyncInitMethodManager.ASYNC_INIT_METHOD_EXECUTOR_BEAN_NAME).get();
-                    assertThat(threadPoolExecutor.getCorePoolSize()).isEqualTo(10);
-                    assertThat(threadPoolExecutor.getMaximumPoolSize()).isEqualTo(10);
+                    assertThat(threadPoolExecutor).isInstanceOf(ThreadPoolExecutor.class);
+                    assertThat(((ThreadPoolExecutor) threadPoolExecutor).getCorePoolSize()).isEqualTo(10);
+                    assertThat(((ThreadPoolExecutor) threadPoolExecutor).getMaximumPoolSize()).isEqualTo(10);
+                });
+    }
+
+    @Test
+    @EnabledOnJre(JRE.JAVA_21)
+    public void useAsyncInitMethodVirtualExecutor() {
+        this.contextRunner
+                .withPropertyValues("sofa.boot.startup.threads.virtual.enabled=true")
+                .run((context) -> {
+                    ExecutorService threadPoolExecutor = (ExecutorService) context.getBean(Supplier.class,
+                            AsyncInitMethodManager.ASYNC_INIT_METHOD_EXECUTOR_BEAN_NAME).get();
+                  assertThat(threadPoolExecutor).isNotInstanceOf(ThreadPoolExecutor.class);
                 });
     }
 }

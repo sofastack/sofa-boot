@@ -20,6 +20,8 @@ import com.alipay.sofa.runtime.api.annotation.SofaAsyncInit;
 import com.alipay.sofa.runtime.async.AsyncInitMethodManager;
 import com.alipay.sofa.smoke.tests.runtime.RuntimeSofaBootApplication;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledOnJre;
+import org.junit.jupiter.api.condition.JRE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -41,6 +43,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Import(AsyncInitTests.AsyncInitTestConfiguration.class)
 @TestPropertySource(properties = { "sofa.boot.runtime.asyncInitExecutorCoreSize=20",
                                   "sofa.boot.runtime.asyncInitExecutorMaxSize=20" })
+@EnabledOnJre(JRE.JAVA_17)
 public class AsyncInitTests {
 
     @Autowired

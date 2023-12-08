@@ -14,21 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.smoke.tests.isle;
+package com.alipay.sofa.smoke.tests.actuator.health;
 
-import com.alipay.sofa.boot.isle.stage.SpringContextInstallStage;
-import org.junit.jupiter.api.condition.EnabledOnJre;
-import org.junit.jupiter.api.condition.JRE;
 import org.springframework.test.context.TestPropertySource;
 
 /**
- * Integration tests for {@link SpringContextInstallStage} in parallel.
+ * Integration tests for multi components in parallel mode.
  *
  * @author huzijie
- * @version ParallelSpringContextInstallStageTests.java, v 0.1 2023年02月21日 8:06 PM huzijie Exp $
+ * @version ParallelReadinessHealthCheckTests.java, v 0.1 2023年11月27日 11:30 AM huzijie Exp $
  */
-@TestPropertySource(properties = "sofa.boot.isle.moduleStartUpParallel=true")
-@EnabledOnJre(JRE.JAVA_17)
-public class ParallelSpringContextInstallStageTests extends
-                                                   SpringContextInstallStageIntegrationTestBase {
+@TestPropertySource(properties = { "sofa.boot.actuator.health.parallelCheck=true", "bean.count=100" })
+public class ParallelReadinessHealthCheckTests extends ReadinessHealthCheckTestBase {
 }

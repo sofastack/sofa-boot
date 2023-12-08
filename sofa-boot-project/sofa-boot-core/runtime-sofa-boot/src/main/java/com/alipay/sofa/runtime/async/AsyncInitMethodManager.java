@@ -30,8 +30,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
-import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
@@ -49,7 +49,7 @@ public class AsyncInitMethodManager implements PriorityOrdered,
 
     public static final String                          ASYNC_INIT_METHOD_NAME               = "async-init-method-name";
 
-    private final AtomicReference<ThreadPoolExecutor>   threadPoolExecutorRef                = new AtomicReference<>();
+    private final AtomicReference<ExecutorService>      executorServiceRef                   = new AtomicReference<>();
 
     private final Map<BeanFactory, Map<String, String>> asyncInitBeanNameMap                 = new ConcurrentHashMap<>();
 
@@ -77,20 +77,20 @@ public class AsyncInitMethodManager implements PriorityOrdered,
     }
 
     public void submitTask(Runnable runnable) {
-        if (threadPoolExecutorRef.get() == null) {
-            ThreadPoolExecutor threadPoolExecutor = createAsyncExecutor();
-            boolean success = threadPoolExecutorRef.compareAndSet(null, threadPoolExecutor);
+        if (executorServiceRef.get() == null) {
+            ExecutorService executorService = createAsyncExecutorService();
+            boolean success = executorServiceRef.compareAndSet(null, executorService);
             if (!success) {
-                threadPoolExecutor.shutdown();
+                executorService.shutdown();
             }
         }
-        Future<?> future = threadPoolExecutorRef.get().submit(runnable);
+        Future<?> future = executorServiceRef.get().submit(runnable);
         futures.add(future);
     }
 
-    private ThreadPoolExecutor createAsyncExecutor() {
-        return (ThreadPoolExecutor) applicationContext.getBean(
-            ASYNC_INIT_METHOD_EXECUTOR_BEAN_NAME, Supplier.class).get();
+    private ExecutorService createAsyncExecutorService() {
+        return (ExecutorService) applicationContext.getBean(ASYNC_INIT_METHOD_EXECUTOR_BEAN_NAME,
+            Supplier.class).get();
     }
 
     void ensureAsyncTasksFinish() {
@@ -105,9 +105,9 @@ public class AsyncInitMethodManager implements PriorityOrdered,
         startUpFinish = true;
         futures.clear();
         asyncInitBeanNameMap.clear();
-        if (threadPoolExecutorRef.get() != null) {
-            threadPoolExecutorRef.get().shutdown();
-            threadPoolExecutorRef.set(null);
+        if (executorServiceRef.get() != null) {
+            executorServiceRef.get().shutdown();
+            executorServiceRef.set(null);
         }
     }
 

@@ -17,10 +17,13 @@
 package com.alipay.sofa.boot.autoconfigure.runtime;
 
 import com.alipay.sofa.boot.autoconfigure.condition.ConditionalOnSwitch;
+import com.alipay.sofa.boot.autoconfigure.condition.OnVirtualThreadStartupAvailableCondition;
+import com.alipay.sofa.boot.autoconfigure.condition.OnVirtualThreadStartupDisableCondition;
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import com.alipay.sofa.common.thread.NamedThreadFactory;
 import com.alipay.sofa.common.thread.SofaThreadPoolExecutor;
+import com.alipay.sofa.common.thread.virtual.SofaVirtualThreadFactory;
 import com.alipay.sofa.runtime.api.client.ReferenceClient;
 import com.alipay.sofa.runtime.api.client.ServiceClient;
 import com.alipay.sofa.runtime.async.AsyncInitMethodManager;
@@ -54,12 +57,14 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.context.properties.bind.Bindable;
 import org.springframework.boot.context.properties.bind.Binder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.support.SpringFactoriesLoader;
 import org.springframework.util.Assert;
 
 import java.util.HashSet;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -167,7 +172,8 @@ public class SofaRuntimeAutoConfiguration {
 
         @Bean(AsyncInitMethodManager.ASYNC_INIT_METHOD_EXECUTOR_BEAN_NAME)
         @ConditionalOnMissingBean(name = AsyncInitMethodManager.ASYNC_INIT_METHOD_EXECUTOR_BEAN_NAME)
-        public Supplier<ThreadPoolExecutor> asyncInitMethodExecutor(SofaRuntimeProperties sofaRuntimeProperties) {
+        @Conditional(OnVirtualThreadStartupDisableCondition.class)
+        public Supplier<ExecutorService> asyncInitMethodExecutor(SofaRuntimeProperties sofaRuntimeProperties) {
             return ()-> {
                 int coreSize = sofaRuntimeProperties.getAsyncInitExecutorCoreSize();
                 int maxSize = sofaRuntimeProperties.getAsyncInitExecutorMaxSize();
@@ -180,6 +186,16 @@ public class SofaRuntimeAutoConfiguration {
                         new SynchronousQueue<>(), new NamedThreadFactory("async-init-bean"),
                         new ThreadPoolExecutor.CallerRunsPolicy(), "async-init-bean",
                         SofaBootConstants.SOFA_BOOT_SPACE_NAME);
+            };
+        }
+
+        @Bean(AsyncInitMethodManager.ASYNC_INIT_METHOD_EXECUTOR_BEAN_NAME)
+        @ConditionalOnMissingBean(name = AsyncInitMethodManager.ASYNC_INIT_METHOD_EXECUTOR_BEAN_NAME)
+        @Conditional(OnVirtualThreadStartupAvailableCondition.class)
+        public Supplier<ExecutorService> asyncInitMethodVirtualExecutor() {
+            return ()-> {
+                LOGGER.info("create async-init-bean virtual executor service");
+                return SofaVirtualThreadFactory.ofExecutorService("async-init-bean");
             };
         }
 
