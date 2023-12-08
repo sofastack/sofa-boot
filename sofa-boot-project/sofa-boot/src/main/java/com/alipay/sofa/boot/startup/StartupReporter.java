@@ -63,11 +63,11 @@ public class StartupReporter {
 
     public static final Collection<String> SPRING_CONTEXT_POST_PROCESSOR_TYPES            = Set
                                                                                               .of(SPRING_CONTEXT_BEANDEF_REGISTRY_POST_PROCESSOR,
-                                                                                                  SPRING_CONTEXT_BEAN_FACTORY_POST_PROCESSOR,
-                                                                                                  SPRING_BEAN_POST_PROCESSOR);
+                                                                                                  SPRING_CONTEXT_BEAN_FACTORY_POST_PROCESSOR);
 
     public static final Collection<String> SPRING_CONFIG_CLASSES_ENHANCE_TYPES            = Set
-                                                                                              .of(SPRING_CONFIG_CLASSES_ENHANCE);
+                                                                                              .of(SPRING_CONFIG_CLASSES_ENHANCE,
+                                                                                                  SPRING_BEAN_POST_PROCESSOR);
 
     private final StartupStaticsModel      startupStaticsModel;
 
