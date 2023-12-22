@@ -67,7 +67,8 @@ public class KafkaConsumerFactoryBeanPostProcessorTests {
     static class EmptyConsumerFactory implements ConsumerFactory {
 
         @Override
-        public Consumer createConsumer(String groupId, String clientIdPrefix, String clientIdSuffix, Properties properties) {
+        public Consumer createConsumer(String groupId, String clientIdPrefix,
+                                       String clientIdSuffix, Properties properties) {
             return null;
         }
 
