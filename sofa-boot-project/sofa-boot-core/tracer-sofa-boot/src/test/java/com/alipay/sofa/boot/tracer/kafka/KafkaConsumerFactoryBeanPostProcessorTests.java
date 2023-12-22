@@ -21,6 +21,8 @@ import org.apache.kafka.clients.consumer.Consumer;
 import org.junit.jupiter.api.Test;
 import org.springframework.kafka.core.ConsumerFactory;
 
+import java.util.Properties;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -65,7 +67,8 @@ public class KafkaConsumerFactoryBeanPostProcessorTests {
     static class EmptyConsumerFactory implements ConsumerFactory {
 
         @Override
-        public Consumer createConsumer(String s, String s1, String s2) {
+        public Consumer createConsumer(String groupId, String clientIdPrefix,
+                                       String clientIdSuffix, Properties properties) {
             return null;
         }
 

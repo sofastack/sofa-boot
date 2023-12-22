@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
@@ -96,7 +97,7 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
     /**
      * Check result details for healthCheckerProcessor
      */
-    private final Map<String, Health>             healthCheckerDetails                      = new HashMap<>();
+    private final Map<String, Health>             healthCheckerDetails                      = new ConcurrentHashMap<>();
 
     /**
      * Check result for healthIndicatorProcessor
@@ -106,7 +107,7 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
     /**
      * Check result for healthIndicatorProcessor
      */
-    private final Map<String, Health>             healthIndicatorDetails                    = new HashMap<>();
+    private final Map<String, Health>             healthIndicatorDetails                    = new ConcurrentHashMap<>();
 
     /**
      * Check result for readinessCheckCallbackProcessor
@@ -116,7 +117,7 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
     /**
      * Check result details for readinessCheckCallbackProcessor
      */
-    private final Map<String, Health>             healthCallbackDetails                     = new HashMap<>();
+    private final Map<String, Health>             healthCallbackDetails                     = new ConcurrentHashMap<>();
 
     /**
      * ReadinessCheckCallbackProcessor trigger status
