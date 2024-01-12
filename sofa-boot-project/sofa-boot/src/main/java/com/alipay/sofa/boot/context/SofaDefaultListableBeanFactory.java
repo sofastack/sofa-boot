@@ -17,6 +17,7 @@
 package com.alipay.sofa.boot.context;
 
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.util.ObjectUtils;
 
 /**
  * Default Implementation of {@link DefaultListableBeanFactory} in SOFABoot framework.
@@ -28,4 +29,14 @@ import org.springframework.beans.factory.support.DefaultListableBeanFactory;
  * @since 4.0.0
  */
 public class SofaDefaultListableBeanFactory extends DefaultListableBeanFactory {
+
+    private String id = ObjectUtils.identityToString(this);
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getId() {
+        return this.id;
+    }
 }
