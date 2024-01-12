@@ -87,6 +87,7 @@ public class DynamicSpringContextLoader implements SpringContextLoader, Initiali
         ClassLoader classLoader = deployment.getClassLoader();
 
         SofaDefaultListableBeanFactory beanFactory = SofaSpringContextSupport.createBeanFactory(classLoader, this::createBeanFactory);
+        beanFactory.setId(deployment.getModuleName());
 
         SofaGenericApplicationContext context = SofaSpringContextSupport.createApplicationContext(beanFactory, this::createApplicationContext);
         if (startupReporter != null) {

@@ -28,7 +28,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionReader;
-import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -103,10 +102,11 @@ public class DynamicSpringContextLoaderTests {
         assertThat(applicationContext.getEnvironment().getActiveProfiles()).containsOnly("test");
 
         applicationContext.refresh();
-        DefaultListableBeanFactory autowireCapableBeanFactory = (DefaultListableBeanFactory) applicationContext
+        SofaDefaultListableBeanFactory autowireCapableBeanFactory = (SofaDefaultListableBeanFactory) applicationContext
             .getAutowireCapableBeanFactory();
         assertThat(autowireCapableBeanFactory.isAllowBeanDefinitionOverriding()).isTrue();
         assertThat(autowireCapableBeanFactory).isInstanceOf(SofaDefaultListableBeanFactory.class);
+        assertThat(autowireCapableBeanFactory.getId()).isEqualTo("test");
     }
 
     @Test
