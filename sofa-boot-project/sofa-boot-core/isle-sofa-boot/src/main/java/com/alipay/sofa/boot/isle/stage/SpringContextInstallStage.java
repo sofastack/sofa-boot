@@ -186,34 +186,37 @@ public class SpringContextInstallStage extends AbstractPipelineStage implements 
      */
     private void refreshRecursively(DeploymentDescriptor deployment,
                                   CountDownLatch latch, List<Future<?>> futures) {
-        futures.add(moduleRefreshExecutorService.submit(() -> {
-            String oldName = Thread.currentThread().getName();
-            try {
-                Thread.currentThread().setName(
-                        "sofa-module-refresh-" + deployment.getModuleName());
-                if (deployment.isSpringPowered() && !application.getFailed().contains(deployment)) {
-                    refreshAndCollectCost(deployment);
-                }
-                DependencyTree.Entry<String, DeploymentDescriptor> entry = application
-                        .getDeployRegistry().getEntry(deployment.getModuleName());
-                if (entry != null && entry.getDependsOnMe() != null) {
-                    for (DependencyTree.Entry<String, DeploymentDescriptor> child : entry
-                            .getDependsOnMe()) {
-                        child.getDependencies().remove(entry);
-                        if (child.getDependencies().size() == 0) {
-                            refreshRecursively(child.get(), latch, futures);
+        // if interrupted, moduleRefreshExecutorService will be null;
+        if (moduleRefreshExecutorService != null) {
+            futures.add(moduleRefreshExecutorService.submit(() -> {
+                String oldName = Thread.currentThread().getName();
+                try {
+                    Thread.currentThread().setName(
+                            "sofa-module-refresh-" + deployment.getModuleName());
+                    if (deployment.isSpringPowered() && !application.getFailed().contains(deployment)) {
+                        refreshAndCollectCost(deployment);
+                    }
+                    DependencyTree.Entry<String, DeploymentDescriptor> entry = application
+                            .getDeployRegistry().getEntry(deployment.getModuleName());
+                    if (entry != null && entry.getDependsOnMe() != null) {
+                        for (DependencyTree.Entry<String, DeploymentDescriptor> child : entry
+                                .getDependsOnMe()) {
+                            child.getDependencies().remove(entry);
+                            if (child.getDependencies().size() == 0) {
+                                refreshRecursively(child.get(), latch, futures);
+                            }
                         }
                     }
+                } catch (Throwable t) {
+                    LOGGER.error(ErrorCode.convert("01-11002", deployment.getName()), t);
+                    throw new RuntimeException(ErrorCode.convert("01-11002", deployment.getName()),
+                            t);
+                } finally {
+                    latch.countDown();
+                    Thread.currentThread().setName(oldName);
                 }
-            } catch (Throwable t) {
-                LOGGER.error(ErrorCode.convert("01-11002", deployment.getName()), t);
-                throw new RuntimeException(ErrorCode.convert("01-11002", deployment.getName()),
-                        t);
-            } finally {
-                latch.countDown();
-                Thread.currentThread().setName(oldName);
-            }
-        }));
+            }));
+        }
     }
 
     protected void refreshAndCollectCost(DeploymentDescriptor deployment) {
