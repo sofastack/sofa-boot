@@ -52,15 +52,23 @@ public class StartupReporter {
 
     public static final String             SPRING_CONTEXT_BEAN_FACTORY_POST_PROCESSOR     = "spring.context.bean-factory.post-process";
 
+    public static final String             SPRING_BEAN_POST_PROCESSOR                     = "spring.context.beans.post-process";
+
+    public static final String             SPRING_CONFIG_CLASSES_ENHANCE                  = "spring.context.config-classes.enhance";
+
     public static final Collection<String> SPRING_BEAN_INSTANTIATE_TYPES                  = new HashSet<>();
 
     public static final Collection<String> SPRING_CONTEXT_POST_PROCESSOR_TYPES            = new HashSet<>();
+
+    public static final Collection<String> SPRING_CONFIG_CLASSES_ENHANCE_TYPES            = new HashSet<>();
 
     static {
         SPRING_BEAN_INSTANTIATE_TYPES.add(SPRING_BEANS_INSTANTIATE);
         SPRING_BEAN_INSTANTIATE_TYPES.add(SPRING_BEANS_SMART_INSTANTIATE);
         SPRING_CONTEXT_POST_PROCESSOR_TYPES.add(SPRING_CONTEXT_BEANDEF_REGISTRY_POST_PROCESSOR);
         SPRING_CONTEXT_POST_PROCESSOR_TYPES.add(SPRING_CONTEXT_BEAN_FACTORY_POST_PROCESSOR);
+        SPRING_CONFIG_CLASSES_ENHANCE_TYPES.add(SPRING_CONFIG_CLASSES_ENHANCE);
+        SPRING_CONFIG_CLASSES_ENHANCE_TYPES.add(SPRING_BEAN_POST_PROCESSOR);
     }
 
     private final StartupStaticsModel      startupStaticsModel                            = new StartupStaticsModel();
@@ -175,7 +183,9 @@ public class StartupReporter {
 
     private boolean filterBeanInitializeByCost(BeanStat beanStat) {
         String name = beanStat.getBeanType();
-        if (SPRING_BEAN_INSTANTIATE_TYPES.contains(name)) {
+        if (SPRING_BEAN_INSTANTIATE_TYPES.contains(name)
+            || SPRING_CONTEXT_POST_PROCESSOR_TYPES.contains(name)
+            || SPRING_CONFIG_CLASSES_ENHANCE_TYPES.contains(name)) {
             return beanStat.getCost() >= beanInitCostThreshold;
         } else {
             return true;

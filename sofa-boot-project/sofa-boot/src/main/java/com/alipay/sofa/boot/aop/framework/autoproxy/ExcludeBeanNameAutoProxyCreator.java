@@ -20,6 +20,7 @@ import org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 import org.springframework.util.PatternMatchUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +52,7 @@ public class ExcludeBeanNameAutoProxyCreator extends BeanNameAutoProxyCreator {
         Assert.notEmpty(beanNames, "'excludeBeanNames' must not be empty");
         this.excludeBeanNames = new ArrayList<>(beanNames.length);
         for (String mappedName : beanNames) {
-            this.excludeBeanNames.add(mappedName.strip());
+            this.excludeBeanNames.add(StringUtils.trimWhitespace(mappedName));
         }
     }
 

@@ -18,7 +18,7 @@ package com.alipay.sofa.boot.aop.framework.autoproxy;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,7 +34,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author huzijie
  * @version ExcludeBeanNameAutoProxyCreatorTests.java, v 0.1 2024年01月04日 4:36 PM huzijie Exp $
  */
-public class ExcludeBeanNameAutoProxyCreatorTests {
+public class ExcludeBeanNameAutoProxyCreatorTest {
 
     @Test
     public void excludeBeanNames() {
