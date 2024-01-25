@@ -37,7 +37,7 @@
     <description>SOFABoot Build</description>
 
     <properties>
-        <revision>3.21.0</revision>
+        <revision>3.22.0</revision>
         <sofa.boot.version>${revision}</sofa.boot.version>
         <!--maven plugin-->
         <maven.staging.plugin>1.6.7</maven.staging.plugin>

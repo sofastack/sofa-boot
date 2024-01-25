@@ -40,6 +40,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
@@ -71,11 +72,11 @@ public class ReadinessCheckListener implements ApplicationContextAware, Ordered,
 
     private boolean                                    healthCheckerStatus        = true;
 
-    private Map<String, Health>                        healthCheckerDetails       = new HashMap<>();
+    private Map<String, Health>                        healthCheckerDetails       = new ConcurrentHashMap<>();
 
     private boolean                                    healthIndicatorStatus      = true;
 
-    private Map<String, Health>                        healthIndicatorDetails     = new HashMap<>();
+    private Map<String, Health>                        healthIndicatorDetails     = new ConcurrentHashMap<>();
 
     private boolean                                    healthCallbackStatus       = true;
     private boolean                                    readinessCheckFinish       = false;
