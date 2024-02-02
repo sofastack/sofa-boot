@@ -251,13 +251,8 @@ public class DynamicJvmServiceProxyFinder {
         if (getInstance().bizManagerService == null) {
             return null;
         }
-
-        for (Biz biz : getInstance().bizManagerService.getBizInOrder()) {
-            if (biz.getBizClassLoader().equals(sofaRuntimeManager.getAppClassLoader())) {
-                return biz;
-            }
-        }
-        return null;
+        return getInstance().bizManagerService.getBizByClassLoader(sofaRuntimeManager
+            .getAppClassLoader());
     }
 
     public boolean isHasFinishStartup() {

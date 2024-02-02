@@ -65,6 +65,11 @@ public class MockBizManagerService implements BizManagerService {
 
     @Override
     public Biz getBizByClassLoader(ClassLoader classLoader) {
+        for (Biz biz : bizList) {
+            if (biz.getBizClassLoader().equals(classLoader)) {
+                return biz;
+            }
+        }
         return null;
     }
 
