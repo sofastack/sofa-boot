@@ -69,6 +69,8 @@ public class SofaBootRpcConfigConstants {
     //@since 5.5.2
     public static final String  REGISTRY_PROTOCOL_SOFA             = "sofa";
 
+    public static final String  REGISTRY_PROTOCOL_KUBERNETES       = "kubernetes";
+
     /* server */
     public static final String  RPC_PROTOCOL_BOLT                  = "bolt";
     public static final String  RPC_PROTOCOL_REST                  = "rest";
