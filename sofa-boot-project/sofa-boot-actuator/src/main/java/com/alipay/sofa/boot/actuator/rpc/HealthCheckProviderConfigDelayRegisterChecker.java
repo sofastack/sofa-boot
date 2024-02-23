@@ -14,29 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.boot.actuator.extension;
+package com.alipay.sofa.boot.actuator.rpc;
 
 import com.alipay.sofa.boot.actuator.health.ReadinessCheckListener;
-import com.alipay.sofa.rpc.boot.extension.ProviderConfigDelayRegisterChecker;
-import org.springframework.beans.BeansException;
+import com.alipay.sofa.rpc.boot.container.ProviderConfigDelayRegisterChecker;
 import org.springframework.boot.availability.ReadinessState;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 
-public class ProviderConfigDelayRegisterCheckerSupport implements ApplicationContextAware,
-                                                      ProviderConfigDelayRegisterChecker {
+/**
+ * ProviderConfigDelayRegisterChecker的具体实现
+ */
+public class HealthCheckProviderConfigDelayRegisterChecker implements
+                                                          ProviderConfigDelayRegisterChecker {
 
-    private ApplicationContext applicationContext;
+    private ReadinessCheckListener readinessCheckListener;
+
+    private boolean                enableDelayRegister;
 
     @Override
-    public boolean isDelayRegisterHealthCheck() {
-        ReadinessCheckListener readinessCheckListener = applicationContext
-            .getBean(ReadinessCheckListener.class);
+    public boolean allowRegister() {
         return ReadinessState.ACCEPTING_TRAFFIC.equals(readinessCheckListener.getReadinessState());
     }
 
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
+    public void setReadinessCheckListener(ReadinessCheckListener readinessCheckListener) {
+        this.readinessCheckListener = readinessCheckListener;
+    }
+
+    public void setEnableDelayRegister(boolean enableDelayRegister) {
+        this.enableDelayRegister = enableDelayRegister;
     }
 }

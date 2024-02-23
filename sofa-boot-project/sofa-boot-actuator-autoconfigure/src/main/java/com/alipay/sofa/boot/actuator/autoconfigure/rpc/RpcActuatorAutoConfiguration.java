@@ -16,9 +16,12 @@
  */
 package com.alipay.sofa.boot.actuator.autoconfigure.rpc;
 
+import com.alipay.sofa.boot.actuator.health.ReadinessCheckListener;
 import com.alipay.sofa.boot.actuator.health.ReadinessEndpoint;
+import com.alipay.sofa.boot.actuator.rpc.HealthCheckProviderConfigDelayRegisterChecker;
 import com.alipay.sofa.boot.actuator.rpc.RpcAfterHealthCheckCallback;
 import com.alipay.sofa.boot.actuator.rpc.SofaRpcEndpoint;
+import com.alipay.sofa.boot.autoconfigure.rpc.SofaBootRpcProperties;
 import com.alipay.sofa.boot.autoconfigure.rpc.SofaRpcAutoConfiguration;
 import com.alipay.sofa.rpc.boot.context.RpcStartApplicationListener;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
@@ -39,6 +42,19 @@ import org.springframework.context.annotation.Bean;
 @ConditionalOnClass(RpcStartApplicationListener.class)
 @ConditionalOnBean(RpcStartApplicationListener.class)
 public class RpcActuatorAutoConfiguration {
+
+    @Bean
+    @ConditionalOnMissingBean
+    @ConditionalOnAvailableEndpoint(endpoint = ReadinessEndpoint.class)
+    public HealthCheckProviderConfigDelayRegisterChecker providerConfigDelayRegisterCheckerSupport(ReadinessCheckListener readinessCheckListener,
+                                                                                                   SofaBootRpcProperties sofaBootRpcProperties) {
+        HealthCheckProviderConfigDelayRegisterChecker healthCheckProviderConfigDelayRegisterChecker = new HealthCheckProviderConfigDelayRegisterChecker();
+        healthCheckProviderConfigDelayRegisterChecker
+            .setReadinessCheckListener(readinessCheckListener);
+        healthCheckProviderConfigDelayRegisterChecker.setEnableDelayRegister(sofaBootRpcProperties
+            .getEnableDelayRegister());
+        return healthCheckProviderConfigDelayRegisterChecker;
+    }
 
     @Bean
     @ConditionalOnMissingBean

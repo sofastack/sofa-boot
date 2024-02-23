@@ -14,9 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.rpc.boot.extension;
+package com.alipay.sofa.rpc.boot.container;
 
+/**
+ * 延时发布后注册服务到注册中心的健康检查
+ */
 public interface ProviderConfigDelayRegisterChecker {
 
-    boolean isDelayRegisterHealthCheck();
+    /**
+     * 是否允许注册服务到注册中心
+     *
+     * @return
+     */
+    boolean allowRegister();
 }

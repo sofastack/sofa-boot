@@ -16,8 +16,8 @@
  */
 package com.alipay.sofa.rpc.boot.container;
 
+import com.alipay.sofa.common.thread.SofaScheduledThreadPoolExecutor;
 import com.alipay.sofa.rpc.boot.config.SofaBootRpcConfigConstants;
-import com.alipay.sofa.rpc.boot.extension.ProviderConfigDelayRegisterChecker;
 import com.alipay.sofa.rpc.boot.log.SofaBootRpcLoggerFactory;
 import com.alipay.sofa.rpc.boot.runtime.binding.RpcBinding;
 import com.alipay.sofa.rpc.config.ProviderConfig;
@@ -34,8 +34,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -65,15 +63,24 @@ public class ProviderConfigContainer {
     /**
      * 用来延时发布的线程池
      */
-    private ScheduledExecutorService                    scheduledExecutorService;
+    private SofaScheduledThreadPoolExecutor             scheduledExecutorService;
 
     /**
      * 延时发布时健康检查
      */
-    private ProviderConfigDelayRegisterChecker          providerConfigDelayRegisterChecker;
+    private List<ProviderConfigDelayRegisterChecker>    providerConfigDelayRegisterCheckerList;
 
-    public void setProviderConfigDelayRegister(ProviderConfigDelayRegisterChecker providerConfigDelayRegisterChecker) {
-        this.providerConfigDelayRegisterChecker = providerConfigDelayRegisterChecker;
+    /**
+     * 是否开启延时加载，兼容老逻辑
+     */
+    private boolean                                     enableDelayRegister;
+
+    public void setProviderConfigDelayRegister(List<ProviderConfigDelayRegisterChecker> providerConfigDelayRegisterCheckerList) {
+        this.providerConfigDelayRegisterCheckerList = providerConfigDelayRegisterCheckerList;
+    }
+
+    public void setEnableDelayRegister(boolean enableDelayRegister) {
+        this.enableDelayRegister = enableDelayRegister;
     }
 
     /**
@@ -147,27 +154,43 @@ public class ProviderConfigContainer {
         for (ProviderConfig providerConfig : getAllProviderConfig()) {
             int delay = providerConfig.getDelay();
             // 没有配置延时加载则直接去注册中心注册服务
-            if (delay <= 0) {
-                doPublishProviderConfig(providerConfig, false);
+            if (delay <= 0 && !enableDelayRegister) {
+                doPublishProviderConfig(providerConfig);
             } else {
                 // 根据延时时间异步去注册中心注册服务
                 if (scheduledExecutorService == null) {
-                    scheduledExecutorService = Executors.newScheduledThreadPool(16);
+                    scheduledExecutorService = new SofaScheduledThreadPoolExecutor(16);
                 }
-                scheduledExecutorService.schedule(() -> doPublishProviderConfig(providerConfig, true), delay, TimeUnit.MILLISECONDS);
+                scheduledExecutorService.schedule(() -> doDelayPublishProviderConfig(providerConfig,
+                        allRegisterCheckerPass(providerConfigDelayRegisterCheckerList)), delay, TimeUnit.MILLISECONDS);
             }
         }
     }
 
-    private void doPublishProviderConfig(ProviderConfig providerConfig, boolean needHealthCheck) {
-        if (needHealthCheck && !providerConfigDelayRegisterChecker.isDelayRegisterHealthCheck()) {
+    private void doDelayPublishProviderConfig(ProviderConfig providerConfig,
+                                              boolean allRegisterCheckerPass) {
+        if (!allRegisterCheckerPass) {
             if (LOGGER.isWarnEnabled()) {
                 LOGGER.warn("service publish failed, interfaceId["
                             + providerConfig.getInterfaceId() + "], please check.");
             }
             return;
         }
+        doPublishProviderConfig(providerConfig);
+    }
 
+    private boolean allRegisterCheckerPass(List<ProviderConfigDelayRegisterChecker> providerConfigDelayRegisterCheckerList) {
+        boolean allTrue = true;
+        for (ProviderConfigDelayRegisterChecker providerConfigDelayRegisterChecker : providerConfigDelayRegisterCheckerList) {
+            if (!providerConfigDelayRegisterChecker.allowRegister()) {
+                allTrue = false;
+                break;
+            }
+        }
+        return allTrue;
+    }
+
+    private void doPublishProviderConfig(ProviderConfig providerConfig) {
         ServerConfig serverConfig = (ServerConfig) providerConfig.getServer().get(0);
         if (!serverConfig.getProtocol().equalsIgnoreCase(
             SofaBootRpcConfigConstants.RPC_PROTOCOL_DUBBO)) {

@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.boot.autoconfigure.rpc;
 
-import com.alipay.sofa.boot.actuator.extension.ProviderConfigDelayRegisterCheckerSupport;
+import com.alipay.sofa.boot.actuator.rpc.HealthCheckProviderConfigDelayRegisterChecker;
 import com.alipay.sofa.boot.autoconfigure.condition.ConditionalOnSwitch;
 import com.alipay.sofa.boot.autoconfigure.rpc.SofaRpcAutoConfiguration.RegistryConfigurationImportSelector;
 import com.alipay.sofa.boot.autoconfigure.runtime.SofaRuntimeAutoConfiguration;
@@ -56,6 +56,7 @@ import org.springframework.core.type.AnnotationMetadata;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * {@link EnableAutoConfiguration Auto-configuration} for sofa Rpc.
@@ -73,21 +74,18 @@ public class SofaRpcAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public ProviderConfigDelayRegisterCheckerSupport providerConfigDelayRegisterCheckerSupport() {
-        return new ProviderConfigDelayRegisterCheckerSupport();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
     public ProviderConfigContainer providerConfigContainer(SofaBootRpcProperties sofaBootRpcProperties,
-                                                           ProviderConfigDelayRegisterCheckerSupport providerConfigDelayRegisterCheckerSupport) {
+                                                           ObjectProvider<HealthCheckProviderConfigDelayRegisterChecker> healthCheckProviderConfigDelayRegisterChecker) {
         ProviderConfigContainer providerConfigContainer = new ProviderConfigContainer();
         providerConfigContainer.setProviderRegisterWhiteList(sofaBootRpcProperties
             .getProviderRegisterWhiteList());
         providerConfigContainer.setProviderRegisterBlackList(sofaBootRpcProperties
             .getProviderRegisterBlackList());
         providerConfigContainer
-            .setProviderConfigDelayRegister(providerConfigDelayRegisterCheckerSupport);
+            .setProviderConfigDelayRegister(healthCheckProviderConfigDelayRegisterChecker.stream()
+                .collect(Collectors.toList()));
+        providerConfigContainer.setEnableDelayRegister(sofaBootRpcProperties
+            .getEnableDelayRegister());
         return providerConfigContainer;
     }
 
