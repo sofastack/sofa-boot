@@ -17,6 +17,7 @@
 package com.alipay.sofa.rpc.boot.container;
 
 import com.alipay.sofa.rpc.boot.config.SofaBootRpcConfigConstants;
+import com.alipay.sofa.rpc.boot.extension.ProviderConfigDelayRegisterChecker;
 import com.alipay.sofa.rpc.boot.log.SofaBootRpcLoggerFactory;
 import com.alipay.sofa.rpc.boot.runtime.binding.RpcBinding;
 import com.alipay.sofa.rpc.config.ProviderConfig;
@@ -33,6 +34,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * ProviderConfig持有者.维护编程界面级别的RPC组件。
@@ -57,6 +61,20 @@ public class ProviderConfigContainer {
      */
     private final ConcurrentMap<String, ProviderConfig> RPC_SERVICE_CONTAINER = new ConcurrentHashMap<String, ProviderConfig>(
                                                                                   256);
+
+    /**
+     * 用来延时发布的线程池
+     */
+    private ScheduledExecutorService                    scheduledExecutorService;
+
+    /**
+     * 延时发布时健康检查
+     */
+    private ProviderConfigDelayRegisterChecker          providerConfigDelayRegisterChecker;
+
+    public void setProviderConfigDelayRegister(ProviderConfigDelayRegisterChecker providerConfigDelayRegisterChecker) {
+        this.providerConfigDelayRegisterChecker = providerConfigDelayRegisterChecker;
+    }
 
     /**
      * 增加 ProviderConfig
@@ -127,32 +145,52 @@ public class ProviderConfigContainer {
      */
     public void publishAllProviderConfig() {
         for (ProviderConfig providerConfig : getAllProviderConfig()) {
-
-            ServerConfig serverConfig = (ServerConfig) providerConfig.getServer().get(0);
-            if (!serverConfig.getProtocol().equalsIgnoreCase(
-                SofaBootRpcConfigConstants.RPC_PROTOCOL_DUBBO)) {
-                if (allowProviderRegister(providerConfig)) {
-                    providerConfig.setRegister(true);
-                } else {
-                    LOGGER.info("Provider will not register: [{}]", providerConfig.buildKey());
+            int delay = providerConfig.getDelay();
+            // 没有配置延时加载则直接去注册中心注册服务
+            if (delay <= 0) {
+                doPublishProviderConfig(providerConfig, false);
+            } else {
+                // 根据延时时间异步去注册中心注册服务
+                if (scheduledExecutorService == null) {
+                    scheduledExecutorService = Executors.newScheduledThreadPool(16);
                 }
+                scheduledExecutorService.schedule(() -> doPublishProviderConfig(providerConfig, true), delay, TimeUnit.MILLISECONDS);
+            }
+        }
+    }
 
-                List<RegistryConfig> registrys = providerConfig.getRegistry();
-                for (RegistryConfig registryConfig : registrys) {
+    private void doPublishProviderConfig(ProviderConfig providerConfig, boolean needHealthCheck) {
+        if (needHealthCheck && !providerConfigDelayRegisterChecker.isDelayRegisterHealthCheck()) {
+            if (LOGGER.isWarnEnabled()) {
+                LOGGER.warn("service publish failed, interfaceId["
+                            + providerConfig.getInterfaceId() + "], please check.");
+            }
+            return;
+        }
 
-                    Registry registry = RegistryFactory.getRegistry(registryConfig);
-                    registry.init();
-                    registry.start();
+        ServerConfig serverConfig = (ServerConfig) providerConfig.getServer().get(0);
+        if (!serverConfig.getProtocol().equalsIgnoreCase(
+            SofaBootRpcConfigConstants.RPC_PROTOCOL_DUBBO)) {
+            if (allowProviderRegister(providerConfig)) {
+                providerConfig.setRegister(true);
+            } else {
+                LOGGER.info("Provider will not register: [{}]", providerConfig.buildKey());
+            }
 
-                    registry.register(providerConfig);
+            List<RegistryConfig> registrys = providerConfig.getRegistry();
+            for (RegistryConfig registryConfig : registrys) {
 
-                    if (LOGGER.isInfoEnabled()) {
-                        LOGGER.info("service published.  interfaceId["
-                                    + providerConfig.getInterfaceId() + "]; protocol["
-                                    + serverConfig.getProtocol() + "]");
-                    }
+                Registry registry = RegistryFactory.getRegistry(registryConfig);
+                registry.init();
+                registry.start();
+
+                registry.register(providerConfig);
+
+                if (LOGGER.isInfoEnabled()) {
+                    LOGGER.info("service published.  interfaceId["
+                                + providerConfig.getInterfaceId() + "]; protocol["
+                                + serverConfig.getProtocol() + "]");
                 }
-
             }
         }
     }

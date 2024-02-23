@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.boot.autoconfigure.rpc;
 
+import com.alipay.sofa.boot.actuator.extension.ProviderConfigDelayRegisterCheckerSupport;
 import com.alipay.sofa.boot.autoconfigure.condition.ConditionalOnSwitch;
 import com.alipay.sofa.boot.autoconfigure.rpc.SofaRpcAutoConfiguration.RegistryConfigurationImportSelector;
 import com.alipay.sofa.boot.autoconfigure.runtime.SofaRuntimeAutoConfiguration;
@@ -72,12 +73,21 @@ public class SofaRpcAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public ProviderConfigContainer providerConfigContainer(SofaBootRpcProperties sofaBootRpcProperties) {
+    public ProviderConfigDelayRegisterCheckerSupport providerConfigDelayRegisterCheckerSupport() {
+        return new ProviderConfigDelayRegisterCheckerSupport();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public ProviderConfigContainer providerConfigContainer(SofaBootRpcProperties sofaBootRpcProperties,
+                                                           ProviderConfigDelayRegisterCheckerSupport providerConfigDelayRegisterCheckerSupport) {
         ProviderConfigContainer providerConfigContainer = new ProviderConfigContainer();
         providerConfigContainer.setProviderRegisterWhiteList(sofaBootRpcProperties
             .getProviderRegisterWhiteList());
         providerConfigContainer.setProviderRegisterBlackList(sofaBootRpcProperties
             .getProviderRegisterBlackList());
+        providerConfigContainer
+            .setProviderConfigDelayRegister(providerConfigDelayRegisterCheckerSupport);
         return providerConfigContainer;
     }
 
