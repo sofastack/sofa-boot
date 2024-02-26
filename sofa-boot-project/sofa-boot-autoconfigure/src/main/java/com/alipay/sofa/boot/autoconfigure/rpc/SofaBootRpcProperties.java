@@ -345,15 +345,7 @@ public class SofaBootRpcProperties implements EnvironmentAware {
     /**
      * 是否开启延时注册功能
      */
-    private Boolean             enableDelayRegister;
-
-    public Boolean getEnableDelayRegister() {
-        return enableDelayRegister;
-    }
-
-    public void setEnableDelayRegister(Boolean enableDelayRegister) {
-        this.enableDelayRegister = enableDelayRegister;
-    }
+    private boolean             enableDelayRegister;
 
     public boolean isEnableAutoPublish() {
         return enableAutoPublish;
@@ -952,6 +944,14 @@ public class SofaBootRpcProperties implements EnvironmentAware {
 
     public void setProviderRegisterBlackList(List<String> providerRegisterBlackList) {
         this.providerRegisterBlackList = providerRegisterBlackList;
+    }
+
+    public boolean getEnableDelayRegister() {
+        return enableDelayRegister;
+    }
+
+    public void setEnableDelayRegister(boolean enableDelayRegister) {
+        this.enableDelayRegister = enableDelayRegister;
     }
 
     @Override

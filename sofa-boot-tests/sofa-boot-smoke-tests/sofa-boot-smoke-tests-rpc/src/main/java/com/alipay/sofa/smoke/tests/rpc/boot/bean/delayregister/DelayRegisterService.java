@@ -14,17 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.rpc.boot.container;
+package com.alipay.sofa.smoke.tests.rpc.boot.bean.delayregister;
 
 /**
- * 用于判断是否允许延迟服务发布至注册中心的扩展点
+ * @author chengming
+ * @version DelayRegisterService.java, v 0.1 2024年02月26日 3:37 PM chengming
  */
-public interface ProviderConfigDelayRegisterChecker {
+public interface DelayRegisterService {
 
-    /**
-     * 是否允许注册服务到注册中心
-     *
-     * @return
-     */
-    boolean allowRegister();
+    String sayHello(String string);
 }

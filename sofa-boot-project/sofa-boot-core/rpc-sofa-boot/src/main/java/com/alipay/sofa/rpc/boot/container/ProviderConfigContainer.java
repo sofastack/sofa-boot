@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.rpc.boot.container;
 
+import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.common.thread.SofaScheduledThreadPoolExecutor;
 import com.alipay.sofa.rpc.boot.config.SofaBootRpcConfigConstants;
 import com.alipay.sofa.rpc.boot.log.SofaBootRpcLoggerFactory;
@@ -66,7 +67,7 @@ public class ProviderConfigContainer {
     private SofaScheduledThreadPoolExecutor             scheduledExecutorService;
 
     /**
-     * 延时发布时健康检查
+     * 用于判断是否允许延迟服务发布至注册中心的扩展点、需要所有拓展点都通过
      */
     private List<ProviderConfigDelayRegisterChecker>    providerConfigDelayRegisterCheckerList;
 
@@ -74,14 +75,6 @@ public class ProviderConfigContainer {
      * 是否开启延时加载，兼容老逻辑
      */
     private boolean                                     enableDelayRegister;
-
-    public void setProviderConfigDelayRegister(List<ProviderConfigDelayRegisterChecker> providerConfigDelayRegisterCheckerList) {
-        this.providerConfigDelayRegisterCheckerList = providerConfigDelayRegisterCheckerList;
-    }
-
-    public void setEnableDelayRegister(boolean enableDelayRegister) {
-        this.enableDelayRegister = enableDelayRegister;
-    }
 
     /**
      * 增加 ProviderConfig
@@ -154,32 +147,22 @@ public class ProviderConfigContainer {
         for (ProviderConfig providerConfig : getAllProviderConfig()) {
             int delay = providerConfig.getDelay();
             // 没有配置延时加载则直接去注册中心注册服务
-            if (delay <= 0 && !enableDelayRegister) {
+            if (!enableDelayRegister && delay <= 0) {
                 doPublishProviderConfig(providerConfig);
             } else {
                 // 根据延时时间异步去注册中心注册服务
                 if (scheduledExecutorService == null) {
-                    scheduledExecutorService = new SofaScheduledThreadPoolExecutor(16);
+                    scheduledExecutorService = new SofaScheduledThreadPoolExecutor(1, "async-register-bean",
+                            SofaBootConstants.SOFA_BOOT_SPACE_NAME);
                 }
                 scheduledExecutorService.schedule(() -> doDelayPublishProviderConfig(providerConfig,
-                        allRegisterCheckerPass(providerConfigDelayRegisterCheckerList)), delay, TimeUnit.MILLISECONDS);
+                        providerConfigDelayRegisterCheckerList), delay, TimeUnit.MILLISECONDS);
             }
         }
     }
 
     private void doDelayPublishProviderConfig(ProviderConfig providerConfig,
-                                              boolean allRegisterCheckerPass) {
-        if (!allRegisterCheckerPass) {
-            if (LOGGER.isWarnEnabled()) {
-                LOGGER.warn("service publish failed, interfaceId["
-                            + providerConfig.getInterfaceId() + "], please check.");
-            }
-            return;
-        }
-        doPublishProviderConfig(providerConfig);
-    }
-
-    private boolean allRegisterCheckerPass(List<ProviderConfigDelayRegisterChecker> providerConfigDelayRegisterCheckerList) {
+                                              List<ProviderConfigDelayRegisterChecker> providerConfigDelayRegisterCheckerList) {
         boolean allTrue = true;
         for (ProviderConfigDelayRegisterChecker providerConfigDelayRegisterChecker : providerConfigDelayRegisterCheckerList) {
             if (!providerConfigDelayRegisterChecker.allowRegister()) {
@@ -187,7 +170,14 @@ public class ProviderConfigContainer {
                 break;
             }
         }
-        return allTrue;
+        if (!allTrue) {
+            if (LOGGER.isWarnEnabled()) {
+                LOGGER.warn("service publish failed, interfaceId["
+                            + providerConfig.getInterfaceId() + "], please check.");
+            }
+            return;
+        }
+        doPublishProviderConfig(providerConfig);
     }
 
     private void doPublishProviderConfig(ProviderConfig providerConfig) {
@@ -317,5 +307,21 @@ public class ProviderConfigContainer {
 
     public List<String> getProviderRegisterBlackList() {
         return providerRegisterBlackList;
+    }
+
+    public void setProviderConfigDelayRegister(List<ProviderConfigDelayRegisterChecker> providerConfigDelayRegisterCheckerList) {
+        this.providerConfigDelayRegisterCheckerList = providerConfigDelayRegisterCheckerList;
+    }
+
+    public List<ProviderConfigDelayRegisterChecker> getProviderConfigDelayRegisterCheckerList() {
+        return providerConfigDelayRegisterCheckerList;
+    }
+
+    public void setEnableDelayRegister(boolean enableDelayRegister) {
+        this.enableDelayRegister = enableDelayRegister;
+    }
+
+    public boolean isEnableDelayRegister() {
+        return enableDelayRegister;
     }
 }

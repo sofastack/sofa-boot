@@ -25,7 +25,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.availability.ReadinessState;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Test for {@link HealthCheckProviderConfigDelayRegisterChecker}
@@ -48,7 +48,7 @@ public class HealthCheckProviderConfigDelayRegisterCheckerTest {
         boolean result = healthCheckProviderConfigDelayRegisterChecker.allowRegister();
 
         // Verify the results
-        assertTrue(result);
+        assertThat(result).isTrue();
     }
 
 }

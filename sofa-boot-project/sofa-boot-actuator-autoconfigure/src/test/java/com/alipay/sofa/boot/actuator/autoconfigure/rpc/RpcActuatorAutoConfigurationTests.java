@@ -16,6 +16,11 @@
  */
 package com.alipay.sofa.boot.actuator.autoconfigure.rpc;
 
+import com.alipay.sofa.boot.actuator.health.HealthCheckerProcessor;
+import com.alipay.sofa.boot.actuator.health.HealthIndicatorProcessor;
+import com.alipay.sofa.boot.actuator.health.ReadinessCheckCallbackProcessor;
+import com.alipay.sofa.boot.actuator.health.ReadinessCheckListener;
+import com.alipay.sofa.boot.actuator.rpc.HealthCheckProviderConfigDelayRegisterChecker;
 import com.alipay.sofa.boot.actuator.rpc.RpcAfterHealthCheckCallback;
 import com.alipay.sofa.boot.actuator.rpc.SofaRpcEndpoint;
 import com.alipay.sofa.rpc.boot.context.RpcStartApplicationListener;
@@ -23,6 +28,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.FilteredClassLoader;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.event.ContextRefreshedEvent;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -45,9 +52,11 @@ public class RpcActuatorAutoConfigurationTests {
     void runShouldHaveRpcActuatorBeans() {
         this.contextRunner
                 .withBean(RpcStartApplicationListener.class)
+                .withBean(MockReadinessCheckListenerConfiguration.class)
                 .run((context) -> assertThat(context)
                         .hasSingleBean(RpcAfterHealthCheckCallback.class)
-                        .hasSingleBean(SofaRpcEndpoint.class));
+                        .hasSingleBean(SofaRpcEndpoint.class)
+                        .hasSingleBean(HealthCheckProviderConfigDelayRegisterChecker.class));
     }
 
     @Test
@@ -57,7 +66,8 @@ public class RpcActuatorAutoConfigurationTests {
                 .withPropertyValues("management.endpoints.web.exposure.include=info")
                 .run((context) -> assertThat(context)
                         .doesNotHaveBean(RpcAfterHealthCheckCallback.class)
-                        .doesNotHaveBean(SofaRpcEndpoint.class));
+                        .doesNotHaveBean(SofaRpcEndpoint.class)
+                        .doesNotHaveBean(HealthCheckProviderConfigDelayRegisterChecker.class));
     }
 
     @Test
@@ -67,7 +77,8 @@ public class RpcActuatorAutoConfigurationTests {
                 .withClassLoader(new FilteredClassLoader(RpcStartApplicationListener.class))
                 .run((context) -> assertThat(context)
                         .doesNotHaveBean(RpcAfterHealthCheckCallback.class)
-                        .doesNotHaveBean(SofaRpcEndpoint.class));
+                        .doesNotHaveBean(SofaRpcEndpoint.class)
+                        .doesNotHaveBean(HealthCheckProviderConfigDelayRegisterChecker.class));
     }
 
     @Test
@@ -75,6 +86,30 @@ public class RpcActuatorAutoConfigurationTests {
         this.contextRunner
                 .run((context) -> assertThat(context)
                         .doesNotHaveBean(RpcAfterHealthCheckCallback.class)
-                        .doesNotHaveBean(SofaRpcEndpoint.class));
+                        .doesNotHaveBean(SofaRpcEndpoint.class)
+                        .doesNotHaveBean(HealthCheckProviderConfigDelayRegisterChecker.class));
+    }
+
+    static class MockReadinessCheckListenerConfiguration {
+
+        @Bean
+        public MockReadinessCheckListener mockReadinessCheckListener() {
+            return new MockReadinessCheckListener(null, null, null);
+        }
+    }
+
+    static class MockReadinessCheckListener extends ReadinessCheckListener {
+
+        public MockReadinessCheckListener(HealthCheckerProcessor healthCheckerProcessor,
+                                          HealthIndicatorProcessor healthIndicatorProcessor,
+                                          ReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor) {
+            super(healthCheckerProcessor, healthIndicatorProcessor,
+                afterReadinessCheckCallbackProcessor);
+        }
+
+        @Override
+        public void onContextRefreshedEvent(ContextRefreshedEvent event) {
+            // do nothing
+        }
     }
 }

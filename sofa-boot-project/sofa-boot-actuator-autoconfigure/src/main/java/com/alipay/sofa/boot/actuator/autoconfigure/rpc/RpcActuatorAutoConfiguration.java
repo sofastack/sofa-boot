@@ -21,7 +21,6 @@ import com.alipay.sofa.boot.actuator.health.ReadinessEndpoint;
 import com.alipay.sofa.boot.actuator.rpc.HealthCheckProviderConfigDelayRegisterChecker;
 import com.alipay.sofa.boot.actuator.rpc.RpcAfterHealthCheckCallback;
 import com.alipay.sofa.boot.actuator.rpc.SofaRpcEndpoint;
-import com.alipay.sofa.boot.autoconfigure.rpc.SofaBootRpcProperties;
 import com.alipay.sofa.boot.autoconfigure.rpc.SofaRpcAutoConfiguration;
 import com.alipay.sofa.rpc.boot.context.RpcStartApplicationListener;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
@@ -46,19 +45,6 @@ public class RpcActuatorAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     @ConditionalOnAvailableEndpoint(endpoint = ReadinessEndpoint.class)
-    public HealthCheckProviderConfigDelayRegisterChecker providerConfigDelayRegisterCheckerSupport(ReadinessCheckListener readinessCheckListener,
-                                                                                                   SofaBootRpcProperties sofaBootRpcProperties) {
-        HealthCheckProviderConfigDelayRegisterChecker healthCheckProviderConfigDelayRegisterChecker = new HealthCheckProviderConfigDelayRegisterChecker();
-        healthCheckProviderConfigDelayRegisterChecker
-            .setReadinessCheckListener(readinessCheckListener);
-        healthCheckProviderConfigDelayRegisterChecker.setEnableDelayRegister(sofaBootRpcProperties
-            .getEnableDelayRegister());
-        return healthCheckProviderConfigDelayRegisterChecker;
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    @ConditionalOnAvailableEndpoint(endpoint = ReadinessEndpoint.class)
     public RpcAfterHealthCheckCallback rpcAfterHealthCheckCallback(RpcStartApplicationListener rpcStartApplicationListener) {
         return new RpcAfterHealthCheckCallback(rpcStartApplicationListener);
     }
@@ -68,5 +54,12 @@ public class RpcActuatorAutoConfiguration {
     @ConditionalOnAvailableEndpoint(endpoint = SofaRpcEndpoint.class)
     public SofaRpcEndpoint sofaRpcEndPoint() {
         return new SofaRpcEndpoint();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    @ConditionalOnAvailableEndpoint(endpoint = ReadinessEndpoint.class)
+    public HealthCheckProviderConfigDelayRegisterChecker healthCheckProviderConfigDelayRegisterChecker(ReadinessCheckListener readinessCheckListener) {
+        return new HealthCheckProviderConfigDelayRegisterChecker(readinessCheckListener);
     }
 }

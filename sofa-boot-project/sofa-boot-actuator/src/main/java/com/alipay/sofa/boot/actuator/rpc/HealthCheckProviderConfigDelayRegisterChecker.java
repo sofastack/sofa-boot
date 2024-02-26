@@ -28,18 +28,12 @@ public class HealthCheckProviderConfigDelayRegisterChecker implements
 
     private ReadinessCheckListener readinessCheckListener;
 
-    private boolean                enableDelayRegister;
+    public HealthCheckProviderConfigDelayRegisterChecker(ReadinessCheckListener readinessCheckListener) {
+        this.readinessCheckListener = readinessCheckListener;
+    }
 
     @Override
     public boolean allowRegister() {
         return ReadinessState.ACCEPTING_TRAFFIC.equals(readinessCheckListener.getReadinessState());
-    }
-
-    public void setReadinessCheckListener(ReadinessCheckListener readinessCheckListener) {
-        this.readinessCheckListener = readinessCheckListener;
-    }
-
-    public void setEnableDelayRegister(boolean enableDelayRegister) {
-        this.enableDelayRegister = enableDelayRegister;
     }
 }
