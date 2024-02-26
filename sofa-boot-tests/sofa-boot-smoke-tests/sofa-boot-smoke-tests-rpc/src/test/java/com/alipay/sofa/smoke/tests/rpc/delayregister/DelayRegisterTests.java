@@ -48,7 +48,7 @@ public class DelayRegisterTests {
      */
     @Test
     public void testDelayRegister() throws InterruptedException {
-        // 首次发起调用、期望返回 RPC-020060001: Cannot get the service address of service
+        // 首次发起调用、期望返回 RPC cannot find service
         Assertions.assertThatThrownBy(() -> delayRegisterService.sayHello("hi")).isInstanceOf(SofaRouteException.class).
                 hasMessageContaining("Cannot get the service address of service [com.alipay.sofa.smoke.tests.rpc.boot.bean.delayregister.DelayRegisterService:1.0], please check the registry log.");
         // 因为在 META-INF/sofa-rpc/rpc-config.json 配置了5s

@@ -34,6 +34,6 @@ public class HealthCheckProviderConfigDelayRegisterChecker implements
 
     @Override
     public boolean allowRegister() {
-        return ReadinessState.ACCEPTING_TRAFFIC.equals(readinessCheckListener.getReadinessState());
+        return !ReadinessState.REFUSING_TRAFFIC.equals(readinessCheckListener.getReadinessState());
     }
 }

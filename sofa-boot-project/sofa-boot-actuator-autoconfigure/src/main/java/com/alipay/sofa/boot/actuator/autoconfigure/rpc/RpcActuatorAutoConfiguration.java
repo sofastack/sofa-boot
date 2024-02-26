@@ -59,6 +59,7 @@ public class RpcActuatorAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     @ConditionalOnAvailableEndpoint(endpoint = ReadinessEndpoint.class)
+    @ConditionalOnBean(ReadinessCheckListener.class)
     public HealthCheckProviderConfigDelayRegisterChecker healthCheckProviderConfigDelayRegisterChecker(ReadinessCheckListener readinessCheckListener) {
         return new HealthCheckProviderConfigDelayRegisterChecker(readinessCheckListener);
     }

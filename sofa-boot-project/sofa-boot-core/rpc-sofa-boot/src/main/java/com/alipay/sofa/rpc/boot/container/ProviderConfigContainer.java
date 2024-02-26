@@ -146,17 +146,17 @@ public class ProviderConfigContainer {
     public void publishAllProviderConfig() {
         for (ProviderConfig providerConfig : getAllProviderConfig()) {
             int delay = providerConfig.getDelay();
-            // 没有配置延时加载则直接去注册中心注册服务
-            if (!enableDelayRegister && delay <= 0) {
-                doPublishProviderConfig(providerConfig);
-            } else {
+            if (enableDelayRegister && delay > 0) {
                 // 根据延时时间异步去注册中心注册服务
                 if (scheduledExecutorService == null) {
-                    scheduledExecutorService = new SofaScheduledThreadPoolExecutor(1, "async-register-bean",
+                    scheduledExecutorService = new SofaScheduledThreadPoolExecutor(1, "rpc-provider-delay-register",
                             SofaBootConstants.SOFA_BOOT_SPACE_NAME);
                 }
                 scheduledExecutorService.schedule(() -> doDelayPublishProviderConfig(providerConfig,
                         providerConfigDelayRegisterCheckerList), delay, TimeUnit.MILLISECONDS);
+            } else {
+                // 没有配置延时加载则直接去注册中心注册服务
+                doPublishProviderConfig(providerConfig);
             }
         }
     }
