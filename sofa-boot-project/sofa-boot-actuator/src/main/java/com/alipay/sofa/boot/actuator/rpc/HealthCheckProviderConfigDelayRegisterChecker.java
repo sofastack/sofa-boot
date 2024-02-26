@@ -26,7 +26,7 @@ import org.springframework.boot.availability.ReadinessState;
 public class HealthCheckProviderConfigDelayRegisterChecker implements
                                                           ProviderConfigDelayRegisterChecker {
 
-    private ReadinessCheckListener readinessCheckListener;
+    private final ReadinessCheckListener readinessCheckListener;
 
     public HealthCheckProviderConfigDelayRegisterChecker(ReadinessCheckListener readinessCheckListener) {
         this.readinessCheckListener = readinessCheckListener;
@@ -34,6 +34,6 @@ public class HealthCheckProviderConfigDelayRegisterChecker implements
 
     @Override
     public boolean allowRegister() {
-        return !ReadinessState.REFUSING_TRAFFIC.equals(readinessCheckListener.getReadinessState());
+        return ReadinessState.REFUSING_TRAFFIC != readinessCheckListener.getReadinessState();
     }
 }

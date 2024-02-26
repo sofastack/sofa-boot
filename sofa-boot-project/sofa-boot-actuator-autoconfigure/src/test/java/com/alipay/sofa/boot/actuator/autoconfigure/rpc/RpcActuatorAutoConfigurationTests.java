@@ -17,10 +17,6 @@
 package com.alipay.sofa.boot.actuator.autoconfigure.rpc;
 
 import com.alipay.sofa.boot.actuator.autoconfigure.health.ReadinessAutoConfiguration;
-import com.alipay.sofa.boot.actuator.health.HealthCheckerProcessor;
-import com.alipay.sofa.boot.actuator.health.HealthIndicatorProcessor;
-import com.alipay.sofa.boot.actuator.health.ReadinessCheckCallbackProcessor;
-import com.alipay.sofa.boot.actuator.health.ReadinessCheckListener;
 import com.alipay.sofa.boot.actuator.rpc.HealthCheckProviderConfigDelayRegisterChecker;
 import com.alipay.sofa.boot.actuator.rpc.RpcAfterHealthCheckCallback;
 import com.alipay.sofa.boot.actuator.rpc.SofaRpcEndpoint;
@@ -29,8 +25,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.FilteredClassLoader;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.event.ContextRefreshedEvent;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -93,28 +87,5 @@ public class RpcActuatorAutoConfigurationTests {
                 .run((context) -> assertThat(context)
                         .doesNotHaveBean(RpcAfterHealthCheckCallback.class)
                         .doesNotHaveBean(SofaRpcEndpoint.class));
-    }
-
-    static class MockReadinessCheckListenerConfiguration {
-
-        @Bean
-        public MockReadinessCheckListener mockReadinessCheckListener() {
-            return new MockReadinessCheckListener(null, null, null);
-        }
-    }
-
-    static class MockReadinessCheckListener extends ReadinessCheckListener {
-
-        public MockReadinessCheckListener(HealthCheckerProcessor healthCheckerProcessor,
-                                          HealthIndicatorProcessor healthIndicatorProcessor,
-                                          ReadinessCheckCallbackProcessor afterReadinessCheckCallbackProcessor) {
-            super(healthCheckerProcessor, healthIndicatorProcessor,
-                afterReadinessCheckCallbackProcessor);
-        }
-
-        @Override
-        public void onContextRefreshedEvent(ContextRefreshedEvent event) {
-            // do nothing
-        }
     }
 }
