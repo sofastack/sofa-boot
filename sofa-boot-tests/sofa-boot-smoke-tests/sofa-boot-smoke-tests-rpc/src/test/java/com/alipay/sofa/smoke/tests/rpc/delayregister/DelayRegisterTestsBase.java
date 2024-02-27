@@ -20,6 +20,8 @@ import com.alipay.sofa.boot.actuator.health.ReadinessCheckCallback;
 import com.alipay.sofa.rpc.core.exception.SofaRouteException;
 import com.alipay.sofa.smoke.tests.rpc.boot.RpcSofaBootApplication;
 import com.alipay.sofa.smoke.tests.rpc.boot.bean.delayregister.DelayRegisterService;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.Health;
@@ -44,6 +46,17 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
                                                                       "sofa.boot.rpc.enable-delay-register=true" })
 @Import(DelayRegisterTestsBase.DelayRegisterConfiguration.class)
 public class DelayRegisterTestsBase {
+
+    @BeforeAll
+    public static void setUp() {
+        System.setProperty("provider.delay", "2000");
+    }
+
+    @AfterAll
+    public static void clear() {
+        System.clearProperty("provider.delay");
+    }
+
     @Autowired
     private DelayRegisterService delayRegisterService;
 
