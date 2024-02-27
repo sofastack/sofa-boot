@@ -30,6 +30,7 @@ public class RegistryConfigurations {
                 MulticastRegistryConfiguration.class.getName(),
                 MeshRegistryConfiguration.class.getName(),
                 ConsulRegistryConfiguration.class.getName(),
-                SofaRegistryConfiguration.class.getName() };
+                SofaRegistryConfiguration.class.getName(),
+                PolarisRegistryConfiguration.class.getName() };
     }
 }
