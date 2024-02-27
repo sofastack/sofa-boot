@@ -16,21 +16,23 @@
  */
 package com.alipay.sofa.boot.autoconfigure.rpc;
 
-/**
- *
- * @author yuanxuan
- * @version : RegistryConfigurations.java, v 0.1 2023年02月01日 16:07 yuanxuan Exp $
- */
-public class RegistryConfigurations {
+import com.alipay.sofa.boot.autoconfigure.condition.ConditionalOnSwitch;
+import com.alipay.sofa.rpc.boot.config.PolarisRegistryConfigurator;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-    public static String[] registryConfigurationClass() {
-        return new String[] { LocalRegistryConfiguration.class.getName(),
-                ZookeeperRegistryConfiguration.class.getName(),
-                NacosRegistryConfiguration.class.getName(),
-                MulticastRegistryConfiguration.class.getName(),
-                MeshRegistryConfiguration.class.getName(),
-                ConsulRegistryConfiguration.class.getName(),
-                SofaRegistryConfiguration.class.getName(),
-                PolarisRegistryConfiguration.class.getName() };
+/**
+ * @author chengming
+ * @version PolarisRegistryConfiguration.java, v 0.1 2024年02月27日 4:02 PM chengming
+ */
+@Configuration(proxyBeanMethods = false)
+@ConditionalOnSwitch(value = "rpcPolarisRegistryConfiguration")
+public class PolarisRegistryConfiguration {
+
+    @Bean
+    @ConditionalOnMissingBean
+    public PolarisRegistryConfigurator polarisRegistryConfigurator() {
+        return new PolarisRegistryConfigurator();
     }
 }
