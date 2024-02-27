@@ -399,8 +399,9 @@ public class SofaRpcAutoConfigurationTests {
     void customProviderConfigContainerForProviderConfigDelayRegisterChecker() {
         this.contextRunner.withUserConfiguration(ProviderConfigDelayRegisterCheckerConfiguration.class)
                 .run(context -> {
+                    ProviderConfigContainer providerConfigContainer = context.getBean(ProviderConfigContainer.class);
                     List<ProviderConfigDelayRegisterChecker> checkers =
-                            context.getBeanProvider(ProviderConfigDelayRegisterChecker.class).stream().toList();
+                            providerConfigContainer.getProviderConfigDelayRegisterCheckerList();
                     assertThat(checkers.size()).isEqualTo(1);
                     assertThat(checkers.get(0).allowRegister()).isTrue();
                 });

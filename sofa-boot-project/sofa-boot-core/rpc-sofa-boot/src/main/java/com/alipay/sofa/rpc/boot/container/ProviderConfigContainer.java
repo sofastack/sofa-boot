@@ -163,19 +163,14 @@ public class ProviderConfigContainer {
 
     private void doDelayPublishProviderConfig(ProviderConfig providerConfig,
                                               List<ProviderConfigDelayRegisterChecker> providerConfigDelayRegisterCheckerList) {
-        boolean allTrue = true;
         for (ProviderConfigDelayRegisterChecker providerConfigDelayRegisterChecker : providerConfigDelayRegisterCheckerList) {
             if (!providerConfigDelayRegisterChecker.allowRegister()) {
-                allTrue = false;
-                break;
+                if (LOGGER.isWarnEnabled()) {
+                    LOGGER.warn("service publish failed, interfaceId [{}], please check.",
+                        providerConfig.getInterfaceId());
+                }
+                return;
             }
-        }
-        if (!allTrue) {
-            if (LOGGER.isWarnEnabled()) {
-                LOGGER.warn("service publish failed, interfaceId["
-                            + providerConfig.getInterfaceId() + "], please check.");
-            }
-            return;
         }
         doPublishProviderConfig(providerConfig);
     }
