@@ -18,8 +18,6 @@ package com.alipay.sofa.boot.autoconfigure.rpc;
 
 import com.alipay.sofa.boot.autoconfigure.condition.ConditionalOnSwitch;
 import com.alipay.sofa.rpc.boot.config.PolarisRegistryConfigurator;
-import org.apache.curator.framework.CuratorFramework;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,7 +27,6 @@ import org.springframework.context.annotation.Configuration;
  * @version PolarisRegistryConfiguration.java, v 0.1 2024年02月27日 4:02 PM chengming
  */
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnClass(CuratorFramework.class)
 @ConditionalOnSwitch(value = "rpcPolarisRegistryConfiguration")
 public class PolarisRegistryConfiguration {
 
