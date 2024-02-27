@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:sofa="http://sofastack.io/schema/sofaboot"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://sofastack.io/schema/sofaboot   http://sofastack.io/schema/sofaboot.xsd">
+
+    <bean id="delayRegisterServiceImpl" class="com.alipay.sofa.smoke.tests.rpc.boot.bean.delayregister.DelayRegisterServiceImpl"/>
+    <bean id="customReadinessCallBack" class="com.alipay.sofa.smoke.tests.rpc.delayregister.DelayRegisterTestsBase.CustomReadinessCallBack"/>
+
+    <sofa:service ref="delayRegisterServiceImpl" interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.delayregister.DelayRegisterService" unique-id="${test-uniqueId}">
+        <sofa:binding.bolt/>
+    </sofa:service>
+    <sofa:reference jvm-first="false" id="delayRegisterService" interface="com.alipay.sofa.smoke.tests.rpc.boot.bean.delayregister.DelayRegisterService" unique-id="${test-uniqueId}">
+        <sofa:binding.bolt/>
+    </sofa:reference>
+
+</beans>

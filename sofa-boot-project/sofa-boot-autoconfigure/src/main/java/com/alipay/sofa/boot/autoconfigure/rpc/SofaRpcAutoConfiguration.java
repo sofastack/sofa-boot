@@ -24,6 +24,7 @@ import com.alipay.sofa.rpc.boot.config.FaultToleranceConfigurator;
 import com.alipay.sofa.rpc.boot.config.RegistryConfigureProcessor;
 import com.alipay.sofa.rpc.boot.container.ConsumerConfigContainer;
 import com.alipay.sofa.rpc.boot.container.ProviderConfigContainer;
+import com.alipay.sofa.rpc.boot.container.ProviderConfigDelayRegisterChecker;
 import com.alipay.sofa.rpc.boot.container.RegistryConfigContainer;
 import com.alipay.sofa.rpc.boot.container.ServerConfigContainer;
 import com.alipay.sofa.rpc.boot.context.RpcStartApplicationListener;
@@ -55,6 +56,7 @@ import org.springframework.core.type.AnnotationMetadata;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * {@link EnableAutoConfiguration Auto-configuration} for sofa Rpc.
@@ -72,12 +74,17 @@ public class SofaRpcAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public ProviderConfigContainer providerConfigContainer(SofaBootRpcProperties sofaBootRpcProperties) {
+    public ProviderConfigContainer providerConfigContainer(SofaBootRpcProperties sofaBootRpcProperties,
+                                                           ObjectProvider<ProviderConfigDelayRegisterChecker> providerConfigDelayRegisterCheckers) {
         ProviderConfigContainer providerConfigContainer = new ProviderConfigContainer();
         providerConfigContainer.setProviderRegisterWhiteList(sofaBootRpcProperties
             .getProviderRegisterWhiteList());
         providerConfigContainer.setProviderRegisterBlackList(sofaBootRpcProperties
             .getProviderRegisterBlackList());
+        providerConfigContainer.setProviderConfigDelayRegister(providerConfigDelayRegisterCheckers
+            .stream().collect(Collectors.toList()));
+        providerConfigContainer.setEnableDelayRegister(sofaBootRpcProperties
+            .isEnableDelayRegister());
         return providerConfigContainer;
     }
 

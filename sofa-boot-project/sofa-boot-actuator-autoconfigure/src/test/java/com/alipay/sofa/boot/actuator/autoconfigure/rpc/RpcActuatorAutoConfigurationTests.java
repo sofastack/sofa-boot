@@ -16,6 +16,8 @@
  */
 package com.alipay.sofa.boot.actuator.autoconfigure.rpc;
 
+import com.alipay.sofa.boot.actuator.autoconfigure.health.ReadinessAutoConfiguration;
+import com.alipay.sofa.boot.actuator.rpc.HealthCheckProviderConfigDelayRegisterChecker;
 import com.alipay.sofa.boot.actuator.rpc.RpcAfterHealthCheckCallback;
 import com.alipay.sofa.boot.actuator.rpc.SofaRpcEndpoint;
 import com.alipay.sofa.rpc.boot.context.RpcStartApplicationListener;
@@ -40,6 +42,15 @@ public class RpcActuatorAutoConfigurationTests {
                                                                      .of(RpcActuatorAutoConfiguration.class))
                                                              .withPropertyValues(
                                                                  "management.endpoints.web.exposure.include=readiness,rpc");
+
+    @Test
+    void runShouldHaveHealthCheckProviderConfigDelayRegisterChecker() {
+        this.contextRunner
+                .withUserConfiguration(ReadinessAutoConfiguration.class)
+                .withBean(RpcStartApplicationListener.class)
+                .run((context) -> assertThat(context)
+                        .hasSingleBean(HealthCheckProviderConfigDelayRegisterChecker.class));
+    }
 
     @Test
     void runShouldHaveRpcActuatorBeans() {
