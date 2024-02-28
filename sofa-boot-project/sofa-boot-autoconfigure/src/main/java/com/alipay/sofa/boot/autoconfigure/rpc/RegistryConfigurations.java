@@ -32,6 +32,6 @@ public class RegistryConfigurations {
                 ConsulRegistryConfiguration.class.getName(),
                 SofaRegistryConfiguration.class.getName(),
                 PolarisRegistryConfiguration.class.getName(),
-                KubernetesRegistryConfiguration.class.getName()};
+                KubernetesRegistryConfiguration.class.getName() };
     }
 }
