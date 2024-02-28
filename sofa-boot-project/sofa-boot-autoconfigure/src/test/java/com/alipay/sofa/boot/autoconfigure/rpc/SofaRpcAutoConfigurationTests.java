@@ -21,6 +21,7 @@ import com.alipay.sofa.boot.autoconfigure.runtime.SofaRuntimeAutoConfiguration;
 import com.alipay.sofa.rpc.boot.config.FaultToleranceConfigurator;
 import com.alipay.sofa.rpc.boot.config.RegistryConfigureProcessor;
 import com.alipay.sofa.rpc.boot.container.ProviderConfigContainer;
+import com.alipay.sofa.rpc.boot.container.ProviderConfigDelayRegisterChecker;
 import com.alipay.sofa.rpc.boot.container.RegistryConfigContainer;
 import com.alipay.sofa.rpc.boot.container.ServerConfigContainer;
 import com.alipay.sofa.rpc.boot.runtime.adapter.processor.ConsumerMockProcessor;
@@ -381,6 +382,46 @@ public class SofaRpcAutoConfigurationTests {
                     List<String> blackList = providerConfigContainer.getProviderRegisterBlackList();
                     assertThat(blackList).containsExactly("e", "f", "g");
                 });
+    }
+
+    @Test
+    void customProviderConfigContainerForEnableDelayRegister() {
+        this.contextRunner.withPropertyValues(
+                        "sofa.boot.rpc.enableDelayRegister=true").
+                run(context -> {
+                    ProviderConfigContainer providerConfigContainer = context.getBean(ProviderConfigContainer.class);
+                    boolean enableDelayRegister = providerConfigContainer.isEnableDelayRegister();
+                    assertThat(enableDelayRegister).isTrue();
+                });
+    }
+
+    @Test
+    void customProviderConfigContainerForProviderConfigDelayRegisterChecker() {
+        this.contextRunner.withUserConfiguration(ProviderConfigDelayRegisterCheckerConfiguration.class)
+                .run(context -> {
+                    ProviderConfigContainer providerConfigContainer = context.getBean(ProviderConfigContainer.class);
+                    List<ProviderConfigDelayRegisterChecker> checkers =
+                            providerConfigContainer.getProviderConfigDelayRegisterCheckerList();
+                    assertThat(checkers.size()).isEqualTo(1);
+                    assertThat(checkers.get(0).allowRegister()).isTrue();
+                });
+    }
+
+    @Configuration(proxyBeanMethods = false)
+    static class ProviderConfigDelayRegisterCheckerConfiguration {
+
+        @Bean
+        public ProviderConfigDelayRegisterChecker firstChecker() {
+            return new FirstChecker();
+        }
+    }
+
+    static class FirstChecker implements ProviderConfigDelayRegisterChecker {
+
+        @Override
+        public boolean allowRegister() {
+            return true;
+        }
     }
 
     @Configuration(proxyBeanMethods = false)

@@ -14,24 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.boot.autoconfigure.rpc;
+package com.alipay.sofa.smoke.tests.rpc.delayregister;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.test.context.TestPropertySource;
 
 /**
+ * Tests for rpc provider delay register when health check success.
  *
- * @author yuanxuan
- * @version : RegistryConfigurations.java, v 0.1 2023年02月01日 16:07 yuanxuan Exp $
+ * @author huzijie
+ * @version DelayRegisterSuccessTests.java, v 0.1 2024年02月26日 20:15 huzijie Exp $
  */
-public class RegistryConfigurations {
+@TestPropertySource(properties = { "delayregister.healthcheck.result=true", "test-uniqueId=success" })
+public class DelayRegisterSuccessTests extends DelayRegisterTestsBase {
 
-    public static String[] registryConfigurationClass() {
-        return new String[] { LocalRegistryConfiguration.class.getName(),
-                ZookeeperRegistryConfiguration.class.getName(),
-                NacosRegistryConfiguration.class.getName(),
-                MulticastRegistryConfiguration.class.getName(),
-                MeshRegistryConfiguration.class.getName(),
-                ConsulRegistryConfiguration.class.getName(),
-                SofaRegistryConfiguration.class.getName(),
-                PolarisRegistryConfiguration.class.getName(),
-                KubernetesRegistryConfiguration.class.getName()};
+    @Test
+    public void testDelayRegister() throws InterruptedException {
+        registerFail();
+
+        Thread.sleep(3000);
+
+        registerSuccess();
     }
 }
