@@ -82,6 +82,7 @@ public class RpcThreadPoolMonitor {
                         StringBuilder sb = new StringBuilder();
                         sb.append("coreSize:" + threadPoolExecutor.getCorePoolSize() + ",");
                         sb.append("maxPoolSize:" + threadPoolExecutor.getMaximumPoolSize() + ",");
+                        sb.append("queueRemainingSize:" + threadPoolExecutor.getQueue().remainingCapacity() + ",");
                         sb.append("keepAliveTime:"
                                   + threadPoolExecutor.getKeepAliveTime(TimeUnit.MILLISECONDS)
                                   + "\n");
