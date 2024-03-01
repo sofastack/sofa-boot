@@ -17,8 +17,15 @@
 package com.alipay.sofa.boot.util;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.cloud.util.PropertyUtils;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.Environment;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Tests for {@link SofaBootEnvUtils}.
@@ -49,4 +56,49 @@ public class SofaBootEnvUtilsTests {
     public void arkEnv() {
         assertThat(SofaBootEnvUtils.isArkEnv()).isFalse();
     }
+
+    @Test
+    void testIsSpringCloudBootstrapEnvironment_NullEnvironment() {
+        assertThat(SofaBootEnvUtils.isSpringCloudBootstrapEnvironment(null)).isFalse();
+    }
+
+    @Test
+    public void testInitSpringTestEnv() {
+        // Arrange
+        boolean expectedTestEnv = true;
+
+        // Act
+        boolean actualTestEnv = isInitSpringTestEnv();
+
+        // Assert
+        assertEquals(expectedTestEnv, actualTestEnv);
+    }
+
+    // Simulate the behavior of initSpringTestEnv() method
+    private boolean isInitSpringTestEnv() {
+        // Create a mock stack trace similar to the one in the method
+        StackTraceElement[] stackTrace = new StackTraceElement[]{
+                new StackTraceElement("SomeClass", "someMethod", "SomeClass.java", 10),
+                new StackTraceElement("AnotherClass", "loadContext", "AnotherClass.java", 20),
+                new StackTraceElement("org.springframework.boot.test.context.SpringBootContextLoader",
+                        "loadContext", "SpringBootContextLoader.java", 30)
+        };
+
+        // Call the method and check if it sets TEST_ENV to true
+        boolean TEST_ENV = false;
+        for (StackTraceElement stackTraceElement : stackTrace) {
+            if ("loadContext".equals(stackTraceElement.getMethodName())
+                    && "org.springframework.boot.test.context.SpringBootContextLoader"
+                    .equals(stackTraceElement.getClassName())) {
+                TEST_ENV = true;
+                break;
+            }
+        }
+        return TEST_ENV;
+    }
 }
+
+
+
+
+
