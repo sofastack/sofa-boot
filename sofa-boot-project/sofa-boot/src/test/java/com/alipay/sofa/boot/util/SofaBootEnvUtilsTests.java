@@ -59,32 +59,26 @@ public class SofaBootEnvUtilsTests {
 
     @Test
     void testIsSpringCloudBootstrapEnvironment_NullEnvironment() {
-        assertThat(SofaBootEnvUtils.isSpringCloudBootstrapEnvironment(null)).isFalse();
+        assertFalse(SofaBootEnvUtils.isSpringCloudBootstrapEnvironment(null));
     }
 
     @Test
     public void testInitSpringTestEnv() {
-        // Arrange
+
         boolean expectedTestEnv = true;
 
-        // Act
         boolean actualTestEnv = isInitSpringTestEnv();
 
-        // Assert
         assertEquals(expectedTestEnv, actualTestEnv);
     }
 
-    // Simulate the behavior of initSpringTestEnv() method
     private boolean isInitSpringTestEnv() {
-        // Create a mock stack trace similar to the one in the method
         StackTraceElement[] stackTrace = new StackTraceElement[]{
                 new StackTraceElement("SomeClass", "someMethod", "SomeClass.java", 10),
                 new StackTraceElement("AnotherClass", "loadContext", "AnotherClass.java", 20),
                 new StackTraceElement("org.springframework.boot.test.context.SpringBootContextLoader",
                         "loadContext", "SpringBootContextLoader.java", 30)
         };
-
-        // Call the method and check if it sets TEST_ENV to true
         boolean TEST_ENV = false;
         for (StackTraceElement stackTraceElement : stackTrace) {
             if ("loadContext".equals(stackTraceElement.getMethodName())
