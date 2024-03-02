@@ -1,9 +1,16 @@
 package com.alipay.sofa.boot.compatibility;
 
 import com.alipay.sofa.boot.compatibility.VerificationResult;
+import com.alipay.sofa.boot.util.SofaBootEnvUtils;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.*;
 
+/**
+ * Tests for {@link VerificationResult}.
+ *
+ * @author JPSINH27
+ * @version VerificationResultTests, v 0.1 2024年03月02日 10:20 PM
+ */
 public class VerificationResultTests {
 
     @Test

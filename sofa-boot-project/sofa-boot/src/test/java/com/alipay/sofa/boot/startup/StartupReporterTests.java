@@ -1,5 +1,6 @@
 package com.alipay.sofa.boot.startup;
 
+import com.alipay.sofa.boot.env.SofaBootEnvironmentPostProcessor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -11,6 +12,12 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Tests for {@link StartupReporter}.
+ *
+ * @author JPSINH27
+ * @version StartupReporterTests.java, v 0.1 2024年01月03日 10:19 PM
+ */
 public class StartupReporterTests {
 
     @Mock
