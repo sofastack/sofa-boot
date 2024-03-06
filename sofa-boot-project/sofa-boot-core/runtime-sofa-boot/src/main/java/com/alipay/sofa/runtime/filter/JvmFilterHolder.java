@@ -18,9 +18,8 @@ package com.alipay.sofa.runtime.filter;
 
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -31,7 +30,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class JvmFilterHolder {
 
-    private final List<JvmFilter> JVM_FILTERS    = new ArrayList<>();
+    private final List<JvmFilter> JVM_FILTERS    = new CopyOnWriteArrayList<>();
 
     private final AtomicBoolean   FILTERS_SORTED = new AtomicBoolean(false);
 
@@ -56,8 +55,8 @@ public class JvmFilterHolder {
     }
 
     public static boolean beforeInvoking(JvmFilterContext context) {
-        List<JvmFilter> filters = Collections.unmodifiableList(context.getSofaRuntimeContext()
-            .getJvmFilterHolder().getJvmFilters());
+        List<JvmFilter> filters = context.getSofaRuntimeContext().getJvmFilterHolder()
+            .getJvmFilters();
         for (JvmFilter filter : filters) {
             if (!filter.before(context)) {
                 return false;
@@ -67,8 +66,8 @@ public class JvmFilterHolder {
     }
 
     public static boolean afterInvoking(JvmFilterContext context) {
-        List<JvmFilter> filters = Collections.unmodifiableList(context.getSofaRuntimeContext()
-            .getJvmFilterHolder().getJvmFilters());
+        List<JvmFilter> filters = context.getSofaRuntimeContext().getJvmFilterHolder()
+            .getJvmFilters();
         for (int i = filters.size() - 1; i >= 0; --i) {
             if (!filters.get(i).after(context)) {
                 return false;
