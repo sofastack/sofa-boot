@@ -40,24 +40,24 @@ import java.lang.reflect.Method;
  */
 public class DynamicJvmServiceInvoker extends ServiceProxy {
 
-    private static final Logger            LOGGER            = SofaBootLoggerFactory
-                                                                 .getLogger(DynamicJvmServiceInvoker.class);
+    private static final Logger   LOGGER          = SofaBootLoggerFactory
+                                                      .getLogger(DynamicJvmServiceInvoker.class);
 
-    private final Contract                 contract;
-    private final Object                   targetService;
-    private final String                   bizIdentity;
-    private final ThreadLocal<ClassLoader> clientClassloader = new ThreadLocal<>();
-    private final boolean                  serialize;
+    private final Contract        contract;
+    private final Object          targetService;
+    private final String          bizIdentity;
+    private final ClassLoader     clientClassloader;
+    private final boolean         serialize;
 
-    static protected final String          TOSTRING_METHOD   = "toString";
-    static protected final String          EQUALS_METHOD     = "equals";
-    static protected final String          HASHCODE_METHOD   = "hashCode";
+    static protected final String TOSTRING_METHOD = "toString";
+    static protected final String EQUALS_METHOD   = "equals";
+    static protected final String HASHCODE_METHOD = "hashCode";
 
     public DynamicJvmServiceInvoker(ClassLoader clientClassloader, ClassLoader serviceClassLoader,
                                     Object targetService, Contract contract, String bizIdentity,
                                     boolean serialize) {
         super(serviceClassLoader);
-        this.clientClassloader.set(clientClassloader);
+        this.clientClassloader = clientClassloader;
         this.targetService = targetService;
         this.contract = contract;
         this.bizIdentity = bizIdentity;
@@ -103,10 +103,10 @@ public class DynamicJvmServiceInvoker extends ServiceProxy {
                 }
             } else {
                 Object[] arguments = (Object[]) hessianTransport(targetArguments, null);
-                Class[] argumentTypes = (Class[]) hessianTransport(oldArgumentTypes, null);
+                Class<?>[] argumentTypes = (Class<?>[]) hessianTransport(oldArgumentTypes, null);
                 transformMethod = getTargetMethod(targetMethod, argumentTypes);
                 Object retVal = transformMethod.invoke(targetService, arguments);
-                return hessianTransport(retVal, getClientClassloader());
+                return hessianTransport(retVal, clientClassloader);
             }
         } catch (InvocationTargetException ex) {
             throw ex.getTargetException();
@@ -114,7 +114,6 @@ public class DynamicJvmServiceInvoker extends ServiceProxy {
             if (DynamicJvmServiceProxyFinder.getInstance().getBizManagerService() != null) {
                 ReplayContext.clearPlaceHolder();
             }
-            clearClientClassloader();
         }
     }
 
@@ -134,18 +133,6 @@ public class DynamicJvmServiceInvoker extends ServiceProxy {
 
     public Class<?> getInterfaceType() {
         return contract.getInterfaceType();
-    }
-
-    public ClassLoader getClientClassloader() {
-        return clientClassloader.get();
-    }
-
-    public void setClientClassloader(ClassLoader clientClassloader) {
-        this.clientClassloader.set(clientClassloader);
-    }
-
-    public void clearClientClassloader() {
-        this.clientClassloader.remove();
     }
 
     private Method getTargetMethod(Method method, Class<?>[] argumentTypes) {
