@@ -132,8 +132,6 @@ public class SofaGenericApplicationContextTests {
             failed = throwable != null;
         }
 
-
-
         public boolean isStarted() {
             return started;
         }

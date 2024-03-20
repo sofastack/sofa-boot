@@ -17,15 +17,10 @@
 package com.alipay.sofa.boot.util;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.cloud.util.PropertyUtils;
-import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.core.env.Environment;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
  * Tests for {@link SofaBootEnvUtils}.
@@ -73,16 +68,16 @@ public class SofaBootEnvUtilsTests {
     }
 
     private boolean isInitSpringTestEnv() {
-        StackTraceElement[] stackTrace = new StackTraceElement[]{
+        StackTraceElement[] stackTrace = new StackTraceElement[] {
                 new StackTraceElement("SomeClass", "someMethod", "SomeClass.java", 10),
                 new StackTraceElement("AnotherClass", "loadContext", "AnotherClass.java", 20),
-                new StackTraceElement("org.springframework.boot.test.context.SpringBootContextLoader",
-                        "loadContext", "SpringBootContextLoader.java", 30)
-        };
+                new StackTraceElement(
+                    "org.springframework.boot.test.context.SpringBootContextLoader", "loadContext",
+                    "SpringBootContextLoader.java", 30) };
         boolean TEST_ENV = false;
         for (StackTraceElement stackTraceElement : stackTrace) {
             if ("loadContext".equals(stackTraceElement.getMethodName())
-                    && "org.springframework.boot.test.context.SpringBootContextLoader"
+                && "org.springframework.boot.test.context.SpringBootContextLoader"
                     .equals(stackTraceElement.getClassName())) {
                 TEST_ENV = true;
                 break;
@@ -91,8 +86,3 @@ public class SofaBootEnvUtilsTests {
         return TEST_ENV;
     }
 }
-
-
-
-
-
