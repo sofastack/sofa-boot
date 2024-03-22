@@ -8,3 +8,4 @@ com.alipay.sofa.boot.actuator.autoconfigure.health.ManualReadinessCallbackEndpoi
 com.alipay.sofa.boot.actuator.autoconfigure.startup.StartupEndPointAutoConfiguration
 com.alipay.sofa.boot.actuator.autoconfigure.rpc.RpcActuatorAutoConfiguration
 com.alipay.sofa.boot.actuator.autoconfigure.isle.IsleEndpointAutoConfiguration
+com.alipay.sofa.boot.actuator.autoconfigure.threadpool.ThreadPoolEndpointAutoConfiguration

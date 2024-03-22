@@ -25,7 +25,7 @@
         <sofa.registry.version>6.1.8</sofa.registry.version>
         <tracer.core.version>4.0.0</tracer.core.version>
         <rpc.core.version>5.12.0</rpc.core.version>
-        <sofa.common.tools.version>2.1.0</sofa.common.tools.version>
+        <sofa.common.tools.version>2.1.1-SNAPSHOT</sofa.common.tools.version>
         <sofa.bolt.version>1.6.6</sofa.bolt.version>
         <sofa.hessian.version>3.5.1</sofa.hessian.version>
         <sofa.ark.version>2.2.7</sofa.ark.version>
