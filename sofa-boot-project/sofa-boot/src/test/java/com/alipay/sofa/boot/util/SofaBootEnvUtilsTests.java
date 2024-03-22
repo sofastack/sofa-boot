@@ -19,6 +19,8 @@ package com.alipay.sofa.boot.util;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
  * Tests for {@link SofaBootEnvUtils}.
@@ -48,5 +50,39 @@ public class SofaBootEnvUtilsTests {
     @Test
     public void arkEnv() {
         assertThat(SofaBootEnvUtils.isArkEnv()).isFalse();
+    }
+
+    @Test
+    void testIsSpringCloudBootstrapEnvironment_NullEnvironment() {
+        assertFalse(SofaBootEnvUtils.isSpringCloudBootstrapEnvironment(null));
+    }
+
+    @Test
+    public void testInitSpringTestEnv() {
+
+        boolean expectedTestEnv = true;
+
+        boolean actualTestEnv = isInitSpringTestEnv();
+
+        assertEquals(expectedTestEnv, actualTestEnv);
+    }
+
+    private boolean isInitSpringTestEnv() {
+        StackTraceElement[] stackTrace = new StackTraceElement[] {
+                new StackTraceElement("SomeClass", "someMethod", "SomeClass.java", 10),
+                new StackTraceElement("AnotherClass", "loadContext", "AnotherClass.java", 20),
+                new StackTraceElement(
+                    "org.springframework.boot.test.context.SpringBootContextLoader", "loadContext",
+                    "SpringBootContextLoader.java", 30) };
+        boolean TEST_ENV = false;
+        for (StackTraceElement stackTraceElement : stackTrace) {
+            if ("loadContext".equals(stackTraceElement.getMethodName())
+                && "org.springframework.boot.test.context.SpringBootContextLoader"
+                    .equals(stackTraceElement.getClassName())) {
+                TEST_ENV = true;
+                break;
+            }
+        }
+        return TEST_ENV;
     }
 }
