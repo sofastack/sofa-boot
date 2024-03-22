@@ -19,6 +19,7 @@ package com.alipay.sofa.boot.actuator.autoconfigure.threadpool;
 import com.alipay.sofa.boot.actuator.threadpool.ThreadPoolEndpoint;
 import com.alipay.sofa.common.thread.ThreadPoolGovernor;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -29,6 +30,7 @@ import org.springframework.context.annotation.Bean;
  * @author huzijie
  * @version ThreadPoolEndpointAutoConfiguration.java, v 0.1 2024年03月22日 11:58 huzijie Exp $
  */
+@AutoConfiguration
 @ConditionalOnAvailableEndpoint(endpoint = ThreadPoolEndpoint.class)
 public class ThreadPoolEndpointAutoConfiguration {
 
