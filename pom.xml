@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.2</version>
+        <version>3.2.4</version>
     </parent>
 
     <groupId>com.alipay.sofa</groupId>
@@ -37,7 +37,7 @@
     <properties>
         <revision>4.3.0-SNAPSHOT</revision>
         <sofa.boot.version>${revision}</sofa.boot.version>
-        <spring.boot.version>3.2.2</spring.boot.version>
+        <spring.boot.version>3.2.4</spring.boot.version>
         <!--project-->
         <java.version>17</java.version>
         <project.encoding>UTF-8</project.encoding>
