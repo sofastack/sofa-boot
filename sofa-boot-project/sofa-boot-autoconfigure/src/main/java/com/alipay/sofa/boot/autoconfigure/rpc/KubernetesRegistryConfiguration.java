@@ -16,22 +16,19 @@
  */
 package com.alipay.sofa.boot.autoconfigure.rpc;
 
-/**
- *
- * @author yuanxuan
- * @version : RegistryConfigurations.java, v 0.1 2023年02月01日 16:07 yuanxuan Exp $
- */
-public class RegistryConfigurations {
+import com.alipay.sofa.boot.autoconfigure.condition.ConditionalOnSwitch;
+import com.alipay.sofa.rpc.boot.config.KubernetesConfigurator;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-    public static String[] registryConfigurationClass() {
-        return new String[] { LocalRegistryConfiguration.class.getName(),
-                ZookeeperRegistryConfiguration.class.getName(),
-                NacosRegistryConfiguration.class.getName(),
-                MulticastRegistryConfiguration.class.getName(),
-                MeshRegistryConfiguration.class.getName(),
-                ConsulRegistryConfiguration.class.getName(),
-                SofaRegistryConfiguration.class.getName(),
-                PolarisRegistryConfiguration.class.getName(),
-                KubernetesRegistryConfiguration.class.getName() };
+@Configuration(proxyBeanMethods = false)
+@ConditionalOnSwitch(value = "rpcKubernetesRegistry")
+public class KubernetesRegistryConfiguration {
+
+    @Bean
+    @ConditionalOnMissingBean
+    public KubernetesConfigurator kubernetesConfigurator() {
+        return new KubernetesConfigurator();
     }
 }
