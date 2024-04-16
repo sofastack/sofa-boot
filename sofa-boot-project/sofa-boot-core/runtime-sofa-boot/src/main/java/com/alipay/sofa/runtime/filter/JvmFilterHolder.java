@@ -18,9 +18,9 @@ package com.alipay.sofa.runtime.filter;
 
 import org.springframework.core.Ordered;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -28,7 +28,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Created on 2020/8/18
  */
 public class JvmFilterHolder {
-    private static final List<JvmFilter> JVM_FILTERS = new ArrayList<>();
+    private static final List<JvmFilter> JVM_FILTERS = new CopyOnWriteArrayList<>();
     private static final AtomicBoolean filtersSorted  = new AtomicBoolean(false);
 
     private static final Comparator<Ordered> comparator = (f1, f2) -> {
