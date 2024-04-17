@@ -53,7 +53,7 @@
         <nacos.version>1.0.0</nacos.version>
         <swagger.version>2.0.0</swagger.version>
         <protoc.version>3.11.0</protoc.version>
-        <grpc.version>1.28.0</grpc.version>
+        <grpc.version>1.53.0</grpc.version>
         <grpc.common.protos.version>1.17.0</grpc.common.protos.version>
     </properties>
 
