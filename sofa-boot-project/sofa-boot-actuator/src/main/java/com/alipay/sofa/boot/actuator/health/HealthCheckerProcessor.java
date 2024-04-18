@@ -106,12 +106,12 @@ public class HealthCheckerProcessor implements ApplicationContextAware {
         String checkComponentNames = readinessHealthCheckers.values().stream()
                 .map(HealthChecker::getComponentName).collect(Collectors.joining(","));
         logger.info("SOFABoot HealthChecker readiness check {} item: {}.",
-                healthCheckers.size(), checkComponentNames);
+                readinessHealthCheckers.size(), checkComponentNames);
         boolean result;
         if (isParallelCheck()) {
-            CountDownLatch countDownLatch = new CountDownLatch(healthCheckers.size());
+            CountDownLatch countDownLatch = new CountDownLatch(readinessHealthCheckers.size());
             AtomicBoolean parallelResult = new AtomicBoolean(true);
-            healthCheckers.forEach((String key, HealthChecker value) -> healthCheckExecutor.execute(() -> {
+            readinessHealthCheckers.forEach((String key, HealthChecker value) -> healthCheckExecutor.execute(() -> {
                 try {
                     if (!doHealthCheck(key, value, false, healthMap, true, false)) {
                         parallelResult.set(false);
