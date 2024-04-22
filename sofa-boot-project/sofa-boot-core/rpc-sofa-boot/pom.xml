@@ -14,6 +14,7 @@
     <properties>
         <main.user.dir>${basedir}/../../..</main.user.dir>
         <sofa.rpc.compiler.version>0.0.3</sofa.rpc.compiler.version>
+        <protobuf.protoc.version>3.17.3</protobuf.protoc.version>
     </properties>
 
     <dependencies>
@@ -152,7 +153,7 @@
                 <artifactId>protobuf-maven-plugin</artifactId>
                 <version>0.5.1</version>
                 <configuration>
-                    <protocArtifact>com.google.protobuf:protoc:3.7.1:exe:${os.detected.classifier}</protocArtifact>
+                    <protocArtifact>com.google.protobuf:protoc:${protobuf.protoc.version}:exe:${os.detected.classifier}</protocArtifact>
                     <pluginId>grpc-java</pluginId>
                     <pluginArtifact>io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}</pluginArtifact>
                     <outputDirectory>build/generated/source/proto/test/java</outputDirectory>
