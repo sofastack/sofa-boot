@@ -157,7 +157,7 @@ public class StartupSpringApplicationRunListener implements SpringApplicationRun
 
     @Override
     public int getOrder() {
-        return Ordered.LOWEST_PRECEDENCE - 1;
+        return Ordered.LOWEST_PRECEDENCE - 10;
     }
 
     private String getStartedMessage(Environment environment, Duration timeTakenToStartup) {
