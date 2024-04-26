@@ -83,17 +83,8 @@ SOFABoot is compiled under JDK 17 currently and needs [Apache Maven 3.5.4](https
 ### Community
 See our community [materials](https://github.com/sofastack/community/blob/master/ROLES-EN.md).
 
-Scan the QR code below with DingTalk(钉钉) to join the SOFAStack user group.
-<p align="center">
-<img src="https://gw.alipayobjects.com/mdn/sofastack/afts/img/A*1DklS7SZFNMAAAAAAAAAAAAAARQnAQ" width="200">
-</p>
-
-Scan the QR code below with WeChat(微信) to Follow our Official Accounts.
-<p align="center">
-<img src="https://gw.alipayobjects.com/mdn/sofastack/afts/img/A*LVCnR6KtEfEAAAAAAAAAAABjARQnAQ" width="222">
-</p>
-
-
+### Contact Us
+See [Community contact way](https://www.sofastack.tech/awesome/#community)
 
 ## Acknowledgements
 The first version of SOFA is created by Felix(阿玺), lots of thanks are given to Felix for laying a solid foundation for SOFA.
