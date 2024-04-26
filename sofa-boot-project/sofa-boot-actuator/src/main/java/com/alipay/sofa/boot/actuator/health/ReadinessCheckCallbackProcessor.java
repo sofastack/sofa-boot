@@ -112,7 +112,7 @@ public class ReadinessCheckCallbackProcessor implements ApplicationContextAware 
 
         BaseStat baseStat = new BaseStat();
         baseStat.setName(beanId);
-        baseStat.putAttribute("type", "readinessCheckCallbacn");
+        baseStat.putAttribute("type", "readinessCheckCallback");
         baseStat.setStartTime(System.currentTimeMillis());
 
         try {
