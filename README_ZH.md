@@ -1,6 +1,6 @@
 ## SOFABoot
 
-![build](https://github.com/sofastack/sofa-boot/workflows/build/badge.svg)
+![build](https://github.com/sofastack/sofa-boot/actions/workflows/maven.yml)
 [![Coverage Status](https://codecov.io/gh/sofastack/sofa-boot/branch/master/graph/badge.svg)](https://codecov.io/gh/sofastack/sofa-boot/branch/master)
 ![license](https://img.shields.io/badge/license-Apache--2.0-green.svg)
 [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/sofastack/sofa-boot.svg)](http://isitmaintained.com/project/sofastack/sofa-boot "Average time to resolve an issue")
