@@ -60,19 +60,33 @@ public class IsleBeansEndpoint extends BeansEndpoint {
     @Override
     public BeansEndpoint.BeansDescriptor beans() {
         BeansEndpoint.BeansDescriptor beansDescriptor = super.beans();
-        Map<String, BeansEndpoint.ContextBeansDescriptor> moduleApplicationContexts = getModuleApplicationContexts(applicationRuntimeModel);
+        String springParentId = null;
+        for (Map.Entry<String, ContextBeansDescriptor> entry : beansDescriptor.getContexts()
+            .entrySet()) {
+            if (entry.getValue().getParentId() == null) {
+                springParentId = entry.getKey();
+                break;
+            }
+        }
+
+        Map<String, BeansEndpoint.ContextBeansDescriptor> moduleApplicationContexts = getModuleApplicationContexts(
+            applicationRuntimeModel, springParentId);
         beansDescriptor.getContexts().putAll(moduleApplicationContexts);
         return beansDescriptor;
     }
 
-    private Map<String, BeansEndpoint.ContextBeansDescriptor> getModuleApplicationContexts(ApplicationRuntimeModel applicationRuntimeModel) {
+    private Map<String, BeansEndpoint.ContextBeansDescriptor> getModuleApplicationContexts(ApplicationRuntimeModel applicationRuntimeModel,String springParentId) {
         Map<String, BeansEndpoint.ContextBeansDescriptor> contexts = new HashMap<>();
         List<DeploymentDescriptor> installedModules = applicationRuntimeModel.getInstalled();
         installedModules.forEach(descriptor -> {
             ApplicationContext applicationContext = descriptor.getApplicationContext();
+            String parentId = descriptor.getSpringParent();
+            if (parentId == null){
+                parentId = springParentId;
+            }
             if (applicationContext instanceof ConfigurableApplicationContext) {
                 BeansEndpoint.ContextBeansDescriptor contextBeans = describing((ConfigurableApplicationContext) applicationContext,
-                        descriptor.getSpringParent());
+                        parentId);
                 if (contextBeans != null) {
                     contexts.put(descriptor.getModuleName(), contextBeans);
                 }
