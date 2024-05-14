@@ -49,6 +49,7 @@ import org.springframework.beans.factory.annotation.AnnotatedGenericBeanDefiniti
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
@@ -247,7 +248,9 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
         if (!registry.containsBeanDefinition(referenceId)) {
             BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition();
             builder.getRawBeanDefinition().setScope(beanDefinition.getScope());
-            builder.getRawBeanDefinition().setLazyInit(beanDefinition.isLazyInit());
+            if (((AbstractBeanDefinition) beanDefinition).getLazyInit() != null) {
+                builder.getRawBeanDefinition().setLazyInit(beanDefinition.isLazyInit());
+            }
             builder.getRawBeanDefinition().setBeanClass(ReferenceFactoryBean.class);
             builder.addAutowiredProperty(AbstractContractDefinitionParser.SOFA_RUNTIME_CONTEXT);
             builder
@@ -314,7 +317,9 @@ public class ServiceBeanFactoryPostProcessor implements BeanFactoryPostProcessor
 
         if (!registry.containsBeanDefinition(serviceId)) {
             builder.getRawBeanDefinition().setScope(beanDefinition.getScope());
-            builder.setLazyInit(beanDefinition.isLazyInit());
+            if (((AbstractBeanDefinition) beanDefinition).getLazyInit() != null) {
+                builder.setLazyInit(beanDefinition.isLazyInit());
+            }
             builder.getRawBeanDefinition().setBeanClass(ServiceFactoryBean.class);
             builder.addAutowiredProperty(AbstractContractDefinitionParser.SOFA_RUNTIME_CONTEXT);
             builder
