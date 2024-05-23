@@ -93,7 +93,7 @@ public class SofaRuntimeContainerTests {
 
         assertThat(SofaRuntimeContainer.getApplicationContext(classLoaderA)).isEqualTo(
             genericApplicationContext);
-        sofaRuntimeContainer.destroy();
+        sofaRuntimeContainer.destroy(classLoaderA);
         assertThat(SofaRuntimeContainer.getApplicationContext(classLoaderA)).isNull();
     }
 

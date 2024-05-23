@@ -42,13 +42,8 @@ public class SofaBizUninstallEventHandler implements EventHandler<BeforeBizStopE
         // Remove dynamic JVM service cache
         DynamicJvmServiceProxyFinder.getInstance().afterBizUninstall(biz);
 
-        SofaRuntimeManager sofaRuntimeManager = SofaRuntimeContainer.getSofaRuntimeManager(biz
-            .getBizClassLoader());
+        SofaRuntimeContainer.destroy(biz.getBizClassLoader());
 
-        if (sofaRuntimeManager == null) {
-            throw new IllegalStateException("No SofaRuntimeManager match classLoader");
-        }
-        sofaRuntimeManager.shutDownExternally();
     }
 
     @Override
