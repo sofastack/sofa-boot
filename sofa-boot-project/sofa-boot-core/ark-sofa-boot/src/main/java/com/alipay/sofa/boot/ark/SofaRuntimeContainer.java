@@ -18,7 +18,6 @@ package com.alipay.sofa.boot.ark;
 
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.DisposableBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.util.Assert;
@@ -34,7 +33,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author huzijie
  * @since 2.5.0
  */
-public class SofaRuntimeContainer implements ApplicationContextAware, DisposableBean {
+public class SofaRuntimeContainer implements ApplicationContextAware {
 
     private static final Map<ClassLoader, ApplicationContext> APPLICATION_CONTEXT_MAP  = new ConcurrentHashMap<>();
 
@@ -104,10 +103,14 @@ public class SofaRuntimeContainer implements ApplicationContextAware, Disposable
         JVM_INVOKE_SERIALIZE_MAP.clear();
     }
 
-    @Override
-    public void destroy() {
+    public static void destroy(ClassLoader contextClassLoader) {
         APPLICATION_CONTEXT_MAP.remove(contextClassLoader);
-        SOFA_RUNTIME_MANAGER_MAP.remove(contextClassLoader);
+
+        SofaRuntimeManager sofaRuntimeManager = SOFA_RUNTIME_MANAGER_MAP.remove(contextClassLoader);
+        if (sofaRuntimeManager != null) {
+            sofaRuntimeManager.shutDownExternally();
+        }
+
         JVM_SERVICE_CACHE_MAP.remove(contextClassLoader);
         JVM_INVOKE_SERIALIZE_MAP.remove(contextClassLoader);
     }
