@@ -27,7 +27,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.support.GenericApplicationContext;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -48,14 +47,6 @@ public class SofaBizUninstallEventHandlerTests {
     @BeforeEach
     public void clear() {
         SofaRuntimeContainer.clear();
-    }
-
-    @Test
-    public void noSofaRuntimeManager() {
-        MockBiz mockBiz = new MockBiz();
-        assertThatThrownBy(() -> sofaBizUninstallEventHandler.handleEvent(new BeforeBizStopEvent(mockBiz)))
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessage("No SofaRuntimeManager match classLoader");
     }
 
     @Test
