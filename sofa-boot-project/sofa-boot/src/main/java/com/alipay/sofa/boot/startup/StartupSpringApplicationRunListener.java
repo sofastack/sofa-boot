@@ -42,29 +42,24 @@ import java.util.List;
  */
 public class StartupSpringApplicationRunListener implements SpringApplicationRunListener, Ordered {
 
-    private final SpringApplication     application;
+    private final SpringApplication application;
 
-    private final String[]              args;
+    private final String[]          args;
 
-    private final StartupReporter       startupReporter;
+    private final StartupReporter   startupReporter;
 
-    private final ApplicationStartup    userApplicationStartup;
+    private BaseStat                jvmStartingStage;
 
-    private BufferingApplicationStartup applicationStartup;
+    private BaseStat                environmentPrepareStage;
 
-    private BaseStat                    jvmStartingStage;
+    private ChildrenStat<BaseStat>  applicationContextPrepareStage;
 
-    private BaseStat                    environmentPrepareStage;
-
-    private ChildrenStat<BaseStat>      applicationContextPrepareStage;
-
-    private BaseStat                    applicationContextLoadStage;
+    private BaseStat                applicationContextLoadStage;
 
     public StartupSpringApplicationRunListener(SpringApplication springApplication, String[] args) {
         this.application = springApplication;
         this.args = args;
         this.startupReporter = new StartupReporter();
-        this.userApplicationStartup = springApplication.getApplicationStartup();
     }
 
     @Override
@@ -84,16 +79,12 @@ public class StartupSpringApplicationRunListener implements SpringApplicationRun
         environmentPrepareStage.setEndTime(System.currentTimeMillis());
         startupReporter.setAppName(environment.getProperty(SofaBootConstants.APP_NAME_KEY));
         startupReporter.bindToStartupReporter(environment);
+        bootstrapContext.register(StartupReporter.class, key -> startupReporter);
 
         // create BufferingApplicationStartup if user not custom.
+        ApplicationStartup userApplicationStartup = application.getApplicationStartup();
         if (ApplicationStartup.DEFAULT == userApplicationStartup || userApplicationStartup == null) {
-            this.applicationStartup = new BufferingApplicationStartup(startupReporter.getBufferSize());
-        } else if (userApplicationStartup instanceof BufferingApplicationStartup userApplicationStartup) {
-            // use user custom BufferingApplicationStartup
-            this.applicationStartup = userApplicationStartup;
-        } else {
-            // disable startup static when user custom other type ApplicationStartup;
-            this.applicationStartup = null;
+            application.setApplicationStartup(new BufferingApplicationStartup(startupReporter.getBufferSize()));
         }
     }
 
@@ -108,9 +99,6 @@ public class StartupSpringApplicationRunListener implements SpringApplicationRun
             List<BaseStat> baseStatList = startupSpringApplication.getInitializerStartupStatList();
             applicationContextPrepareStage.setChildren(new ArrayList<>(baseStatList));
             baseStatList.clear();
-        }
-        if (applicationStartup != null) {
-            context.setApplicationStartup(applicationStartup);
         }
     }
 
@@ -156,7 +144,7 @@ public class StartupSpringApplicationRunListener implements SpringApplicationRun
 
     @Override
     public int getOrder() {
-        return Ordered.LOWEST_PRECEDENCE;
+        return Ordered.LOWEST_PRECEDENCE - 10;
     }
 
     private String getStartedMessage(Environment environment, Duration timeTakenToStartup) {
