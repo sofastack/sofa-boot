@@ -33,6 +33,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.Callable;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -111,19 +112,8 @@ public class HealthCheckerProcessor implements ApplicationContextAware {
         if (isParallelCheck()) {
             CountDownLatch countDownLatch = new CountDownLatch(readinessHealthCheckers.size());
             AtomicBoolean parallelResult = new AtomicBoolean(true);
-            readinessHealthCheckers.forEach((String key, HealthChecker value) -> healthCheckExecutor.execute(() -> {
-                try {
-                    if (!doHealthCheck(key, value, false, healthMap, true, false)) {
-                        parallelResult.set(false);
-                    }
-                } catch (Throwable t) {
-                    parallelResult.set(false);
-                    logger.error(ErrorCode.convert("01-22004"), t);
-                    healthMap.put(key, new Health.Builder().withException(t).status(Status.DOWN).build());
-                } finally {
-                    countDownLatch.countDown();
-                }
-            }));
+            readinessHealthCheckers.forEach((String key, HealthChecker value) -> healthCheckExecutor.execute(
+                    new AsyncHealthCheckRunnable(key, value, healthMap, parallelResult, countDownLatch)));
             boolean finished = false;
             try {
                 finished = countDownLatch.await(getParallelCheckTimeout(), TimeUnit.MILLISECONDS);
@@ -160,7 +150,7 @@ public class HealthCheckerProcessor implements ApplicationContextAware {
      * @return health check passes or not
      */
     private boolean doHealthCheck(String beanId, HealthChecker healthChecker, boolean isRetry,
-                                      Map<String, Health> healthMap, boolean isReadiness, boolean wait) {
+                                  Map<String, Health> healthMap, boolean isReadiness, boolean wait) {
         Assert.notNull(healthMap, "HealthMap must not be null");
 
         Health health;
@@ -180,20 +170,23 @@ public class HealthCheckerProcessor implements ApplicationContextAware {
         do {
             try {
                 if (wait) {
-                    Future<Health> future = healthCheckExecutor.submit(healthChecker::isHealthy);
+                    Future<Health> future = healthCheckExecutor
+                        .submit(new AsyncHealthCheckCallable(healthChecker));
                     health = future.get(timeout, TimeUnit.MILLISECONDS);
                 } else {
                     health = healthChecker.isHealthy();
                 }
-            }  catch (TimeoutException e) {
-                logger.error(
+            } catch (TimeoutException e) {
+                logger
+                    .error(
                         "Timeout occurred while doing HealthChecker[{}] {} check, the timeout value is: {}ms.",
                         beanId, checkType, timeout);
-                health = new Health.Builder().withException(e).withDetail("timeout", timeout).status(Status.UNKNOWN).build();
+                health = new Health.Builder().withException(e).withDetail("timeout", timeout)
+                    .status(Status.UNKNOWN).build();
             } catch (Throwable e) {
                 logger.error(String.format(
-                        "Exception occurred while wait the result of HealthChecker[%s] %s check.",
-                        beanId, checkType), e);
+                    "Exception occurred while wait the result of HealthChecker[%s] %s check.",
+                    beanId, checkType), e);
                 health = new Health.Builder().withException(e).status(Status.DOWN).build();
             }
             result = health.getStatus().equals(Status.UP);
@@ -208,9 +201,7 @@ public class HealthCheckerProcessor implements ApplicationContextAware {
                     retryCount += 1;
                     TimeUnit.MILLISECONDS.sleep(healthChecker.getRetryTimeInterval());
                 } catch (InterruptedException e) {
-                    logger
-                        .error(ErrorCode.convert("01-23002", retryCount, beanId,
-                            checkType), e);
+                    logger.error(ErrorCode.convert("01-23002", retryCount, beanId, checkType), e);
                 }
             }
         } while (isRetry && retryCount < healthChecker.getRetryCount());
@@ -223,12 +214,12 @@ public class HealthCheckerProcessor implements ApplicationContextAware {
             if (!result) {
                 if (healthChecker.isStrictCheck()) {
                     logger.error(ErrorCode.convert("01-23001", beanId, checkType, retryCount,
-                            objectMapper.writeValueAsString(health.getDetails()),
-                            healthChecker.isStrictCheck()));
+                        objectMapper.writeValueAsString(health.getDetails()),
+                        healthChecker.isStrictCheck()));
                 } else {
                     logger.warn(ErrorCode.convert("01-23001", beanId, checkType, retryCount,
-                            objectMapper.writeValueAsString(health.getDetails()),
-                            healthChecker.isStrictCheck()));
+                        objectMapper.writeValueAsString(health.getDetails()),
+                        healthChecker.isStrictCheck()));
                 }
             }
         } catch (JsonProcessingException ex) {
@@ -363,5 +354,56 @@ public class HealthCheckerProcessor implements ApplicationContextAware {
             return this.timeout;
         }
 
+    }
+
+    private class AsyncHealthCheckRunnable implements Runnable {
+        private final String              key;
+        private final HealthChecker       value;
+        private final Map<String, Health> healthMap;
+
+        private final AtomicBoolean       parallelResult;
+
+        private final CountDownLatch      countDownLatch;
+
+        public AsyncHealthCheckRunnable(String key, HealthChecker value,
+                                        Map<String, Health> healthMap,
+                                        AtomicBoolean parallelResult, CountDownLatch countDownLatch) {
+            this.key = key;
+            this.value = value;
+            this.healthMap = healthMap;
+            this.parallelResult = parallelResult;
+            this.countDownLatch = countDownLatch;
+        }
+
+        @Override
+        public void run() {
+            try {
+                if (!HealthCheckerProcessor.this.doHealthCheck(key, value, false, healthMap, true,
+                    false)) {
+                    parallelResult.set(false);
+                }
+            } catch (Throwable t) {
+                parallelResult.set(false);
+                logger.error(ErrorCode.convert("01-22004"), t);
+                healthMap.put(key, new Health.Builder().withException(t).status(Status.DOWN)
+                    .build());
+            } finally {
+                countDownLatch.countDown();
+            }
+        }
+    }
+
+    private class AsyncHealthCheckCallable implements Callable<Health> {
+
+        private final HealthChecker healthChecker;
+
+        public AsyncHealthCheckCallable(HealthChecker healthChecker) {
+            this.healthChecker = healthChecker;
+        }
+
+        @Override
+        public Health call() throws Exception {
+            return healthChecker.isHealthy();
+        }
     }
 }
