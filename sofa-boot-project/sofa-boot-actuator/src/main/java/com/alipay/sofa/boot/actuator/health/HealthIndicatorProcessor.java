@@ -41,6 +41,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.Callable;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -167,19 +168,8 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
         if (isParallelCheck()) {
             CountDownLatch countDownLatch = new CountDownLatch(healthIndicators.size());
             AtomicBoolean parallelResult = new AtomicBoolean(true);
-            healthIndicators.forEach((key, value) -> healthCheckExecutor.execute(() -> {
-                try {
-                    if (!doHealthCheck(key, value, healthMap, false)) {
-                        parallelResult.set(false);
-                    }
-                } catch (Throwable t) {
-                    parallelResult.set(false);
-                    logger.error(ErrorCode.convert("01-21003"), t);
-                    healthMap.put(key, new Health.Builder().withException(t).status(Status.DOWN).build());
-                } finally {
-                    countDownLatch.countDown();
-                }
-            }));
+            healthIndicators.forEach((key, value) -> healthCheckExecutor.execute(
+                    new AsyncHealthIndicatorRunnable(key, value, healthMap, parallelResult, countDownLatch)));
             boolean finished = false;
             try {
                 finished = countDownLatch.await(getParallelCheckTimeout(), TimeUnit.MILLISECONDS);
@@ -226,7 +216,7 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
         try {
             if (wait) {
                 Future<Health> future = healthCheckExecutor
-                        .submit(healthIndicator::health);
+                        .submit(new AsyncHealthIndicatorCallable(healthIndicator));
                 health = future.get(timeout, TimeUnit.MILLISECONDS);
             } else {
                 health = healthIndicator.health();
@@ -314,5 +304,56 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
 
     public List<BaseStat> getHealthIndicatorStartupStatList() {
         return healthIndicatorStartupStatList;
+    }
+
+    private class AsyncHealthIndicatorRunnable implements Runnable {
+        private final String              key;
+        private final HealthIndicator     value;
+        private final Map<String, Health> healthMap;
+
+        private final AtomicBoolean       parallelResult;
+
+        private final CountDownLatch      countDownLatch;
+
+        public AsyncHealthIndicatorRunnable(String key, HealthIndicator value,
+                                            Map<String, Health> healthMap,
+                                            AtomicBoolean parallelResult,
+                                            CountDownLatch countDownLatch) {
+            this.key = key;
+            this.value = value;
+            this.healthMap = healthMap;
+            this.parallelResult = parallelResult;
+            this.countDownLatch = countDownLatch;
+        }
+
+        @Override
+        public void run() {
+            try {
+                if (!HealthIndicatorProcessor.this.doHealthCheck(key, value, healthMap, false)) {
+                    parallelResult.set(false);
+                }
+            } catch (Throwable t) {
+                parallelResult.set(false);
+                logger.error(ErrorCode.convert("01-21003"), t);
+                healthMap.put(key, new Health.Builder().withException(t).status(Status.DOWN)
+                    .build());
+            } finally {
+                countDownLatch.countDown();
+            }
+        }
+    }
+
+    private class AsyncHealthIndicatorCallable implements Callable<Health> {
+
+        private final HealthIndicator healthIndicator;
+
+        public AsyncHealthIndicatorCallable(HealthIndicator healthIndicator) {
+            this.healthIndicator = healthIndicator;
+        }
+
+        @Override
+        public Health call() throws Exception {
+            return healthIndicator.health();
+        }
     }
 }

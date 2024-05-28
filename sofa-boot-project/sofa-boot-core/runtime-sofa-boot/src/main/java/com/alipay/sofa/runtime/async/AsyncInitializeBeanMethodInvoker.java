@@ -75,28 +75,15 @@ public class AsyncInitializeBeanMethodInvoker implements MethodInterceptor {
         if (!isAsyncCalled && methodName.equals(asyncMethodName)) {
             isAsyncCalled = true;
             isAsyncCalling = true;
-            asyncInitMethodManager.submitTask(() -> {
-                try {
-                    long startTime = System.currentTimeMillis();
-                    invocation.getMethod().invoke(targetObject, invocation.getArguments());
-                    LOGGER.info("{}({}) {} method execute {}dms.", targetObject
-                                    .getClass().getName(), beanName, methodName, (System
-                                    .currentTimeMillis() - startTime));
-                } catch (Throwable e) {
-                    throw new RuntimeException(e);
-                } finally {
-                    asyncMethodFinish();
-                }
-            });
+            asyncInitMethodManager.submitTask(new AsyncBeanInitRunnable(invocation));
             return null;
         }
 
         if (isAsyncCalling) {
             long startTime = System.currentTimeMillis();
             initCountDownLatch.await();
-            LOGGER.info("{}({}) {} method wait {}ms.",
-                    targetObject.getClass().getName(), beanName, methodName,
-                    (System.currentTimeMillis() - startTime));
+            LOGGER.info("{}({}) {} method wait {}ms.", targetObject.getClass().getName(), beanName,
+                methodName, (System.currentTimeMillis() - startTime));
         }
         return invocation.getMethod().invoke(targetObject, invocation.getArguments());
     }
@@ -104,5 +91,29 @@ public class AsyncInitializeBeanMethodInvoker implements MethodInterceptor {
     void asyncMethodFinish() {
         this.initCountDownLatch.countDown();
         this.isAsyncCalling = false;
+    }
+
+    private class AsyncBeanInitRunnable implements Runnable {
+
+        private final MethodInvocation invocation;
+
+        public AsyncBeanInitRunnable(MethodInvocation invocation) {
+            this.invocation = invocation;
+        }
+
+        @Override
+        public void run() {
+            try {
+                long startTime = System.currentTimeMillis();
+                invocation.getMethod().invoke(targetObject, invocation.getArguments());
+                LOGGER.info("{}({}) {} method execute {}dms.", targetObject.getClass().getName(),
+                    beanName, invocation.getMethod().getName(),
+                    (System.currentTimeMillis() - startTime));
+            } catch (Throwable e) {
+                throw new RuntimeException(e);
+            } finally {
+                AsyncInitializeBeanMethodInvoker.this.asyncMethodFinish();
+            }
+        }
     }
 }

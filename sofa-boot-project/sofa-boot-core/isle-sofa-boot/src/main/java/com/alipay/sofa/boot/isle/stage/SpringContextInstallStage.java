@@ -184,38 +184,12 @@ public class SpringContextInstallStage extends AbstractPipelineStage implements 
     /**
      * Refresh all {@link ApplicationContext} recursively
      */
-    private void refreshRecursively(DeploymentDescriptor deployment,
-                                  CountDownLatch latch, List<Future<?>> futures) {
+    private void refreshRecursively(DeploymentDescriptor deployment, CountDownLatch latch,
+                                    List<Future<?>> futures) {
         // if interrupted, moduleRefreshExecutorService will be null;
         if (moduleRefreshExecutorService != null) {
-            futures.add(moduleRefreshExecutorService.submit(() -> {
-                String oldName = Thread.currentThread().getName();
-                try {
-                    Thread.currentThread().setName(
-                            "sofa-module-refresh-" + deployment.getModuleName());
-                    if (deployment.isSpringPowered() && !application.getFailed().contains(deployment)) {
-                        refreshAndCollectCost(deployment);
-                    }
-                    DependencyTree.Entry<String, DeploymentDescriptor> entry = application
-                            .getDeployRegistry().getEntry(deployment.getModuleName());
-                    if (entry != null && entry.getDependsOnMe() != null) {
-                        for (DependencyTree.Entry<String, DeploymentDescriptor> child : entry
-                                .getDependsOnMe()) {
-                            child.getDependencies().remove(entry);
-                            if (child.getDependencies().size() == 0) {
-                                refreshRecursively(child.get(), latch, futures);
-                            }
-                        }
-                    }
-                } catch (Throwable t) {
-                    LOGGER.error(ErrorCode.convert("01-11002", deployment.getName()), t);
-                    throw new RuntimeException(ErrorCode.convert("01-11002", deployment.getName()),
-                            t);
-                } finally {
-                    latch.countDown();
-                    Thread.currentThread().setName(oldName);
-                }
-            }));
+            futures.add(moduleRefreshExecutorService.submit(new AsyncSpringContextRunnable(
+                deployment, latch, futures)));
         }
     }
 
@@ -290,5 +264,47 @@ public class SpringContextInstallStage extends AbstractPipelineStage implements 
     @Override
     public int getOrder() {
         return 20000;
+    }
+
+    private class AsyncSpringContextRunnable implements Runnable {
+        private final DeploymentDescriptor deployment;
+        private final CountDownLatch       latch;
+        private final List<Future<?>>      futures;
+
+        public AsyncSpringContextRunnable(DeploymentDescriptor deployment, CountDownLatch latch,
+                                          List<Future<?>> futures) {
+            this.deployment = deployment;
+            this.latch = latch;
+            this.futures = futures;
+        }
+
+        @Override
+        public void run() {
+            String oldName = Thread.currentThread().getName();
+            try {
+                Thread.currentThread().setName("sofa-module-refresh-" + deployment.getModuleName());
+                if (deployment.isSpringPowered() && !application.getFailed().contains(deployment)) {
+                    SpringContextInstallStage.this.refreshAndCollectCost(deployment);
+                }
+                DependencyTree.Entry<String, DeploymentDescriptor> entry = application
+                    .getDeployRegistry().getEntry(deployment.getModuleName());
+                if (entry != null && entry.getDependsOnMe() != null) {
+                    for (DependencyTree.Entry<String, DeploymentDescriptor> child : entry
+                        .getDependsOnMe()) {
+                        child.getDependencies().remove(entry);
+                        if (child.getDependencies().size() == 0) {
+                            SpringContextInstallStage.this.refreshRecursively(child.get(), latch,
+                                futures);
+                        }
+                    }
+                }
+            } catch (Throwable t) {
+                LOGGER.error(ErrorCode.convert("01-11002", deployment.getName()), t);
+                throw new RuntimeException(ErrorCode.convert("01-11002", deployment.getName()), t);
+            } finally {
+                latch.countDown();
+                Thread.currentThread().setName(oldName);
+            }
+        }
     }
 }
