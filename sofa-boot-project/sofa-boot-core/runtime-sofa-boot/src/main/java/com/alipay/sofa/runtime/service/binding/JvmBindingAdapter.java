@@ -210,8 +210,10 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
                                                 + "] has already been destroyed.");
             }
 
-            SofaLogger.debug(">> Start in JVM service invoke, the service interface is  - {}",
-                getInterfaceName());
+            if (SofaLogger.isDebugEnabled()) {
+                SofaLogger.debug(">> Start in JVM service invoke, the service interface is  - {}",
+                    getInterfaceName());
+            }
 
             Object retVal;
             Object targetObj = this.getTarget();
@@ -225,17 +227,21 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
                     try {
                         return serviceProxy.invoke(invocation);
                     } finally {
-                        SofaLogger.debug(
-                            "<< Finish Cross App JVM service invoke, the service is  - {}]",
-                            (getInterfaceName() + "#" + getUniqueId()));
+                        if (SofaLogger.isDebugEnabled()) {
+                            SofaLogger.debug(
+                                "<< Finish Cross App JVM service invoke, the service is  - {}]",
+                                (getInterfaceName() + "#" + getUniqueId()));
+                        }
                     }
                 }
             }
 
             if (targetObj == null || ((targetObj instanceof Proxy) && binding.hasBackupProxy())) {
                 targetObj = binding.getBackupProxy();
-                SofaLogger.debug("<<{}.{} backup proxy invoke.", getInterfaceName().getName(),
-                    invocation.getMethod().getName());
+                if (SofaLogger.isDebugEnabled()) {
+                    SofaLogger.debug("<<{}.{} backup proxy invoke.", getInterfaceName().getName(),
+                        invocation.getMethod().getName());
+                }
             }
 
             if (targetObj == null) {
@@ -250,9 +256,11 @@ public class JvmBindingAdapter implements BindingAdapter<JvmBinding> {
             } catch (InvocationTargetException ex) {
                 throw ex.getTargetException();
             } finally {
-                SofaLogger.debug(
-                    "<< Finish JVM service invoke, the service implementation is  - {}]",
-                    (this.target == null ? "null" : this.target.getClass().getName()));
+                if (SofaLogger.isDebugEnabled()) {
+                    SofaLogger.debug(
+                        "<< Finish JVM service invoke, the service implementation is  - {}]",
+                        (this.target == null ? "null" : this.target.getClass().getName()));
+                }
 
                 popThreadContextClassLoader(tcl);
             }
