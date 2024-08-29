@@ -23,7 +23,6 @@ import java.lang.reflect.Field;
 
 /**
  * @author huazhongming
- * @date 2024/8/7 16
  * @since 4.4.0
  */
 public class UnsafeUtil {
@@ -38,7 +37,6 @@ public class UnsafeUtil {
                 theUnsafeField.setAccessible(true);
                 unsafe = (Unsafe) theUnsafeField.get(null);
             } catch (Throwable ignored) {
-                // ignored
             }
             UNSAFE = unsafe;
         }
@@ -55,8 +53,7 @@ public class UnsafeUtil {
                 long offset = unsafe().staticFieldOffset(implLookupField);
                 IMPL_LOOKUP = (MethodHandles.Lookup) unsafe().getObject(
                     unsafe().staticFieldBase(implLookupField), offset);
-            } catch (Throwable e) {
-                // ignored
+            } catch (Throwable ignored) {
             }
         }
         return IMPL_LOOKUP;

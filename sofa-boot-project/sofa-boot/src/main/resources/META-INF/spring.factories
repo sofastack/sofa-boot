@@ -16,4 +16,4 @@ org.springframework.boot.SpringApplicationRunListener=\
 # Initializers
 org.springframework.context.ApplicationContextInitializer=\
   com.alipay.sofa.boot.compatibility.CompatibilityVerifierApplicationContextInitializer,\
-  com.alipay.sofa.boot.Initializer.DynamicModuleApplicationContextInitializer
+  com.alipay.sofa.boot.Initializer.DynamicModuleExportApplicationContextInitializer

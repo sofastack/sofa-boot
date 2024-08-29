@@ -22,12 +22,11 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 /**
  * @author huazhongming
- * @date 2024/8/7
  * @since 4.4.0
  */
-public class DynamicModuleApplicationContextInitializer
-                                                       implements
-                                                       ApplicationContextInitializer<ConfigurableApplicationContext> {
+public class DynamicModuleExportApplicationContextInitializer
+                                                             implements
+                                                             ApplicationContextInitializer<ConfigurableApplicationContext> {
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
         ModuleUtil.exportAllJDKModulePackageToAll();
