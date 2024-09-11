@@ -30,12 +30,14 @@ import java.util.Optional;
  */
 public class ModuleUtil {
 
-    private static final Logger       LOGGER = SofaBootLoggerFactory.getLogger(ModuleUtil.class);
+    private static final Logger              LOGGER = SofaBootLoggerFactory
+                                                        .getLogger(ModuleUtil.class);
 
-    private static final MethodHandle implAddOpensToAllUnnamed;
-    private static final MethodHandle implAddOpens;
-    private static final MethodHandle implAddExportsToAllUnnamed;
-    private static final MethodHandle implAddExports;
+    private static final MethodHandle        implAddOpensToAllUnnamed;
+    private static final MethodHandle        implAddOpens;
+    private static final MethodHandle        implAddExportsToAllUnnamed;
+    private static final MethodHandle        implAddExports;
+    private static final Map<String, Module> nameToModules;
 
     static {
         implAddOpensToAllUnnamed = createModuleMethodHandle("implAddOpensToAllUnnamed",
@@ -44,6 +46,7 @@ public class ModuleUtil {
         implAddExportsToAllUnnamed = createModuleMethodHandle("implAddExportsToAllUnnamed",
             String.class);
         implAddExports = createModuleMethodHandle("implAddExports", String.class);
+        nameToModules = getNameToModule();
     }
 
     /**
@@ -51,7 +54,6 @@ public class ModuleUtil {
      */
     public static void exportAllJDKModulePackageToAll() {
         try {
-            Map<String, Module> nameToModules = getNameToModule();
             if (nameToModules != null) {
                 nameToModules.forEach((name, module) -> module.getPackages().forEach(pkgName -> {
                     if (isJDKModulePackage(pkgName)) {

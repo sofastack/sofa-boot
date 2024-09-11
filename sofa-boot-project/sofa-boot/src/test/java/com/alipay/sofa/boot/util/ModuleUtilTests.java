@@ -44,7 +44,7 @@ public class ModuleUtilTests {
 
         ModuleUtil.exportAllJDKModulePackageToAll();
 
-        java.lang.reflect.Method newByteChannel0Method = Files.class.getDeclaredMethod("provider", Path.class);
+        Method newByteChannel0Method = Files.class.getDeclaredMethod("provider", Path.class);
         newByteChannel0Method.setAccessible(true);
     }
 }

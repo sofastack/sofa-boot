@@ -24,11 +24,25 @@ import org.springframework.context.ConfigurableApplicationContext;
  * @author huazhongming
  * @since 4.4.0
  */
-public class DynamicModuleExportApplicationContextInitializer
-                                                             implements
-                                                             ApplicationContextInitializer<ConfigurableApplicationContext> {
+public class AutoModuleExportApplicationContextInitializer
+                                                          implements
+                                                          ApplicationContextInitializer<ConfigurableApplicationContext> {
+
+    private static final String AUTO_MODULE_JDK_ENABLE_KEY = "sofa.boot.auto.module.export.jdk.enable";
+    private static final String AUTO_MODULE_ALL_ENABLE_KEY = "sofa.boot.auto.module.export.all.enable";
+
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
-        ModuleUtil.exportAllJDKModulePackageToAll();
+        if (isEnable(applicationContext, AUTO_MODULE_ALL_ENABLE_KEY, "false")) {
+            ModuleUtil.exportAllModulePackageToAll();
+        } else if (isEnable(applicationContext, AUTO_MODULE_JDK_ENABLE_KEY, "true")) {
+            ModuleUtil.exportAllJDKModulePackageToAll();
+        }
+    }
+
+    protected boolean isEnable(ConfigurableApplicationContext applicationContext, String key,
+                               String defaultValue) {
+        String switchStr = applicationContext.getEnvironment().getProperty(key, defaultValue);
+        return Boolean.parseBoolean(switchStr);
     }
 }
