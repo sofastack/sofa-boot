@@ -23,6 +23,7 @@ import java.lang.invoke.MethodHandle;
 import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author huazhongming
@@ -30,14 +31,20 @@ import java.util.Optional;
  */
 public class ModuleUtil {
 
-    private static final Logger              LOGGER = SofaBootLoggerFactory
-                                                        .getLogger(ModuleUtil.class);
+    private static final Logger              LOGGER     = SofaBootLoggerFactory
+                                                            .getLogger(ModuleUtil.class);
 
     private static final MethodHandle        implAddOpensToAllUnnamed;
+
     private static final MethodHandle        implAddOpens;
+
     private static final MethodHandle        implAddExportsToAllUnnamed;
+
     private static final MethodHandle        implAddExports;
+
     private static final Map<String, Module> nameToModules;
+
+    private static final AtomicBoolean       isExported = new AtomicBoolean(false);
 
     static {
         implAddOpensToAllUnnamed = createModuleMethodHandle("implAddOpensToAllUnnamed",
@@ -54,7 +61,7 @@ public class ModuleUtil {
      */
     public static void exportAllJDKModulePackageToAll() {
         try {
-            if (nameToModules != null) {
+            if (isExported.compareAndSet(false,true) && nameToModules != null) {
                 nameToModules.forEach((name, module) -> module.getPackages().forEach(pkgName -> {
                     if (isJDKModulePackage(pkgName)) {
                         addOpensToAll(module, pkgName);
@@ -76,8 +83,7 @@ public class ModuleUtil {
      */
     public static void exportAllModulePackageToAll() {
         try {
-            Map<String, Module> nameToModules = getNameToModule();
-            if (nameToModules != null) {
+            if (isExported.compareAndSet(false,true) && nameToModules != null) {
                 nameToModules.forEach((name, module) -> module.getPackages().forEach(pkgName -> {
                     addOpensToAll(module, pkgName);
                     addExportsToAll(module, pkgName);
@@ -244,5 +250,4 @@ public class ModuleUtil {
     public static Map<String, Module> getNameToModule() {
         return (Map<String, Module>) getModuleLayerFieldsValue("nameToModule");
     }
-
 }
