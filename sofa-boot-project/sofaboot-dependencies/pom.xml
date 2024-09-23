@@ -31,7 +31,7 @@
         <!--2rd lib dependency-->
         <sofa.common.tools.version>1.3.11</sofa.common.tools.version>
         <sofa.bolt.version>1.5.10</sofa.bolt.version>
-        <sofa.hessian.version>3.3.12</sofa.hessian.version>
+        <sofa.hessian.version>3.5.5</sofa.hessian.version>
 
         <!--3rd lib dependency-->
         <!--FIXME 1.7.36 will cause compatibility problem, see #https://www.slf4j.org/manual.html-->
