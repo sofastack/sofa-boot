@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
@@ -275,9 +276,14 @@ public class ServerConfigContainer {
                 } else {
                     customThreadPoolMonitor.setPoolName(pool.getThreadPoolName());
                 }
-                customThreadPoolMonitor.setThreadPoolExecutor(pool.getExecutor());
-                customThreadPoolMonitor.start();
-                poolNames.add(pool.getThreadPoolName());
+
+                Executor tmp = pool.getUserExecutor();
+                if (tmp instanceof ThreadPoolExecutor) {
+                    customThreadPoolMonitor.setThreadPoolExecutor((ThreadPoolExecutor) pool
+                        .getUserExecutor());
+                    customThreadPoolMonitor.start();
+                    poolNames.add(pool.getThreadPoolName());
+                }
             }
         }
     }
