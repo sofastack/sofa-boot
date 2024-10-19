@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.rpc.boot.context;
 
-import com.alipay.sofa.rpc.boot.common.SofaBootRpcParserUtil;
 import com.alipay.sofa.rpc.boot.config.FaultToleranceConfigurator;
 import com.alipay.sofa.rpc.boot.config.SofaBootRpcProperties;
 import com.alipay.sofa.rpc.boot.container.ProviderConfigContainer;
@@ -24,7 +23,6 @@ import com.alipay.sofa.rpc.boot.container.RegistryConfigContainer;
 import com.alipay.sofa.rpc.boot.container.ServerConfigContainer;
 import com.alipay.sofa.rpc.boot.context.event.SofaBootRpcStartEvent;
 import com.alipay.sofa.rpc.config.ProviderConfig;
-import com.alipay.sofa.rpc.event.LookoutSubscriber;
 import org.springframework.context.ApplicationListener;
 import org.springframework.util.CollectionUtils;
 
@@ -63,8 +61,6 @@ public class SofaBootRpcStartListener implements ApplicationListener<SofaBootRpc
 
     @Override
     public void onApplicationEvent(SofaBootRpcStartEvent event) {
-        //choose disable metrics lookout
-        disableLookout();
 
         //extra info
         processExtra(event);
@@ -93,12 +89,4 @@ public class SofaBootRpcStartListener implements ApplicationListener<SofaBootRpc
 
     }
 
-    protected void disableLookout() {
-        Boolean disable = SofaBootRpcParserUtil.parseBoolean(sofaBootRpcProperties
-            .getLookoutCollectDisable());
-
-        if (disable != null) {
-            LookoutSubscriber.setLookoutCollectDisable(disable);
-        }
-    }
 }
