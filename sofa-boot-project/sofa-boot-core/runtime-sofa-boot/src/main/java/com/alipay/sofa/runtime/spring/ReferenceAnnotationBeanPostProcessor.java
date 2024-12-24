@@ -98,9 +98,7 @@ public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor,
             }
 
             if (annotationWrapper.get() == null) {
-                annotationWrapper.set(AnnotationWrapper.create(SofaReference.class)
-                        .withEnvironment(applicationContext.getEnvironment())
-                        .withBinder(DefaultPlaceHolderBinder.INSTANCE));
+                annotationWrapper.set(createAnnotationWrapper());
             }
             sofaReferenceAnnotation = annotationWrapper.get().wrap(sofaReferenceAnnotation);
 
@@ -136,9 +134,7 @@ public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor,
             }
 
             if (annotationWrapper.get() == null) {
-                annotationWrapper.set(AnnotationWrapper.create(SofaReference.class)
-                        .withEnvironment(applicationContext.getEnvironment())
-                        .withBinder(DefaultPlaceHolderBinder.INSTANCE));
+                annotationWrapper.set(createAnnotationWrapper());
             }
             sofaReferenceAnnotation = annotationWrapper.get().wrap(sofaReferenceAnnotation);
 
@@ -192,8 +188,12 @@ public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor,
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
-        this.annotationWrapper.set(AnnotationWrapper.create(SofaReference.class)
-            .withEnvironment(applicationContext.getEnvironment())
-            .withBinder(DefaultPlaceHolderBinder.INSTANCE));
+        this.annotationWrapper.set(createAnnotationWrapper());
+    }
+
+    private AnnotationWrapper<SofaReference> createAnnotationWrapper() {
+        return AnnotationWrapper.create(SofaReference.class)
+                .withEnvironment(this.applicationContext.getEnvironment())
+                .withBinder(DefaultPlaceHolderBinder.INSTANCE);
     }
 }
