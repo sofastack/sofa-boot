@@ -56,18 +56,18 @@ import java.lang.reflect.Modifier;
 public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor,
                                                  ApplicationContextAware, PriorityOrdered {
 
-    private static final Logger              LOGGER = SofaBootLoggerFactory
-                                                        .getLogger(ReferenceAnnotationBeanPostProcessor.class);
+    private static final Logger                                 LOGGER            = SofaBootLoggerFactory
+                                                                                      .getLogger(ReferenceAnnotationBeanPostProcessor.class);
 
-    private final SofaRuntimeContext         sofaRuntimeContext;
+    private final SofaRuntimeContext                            sofaRuntimeContext;
 
-    private final BindingAdapterFactory      bindingAdapterFactory;
+    private final BindingAdapterFactory                         bindingAdapterFactory;
 
-    private final BindingConverterFactory    bindingConverterFactory;
+    private final BindingConverterFactory                       bindingConverterFactory;
 
-    private ApplicationContext               applicationContext;
+    private ApplicationContext                                  applicationContext;
 
-    private AnnotationWrapper<SofaReference> annotationWrapper;
+    private final ThreadLocal<AnnotationWrapper<SofaReference>> annotationWrapper = new ThreadLocal<>();
 
     /**
      * To construct a ReferenceAnnotationBeanPostProcessor via a Spring Bean
@@ -97,7 +97,10 @@ public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor,
                 return;
             }
 
-            sofaReferenceAnnotation = annotationWrapper.wrap(sofaReferenceAnnotation);
+            if (annotationWrapper.get() == null) {
+                annotationWrapper.set(createAnnotationWrapper());
+            }
+            sofaReferenceAnnotation = annotationWrapper.get().wrap(sofaReferenceAnnotation);
 
             Class<?> interfaceType = sofaReferenceAnnotation.interfaceType();
             if (interfaceType.equals(void.class)) {
@@ -130,7 +133,10 @@ public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor,
                 return;
             }
 
-            sofaReferenceAnnotation = annotationWrapper.wrap(sofaReferenceAnnotation);
+            if (annotationWrapper.get() == null) {
+                annotationWrapper.set(createAnnotationWrapper());
+            }
+            sofaReferenceAnnotation = annotationWrapper.get().wrap(sofaReferenceAnnotation);
 
             Class<?> interfaceType = sofaReferenceAnnotation.interfaceType();
             if (interfaceType.equals(void.class)) {
@@ -182,8 +188,12 @@ public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor,
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
-        this.annotationWrapper = AnnotationWrapper.create(SofaReference.class)
-            .withEnvironment(applicationContext.getEnvironment())
+        this.annotationWrapper.set(createAnnotationWrapper());
+    }
+
+    private AnnotationWrapper<SofaReference> createAnnotationWrapper() {
+        return AnnotationWrapper.create(SofaReference.class)
+            .withEnvironment(this.applicationContext.getEnvironment())
             .withBinder(DefaultPlaceHolderBinder.INSTANCE);
     }
 }
