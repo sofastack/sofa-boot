@@ -193,7 +193,7 @@ public class ReferenceAnnotationBeanPostProcessor implements BeanPostProcessor,
 
     private AnnotationWrapper<SofaReference> createAnnotationWrapper() {
         return AnnotationWrapper.create(SofaReference.class)
-                .withEnvironment(this.applicationContext.getEnvironment())
-                .withBinder(DefaultPlaceHolderBinder.INSTANCE);
+            .withEnvironment(this.applicationContext.getEnvironment())
+            .withBinder(DefaultPlaceHolderBinder.INSTANCE);
     }
 }
