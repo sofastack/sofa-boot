@@ -16,14 +16,12 @@
  */
 package com.alipay.sofa.rpc.boot.context;
 
-import com.alipay.sofa.rpc.boot.common.SofaBootRpcParserUtil;
 import com.alipay.sofa.rpc.boot.config.FaultToleranceConfigurator;
 import com.alipay.sofa.rpc.boot.container.ProviderConfigContainer;
 import com.alipay.sofa.rpc.boot.container.RegistryConfigContainer;
 import com.alipay.sofa.rpc.boot.container.ServerConfigContainer;
 import com.alipay.sofa.rpc.boot.context.event.SofaBootRpcStartEvent;
 import com.alipay.sofa.rpc.config.ProviderConfig;
-import com.alipay.sofa.rpc.event.LookoutSubscriber;
 import org.springframework.context.ApplicationListener;
 import org.springframework.util.CollectionUtils;
 
@@ -46,8 +44,6 @@ public class SofaBootRpcStartListener implements ApplicationListener<SofaBootRpc
 
     protected final RegistryConfigContainer    registryConfigContainer;
 
-    private String                             lookoutCollectDisable;
-
     public SofaBootRpcStartListener(ProviderConfigContainer providerConfigContainer,
                                     FaultToleranceConfigurator faultToleranceConfigurator,
                                     ServerConfigContainer serverConfigContainer,
@@ -60,8 +56,6 @@ public class SofaBootRpcStartListener implements ApplicationListener<SofaBootRpc
 
     @Override
     public void onApplicationEvent(SofaBootRpcStartEvent event) {
-        //choose disable metrics lookout
-        disableLookout();
 
         //extra info
         processExtra(event);
@@ -90,17 +84,5 @@ public class SofaBootRpcStartListener implements ApplicationListener<SofaBootRpc
 
     protected void processExtra(SofaBootRpcStartEvent event) {
 
-    }
-
-    protected void disableLookout() {
-        Boolean disable = SofaBootRpcParserUtil.parseBoolean(lookoutCollectDisable);
-
-        if (disable != null) {
-            LookoutSubscriber.setLookoutCollectDisable(disable);
-        }
-    }
-
-    public void setLookoutCollectDisable(String lookoutCollectDisable) {
-        this.lookoutCollectDisable = lookoutCollectDisable;
     }
 }

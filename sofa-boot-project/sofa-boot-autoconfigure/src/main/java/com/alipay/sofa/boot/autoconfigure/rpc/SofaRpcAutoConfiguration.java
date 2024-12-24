@@ -271,11 +271,9 @@ public class SofaRpcAutoConfiguration {
                                                              ObjectProvider<FaultToleranceConfigurator> faultToleranceConfigurator,
                                                              ServerConfigContainer serverConfigContainer,
                                                              RegistryConfigContainer registryConfigContainer) {
-        SofaBootRpcStartListener rpcStartListener = new SofaBootRpcStartListener(
-            providerConfigContainer, faultToleranceConfigurator.getIfUnique(),
-            serverConfigContainer, registryConfigContainer);
-        rpcStartListener.setLookoutCollectDisable(sofaBootRpcProperties.getLookoutCollectDisable());
-        return rpcStartListener;
+        return new SofaBootRpcStartListener(providerConfigContainer,
+            faultToleranceConfigurator.getIfUnique(), serverConfigContainer,
+            registryConfigContainer);
     }
 
     @Bean
