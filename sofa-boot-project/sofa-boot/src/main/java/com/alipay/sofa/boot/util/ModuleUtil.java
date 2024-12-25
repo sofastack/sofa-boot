@@ -63,7 +63,7 @@ public class ModuleUtil {
         try {
             if (isExported.compareAndSet(false,true) && nameToModules != null) {
                 nameToModules.forEach((name, module) -> module.getPackages().forEach(pkgName -> {
-                    if (isJDKModulePackage(pkgName)) {
+                    if (isJDKModulePackage(module.getName())) {
                         addOpensToAll(module, pkgName);
                         addExportsToAll(module, pkgName);
                     }
