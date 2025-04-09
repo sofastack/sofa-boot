@@ -38,6 +38,11 @@ public class ClientFactoryImpl implements ClientFactoryInternal {
         clients.put(clientType, clientInstance);
     }
 
+    @Override
+    public void destroy() {
+        clients.clear();
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public <T> T getClient(Class<T> clazz) {
