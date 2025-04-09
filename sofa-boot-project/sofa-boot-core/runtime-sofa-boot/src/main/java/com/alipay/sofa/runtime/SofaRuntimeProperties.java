@@ -136,6 +136,7 @@ public class SofaRuntimeProperties {
         skipAllComponentShutdownMap.remove(classLoader);
         skipCommonComponentShutdownMap.remove(classLoader);
         extensionFailureInsulatingMap.remove(classLoader);
+        manualReadinessCallbackMap.remove(classLoader);
     }
 
     public static Boolean isSkipJvmSerialize(ClassLoader classLoader) {
