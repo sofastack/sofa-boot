@@ -134,7 +134,7 @@ public class ClientFactoryTest {
         serviceParam.setInstance(new Object());
         serviceParam.setInterfaceType(SampleService.class);
         serviceParam.addBindingParam(jvmBindingParam);
-        serviceClient.service(serviceParam);
+        Assert.assertThrows(Exception.class, ()-> serviceClient.service(serviceParam));
 
         String content = FileUtils.readFileToString(sofaLog, System.getProperty("file.encoding"));
         Assert

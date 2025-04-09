@@ -66,7 +66,8 @@ public class XMLSofaServiceTypeCheckFailTest {
             SofaBindingTestIsNotAssignableFromInterfaceTypeConfiguration.class);
         springApplication.setWebApplicationType(WebApplicationType.NONE);
         springApplication.setDefaultProperties(properties);
-        springApplication.run();
+
+        Assert.assertThrows(Exception.class, springApplication::run);
 
         String content = FileUtils.readFileToString(sofaLog, System.getProperty("file.encoding"));
         Assert
