@@ -68,7 +68,8 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
                                                                                       .asList(
                                                                                           "com.alipay.sofa.boot.actuator.health.NonReadinessCheck",
                                                                                           "org.springframework.boot.actuate.availability.ReadinessStateHealthIndicator",
-                                                                                          "org.springframework.boot.actuate.availability.LivenessStateHealthIndicator");
+                                                                                          "org.springframework.boot.actuate.availability.LivenessStateHealthIndicator",
+                                                                                          "org.springframework.boot.actuate.ssl.SslHealthIndicator");
 
     private static final String                    REACTOR_CLASS                  = "reactor.core.publisher.Mono";
 
