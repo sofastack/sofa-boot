@@ -23,8 +23,8 @@
         <maven-surefire-plugin.version>3.0.0</maven-surefire-plugin.version>
         <!-- sofa stack lib-->
         <sofa.registry.version>6.1.8</sofa.registry.version>
-        <tracer.core.version>4.0.1</tracer.core.version>
-        <rpc.core.version>5.13.2</rpc.core.version>
+        <tracer.core.version>4.0.2</tracer.core.version>
+        <rpc.core.version>5.13.4</rpc.core.version>
         <sofa.common.tools.version>2.1.1</sofa.common.tools.version>
         <sofa.bolt.version>1.6.10</sofa.bolt.version>
         <sofa.hessian.version>3.5.5</sofa.hessian.version>
