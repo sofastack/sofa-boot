@@ -57,19 +57,33 @@ public class IsleBeansEndpoint extends BeansEndpoint {
         ApplicationBeans applicationBeans = super.beans();
         ApplicationRuntimeModel applicationRuntimeModel = context.getBean(
             SofaBootConstants.APPLICATION, ApplicationRuntimeModel.class);
-        Map<String, ContextBeans> moduleApplicationContexts = getModuleApplicationContexts(applicationRuntimeModel);
+
+        String springParentId = null;
+        for (Map.Entry<String, ContextBeans> entry : applicationBeans.getContexts().entrySet()) {
+            if (entry.getValue().getParentId() == null) {
+                springParentId = entry.getKey();
+                break;
+            }
+        }
+
+        Map<String, ContextBeans> moduleApplicationContexts = getModuleApplicationContexts(
+            applicationRuntimeModel, springParentId);
         applicationBeans.getContexts().putAll(moduleApplicationContexts);
         return applicationBeans;
     }
 
-    private Map<String, ContextBeans> getModuleApplicationContexts(ApplicationRuntimeModel applicationRuntimeModel) {
+    private Map<String, ContextBeans> getModuleApplicationContexts(ApplicationRuntimeModel applicationRuntimeModel,String springParentId) {
         Map<String, ContextBeans> contexts = new HashMap<>();
         List<DeploymentDescriptor> installedModules = applicationRuntimeModel.getInstalled();
         installedModules.forEach(descriptor -> {
             ApplicationContext applicationContext = descriptor.getApplicationContext();
+            String parentId = descriptor.getSpringParent();
+            if (parentId == null){
+                parentId = springParentId;
+            }
             if (applicationContext instanceof ConfigurableApplicationContext) {
                 ContextBeans contextBeans = describing((ConfigurableApplicationContext) applicationContext,
-                        descriptor.getSpringParent());
+                        parentId);
                 if (contextBeans != null) {
                     contexts.put(descriptor.getModuleName(), contextBeans);
                 }

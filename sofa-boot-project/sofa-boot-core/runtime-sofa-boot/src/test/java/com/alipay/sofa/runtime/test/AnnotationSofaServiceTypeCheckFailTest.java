@@ -24,6 +24,7 @@ import org.apache.commons.io.FileUtils;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -68,7 +69,8 @@ public class AnnotationSofaServiceTypeCheckFailTest {
             TestSofaServiceNotAssignableFromInterfaceTypeConfiguration.class);
         springApplication.setWebApplicationType(WebApplicationType.NONE);
         springApplication.setDefaultProperties(properties);
-        springApplication.run();
+
+        Assert.assertThrows(BeanCreationException.class, springApplication::run);
 
         String content = FileUtils.readFileToString(sofaLog, System.getProperty("file.encoding"));
         Assert

@@ -29,6 +29,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -100,7 +101,7 @@ public class SofaServiceAndReferenceTest {
         Map<String, Object> properties = new HashMap<>();
         properties.put("spring.application.name", "SofaServiceAndReferenceTest");
         SpringApplication springApplication = new SpringApplication(
-            TestSofaReferenceOnMethodConfiguration.class, RuntimeConfiguration.class);
+            TestSofaServiceOnMethodConfiguration.class, RuntimeConfiguration.class);
         springApplication.setWebApplicationType(WebApplicationType.NONE);
         springApplication.setDefaultProperties(properties);
         ApplicationContext ctx = springApplication.run();
@@ -173,7 +174,7 @@ public class SofaServiceAndReferenceTest {
         properties.put("spring.application.name", "SofaServiceAndReferenceTest");
         properties.put("logging.path", logRootPath);
         SpringApplication springApplication = new SpringApplication(
-            TestSofaReferenceOnMethodConfiguration.class, RuntimeConfiguration.class);
+            TestSofaServiceOnMethodConfiguration.class, RuntimeConfiguration.class);
         springApplication.setWebApplicationType(WebApplicationType.NONE);
         springApplication.setDefaultProperties(properties);
         springApplication.run();
@@ -184,6 +185,53 @@ public class SofaServiceAndReferenceTest {
         Assert.assertTrue(content
             .contains("SofaReference annotation is not supported on static fields: "
                       + SofaServiceAndReferenceTest.class.getDeclaredField("staticSampleService")));
+    }
+
+    @Test
+    public void testSofaServiceBeanLazyInit() throws IOException {
+        String logRootPath = StringUtils.hasText(System.getProperty("logging.path")) ? System
+            .getProperty("logging.path") : "./logs";
+        File sofaLog = new File(logRootPath + File.separator + "sofa-runtime" + File.separator
+                                + "sofa-default.log");
+        FileUtils.write(sofaLog, "", System.getProperty("file.encoding"));
+
+        Map<String, Object> properties = new HashMap<>();
+        properties.put("spring.application.name", "SofaServiceAndReferenceTest");
+        properties.put("logging.path", logRootPath);
+        SpringApplication springApplication = new SpringApplication(
+            TestSofaServiceConfiguration.class, RuntimeConfiguration.class);
+        springApplication.setLazyInitialization(true);
+        springApplication.setWebApplicationType(WebApplicationType.NONE);
+        springApplication.setDefaultProperties(properties);
+        ConfigurableApplicationContext context = springApplication.run();
+
+        String serviceBeanName = SofaBeanNameGenerator.generateSofaServiceBeanName(
+            SampleService.class, "");
+        Assert.assertTrue(context.getBeanFactory().getBeanDefinition(serviceBeanName).isLazyInit());
+    }
+
+    @Test
+    public void testSofaReferenceBeanLazyInit() throws IOException {
+        String logRootPath = StringUtils.hasText(System.getProperty("logging.path")) ? System
+            .getProperty("logging.path") : "./logs";
+        File sofaLog = new File(logRootPath + File.separator + "sofa-runtime" + File.separator
+                                + "sofa-default.log");
+        FileUtils.write(sofaLog, "", System.getProperty("file.encoding"));
+
+        Map<String, Object> properties = new HashMap<>();
+        properties.put("spring.application.name", "SofaServiceAndReferenceTest");
+        properties.put("logging.path", logRootPath);
+        SpringApplication springApplication = new SpringApplication(
+            TestSofaReferenceOnMethodConfiguration.class, RuntimeConfiguration.class);
+        springApplication.setLazyInitialization(true);
+        springApplication.setWebApplicationType(WebApplicationType.NONE);
+        springApplication.setDefaultProperties(properties);
+        ConfigurableApplicationContext context = springApplication.run();
+
+        String referenceBeanName = SofaBeanNameGenerator.generateSofaReferenceBeanName(
+            SampleService.class, "");
+        Assert.assertTrue(context.getBeanFactory().getBeanDefinition(referenceBeanName)
+            .isLazyInit());
     }
 
     @Configuration(proxyBeanMethods = false)
@@ -209,6 +257,14 @@ public class SofaServiceAndReferenceTest {
 
     @Configuration(proxyBeanMethods = false)
     static class TestSofaReferenceOnMethodConfiguration {
+        @Bean
+        public SampleService sampleService(@SofaReference SampleService sampleService) {
+            return new DefaultSampleService("TestSofaReferenceConfiguration");
+        }
+    }
+
+    @Configuration(proxyBeanMethods = false)
+    static class TestSofaServiceOnMethodConfiguration {
         @Bean
         public SofaServiceAndReferenceTest sofaServiceAndReferenceTest() {
             return new SofaServiceAndReferenceTest();
