@@ -112,11 +112,13 @@ public class StandardSofaRuntimeManager implements SofaRuntimeManager, Applicati
     @Override
     public void shutDownExternally() throws ServiceRuntimeException {
         try {
+            clientFactoryInternal.destroy();
             AbstractApplicationContext applicationContext = (AbstractApplicationContext) rootApplicationContext;
             // only need shutdown when root context is active
             if (applicationContext.isActive()) {
                 applicationContext.close();
             }
+            rootApplicationContext = null;
             appClassLoader = null;
         } catch (Throwable throwable) {
             throw new ServiceRuntimeException(ErrorCode.convert("01-03100"), throwable);
