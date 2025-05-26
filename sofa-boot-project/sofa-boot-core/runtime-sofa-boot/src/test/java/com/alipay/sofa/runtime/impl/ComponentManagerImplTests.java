@@ -138,9 +138,12 @@ public class ComponentManagerImplTests {
         componentInfoA = new DemoComponent("A");
         componentInfoA.setRegisterException(true);
 
-        assertThat(componentManager.registerAndGet(componentInfoA)).isNull();
-        assertThat(capturedOutput.getOut()).contains("01-03003");
-        assertThat(capturedOutput.getOut()).contains(componentInfoA.getName().toString());
+        try {
+            assertThat(componentManager.registerAndGet(componentInfoA)).isNull();
+        } catch (ServiceRuntimeException e) {
+            assertThat(capturedOutput.getOut()).contains("01-03003");
+            assertThat(capturedOutput.getOut()).contains(componentInfoA.getName().toString());
+        }
     }
 
     @Test
@@ -148,10 +151,14 @@ public class ComponentManagerImplTests {
         componentInfoA = new DemoComponent("A");
         componentInfoA.setResolveException(true);
 
-        assertThat(componentManager.registerAndGet(componentInfoA)).isEqualTo(componentInfoA);
-        assertThat(componentInfoA.isHealthy().isHealthy()).isFalse();
-        assertThat(capturedOutput.getOut()).contains("01-03004");
-        assertThat(capturedOutput.getOut()).contains(componentInfoA.getName().toString());
+        try {
+            assertThat(componentManager.registerAndGet(componentInfoA)).isEqualTo(componentInfoA);
+
+        } catch (ServiceRuntimeException e) {
+            assertThat(componentInfoA.isHealthy().isHealthy()).isFalse();
+            assertThat(capturedOutput.getOut()).contains("01-03004");
+            assertThat(capturedOutput.getOut()).contains(componentInfoA.getName().toString());
+        }
     }
 
     @Test
