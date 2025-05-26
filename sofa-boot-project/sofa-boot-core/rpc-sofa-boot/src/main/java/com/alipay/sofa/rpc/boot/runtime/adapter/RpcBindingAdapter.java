@@ -201,12 +201,11 @@ public abstract class RpcBindingAdapter implements BindingAdapter<RpcBinding> {
         if (MockMode.LOCAL.equalsIgnoreCase(binding.getRpcBindingParam().getMockMode())) {
             consumerConfig.setMockRef(consumerConfigHelper.getMockRef(binding, applicationContext));
         }
-
+        binding.setConsumerConfig(consumerConfig);
         consumerConfigContainer.addConsumerConfig(binding, consumerConfig);
 
         try {
             Object result = consumerConfig.refer();
-            binding.setConsumerConfig(consumerConfig);
             return result;
         } catch (Exception e) {
             throw new ServiceRuntimeException(LogCodes.getLog(LogCodes.ERROR_PROXY_CONSUME_FAIL), e);
