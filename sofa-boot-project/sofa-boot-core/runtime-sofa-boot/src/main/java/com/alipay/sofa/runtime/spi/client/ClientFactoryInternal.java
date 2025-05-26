@@ -32,4 +32,6 @@ public interface ClientFactoryInternal extends ClientFactory {
      * @param clientInstance client instance
      */
     void registerClient(Class<?> clientType, Object clientInstance);
+
+    void destroy();
 }
