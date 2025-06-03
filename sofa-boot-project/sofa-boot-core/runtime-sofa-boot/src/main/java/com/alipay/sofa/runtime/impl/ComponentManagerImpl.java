@@ -187,7 +187,7 @@ public class ComponentManagerImpl implements ComponentManager {
             ci.register();
         } catch (Throwable t) {
             LOGGER.error(ErrorCode.convert("01-03003", ci.getName()), t);
-            return null;
+            throw new ServiceRuntimeException(ErrorCode.convert("01-03003", ci.getName()));
         }
 
         LOGGER.info("Registering component: {}", ci.getName());
@@ -209,6 +209,7 @@ public class ComponentManagerImpl implements ComponentManager {
         } catch (Throwable t) {
             ci.exception(new Exception(t));
             LOGGER.error(ErrorCode.convert("01-03004", ci.getName()), t);
+            throw new ServiceRuntimeException(ErrorCode.convert("01-03004", ci.getName()));
         }
 
         return ci;
