@@ -26,6 +26,6 @@ jobs:
       - name: Build with Maven
         run: mvn --batch-mode deploy -DskipTests -Prelease
         env:
-          MAVEN_USERNAME: ${{ secrets.NEW_MAVEN_PASSWORD }}
-          MAVEN_PASSWORD: ${{ secrets.NEW_MAVEN_USERNAME }}
+          MAVEN_USERNAME: ${{ secrets.NEW_MAVEN_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.NEW_MAVEN_PASSWORD }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
