@@ -10,6 +10,7 @@
         <version>${revision}</version>
     </parent>
 
+    <name>SOFABoot Dependencies</name>
     <artifactId>sofaboot-dependencies</artifactId>
     <packaging>pom</packaging>
 

@@ -10,6 +10,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <name>SOFA Boot</name>
     <artifactId>sofa-boot</artifactId>
 
     <dependencies>

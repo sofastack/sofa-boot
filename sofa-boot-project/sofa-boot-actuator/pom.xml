@@ -10,6 +10,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <name>SOFABoot Actuator</name>
     <artifactId>sofa-boot-actuator</artifactId>
 
     <dependencies>

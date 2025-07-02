@@ -9,6 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <name>Runtime SOFABoot</name>
     <artifactId>runtime-sofa-boot</artifactId>
 
     <properties>

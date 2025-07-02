@@ -9,6 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <name>Tracer SOFABoot</name>
     <artifactId>tracer-sofa-boot</artifactId>
 
     <properties>
