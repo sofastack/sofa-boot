@@ -9,6 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <name>Test SOFABoot</name>
     <artifactId>test-sofa-boot</artifactId>
 
     <properties>

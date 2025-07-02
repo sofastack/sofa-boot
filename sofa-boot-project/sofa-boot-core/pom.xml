@@ -20,6 +20,7 @@
         <module>test-sofa-boot</module>
     </modules>
 
+    <name>SOFABoot Core</name>
     <artifactId>sofa-boot-core</artifactId>
 
     <dependencies>

@@ -11,6 +11,7 @@
 
     <modelVersion>4.0.0</modelVersion>
 
+    <name>SOFABoot Actuator Autoconfigure</name>
     <artifactId>sofa-boot-actuator-autoconfigure</artifactId>
 
     <dependencies>

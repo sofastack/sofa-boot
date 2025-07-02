@@ -9,6 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <name>Ark SOFABoot Starter</name>
     <artifactId>ark-sofa-boot-starter</artifactId>
 
     <properties>
