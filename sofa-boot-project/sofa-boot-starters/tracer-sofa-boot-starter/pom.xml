@@ -9,6 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <name>SOFABoot Tracer Starter</name>
     <artifactId>tracer-sofa-boot-starter</artifactId>
 
     <properties>
