@@ -15,8 +15,8 @@ repositories {
 dependencies {
     implementation localGroovy()
     implementation gradleApi()
-    implementation 'org.springframework.boot:spring-boot-gradle-plugin:3.5.6'
-    implementation 'org.springframework.boot:spring-boot-loader-tools:3.5.6'
+    implementation 'org.springframework.boot:spring-boot-gradle-plugin:3.5.12'
+    implementation 'org.springframework.boot:spring-boot-loader-tools:3.5.12'
     implementation 'io.spring.gradle:dependency-management-plugin:1.1.7'
     implementation "org.apache.commons:commons-compress:1.19"
     implementation "org.springframework:spring-core:6.2.11"
