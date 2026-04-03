@@ -21,8 +21,11 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -125,6 +128,25 @@ public class SofaPostProcessorShareManagerTests {
         assertThat(manager.getRegisterSingletonMap().get("beanFactoryPostProcessor")).isNotNull();
     }
 
+    @Test
+    public void unShareContextPostProcessorsWithConfigurationBeanNameFilter() {
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+        RootBeanDefinition beanDefinition = new RootBeanDefinition(
+            SofaPostProcessorShareManager.class);
+        beanDefinition.setAutowireMode(2);
+        context.registerBeanDefinition("manager", beanDefinition);
+        context.registerBean("sofaPostProcessorShareFilters",
+            SecurityBeanNameSofaPostProcessorShareFilter.class);
+        context.register(FilterByBeanNameConfiguration.class);
+        context.refresh();
+        SofaPostProcessorShareManager manager = context
+            .getBean(SofaPostProcessorShareManager.class);
+        assertThat(manager).isNotNull();
+        assertThat(
+            manager.getRegisterBeanDefinitionMap().get(
+                "springSecurityPathPatternParserBeanDefinitionRegistryPostProcessor")).isNull();
+    }
+
     static class NormalBeanPostProcessor implements BeanPostProcessor {
     }
 
@@ -185,6 +207,39 @@ public class SofaPostProcessorShareManagerTests {
         @Override
         public boolean useSingletonByBeanName(String beanName) {
             return beanName.equals("beanFactoryPostProcessor");
+        }
+    }
+
+    static class SecurityBeanNameSofaPostProcessorShareFilter implements
+                                                             SofaPostProcessorShareFilter {
+
+        @Override
+        public boolean skipShareByBeanName(String beanName) {
+            return beanName
+                .equals("springSecurityPathPatternParserBeanDefinitionRegistryPostProcessor");
+        }
+    }
+
+    @Configuration
+    static class FilterByBeanNameConfiguration {
+
+        @Bean
+        public BeanDefinitionRegistryPostProcessor springSecurityPathPatternParserBeanDefinitionRegistryPostProcessor() {
+            return new FakeBeanDefinitionRegistryPostProcessor();
+        }
+    }
+
+    static class FakeBeanDefinitionRegistryPostProcessor implements
+                                                        BeanDefinitionRegistryPostProcessor {
+
+        @Override
+        public void postProcessBeanDefinitionRegistry(org.springframework.beans.factory.support.BeanDefinitionRegistry registry)
+                                                                                                                                throws BeansException {
+        }
+
+        @Override
+        public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory)
+                                                                                       throws BeansException {
         }
     }
 }
