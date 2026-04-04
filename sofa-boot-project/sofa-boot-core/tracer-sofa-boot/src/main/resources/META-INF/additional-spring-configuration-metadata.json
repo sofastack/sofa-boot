@@ -1,0 +1,18 @@
+{
+  "groups": [
+    {
+      "name": "sofa.boot.tracer",
+      "type": "com.alipay.sofa.tracer.boot.properties.SofaTracerProperties",
+      "description": "SOFATracer configuration properties.",
+      "sourceType": "com.alipay.sofa.tracer.boot.properties.SofaTracerProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "sofa.boot.tracer.disable",
+      "type": "java.lang.Boolean",
+      "description": "Whether to disable all SOFA tracer logs.",
+      "defaultValue": false
+    }
+  ]
+}

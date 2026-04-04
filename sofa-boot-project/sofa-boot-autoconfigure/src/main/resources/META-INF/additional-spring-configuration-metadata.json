@@ -1,0 +1,24 @@
+{
+  "groups": [
+    {
+      "name": "sofa.boot.rpc",
+      "type": "com.alipay.sofa.boot.autoconfigure.rpc.SofaBootRpcProperties",
+      "description": "SOFA RPC configuration properties.",
+      "sourceType": "com.alipay.sofa.boot.autoconfigure.rpc.SofaBootRpcProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "sofa.boot.rpc.bolt-port",
+      "type": "java.lang.Integer",
+      "description": "Bolt protocol listening port for RPC service calls.",
+      "defaultValue": 12200
+    },
+    {
+      "name": "sofa.boot.rpc.bolt-thread-pool-core-size",
+      "type": "java.lang.Integer",
+      "description": "Core thread pool size for Bolt.",
+      "defaultValue": 20
+    }
+  ]
+}

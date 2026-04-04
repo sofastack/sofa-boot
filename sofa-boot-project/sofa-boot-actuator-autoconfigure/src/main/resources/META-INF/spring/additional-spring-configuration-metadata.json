@@ -1,0 +1,24 @@
+{
+  "groups": [
+    {
+      "name": "sofa.boot.actuator.health",
+      "type": "com.alipay.sofa.boot.actuator.autoconfigure.health.HealthProperties",
+      "description": "Configuration for SOFABoot health checks.",
+      "sourceType": "com.alipay.sofa.boot.actuator.autoconfigure.health.HealthProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "sofa.boot.actuator.health.parallel-check",
+      "type": "java.lang.Boolean",
+      "description": "Whether to perform health checks in parallel to speed up startup.",
+      "defaultValue": true
+    },
+    {
+      "name": "sofa.boot.actuator.health.global-health-checker-timeout",
+      "type": "java.lang.Integer",
+      "description": "Global timeout for health checks in milliseconds.",
+      "defaultValue": 60000
+    }
+  ]
+}

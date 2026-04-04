@@ -1,0 +1,18 @@
+{
+  "groups": [
+    {
+      "name": "sofa.boot.ark",
+      "type": "com.alipay.sofa.boot.ark.SofaArkProperties",
+      "description": "SOFAArk modularity configuration.",
+      "sourceType": "com.alipay.sofa.boot.ark.SofaArkProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "sofa.boot.ark.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Enable or disable SOFAArk features.",
+      "defaultValue": true
+    }
+  ]
+}
