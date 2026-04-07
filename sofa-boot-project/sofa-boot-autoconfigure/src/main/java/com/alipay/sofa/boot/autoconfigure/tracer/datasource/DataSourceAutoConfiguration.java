@@ -17,6 +17,7 @@
 package com.alipay.sofa.boot.autoconfigure.tracer.datasource;
 
 import com.alipay.common.tracer.core.configuration.SofaTracerConfiguration;
+import com.alipay.sofa.boot.reflection.ReflectionCache;
 import com.alipay.sofa.boot.tracer.datasource.DataSourceBeanPostProcessor;
 import com.alipay.sofa.tracer.plugins.datasource.SmartDataSource;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -41,10 +42,12 @@ public class DataSourceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public static DataSourceBeanPostProcessor dataSourceBeanPostProcessor(Environment environment) {
+    public static DataSourceBeanPostProcessor dataSourceBeanPostProcessor(Environment environment,
+                                                                          ReflectionCache reflectionCache) {
         String appName = environment.getProperty(SofaTracerConfiguration.TRACER_APPNAME_KEY);
         DataSourceBeanPostProcessor dataSourceBeanPostProcessor = new DataSourceBeanPostProcessor();
         dataSourceBeanPostProcessor.setAppName(appName);
+        dataSourceBeanPostProcessor.setReflectionCache(reflectionCache);
         return dataSourceBeanPostProcessor;
     }
 }

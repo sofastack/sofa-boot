@@ -1,3 +1,4 @@
+com.alipay.sofa.boot.autoconfigure.reflection.ReflectionCacheAutoConfiguration
 com.alipay.sofa.boot.autoconfigure.runtime.SofaRuntimeAutoConfiguration
 com.alipay.sofa.boot.autoconfigure.isle.SofaModuleAutoConfiguration
 com.alipay.sofa.boot.autoconfigure.rpc.SofaRpcAutoConfiguration

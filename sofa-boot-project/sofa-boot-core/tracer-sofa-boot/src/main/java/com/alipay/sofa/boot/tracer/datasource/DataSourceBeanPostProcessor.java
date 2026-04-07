@@ -17,6 +17,7 @@
 package com.alipay.sofa.boot.tracer.datasource;
 
 import com.alipay.sofa.boot.context.processor.SingletonSofaPostProcessor;
+import com.alipay.sofa.boot.reflection.ReflectionCache;
 import com.alipay.sofa.tracer.plugins.datasource.SmartDataSource;
 import com.alipay.sofa.tracer.plugins.datasource.utils.DataSourceUtils;
 import org.springframework.beans.BeansException;
@@ -42,7 +43,9 @@ import static com.alipay.common.tracer.core.configuration.SofaTracerConfiguratio
 @SingletonSofaPostProcessor
 public class DataSourceBeanPostProcessor implements BeanPostProcessor, PriorityOrdered {
 
-    private String appName;
+    private String          appName;
+
+    private ReflectionCache reflectionCache;
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName)
@@ -73,7 +76,7 @@ public class DataSourceBeanPostProcessor implements BeanPostProcessor, PriorityO
         }
 
         try {
-            Method urlMethod = ReflectionUtils.findMethod(bean.getClass(), getUrlMethodName);
+            Method urlMethod = findMethod(bean.getClass(), getUrlMethodName);
             urlMethod.setAccessible(true);
             url = (String) urlMethod.invoke(bean);
         } catch (Throwable throwable) {
@@ -99,5 +102,14 @@ public class DataSourceBeanPostProcessor implements BeanPostProcessor, PriorityO
 
     public void setAppName(String appName) {
         this.appName = appName;
+    }
+
+    public void setReflectionCache(ReflectionCache reflectionCache) {
+        this.reflectionCache = reflectionCache;
+    }
+
+    private Method findMethod(Class<?> targetClass, String methodName) {
+        return reflectionCache != null ? reflectionCache.findMethod(targetClass, methodName)
+            : ReflectionUtils.findMethod(targetClass, methodName);
     }
 }

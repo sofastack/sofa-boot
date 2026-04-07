@@ -25,6 +25,7 @@ import com.alipay.sofa.boot.autoconfigure.condition.OnVirtualThreadStartupAvaila
 import com.alipay.sofa.boot.autoconfigure.condition.OnVirtualThreadStartupDisableCondition;
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
+import com.alipay.sofa.boot.reflection.ReflectionCache;
 import com.alipay.sofa.common.thread.NamedThreadFactory;
 import com.alipay.sofa.common.thread.SofaThreadPoolExecutor;
 import com.alipay.sofa.common.thread.virtual.SofaVirtualThreadFactory;
@@ -97,9 +98,11 @@ public class ReadinessAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public HealthIndicatorProcessor healthIndicatorProcessor(HealthProperties healthCheckProperties,
-                                                             ExecutorService readinessHealthCheckExecutor) {
+                                                             ExecutorService readinessHealthCheckExecutor,
+                                                             ReflectionCache reflectionCache) {
         HealthIndicatorProcessor healthIndicatorProcessor = new HealthIndicatorProcessor();
         healthIndicatorProcessor.setHealthCheckExecutor(readinessHealthCheckExecutor);
+        healthIndicatorProcessor.setReflectionCache(reflectionCache);
         healthIndicatorProcessor.initExcludedIndicators(healthCheckProperties
             .getExcludedIndicators());
         healthIndicatorProcessor.setParallelCheck(healthCheckProperties.isParallelCheck());

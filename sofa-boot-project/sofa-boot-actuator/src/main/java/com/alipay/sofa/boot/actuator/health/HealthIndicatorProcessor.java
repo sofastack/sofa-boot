@@ -18,6 +18,7 @@ package com.alipay.sofa.boot.actuator.health;
 
 import com.alipay.sofa.boot.log.ErrorCode;
 import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
+import com.alipay.sofa.boot.reflection.ReflectionCache;
 import com.alipay.sofa.boot.startup.BaseStat;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -98,6 +99,8 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
 
     private long                                   parallelCheckTimeout;
 
+    private ReflectionCache                        reflectionCache;
+
     static {
         REACTOR_CLASS_EXIST = ClassUtils.isPresent(REACTOR_CLASS, null);
     }
@@ -133,7 +136,7 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
         excludedIndicators = new HashSet<>();
         for (String exclude : excludes) {
             try {
-                Class<?> c = Class.forName(exclude);
+                Class<?> c = loadClass(exclude);
                 excludedIndicators.add(c);
             } catch (Throwable e) {
                 logger.warn("Unable to find excluded HealthIndicator class {}, just ignore it.",
@@ -293,6 +296,15 @@ public class HealthIndicatorProcessor implements ApplicationContextAware {
 
     public void setParallelCheckTimeout(long parallelCheckTimeout) {
         this.parallelCheckTimeout = parallelCheckTimeout;
+    }
+
+    public void setReflectionCache(ReflectionCache reflectionCache) {
+        this.reflectionCache = reflectionCache;
+    }
+
+    private Class<?> loadClass(String className) throws ClassNotFoundException {
+        return reflectionCache != null ? reflectionCache.forName(className) : Class
+            .forName(className);
     }
 
     public Map<String, HealthCheckerConfig> getHealthIndicatorConfig() {

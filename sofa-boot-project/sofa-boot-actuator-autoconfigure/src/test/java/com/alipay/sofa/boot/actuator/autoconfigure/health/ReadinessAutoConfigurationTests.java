@@ -22,6 +22,7 @@ import com.alipay.sofa.boot.actuator.health.HealthIndicatorProcessor;
 import com.alipay.sofa.boot.actuator.health.ModuleHealthChecker;
 import com.alipay.sofa.boot.actuator.health.ReadinessCheckCallbackProcessor;
 import com.alipay.sofa.boot.actuator.health.ReadinessCheckListener;
+import com.alipay.sofa.boot.autoconfigure.reflection.ReflectionCacheAutoConfiguration;
 import com.alipay.sofa.boot.autoconfigure.isle.SofaModuleAutoConfiguration;
 import com.alipay.sofa.boot.autoconfigure.runtime.SofaRuntimeAutoConfiguration;
 import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
@@ -49,7 +50,8 @@ public class ReadinessAutoConfigurationTests {
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
                                                              .withConfiguration(
                                                                  AutoConfigurations
-                                                                     .of(ReadinessAutoConfiguration.class))
+                                                                     .of(ReflectionCacheAutoConfiguration.class,
+                                                                         ReadinessAutoConfiguration.class))
                                                              .withPropertyValues(
                                                                  "management.endpoints.web.exposure.include=readiness");
 

@@ -20,6 +20,7 @@ import com.alipay.sofa.boot.actuator.autoconfigure.health.ReadinessAutoConfigura
 import com.alipay.sofa.boot.actuator.rpc.HealthCheckProviderConfigDelayRegisterChecker;
 import com.alipay.sofa.boot.actuator.rpc.RpcAfterHealthCheckCallback;
 import com.alipay.sofa.boot.actuator.rpc.SofaRpcEndpoint;
+import com.alipay.sofa.boot.autoconfigure.reflection.ReflectionCacheAutoConfiguration;
 import com.alipay.sofa.rpc.boot.context.RpcStartApplicationListener;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
@@ -46,7 +47,8 @@ public class RpcActuatorAutoConfigurationTests {
     @Test
     void runShouldHaveHealthCheckProviderConfigDelayRegisterChecker() {
         this.contextRunner
-                .withUserConfiguration(ReadinessAutoConfiguration.class)
+                .withConfiguration(AutoConfigurations.of(ReflectionCacheAutoConfiguration.class,
+                    ReadinessAutoConfiguration.class))
                 .withBean(RpcStartApplicationListener.class)
                 .run((context) -> assertThat(context)
                         .hasSingleBean(HealthCheckProviderConfigDelayRegisterChecker.class));
