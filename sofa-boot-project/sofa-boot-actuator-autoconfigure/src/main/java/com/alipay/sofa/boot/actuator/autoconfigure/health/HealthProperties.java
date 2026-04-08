@@ -17,8 +17,10 @@
 package com.alipay.sofa.boot.actuator.autoconfigure.health;
 
 import com.alipay.sofa.boot.actuator.health.HealthCheckerConfig;
+import jakarta.validation.constraints.Positive;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,6 +35,7 @@ import java.util.Map;
  * Created on 2020/5/18
  */
 @ConfigurationProperties("sofa.boot.actuator.health")
+@Validated
 public class HealthProperties {
 
     /**
@@ -54,6 +57,7 @@ public class HealthProperties {
     /**
      * Timeout duration of parallel health check, in milliseconds.
      */
+    @Positive(message = "并行健康检查超时时间必须大于 0")
     private long                                                                                parallelCheckTimeout         = 120 * 1000;
 
     /**
@@ -84,6 +88,7 @@ public class HealthProperties {
     /**
      * Global {@link com.alipay.sofa.boot.actuator.health.HealthChecker} health check timeout，in milliseconds.
      */
+    @Positive(message = "HealthChecker 全局超时时间必须大于 0")
     private int                                                                                 globalHealthCheckerTimeout   = 60 * 1000;
 
     /**
@@ -95,6 +100,7 @@ public class HealthProperties {
     /**
      * Global {@link org.springframework.boot.actuate.health.HealthIndicator} health check timeout，in milliseconds.
      */
+    @Positive(message = "HealthIndicator 全局超时时间必须大于 0")
     private int                                                                                 globalHealthIndicatorTimeout = 60 * 1000;
 
     /**

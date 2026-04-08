@@ -23,6 +23,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.FilteredClassLoader;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
+import org.springframework.core.NestedExceptionUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -57,6 +58,17 @@ public class SofaTracerAutoConfigurationTests {
     public void withoutSpanReportListenerHolder() {
         this.contextRunner
                 .run((context) -> assertThat(context.getBean("sofaTracerSpanReportListener").toString()).isEqualTo("null"));
+    }
+
+    @Test
+    public void invalidTracerPropertiesShouldFailFast() {
+        this.contextRunner
+                .withPropertyValues("sofa.boot.tracer.samplerPercentage=101")
+                .run((context) -> {
+                    assertThat(context).hasFailed();
+                    assertThat(NestedExceptionUtils.getMostSpecificCause(context.getStartupFailure()).getMessage())
+                            .contains("采样率不能大于 100");
+                });
     }
 
     static class SampleSpanReportListener implements SpanReportListener {

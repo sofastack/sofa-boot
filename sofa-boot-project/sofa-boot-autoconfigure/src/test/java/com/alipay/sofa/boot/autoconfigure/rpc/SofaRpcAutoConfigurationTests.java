@@ -46,6 +46,7 @@ import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.NestedExceptionUtils;
 
 import javax.ws.rs.client.ClientRequestFilter;
 import javax.ws.rs.client.ClientResponseFilter;
@@ -212,6 +213,18 @@ public class SofaRpcAutoConfigurationTests {
                     assertThat(faultToleranceConfig.getWeightRecoverRate()).isEqualTo(3.0);
                     assertThat(faultToleranceConfig.getDegradeLeastWeight()).isEqualTo(2);
                     assertThat(faultToleranceConfig.getDegradeMaxIpCount()).isEqualTo(3);
+                });
+    }
+
+    @Test
+    void invalidRpcPropertiesShouldFailFast() {
+        this.contextRunner.withPropertyValues("sofa.boot.rpc.boltPort=80",
+                        "sofa.boot.rpc.aftDegradeLeastWeight=-10")
+                .run(context -> {
+                    assertThat(context).hasFailed();
+                    assertThat(NestedExceptionUtils.getMostSpecificCause(context.getStartupFailure()).getMessage())
+                            .contains("Bolt 端口必须在 1024 到 65535 之间")
+                            .contains("降级最小权重必须在 0 到 100 之间");
                 });
     }
 

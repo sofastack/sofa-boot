@@ -36,6 +36,7 @@ import org.junit.jupiter.api.condition.JRE;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.FilteredClassLoader;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
+import org.springframework.core.NestedExceptionUtils;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -151,6 +152,17 @@ public class SofaModuleAutoConfigurationTests {
                     assertThat(threadPoolExecutor.getCorePoolSize()).isEqualTo(SofaBootConstants.CPU_CORE * 2);
                     assertThat(threadPoolExecutor.getConfig().getTaskTimeout()).isEqualTo(10);
                     assertThat(threadPoolExecutor.getConfig().getPeriod()).isEqualTo(20);
+                });
+    }
+
+    @Test
+    void invalidParallelRefreshConfigShouldFailFast() {
+        this.contextRunner
+                .withPropertyValues("sofa.boot.isle.parallelRefreshPoolSizeFactor=0")
+                .run((context) -> {
+                    assertThat(context).hasFailed();
+                    assertThat(NestedExceptionUtils.getMostSpecificCause(context.getStartupFailure()).getMessage())
+                            .contains("模块并行刷新线程池倍率必须大于 0");
                 });
     }
 

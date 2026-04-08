@@ -33,6 +33,7 @@ import org.junit.jupiter.api.condition.JRE;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.FilteredClassLoader;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
+import org.springframework.core.NestedExceptionUtils;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -127,6 +128,18 @@ public class SofaRuntimeAutoConfigurationTests {
                     assertThat(threadPoolExecutor).isInstanceOf(ThreadPoolExecutor.class);
                     assertThat(((ThreadPoolExecutor) threadPoolExecutor).getCorePoolSize()).isEqualTo(10);
                     assertThat(((ThreadPoolExecutor) threadPoolExecutor).getMaximumPoolSize()).isEqualTo(10);
+                });
+    }
+
+    @Test
+    public void invalidAsyncInitExecutorConfigShouldFailFast() {
+        this.contextRunner
+                .withPropertyValues("sofa.boot.runtime.asyncInitExecutorCoreSize=10")
+                .withPropertyValues("sofa.boot.runtime.asyncInitExecutorMaxSize=5")
+                .run((context) -> {
+                    assertThat(context).hasFailed();
+                    assertThat(NestedExceptionUtils.getMostSpecificCause(context.getStartupFailure()).getMessage())
+                            .contains("异步初始化线程池最大线程数不能小于核心线程数");
                 });
     }
 

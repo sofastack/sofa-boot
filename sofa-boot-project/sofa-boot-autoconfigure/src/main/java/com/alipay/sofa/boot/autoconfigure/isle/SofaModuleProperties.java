@@ -16,7 +16,9 @@
  */
 package com.alipay.sofa.boot.autoconfigure.isle;
 
+import jakarta.validation.constraints.Positive;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +30,7 @@ import java.util.List;
  * @author huzijie
  */
 @ConfigurationProperties("sofa.boot.isle")
+@Validated
 public class SofaModuleProperties {
 
     /**
@@ -78,16 +81,19 @@ public class SofaModuleProperties {
     /**
      * Thead pool size factor used in parallel sofa module application context refresh.
      */
+    @Positive(message = "模块并行刷新线程池倍率必须大于 0")
     private float        parallelRefreshPoolSizeFactor = 5.0f;
 
     /**
      * Timeout used in parallel sofa module application context refresh, in milliseconds.
      */
+    @Positive(message = "模块并行刷新超时时间必须大于 0")
     private long         parallelRefreshTimeout        = 60;
 
     /**
      * Monitor period used in parallel sofa module application context refresh, in milliseconds.
      */
+    @Positive(message = "模块并行刷新检查周期必须大于 0")
     private long         parallelRefreshCheckPeriod    = 30;
 
     public List<String> getActiveProfiles() {

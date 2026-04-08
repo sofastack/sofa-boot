@@ -17,7 +17,10 @@
 package com.alipay.sofa.boot.autoconfigure.runtime;
 
 import com.alipay.sofa.boot.constant.SofaBootConstants;
+import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.PositiveOrZero;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +32,7 @@ import java.util.List;
  * @author huzijie
  */
 @ConfigurationProperties("sofa.boot.runtime")
+@Validated
 public class SofaRuntimeProperties {
 
     /**
@@ -80,11 +84,13 @@ public class SofaRuntimeProperties {
     /**
      * Custom async init executor core size.
      */
+    @PositiveOrZero(message = "异步初始化线程池核心线程数不能小于 0")
     private int          asyncInitExecutorCoreSize       = SofaBootConstants.CPU_CORE + 1;
 
     /**
      * Custom async init executor max size.
      */
+    @PositiveOrZero(message = "异步初始化线程池最大线程数不能小于 0")
     private int          asyncInitExecutorMaxSize        = SofaBootConstants.CPU_CORE + 1;
 
     /**
@@ -199,5 +205,10 @@ public class SofaRuntimeProperties {
 
     public void setServiceCanBeDuplicate(boolean serviceCanBeDuplicate) {
         this.serviceCanBeDuplicate = serviceCanBeDuplicate;
+    }
+
+    @AssertTrue(message = "异步初始化线程池最大线程数不能小于核心线程数")
+    public boolean isAsyncInitExecutorPoolSizeValid() {
+        return asyncInitExecutorMaxSize >= asyncInitExecutorCoreSize;
     }
 }
