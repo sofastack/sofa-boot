@@ -31,7 +31,6 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Integration tests for {@code /actuator/reflection-cache}.
  *
  * @author xiaosiyuan
- * @since 4.5.0
  */
 @SpringBootTest(classes = ActuatorSofaBootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = { "management.endpoints.web.exposure.include=reflection-cache" })
 public class ReflectionCacheEndpointWebTests {

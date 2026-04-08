@@ -28,7 +28,6 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Tests for {@link ReflectionCacheEndpointAutoConfiguration}.
  *
  * @author xiaosiyuan
- * @since 4.5.0
  */
 public class ReflectionCacheEndpointAutoConfigurationTests {
 

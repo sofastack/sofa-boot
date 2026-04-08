@@ -28,7 +28,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  * Tests for {@link ReflectionCache}.
  *
  * @author xiaosiyuan
- * @since 4.5.0
  */
 public class ReflectionCacheTests {
 

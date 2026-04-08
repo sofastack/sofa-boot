@@ -22,7 +22,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * Properties for {@link ReflectionCacheAutoConfiguration}.
  *
  * @author xiaosiyuan
- * @since 4.5.0
  */
 @ConfigurationProperties("sofa.boot.reflection.cache")
 public class ReflectionCacheProperties {

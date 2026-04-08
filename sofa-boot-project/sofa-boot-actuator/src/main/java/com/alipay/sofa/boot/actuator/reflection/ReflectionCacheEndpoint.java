@@ -25,7 +25,6 @@ import org.springframework.boot.actuate.endpoint.annotation.WriteOperation;
  * Endpoint for viewing and clearing the reflection cache.
  *
  * @author xiaosiyuan
- * @since 4.5.0
  */
 @Endpoint(id = "reflection-cache")
 public class ReflectionCacheEndpoint {

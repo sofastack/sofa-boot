@@ -25,7 +25,6 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Tests for {@link ReflectionCacheEndpoint}.
  *
  * @author xiaosiyuan
- * @since 4.5.0
  */
 public class ReflectionCacheEndpointTests {
 

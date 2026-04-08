@@ -32,7 +32,6 @@ import java.util.function.Function;
  * Caches repeated reflection lookups.
  *
  * @author xiaosiyuan
- * @since 4.5.0
  */
 public class ReflectionCache {
 

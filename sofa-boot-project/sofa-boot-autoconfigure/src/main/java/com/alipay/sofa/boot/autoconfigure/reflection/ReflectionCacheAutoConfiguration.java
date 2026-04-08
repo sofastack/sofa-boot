@@ -26,7 +26,6 @@ import org.springframework.context.annotation.Bean;
  * Configures {@link ReflectionCache}.
  *
  * @author xiaosiyuan
- * @since 4.5.0
  */
 @AutoConfiguration
 @EnableConfigurationProperties(ReflectionCacheProperties.class)

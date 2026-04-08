@@ -29,7 +29,6 @@ import org.springframework.context.annotation.Bean;
  * Configures {@link ReflectionCacheEndpoint}.
  *
  * @author xiaosiyuan
- * @since 4.5.0
  */
 @AutoConfiguration(after = ReflectionCacheAutoConfiguration.class)
 @ConditionalOnBean(ReflectionCache.class)
