@@ -18,6 +18,10 @@ package com.alipay.sofa.smoke.tests.actuator.diagnostic;
 
 import com.alipay.sofa.boot.actuator.diagnostic.SofaDiagnosticEndpoint;
 import com.alipay.sofa.common.thread.SofaThreadPoolExecutor;
+import com.alipay.sofa.runtime.api.annotation.SofaReference;
+import com.alipay.sofa.runtime.api.annotation.SofaReferenceBinding;
+import com.alipay.sofa.runtime.api.annotation.SofaService;
+import com.alipay.sofa.runtime.api.annotation.SofaServiceBinding;
 import com.alipay.sofa.smoke.tests.actuator.ActuatorSofaBootApplication;
 import com.alipay.sofa.smoke.tests.actuator.sample.beans.DefaultSampleService;
 import com.alipay.sofa.smoke.tests.actuator.sample.beans.SampleService;
@@ -31,16 +35,19 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
-
-import com.alipay.sofa.runtime.api.annotation.SofaReference;
-import com.alipay.sofa.runtime.api.annotation.SofaReferenceBinding;
-import com.alipay.sofa.runtime.api.annotation.SofaService;
-import com.alipay.sofa.runtime.api.annotation.SofaServiceBinding;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -59,6 +66,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class SofaDiagnosticEndpointWebTests {
 
     private static final String SAMPLE_SERVICE_INTERFACE = SampleService.class.getName();
+
+    private final ObjectMapper  objectMapper             = new ObjectMapper();
+
+    private final HttpEntity<?> actuatorPostRequest      = createActuatorPostRequest();
 
     @Autowired
     private TestRestTemplate    restTemplate;
@@ -79,7 +90,7 @@ public class SofaDiagnosticEndpointWebTests {
             .getForEntity("/actuator/sofa-diagnostic/services/all", String.class);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        JsonNode body = new ObjectMapper().readTree(response.getBody());
+        JsonNode body = objectMapper.readTree(response.getBody());
         JsonNode published = body.get("published");
         JsonNode referenced = body.get("referenced");
 
@@ -103,7 +114,7 @@ public class SofaDiagnosticEndpointWebTests {
                 SAMPLE_SERVICE_INTERFACE);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        JsonNode body = new ObjectMapper().readTree(response.getBody());
+        JsonNode body = objectMapper.readTree(response.getBody());
         JsonNode publishedDetails = body.get("publishedDetails");
         JsonNode referencedDetails = body.get("referencedDetails");
 
@@ -120,6 +131,78 @@ public class SofaDiagnosticEndpointWebTests {
             assertThat(node.get("jvmFirst").asBoolean()).isTrue();
             assertThat(node.get("required").asBoolean()).isTrue();
         });
+    }
+
+    @Test
+    public void sofaDiagnosticGcCommand() throws JsonProcessingException {
+        ResponseEntity<String> response = postToActuator("/actuator/sofa-diagnostic/gc");
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        JsonNode body = objectMapper.readTree(response.getBody());
+        assertThat(body.get("success").asBoolean()).isTrue();
+        assertThat(body.get("message").asText()).isEqualTo("GC triggered successfully");
+        assertThat(body.get("data")).hasSize(3);
+        assertThat(body.get("data").has("memoryBeforeGc")).isTrue();
+        assertThat(body.get("data").has("memoryAfterGc")).isTrue();
+        assertThat(body.get("data").has("memoryFreed")).isTrue();
+    }
+
+    @Test
+    public void sofaDiagnosticThreadDumpCommand() throws JsonProcessingException {
+        ResponseEntity<String> response = postToActuator("/actuator/sofa-diagnostic/thread-dump");
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        JsonNode body = objectMapper.readTree(response.getBody());
+        assertThat(body.get("success").asBoolean()).isTrue();
+        assertThat(body.get("message").asText()).isEqualTo("Thread dump generated successfully");
+        assertThat(body.get("data").get("threadCount").asInt()).isPositive();
+        assertThat(body.get("data").get("threads")).isNotEmpty();
+    }
+
+    @Test
+    public void sofaDiagnosticHeapDumpCommand() throws Exception {
+        ResponseEntity<String> response = postToActuator("/actuator/sofa-diagnostic/heap-dump");
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        JsonNode body = objectMapper.readTree(response.getBody());
+        Path heapDumpPath = Path.of(body.get("data").get("path").asText());
+        try {
+            assertThat(body.get("success").asBoolean()).isTrue();
+            assertThat(body.get("message").asText()).isEqualTo("Heap dump generated successfully");
+            assertThat(body.get("data").get("liveOnly").asBoolean()).isTrue();
+            assertThat(Files.exists(heapDumpPath)).isTrue();
+            assertThat(body.get("data").get("size").asLong()).isGreaterThan(0L);
+        } finally {
+            Files.deleteIfExists(heapDumpPath);
+        }
+    }
+
+    @Test
+    public void sofaDiagnosticHeapDumpCommandWithInvalidPath() throws JsonProcessingException {
+        String path = System.getProperty("java.io.tmpdir") + "/missing-dir-" + System.nanoTime()
+                      + "/heap.hprof";
+        String url = UriComponentsBuilder.fromPath("/actuator/sofa-diagnostic/heap-dump")
+            .queryParam("path", path).queryParam("liveOnly", false).build().toUriString();
+
+        ResponseEntity<String> response = postToActuator(url);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        JsonNode body = objectMapper.readTree(response.getBody());
+        assertThat(body.get("success").asBoolean()).isFalse();
+        assertThat(body.get("message").asText()).startsWith("Failed to generate heap dump:");
+        assertThat(body.get("data").has("error")).isTrue();
+    }
+
+    private ResponseEntity<String> postToActuator(String url) {
+        return restTemplate.withBasicAuth("ops", "123456").exchange(url, HttpMethod.POST,
+            actuatorPostRequest, String.class);
+    }
+
+    private HttpEntity<?> createActuatorPostRequest() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
+        return new HttpEntity<>("{}", headers);
     }
 
     @Configuration
