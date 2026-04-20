@@ -68,4 +68,29 @@ public class LogEnvironmentPreparingListenerTests {
             .isEqualTo("false");
         System.clearProperty(SofaThreadPoolConstants.SOFA_THREAD_POOL_LOGGING_CAPABILITY);
     }
+
+    @Test
+    public void registerStructuredLoggingProperties() {
+        LogEnvironmentPostProcessor logEnvironmentPostProcessor = new LogEnvironmentPostProcessor();
+        MockEnvironment environment = new MockEnvironment();
+        environment.setProperty("logging.structured.format.file", "ecs");
+        environment.setProperty("logging.structured.json.add.region", "cn");
+        environment.setProperty("logging.sofa.tracer.output-structured", "true");
+        environment.setProperty("spring.application.name", "sofa-app");
+
+        logEnvironmentPostProcessor.postProcessEnvironment(environment, null);
+
+        assertThat(
+            CommonLoggingConfigurations.getExternalConfigurations().get(
+                LogEnvironmentPostProcessor.FILE_LOG_STRUCTURED_FORMAT)).isEqualTo("ecs");
+        assertThat(
+            CommonLoggingConfigurations.getExternalConfigurations().get(
+                "logging.structured.json.add.region")).isEqualTo("cn");
+        assertThat(
+            CommonLoggingConfigurations.getExternalConfigurations().get(
+                "logging.sofa.tracer.output-structured")).isEqualTo("true");
+        assertThat(
+            CommonLoggingConfigurations.getExternalConfigurations().get("spring.application.name"))
+            .isEqualTo("sofa-app");
+    }
 }

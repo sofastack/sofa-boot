@@ -27,7 +27,8 @@
             <FileNamePattern>${logging.path}/sofa-runtime/common-error.log.%d{yyyy-MM-dd}</FileNamePattern>
             <MaxHistory>30</MaxHistory>
         </rollingPolicy>
-        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+        <encoder class="com.alipay.sofa.boot.logging.logback.SofaStructuredLogEncoder">
+            <format>${FILE_LOG_STRUCTURED_FORMAT}</format>
             <pattern>%d %-5p %-32t - %m%n</pattern>
             <charset>${file.encoding}</charset>
         </encoder>
@@ -43,7 +44,8 @@
             <FileNamePattern>${logging.path}/sofa-runtime/sofa-default.log.%d{yyyy-MM-dd}</FileNamePattern>
             <MaxHistory>30</MaxHistory>
         </rollingPolicy>
-        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+        <encoder class="com.alipay.sofa.boot.logging.logback.SofaStructuredLogEncoder">
+            <format>${FILE_LOG_STRUCTURED_FORMAT}</format>
             <pattern>%d %-5p %-32t - %m%n</pattern>
             <charset>${file.encoding}</charset>
         </encoder>
@@ -66,7 +68,8 @@
             <!--日志文件保留天数-->
             <MaxHistory>30</MaxHistory>
         </rollingPolicy>
-        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+        <encoder class="com.alipay.sofa.boot.logging.logback.SofaStructuredLogEncoder">
+            <format>${FILE_LOG_STRUCTURED_FORMAT}</format>
             <pattern>%d %-5p %-32t - %m%n</pattern>
             <!-- 编码 -->
             <charset>${file.encoding}</charset>
@@ -88,7 +91,8 @@
             <!--日志文件保留天数-->
             <MaxHistory>30</MaxHistory>
         </rollingPolicy>
-        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+        <encoder class="com.alipay.sofa.boot.logging.logback.SofaStructuredLogEncoder">
+            <format>${FILE_LOG_STRUCTURED_FORMAT}</format>
             <pattern>%d %-5p %-32t - %m%n</pattern>
             <!-- 编码 -->
             <charset>${file.encoding}</charset>

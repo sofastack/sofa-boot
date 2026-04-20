@@ -42,12 +42,28 @@ import java.util.Map;
  */
 public class LogEnvironmentPostProcessor implements EnvironmentPostProcessor, Ordered {
 
-    public static final int    ORDER                            = ConfigDataEnvironmentPostProcessor.ORDER + 1;
+    public static final int    ORDER                              = ConfigDataEnvironmentPostProcessor.ORDER + 1;
+
+    static final String        FILE_LOG_STRUCTURED_FORMAT         = "FILE_LOG_STRUCTURED_FORMAT";
+
+    static final String        CONSOLE_LOG_STRUCTURED_FORMAT      = "CONSOLE_LOG_STRUCTURED_FORMAT";
+
+    static final String        FILE_STRUCTURED_FORMAT_PROPERTY    = "logging.structured.format.file";
+
+    static final String        CONSOLE_STRUCTURED_FORMAT_PROPERTY = "logging.structured.format.console";
+
+    static final String        STRUCTURED_LOGGING_PREFIX          = "logging.structured.";
+
+    static final String        TRACER_STRUCTURED_PREFIX           = "logging.sofa.tracer.";
+
+    static final String        APPLICATION_NAME_PROPERTY          = "spring.application.name";
+
+    static final String        APPLICATION_VERSION_PROPERTY       = "spring.application.version";
 
     /**
      * support use config to disable sofa common thread pool monitor.
      */
-    public static final String SOFA_THREAD_POOL_MONITOR_DISABLE = "sofa.boot.tools.threadpool.monitor.disable";
+    public static final String SOFA_THREAD_POOL_MONITOR_DISABLE   = "sofa.boot.tools.threadpool.monitor.disable";
 
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment,
@@ -71,6 +87,10 @@ public class LogEnvironmentPostProcessor implements EnvironmentPostProcessor, Or
             context);
         loadLogConfiguration(Constants.LOG_ENCODING_PROP_KEY,
             environment.getProperty(Constants.LOG_ENCODING_PROP_KEY), context);
+        loadLogConfiguration(FILE_LOG_STRUCTURED_FORMAT,
+            environment.getProperty(FILE_STRUCTURED_FORMAT_PROPERTY, ""), context);
+        loadLogConfiguration(CONSOLE_LOG_STRUCTURED_FORMAT,
+            environment.getProperty(CONSOLE_STRUCTURED_FORMAT_PROPERTY, ""), context);
         // Don't delete this!
         // Some old SOFA SDKs rely on JVM system properties to determine log configurations.
         LogEnvUtils.keepCompatible(context, true);
@@ -83,6 +103,9 @@ public class LogEnvironmentPostProcessor implements EnvironmentPostProcessor, Or
             if (propertySource instanceof EnumerablePropertySource) {
                 for (String key : ((EnumerablePropertySource) propertySource).getPropertyNames()) {
                     if (LogEnvUtils.isSofaCommonLoggingConfig(key)) {
+                        CommonLoggingConfigurations.loadExternalConfiguration(key,
+                            environment.getProperty(key));
+                    } else if (isStructuredLoggingConfig(key) || isApplicationMetadata(key)) {
                         CommonLoggingConfigurations.loadExternalConfiguration(key,
                             environment.getProperty(key));
                     }
@@ -108,9 +131,18 @@ public class LogEnvironmentPostProcessor implements EnvironmentPostProcessor, Or
     }
 
     private void loadLogConfiguration(String key, String value, Map<String, String> context) {
-        if (StringUtils.hasText(value)) {
+        if (value != null) {
             context.put(key, value);
         }
+    }
+
+    private boolean isStructuredLoggingConfig(String key) {
+        return key.startsWith(STRUCTURED_LOGGING_PREFIX)
+               || key.startsWith(TRACER_STRUCTURED_PREFIX);
+    }
+
+    private boolean isApplicationMetadata(String key) {
+        return APPLICATION_NAME_PROPERTY.equals(key) || APPLICATION_VERSION_PROPERTY.equals(key);
     }
 
     private void initSofaCommonThread(ConfigurableEnvironment environment) {
