@@ -93,8 +93,6 @@ public class SofaDiagnosticEndpoint {
 
     private static final String                  RPC_ROUTER_CACHE_TYPE       = "rpc-router";
 
-    private static final String                  SERVICE_METADATA_CACHE_TYPE = "service-metadata";
-
     private final SofaRuntimeContext              sofaRuntimeContext;
 
     private final ThreadPoolGovernor              threadPoolGovernor;
@@ -189,20 +187,18 @@ public class SofaDiagnosticEndpoint {
         return switch (cacheType) {
             case "all" -> clearAllCaches(interfaceType, uniqueId);
             case RPC_ROUTER_CACHE_TYPE -> clearRpcRouterCache(interfaceType, uniqueId);
-            case SERVICE_METADATA_CACHE_TYPE -> clearServiceMetadataCache(interfaceType, uniqueId);
             default -> throw new IllegalArgumentException("Unknown cache type: " + cacheType
-                                                          + ". Supported cache types: all, rpc-router, service-metadata");
+                                                          + ". Supported cache types: all, rpc-router");
         };
     }
 
     private OperationResult clearAllCaches(@Nullable String interfaceType,
                                            @Nullable String uniqueId) {
         OperationResult rpcResult = clearRpcRouterCache(interfaceType, uniqueId);
-        OperationResult metaResult = clearServiceMetadataCache(interfaceType, uniqueId);
-        boolean success = rpcResult.success() && metaResult.success();
+        boolean success = rpcResult.success();
         return new OperationResult(success,
             success ? "All caches cleared successfully" : "Some caches failed to clear",
-            Map.of("rpcRouter", rpcResult, "serviceMetadata", metaResult));
+            Map.of("rpcRouter", rpcResult));
     }
 
     @SuppressWarnings("rawtypes")
@@ -241,41 +237,6 @@ public class SofaDiagnosticEndpoint {
                     : "RPC router cache cleared partially", data);
         }
         return new OperationResult(true, "RPC router cache cleared successfully", data);
-    }
-
-    private OperationResult clearServiceMetadataCache(@Nullable String interfaceType,
-                                                      @Nullable String uniqueId) {
-        ComponentManager componentManager = sofaRuntimeContext.getComponentManager();
-        List<ServiceComponent> matched = findRegisteredServiceComponents(componentManager,
-            interfaceType, uniqueId);
-
-        if (matched.isEmpty()) {
-            return new OperationResult(false, "No matching service components found",
-                buildFilterData(interfaceType, uniqueId));
-        }
-
-        List<String> cleared = new ArrayList<>();
-        List<String> failed = new ArrayList<>();
-        for (ServiceComponent serviceComponent : matched) {
-            String rawName = serviceComponent.getName().getRawName();
-            try {
-                componentManager.unregister(serviceComponent);
-                cleared.add(rawName);
-            } catch (Exception e) {
-                failed.add(rawName + ": " + e.getClass().getSimpleName());
-            }
-        }
-
-        Map<String, Object> data = buildFilterData(interfaceType, uniqueId);
-        data.put("clearedCount", cleared.size());
-        data.put("components", cleared);
-        data.put("failed", failed);
-        if (!failed.isEmpty()) {
-            return new OperationResult(false,
-                cleared.isEmpty() ? "Failed to clear service metadata cache"
-                    : "Service metadata cache cleared partially", data);
-        }
-        return new OperationResult(true, "Service metadata cache cleared", data);
     }
 
     private OperationResult refreshComponent(@Nullable String interfaceType,
@@ -485,18 +446,6 @@ public class SofaDiagnosticEndpoint {
         return new MemoryStats(
             new HeapMemoryInfo(heap.getUsed(), heap.getCommitted(), heap.getMax()),
             new NonHeapMemoryInfo(nonHeap.getUsed(), nonHeap.getCommitted()));
-    }
-
-    private List<ServiceComponent> findRegisteredServiceComponents(ComponentManager componentManager,
-                                                                   @Nullable String interfaceType,
-                                                                   @Nullable String uniqueId) {
-        Collection<ComponentInfo> components = componentManager
-            .getComponentInfosByType(ServiceComponent.SERVICE_COMPONENT_TYPE);
-        return components.stream().filter(ServiceComponent.class::isInstance)
-            .map(ServiceComponent.class::cast)
-            .filter(sc -> matchesCriteria(interfaceType, sc.getService().getInterfaceType().getName())
-                          && matchesCriteria(uniqueId, sc.getService().getUniqueId()))
-            .toList();
     }
 
     private List<ServiceFactoryBean> findServiceFactoryBeans(ComponentManager componentManager,

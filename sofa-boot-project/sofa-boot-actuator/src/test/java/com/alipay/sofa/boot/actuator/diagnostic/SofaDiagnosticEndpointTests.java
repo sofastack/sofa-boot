@@ -251,34 +251,20 @@ public class SofaDiagnosticEndpointTests {
     void executeClearCacheUsesAllWhenTypeIsNull() {
         try (ConsumerBootstrapRegistration ignored = registerConsumerBootstrap(
             TestService.class.getName(), "serviceUniqueId", 2, false)) {
-            ServiceComponent serviceComponent = serviceComponent(TestService.class,
-                "serviceUniqueId");
-
-            when(sofaRuntimeContext.getComponentManager()).thenReturn(componentManager);
-            when(componentManager.getComponentInfosByType(ServiceComponent.SERVICE_COMPONENT_TYPE))
-                .thenReturn(List.of(serviceComponent));
-
             SofaDiagnosticEndpoint.OperationResult result = sofaDiagnosticEndpoint.execute(
                 "clear-cache", null, TestService.class.getName(), "serviceUniqueId", null, null);
 
             assertThat(result.success()).isTrue();
             assertThat(result.message()).isEqualTo("All caches cleared successfully");
             Map<String, Object> data = result.data();
-            assertThat(data).containsKeys("rpcRouter", "serviceMetadata");
+            assertThat(data).containsOnlyKeys("rpcRouter");
             assertThat(((SofaDiagnosticEndpoint.OperationResult) data.get("rpcRouter")).success())
-                .isTrue();
-            assertThat(
-                ((SofaDiagnosticEndpoint.OperationResult) data.get("serviceMetadata")).success())
                 .isTrue();
         }
     }
 
     @Test
     void executeClearCacheUsesAllWhenTypeIsEmpty() {
-        when(sofaRuntimeContext.getComponentManager()).thenReturn(componentManager);
-        when(componentManager.getComponentInfosByType(ServiceComponent.SERVICE_COMPONENT_TYPE))
-            .thenReturn(List.of());
-
         SofaDiagnosticEndpoint.OperationResult result = sofaDiagnosticEndpoint.execute(
             "clear-cache", "", TestService.class.getName(), "serviceUniqueId", null, null);
 
@@ -287,8 +273,6 @@ public class SofaDiagnosticEndpointTests {
         Map<String, Object> data = result.data();
         assertThat(((SofaDiagnosticEndpoint.OperationResult) data.get("rpcRouter")).success())
             .isFalse();
-        assertThat(((SofaDiagnosticEndpoint.OperationResult) data.get("serviceMetadata")).success())
-            .isFalse();
     }
 
     @Test
@@ -296,7 +280,7 @@ public class SofaDiagnosticEndpointTests {
         assertThatThrownBy(() -> sofaDiagnosticEndpoint.execute("clear-cache", "unknown", null,
             null, null, null)).isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining("Unknown cache type: unknown")
-            .hasMessageContaining("Supported cache types: all, rpc-router, service-metadata");
+            .hasMessageContaining("Supported cache types: all, rpc-router");
     }
 
     @Test
@@ -361,88 +345,6 @@ public class SofaDiagnosticEndpointTests {
                 .contains(TestService.class.getName() + ":failed")
                 .contains("IllegalStateException");
         }
-    }
-
-    @Test
-    void executeClearCacheServiceMetadataReturnsFailureWhenNoServiceMatches() {
-        when(sofaRuntimeContext.getComponentManager()).thenReturn(componentManager);
-        when(componentManager.getComponentInfosByType(ServiceComponent.SERVICE_COMPONENT_TYPE))
-            .thenReturn(List.of());
-
-        SofaDiagnosticEndpoint.OperationResult result = sofaDiagnosticEndpoint.execute(
-            "clear-cache", "service-metadata", TestService.class.getName(), "serviceUniqueId",
-            null, null);
-
-        assertThat(result.success()).isFalse();
-        assertThat(result.message()).isEqualTo("No matching service components found");
-        assertThat(result.data()).containsEntry("interfaceType", TestService.class.getName())
-            .containsEntry("uniqueId", "serviceUniqueId");
-    }
-
-    @Test
-    void executeClearCacheServiceMetadataReturnsSuccessWhenServicesMatch() {
-        ServiceComponent serviceComponent = serviceComponent(TestService.class, "serviceUniqueId");
-        String componentName = componentRawName(TestService.class, "serviceUniqueId");
-
-        when(sofaRuntimeContext.getComponentManager()).thenReturn(componentManager);
-        when(componentManager.getComponentInfosByType(ServiceComponent.SERVICE_COMPONENT_TYPE))
-            .thenReturn(List.of(serviceComponent));
-
-        SofaDiagnosticEndpoint.OperationResult result = sofaDiagnosticEndpoint.execute(
-            "clear-cache", "service-metadata", TestService.class.getName(), "serviceUniqueId",
-            null, null);
-
-        assertThat(result.success()).isTrue();
-        assertThat(result.message()).isEqualTo("Service metadata cache cleared");
-        assertThat(result.data()).containsEntry("clearedCount", 1);
-        assertThat((List<?>) result.data().get("components")).singleElement().isEqualTo(
-            componentName);
-    }
-
-    @Test
-    void executeClearCacheServiceMetadataReturnsPartialFailureWhenSomeServicesFail() {
-        ServiceComponent succeeded = serviceComponent(TestService.class, "success");
-        ServiceComponent failed = serviceComponent(TestService.class, "failed");
-        String succeededName = componentRawName(TestService.class, "success");
-        String failedName = componentRawName(TestService.class, "failed");
-
-        when(sofaRuntimeContext.getComponentManager()).thenReturn(componentManager);
-        when(componentManager.getComponentInfosByType(ServiceComponent.SERVICE_COMPONENT_TYPE))
-            .thenReturn(List.of(succeeded, failed));
-        Mockito.doNothing().when(componentManager).unregister(succeeded);
-        Mockito.doThrow(new IllegalStateException("unregister failed")).when(componentManager)
-            .unregister(failed);
-
-        SofaDiagnosticEndpoint.OperationResult result = sofaDiagnosticEndpoint.execute(
-            "clear-cache", "service-metadata", TestService.class.getName(), null, null, null);
-
-        assertThat(result.success()).isFalse();
-        assertThat(result.message()).isEqualTo("Service metadata cache cleared partially");
-        assertThat((List<?>) result.data().get("components")).singleElement().isEqualTo(
-            succeededName);
-        assertThat((List<?>) result.data().get("failed")).singleElement().asString()
-            .contains(failedName).contains("IllegalStateException");
-    }
-
-    @Test
-    void executeClearCacheServiceMetadataReturnsFailureWhenAllServicesFail() {
-        ServiceComponent failed = serviceComponent(TestService.class, "failed");
-        String failedName = componentRawName(TestService.class, "failed");
-
-        when(sofaRuntimeContext.getComponentManager()).thenReturn(componentManager);
-        when(componentManager.getComponentInfosByType(ServiceComponent.SERVICE_COMPONENT_TYPE))
-            .thenReturn(List.of(failed));
-        Mockito.doThrow(new IllegalStateException("unregister failed")).when(componentManager)
-            .unregister(failed);
-
-        SofaDiagnosticEndpoint.OperationResult result = sofaDiagnosticEndpoint.execute(
-            "clear-cache", "service-metadata", TestService.class.getName(), "failed", null, null);
-
-        assertThat(result.success()).isFalse();
-        assertThat(result.message()).isEqualTo("Failed to clear service metadata cache");
-        assertThat((List<?>) result.data().get("components")).isEmpty();
-        assertThat((List<?>) result.data().get("failed")).singleElement().asString()
-            .contains(failedName).contains("IllegalStateException");
     }
 
     @Test
@@ -564,18 +466,6 @@ public class SofaDiagnosticEndpointTests {
         }
         RpcRuntimeContext.cacheConsumerConfig(consumerBootstrap);
         return new ConsumerBootstrapRegistration(consumerBootstrap);
-    }
-
-    private ServiceComponent serviceComponent(Class<?> interfaceType, String uniqueId) {
-        ServiceComponent serviceComponent = Mockito.mock(ServiceComponent.class);
-        Service service = Mockito.mock(Service.class);
-        ComponentName componentName = ComponentNameFactory.createComponentName(
-            ServiceComponent.SERVICE_COMPONENT_TYPE, interfaceType, uniqueId);
-        when(serviceComponent.getService()).thenReturn(service);
-        Mockito.doReturn(interfaceType).when(service).getInterfaceType();
-        when(service.getUniqueId()).thenReturn(uniqueId);
-        when(serviceComponent.getName()).thenReturn(componentName);
-        return serviceComponent;
     }
 
     private ServiceFactoryBean serviceFactoryBean(Class<?> interfaceClass, String uniqueId) {
