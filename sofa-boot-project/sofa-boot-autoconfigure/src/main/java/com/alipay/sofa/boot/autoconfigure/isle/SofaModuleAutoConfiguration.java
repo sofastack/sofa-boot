@@ -70,10 +70,8 @@ import java.util.function.Supplier;
 @EnableConfigurationProperties(SofaModuleProperties.class)
 public class SofaModuleAutoConfiguration {
 
-    public static final String  SPRING_SECURITY_SOFA_POST_PROCESSOR_SHARE_FILTER_BEAN_NAME = "springSecuritySofaPostProcessorShareFilter";
-
-    private static final Logger LOGGER                                                     = SofaBootLoggerFactory
-                                                                                               .getLogger(SofaModuleAutoConfiguration.class);
+    private static final Logger LOGGER = SofaBootLoggerFactory
+                                           .getLogger(SofaModuleAutoConfiguration.class);
 
     @Bean
     @ConditionalOnMissingBean
@@ -198,25 +196,6 @@ public class SofaModuleAutoConfiguration {
     @ConditionalOnMissingBean
     public ModuleDeploymentValidator sofaModuleDeploymentValidator() {
         return new DefaultModuleDeploymentValidator();
-    }
-
-    @Bean(name = SPRING_SECURITY_SOFA_POST_PROCESSOR_SHARE_FILTER_BEAN_NAME)
-    @ConditionalOnMissingBean(name = SPRING_SECURITY_SOFA_POST_PROCESSOR_SHARE_FILTER_BEAN_NAME)
-    public SofaPostProcessorShareFilter springSecuritySofaPostProcessorShareFilter() {
-        return new SofaPostProcessorShareFilter() {
-            private static final String SPRING_SECURITY_PACKAGE                            = "org.springframework.security.";
-            private static final String SPRING_SECURITY_PATH_PATTERN_PARSER_POST_PROCESSOR = "springSecurityPathPatternParserBeanDefinitionRegistryPostProcessor";
-
-            @Override
-            public boolean skipShareByClass(Class<?> clazz) {
-                return clazz.getName().startsWith(SPRING_SECURITY_PACKAGE);
-            }
-
-            @Override
-            public boolean skipShareByBeanName(String beanName) {
-                return SPRING_SECURITY_PATH_PATTERN_PARSER_POST_PROCESSOR.equals(beanName);
-            }
-        };
     }
 
     @Bean

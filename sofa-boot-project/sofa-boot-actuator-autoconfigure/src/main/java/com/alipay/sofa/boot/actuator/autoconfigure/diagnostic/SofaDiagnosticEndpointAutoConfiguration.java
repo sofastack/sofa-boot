@@ -27,10 +27,8 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.web.SecurityFilterChain;
 
 /**
  * {@link EnableAutoConfiguration Auto-configuration} for {@link SofaDiagnosticEndpoint}.
@@ -46,23 +44,8 @@ public class SofaDiagnosticEndpointAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    @ConditionalOnProperty(prefix = "management.endpoint.sofa-diagnostic", name = "sensitive", havingValue = "false")
-    public SofaDiagnosticEndpoint publicSofaDiagnosticEndpoint(SofaRuntimeContext sofaRuntimeContext,
-                                                               ApplicationContext applicationContext) {
-        return createEndpoint(sofaRuntimeContext, applicationContext);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    @ConditionalOnClass(SecurityFilterChain.class)
-    @ConditionalOnProperty(prefix = "management.endpoint.sofa-diagnostic", name = "sensitive", havingValue = "true", matchIfMissing = true)
-    public SofaDiagnosticEndpoint secureSofaDiagnosticEndpoint(SofaRuntimeContext sofaRuntimeContext,
-                                                               ApplicationContext applicationContext) {
-        return createEndpoint(sofaRuntimeContext, applicationContext);
-    }
-
-    private SofaDiagnosticEndpoint createEndpoint(SofaRuntimeContext sofaRuntimeContext,
-                                                  ApplicationContext applicationContext) {
+    public SofaDiagnosticEndpoint sofaDiagnosticEndpoint(SofaRuntimeContext sofaRuntimeContext,
+                                                         ApplicationContext applicationContext) {
         return new SofaDiagnosticEndpoint(sofaRuntimeContext, ThreadPoolGovernor.getInstance(),
             applicationContext);
     }

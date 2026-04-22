@@ -10,4 +10,3 @@ com.alipay.sofa.boot.actuator.autoconfigure.rpc.RpcActuatorAutoConfiguration
 com.alipay.sofa.boot.actuator.autoconfigure.isle.IsleEndpointAutoConfiguration
 com.alipay.sofa.boot.actuator.autoconfigure.threadpool.ThreadPoolEndpointAutoConfiguration
 com.alipay.sofa.boot.actuator.autoconfigure.diagnostic.SofaDiagnosticEndpointAutoConfiguration
-com.alipay.sofa.boot.actuator.autoconfigure.diagnostic.SofaDiagnosticSecurityAutoConfiguration

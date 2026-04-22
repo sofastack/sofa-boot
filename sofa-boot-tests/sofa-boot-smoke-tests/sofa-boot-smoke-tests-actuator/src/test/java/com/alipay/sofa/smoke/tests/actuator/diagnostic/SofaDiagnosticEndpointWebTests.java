@@ -57,11 +57,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author xiaosiyuan
  * @version SofaDiagnosticEndpointWebTests.java, v 0.1 2026年04月02日 xiaosiyuan Exp $
  */
-@SpringBootTest(classes = ActuatorSofaBootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {
-                                                                                                                                       "management.endpoints.web.exposure.include=sofa-diagnostic",
-                                                                                                                                       "management.endpoint.sofa-diagnostic.sensitive=true",
-                                                                                                                                       "spring.security.user.name=ops",
-                                                                                                                                       "spring.security.user.password=123456" })
+@SpringBootTest(classes = ActuatorSofaBootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = { "management.endpoints.web.exposure.include=sofa-diagnostic" })
 @Import(SofaDiagnosticEndpointWebTests.Config.class)
 public class SofaDiagnosticEndpointWebTests {
 
@@ -76,8 +72,8 @@ public class SofaDiagnosticEndpointWebTests {
 
     @Test
     public void sofaDiagnosticActuator() {
-        ResponseEntity<String> response = restTemplate.withBasicAuth("ops", "123456").getForEntity(
-            "/actuator/sofa-diagnostic", String.class);
+        ResponseEntity<String> response = restTemplate.getForEntity("/actuator/sofa-diagnostic",
+            String.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).contains("\"components\":{\"total\":")
             .contains("\"threadPools\":[{\"threadPoolName\":\"diagnosticThreadPool\"")
@@ -86,8 +82,8 @@ public class SofaDiagnosticEndpointWebTests {
 
     @Test
     public void sofaDiagnosticServicesActuator() throws JsonProcessingException {
-        ResponseEntity<String> response = restTemplate.withBasicAuth("ops", "123456")
-            .getForEntity("/actuator/sofa-diagnostic/services/all", String.class);
+        ResponseEntity<String> response = restTemplate.getForEntity(
+            "/actuator/sofa-diagnostic/services/all", String.class);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         JsonNode body = objectMapper.readTree(response.getBody());
@@ -109,9 +105,9 @@ public class SofaDiagnosticEndpointWebTests {
 
     @Test
     public void sofaDiagnosticServiceDetailActuator() throws JsonProcessingException {
-        ResponseEntity<String> response = restTemplate.withBasicAuth("ops", "123456")
-            .getForEntity("/actuator/sofa-diagnostic/serviceDetail/{interfaceId}", String.class,
-                SAMPLE_SERVICE_INTERFACE);
+        ResponseEntity<String> response = restTemplate.getForEntity(
+            "/actuator/sofa-diagnostic/serviceDetail/{interfaceId}", String.class,
+            SAMPLE_SERVICE_INTERFACE);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         JsonNode body = objectMapper.readTree(response.getBody());
@@ -194,8 +190,7 @@ public class SofaDiagnosticEndpointWebTests {
     }
 
     private ResponseEntity<String> postToActuator(String url) {
-        return restTemplate.withBasicAuth("ops", "123456").exchange(url, HttpMethod.POST,
-            actuatorPostRequest, String.class);
+        return restTemplate.exchange(url, HttpMethod.POST, actuatorPostRequest, String.class);
     }
 
     private HttpEntity<?> createActuatorPostRequest() {

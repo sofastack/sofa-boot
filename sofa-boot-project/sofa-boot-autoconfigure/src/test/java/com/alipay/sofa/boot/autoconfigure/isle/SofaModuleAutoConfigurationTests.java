@@ -17,7 +17,6 @@
 package com.alipay.sofa.boot.autoconfigure.isle;
 
 import com.alipay.sofa.boot.constant.SofaBootConstants;
-import com.alipay.sofa.boot.context.processor.SofaPostProcessorShareFilter;
 import com.alipay.sofa.boot.context.processor.SofaPostProcessorShareManager;
 import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
 import com.alipay.sofa.boot.isle.deployment.ModuleDeploymentValidator;
@@ -37,7 +36,6 @@ import org.junit.jupiter.api.condition.JRE;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.FilteredClassLoader;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
-import org.springframework.security.config.annotation.web.configuration.FakeSecurityBeanFactoryPostProcessor;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -71,7 +69,6 @@ public class SofaModuleAutoConfigurationTests {
                         .hasBean(SpringContextInstallStage.SOFA_MODULE_REFRESH_EXECUTOR_BEAN_NAME)
                         .hasSingleBean(SofaModuleProfileChecker.class)
                         .hasSingleBean(ModuleDeploymentValidator.class)
-                        .hasBean(SofaModuleAutoConfiguration.SPRING_SECURITY_SOFA_POST_PROCESSOR_SHARE_FILTER_BEAN_NAME)
                         .hasSingleBean(SofaPostProcessorShareManager.class));
     }
 
@@ -174,22 +171,6 @@ public class SofaModuleAutoConfigurationTests {
                 .run((context) -> {
                     SofaPostProcessorShareManager sofaPostProcessorShareManager = context.getBean(SofaPostProcessorShareManager.class);
                     assertThat(sofaPostProcessorShareManager.isShareParentContextPostProcessors()).isFalse();
-                });
-    }
-
-    @Test
-    void springSecurityPostProcessorsAreNotSharedToModuleContexts() {
-        this.contextRunner
-                .run((context) -> {
-                    SofaPostProcessorShareFilter filter = context.getBean(
-                        SofaModuleAutoConfiguration.SPRING_SECURITY_SOFA_POST_PROCESSOR_SHARE_FILTER_BEAN_NAME,
-                        SofaPostProcessorShareFilter.class);
-                    assertThat(filter.skipShareByClass(FakeSecurityBeanFactoryPostProcessor.class))
-                        .isTrue();
-                    assertThat(filter.skipShareByBeanName(
-                        "springSecurityPathPatternParserBeanDefinitionRegistryPostProcessor"))
-                        .isTrue();
-                    assertThat(filter.skipShareByClass(ModelCreatingStage.class)).isFalse();
                 });
     }
 
