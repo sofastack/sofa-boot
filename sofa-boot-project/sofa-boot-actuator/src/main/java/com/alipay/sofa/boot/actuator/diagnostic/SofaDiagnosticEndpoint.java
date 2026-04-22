@@ -37,6 +37,7 @@ import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import com.alipay.sofa.runtime.spring.factory.ServiceFactoryBean;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
+import org.springframework.boot.actuate.endpoint.Access;
 import org.springframework.boot.actuate.endpoint.OperationResponseBody;
 import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
 import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
@@ -73,7 +74,7 @@ import java.util.stream.Collectors;
  * @author xiaosiyuan
  * @version SofaDiagnosticEndpoint.java, v 0.1 2026年04月01日 xiaosiyuan Exp $
  */
-@Endpoint(id = "sofa-diagnostic")
+@Endpoint(id = "sofa-diagnostic", defaultAccess = Access.READ_ONLY)
 public class SofaDiagnosticEndpoint {
 
     private static final String                  CLEAR_CACHE_COMMAND         = "clear-cache";

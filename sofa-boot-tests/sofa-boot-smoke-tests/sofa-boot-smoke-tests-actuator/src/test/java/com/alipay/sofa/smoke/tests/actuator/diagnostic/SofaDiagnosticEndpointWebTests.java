@@ -57,7 +57,9 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author xiaosiyuan
  * @version SofaDiagnosticEndpointWebTests.java, v 0.1 2026年04月02日 xiaosiyuan Exp $
  */
-@SpringBootTest(classes = ActuatorSofaBootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = { "management.endpoints.web.exposure.include=sofa-diagnostic" })
+@SpringBootTest(classes = ActuatorSofaBootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {
+                                                                                                                                       "management.endpoints.web.exposure.include=sofa-diagnostic",
+                                                                                                                                       "management.endpoint.sofa-diagnostic.access=unrestricted" })
 @Import(SofaDiagnosticEndpointWebTests.Config.class)
 public class SofaDiagnosticEndpointWebTests {
 

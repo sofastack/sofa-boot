@@ -47,6 +47,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.actuate.endpoint.Access;
+import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
 import org.springframework.context.ApplicationContext;
 
 import java.util.List;
@@ -98,6 +100,14 @@ public class SofaDiagnosticEndpointTests {
 
     @InjectMocks
     private SofaDiagnosticEndpoint sofaDiagnosticEndpoint;
+
+    @Test
+    void endpointShouldBeReadOnlyByDefault() {
+        Endpoint endpoint = SofaDiagnosticEndpoint.class.getAnnotation(Endpoint.class);
+
+        assertThat(endpoint).isNotNull();
+        assertThat(endpoint.defaultAccess()).isEqualTo(Access.READ_ONLY);
+    }
 
     @Test
     void summary() {
