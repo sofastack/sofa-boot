@@ -51,7 +51,7 @@ import java.util.Map;
  * switches to Spring Boot's structured logging formatters when a structured format is
  * configured for SOFA logger spaces.
  *
- * @author OpenAI
+ * @author Alan
  * @since 4.6.0
  */
 public class SofaStructuredLogEncoder extends EncoderBase<ILoggingEvent> {
