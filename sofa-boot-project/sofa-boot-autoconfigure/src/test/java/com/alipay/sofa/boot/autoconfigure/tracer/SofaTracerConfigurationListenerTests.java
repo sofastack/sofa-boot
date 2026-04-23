@@ -37,9 +37,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * Tests for {@link SofaTracerConfigurationListener}.
- *
- * @author huzijie
- * @version SofaTracerConfigurationListenerTests.java, v 0.1 2023年01月11日 3:28 PM huzijie Exp $
  */
 public class SofaTracerConfigurationListenerTests {
 
@@ -86,6 +83,8 @@ public class SofaTracerConfigurationListenerTests {
         props.put("sofa.boot.tracer.samplerName", "test");
         props.put("sofa.boot.tracer.samplerPercentage", "200.0");
         props.put("sofa.boot.tracer.samplerCustomRuleClassName", "TestRuleClass");
+        props.put("sofa.boot.tracer.output-structured", "true");
+        props.put("logging.structured.format.file", "ecs");
         props.put("sofa.boot.tracer.jsonOutput", "false");
         application.setDefaultProperties(props);
         application.addListeners(new SpringCloudConfigListener());
@@ -125,6 +124,39 @@ public class SofaTracerConfigurationListenerTests {
             SofaTracerConfiguration
                 .getProperty(SofaTracerConfiguration.SAMPLER_STRATEGY_CUSTOM_RULE_CLASS_NAME))
             .isEqualTo("TestRuleClass");
+        assertThat(SofaTracerConfiguration.getProperty(SofaTracerConfiguration.JSON_FORMAT_OUTPUT))
+            .isEqualTo("false");
+    }
+
+    @Test
+    public void tracerJsonOutputFollowsStructuredLogging() {
+        SpringApplication application = new SpringApplication(Config.class);
+        application.setWebApplicationType(WebApplicationType.NONE);
+        Map<String, Object> props = new HashMap<>();
+        props.put("spring.application.name", "tracer-structured");
+        props.put("sofa.boot.tracer.output-structured", "true");
+        props.put("logging.structured.format.console", "logstash");
+        application.setDefaultProperties(props);
+        application.addListeners(new SpringCloudConfigListener());
+        application.addListeners(new SofaTracerConfigurationListener());
+        this.context = application.run();
+
+        assertThat(SofaTracerConfiguration.getProperty(SofaTracerConfiguration.JSON_FORMAT_OUTPUT))
+            .isEqualTo("true");
+    }
+
+    @Test
+    public void tracerJsonOutputCanBeDisabledWhenStructuredLoggingIsDisabled() {
+        SpringApplication application = new SpringApplication(Config.class);
+        application.setWebApplicationType(WebApplicationType.NONE);
+        Map<String, Object> props = new HashMap<>();
+        props.put("spring.application.name", "tracer-pattern");
+        props.put("sofa.boot.tracer.output-structured", "true");
+        application.setDefaultProperties(props);
+        application.addListeners(new SpringCloudConfigListener());
+        application.addListeners(new SofaTracerConfigurationListener());
+        this.context = application.run();
+
         assertThat(SofaTracerConfiguration.getProperty(SofaTracerConfiguration.JSON_FORMAT_OUTPUT))
             .isEqualTo("false");
     }

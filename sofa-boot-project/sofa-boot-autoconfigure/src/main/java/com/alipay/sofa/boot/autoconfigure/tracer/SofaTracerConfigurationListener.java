@@ -32,8 +32,6 @@ import org.springframework.util.StringUtils;
 /**
  * Parse SOFATracer Configuration in early stage.
  *
- * @author qilong.zql
- * @author huzijie
  * @since 2.2.2
  */
 public class SofaTracerConfigurationListener
@@ -98,7 +96,23 @@ public class SofaTracerConfigurationListener
             String.valueOf(sofaTracerProperties.getSamplerPercentage()));
 
         SofaTracerConfiguration.setProperty(SofaTracerConfiguration.JSON_FORMAT_OUTPUT,
-            String.valueOf(sofaTracerProperties.isJsonOutput()));
+            String.valueOf(resolveJsonOutput(environment, sofaTracerProperties)));
+    }
+
+    private boolean resolveJsonOutput(ConfigurableEnvironment environment,
+                                      SofaTracerProperties sofaTracerProperties) {
+        if (Binder.get(environment).bind("sofa.boot.tracer.json-output", Boolean.class).isBound()) {
+            return sofaTracerProperties.isJsonOutput();
+        }
+        if (sofaTracerProperties.isOutputStructured()) {
+            return isStructuredLoggingEnabled(environment);
+        }
+        return sofaTracerProperties.isJsonOutput();
+    }
+
+    private boolean isStructuredLoggingEnabled(ConfigurableEnvironment environment) {
+        return StringUtils.hasText(environment.getProperty("logging.structured.format.console"))
+               || StringUtils.hasText(environment.getProperty("logging.structured.format.file"));
     }
 
     @Override

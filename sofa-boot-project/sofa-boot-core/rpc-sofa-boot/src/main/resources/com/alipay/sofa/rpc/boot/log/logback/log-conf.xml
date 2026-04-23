@@ -20,8 +20,9 @@
             <!--日志文件保留天数-->
             <MaxHistory>30</MaxHistory>
         </rollingPolicy>
-        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+        <encoder class="com.alipay.sofa.boot.logging.logback.SofaBootStructuredLogEncoder">
             <pattern>%d %-5p %-32t - %m%n</pattern>
+            <formatProperty>FILE_LOG_STRUCTURED_FORMAT</formatProperty>
             <!-- 编码 -->
             <charset>${file.encoding}</charset>
         </encoder>
@@ -42,8 +43,9 @@
             <!--日志文件保留天数-->
             <MaxHistory>30</MaxHistory>
         </rollingPolicy>
-        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+        <encoder class="com.alipay.sofa.boot.logging.logback.SofaBootStructuredLogEncoder">
             <pattern>%d %-5p %-32t - %m%n</pattern>
+            <formatProperty>FILE_LOG_STRUCTURED_FORMAT</formatProperty>
             <!-- 编码 -->
             <charset>${file.encoding}</charset>
         </encoder>
@@ -65,8 +67,9 @@
             <!--日志文件保留天数-->
             <MaxHistory>30</MaxHistory>
         </rollingPolicy>
-        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+        <encoder class="com.alipay.sofa.boot.logging.logback.SofaBootStructuredLogEncoder">
             <pattern>%d %-5p %-32t %c{2} - %m%n</pattern>
+            <formatProperty>FILE_LOG_STRUCTURED_FORMAT</formatProperty>
             <!-- 编码 -->
             <charset>${file.encoding}</charset>
         </encoder>
@@ -87,8 +90,9 @@
             <!--日志文件保留天数-->
             <MaxHistory>30</MaxHistory>
         </rollingPolicy>
-        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+        <encoder class="com.alipay.sofa.boot.logging.logback.SofaBootStructuredLogEncoder">
             <pattern>%d %-5p %-32t %c{2} - %m%n</pattern>
+            <formatProperty>FILE_LOG_STRUCTURED_FORMAT</formatProperty>
             <!-- 编码 -->
             <charset>${file.encoding}</charset>
         </encoder>
@@ -109,8 +113,9 @@
             <!--日志文件保留天数-->
             <MaxHistory>30</MaxHistory>
         </rollingPolicy>
-        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+        <encoder class="com.alipay.sofa.boot.logging.logback.SofaBootStructuredLogEncoder">
             <pattern>%d %-5p %-32t %c{2} - %m%n</pattern>
+            <formatProperty>FILE_LOG_STRUCTURED_FORMAT</formatProperty>
             <!-- 编码 -->
             <charset>${file.encoding}</charset>
         </encoder>

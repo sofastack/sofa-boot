@@ -29,8 +29,6 @@ import static com.alipay.common.tracer.core.configuration.SofaTracerConfiguratio
 /**
  * Configuration properties to configure tracer.
  *
- * @author yangguanchao
- * @author huzijie
  * @since 2018/04/30
  */
 @ConfigurationProperties("sofa.boot.tracer")
@@ -92,6 +90,11 @@ public class SofaTracerProperties {
      * Use json to print log.
      */
     private boolean             jsonOutput                = true;
+
+    /**
+     * Follow SOFABoot structured logging when jsonOutput is not explicitly configured.
+     */
+    private boolean             outputStructured;
 
     public String getDisableDigestLog() {
         return disableDigestLog;
@@ -179,5 +182,13 @@ public class SofaTracerProperties {
 
     public void setJsonOutput(boolean jsonOutput) {
         this.jsonOutput = jsonOutput;
+    }
+
+    public boolean isOutputStructured() {
+        return outputStructured;
+    }
+
+    public void setOutputStructured(boolean outputStructured) {
+        this.outputStructured = outputStructured;
     }
 }
