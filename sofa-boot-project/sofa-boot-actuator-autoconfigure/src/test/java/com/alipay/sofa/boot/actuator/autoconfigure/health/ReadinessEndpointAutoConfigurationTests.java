@@ -19,6 +19,7 @@ package com.alipay.sofa.boot.actuator.autoconfigure.health;
 import com.alipay.sofa.boot.actuator.health.ReadinessEndpoint;
 import com.alipay.sofa.boot.actuator.health.ReadinessEndpointWebExtension;
 import com.alipay.sofa.boot.actuator.health.ReadinessHttpCodeStatusMapper;
+import com.alipay.sofa.boot.autoconfigure.reflection.ReflectionCacheAutoConfiguration;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.actuate.autoconfigure.health.HealthEndpointAutoConfiguration;
 import org.springframework.boot.actuate.health.HttpCodeStatusMapper;
@@ -38,7 +39,8 @@ public class ReadinessEndpointAutoConfigurationTests {
 
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
                                                              .withConfiguration(AutoConfigurations
-                                                                 .of(ReadinessEndpointAutoConfiguration.class,
+                                                                 .of(ReflectionCacheAutoConfiguration.class,
+                                                                     ReadinessEndpointAutoConfiguration.class,
                                                                      ReadinessAutoConfiguration.class,
                                                                      HealthEndpointAutoConfiguration.class));
 

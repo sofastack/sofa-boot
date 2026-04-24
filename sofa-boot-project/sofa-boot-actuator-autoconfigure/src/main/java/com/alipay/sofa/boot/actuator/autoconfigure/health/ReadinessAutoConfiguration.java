@@ -25,10 +25,12 @@ import com.alipay.sofa.boot.autoconfigure.condition.OnVirtualThreadStartupAvaila
 import com.alipay.sofa.boot.autoconfigure.condition.OnVirtualThreadStartupDisableCondition;
 import com.alipay.sofa.boot.constant.SofaBootConstants;
 import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
+import com.alipay.sofa.boot.reflection.ReflectionCache;
 import com.alipay.sofa.common.thread.NamedThreadFactory;
 import com.alipay.sofa.common.thread.SofaThreadPoolExecutor;
 import com.alipay.sofa.common.thread.virtual.SofaVirtualThreadFactory;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -97,9 +99,11 @@ public class ReadinessAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public HealthIndicatorProcessor healthIndicatorProcessor(HealthProperties healthCheckProperties,
-                                                             ExecutorService readinessHealthCheckExecutor) {
+                                                             ExecutorService readinessHealthCheckExecutor,
+                                                             ObjectProvider<ReflectionCache> reflectionCacheProvider) {
         HealthIndicatorProcessor healthIndicatorProcessor = new HealthIndicatorProcessor();
         healthIndicatorProcessor.setHealthCheckExecutor(readinessHealthCheckExecutor);
+        reflectionCacheProvider.ifAvailable(healthIndicatorProcessor::setReflectionCache);
         healthIndicatorProcessor.initExcludedIndicators(healthCheckProperties
             .getExcludedIndicators());
         healthIndicatorProcessor.setParallelCheck(healthCheckProperties.isParallelCheck());

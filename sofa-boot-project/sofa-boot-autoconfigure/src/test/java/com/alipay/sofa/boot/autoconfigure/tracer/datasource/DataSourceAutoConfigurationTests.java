@@ -16,6 +16,8 @@
  */
 package com.alipay.sofa.boot.autoconfigure.tracer.datasource;
 
+import com.alipay.sofa.boot.autoconfigure.reflection.ReflectionCacheAutoConfiguration;
+import com.alipay.sofa.boot.reflection.ReflectionCache;
 import com.alipay.sofa.boot.tracer.datasource.DataSourceBeanPostProcessor;
 import com.alipay.sofa.tracer.plugins.datasource.SmartDataSource;
 import org.junit.jupiter.api.Test;
@@ -35,12 +37,22 @@ public class DataSourceAutoConfigurationTests {
 
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
                                                              .withConfiguration(AutoConfigurations
-                                                                 .of(DataSourceAutoConfiguration.class));
+                                                                 .of(ReflectionCacheAutoConfiguration.class,
+                                                                     DataSourceAutoConfiguration.class));
 
     @Test
     public void registerDataSourcePostProcessors() {
         this.contextRunner
                 .run((context) -> assertThat(context)
+                        .hasSingleBean(DataSourceBeanPostProcessor.class));
+    }
+
+    @Test
+    public void registerDataSourcePostProcessorsWithoutReflectionCacheAutoConfiguration() {
+        new ApplicationContextRunner()
+                .withConfiguration(AutoConfigurations.of(DataSourceAutoConfiguration.class))
+                .run((context) -> assertThat(context)
+                        .doesNotHaveBean(ReflectionCache.class)
                         .hasSingleBean(DataSourceBeanPostProcessor.class));
     }
 

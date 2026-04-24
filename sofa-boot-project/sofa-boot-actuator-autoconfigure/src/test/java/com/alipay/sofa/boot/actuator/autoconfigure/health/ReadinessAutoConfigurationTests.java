@@ -22,9 +22,11 @@ import com.alipay.sofa.boot.actuator.health.HealthIndicatorProcessor;
 import com.alipay.sofa.boot.actuator.health.ModuleHealthChecker;
 import com.alipay.sofa.boot.actuator.health.ReadinessCheckCallbackProcessor;
 import com.alipay.sofa.boot.actuator.health.ReadinessCheckListener;
+import com.alipay.sofa.boot.autoconfigure.reflection.ReflectionCacheAutoConfiguration;
 import com.alipay.sofa.boot.autoconfigure.isle.SofaModuleAutoConfiguration;
 import com.alipay.sofa.boot.autoconfigure.runtime.SofaRuntimeAutoConfiguration;
 import com.alipay.sofa.boot.isle.ApplicationRuntimeModel;
+import com.alipay.sofa.boot.reflection.ReflectionCache;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnJre;
@@ -49,7 +51,8 @@ public class ReadinessAutoConfigurationTests {
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
                                                              .withConfiguration(
                                                                  AutoConfigurations
-                                                                     .of(ReadinessAutoConfiguration.class))
+                                                                     .of(ReflectionCacheAutoConfiguration.class,
+                                                                         ReadinessAutoConfiguration.class))
                                                              .withPropertyValues(
                                                                  "management.endpoints.web.exposure.include=readiness");
 
@@ -57,6 +60,20 @@ public class ReadinessAutoConfigurationTests {
     void runShouldHaveReadinessBeans() {
         this.contextRunner
                 .run((context) -> assertThat(context)
+                        .hasSingleBean(ReadinessCheckListener.class)
+                        .hasSingleBean(HealthCheckerProcessor.class)
+                        .hasSingleBean(HealthIndicatorProcessor.class)
+                        .hasSingleBean(ReadinessCheckCallbackProcessor.class)
+                        .hasBean(ReadinessCheckListener.READINESS_HEALTH_CHECK_EXECUTOR_BEAN_NAME));
+    }
+
+    @Test
+    void runWithoutReflectionCacheAutoConfigurationShouldHaveReadinessBeans() {
+        new ApplicationContextRunner()
+                .withConfiguration(AutoConfigurations.of(ReadinessAutoConfiguration.class))
+                .withPropertyValues("management.endpoints.web.exposure.include=readiness")
+                .run((context) -> assertThat(context)
+                        .doesNotHaveBean(ReflectionCache.class)
                         .hasSingleBean(ReadinessCheckListener.class)
                         .hasSingleBean(HealthCheckerProcessor.class)
                         .hasSingleBean(HealthIndicatorProcessor.class)
