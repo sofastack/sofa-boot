@@ -26,9 +26,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Tests for {@link LogEnvironmentPostProcessor}.
- *
- * @author huzijie
- * @version LogEnvironmentPreparingListenerTests.java, v 0.1 2023年02月01日 3:35 PM huzijie Exp $
  */
 public class LogEnvironmentPreparingListenerTests {
 
