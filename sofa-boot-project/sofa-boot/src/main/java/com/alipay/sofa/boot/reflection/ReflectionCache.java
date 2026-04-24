@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 
@@ -305,20 +306,31 @@ public class ReflectionCache {
 
     private static final class LookupStore<K, V extends LookupResult> {
 
-        private final ConcurrentHashMap<K, V> cache     = new ConcurrentHashMap<>();
+        private final ConcurrentHashMap<K, V> cache         = new ConcurrentHashMap<>();
 
-        private final AtomicLong              hitCount  = new AtomicLong();
+        private final AtomicLong              hitCount      = new AtomicLong();
 
-        private final AtomicLong              missCount = new AtomicLong();
+        private final AtomicLong              missCount     = new AtomicLong();
+
+        private final AtomicInteger           missCacheSize = new AtomicInteger();
 
         private V get(K key, Function<K, V> loader) {
+            V result = cache.get(key);
+            if (result != null) {
+                hitCount.incrementAndGet();
+                return result;
+            }
+
             AtomicBoolean cacheMiss = new AtomicBoolean(false);
-            V result = cache.computeIfAbsent(key, cacheKey -> {
+            result = cache.computeIfAbsent(key, cacheKey -> {
                 cacheMiss.set(true);
                 return loader.apply(cacheKey);
             });
             if (cacheMiss.get()) {
                 missCount.incrementAndGet();
+                if (result.isMiss()) {
+                    missCacheSize.incrementAndGet();
+                }
             } else {
                 hitCount.incrementAndGet();
             }
@@ -327,13 +339,14 @@ public class ReflectionCache {
 
         private LookupStats getStats() {
             return new LookupStats(hitCount.get(), missCount.get(), cache.size(),
-                (int) cache.values().stream().filter(LookupResult::isMiss).count());
+                missCacheSize.get());
         }
 
         private void clear() {
             cache.clear();
             hitCount.set(0);
             missCount.set(0);
+            missCacheSize.set(0);
         }
     }
 

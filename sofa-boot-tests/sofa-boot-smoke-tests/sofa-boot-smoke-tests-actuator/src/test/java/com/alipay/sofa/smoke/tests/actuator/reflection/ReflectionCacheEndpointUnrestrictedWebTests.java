@@ -28,12 +28,14 @@ import org.springframework.http.ResponseEntity;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Integration tests for {@code /actuator/reflection-cache}.
+ * Integration tests for unrestricted {@code /actuator/reflection-cache} access.
  *
  * @author xiaosiyuan
  */
-@SpringBootTest(classes = ActuatorSofaBootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = { "management.endpoints.web.exposure.include=reflection-cache" })
-public class ReflectionCacheEndpointWebTests {
+@SpringBootTest(classes = ActuatorSofaBootApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {
+                                                                                                                                       "management.endpoints.web.exposure.include=reflection-cache",
+                                                                                                                                       "management.endpoint.reflection-cache.access=unrestricted" })
+public class ReflectionCacheEndpointUnrestrictedWebTests {
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -42,18 +44,14 @@ public class ReflectionCacheEndpointWebTests {
     private ReflectionCache  reflectionCache;
 
     @Test
-    public void reflectionCacheEndpointShouldExposeStatsWithReadOnlyAccessByDefault()
-                                                                                     throws Exception {
+    public void reflectionCacheEndpointShouldClearWhenAccessIsUnrestricted() throws Exception {
         reflectionCache.forName(String.class.getName());
         reflectionCache.forName(String.class.getName());
 
-        ResponseEntity<String> response = restTemplate.getForEntity("/actuator/reflection-cache",
-            String.class);
+        ResponseEntity<String> response = restTemplate.postForEntity("/actuator/reflection-cache",
+            null, String.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody()).contains("\"enabled\":true").contains("\"classHitCount\":1")
-            .contains("\"classMissCount\":1").contains("\"classCacheSize\":1");
-
-        response = restTemplate.postForEntity("/actuator/reflection-cache", null, String.class);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.METHOD_NOT_ALLOWED);
+        assertThat(response.getBody()).contains("\"totalHitCount\":0")
+            .contains("\"totalMissCount\":0").contains("\"classCacheSize\":0");
     }
 }

@@ -17,6 +17,7 @@
 package com.alipay.sofa.boot.actuator.reflection;
 
 import com.alipay.sofa.boot.reflection.ReflectionCache;
+import org.springframework.boot.actuate.endpoint.Access;
 import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
 import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
 import org.springframework.boot.actuate.endpoint.annotation.WriteOperation;
@@ -26,7 +27,7 @@ import org.springframework.boot.actuate.endpoint.annotation.WriteOperation;
  *
  * @author xiaosiyuan
  */
-@Endpoint(id = "reflection-cache")
+@Endpoint(id = "reflection-cache", defaultAccess = Access.READ_ONLY)
 public class ReflectionCacheEndpoint {
 
     private final ReflectionCache reflectionCache;

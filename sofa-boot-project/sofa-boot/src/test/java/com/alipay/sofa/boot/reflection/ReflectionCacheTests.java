@@ -118,6 +118,80 @@ public class ReflectionCacheTests {
         assertThat(stats.getConstructorCacheSize()).isZero();
     }
 
+    @Test
+    void setEnabledFalseShouldClearCacheState() throws Exception {
+        ReflectionCache reflectionCache = new ReflectionCache();
+
+        reflectionCache.forName(SampleTarget.class.getName());
+        reflectionCache.forName(SampleTarget.class.getName());
+        reflectionCache.findMethod(SampleTarget.class, "greet", String.class);
+        reflectionCache.findMethod(SampleTarget.class, "greet", String.class);
+        reflectionCache.getDeclaredConstructor(SampleTarget.class, String.class);
+        reflectionCache.getDeclaredConstructor(SampleTarget.class, String.class);
+
+        assertThat(reflectionCache.getStats().getTotalHitCount()).isEqualTo(3);
+        assertThat(reflectionCache.getStats().getTotalMissCount()).isEqualTo(3);
+
+        reflectionCache.setEnabled(false);
+
+        assertThat(reflectionCache.isEnabled()).isFalse();
+        ReflectionCache.CacheStats disabledStats = reflectionCache.getStats();
+        assertThat(disabledStats.getTotalHitCount()).isZero();
+        assertThat(disabledStats.getTotalMissCount()).isZero();
+        assertThat(disabledStats.getClassCacheSize()).isZero();
+        assertThat(disabledStats.getMethodCacheSize()).isZero();
+        assertThat(disabledStats.getConstructorCacheSize()).isZero();
+
+        assertThat(reflectionCache.forName(SampleTarget.class.getName())).isSameAs(
+            SampleTarget.class);
+        assertThat(reflectionCache.getStats().getTotalMissCount()).isZero();
+
+        reflectionCache.setEnabled(true);
+
+        assertThat(reflectionCache.isEnabled()).isTrue();
+        assertThat(reflectionCache.forName(SampleTarget.class.getName())).isSameAs(
+            SampleTarget.class);
+        assertThat(reflectionCache.getStats().getClassMissCount()).isEqualTo(1);
+    }
+
+    @Test
+    void clearShouldResetCacheState() throws Exception {
+        ReflectionCache reflectionCache = new ReflectionCache();
+
+        reflectionCache.forName(SampleTarget.class.getName());
+        reflectionCache.forName(SampleTarget.class.getName());
+        reflectionCache.findMethod(SampleTarget.class, "greet", String.class);
+        reflectionCache.findMethod(SampleTarget.class, "greet", String.class);
+        reflectionCache.getDeclaredConstructor(SampleTarget.class, String.class);
+        reflectionCache.getDeclaredConstructor(SampleTarget.class, String.class);
+        assertThatThrownBy(
+            () -> reflectionCache.forName("com.alipay.sofa.boot.reflection.DoesNotExist"))
+                .isInstanceOf(ClassNotFoundException.class);
+        assertThatThrownBy(
+            () -> reflectionCache.forName("com.alipay.sofa.boot.reflection.DoesNotExist"))
+                .isInstanceOf(ClassNotFoundException.class);
+        assertThat(reflectionCache.findMethod(SampleTarget.class, "missingMethod")).isNull();
+        assertThat(reflectionCache.findMethod(SampleTarget.class, "missingMethod")).isNull();
+        assertThatThrownBy(
+            () -> reflectionCache.getDeclaredConstructor(SampleTarget.class, Integer.class))
+                .isInstanceOf(NoSuchMethodException.class);
+        assertThatThrownBy(
+            () -> reflectionCache.getDeclaredConstructor(SampleTarget.class, Integer.class))
+                .isInstanceOf(NoSuchMethodException.class);
+
+        reflectionCache.clear();
+
+        ReflectionCache.CacheStats stats = reflectionCache.getStats();
+        assertThat(stats.getTotalHitCount()).isZero();
+        assertThat(stats.getTotalMissCount()).isZero();
+        assertThat(stats.getClassCacheSize()).isZero();
+        assertThat(stats.getMethodCacheSize()).isZero();
+        assertThat(stats.getConstructorCacheSize()).isZero();
+        assertThat(stats.getClassMissCacheSize()).isZero();
+        assertThat(stats.getMethodMissCacheSize()).isZero();
+        assertThat(stats.getConstructorMissCacheSize()).isZero();
+    }
+
     static class SampleTarget {
 
         private final String prefix;
