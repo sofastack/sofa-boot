@@ -24,6 +24,7 @@ import org.springframework.util.StringUtils;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Node;
 
+import static com.alipay.sofa.runtime.async.AsyncInitMethodManager.ASYNC_INIT_DISABLED_ATTRIBUTE;
 import static com.alipay.sofa.runtime.async.AsyncInitMethodManager.ASYNC_INIT_METHOD_NAME;
 
 /**
@@ -39,6 +40,7 @@ public class AsyncInitBeanDefinitionDecorator implements BeanDefinitionDecorator
     public BeanDefinitionHolder decorate(Node node, BeanDefinitionHolder definition,
                                          ParserContext parserContext) {
         if (!Boolean.TRUE.toString().equalsIgnoreCase(((Attr) node).getValue())) {
+            definition.getBeanDefinition().setAttribute(ASYNC_INIT_DISABLED_ATTRIBUTE, true);
             return definition;
         }
 

@@ -17,6 +17,7 @@
 package com.alipay.sofa.boot.autoconfigure.runtime;
 
 import com.alipay.sofa.runtime.async.AsyncInitMethodManager;
+import com.alipay.sofa.runtime.async.AsyncInitAutoMode;
 import com.alipay.sofa.runtime.context.ComponentContextRefreshInterceptor;
 import com.alipay.sofa.runtime.proxy.ProxyBeanFactoryPostProcessor;
 import com.alipay.sofa.runtime.spi.binding.BindingAdapterFactory;
@@ -128,6 +129,45 @@ public class SofaRuntimeAutoConfigurationTests {
                     assertThat(((ThreadPoolExecutor) threadPoolExecutor).getCorePoolSize()).isEqualTo(10);
                     assertThat(((ThreadPoolExecutor) threadPoolExecutor).getMaximumPoolSize()).isEqualTo(10);
                 });
+    }
+
+    @Test
+    public void customAsyncInitProperties() {
+        this.contextRunner
+                .withPropertyValues("sofa.boot.async-init.corePoolSize=4")
+                .withPropertyValues("sofa.boot.async-init.maxPoolSize=8")
+                .withPropertyValues("sofa.boot.async-init.queueCapacity=7")
+                .withPropertyValues("sofa.boot.async-init.timeoutMillis=1234")
+                .withPropertyValues("sofa.boot.async-init.autoMode=AGGRESSIVE")
+                .run((context) -> {
+                    AsyncInitProperties asyncInitProperties = context
+                        .getBean(AsyncInitProperties.class);
+                    assertThat(asyncInitProperties.getCorePoolSize()).isEqualTo(4);
+                    assertThat(asyncInitProperties.getMaxPoolSize()).isEqualTo(8);
+                    assertThat(asyncInitProperties.getQueueCapacity()).isEqualTo(7);
+                    assertThat(asyncInitProperties.getTimeoutMillis()).isEqualTo(1234);
+                    assertThat(asyncInitProperties.getAutoMode()).isEqualTo(AsyncInitAutoMode.AGGRESSIVE);
+                    assertThat(context.getBean(AsyncInitMethodManager.class).getTimeoutMillis())
+                        .isEqualTo(1234);
+
+                    ExecutorService threadPoolExecutor = (ExecutorService) context.getBean(
+                        Supplier.class, AsyncInitMethodManager.ASYNC_INIT_METHOD_EXECUTOR_BEAN_NAME)
+                        .get();
+                    assertThat(threadPoolExecutor).isInstanceOf(ThreadPoolExecutor.class);
+                    ThreadPoolExecutor executor = (ThreadPoolExecutor) threadPoolExecutor;
+                    assertThat(executor.getCorePoolSize()).isEqualTo(4);
+                    assertThat(executor.getMaximumPoolSize()).isEqualTo(8);
+                    assertThat(executor.getQueue().remainingCapacity()).isEqualTo(7);
+                });
+    }
+
+    @Test
+    public void disableAsyncInitProperties() {
+        this.contextRunner.withPropertyValues("sofa.boot.async-init.enabled=false")
+                .run((context) -> assertThat(context)
+                        .doesNotHaveBean(AsyncInitMethodManager.class)
+                        .doesNotHaveBean(AsyncProxyBeanPostProcessor.class)
+                        .doesNotHaveBean(AsyncInitBeanFactoryPostProcessor.class));
     }
 
     @Test

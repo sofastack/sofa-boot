@@ -17,6 +17,8 @@
 package com.alipay.sofa.runtime.spring;
 
 import com.alipay.sofa.runtime.api.annotation.SofaAsyncInit;
+import com.alipay.sofa.runtime.async.AsyncInitAutoMode;
+import com.alipay.sofa.runtime.async.SmartAsyncInitAnalyzer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -80,6 +82,22 @@ public class AsyncInitBeanFactoryPostProcessorTests {
         assertThat(rootBeanDefinition.getAttribute(ASYNC_INIT_METHOD_NAME)).isNull();
     }
 
+    @Test
+    public void parseSmartAsyncCandidate() {
+        GenericApplicationContext context = new AnnotationConfigApplicationContext();
+        context.registerBean(AsyncInitBeanFactoryPostProcessor.class,
+            () -> new AsyncInitBeanFactoryPostProcessor(new SmartAsyncInitAnalyzer(),
+                AsyncInitAutoMode.CONSERVATIVE));
+        RootBeanDefinition rootBeanDefinition = new RootBeanDefinition();
+        rootBeanDefinition.setBeanClass(SmartCandidateClass.class);
+        rootBeanDefinition.setInitMethodName("init");
+        context.registerBeanDefinition("bean", rootBeanDefinition);
+        context.refresh();
+
+        assertThat(rootBeanDefinition.getAttribute(ASYNC_INIT_METHOD_NAME)).isEqualTo("init");
+        context.close();
+    }
+
     @SofaAsyncInit
     static class NormalClass {
 
@@ -103,6 +121,13 @@ public class AsyncInitBeanFactoryPostProcessorTests {
         @SofaAsyncInit
         public NormalClass normalClass() {
             return new NormalClass();
+        }
+    }
+
+    static class SmartCandidateClass {
+
+        public void init() {
+
         }
     }
 }

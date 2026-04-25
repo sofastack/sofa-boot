@@ -23,6 +23,8 @@ import com.alipay.sofa.boot.log.ErrorCode;
 import com.alipay.sofa.boot.log.SofaBootLoggerFactory;
 import com.alipay.sofa.boot.util.BeanDefinitionUtil;
 import com.alipay.sofa.runtime.api.annotation.SofaAsyncInit;
+import com.alipay.sofa.runtime.async.AsyncInitAutoMode;
+import com.alipay.sofa.runtime.async.SmartAsyncInitAnalyzer;
 import org.slf4j.Logger;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.FatalBeanException;
@@ -52,6 +54,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static com.alipay.sofa.runtime.async.AsyncInitMethodManager.ASYNC_INIT_DISABLED_ATTRIBUTE;
 import static com.alipay.sofa.runtime.async.AsyncInitMethodManager.ASYNC_INIT_METHOD_NAME;
 
 /**
@@ -67,13 +70,31 @@ public class AsyncInitBeanFactoryPostProcessor implements BeanFactoryPostProcess
     private static final Logger              LOGGER = SofaBootLoggerFactory
                                                         .getLogger(AsyncInitBeanFactoryPostProcessor.class);
 
+    private final SmartAsyncInitAnalyzer     smartAsyncInitAnalyzer;
+
+    private final AsyncInitAutoMode          autoMode;
+
     private AnnotationWrapper<SofaAsyncInit> annotationWrapper;
+
+    public AsyncInitBeanFactoryPostProcessor() {
+        this(new SmartAsyncInitAnalyzer(), AsyncInitAutoMode.OFF);
+    }
+
+    public AsyncInitBeanFactoryPostProcessor(SmartAsyncInitAnalyzer smartAsyncInitAnalyzer,
+                                             AsyncInitAutoMode autoMode) {
+        this.smartAsyncInitAnalyzer = smartAsyncInitAnalyzer;
+        this.autoMode = autoMode;
+    }
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
         Arrays.stream(beanFactory.getBeanDefinitionNames())
                 .collect(Collectors.toMap(Function.identity(), beanFactory::getBeanDefinition))
                 .forEach(this::scanAsyncInitBeanDefinition);
+        smartAsyncInitAnalyzer.analyzeAsyncCandidates(beanFactory, autoMode).forEach(beanName -> {
+            BeanDefinition beanDefinition = beanFactory.getBeanDefinition(beanName);
+            beanDefinition.setAttribute(ASYNC_INIT_METHOD_NAME, beanDefinition.getInitMethodName());
+        });
     }
 
     /**
@@ -178,7 +199,9 @@ public class AsyncInitBeanFactoryPostProcessor implements BeanFactoryPostProcess
         sofaAsyncInitAnnotation = annotationWrapper.wrap(sofaAsyncInitAnnotation);
 
         String initMethodName = beanDefinition.getInitMethodName();
-        if (sofaAsyncInitAnnotation.value() && StringUtils.hasText(initMethodName)) {
+        if (!sofaAsyncInitAnnotation.value()) {
+            beanDefinition.setAttribute(ASYNC_INIT_DISABLED_ATTRIBUTE, true);
+        } else if (StringUtils.hasText(initMethodName)) {
             beanDefinition.setAttribute(ASYNC_INIT_METHOD_NAME, initMethodName);
         }
     }

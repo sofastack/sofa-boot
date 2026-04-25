@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
@@ -49,15 +50,27 @@ public class AsyncInitMethodManager implements PriorityOrdered,
 
     public static final String                          ASYNC_INIT_METHOD_NAME               = "async-init-method-name";
 
+    public static final String                          ASYNC_INIT_DISABLED_ATTRIBUTE        = "async-init-disabled";
+
     private final AtomicReference<ExecutorService>      executorServiceRef                   = new AtomicReference<>();
 
     private final Map<BeanFactory, Map<String, String>> asyncInitBeanNameMap                 = new ConcurrentHashMap<>();
 
     private final List<Future<?>>                       futures                              = new ArrayList<>();
 
+    private final long                                  timeoutMillis;
+
     private ApplicationContext                          applicationContext;
 
     private boolean                                     startUpFinish                        = false;
+
+    public AsyncInitMethodManager() {
+        this(0);
+    }
+
+    public AsyncInitMethodManager(long timeoutMillis) {
+        this.timeoutMillis = timeoutMillis;
+    }
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -96,7 +109,11 @@ public class AsyncInitMethodManager implements PriorityOrdered,
     void ensureAsyncTasksFinish() {
         for (Future<?> future : futures) {
             try {
-                future.get();
+                if (timeoutMillis > 0) {
+                    future.get(timeoutMillis, TimeUnit.MILLISECONDS);
+                } else {
+                    future.get();
+                }
             } catch (Throwable e) {
                 throw new RuntimeException("Async init task finish fail", e);
             }
@@ -127,5 +144,9 @@ public class AsyncInitMethodManager implements PriorityOrdered,
         } else {
             return map.get(beanName);
         }
+    }
+
+    public long getTimeoutMillis() {
+        return timeoutMillis;
     }
 }
