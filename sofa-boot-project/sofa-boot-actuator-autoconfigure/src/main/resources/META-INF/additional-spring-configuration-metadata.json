@@ -1,0 +1,95 @@
+{
+  "groups": [
+    {
+      "name": "sofa.boot.actuator.health",
+      "type": "com.alipay.sofa.boot.actuator.autoconfigure.health.HealthProperties",
+      "description": "SOFABoot actuator health configuration properties for readiness checks, health checker timeouts, and status mapping.",
+      "sourceType": "com.alipay.sofa.boot.actuator.autoconfigure.health.HealthProperties"
+    },
+    {
+      "name": "sofa.boot.startup",
+      "type": "com.alipay.sofa.boot.actuator.autoconfigure.startup.StartupProperties",
+      "description": "SOFABoot startup report configuration properties.",
+      "sourceType": "com.alipay.sofa.boot.actuator.autoconfigure.startup.StartupProperties"
+    },
+    {
+      "name": "sofa.boot.startup.threads.virtual",
+      "description": "SOFABoot virtual thread startup configuration properties."
+    }
+  ],
+  "properties": [
+    {
+      "name": "sofa.boot.actuator.health.excluded-indicators",
+      "description": "HealthIndicator bean names excluded from readiness health checks."
+    },
+    {
+      "name": "sofa.boot.actuator.health.global-health-checker-timeout",
+      "description": "Global HealthChecker timeout in milliseconds.",
+      "defaultValue": 60000
+    },
+    {
+      "name": "sofa.boot.actuator.health.global-health-indicator-timeout",
+      "description": "Global HealthIndicator timeout in milliseconds.",
+      "defaultValue": 60000
+    },
+    {
+      "name": "sofa.boot.actuator.health.health-checker-config",
+      "description": "Per HealthChecker configuration keyed by component name."
+    },
+    {
+      "name": "sofa.boot.actuator.health.health-indicator-config",
+      "description": "Per HealthIndicator configuration keyed by bean name."
+    },
+    {
+      "name": "sofa.boot.actuator.health.parallel-check-timeout",
+      "description": "Timeout for parallel health checks in milliseconds.",
+      "defaultValue": 120000
+    },
+    {
+      "name": "sofa.boot.actuator.health.status.http-mapping",
+      "description": "HTTP status code mapping keyed by health status."
+    },
+    {
+      "name": "sofa.boot.actuator.health.status.order",
+      "description": "Ordered health statuses from most severe to least severe."
+    },
+    {
+      "name": "sofa.boot.startup.threads.virtual.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether SOFABoot startup tasks use virtual threads when running on Java 21 or later.",
+      "defaultValue": false
+    }
+  ],
+  "hints": [
+    {
+      "name": "sofa.boot.actuator.health.status.http-mapping.keys",
+      "values": [
+        {
+          "value": "UP",
+          "description": "Application is healthy."
+        },
+        {
+          "value": "DOWN",
+          "description": "Application is unhealthy."
+        },
+        {
+          "value": "OUT_OF_SERVICE",
+          "description": "Application is out of service."
+        },
+        {
+          "value": "UNKNOWN",
+          "description": "Application health is unknown."
+        }
+      ]
+    },
+    {
+      "name": "sofa.boot.actuator.health.status.order",
+      "values": [
+        {
+          "value": "DOWN,OUT_OF_SERVICE,UNKNOWN,UP",
+          "description": "Default severity order used by Spring Boot health status aggregation."
+        }
+      ]
+    }
+  ]
+}
