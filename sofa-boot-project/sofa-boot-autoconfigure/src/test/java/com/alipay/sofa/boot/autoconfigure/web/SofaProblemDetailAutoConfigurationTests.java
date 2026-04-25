@@ -133,6 +133,7 @@ class SofaProblemDetailAutoConfigurationTests {
                     HttpHandlerAutoConfiguration.class,
                     ReactiveWebServerFactoryAutoConfiguration.class,
                     SofaProblemDetailAutoConfiguration.class))
+                .withPropertyValues("server.port=0")
                 .run(context -> assertThat(context)
                     .doesNotHaveBean(SofaProblemDetailExceptionHandler.class));
     }
