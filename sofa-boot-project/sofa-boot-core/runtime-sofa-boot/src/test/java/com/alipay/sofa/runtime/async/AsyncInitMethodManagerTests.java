@@ -102,4 +102,10 @@ public class AsyncInitMethodManagerTests {
             asyncInitMethodName);
     }
 
+    @Test
+    void timeoutMillis() {
+        AsyncInitMethodManager manager = new AsyncInitMethodManager(10);
+        assertThat(manager.getTimeoutMillis()).isEqualTo(10);
+    }
+
 }

@@ -53,6 +53,7 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.context.properties.bind.Bindable;
 import org.springframework.boot.context.properties.bind.Binder;
@@ -64,7 +65,9 @@ import org.springframework.core.io.support.SpringFactoriesLoader;
 import org.springframework.util.Assert;
 
 import java.util.HashSet;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -160,30 +163,50 @@ public class SofaRuntimeAutoConfiguration {
         return new ComponentContextRefreshInterceptor(sofaRuntimeManager);
     }
 
+    @Bean
+    @ConditionalOnMissingBean
+    public static AsyncInitProperties asyncInitProperties(Environment environment) {
+        AsyncInitProperties asyncInitProperties = new AsyncInitProperties();
+        Binder.get(environment).bind("sofa.boot.async-init",
+            Bindable.ofInstance(asyncInitProperties));
+        return asyncInitProperties;
+    }
+
     @Configuration(proxyBeanMethods = false)
     @ConditionalOnSwitch(value = "runtimeAsyncInit")
+    @ConditionalOnProperty(prefix = "sofa.boot.async-init", name = "enabled", havingValue = "true", matchIfMissing = true)
     static class AsyncInitConfiguration {
 
         @Bean
         @ConditionalOnMissingBean
-        public static AsyncInitMethodManager asyncInitMethodManager() {
-            return new AsyncInitMethodManager();
+        public static AsyncInitMethodManager asyncInitMethodManager(AsyncInitProperties asyncInitProperties) {
+            return new AsyncInitMethodManager(asyncInitProperties.getTimeoutMillis());
         }
 
         @Bean(AsyncInitMethodManager.ASYNC_INIT_METHOD_EXECUTOR_BEAN_NAME)
         @ConditionalOnMissingBean(name = AsyncInitMethodManager.ASYNC_INIT_METHOD_EXECUTOR_BEAN_NAME)
         @Conditional(OnVirtualThreadStartupDisableCondition.class)
-        public Supplier<ExecutorService> asyncInitMethodExecutor(SofaRuntimeProperties sofaRuntimeProperties) {
+        public Supplier<ExecutorService> asyncInitMethodExecutor(SofaRuntimeProperties sofaRuntimeProperties,
+                                                                 AsyncInitProperties asyncInitProperties,
+                                                                 Environment environment) {
             return ()-> {
-                int coreSize = sofaRuntimeProperties.getAsyncInitExecutorCoreSize();
-                int maxSize = sofaRuntimeProperties.getAsyncInitExecutorMaxSize();
+                int coreSize = getCorePoolSize(sofaRuntimeProperties, asyncInitProperties,
+                    environment);
+                int maxSize = getMaxPoolSize(sofaRuntimeProperties, asyncInitProperties,
+                    environment);
+                int queueCapacity = asyncInitProperties.getQueueCapacity();
                 Assert.isTrue(coreSize >= 0, "executorCoreSize must no less than zero");
-                Assert.isTrue(maxSize >= 0, "executorMaxSize must no less than zero");
+                Assert.isTrue(maxSize > 0, "executorMaxSize must greater than zero");
+                Assert.isTrue(maxSize >= coreSize, "executorMaxSize must no less than executorCoreSize");
+                Assert.isTrue(queueCapacity >= 0, "queueCapacity must no less than zero");
 
-                LOGGER.info("create async-init-bean thread pool, corePoolSize: {}, maxPoolSize: {}.",
-                        coreSize, maxSize);
+                LOGGER.info("create async-init-bean thread pool, corePoolSize: {}, maxPoolSize: {}, queueCapacity: {}.",
+                        coreSize, maxSize, queueCapacity);
+                BlockingQueue<Runnable> workQueue = queueCapacity > 0
+                    ? new LinkedBlockingQueue<>(queueCapacity)
+                    : new SynchronousQueue<>();
                 return new SofaThreadPoolExecutor(coreSize, maxSize, 30, TimeUnit.SECONDS,
-                        new SynchronousQueue<>(), new NamedThreadFactory("async-init-bean"),
+                        workQueue, new NamedThreadFactory("async-init-bean"),
                         new ThreadPoolExecutor.CallerRunsPolicy(), "async-init-bean",
                         SofaBootConstants.SOFA_BOOT_SPACE_NAME);
             };
@@ -207,8 +230,28 @@ public class SofaRuntimeAutoConfiguration {
 
         @Bean
         @ConditionalOnMissingBean
-        public static AsyncInitBeanFactoryPostProcessor asyncInitBeanFactoryPostProcessor() {
-            return new AsyncInitBeanFactoryPostProcessor();
+        public static AsyncInitBeanFactoryPostProcessor asyncInitBeanFactoryPostProcessor(AsyncInitProperties asyncInitProperties) {
+            return new AsyncInitBeanFactoryPostProcessor(
+                new com.alipay.sofa.runtime.async.SmartAsyncInitAnalyzer(),
+                asyncInitProperties.getAutoMode());
+        }
+
+        private int getCorePoolSize(SofaRuntimeProperties sofaRuntimeProperties,
+                                    AsyncInitProperties asyncInitProperties, Environment environment) {
+            if (!environment.containsProperty("sofa.boot.async-init.core-pool-size")
+                && environment.containsProperty("sofa.boot.runtime.asyncInitExecutorCoreSize")) {
+                return sofaRuntimeProperties.getAsyncInitExecutorCoreSize();
+            }
+            return asyncInitProperties.getCorePoolSize();
+        }
+
+        private int getMaxPoolSize(SofaRuntimeProperties sofaRuntimeProperties,
+                                   AsyncInitProperties asyncInitProperties, Environment environment) {
+            if (!environment.containsProperty("sofa.boot.async-init.max-pool-size")
+                && environment.containsProperty("sofa.boot.runtime.asyncInitExecutorMaxSize")) {
+                return sofaRuntimeProperties.getAsyncInitExecutorMaxSize();
+            }
+            return asyncInitProperties.getMaxPoolSize();
         }
     }
 }
