@@ -32,6 +32,7 @@ import org.junit.jupiter.api.condition.JRE;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.FilteredClassLoader;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
+import org.springframework.core.NestedExceptionUtils;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -145,6 +146,17 @@ public class ReadinessAutoConfigurationTests {
                     assertThat(context.getBean(HealthIndicatorProcessor.class).isParallelCheck()).isFalse();
                     assertThat(context.getBean(HealthIndicatorProcessor.class).getParallelCheckTimeout()).isEqualTo(30000);
                     assertThat(context.getBean(ReadinessCheckListener.READINESS_HEALTH_CHECK_EXECUTOR_BEAN_NAME, ThreadPoolExecutor.class).getMaximumPoolSize()).isEqualTo(1);
+                });
+    }
+
+    @Test
+    void invalidHealthPropertiesShouldFailFast() {
+        this.contextRunner
+                .withPropertyValues("sofa.boot.actuator.health.parallelCheckTimeout=0")
+                .run((context) -> {
+                    assertThat(context).hasFailed();
+                    assertThat(NestedExceptionUtils.getMostSpecificCause(context.getStartupFailure()).getMessage())
+                            .contains("Parallel health check timeout must be greater than 0");
                 });
     }
 

@@ -19,7 +19,11 @@ package com.alipay.sofa.boot.autoconfigure.tracer;
 import com.alipay.common.tracer.core.appender.file.TimedRollingFileAppender;
 import com.alipay.common.tracer.core.configuration.SofaTracerConfiguration;
 import com.alipay.common.tracer.core.reporter.stat.manager.SofaTracerStatisticReporterManager;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Pattern;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,11 +38,13 @@ import static com.alipay.common.tracer.core.configuration.SofaTracerConfiguratio
  * @since 2018/04/30
  */
 @ConfigurationProperties("sofa.boot.tracer")
+@Validated
 public class SofaTracerProperties {
 
     /**
      * Disable digest log.
      */
+    @Pattern(regexp = "^(?i:true|false)$", message = "disableDigestLog must be true or false")
     private String              disableDigestLog          = "false";
 
     /**
@@ -54,17 +60,20 @@ public class SofaTracerProperties {
     /**
      * Tracer's global log retention days configuration.
      */
+    @Pattern(regexp = "^\\d+$", message = "Log reserve days must be a non-negative integer")
     private String              tracerGlobalLogReserveDay = String.valueOf(DEFAULT_LOG_RESERVE_DAY);
 
     /**
      * The interval for printing the stat log.
      */
+    @Pattern(regexp = "^\\d+$", message = "Stat log interval must be a non-negative integer")
     private String              statLogInterval           = String
                                                               .valueOf(SofaTracerStatisticReporterManager.DEFAULT_CYCLE_SECONDS);
 
     /**
      * Threshold, the length of the service transparent field
      */
+    @Pattern(regexp = "^\\d+$", message = "Baggage max length must be a non-negative integer")
     private String              baggageMaxLength          = String
                                                               .valueOf(SofaTracerConfiguration.PEN_ATTRS_LENGTH_TRESHOLD);
 
@@ -76,6 +85,8 @@ public class SofaTracerProperties {
     /**
      * Sampling policy percentage.
      */
+    @DecimalMin(value = "0.0", message = "Sampler percentage must not be less than 0")
+    @DecimalMax(value = "100.0", message = "Sampler percentage must not be greater than 100")
     private float               samplerPercentage         = 100;
 
     /**

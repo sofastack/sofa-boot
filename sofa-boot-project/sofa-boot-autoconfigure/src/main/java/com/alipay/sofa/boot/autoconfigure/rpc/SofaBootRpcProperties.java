@@ -22,6 +22,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.Environment;
 import org.springframework.util.ObjectUtils;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +34,8 @@ import java.util.Map;
  * @author khotyn
  */
 @ConfigurationProperties("sofa.boot.rpc")
+@Validated
+@ValidSofaBootRpcProperties
 public class SofaBootRpcProperties implements EnvironmentAware {
 
     public static final String  PREFIX     = "sofa.boot.rpc";
