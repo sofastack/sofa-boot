@@ -156,7 +156,7 @@ public class ReadinessAutoConfigurationTests {
                 .run((context) -> {
                     assertThat(context).hasFailed();
                     assertThat(NestedExceptionUtils.getMostSpecificCause(context.getStartupFailure()).getMessage())
-                            .contains("并行健康检查超时时间必须大于 0");
+                            .contains("Parallel health check timeout must be greater than 0");
                 });
     }
 

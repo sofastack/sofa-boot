@@ -223,8 +223,8 @@ public class SofaRpcAutoConfigurationTests {
                 .run(context -> {
                     assertThat(context).hasFailed();
                     assertThat(NestedExceptionUtils.getMostSpecificCause(context.getStartupFailure()).getMessage())
-                            .contains("Bolt 端口必须在 1024 到 65535 之间")
-                            .contains("降级最小权重必须在 0 到 100 之间");
+                            .contains("Bolt port must be between 1024 and 65535")
+                            .contains("AFT degrade least weight must be between 0 and 100");
                 });
     }
 

@@ -139,7 +139,7 @@ public class SofaRuntimeAutoConfigurationTests {
                 .run((context) -> {
                     assertThat(context).hasFailed();
                     assertThat(NestedExceptionUtils.getMostSpecificCause(context.getStartupFailure()).getMessage())
-                            .contains("异步初始化线程池最大线程数不能小于核心线程数");
+                            .contains("Async init executor max size must not be less than core size");
                 });
     }
 

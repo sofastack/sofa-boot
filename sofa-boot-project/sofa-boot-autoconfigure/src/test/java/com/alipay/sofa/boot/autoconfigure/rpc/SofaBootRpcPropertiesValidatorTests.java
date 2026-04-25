@@ -100,13 +100,17 @@ public class SofaBootRpcPropertiesValidatorTests {
 
         Map<String, String> violations = messagesByField(validator.validate(properties));
 
-        assertThat(violations).containsEntry("boltPort", "Bolt 端口必须在 1024 到 65535 之间")
-            .containsEntry("boltThreadPoolMaxSize", "Bolt 线程池最大线程数必须大于 0")
-            .containsEntry("aftRegulationEffective", "AFT 单机故障剔除开关必须为 true 或 false")
-            .containsEntry("restDaemon", "REST daemon 开关必须为 true 或 false")
-            .containsEntry("aftLeastWindowExceptionRateMultiple", "AFT 最小异常率倍数必须大于 0")
-            .containsEntry("aftWeightDegradeRate", "降级速率必须大于 0 且不能大于 1")
-            .containsEntry("aftWeightRecoverRate", "恢复速率必须大于 0");
+        assertThat(violations)
+            .containsEntry("boltPort", "Bolt port must be between 1024 and 65535")
+            .containsEntry("boltThreadPoolMaxSize",
+                "Bolt thread pool max size must be greater than 0")
+            .containsEntry("aftRegulationEffective", "AFT regulation switch must be true or false")
+            .containsEntry("restDaemon", "REST daemon switch must be true or false")
+            .containsEntry("aftLeastWindowExceptionRateMultiple",
+                "AFT least window exception rate multiple must be greater than 0")
+            .containsEntry("aftWeightDegradeRate",
+                "AFT weight degrade rate must be greater than 0 and less than or equal to 1")
+            .containsEntry("aftWeightRecoverRate", "AFT weight recover rate must be greater than 0");
     }
 
     @Test
@@ -123,14 +127,19 @@ public class SofaBootRpcPropertiesValidatorTests {
 
         Map<String, String> violations = messagesByField(validator.validate(properties));
 
-        assertThat(violations).containsEntry("boltPort", "Bolt 端口必须在 1024 到 65535 之间")
-            .containsEntry("virtualPort", "虚拟发布端口必须在 1024 到 65535 之间")
-            .containsEntry("boltThreadPoolCoreSize", "Bolt 线程池核心线程数必须大于 0")
-            .containsEntry("consumerRepeatedReferenceLimit", "重复引用限制必须大于 0")
-            .containsEntry("aftTimeWindow", "AFT 时间窗口必须大于 0")
-            .containsEntry("aftDegradeLeastWeight", "降级最小权重必须在 0 到 100 之间")
-            .containsEntry("aftWeightDegradeRate", "降级速率必须大于 0 且不能大于 1")
-            .containsEntry("aftWeightRecoverRate", "恢复速率必须大于 0");
+        assertThat(violations)
+            .containsEntry("boltPort", "Bolt port must be between 1024 and 65535")
+            .containsEntry("virtualPort", "Virtual port must be between 1024 and 65535")
+            .containsEntry("boltThreadPoolCoreSize",
+                "Bolt thread pool core size must be greater than 0")
+            .containsEntry("consumerRepeatedReferenceLimit",
+                "Consumer repeated reference limit must be greater than 0")
+            .containsEntry("aftTimeWindow", "AFT time window must be greater than 0")
+            .containsEntry("aftDegradeLeastWeight",
+                "AFT degrade least weight must be between 0 and 100")
+            .containsEntry("aftWeightDegradeRate",
+                "AFT weight degrade rate must be greater than 0 and less than or equal to 1")
+            .containsEntry("aftWeightRecoverRate", "AFT weight recover rate must be greater than 0");
     }
 
     @Test
@@ -140,7 +149,8 @@ public class SofaBootRpcPropertiesValidatorTests {
 
         Map<String, String> violations = messagesByField(validator.validate(properties));
 
-        assertThat(violations).containsEntry("aftWeightDegradeRate", "降级速率必须大于 0 且不能大于 1");
+        assertThat(violations).containsEntry("aftWeightDegradeRate",
+            "AFT weight degrade rate must be greater than 0 and less than or equal to 1");
     }
 
     @Test
@@ -164,8 +174,10 @@ public class SofaBootRpcPropertiesValidatorTests {
 
         Map<String, String> violations = messagesByField(validator.validate(properties));
 
-        assertThat(violations).containsEntry("aftWeightDegradeRate", "降级速率必须大于 0 且不能大于 1")
-            .containsEntry("aftWeightRecoverRate", "恢复速率必须大于 0");
+        assertThat(violations)
+            .containsEntry("aftWeightDegradeRate",
+                "AFT weight degrade rate must be greater than 0 and less than or equal to 1")
+            .containsEntry("aftWeightRecoverRate", "AFT weight recover rate must be greater than 0");
     }
 
     @Test

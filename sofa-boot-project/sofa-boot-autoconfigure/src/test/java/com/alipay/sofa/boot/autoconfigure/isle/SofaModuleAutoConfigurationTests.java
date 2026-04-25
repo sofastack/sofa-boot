@@ -162,7 +162,7 @@ public class SofaModuleAutoConfigurationTests {
                 .run((context) -> {
                     assertThat(context).hasFailed();
                     assertThat(NestedExceptionUtils.getMostSpecificCause(context.getStartupFailure()).getMessage())
-                            .contains("模块并行刷新线程池倍率必须大于 0");
+                            .contains("Parallel module refresh thread pool size factor must be greater than 0");
                 });
     }
 

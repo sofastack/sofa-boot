@@ -40,91 +40,99 @@ public class SofaBootRpcPropertiesValidator
         boolean valid = true;
 
         valid = validatePort(context, valid, "boltPort", value.getBoltPort(),
-            "Bolt 端口必须在 1024 到 65535 之间");
+            "Bolt port must be between 1024 and 65535");
         valid = validatePort(context, valid, "h2cPort", value.getH2cPort(),
-            "H2C 端口必须在 1024 到 65535 之间");
+            "H2C port must be between 1024 and 65535");
         valid = validatePort(context, valid, "restPort", value.getRestPort(),
-            "REST 端口必须在 1024 到 65535 之间");
+            "REST port must be between 1024 and 65535");
         valid = validatePort(context, valid, "dubboPort", value.getDubboPort(),
-            "Dubbo 端口必须在 1024 到 65535 之间");
+            "Dubbo port must be between 1024 and 65535");
         valid = validatePort(context, valid, "httpPort", value.getHttpPort(),
-            "HTTP 端口必须在 1024 到 65535 之间");
+            "HTTP port must be between 1024 and 65535");
         valid = validatePort(context, valid, "triplePort", value.getTriplePort(),
-            "Triple 端口必须在 1024 到 65535 之间");
+            "Triple port must be between 1024 and 65535");
         valid = validatePort(context, valid, "virtualPort", value.getVirtualPort(),
-            "虚拟发布端口必须在 1024 到 65535 之间");
+            "Virtual port must be between 1024 and 65535");
 
         valid = validatePositiveInteger(context, valid, "boltThreadPoolCoreSize",
-            value.getBoltThreadPoolCoreSize(), "Bolt 线程池核心线程数必须大于 0");
+            value.getBoltThreadPoolCoreSize(), "Bolt thread pool core size must be greater than 0");
         valid = validatePositiveInteger(context, valid, "boltThreadPoolMaxSize",
-            value.getBoltThreadPoolMaxSize(), "Bolt 线程池最大线程数必须大于 0");
+            value.getBoltThreadPoolMaxSize(), "Bolt thread pool max size must be greater than 0");
         valid = validatePositiveInteger(context, valid, "boltThreadPoolQueueSize",
-            value.getBoltThreadPoolQueueSize(), "Bolt 线程池队列长度必须大于 0");
+            value.getBoltThreadPoolQueueSize(),
+            "Bolt thread pool queue size must be greater than 0");
         valid = validatePositiveInteger(context, valid, "boltAcceptsSize",
-            value.getBoltAcceptsSize(), "Bolt 允许建立的连接数必须大于 0");
+            value.getBoltAcceptsSize(), "Bolt accepts size must be greater than 0");
         valid = validatePositiveInteger(context, valid, "h2cThreadPoolCoreSize",
-            value.getH2cThreadPoolCoreSize(), "H2C 线程池核心线程数必须大于 0");
+            value.getH2cThreadPoolCoreSize(), "H2C thread pool core size must be greater than 0");
         valid = validatePositiveInteger(context, valid, "h2cThreadPoolMaxSize",
-            value.getH2cThreadPoolMaxSize(), "H2C 线程池最大线程数必须大于 0");
+            value.getH2cThreadPoolMaxSize(), "H2C thread pool max size must be greater than 0");
         valid = validatePositiveInteger(context, valid, "h2cThreadPoolQueueSize",
-            value.getH2cThreadPoolQueueSize(), "H2C 线程池队列长度必须大于 0");
+            value.getH2cThreadPoolQueueSize(), "H2C thread pool queue size must be greater than 0");
         valid = validatePositiveInteger(context, valid, "h2cAcceptsSize",
-            value.getH2cAcceptsSize(), "H2C 允许建立的连接数必须大于 0");
+            value.getH2cAcceptsSize(), "H2C accepts size must be greater than 0");
         valid = validatePositiveInteger(context, valid, "restIoThreadSize",
-            value.getRestIoThreadSize(), "REST IO 线程数必须大于 0");
+            value.getRestIoThreadSize(), "REST IO thread size must be greater than 0");
         valid = validatePositiveInteger(context, valid, "restThreadPoolMaxSize",
-            value.getRestThreadPoolMaxSize(), "REST 线程池最大线程数必须大于 0");
+            value.getRestThreadPoolMaxSize(), "REST thread pool max size must be greater than 0");
         valid = validatePositiveInteger(context, valid, "restMaxRequestSize",
-            value.getRestMaxRequestSize(), "REST 最大请求体大小必须大于 0");
+            value.getRestMaxRequestSize(), "REST max request size must be greater than 0");
         valid = validatePositiveInteger(context, valid, "dubboIoThreadSize",
-            value.getDubboIoThreadSize(), "Dubbo IO 线程数必须大于 0");
+            value.getDubboIoThreadSize(), "Dubbo IO thread size must be greater than 0");
         valid = validatePositiveInteger(context, valid, "dubboThreadPoolMaxSize",
-            value.getDubboThreadPoolMaxSize(), "Dubbo 线程池最大线程数必须大于 0");
+            value.getDubboThreadPoolMaxSize(), "Dubbo thread pool max size must be greater than 0");
         valid = validatePositiveInteger(context, valid, "dubboAcceptsSize",
-            value.getDubboAcceptsSize(), "Dubbo 允许建立的连接数必须大于 0");
+            value.getDubboAcceptsSize(), "Dubbo accepts size must be greater than 0");
         valid = validatePositiveInteger(context, valid, "httpThreadPoolCoreSize",
-            value.getHttpThreadPoolCoreSize(), "HTTP 线程池核心线程数必须大于 0");
+            value.getHttpThreadPoolCoreSize(), "HTTP thread pool core size must be greater than 0");
         valid = validatePositiveInteger(context, valid, "httpThreadPoolMaxSize",
-            value.getHttpThreadPoolMaxSize(), "HTTP 线程池最大线程数必须大于 0");
+            value.getHttpThreadPoolMaxSize(), "HTTP thread pool max size must be greater than 0");
         valid = validatePositiveInteger(context, valid, "httpThreadPoolQueueSize",
-            value.getHttpThreadPoolQueueSize(), "HTTP 线程池队列长度必须大于 0");
+            value.getHttpThreadPoolQueueSize(),
+            "HTTP thread pool queue size must be greater than 0");
         valid = validatePositiveInteger(context, valid, "httpAcceptsSize",
-            value.getHttpAcceptsSize(), "HTTP 允许建立的连接数必须大于 0");
+            value.getHttpAcceptsSize(), "HTTP accepts size must be greater than 0");
         valid = validatePositiveInteger(context, valid, "tripleThreadPoolCoreSize",
-            value.getTripleThreadPoolCoreSize(), "Triple 线程池核心线程数必须大于 0");
+            value.getTripleThreadPoolCoreSize(),
+            "Triple thread pool core size must be greater than 0");
         valid = validatePositiveInteger(context, valid, "tripleThreadPoolMaxSize",
-            value.getTripleThreadPoolMaxSize(), "Triple 线程池最大线程数必须大于 0");
+            value.getTripleThreadPoolMaxSize(),
+            "Triple thread pool max size must be greater than 0");
         valid = validatePositiveInteger(context, valid, "tripleThreadPoolQueueSize",
-            value.getTripleThreadPoolQueueSize(), "Triple 线程池队列长度必须大于 0");
+            value.getTripleThreadPoolQueueSize(),
+            "Triple thread pool queue size must be greater than 0");
         valid = validatePositiveInteger(context, valid, "tripleAcceptsSize",
-            value.getTripleAcceptsSize(), "Triple 允许建立的连接数必须大于 0");
+            value.getTripleAcceptsSize(), "Triple accepts size must be greater than 0");
         valid = validatePositiveInteger(context, valid, "consumerRepeatedReferenceLimit",
-            value.getConsumerRepeatedReferenceLimit(), "重复引用限制必须大于 0");
+            value.getConsumerRepeatedReferenceLimit(),
+            "Consumer repeated reference limit must be greater than 0");
 
         valid = validateBooleanString(context, valid, "aftRegulationEffective",
-            value.getAftRegulationEffective(), "AFT 单机故障剔除开关必须为 true 或 false");
+            value.getAftRegulationEffective(), "AFT regulation switch must be true or false");
         valid = validateBooleanString(context, valid, "aftDegradeEffective",
-            value.getAftDegradeEffective(), "AFT 降级开关必须为 true 或 false");
+            value.getAftDegradeEffective(), "AFT degrade switch must be true or false");
         valid = validateBooleanString(context, valid, "restTelnet", value.getRestTelnet(),
-            "REST telnet 开关必须为 true 或 false");
+            "REST telnet switch must be true or false");
         valid = validateBooleanString(context, valid, "restDaemon", value.getRestDaemon(),
-            "REST daemon 开关必须为 true 或 false");
+            "REST daemon switch must be true or false");
 
         valid = validatePositiveInteger(context, valid, "aftTimeWindow", value.getAftTimeWindow(),
-            "AFT 时间窗口必须大于 0");
+            "AFT time window must be greater than 0");
         valid = validatePositiveInteger(context, valid, "aftLeastWindowCount",
-            value.getAftLeastWindowCount(), "AFT 最小调用次数必须大于 0");
+            value.getAftLeastWindowCount(), "AFT least window count must be greater than 0");
         valid = validatePositiveDecimal(context, valid, "aftLeastWindowExceptionRateMultiple",
-            value.getAftLeastWindowExceptionRateMultiple(), "AFT 最小异常率倍数必须大于 0");
+            value.getAftLeastWindowExceptionRateMultiple(),
+            "AFT least window exception rate multiple must be greater than 0");
         valid = validateRange(context, valid, "aftDegradeLeastWeight",
-            value.getAftDegradeLeastWeight(), 0, 100, "降级最小权重必须在 0 到 100 之间");
+            value.getAftDegradeLeastWeight(), 0, 100,
+            "AFT degrade least weight must be between 0 and 100");
         valid = validatePositiveInteger(context, valid, "aftDegradeMaxIpCount",
-            value.getAftDegradeMaxIpCount(), "AFT 最大降级 IP 数必须大于 0");
+            value.getAftDegradeMaxIpCount(), "AFT degrade max IP count must be greater than 0");
         valid = validateDecimalRange(context, valid, "aftWeightDegradeRate",
             value.getAftWeightDegradeRate(), BigDecimal.ZERO, false, BigDecimal.ONE, true,
-            "降级速率必须大于 0 且不能大于 1");
+            "AFT weight degrade rate must be greater than 0 and less than or equal to 1");
         valid = validatePositiveDecimal(context, valid, "aftWeightRecoverRate",
-            value.getAftWeightRecoverRate(), "恢复速率必须大于 0");
+            value.getAftWeightRecoverRate(), "AFT weight recover rate must be greater than 0");
 
         return valid;
     }

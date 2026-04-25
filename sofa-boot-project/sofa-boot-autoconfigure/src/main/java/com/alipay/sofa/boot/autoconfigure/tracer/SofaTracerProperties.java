@@ -44,7 +44,7 @@ public class SofaTracerProperties {
     /**
      * Disable digest log.
      */
-    @Pattern(regexp = "^(?i:true|false)$", message = "disableDigestLog 必须为 true 或 false")
+    @Pattern(regexp = "^(?i:true|false)$", message = "disableDigestLog must be true or false")
     private String              disableDigestLog          = "false";
 
     /**
@@ -60,20 +60,20 @@ public class SofaTracerProperties {
     /**
      * Tracer's global log retention days configuration.
      */
-    @Pattern(regexp = "^\\d+$", message = "日志保留天数必须为非负整数")
+    @Pattern(regexp = "^\\d+$", message = "Log reserve days must be a non-negative integer")
     private String              tracerGlobalLogReserveDay = String.valueOf(DEFAULT_LOG_RESERVE_DAY);
 
     /**
      * The interval for printing the stat log.
      */
-    @Pattern(regexp = "^\\d+$", message = "统计日志打印间隔必须为非负整数")
+    @Pattern(regexp = "^\\d+$", message = "Stat log interval must be a non-negative integer")
     private String              statLogInterval           = String
                                                               .valueOf(SofaTracerStatisticReporterManager.DEFAULT_CYCLE_SECONDS);
 
     /**
      * Threshold, the length of the service transparent field
      */
-    @Pattern(regexp = "^\\d+$", message = "透传字段长度阈值必须为非负整数")
+    @Pattern(regexp = "^\\d+$", message = "Baggage max length must be a non-negative integer")
     private String              baggageMaxLength          = String
                                                               .valueOf(SofaTracerConfiguration.PEN_ATTRS_LENGTH_TRESHOLD);
 
@@ -85,8 +85,8 @@ public class SofaTracerProperties {
     /**
      * Sampling policy percentage.
      */
-    @DecimalMin(value = "0.0", message = "采样率不能小于 0")
-    @DecimalMax(value = "100.0", message = "采样率不能大于 100")
+    @DecimalMin(value = "0.0", message = "Sampler percentage must not be less than 0")
+    @DecimalMax(value = "100.0", message = "Sampler percentage must not be greater than 100")
     private float               samplerPercentage         = 100;
 
     /**

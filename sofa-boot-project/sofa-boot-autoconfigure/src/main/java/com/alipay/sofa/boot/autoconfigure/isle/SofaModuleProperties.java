@@ -81,19 +81,19 @@ public class SofaModuleProperties {
     /**
      * Thead pool size factor used in parallel sofa module application context refresh.
      */
-    @Positive(message = "模块并行刷新线程池倍率必须大于 0")
+    @Positive(message = "Parallel module refresh thread pool size factor must be greater than 0")
     private float        parallelRefreshPoolSizeFactor = 5.0f;
 
     /**
      * Timeout used in parallel sofa module application context refresh, in milliseconds.
      */
-    @Positive(message = "模块并行刷新超时时间必须大于 0")
+    @Positive(message = "Parallel module refresh timeout must be greater than 0")
     private long         parallelRefreshTimeout        = 60;
 
     /**
      * Monitor period used in parallel sofa module application context refresh, in milliseconds.
      */
-    @Positive(message = "模块并行刷新检查周期必须大于 0")
+    @Positive(message = "Parallel module refresh check period must be greater than 0")
     private long         parallelRefreshCheckPeriod    = 30;
 
     public List<String> getActiveProfiles() {

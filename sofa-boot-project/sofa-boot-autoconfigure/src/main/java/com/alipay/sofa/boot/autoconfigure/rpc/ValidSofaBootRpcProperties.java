@@ -36,7 +36,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidSofaBootRpcProperties {
 
-    String message() default "SOFA RPC 配置不合法";
+    String message() default "SOFA RPC configuration is invalid";
 
     Class<?>[] groups() default {};
 

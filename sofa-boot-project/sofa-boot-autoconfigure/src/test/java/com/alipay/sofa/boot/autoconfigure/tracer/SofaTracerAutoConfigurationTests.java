@@ -67,7 +67,7 @@ public class SofaTracerAutoConfigurationTests {
                 .run((context) -> {
                     assertThat(context).hasFailed();
                     assertThat(NestedExceptionUtils.getMostSpecificCause(context.getStartupFailure()).getMessage())
-                            .contains("采样率不能大于 100");
+                            .contains("Sampler percentage must not be greater than 100");
                 });
     }
 

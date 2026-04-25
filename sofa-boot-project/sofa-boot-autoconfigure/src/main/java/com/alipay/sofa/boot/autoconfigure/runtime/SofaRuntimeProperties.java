@@ -84,13 +84,13 @@ public class SofaRuntimeProperties {
     /**
      * Custom async init executor core size.
      */
-    @PositiveOrZero(message = "异步初始化线程池核心线程数不能小于 0")
+    @PositiveOrZero(message = "Async init executor core size must not be less than 0")
     private int          asyncInitExecutorCoreSize       = SofaBootConstants.CPU_CORE + 1;
 
     /**
      * Custom async init executor max size.
      */
-    @PositiveOrZero(message = "异步初始化线程池最大线程数不能小于 0")
+    @PositiveOrZero(message = "Async init executor max size must not be less than 0")
     private int          asyncInitExecutorMaxSize        = SofaBootConstants.CPU_CORE + 1;
 
     /**
@@ -207,7 +207,7 @@ public class SofaRuntimeProperties {
         this.serviceCanBeDuplicate = serviceCanBeDuplicate;
     }
 
-    @AssertTrue(message = "异步初始化线程池最大线程数不能小于核心线程数")
+    @AssertTrue(message = "Async init executor max size must not be less than core size")
     public boolean isAsyncInitExecutorPoolSizeValid() {
         return asyncInitExecutorMaxSize >= asyncInitExecutorCoreSize;
     }
