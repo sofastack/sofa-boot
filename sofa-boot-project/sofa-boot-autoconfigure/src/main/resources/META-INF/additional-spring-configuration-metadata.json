@@ -1,0 +1,441 @@
+{
+  "groups": [
+    {
+      "name": "sofa.boot.rpc",
+      "type": "com.alipay.sofa.boot.autoconfigure.rpc.SofaBootRpcProperties",
+      "description": "SOFA RPC configuration properties for publishing, consuming, protocols, registries, and runtime switches.",
+      "sourceType": "com.alipay.sofa.boot.autoconfigure.rpc.SofaBootRpcProperties"
+    },
+    {
+      "name": "sofa.boot.runtime",
+      "type": "com.alipay.sofa.boot.autoconfigure.runtime.SofaRuntimeProperties",
+      "description": "SOFABoot runtime configuration properties for component lifecycle, JVM references, and async initialization.",
+      "sourceType": "com.alipay.sofa.boot.autoconfigure.runtime.SofaRuntimeProperties"
+    },
+    {
+      "name": "sofa.boot.isle",
+      "type": "com.alipay.sofa.boot.autoconfigure.isle.SofaModuleProperties",
+      "description": "SOFABoot module configuration properties for ISLE module discovery, filtering, and startup.",
+      "sourceType": "com.alipay.sofa.boot.autoconfigure.isle.SofaModuleProperties"
+    },
+    {
+      "name": "sofa.boot.ark",
+      "type": "com.alipay.sofa.boot.autoconfigure.ark.SofaArkProperties",
+      "description": "SOFAArk integration properties for JVM service cache and serialized invocation.",
+      "sourceType": "com.alipay.sofa.boot.autoconfigure.ark.SofaArkProperties"
+    },
+    {
+      "name": "sofa.boot.tracer",
+      "type": "com.alipay.sofa.boot.autoconfigure.tracer.SofaTracerProperties",
+      "description": "SOFATracer global configuration properties for digest logs, sampling, reporting, and output format.",
+      "sourceType": "com.alipay.sofa.boot.autoconfigure.tracer.SofaTracerProperties"
+    },
+    {
+      "name": "sofa.boot.tracer.springmvc",
+      "type": "com.alipay.sofa.boot.autoconfigure.tracer.springmvc.OpenTracingSpringMvcProperties",
+      "description": "SOFATracer Spring MVC instrumentation configuration properties.",
+      "sourceType": "com.alipay.sofa.boot.autoconfigure.tracer.springmvc.OpenTracingSpringMvcProperties"
+    },
+    {
+      "name": "sofa.boot.tracer.zipkin",
+      "type": "com.alipay.sofa.boot.autoconfigure.tracer.zipkin.ZipkinProperties",
+      "description": "SOFATracer Zipkin reporting configuration properties.",
+      "sourceType": "com.alipay.sofa.boot.autoconfigure.tracer.zipkin.ZipkinProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "sofa.boot.isle.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether ISLE module auto-configuration is enabled.",
+      "defaultValue": true
+    },
+    {
+      "name": "sofa.boot.rpc.bolt-port",
+      "description": "Bolt protocol listening port for RPC service calls."
+    },
+    {
+      "name": "sofa.boot.rpc.rest-port",
+      "description": "REST protocol listening port for RPC service calls."
+    },
+    {
+      "name": "sofa.boot.rpc.dubbo-port",
+      "description": "Dubbo protocol listening port for RPC service calls."
+    },
+    {
+      "name": "sofa.boot.rpc.http-port",
+      "description": "HTTP protocol listening port for RPC service calls."
+    },
+    {
+      "name": "sofa.boot.rpc.h2c-port",
+      "description": "HTTP/2 cleartext protocol listening port for RPC service calls."
+    },
+    {
+      "name": "sofa.boot.rpc.triple-port",
+      "description": "Triple protocol listening port for RPC service calls."
+    },
+    {
+      "name": "sofa.boot.rpc.registry-address",
+      "description": "Registry address used by RPC services, such as local, zookeeper, nacos, consul, or sofa."
+    },
+    {
+      "name": "sofa.boot.rpc.registries",
+      "description": "Named RPC registry address map for multi-registry scenarios."
+    },
+    {
+      "name": "sofa.boot.rpc.enable-auto-publish",
+      "description": "Whether RPC services are published automatically when the application starts.",
+      "defaultValue": false
+    },
+    {
+      "name": "sofa.boot.rpc.enable-delay-register",
+      "description": "Whether RPC provider registration is delayed until the readiness check passes.",
+      "defaultValue": false
+    },
+    {
+      "name": "sofa.boot.rpc.enable-mesh",
+      "description": "Whether mesh support is enabled for RPC protocols. Currently only Bolt is supported."
+    },
+    {
+      "name": "sofa.boot.rpc.enable-swagger",
+      "description": "Whether Swagger support is enabled for RPC services."
+    },
+    {
+      "name": "sofa.boot.rpc.rest-swagger",
+      "description": "Whether Swagger support is enabled for REST RPC services.",
+      "defaultValue": false
+    },
+    {
+      "name": "sofa.boot.rpc.rest-allowed-origins",
+      "description": "Allowed origins for REST RPC CORS requests."
+    },
+    {
+      "name": "sofa.boot.rpc.rest-context-path",
+      "description": "Context path used by REST RPC services."
+    },
+    {
+      "name": "sofa.boot.rpc.mock-url",
+      "description": "Remote mock server URL. When configured, RPC mock support is enabled automatically."
+    },
+    {
+      "name": "sofa.boot.rpc.dynamic-config",
+      "description": "Dynamic configuration source used by RPC."
+    },
+    {
+      "name": "sofa.boot.rpc.default-tracer",
+      "description": "Default tracer implementation used by RPC."
+    },
+    {
+      "name": "sofa.boot.rpc.hystrix-enable",
+      "description": "Whether Hystrix integration is enabled for RPC."
+    },
+    {
+      "name": "sofa.boot.rpc.consumer-repeated-reference-limit",
+      "description": "Maximum number of repeated consumer references that may be created for the same service interface.",
+      "defaultValue": "3"
+    },
+    {
+      "name": "sofa.boot.runtime.async-init-executor-core-size",
+      "description": "Core size of the async initialization executor. Defaults to available processors plus one."
+    },
+    {
+      "name": "sofa.boot.runtime.async-init-executor-max-size",
+      "description": "Maximum size of the async initialization executor. Defaults to available processors plus one."
+    },
+    {
+      "name": "sofa.boot.tracer.baggage-max-length",
+      "description": "Maximum length of baggage or transparent fields in tracer context."
+    },
+    {
+      "name": "sofa.boot.tracer.stat-log-interval",
+      "description": "Interval, in seconds, for printing SOFATracer statistic logs."
+    },
+    {
+      "name": "sofa.boot.tracer.tracer-global-log-reserve-day",
+      "description": "Number of days to retain global tracer log files."
+    },
+    {
+      "name": "sofa.boot.tracer.tracer-global-rolling-policy",
+      "description": "Rolling pattern used by global tracer log files."
+    },
+    {
+      "name": "sofa.boot.tracer.sampler-percentage",
+      "description": "Sampling percentage used by SOFATracer.",
+      "defaultValue": 100
+    },
+    {
+      "name": "sofa.boot.tracer.datasource.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether datasource tracing instrumentation is enabled.",
+      "defaultValue": true
+    },
+    {
+      "name": "sofa.boot.tracer.feign.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether Feign client tracing instrumentation is enabled.",
+      "defaultValue": true
+    },
+    {
+      "name": "sofa.boot.tracer.flexible.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether flexible method tracing instrumentation is enabled.",
+      "defaultValue": true
+    },
+    {
+      "name": "sofa.boot.tracer.kafka.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether Kafka tracing instrumentation is enabled.",
+      "defaultValue": true
+    },
+    {
+      "name": "sofa.boot.tracer.mongodb.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether MongoDB tracing instrumentation is enabled.",
+      "defaultValue": true
+    },
+    {
+      "name": "sofa.boot.tracer.rabbitmq.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether RabbitMQ tracing instrumentation is enabled.",
+      "defaultValue": true
+    },
+    {
+      "name": "sofa.boot.tracer.redis.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether Redis tracing instrumentation is enabled.",
+      "defaultValue": true
+    },
+    {
+      "name": "sofa.boot.tracer.resttemplate.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether RestTemplate tracing instrumentation is enabled.",
+      "defaultValue": true
+    },
+    {
+      "name": "sofa.boot.tracer.rocketmq.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether RocketMQ tracing instrumentation is enabled.",
+      "defaultValue": true
+    },
+    {
+      "name": "sofa.boot.tracer.springmessage.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether Spring Messaging tracing instrumentation is enabled.",
+      "defaultValue": true
+    },
+    {
+      "name": "sofa.boot.tracer.springmvc.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether Spring MVC tracing instrumentation is enabled.",
+      "defaultValue": true
+    },
+    {
+      "name": "sofa.boot.tracer.zipkin.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether Zipkin reporting is enabled.",
+      "defaultValue": true
+    },
+    {
+      "name": "sofa.boot.switch.bean.rpcConsulRegistry.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether the RPC Consul registry auto-configuration switch is enabled.",
+      "defaultValue": true
+    },
+    {
+      "name": "sofa.boot.switch.bean.rpcFaultToleranceConfigurator.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether the RPC fault tolerance configurator switch is enabled.",
+      "defaultValue": true
+    },
+    {
+      "name": "sofa.boot.switch.bean.rpcKubernetesRegistry.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether the RPC Kubernetes registry auto-configuration switch is enabled.",
+      "defaultValue": true
+    },
+    {
+      "name": "sofa.boot.switch.bean.rpcLocalRegistry.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether the RPC local registry auto-configuration switch is enabled.",
+      "defaultValue": true
+    },
+    {
+      "name": "sofa.boot.switch.bean.rpcMeshRegistry.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether the RPC mesh registry auto-configuration switch is enabled.",
+      "defaultValue": true
+    },
+    {
+      "name": "sofa.boot.switch.bean.rpcMulticastRegistry.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether the RPC multicast registry auto-configuration switch is enabled.",
+      "defaultValue": true
+    },
+    {
+      "name": "sofa.boot.switch.bean.rpcNacosRegistry.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether the RPC Nacos registry auto-configuration switch is enabled.",
+      "defaultValue": true
+    },
+    {
+      "name": "sofa.boot.switch.bean.rpcPolarisRegistryConfiguration.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether the RPC Polaris registry auto-configuration switch is enabled.",
+      "defaultValue": true
+    },
+    {
+      "name": "sofa.boot.switch.bean.rpcRestFilter.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether the RPC REST filter auto-configuration switch is enabled.",
+      "defaultValue": true
+    },
+    {
+      "name": "sofa.boot.switch.bean.rpcSofaRegistry.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether the RPC SOFA registry auto-configuration switch is enabled.",
+      "defaultValue": true
+    },
+    {
+      "name": "sofa.boot.switch.bean.rpcSwagger.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether the RPC Swagger auto-configuration switch is enabled.",
+      "defaultValue": true
+    },
+    {
+      "name": "sofa.boot.switch.bean.rpcZookeeperRegistry.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether the RPC Zookeeper registry auto-configuration switch is enabled.",
+      "defaultValue": true
+    },
+    {
+      "name": "sofa.boot.switch.bean.runtimeAsyncInit.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether the runtime async initialization switch is enabled.",
+      "defaultValue": true
+    }
+  ],
+  "hints": [
+    {
+      "name": "sofa.boot.rpc.bolt-port",
+      "values": [
+        {
+          "value": "12200",
+          "description": "Default Bolt port."
+        }
+      ]
+    },
+    {
+      "name": "sofa.boot.rpc.registry-address",
+      "values": [
+        {
+          "value": "local://",
+          "description": "Local in-memory registry."
+        },
+        {
+          "value": "zookeeper://127.0.0.1:2181",
+          "description": "Zookeeper registry."
+        },
+        {
+          "value": "nacos://127.0.0.1:8848",
+          "description": "Nacos registry."
+        },
+        {
+          "value": "consul://127.0.0.1:8500",
+          "description": "Consul registry."
+        }
+      ]
+    },
+    {
+      "name": "sofa.boot.rpc.enable-mesh",
+      "values": [
+        {
+          "value": "bolt",
+          "description": "Enable mesh support for Bolt."
+        },
+        {
+          "value": "mesh",
+          "description": "Enable mesh mode."
+        },
+        {
+          "value": "all",
+          "description": "Enable all supported mesh modes."
+        }
+      ]
+    },
+    {
+      "name": "sofa.boot.tracer.disable-digest-log",
+      "values": [
+        {
+          "value": "false",
+          "description": "Enable digest logs."
+        },
+        {
+          "value": "true",
+          "description": "Disable digest logs."
+        }
+      ]
+    },
+    {
+      "name": "sofa.boot.tracer.tracer-global-rolling-policy",
+      "values": [
+        {
+          "value": ".yyyy-MM-dd",
+          "description": "Roll tracer logs daily."
+        },
+        {
+          "value": ".yyyy-MM-dd_HH",
+          "description": "Roll tracer logs hourly."
+        }
+      ]
+    },
+    {
+      "name": "sofa.boot.tracer.sampler-percentage",
+      "values": [
+        {
+          "value": 100,
+          "description": "Sample all traces."
+        },
+        {
+          "value": 10,
+          "description": "Sample ten percent of traces."
+        },
+        {
+          "value": 1,
+          "description": "Sample one percent of traces."
+        }
+      ]
+    },
+    {
+      "name": "sofa.boot.tracer.sampler-custom-rule-class-name",
+      "providers": [
+        {
+          "name": "class-reference"
+        }
+      ]
+    },
+    {
+      "name": "sofa.boot.tracer.reporter-name",
+      "providers": [
+        {
+          "name": "class-reference"
+        }
+      ]
+    },
+    {
+      "name": "sofa.boot.tracer.zipkin.base-url",
+      "values": [
+        {
+          "value": "http://localhost:9411/",
+          "description": "Default local Zipkin endpoint."
+        }
+      ]
+    }
+  ],
+  "ignored": {
+    "properties": [
+      {
+        "name": "sofa.boot.rpc.environment"
+      }
+    ]
+  }
+}
