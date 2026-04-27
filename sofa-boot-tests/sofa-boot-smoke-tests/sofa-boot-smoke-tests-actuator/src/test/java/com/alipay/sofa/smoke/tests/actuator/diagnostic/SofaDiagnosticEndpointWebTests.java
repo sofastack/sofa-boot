@@ -73,13 +73,21 @@ public class SofaDiagnosticEndpointWebTests {
     private TestRestTemplate    restTemplate;
 
     @Test
-    public void sofaDiagnosticActuator() {
+    public void sofaDiagnosticActuator() throws JsonProcessingException {
         ResponseEntity<String> response = restTemplate.getForEntity("/actuator/sofa-diagnostic",
             String.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody()).contains("\"components\":{\"total\":")
-            .contains("\"threadPools\":[{\"threadPoolName\":\"diagnosticThreadPool\"")
-            .contains("\"jvm\":{\"javaVersion\":\"").contains("\"memory\":{\"heap\":{\"used\":");
+        JsonNode body = objectMapper.readTree(response.getBody());
+
+        assertThat(body.get("components").get("total").asInt()).isPositive();
+        assertThat(body.get("threadPools")).anySatisfy(node -> assertThat(node.get("threadPoolName")
+            .asText()).isEqualTo("diagnosticThreadPool"));
+        assertThat(body.get("jvm").get("javaVersion").asText()).isNotBlank();
+
+        JsonNode memory = body.get("memory");
+        assertThat(memory.get("heap").get("used").asLong()).isGreaterThanOrEqualTo(0);
+        assertThat(memory.get("nonHeap").get("used").asLong()).isGreaterThanOrEqualTo(0);
+        assertThat(memory.get("garbageCollectors")).isNotEmpty();
     }
 
     @Test

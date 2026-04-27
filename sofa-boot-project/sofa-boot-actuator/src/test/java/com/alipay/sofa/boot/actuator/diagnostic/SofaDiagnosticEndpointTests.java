@@ -141,8 +141,9 @@ public class SofaDiagnosticEndpointTests {
         assertThat(summary.jvm().javaVersion()).isNotBlank();
         assertThat(summary.jvm().availableProcessors()).isPositive();
         assertThat(summary.jvm().pid()).isPositive();
-        assertThat(summary.memory().heap().used()).isGreaterThanOrEqualTo(0);
-        assertThat(summary.memory().nonHeap().used()).isGreaterThanOrEqualTo(0);
+        assertThat(summary.memory().getHeap().getUsed()).isGreaterThanOrEqualTo(0);
+        assertThat(summary.memory().getNonHeap().getUsed()).isGreaterThanOrEqualTo(0);
+        assertThat(summary.memory().getGarbageCollectors()).isNotEmpty();
     }
 
     @Test

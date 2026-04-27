@@ -43,6 +43,7 @@ import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
 import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
 import org.springframework.boot.actuate.endpoint.annotation.Selector;
 import org.springframework.boot.actuate.endpoint.annotation.WriteOperation;
+import org.springframework.boot.info.ProcessInfo;
 import org.springframework.context.ApplicationContext;
 import org.springframework.lang.Nullable;
 
@@ -50,8 +51,6 @@ import javax.management.MBeanServer;
 import javax.management.ObjectName;
 import java.io.File;
 import java.lang.management.ManagementFactory;
-import java.lang.management.MemoryMXBean;
-import java.lang.management.MemoryUsage;
 import java.lang.management.RuntimeMXBean;
 import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
@@ -439,13 +438,8 @@ public class SofaDiagnosticEndpoint {
             Runtime.getRuntime().availableProcessors(), ProcessHandle.current().pid());
     }
 
-    private MemoryStats getMemoryStats() {
-        MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
-        MemoryUsage heap = memoryMXBean.getHeapMemoryUsage();
-        MemoryUsage nonHeap = memoryMXBean.getNonHeapMemoryUsage();
-        return new MemoryStats(
-            new HeapMemoryInfo(heap.getUsed(), heap.getCommitted(), heap.getMax()),
-            new NonHeapMemoryInfo(nonHeap.getUsed(), nonHeap.getCommitted()));
+    private ProcessInfo.MemoryInfo getMemoryStats() {
+        return new ProcessInfo().getMemory();
     }
 
     private List<ServiceFactoryBean> findServiceFactoryBeans(ComponentManager componentManager,
@@ -528,7 +522,7 @@ public class SofaDiagnosticEndpoint {
 
     public record DiagnosticSummary(ComponentStats components, List<ThreadPoolStats> threadPools,
                                     JvmInfo jvm,
-                                    MemoryStats memory) implements OperationResponseBody {
+                                    ProcessInfo.MemoryInfo memory) implements OperationResponseBody {
     }
 
     public record ComponentStats(int total, int activated, int resolved, int registered,
@@ -542,15 +536,6 @@ public class SofaDiagnosticEndpoint {
 
     public record JvmInfo(String javaVersion, String vmName, long uptimeMillis,
                           int availableProcessors, long pid) {
-    }
-
-    public record MemoryStats(HeapMemoryInfo heap, NonHeapMemoryInfo nonHeap) {
-    }
-
-    public record HeapMemoryInfo(long used, long committed, long max) {
-    }
-
-    public record NonHeapMemoryInfo(long used, long committed) {
     }
 
     public record ServicesDescriptor(@Nullable List<ServiceInfo> published,
