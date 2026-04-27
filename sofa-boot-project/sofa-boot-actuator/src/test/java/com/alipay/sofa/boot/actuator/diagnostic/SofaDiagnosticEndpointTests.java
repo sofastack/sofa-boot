@@ -20,14 +20,7 @@ import com.alipay.sofa.common.thread.ThreadPoolConfig;
 import com.alipay.sofa.common.thread.ThreadPoolGovernor;
 import com.alipay.sofa.common.thread.ThreadPoolMonitorWrapper;
 import com.alipay.sofa.common.thread.ThreadPoolStatistics;
-import com.alipay.sofa.rpc.bootstrap.ConsumerBootstrap;
-import com.alipay.sofa.rpc.client.AbstractCluster;
-import com.alipay.sofa.rpc.client.AddressHolder;
-import com.alipay.sofa.rpc.config.ConsumerConfig;
-import com.alipay.sofa.rpc.context.RpcRuntimeContext;
-import com.alipay.sofa.runtime.api.component.ComponentName;
 import com.alipay.sofa.runtime.api.binding.BindingType;
-import com.alipay.sofa.runtime.context.SpringContextComponent;
 import com.alipay.sofa.runtime.model.ComponentStatus;
 import com.alipay.sofa.runtime.service.component.Reference;
 import com.alipay.sofa.runtime.service.component.ReferenceComponent;
@@ -35,31 +28,23 @@ import com.alipay.sofa.runtime.service.component.Service;
 import com.alipay.sofa.runtime.service.component.ServiceComponent;
 import com.alipay.sofa.runtime.spi.binding.Binding;
 import com.alipay.sofa.runtime.spi.component.ComponentInfo;
-import com.alipay.sofa.runtime.spi.component.ComponentNameFactory;
 import com.alipay.sofa.runtime.spi.component.ComponentManager;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
-import com.alipay.sofa.runtime.spi.component.SofaRuntimeManager;
 import com.alipay.sofa.runtime.spi.health.HealthResult;
-import com.alipay.sofa.runtime.spring.factory.ServiceFactoryBean;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.actuate.endpoint.Access;
-import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
-import org.springframework.context.ApplicationContext;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
 /**
@@ -81,12 +66,6 @@ public class SofaDiagnosticEndpointTests {
     private ComponentManager       componentManager;
 
     @Mock
-    private SofaRuntimeManager     sofaRuntimeManager;
-
-    @Mock
-    private ApplicationContext     applicationContext;
-
-    @Mock
     private ServiceComponent       serviceComponent;
 
     @Mock
@@ -100,14 +79,6 @@ public class SofaDiagnosticEndpointTests {
 
     @InjectMocks
     private SofaDiagnosticEndpoint sofaDiagnosticEndpoint;
-
-    @Test
-    void endpointShouldBeReadOnlyByDefault() {
-        Endpoint endpoint = SofaDiagnosticEndpoint.class.getAnnotation(Endpoint.class);
-
-        assertThat(endpoint).isNotNull();
-        assertThat(endpoint.defaultAccess()).isEqualTo(Access.READ_ONLY);
-    }
 
     @Test
     void summary() {
@@ -240,245 +211,10 @@ public class SofaDiagnosticEndpointTests {
         });
     }
 
-    @Test
-    void executeThrowsWhenCommandIsUnknown() {
-        assertThatThrownBy(() -> sofaDiagnosticEndpoint.execute("unknown", null, null, null, null,
-            null)).isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining("Unknown command: unknown")
-            .hasMessageContaining("Supported commands: gc, thread-dump, heap-dump, clear-cache, refresh-component");
-    }
-
-    @Test
-    void executeClearCacheUsesAllWhenTypeIsNull() {
-        try (ConsumerBootstrapRegistration ignored = registerConsumerBootstrap(
-            TestService.class.getName(), "serviceUniqueId", 2, false)) {
-            SofaDiagnosticEndpoint.OperationResult result = sofaDiagnosticEndpoint.execute(
-                "clear-cache", null, TestService.class.getName(), "serviceUniqueId", null, null);
-
-            assertThat(result.success()).isTrue();
-            assertThat(result.message()).isEqualTo("All caches cleared successfully");
-            Map<String, Object> data = result.data();
-            assertThat(data).containsOnlyKeys("rpcRouter");
-            assertThat(((SofaDiagnosticEndpoint.OperationResult) data.get("rpcRouter")).success())
-                .isTrue();
-        }
-    }
-
-    @Test
-    void executeClearCacheUsesAllWhenTypeIsEmpty() {
-        SofaDiagnosticEndpoint.OperationResult result = sofaDiagnosticEndpoint.execute(
-            "clear-cache", "", TestService.class.getName(), "serviceUniqueId", null, null);
-
-        assertThat(result.success()).isFalse();
-        assertThat(result.message()).isEqualTo("Some caches failed to clear");
-        Map<String, Object> data = result.data();
-        assertThat(((SofaDiagnosticEndpoint.OperationResult) data.get("rpcRouter")).success())
-            .isFalse();
-    }
-
-    @Test
-    void executeClearCacheThrowsWhenTypeIsUnknown() {
-        assertThatThrownBy(() -> sofaDiagnosticEndpoint.execute("clear-cache", "unknown", null,
-            null, null, null)).isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining("Unknown cache type: unknown")
-            .hasMessageContaining("Supported cache types: all, rpc-router");
-    }
-
-    @Test
-    void executeClearCacheRpcRouterReturnsFailureWhenNoConsumerMatches() {
-        SofaDiagnosticEndpoint.OperationResult result = sofaDiagnosticEndpoint
-            .execute("clear-cache", "rpc-router", TestService.class.getName(), "serviceUniqueId",
-                null, null);
-
-        assertThat(result.success()).isFalse();
-        assertThat(result.message()).isEqualTo("No matching consumer references found");
-        assertThat(result.data()).containsEntry("interfaceType", TestService.class.getName())
-            .containsEntry("uniqueId", "serviceUniqueId");
-    }
-
-    @Test
-    void executeClearCacheRpcRouterReturnsSuccessWhenConsumersMatch() {
-        try (ConsumerBootstrapRegistration ignored = registerConsumerBootstrap(
-            TestService.class.getName(), "serviceUniqueId", 3, false)) {
-            SofaDiagnosticEndpoint.OperationResult result = sofaDiagnosticEndpoint.execute(
-                "clear-cache", "rpc-router", TestService.class.getName(), "serviceUniqueId", null,
-                null);
-
-            assertThat(result.success()).isTrue();
-            assertThat(result.message()).isEqualTo("RPC router cache cleared successfully");
-            assertThat(result.data()).containsEntry("clearedCount", 1).containsEntry(
-                "clearedProviderCount", 3);
-            assertThat((List<?>) result.data().get("components")).singleElement().isEqualTo(
-                TestService.class.getName() + ":serviceUniqueId");
-        }
-    }
-
-    @Test
-    void executeClearCacheRpcRouterReturnsPartialFailureWhenSomeConsumersFail() {
-        try (ConsumerBootstrapRegistration successConsumer = registerConsumerBootstrap(
-            TestService.class.getName(), "success", 1, false);
-                ConsumerBootstrapRegistration failedConsumer = registerConsumerBootstrap(
-                    TestService.class.getName(), "failed", 2, true)) {
-            SofaDiagnosticEndpoint.OperationResult result = sofaDiagnosticEndpoint.execute(
-                "clear-cache", "rpc-router", TestService.class.getName(), null, null, null);
-
-            assertThat(result.success()).isFalse();
-            assertThat(result.message()).isEqualTo("RPC router cache cleared partially");
-            assertThat((List<?>) result.data().get("components")).singleElement().isEqualTo(
-                TestService.class.getName() + ":success");
-            assertThat((List<?>) result.data().get("failed")).singleElement().asString()
-                .contains(TestService.class.getName() + ":failed")
-                .contains("IllegalStateException");
-        }
-    }
-
-    @Test
-    void executeClearCacheRpcRouterReturnsFailureWhenAllConsumersFail() {
-        try (ConsumerBootstrapRegistration ignored = registerConsumerBootstrap(
-            TestService.class.getName(), "failed", 1, true)) {
-            SofaDiagnosticEndpoint.OperationResult result = sofaDiagnosticEndpoint.execute(
-                "clear-cache", "rpc-router", TestService.class.getName(), "failed", null, null);
-
-            assertThat(result.success()).isFalse();
-            assertThat(result.message()).isEqualTo("Failed to clear RPC router cache");
-            assertThat((List<?>) result.data().get("components")).isEmpty();
-            assertThat((List<?>) result.data().get("failed")).singleElement().asString()
-                .contains(TestService.class.getName() + ":failed")
-                .contains("IllegalStateException");
-        }
-    }
-
-    @Test
-    void executeRefreshComponentReturnsFailureWhenNoFactoryMatches() {
-        when(sofaRuntimeContext.getComponentManager()).thenReturn(componentManager);
-        when(sofaRuntimeContext.getSofaRuntimeManager()).thenReturn(sofaRuntimeManager);
-        when(sofaRuntimeManager.getRootApplicationContext()).thenReturn(null);
-        when(componentManager.getComponentInfosByType(SpringContextComponent.SPRING_COMPONENT_TYPE))
-            .thenReturn(List.of());
-        when(applicationContext.getBeanDefinitionNames()).thenReturn(new String[0]);
-
-        SofaDiagnosticEndpoint.OperationResult result = sofaDiagnosticEndpoint.execute(
-            "refresh-component", null, TestService.class.getName(), "serviceUniqueId", null, null);
-
-        assertThat(result.success()).isFalse();
-        assertThat(result.message()).isEqualTo(
-            "No matching Spring-managed service factories found for refresh");
-        assertThat(result.data()).containsEntry("interfaceType", TestService.class.getName())
-            .containsEntry("uniqueId", "serviceUniqueId");
-    }
-
-    @Test
-    void executeRefreshComponentReturnsSuccessAndSkippedWhenFactoriesMatch() {
-        ServiceFactoryBean refreshable = serviceFactoryBean(TestService.class, "refresh");
-        ServiceFactoryBean registered = serviceFactoryBean(TestService.class, "registered");
-        String refreshableName = componentRawName(TestService.class, "refresh");
-        String registeredName = componentRawName(TestService.class, "registered");
-
-        when(sofaRuntimeContext.getComponentManager()).thenReturn(componentManager);
-        when(sofaRuntimeContext.getSofaRuntimeManager()).thenReturn(sofaRuntimeManager);
-        when(sofaRuntimeManager.getRootApplicationContext()).thenReturn(null);
-        when(componentManager.getComponentInfosByType(SpringContextComponent.SPRING_COMPONENT_TYPE))
-            .thenReturn(List.of());
-        when(applicationContext.getId()).thenReturn("app");
-        when(applicationContext.getBeanDefinitionNames()).thenReturn(
-            new String[] { "refreshBean", "registeredBean" });
-        when(applicationContext.isTypeMatch("&refreshBean", ServiceFactoryBean.class)).thenReturn(
-            true);
-        when(applicationContext.isTypeMatch("&registeredBean", ServiceFactoryBean.class))
-            .thenReturn(true);
-        when(applicationContext.getBean("&refreshBean", ServiceFactoryBean.class)).thenReturn(
-            refreshable);
-        when(applicationContext.getBean("&registeredBean", ServiceFactoryBean.class)).thenReturn(
-            registered);
-        when(componentManager.isRegistered(Mockito.any(ComponentName.class))).thenAnswer(
-            invocation -> {
-                ComponentName componentName = invocation.getArgument(0);
-                return componentName != null
-                       && componentName.getRawName().equals(registeredName);
-            });
-
-        SofaDiagnosticEndpoint.OperationResult result = sofaDiagnosticEndpoint.execute(
-            "refresh-component", null, TestService.class.getName(), null, null, null);
-
-        assertThat(result.success()).isTrue();
-        assertThat(result.message()).isEqualTo("Component refreshed successfully");
-        assertThat(result.data()).containsEntry("refreshedCount", 1);
-        assertThat((List<?>) result.data().get("components")).singleElement()
-            .isEqualTo(refreshableName);
-        assertThat((List<?>) result.data().get("skipped")).singleElement()
-            .isEqualTo(registeredName);
-    }
-
-    @Test
-    void executeRefreshComponentReturnsFailureWhenFactoryRefreshThrows() throws Exception {
-        ServiceFactoryBean refreshable = serviceFactoryBean(TestService.class, "refresh");
-        String refreshableName = componentRawName(TestService.class, "refresh");
-
-        when(sofaRuntimeContext.getComponentManager()).thenReturn(componentManager);
-        when(sofaRuntimeContext.getSofaRuntimeManager()).thenReturn(sofaRuntimeManager);
-        when(sofaRuntimeManager.getRootApplicationContext()).thenReturn(null);
-        when(componentManager.getComponentInfosByType(SpringContextComponent.SPRING_COMPONENT_TYPE))
-            .thenReturn(List.of());
-        when(applicationContext.getId()).thenReturn("app");
-        when(applicationContext.getBeanDefinitionNames())
-            .thenReturn(new String[] { "refreshBean" });
-        when(applicationContext.isTypeMatch("&refreshBean", ServiceFactoryBean.class)).thenReturn(
-            true);
-        when(applicationContext.getBean("&refreshBean", ServiceFactoryBean.class)).thenReturn(
-            refreshable);
-        when(componentManager.isRegistered(Mockito.any(ComponentName.class))).thenReturn(false);
-        Mockito.doThrow(new IllegalStateException("refresh failed")).when(refreshable)
-            .afterPropertiesSet();
-
-        SofaDiagnosticEndpoint.OperationResult result = sofaDiagnosticEndpoint.execute(
-            "refresh-component", null, TestService.class.getName(), "refresh", null, null);
-
-        assertThat(result.success()).isFalse();
-        assertThat(result.message()).isEqualTo("Failed to refresh component");
-        assertThat(result.data()).containsEntry("refreshedCount", 0)
-            .containsEntry("failedComponent", refreshableName)
-            .containsEntry("error", "refresh failed");
-    }
-
     private ComponentInfo component(ComponentStatus componentStatus) {
         ComponentInfo componentInfo = Mockito.mock(ComponentInfo.class);
         when(componentInfo.getState()).thenReturn(componentStatus);
         return componentInfo;
-    }
-
-    @SuppressWarnings("rawtypes")
-    private ConsumerBootstrapRegistration registerConsumerBootstrap(String interfaceId,
-                                                                    String uniqueId,
-                                                                    int providerCount,
-                                                                    boolean updateFails) {
-        ConsumerBootstrap consumerBootstrap = Mockito.mock(ConsumerBootstrap.class);
-        ConsumerConfig consumerConfig = Mockito.mock(ConsumerConfig.class);
-        AbstractCluster cluster = Mockito.mock(AbstractCluster.class);
-        AddressHolder addressHolder = Mockito.mock(AddressHolder.class);
-        when(consumerBootstrap.getConsumerConfig()).thenReturn(consumerConfig);
-        when(consumerConfig.getInterfaceId()).thenReturn(interfaceId);
-        when(consumerConfig.getUniqueId()).thenReturn(uniqueId);
-        when(consumerBootstrap.getCluster()).thenReturn(cluster);
-        when(cluster.getAddressHolder()).thenReturn(addressHolder);
-        when(addressHolder.getAllProviderSize()).thenReturn(providerCount);
-        if (updateFails) {
-            Mockito.doThrow(new IllegalStateException("update failed")).when(cluster)
-                .updateAllProviders(Mockito.anyList());
-        }
-        RpcRuntimeContext.cacheConsumerConfig(consumerBootstrap);
-        return new ConsumerBootstrapRegistration(consumerBootstrap);
-    }
-
-    private ServiceFactoryBean serviceFactoryBean(Class<?> interfaceClass, String uniqueId) {
-        ServiceFactoryBean serviceFactoryBean = Mockito.mock(ServiceFactoryBean.class);
-        Mockito.doReturn(interfaceClass).when(serviceFactoryBean).getInterfaceClass();
-        when(serviceFactoryBean.getUniqueId()).thenReturn(uniqueId);
-        return serviceFactoryBean;
-    }
-
-    private String componentRawName(Class<?> interfaceClass, String uniqueId) {
-        return ComponentNameFactory.createComponentName(ServiceComponent.SERVICE_COMPONENT_TYPE,
-            interfaceClass, uniqueId).getRawName();
     }
 
     private ThreadPoolMonitorWrapper threadPoolWrapper() {
@@ -510,18 +246,5 @@ public class SofaDiagnosticEndpointTests {
     }
 
     static class TestServiceImpl implements TestService {
-    }
-
-    private static final class ConsumerBootstrapRegistration implements AutoCloseable {
-        private final ConsumerBootstrap<?> consumerBootstrap;
-
-        private ConsumerBootstrapRegistration(ConsumerBootstrap<?> consumerBootstrap) {
-            this.consumerBootstrap = consumerBootstrap;
-        }
-
-        @Override
-        public void close() {
-            RpcRuntimeContext.invalidateConsumerConfig(consumerBootstrap);
-        }
     }
 }

@@ -18,10 +18,8 @@ package com.alipay.sofa.boot.actuator.autoconfigure.diagnostic;
 
 import com.alipay.sofa.boot.actuator.diagnostic.SofaDiagnosticEndpoint;
 import com.alipay.sofa.boot.autoconfigure.runtime.SofaRuntimeAutoConfiguration;
-import com.alipay.sofa.rpc.context.RpcRuntimeContext;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
-import org.springframework.boot.test.context.FilteredClassLoader;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -49,13 +47,6 @@ public class SofaDiagnosticEndpointAutoConfigurationTests {
     @Test
     void runWhenNotExposedShouldNotHaveEndpointBean() {
         this.contextRunner
-            .run((context) -> assertThat(context).doesNotHaveBean(SofaDiagnosticEndpoint.class));
-    }
-
-    @Test
-    void runWhenRpcRuntimeContextClassMissingShouldNotHaveEndpointBean() {
-        this.contextRunner.withClassLoader(new FilteredClassLoader(RpcRuntimeContext.class))
-            .withPropertyValues("management.endpoints.web.exposure.include=*")
             .run((context) -> assertThat(context).doesNotHaveBean(SofaDiagnosticEndpoint.class));
     }
 

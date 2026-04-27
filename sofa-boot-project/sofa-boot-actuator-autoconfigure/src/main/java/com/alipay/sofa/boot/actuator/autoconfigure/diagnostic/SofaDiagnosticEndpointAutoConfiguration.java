@@ -19,7 +19,6 @@ package com.alipay.sofa.boot.actuator.autoconfigure.diagnostic;
 import com.alipay.sofa.boot.actuator.diagnostic.SofaDiagnosticEndpoint;
 import com.alipay.sofa.boot.autoconfigure.runtime.SofaRuntimeAutoConfiguration;
 import com.alipay.sofa.common.thread.ThreadPoolGovernor;
-import com.alipay.sofa.rpc.context.RpcRuntimeContext;
 import com.alipay.sofa.runtime.spi.component.SofaRuntimeContext;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -27,7 +26,6 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 
 /**
@@ -37,16 +35,14 @@ import org.springframework.context.annotation.Bean;
  * @version SofaDiagnosticEndpointAutoConfiguration.java, v 0.1 2026年04月01日 xiaosiyuan Exp $
  */
 @AutoConfiguration(after = SofaRuntimeAutoConfiguration.class)
-@ConditionalOnClass({ SofaRuntimeContext.class, RpcRuntimeContext.class })
+@ConditionalOnClass(SofaRuntimeContext.class)
 @ConditionalOnBean(SofaRuntimeContext.class)
 @ConditionalOnAvailableEndpoint(endpoint = SofaDiagnosticEndpoint.class)
 public class SofaDiagnosticEndpointAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public SofaDiagnosticEndpoint sofaDiagnosticEndpoint(SofaRuntimeContext sofaRuntimeContext,
-                                                         ApplicationContext applicationContext) {
-        return new SofaDiagnosticEndpoint(sofaRuntimeContext, ThreadPoolGovernor.getInstance(),
-            applicationContext);
+    public SofaDiagnosticEndpoint sofaDiagnosticEndpoint(SofaRuntimeContext sofaRuntimeContext) {
+        return new SofaDiagnosticEndpoint(sofaRuntimeContext, ThreadPoolGovernor.getInstance());
     }
 }
