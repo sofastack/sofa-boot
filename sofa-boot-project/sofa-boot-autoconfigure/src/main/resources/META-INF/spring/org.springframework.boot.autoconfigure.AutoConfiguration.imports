@@ -1,6 +1,7 @@
 com.alipay.sofa.boot.autoconfigure.runtime.SofaRuntimeAutoConfiguration
 com.alipay.sofa.boot.autoconfigure.isle.SofaModuleAutoConfiguration
 com.alipay.sofa.boot.autoconfigure.rpc.SofaRpcAutoConfiguration
+com.alipay.sofa.boot.autoconfigure.web.SofaProblemDetailAutoConfiguration
 com.alipay.sofa.boot.autoconfigure.tracer.SofaTracerAutoConfiguration
 com.alipay.sofa.boot.autoconfigure.tracer.datasource.DataSourceAutoConfiguration
 com.alipay.sofa.boot.autoconfigure.tracer.zipkin.ZipkinAutoConfiguration
