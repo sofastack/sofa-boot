@@ -38,10 +38,13 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.env.MockEnvironment;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,8 +55,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import org.springframework.web.context.ConfigurableWebApplicationContext;
+import org.springframework.web.context.request.ServletWebRequest;
 
 import java.net.URI;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -232,8 +237,135 @@ class SofaProblemDetailAutoConfigurationTests {
         });
     }
 
+    @Test
+    void usesRuntimeFallbackDetailWhenExceptionMessageIsBlank() {
+        SofaRuntimeProblemDetailExceptionHandler handler = new SofaRuntimeProblemDetailExceptionHandler(
+            new SofaProblemDetailProperties(), new MockEnvironment());
+
+        ResponseEntity<Object> response = handler.handleServiceRuntimeException(
+            new ServiceRuntimeException(), servletWebRequest("/problem-detail/runtime-empty"));
+
+        ProblemDetail problemDetail = (ProblemDetail) response.getBody();
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+        assertThat(problemDetail.getDetail()).isEqualTo("SOFA runtime execution failed");
+        assertThat(problemDetail.getInstance()).isEqualTo(URI.create("/problem-detail/runtime-empty"));
+    }
+
+    @Test
+    void classifiesRpcAvailabilityErrorTypesAsServiceUnavailable() {
+        SofaRpcProblemDetailExceptionHandler handler = new SofaRpcProblemDetailExceptionHandler(
+            new SofaProblemDetailProperties(), new MockEnvironment());
+        int[] errorTypes = { RpcErrorType.SERVER_BUSY, RpcErrorType.SERVER_CLOSED,
+                RpcErrorType.SERVER_NOT_FOUND_INVOKER, RpcErrorType.SERVER_NETWORK,
+                RpcErrorType.CLIENT_TIMEOUT, RpcErrorType.CLIENT_NETWORK };
+
+        for (int errorType : errorTypes) {
+            ResponseEntity<Object> response = handler.handleSofaBootRpcRuntimeException(
+                new SofaBootRpcRuntimeException(null, new SofaRpcException(errorType, "rpc failed")),
+                servletWebRequest("/problem-detail/rpc-unavailable"));
+
+            ProblemDetail problemDetail = (ProblemDetail) response.getBody();
+            assertThat(response.getStatusCode()).isEqualTo(HttpStatus.SERVICE_UNAVAILABLE);
+            assertThat(problemDetail.getType()).isEqualTo(SofaProblemDetailExceptionHandler.RPC_EXCEPTION_TYPE);
+            assertThat(problemDetail.getDetail()).isEqualTo("RPC service call failed");
+        }
+    }
+
+    @Test
+    void classifiesRpcNonAvailabilityCauseAsConfigurationProblem() {
+        SofaRpcProblemDetailExceptionHandler handler = new SofaRpcProblemDetailExceptionHandler(
+            new SofaProblemDetailProperties(), new MockEnvironment());
+
+        ResponseEntity<Object> response = handler.handleSofaBootRpcRuntimeException(
+            new SofaBootRpcRuntimeException(null,
+                new SofaRpcException(RpcErrorType.CLIENT_SERIALIZE, "serialize failed")),
+            servletWebRequest("/problem-detail/rpc-configuration"));
+
+        ProblemDetail problemDetail = (ProblemDetail) response.getBody();
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+        assertThat(problemDetail.getType())
+            .isEqualTo(SofaProblemDetailExceptionHandler.RPC_CONFIGURATION_TYPE);
+        assertThat(problemDetail.getDetail()).isEqualTo("SOFA RPC configuration is invalid");
+    }
+
+    @Test
+    void customizesStackTraceAndPreservesExistingExtensions() {
+        SofaProblemDetailProperties properties = new SofaProblemDetailProperties();
+        properties.setIncludeStackTrace(true);
+        TestableSofaProblemDetailExceptionHandler handler = new TestableSofaProblemDetailExceptionHandler(
+            properties, new MockEnvironment().withProperty("spring.application.name", "demo-service"));
+        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+        problemDetail.setType(URI.create("https://example.com/type"));
+        problemDetail.setInstance(URI.create("/existing"));
+        problemDetail.setProperty("service", "custom-service");
+        problemDetail.setProperty("errorCode", "CUSTOM");
+
+        handler.customize(problemDetail, servletWebRequest("/problem-detail/runtime"),
+            new ServiceRuntimeException("SOFA-BOOT-01-12345: failed"));
+
+        Map<String, Object> propertiesMap = problemDetail.getProperties();
+        assertThat(problemDetail.getType()).isEqualTo(URI.create("https://example.com/type"));
+        assertThat(problemDetail.getInstance()).isEqualTo(URI.create("/existing"));
+        assertThat(propertiesMap).containsEntry("service", "custom-service");
+        assertThat(propertiesMap).containsEntry("errorCode", "CUSTOM");
+        assertThat(propertiesMap.get("stackTrace").toString())
+            .contains(ServiceRuntimeException.class.getName());
+    }
+
+    @Test
+    void customizesWithoutInstanceWhenRequestUriIsBlank() {
+        TestableSofaProblemDetailExceptionHandler handler = new TestableSofaProblemDetailExceptionHandler(
+            new SofaProblemDetailProperties(), new MockEnvironment());
+        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+        problemDetail.setType(URI.create("https://example.com/type"));
+
+        handler.customize(problemDetail, servletWebRequest(""), new ServiceRuntimeException());
+
+        assertThat(problemDetail.getInstance()).isNull();
+        assertThat(problemDetail.getProperties()).isNull();
+    }
+
+    @Test
+    void leavesNonProblemDetailBodiesUntouched() {
+        TestableSofaProblemDetailExceptionHandler handler = new TestableSofaProblemDetailExceptionHandler(
+            new SofaProblemDetailProperties(), new MockEnvironment());
+
+        ResponseEntity<Object> response = handler.create("plain body",
+            servletWebRequest("/problem-detail/plain"));
+
+        assertThat(response.getBody()).isEqualTo("plain body");
+    }
+
+    @Test
+    void updatesEnabledProperty() {
+        SofaProblemDetailProperties properties = new SofaProblemDetailProperties();
+
+        properties.setEnabled(false);
+
+        assertThat(properties.isEnabled()).isFalse();
+    }
+
     private MockMvc mockMvc(ConfigurableWebApplicationContext context) {
         return MockMvcBuilders.webAppContextSetup(context).build();
+    }
+
+    private ServletWebRequest servletWebRequest(String requestUri) {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setRequestURI(requestUri);
+        return new ServletWebRequest(request);
+    }
+
+    private static class TestableSofaProblemDetailExceptionHandler extends
+                                                                  SofaProblemDetailExceptionHandler {
+
+        TestableSofaProblemDetailExceptionHandler(SofaProblemDetailProperties properties,
+                                                  MockEnvironment environment) {
+            super(properties, environment);
+        }
+
+        ResponseEntity<Object> create(Object body, ServletWebRequest request) {
+            return createResponseEntity(body, new HttpHeaders(), HttpStatus.OK, request);
+        }
     }
 
     @Configuration(proxyBeanMethods = false)
