@@ -34,7 +34,7 @@
         <!--3rd lib dependency-->
         <spring.cloud.version>2025.0.0</spring.cloud.version>
         <asm.version>9.8</asm.version>
-        <fastjson.version>1.2.83</fastjson.version>
+        <fastjson.version>2.0.61</fastjson.version>
         <javassist.version>3.29.2-GA</javassist.version>
         <protobuf.version>3.22.2</protobuf.version>
         <xerces.version>2.12.2</xerces.version>
@@ -530,6 +530,12 @@
                 <groupId>org.apache.rocketmq</groupId>
                 <artifactId>rocketmq-spring-boot-starter</artifactId>
                 <version>${rocketmq.spring.boot.starter.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.alibaba</groupId>
+                        <artifactId>fastjson</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>
@@ -557,8 +563,8 @@
             </dependency>
 
             <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>fastjson</artifactId>
+                <groupId>com.alibaba.fastjson2</groupId>
+                <artifactId>fastjson2</artifactId>
                 <version>${fastjson.version}</version>
             </dependency>
 
@@ -690,6 +696,10 @@
                     <exclusion>
                         <artifactId>spring</artifactId>
                         <groupId>org.springframework</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.alibaba</groupId>
+                        <artifactId>fastjson</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
